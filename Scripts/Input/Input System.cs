@@ -4,6 +4,7 @@ namespace Input
 {
     public class InputSystem : MonoBehaviour
     {
+        // 裝置輸入端
         public static InputManager Input;
         
         private void Awake() { Input = new InputManager(); }
