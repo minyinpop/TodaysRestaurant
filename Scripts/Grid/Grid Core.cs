@@ -9,6 +9,6 @@ namespace Grid
         protected Image Image;
         
         // 格子資訊
-        public GridInfo GridInfo;
+        protected GridCore gridInfo;
     }
 }

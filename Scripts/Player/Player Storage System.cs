@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Player
 {
-    public class PlayerBagSystem
+    public class PlayerStorageSystem : MonoBehaviour
     {
         // 總物品格
         [field: SerializeField] private List<GridCore> totalGrids;
