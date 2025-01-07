@@ -6,12 +6,12 @@ namespace Item
     public class IngredientSO : ScriptableObject, ITem
     {
         // 編號
-        public int id;
+        [field: SerializeField] public int ID { get; private set; }
         // 圖片
-        public Sprite sprite;
+        [field: SerializeField] public Sprite Sprite { get; private set; }
         // 可否堆疊
-        public bool stackable;
+        [field: SerializeField] public bool Stackable { get; private set; }
         // 最大堆疊數
-        public int maxStack;
+        [field: SerializeField] public int MaxStack { get; private set; }
     }
 }

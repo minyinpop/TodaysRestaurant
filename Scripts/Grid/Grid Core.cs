@@ -9,6 +9,11 @@ namespace Grid
         protected Image Image;
         
         // 格子資訊
-        protected GridCore gridInfo;
+        public GridInfo GridInfo { get; private set; }
+
+        private void Awake()
+        {
+            GridInfo = new GridInfo();
+        }
     }
 }
