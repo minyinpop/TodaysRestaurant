@@ -1,10 +1,10 @@
-## 眼及之處的 Unity Assets 檔案
+## 今食堂的 Unity Assets 檔案
 
 ### 目錄
-- **[🌐｜版本資訊](https://github.com/minyinpop/EVERYEYES?tab=readme-ov-file#%E7%89%88%E6%9C%AC%E8%B3%87%E8%A8%8A)**
-- **[🗂️｜使用插件](https://github.com/minyinpop/EVERYEYES?tab=readme-ov-file#%EF%B8%8F%E4%BD%BF%E7%94%A8%E6%8F%92%E4%BB%B6)**
-- **[🔰｜安裝方式](https://github.com/minyinpop/EVERYEYES?tab=readme-ov-file#%E5%AE%89%E8%A3%9D%E6%96%B9%E5%BC%8F)**
-- **[📱｜聯絡方式](https://github.com/minyinpop/EVERYEYES?tab=readme-ov-file#%E8%81%AF%E7%B5%A1%E6%96%B9%E5%BC%8F)**
+- **[🌐｜版本資訊](https://github.com/minyinpop/TodaysRestaurant?tab=readme-ov-file#%E7%89%88%E6%9C%AC%E8%B3%87%E8%A8%8A)**
+- **[🗂️｜使用插件](https://github.com/minyinpop/TodaysRestaurant?tab=readme-ov-file#%EF%B8%8F%E4%BD%BF%E7%94%A8%E6%8F%92%E4%BB%B6)**
+- **[🔰｜安裝方式](https://github.com/minyinpop/TodaysRestaurant?tab=readme-ov-file#%E5%AE%89%E8%A3%9D%E6%96%B9%E5%BC%8F)**
+- **[📱｜聯絡方式](https://github.com/minyinpop/TodaysRestaurant?tab=readme-ov-file#%E8%81%AF%E7%B5%A1%E6%96%B9%E5%BC%8F)**
 ---
 ### 🌐｜版本資訊
 - **此專案的版本為 6000.0.31f1，請使用該版本的編輯器來製作。**
