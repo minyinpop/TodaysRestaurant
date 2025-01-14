@@ -27,10 +27,7 @@ namespace Storage.Slot
         /// <param name="otherInfo"></param>>
         public virtual void Refresh(StorageSlotInfo otherInfo)
         {
-            if (StorageSlotInfo.state is StorageSlotInfo.StorageSlotState.Locked)
-                return;
-
-            if (StorageSlotInfo.Equals(otherInfo))
+            if (otherInfo.state is StorageSlotInfo.StorageSlotState.Locked)
                 return;
             
             StorageSlotInfo = otherInfo;

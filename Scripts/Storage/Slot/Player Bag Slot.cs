@@ -29,10 +29,7 @@ namespace Storage.Slot
         /// <param name="otherInfo"></param>>
         public override void Refresh(StorageSlotInfo otherInfo)
         {
-            if (StorageSlotInfo.state is StorageSlotInfo.StorageSlotState.Locked)
-                return;
-            
-            if (StorageSlotInfo.Equals(otherInfo))
+            if (otherInfo.state is StorageSlotInfo.StorageSlotState.Locked)
                 return;
             
             StorageSlotInfo = otherInfo;

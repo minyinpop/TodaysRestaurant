@@ -42,7 +42,9 @@ namespace Player
             if (inventoryUIPrefab is not null)
             {
                 _tempInventoryUI = Instantiate(inventoryUIPrefab, canvas.transform);
+                
                 AddInventoryStorageSlot();
+                Refresh();
             }
         }
 
@@ -65,7 +67,9 @@ namespace Player
             if (_tempBagUI is null)
             {
                 _tempBagUI = Instantiate(bagUIPrefab, canvas.transform);
+                
                 AddBagStorageSlot();
+                Refresh();
             }
             else
             {
