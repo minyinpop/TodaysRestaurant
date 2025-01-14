@@ -1,32 +1,31 @@
 using Input;
+using State;
 using UnityEngine;
 
 namespace Player
 {
     [RequireComponent(typeof(SpriteRenderer))]
     [RequireComponent(typeof(Animator))]
-    [RequireComponent(typeof(CapsuleCollider))]
-    [RequireComponent(typeof(Rigidbody))]
+    [RequireComponent(typeof(CharacterController))]
     public class PlayerControlSystem : MonoBehaviour
     {
-        // 裝置輸入端
+        // 輸入系統
         private InputManager _input;
-        // 移動方向軸
+        // 移動方向
         private Vector3 MoveAxes => _input.Player.MoveAxes.ReadValue<Vector3>();
         
-        // 自身的圖片渲染器
+        // 圖片渲染
         private SpriteRenderer _sprite;
-        // 自身的動畫控制器
+        // 動畫控制
         private Animator _anima;
-        // 自身的剛體
-        private Rigidbody _rig;
-
-        [field: Header("基礎設定")]
-        // 移動速度
-        [field: SerializeField] private float moveSpeed = 120.0f;
+        // 角色控制
+        private CharacterController _cc;
         
-        // 走路的動畫哈希值
-        private readonly int isWalk = Animator.StringToHash("IsWalk");
+        // 動畫哈希值
+        private int IsWalkHash => Animator.StringToHash("IsWalk");
+
+        [field: Header("設定"), Tooltip("狀態設定檔"), SerializeField]
+        private StateConfigSO stateConfig;
 
         private void Awake()
         {
@@ -34,20 +33,20 @@ namespace Player
             
             _sprite = GetComponent<SpriteRenderer>();
             _anima = GetComponent<Animator>();
-            _rig = GetComponent<Rigidbody>();
+            _cc = GetComponent<CharacterController>();
         }
 
         private void FixedUpdate()
         {
-            var x = MoveAxes.x * moveSpeed * Time.fixedDeltaTime;
-            var y = _rig.linearVelocity.y;
-            var z = MoveAxes.z * moveSpeed * Time.fixedDeltaTime;
-            
-            _rig.linearVelocity = new Vector3(x, y, z);
+            var x = MoveAxes.x * stateConfig.MoveSpeed;
+            var y = _cc.velocity.y;
+            var z = MoveAxes.z * stateConfig.MoveSpeed;
+            _cc.SimpleMove(new Vector3(x, y, z) * Time.fixedDeltaTime);
         }
 
         private void Update()
         {
+            // ↓ 翻轉圖片 ↓
             _sprite.flipX = MoveAxes.x switch
             {
                 > 0 => true,
@@ -55,7 +54,8 @@ namespace Player
                 _ => _sprite.flipX
             };
             
-            _anima.SetBool(isWalk, MoveAxes.x != 0 || MoveAxes.z != 0);
+            // ↓ 走路動畫 ↓
+            _anima.SetBool(IsWalkHash, MoveAxes.x != 0 || MoveAxes.z != 0);
         }
     }
 }

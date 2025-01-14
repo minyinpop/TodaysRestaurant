@@ -25,12 +25,12 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
     ""maps"": [
         {
             ""name"": ""Player"",
-            ""id"": ""b339d4a8-85b5-4c9b-bebd-49bc778fb05e"",
+            ""id"": ""5af980fe-4b8b-478c-bff6-01d06dd4bdb8"",
             ""actions"": [
                 {
                     ""name"": ""Move Axes"",
                     ""type"": ""Value"",
-                    ""id"": ""530efe0c-3cdc-44b3-a816-229429bf306e"",
+                    ""id"": ""17c61c06-1fc0-488c-b4e2-387b3026ed5d"",
                     ""expectedControlType"": ""Vector3"",
                     ""processors"": ""NormalizeVector3"",
                     ""interactions"": ""Press"",
@@ -40,7 +40,7 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
             ""bindings"": [
                 {
                     ""name"": ""WASD"",
-                    ""id"": ""6e2be73e-0c65-48b0-a689-663b1fba980f"",
+                    ""id"": ""404bf737-d852-4f9f-9006-5ffaee9a839e"",
                     ""path"": ""3DVector"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -50,30 +50,8 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""left"",
-                    ""id"": ""1f9fdac2-e35d-4c46-9450-2e5eb54d26a8"",
-                    ""path"": ""<Keyboard>/a"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Move Axes"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""right"",
-                    ""id"": ""30a20d5c-729a-41e0-8ed9-fc0e67ded149"",
-                    ""path"": ""<Keyboard>/d"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Move Axes"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
                     ""name"": ""forward"",
-                    ""id"": ""eccecf45-627f-445d-9e52-264c6cd20cc8"",
+                    ""id"": ""c5f4d9d4-571d-4792-a61e-5f2cf6dc22ff"",
                     ""path"": ""<Keyboard>/w"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -84,7 +62,7 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""backward"",
-                    ""id"": ""49f59a0b-2e26-40a8-9553-b982f7bd7b2d"",
+                    ""id"": ""3e503168-8bb1-48ec-b388-35a967a8f421"",
                     ""path"": ""<Keyboard>/s"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -92,54 +70,28 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
                     ""action"": ""Move Axes"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
-                }
-            ]
-        },
-        {
-            ""name"": ""Mouse"",
-            ""id"": ""a645f6a0-03ea-47da-8f14-8bba2ec429c3"",
-            ""actions"": [
-                {
-                    ""name"": ""Left Click"",
-                    ""type"": ""Button"",
-                    ""id"": ""be426891-3e24-4aa7-96bf-1503b2869ba4"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Position"",
-                    ""type"": ""Value"",
-                    ""id"": ""b32fbc65-66ae-4c57-bb77-9f562285d718"",
-                    ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                }
-            ],
-            ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""64ba4c6d-1479-4601-b194-7ab780788ff0"",
-                    ""path"": ""<Mouse>/leftButton"",
+                    ""name"": ""left"",
+                    ""id"": ""a0006b10-99bd-4287-9a25-75432814dd49"",
+                    ""path"": ""<Keyboard>/a"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Left Click"",
+                    ""action"": ""Move Axes"",
                     ""isComposite"": false,
-                    ""isPartOfComposite"": false
+                    ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": """",
-                    ""id"": ""149091ba-5600-4628-a9de-1d84c80ba415"",
-                    ""path"": ""<Mouse>/position"",
+                    ""name"": ""right"",
+                    ""id"": ""ac3cce21-831f-4d1d-9494-d19f38dffdaf"",
+                    ""path"": ""<Keyboard>/d"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Position"",
+                    ""action"": ""Move Axes"",
                     ""isComposite"": false,
-                    ""isPartOfComposite"": false
+                    ""isPartOfComposite"": true
                 }
             ]
         }
@@ -149,16 +101,11 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_MoveAxes = m_Player.FindAction("Move Axes", throwIfNotFound: true);
-        // Mouse
-        m_Mouse = asset.FindActionMap("Mouse", throwIfNotFound: true);
-        m_Mouse_LeftClick = m_Mouse.FindAction("Left Click", throwIfNotFound: true);
-        m_Mouse_Position = m_Mouse.FindAction("Position", throwIfNotFound: true);
     }
 
     ~@InputManager()
     {
         UnityEngine.Debug.Assert(!m_Player.enabled, "This will cause a leak and performance issues, InputManager.Player.Disable() has not been called.");
-        UnityEngine.Debug.Assert(!m_Mouse.enabled, "This will cause a leak and performance issues, InputManager.Mouse.Disable() has not been called.");
     }
 
     public void Dispose()
@@ -262,67 +209,8 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
         }
     }
     public PlayerActions @Player => new PlayerActions(this);
-
-    // Mouse
-    private readonly InputActionMap m_Mouse;
-    private List<IMouseActions> m_MouseActionsCallbackInterfaces = new List<IMouseActions>();
-    private readonly InputAction m_Mouse_LeftClick;
-    private readonly InputAction m_Mouse_Position;
-    public struct MouseActions
-    {
-        private @InputManager m_Wrapper;
-        public MouseActions(@InputManager wrapper) { m_Wrapper = wrapper; }
-        public InputAction @LeftClick => m_Wrapper.m_Mouse_LeftClick;
-        public InputAction @Position => m_Wrapper.m_Mouse_Position;
-        public InputActionMap Get() { return m_Wrapper.m_Mouse; }
-        public void Enable() { Get().Enable(); }
-        public void Disable() { Get().Disable(); }
-        public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(MouseActions set) { return set.Get(); }
-        public void AddCallbacks(IMouseActions instance)
-        {
-            if (instance == null || m_Wrapper.m_MouseActionsCallbackInterfaces.Contains(instance)) return;
-            m_Wrapper.m_MouseActionsCallbackInterfaces.Add(instance);
-            @LeftClick.started += instance.OnLeftClick;
-            @LeftClick.performed += instance.OnLeftClick;
-            @LeftClick.canceled += instance.OnLeftClick;
-            @Position.started += instance.OnPosition;
-            @Position.performed += instance.OnPosition;
-            @Position.canceled += instance.OnPosition;
-        }
-
-        private void UnregisterCallbacks(IMouseActions instance)
-        {
-            @LeftClick.started -= instance.OnLeftClick;
-            @LeftClick.performed -= instance.OnLeftClick;
-            @LeftClick.canceled -= instance.OnLeftClick;
-            @Position.started -= instance.OnPosition;
-            @Position.performed -= instance.OnPosition;
-            @Position.canceled -= instance.OnPosition;
-        }
-
-        public void RemoveCallbacks(IMouseActions instance)
-        {
-            if (m_Wrapper.m_MouseActionsCallbackInterfaces.Remove(instance))
-                UnregisterCallbacks(instance);
-        }
-
-        public void SetCallbacks(IMouseActions instance)
-        {
-            foreach (var item in m_Wrapper.m_MouseActionsCallbackInterfaces)
-                UnregisterCallbacks(item);
-            m_Wrapper.m_MouseActionsCallbackInterfaces.Clear();
-            AddCallbacks(instance);
-        }
-    }
-    public MouseActions @Mouse => new MouseActions(this);
     public interface IPlayerActions
     {
         void OnMoveAxes(InputAction.CallbackContext context);
-    }
-    public interface IMouseActions
-    {
-        void OnLeftClick(InputAction.CallbackContext context);
-        void OnPosition(InputAction.CallbackContext context);
     }
 }
