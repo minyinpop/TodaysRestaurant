@@ -33,8 +33,17 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
                     ""id"": ""17c61c06-1fc0-488c-b4e2-387b3026ed5d"",
                     ""expectedControlType"": ""Vector3"",
                     ""processors"": ""NormalizeVector3"",
-                    ""interactions"": ""Press"",
+                    ""interactions"": ""Hold"",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Open Bag"",
+                    ""type"": ""Button"",
+                    ""id"": ""eee6146b-fe3f-4810-8b3b-2555ed43eecf"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -92,6 +101,76 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
                     ""action"": ""Move Axes"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f8414892-c510-43ab-bda2-4fdc260f6059"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Open Bag"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""89aa82c0-88b4-42e4-a67a-5e7b5a0867e2"",
+                    ""path"": ""<Keyboard>/b"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Open Bag"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""Mouse"",
+            ""id"": ""ab2d6738-8c23-42b2-9fd8-a8bf4c4f9440"",
+            ""actions"": [
+                {
+                    ""name"": ""Left Button"",
+                    ""type"": ""Button"",
+                    ""id"": ""37607948-92c4-4ed5-bbf8-a6fb03978d19"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Mouse Pos"",
+                    ""type"": ""Value"",
+                    ""id"": ""79ba928f-2967-47d5-b76c-fc64918cfc9a"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""2990367d-ed9e-40b0-9bae-dc27152ecc2d"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": ""Press(behavior=2)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Left Button"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""241a535b-080c-4481-b424-810383b5746f"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Mouse Pos"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -101,11 +180,17 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_MoveAxes = m_Player.FindAction("Move Axes", throwIfNotFound: true);
+        m_Player_OpenBag = m_Player.FindAction("Open Bag", throwIfNotFound: true);
+        // Mouse
+        m_Mouse = asset.FindActionMap("Mouse", throwIfNotFound: true);
+        m_Mouse_LeftButton = m_Mouse.FindAction("Left Button", throwIfNotFound: true);
+        m_Mouse_MousePos = m_Mouse.FindAction("Mouse Pos", throwIfNotFound: true);
     }
 
     ~@InputManager()
     {
         UnityEngine.Debug.Assert(!m_Player.enabled, "This will cause a leak and performance issues, InputManager.Player.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_Mouse.enabled, "This will cause a leak and performance issues, InputManager.Mouse.Disable() has not been called.");
     }
 
     public void Dispose()
@@ -168,11 +253,13 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Player;
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_MoveAxes;
+    private readonly InputAction m_Player_OpenBag;
     public struct PlayerActions
     {
         private @InputManager m_Wrapper;
         public PlayerActions(@InputManager wrapper) { m_Wrapper = wrapper; }
         public InputAction @MoveAxes => m_Wrapper.m_Player_MoveAxes;
+        public InputAction @OpenBag => m_Wrapper.m_Player_OpenBag;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -185,6 +272,9 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
             @MoveAxes.started += instance.OnMoveAxes;
             @MoveAxes.performed += instance.OnMoveAxes;
             @MoveAxes.canceled += instance.OnMoveAxes;
+            @OpenBag.started += instance.OnOpenBag;
+            @OpenBag.performed += instance.OnOpenBag;
+            @OpenBag.canceled += instance.OnOpenBag;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -192,6 +282,9 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
             @MoveAxes.started -= instance.OnMoveAxes;
             @MoveAxes.performed -= instance.OnMoveAxes;
             @MoveAxes.canceled -= instance.OnMoveAxes;
+            @OpenBag.started -= instance.OnOpenBag;
+            @OpenBag.performed -= instance.OnOpenBag;
+            @OpenBag.canceled -= instance.OnOpenBag;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -209,8 +302,68 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
         }
     }
     public PlayerActions @Player => new PlayerActions(this);
+
+    // Mouse
+    private readonly InputActionMap m_Mouse;
+    private List<IMouseActions> m_MouseActionsCallbackInterfaces = new List<IMouseActions>();
+    private readonly InputAction m_Mouse_LeftButton;
+    private readonly InputAction m_Mouse_MousePos;
+    public struct MouseActions
+    {
+        private @InputManager m_Wrapper;
+        public MouseActions(@InputManager wrapper) { m_Wrapper = wrapper; }
+        public InputAction @LeftButton => m_Wrapper.m_Mouse_LeftButton;
+        public InputAction @MousePos => m_Wrapper.m_Mouse_MousePos;
+        public InputActionMap Get() { return m_Wrapper.m_Mouse; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(MouseActions set) { return set.Get(); }
+        public void AddCallbacks(IMouseActions instance)
+        {
+            if (instance == null || m_Wrapper.m_MouseActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_MouseActionsCallbackInterfaces.Add(instance);
+            @LeftButton.started += instance.OnLeftButton;
+            @LeftButton.performed += instance.OnLeftButton;
+            @LeftButton.canceled += instance.OnLeftButton;
+            @MousePos.started += instance.OnMousePos;
+            @MousePos.performed += instance.OnMousePos;
+            @MousePos.canceled += instance.OnMousePos;
+        }
+
+        private void UnregisterCallbacks(IMouseActions instance)
+        {
+            @LeftButton.started -= instance.OnLeftButton;
+            @LeftButton.performed -= instance.OnLeftButton;
+            @LeftButton.canceled -= instance.OnLeftButton;
+            @MousePos.started -= instance.OnMousePos;
+            @MousePos.performed -= instance.OnMousePos;
+            @MousePos.canceled -= instance.OnMousePos;
+        }
+
+        public void RemoveCallbacks(IMouseActions instance)
+        {
+            if (m_Wrapper.m_MouseActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IMouseActions instance)
+        {
+            foreach (var item in m_Wrapper.m_MouseActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_MouseActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public MouseActions @Mouse => new MouseActions(this);
     public interface IPlayerActions
     {
         void OnMoveAxes(InputAction.CallbackContext context);
+        void OnOpenBag(InputAction.CallbackContext context);
+    }
+    public interface IMouseActions
+    {
+        void OnLeftButton(InputAction.CallbackContext context);
+        void OnMousePos(InputAction.CallbackContext context);
     }
 }

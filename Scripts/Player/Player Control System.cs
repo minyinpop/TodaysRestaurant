@@ -46,7 +46,6 @@ namespace Player
 
         private void Update()
         {
-            // ↓ 翻轉圖片 ↓
             _sprite.flipX = MoveAxes.x switch
             {
                 > 0 => true,
@@ -54,7 +53,6 @@ namespace Player
                 _ => _sprite.flipX
             };
             
-            // ↓ 走路動畫 ↓
             _anima.SetBool(IsWalkHash, MoveAxes.x != 0 || MoveAxes.z != 0);
         }
     }

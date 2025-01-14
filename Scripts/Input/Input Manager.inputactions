@@ -11,8 +11,17 @@
                     "id": "17c61c06-1fc0-488c-b4e2-387b3026ed5d",
                     "expectedControlType": "Vector3",
                     "processors": "NormalizeVector3",
-                    "interactions": "Press",
+                    "interactions": "Hold",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "Open Bag",
+                    "type": "Button",
+                    "id": "eee6146b-fe3f-4810-8b3b-2555ed43eecf",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "Press",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -70,6 +79,76 @@
                     "action": "Move Axes",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "f8414892-c510-43ab-bda2-4fdc260f6059",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Open Bag",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "89aa82c0-88b4-42e4-a67a-5e7b5a0867e2",
+                    "path": "<Keyboard>/b",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Open Bag",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Mouse",
+            "id": "ab2d6738-8c23-42b2-9fd8-a8bf4c4f9440",
+            "actions": [
+                {
+                    "name": "Left Button",
+                    "type": "Button",
+                    "id": "37607948-92c4-4ed5-bbf8-a6fb03978d19",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Mouse Pos",
+                    "type": "Value",
+                    "id": "79ba928f-2967-47d5-b76c-fc64918cfc9a",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "2990367d-ed9e-40b0-9bae-dc27152ecc2d",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "Press(behavior=2)",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Left Button",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "241a535b-080c-4481-b424-810383b5746f",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Mouse Pos",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }
