@@ -22,5 +22,44 @@ namespace Storage.Slot
             
             Refresh(otherInfo);
         }
+
+        /// <summary>
+        /// 更新格子邏輯
+        /// </summary>
+        /// <param name="otherInfo"></param>>
+        public override void Refresh(StorageSlotInfo otherInfo)
+        {
+            if (StorageSlotInfo.state is StorageSlotInfo.StorageSlotState.Locked)
+                return;
+            
+            if (StorageSlotInfo.Equals(otherInfo))
+                return;
+            
+            StorageSlotInfo = otherInfo;
+            storageSlotImage.sprite = slotUnlockedSprite;
+
+            if (StorageSlotInfo.item is null)
+            {
+                if (itemImage is not null)
+                    itemImage.gameObject.SetActive(false);
+                
+                if (itemAmountTMP is not null)
+                    itemAmountTMP.gameObject.SetActive(false);
+            }
+            else
+            {
+                if (itemImage is not null)
+                {
+                    itemImage.gameObject.SetActive(true);
+                    itemImage.sprite = StorageSlotInfo.item.Sprite;
+                }
+
+                if (itemAmountTMP is not null)
+                {
+                    itemAmountTMP.gameObject.SetActive(true);
+                    itemAmountTMP.text = $"{otherInfo.itemAmount}";
+                }
+            }
+        }
     }
 }

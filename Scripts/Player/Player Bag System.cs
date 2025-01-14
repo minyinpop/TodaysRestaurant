@@ -17,7 +17,7 @@ namespace Player
         // 背包介面暫存
         private GameObject _tempBagUI;
         
-        // 儲存格站存
+        // 儲存格暫存
         private List<StorageSlotCore> _tempStorageSlots = new();
         
         [field: Header("資料"), Tooltip("玩家背包的資料庫組件"), SerializeField]
@@ -42,9 +42,7 @@ namespace Player
             if (inventoryUIPrefab is not null)
             {
                 _tempInventoryUI = Instantiate(inventoryUIPrefab, canvas.transform);
-
-                foreach (var storageSlot in _tempInventoryUI.GetComponentsInChildren<StorageSlotCore>())
-                    _tempStorageSlots.Add(storageSlot);
+                AddInventoryStorageSlot();
             }
         }
 
@@ -67,18 +65,13 @@ namespace Player
             if (_tempBagUI is null)
             {
                 _tempBagUI = Instantiate(bagUIPrefab, canvas.transform);
-                
-                foreach (var storageSlot in _tempBagUI.GetComponentsInChildren<StorageSlotCore>())
-                    _tempStorageSlots.Add(storageSlot);
-                
-                Refresh();
+                AddBagStorageSlot();
             }
             else
             {
-                foreach (var storageSlot in _tempBagUI.GetComponentsInChildren<StorageSlotCore>())
-                    _tempStorageSlots.Remove(storageSlot);
-                
+                RemoveBagStorageSlot();
                 Destroy(_tempBagUI);
+                
                 _tempBagUI = null;
             }
         }
@@ -94,6 +87,70 @@ namespace Player
             {
                 storageSlot.Refresh(StorageDataSO.StorageSlotInfos[i]);
                 i++;
+            }
+        }
+        
+        /// <summary>
+        /// 新增物品欄儲物格到暫存邏輯
+        /// </summary>
+        private void AddInventoryStorageSlot()
+        {
+            if (_tempInventoryUI is null)
+                return;
+
+            foreach (var storageSlot in _tempInventoryUI.GetComponentsInChildren<StorageSlotCore>())
+            {
+                if (_tempStorageSlots.Contains(storageSlot))
+                    continue;
+                
+                _tempStorageSlots.Add(storageSlot);
+            }
+        }
+
+        /// <summary>
+        /// 從暫存中移除物品欄儲物格邏輯
+        /// </summary>
+        private void RemoveInventoryStorageSlot()
+        {
+            if (_tempInventoryUI is null)
+                return;
+
+            foreach (var storageSlot in _tempInventoryUI.GetComponentsInChildren<StorageSlotCore>())
+            {
+                if (_tempStorageSlots.Contains(storageSlot))
+                    _tempStorageSlots.Remove(storageSlot);
+            }
+        }
+
+        /// <summary>
+        /// 新增背包儲物格到暫存邏輯
+        /// </summary>
+        private void AddBagStorageSlot()
+        {
+            if (_tempBagUI is null)
+                return;
+
+            foreach (var storageSlot in _tempBagUI.GetComponentsInChildren<StorageSlotCore>())
+            {
+                if (_tempStorageSlots.Contains(storageSlot))
+                    continue;
+                
+                _tempStorageSlots.Add(storageSlot);
+            }
+        }
+
+        /// <summary>
+        /// 從暫存中移除背包儲物格邏輯
+        /// </summary>
+        private void RemoveBagStorageSlot()
+        {
+            if (_tempBagUI is null)
+                return;
+            
+            foreach (var storageSlot in _tempBagUI.GetComponentsInChildren<StorageSlotCore>())
+            {
+                if (_tempStorageSlots.Contains(storageSlot))
+                    _tempStorageSlots.Remove(storageSlot);
             }
         }
     }

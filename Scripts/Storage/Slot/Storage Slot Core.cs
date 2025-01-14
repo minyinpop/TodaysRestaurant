@@ -7,7 +7,7 @@ namespace Storage.Slot
     public abstract class StorageSlotCore : MonoBehaviour
     {
         // 儲存格資訊
-        private StorageSlotInfo storageSlotInfo;
+        protected StorageSlotInfo StorageSlotInfo;
         
         [field: Header("組件"), Tooltip("物品的圖片組件"), SerializeField]
         protected Image itemImage;
@@ -25,11 +25,17 @@ namespace Storage.Slot
         /// 更新格子邏輯
         /// </summary>
         /// <param name="otherInfo"></param>>
-        public void Refresh(StorageSlotInfo otherInfo)
+        public virtual void Refresh(StorageSlotInfo otherInfo)
         {
-            storageSlotInfo = otherInfo;
+            if (StorageSlotInfo.state is StorageSlotInfo.StorageSlotState.Locked)
+                return;
 
-            if (storageSlotInfo.item is null)
+            if (StorageSlotInfo.Equals(otherInfo))
+                return;
+            
+            StorageSlotInfo = otherInfo;
+
+            if (StorageSlotInfo.item is null)
             {
                 if (itemImage is not null)
                     itemImage.gameObject.SetActive(false);
@@ -42,7 +48,7 @@ namespace Storage.Slot
                 if (itemImage is not null)
                 {
                     itemImage.gameObject.SetActive(true);
-                    itemImage.sprite = storageSlotInfo.item.Sprite;
+                    itemImage.sprite = StorageSlotInfo.item.Sprite;
                 }
 
                 if (itemAmountTMP is not null)
