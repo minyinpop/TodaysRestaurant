@@ -1,11 +1,10 @@
 using System;
 using Item;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Storage.Slot
 {
-    [System.Serializable]
+    [Serializable]
     public struct StorageSlotInfo : IEquatable<StorageSlotInfo>
     {
         [field: Header("資訊"), Tooltip("儲存格是否解鎖 ?")]

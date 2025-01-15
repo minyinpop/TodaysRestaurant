@@ -83,14 +83,14 @@ namespace Player
         private void OnLeftButtonRelease(InputAction.CallbackContext context)
         {
             _releasedSlot = StorageSlotDetect();
-
+            
             // " 點擊的儲存格 " 或 " 放開的儲存格 " 是空的
             if (_clickedSlot is null || _releasedSlot is null)
             {
                 ResetData();
                 return;
             }
-
+            
             // " 點擊的儲存格 " 裡的物品是空的
             if (_clickedSlot.storageSlotInfo.item is null)
             {
@@ -105,6 +105,13 @@ namespace Player
                 return;
             }
 
+            // " 點擊的儲存格 " 與 " 放開的儲存格 " 的屬性是一樣的
+            if (_clickedSlot.storageSlotInfo.GetHashCode() == _releasedSlot.storageSlotInfo.GetHashCode())
+            {
+                ResetData();
+                return;
+            }
+
             // " 放開的儲存格 " 裡是沒有物品的
             if (_releasedSlot.storageSlotInfo.item is null)
             {
@@ -113,6 +120,8 @@ namespace Player
                 
                 _clickedSlot.Refresh();
                 _releasedSlot.Refresh();
+                
+                // TODO: 更新與儲存格相符的 Storage Data SO ...
                 
                 ResetData();
                 return;

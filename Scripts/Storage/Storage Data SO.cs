@@ -2,14 +2,15 @@ using System.Collections.Generic;
 using Item;
 using Storage.Slot;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Storage
 {
     [CreateAssetMenu(menuName = "Minyinpop/Storage Data", fileName = "New Storage Data", order = 2)]
     public class StorageDataSO : ScriptableObject
     {
-        [field: Header("物品資料"), Tooltip("儲存格裡面的物品資料，數量表示可使用的格子的總數"), SerializeField]
-        public List<StorageSlotInfo> StorageSlotInfos { get; private set; }
+        [field: Header("物品資料"), Tooltip("儲存格裡面的物品資料，數量表示可使用的格子的總數")]
+        public List<StorageSlotInfo> storageSlotInfos;
         
         /// <summary>
         /// 物品添加
@@ -17,37 +18,37 @@ namespace Storage
         /// <param name="item"></param>
         public void AddItem(ItemCore item)
         {
-            for (var i = 0; i < StorageSlotInfos.Count; i++)
+            for (var i = 0; i < storageSlotInfos.Count; i++)
             {
-                if (StorageSlotInfos[i].state is StorageSlotInfo.StorageSlotState.Locked)
+                if (storageSlotInfos[i].state is StorageSlotInfo.StorageSlotState.Locked)
                     continue;
 
-                if (StorageSlotInfos[i].item is null)
+                if (storageSlotInfos[i].item is null)
                 {
-                    StorageSlotInfos[i] = new StorageSlotInfo
+                    storageSlotInfos[i] = new StorageSlotInfo
                     {
-                        state = StorageSlotInfos[i].state,
+                        state = storageSlotInfos[i].state,
                         item = item,
-                        itemAmount = StorageSlotInfos[i].itemAmount + 1
+                        itemAmount = storageSlotInfos[i].itemAmount + 1
                     };
                     
                     break;
                 }
                 
-                if (StorageSlotInfos[i].item != item)
+                if (storageSlotInfos[i].item != item)
                     continue;
                 
-                if (!StorageSlotInfos[i].item.Stackable)
+                if (!storageSlotInfos[i].item.Stackable)
                     continue;
 
-                if (StorageSlotInfos[i].itemAmount >= StorageSlotInfos[i].item.MaxStack)
+                if (storageSlotInfos[i].itemAmount >= storageSlotInfos[i].item.MaxStack)
                     continue;
 
-                StorageSlotInfos[i] = new StorageSlotInfo
+                storageSlotInfos[i] = new StorageSlotInfo
                 {
-                    state = StorageSlotInfos[i].state,
+                    state = storageSlotInfos[i].state,
                     item = item,
-                    itemAmount = StorageSlotInfos[i].itemAmount + 1
+                    itemAmount = storageSlotInfos[i].itemAmount + 1
                 };
 
                 break;

@@ -13,12 +13,12 @@ namespace Player
         private InputManager _input;
         
         // 物品欄介面暫存
-        private GameObject _tempInventoryUI;
+        private GameObject _inventoryUI;
         // 背包介面暫存
-        private GameObject _tempBagUI;
+        private GameObject _bagUI;
         
         // 儲存格暫存
-        private readonly List<StorageSlotCore> _tempStorageSlots = new();
+        private readonly List<StorageSlotCore> _storageSlots = new();
         
         [field: Header("資料"), Tooltip("玩家背包的資料庫組件"), SerializeField]
         public StorageDataSO StorageDataSO { get; private set; }
@@ -41,7 +41,7 @@ namespace Player
         {
             if (inventoryUIPrefab is not null)
             {
-                _tempInventoryUI = Instantiate(inventoryUIPrefab, canvas.transform);
+                _inventoryUI = Instantiate(inventoryUIPrefab, canvas.transform);
                 
                 AddInventoryStorageSlot();
                 Refresh();
@@ -64,9 +64,9 @@ namespace Player
         /// <param name="context"></param>
         private void OnOpenBagButtonPressed(InputAction.CallbackContext context)
         {
-            if (_tempBagUI is null)
+            if (_bagUI is null)
             {
-                _tempBagUI = Instantiate(bagUIPrefab, canvas.transform);
+                _bagUI = Instantiate(bagUIPrefab, canvas.transform);
                 
                 AddBagStorageSlot();
                 Refresh();
@@ -74,19 +74,21 @@ namespace Player
             else
             {
                 RemoveBagStorageSlot();
-                Destroy(_tempBagUI);
+                Destroy(_bagUI);
                 
-                _tempBagUI = null;
+                Refresh();
+                
+                _bagUI = null;
             }
         }
 
         /// <summary>
         /// 更新背包
         /// </summary>
-        public void Refresh()
+        private void Refresh()
         {
-            for (var i = 0; i < _tempStorageSlots.Count; i++)
-                _tempStorageSlots[i].Refresh(StorageDataSO.StorageSlotInfos[i]);
+            for (var i = 0; i < _storageSlots.Count; i++)
+                _storageSlots[i].Refresh(StorageDataSO.storageSlotInfos[i]);
         }
         
         /// <summary>
@@ -94,15 +96,15 @@ namespace Player
         /// </summary>
         private void AddInventoryStorageSlot()
         {
-            if (_tempInventoryUI is null)
+            if (_inventoryUI is null)
                 return;
 
-            foreach (var storageSlot in _tempInventoryUI.GetComponentsInChildren<StorageSlotCore>())
+            foreach (var storageSlot in _inventoryUI.GetComponentsInChildren<StorageSlotCore>())
             {
-                if (_tempStorageSlots.Contains(storageSlot))
+                if (_storageSlots.Contains(storageSlot))
                     continue;
                 
-                _tempStorageSlots.Add(storageSlot);
+                _storageSlots.Add(storageSlot);
             }
         }
 
@@ -111,13 +113,13 @@ namespace Player
         /// </summary>
         private void RemoveInventoryStorageSlot()
         {
-            if (_tempInventoryUI is null)
+            if (_inventoryUI is null)
                 return;
 
-            foreach (var storageSlot in _tempInventoryUI.GetComponentsInChildren<StorageSlotCore>())
+            foreach (var storageSlot in _inventoryUI.GetComponentsInChildren<StorageSlotCore>())
             {
-                if (_tempStorageSlots.Contains(storageSlot))
-                    _tempStorageSlots.Remove(storageSlot);
+                if (_storageSlots.Contains(storageSlot))
+                    _storageSlots.Remove(storageSlot);
             }
         }
 
@@ -126,15 +128,15 @@ namespace Player
         /// </summary>
         private void AddBagStorageSlot()
         {
-            if (_tempBagUI is null)
+            if (_bagUI is null)
                 return;
 
-            foreach (var storageSlot in _tempBagUI.GetComponentsInChildren<StorageSlotCore>())
+            foreach (var storageSlot in _bagUI.GetComponentsInChildren<StorageSlotCore>())
             {
-                if (_tempStorageSlots.Contains(storageSlot))
+                if (_storageSlots.Contains(storageSlot))
                     continue;
                 
-                _tempStorageSlots.Add(storageSlot);
+                _storageSlots.Add(storageSlot);
             }
         }
 
@@ -143,13 +145,13 @@ namespace Player
         /// </summary>
         private void RemoveBagStorageSlot()
         {
-            if (_tempBagUI is null)
+            if (_bagUI is null)
                 return;
             
-            foreach (var storageSlot in _tempBagUI.GetComponentsInChildren<StorageSlotCore>())
+            foreach (var storageSlot in _bagUI.GetComponentsInChildren<StorageSlotCore>())
             {
-                if (_tempStorageSlots.Contains(storageSlot))
-                    _tempStorageSlots.Remove(storageSlot);
+                if (_storageSlots.Contains(storageSlot))
+                    _storageSlots.Remove(storageSlot);
             }
         }
     }
