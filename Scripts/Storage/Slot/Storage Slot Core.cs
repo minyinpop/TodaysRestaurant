@@ -7,7 +7,11 @@ namespace Storage.Slot
     public abstract class StorageSlotCore : MonoBehaviour
     {
         // 儲存格資訊
-        protected StorageSlotInfo StorageSlotInfo;
+        [field: HideInInspector]
+        public StorageSlotInfo storageSlotInfo;
+        
+        [field: Header("資料"), Tooltip("這個儲存格是哪一個 Storage Data SO 的 ?"), SerializeField]
+        public StorageDataSO StorageDataSO { get; protected set; }
         
         [field: Header("組件"), Tooltip("物品的圖片組件"), SerializeField]
         protected Image itemImage;
@@ -16,23 +20,20 @@ namespace Storage.Slot
         protected TextMeshProUGUI itemAmountTMP;
 
         /// <summary>
-        /// 解鎖儲存格邏輯
+        /// 解鎖儲存格
         /// </summary>
         /// <param name="otherInfo"></param>
         public virtual void Unlock(StorageSlotInfo otherInfo) {}
 
         /// <summary>
-        /// 更新格子邏輯
+        /// 更新格子
         /// </summary>
-        /// <param name="otherInfo"></param>>
-        public virtual void Refresh(StorageSlotInfo otherInfo)
+        public void Refresh()
         {
-            if (otherInfo.state is StorageSlotInfo.StorageSlotState.Locked)
+            if (storageSlotInfo.state is StorageSlotInfo.StorageSlotState.Locked)
                 return;
-            
-            StorageSlotInfo = otherInfo;
 
-            if (StorageSlotInfo.item is null)
+            if (storageSlotInfo.item is null)
             {
                 if (itemImage is not null)
                     itemImage.gameObject.SetActive(false);
@@ -45,7 +46,42 @@ namespace Storage.Slot
                 if (itemImage is not null)
                 {
                     itemImage.gameObject.SetActive(true);
-                    itemImage.sprite = StorageSlotInfo.item.Sprite;
+                    itemImage.sprite = storageSlotInfo.item.Sprite;
+                }
+
+                if (itemAmountTMP is not null)
+                {
+                    itemAmountTMP.gameObject.SetActive(true);
+                    itemAmountTMP.text = $"{storageSlotInfo.itemAmount}";
+                }
+            }
+        }
+
+        /// <summary>
+        /// 使用外部資訊更新格子
+        /// </summary>
+        /// <param name="otherInfo"></param>>
+        public virtual void Refresh(StorageSlotInfo otherInfo)
+        {
+            if (otherInfo.state is StorageSlotInfo.StorageSlotState.Locked)
+                return;
+            
+            storageSlotInfo = otherInfo;
+
+            if (storageSlotInfo.item is null)
+            {
+                if (itemImage is not null)
+                    itemImage.gameObject.SetActive(false);
+                
+                if (itemAmountTMP is not null)
+                    itemAmountTMP.gameObject.SetActive(false);
+            }
+            else
+            {
+                if (itemImage is not null)
+                {
+                    itemImage.gameObject.SetActive(true);
+                    itemImage.sprite = storageSlotInfo.item.Sprite;
                 }
 
                 if (itemAmountTMP is not null)

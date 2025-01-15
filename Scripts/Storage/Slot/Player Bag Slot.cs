@@ -12,7 +12,7 @@ namespace Storage.Slot
         private Sprite slotUnlockedSprite;
 
         /// <summary>
-        /// 解鎖儲存格邏輯
+        /// 解鎖儲存格
         /// </summary>
         /// <param name="otherInfo"></param>
         public override void Unlock(StorageSlotInfo otherInfo)
@@ -24,7 +24,7 @@ namespace Storage.Slot
         }
 
         /// <summary>
-        /// 更新格子邏輯
+        /// 使用外部資訊更新格子
         /// </summary>
         /// <param name="otherInfo"></param>>
         public override void Refresh(StorageSlotInfo otherInfo)
@@ -32,10 +32,10 @@ namespace Storage.Slot
             if (otherInfo.state is StorageSlotInfo.StorageSlotState.Locked)
                 return;
             
-            StorageSlotInfo = otherInfo;
+            storageSlotInfo = otherInfo;
             storageSlotImage.sprite = slotUnlockedSprite;
 
-            if (StorageSlotInfo.item is null)
+            if (storageSlotInfo.item is null)
             {
                 if (itemImage is not null)
                     itemImage.gameObject.SetActive(false);
@@ -48,7 +48,7 @@ namespace Storage.Slot
                 if (itemImage is not null)
                 {
                     itemImage.gameObject.SetActive(true);
-                    itemImage.sprite = StorageSlotInfo.item.Sprite;
+                    itemImage.sprite = storageSlotInfo.item.Sprite;
                 }
 
                 if (itemAmountTMP is not null)

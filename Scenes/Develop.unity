@@ -879,6 +879,56 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &769323013
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 769323014}
+  - component: {fileID: 769323015}
+  m_Layer: 0
+  m_Name: Player Item Drag System
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &769323014
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 769323013}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -6, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &769323015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 769323013}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52d6f0a1677429c923c48f3f28669c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canvas: {fileID: 156224297}
+  raycaster: {fileID: 367849547}
+  itemDragPreviewPrefab: {fileID: 4760266695139415115, guid: a5d8c6ce9aee8c34ba1f8c9cd247a72d, type: 3}
+  itemDragPreviewOffset: {x: -12, y: 6}
+  storageDataSO: {fileID: 11400000, guid: 3a1a8c32a5e52e745ac984f5f9b1ebf1, type: 2}
+  storageSlotTag: Storage Slot
 --- !u!1 &827057286
 GameObject:
   m_ObjectHideFlags: 0
@@ -1423,5 +1473,6 @@ SceneRoots:
   - {fileID: 115298826}
   - {fileID: 2140971693}
   - {fileID: 1802409019}
+  - {fileID: 769323014}
   - {fileID: 1629929094}
   - {fileID: 738249109}

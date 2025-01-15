@@ -18,7 +18,7 @@ namespace Player
         private GameObject _tempBagUI;
         
         // 儲存格暫存
-        private List<StorageSlotCore> _tempStorageSlots = new();
+        private readonly List<StorageSlotCore> _tempStorageSlots = new();
         
         [field: Header("資料"), Tooltip("玩家背包的資料庫組件"), SerializeField]
         public StorageDataSO StorageDataSO { get; private set; }
@@ -59,7 +59,7 @@ namespace Player
         }
 
         /// <summary>
-        /// 背包互動鍵邏輯
+        /// 背包互動鍵
         /// </summary>
         /// <param name="context"></param>
         private void OnOpenBagButtonPressed(InputAction.CallbackContext context)
@@ -81,21 +81,16 @@ namespace Player
         }
 
         /// <summary>
-        /// 更新背包邏輯
+        /// 更新背包
         /// </summary>
-        private void Refresh()
+        public void Refresh()
         {
-            var i = 0;
-            
-            foreach (var storageSlot in _tempStorageSlots)
-            {
-                storageSlot.Refresh(StorageDataSO.StorageSlotInfos[i]);
-                i++;
-            }
+            for (var i = 0; i < _tempStorageSlots.Count; i++)
+                _tempStorageSlots[i].Refresh(StorageDataSO.StorageSlotInfos[i]);
         }
         
         /// <summary>
-        /// 新增物品欄儲物格到暫存邏輯
+        /// 新增物品欄儲物格到暫存
         /// </summary>
         private void AddInventoryStorageSlot()
         {
@@ -112,7 +107,7 @@ namespace Player
         }
 
         /// <summary>
-        /// 從暫存中移除物品欄儲物格邏輯
+        /// 從暫存中移除物品欄儲物格
         /// </summary>
         private void RemoveInventoryStorageSlot()
         {
@@ -127,7 +122,7 @@ namespace Player
         }
 
         /// <summary>
-        /// 新增背包儲物格到暫存邏輯
+        /// 新增背包儲物格到暫存
         /// </summary>
         private void AddBagStorageSlot()
         {
@@ -144,7 +139,7 @@ namespace Player
         }
 
         /// <summary>
-        /// 從暫存中移除背包儲物格邏輯
+        /// 從暫存中移除背包儲物格
         /// </summary>
         private void RemoveBagStorageSlot()
         {

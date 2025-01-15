@@ -1,3 +1,5 @@
+#if UNITY_EDITOR
+
 using Item;
 using Storage;
 using UnityEditor;
@@ -7,7 +9,7 @@ namespace Tool
 {
     public class ItemSpawner : EditorWindow
     {
-        [field: Header("資料"), Tooltip("玩家背包的資料"), SerializeField]
+        [field: Header("玩家背包"), Tooltip("玩家背包的資料"), SerializeField]
         private StorageDataSO playerBagData;
         
         [MenuItem("Tools/Minyinpop/物品生成器")]
@@ -38,8 +40,8 @@ namespace Tool
             EditorGUILayout.LabelField("物品生成器", titleStyle);
             EditorGUILayout.Space(9);
             
-            EditorGUILayout.LabelField("玩家背包資訊", subtitleStyle);
-            playerBagData = EditorGUILayout.ObjectField(playerBagData, typeof(StorageDataSO), true) as StorageDataSO;
+            EditorGUILayout.LabelField("玩家背包", subtitleStyle);
+            playerBagData = EditorGUILayout.ObjectField("玩家背包資訊", playerBagData, typeof(StorageDataSO), true) as StorageDataSO;
 
             if (Application.isPlaying)
             {
@@ -68,6 +70,11 @@ namespace Tool
                 EditorGUILayout.HelpBox(" 開始遊戲後才可以使用 !", MessageType.Info);
         }
 
+        /// <summary>
+        /// 生成按鈕並定義功能
+        /// </summary>
+        /// <param name="buttonName"></param>
+        /// <param name="filePath"></param>
         private void ButtonInit(string buttonName, string filePath)
         {
             if (GUILayout.Button(buttonName))
@@ -75,3 +82,5 @@ namespace Tool
         }
     }
 }
+
+#endif
