@@ -9,23 +9,17 @@ namespace Player
     [RequireComponent(typeof(CharacterController))]
     public class PlayerControlSystem : MonoBehaviour
     {
-        // 輸入系統
         private InputManager _input;
-        // 移動方向
         private Vector3 MoveAxes => _input.Player.MoveAxes.ReadValue<Vector3>();
-        
-        // 圖片渲染
+
         private SpriteRenderer _sprite;
-        // 動畫控制
         private Animator _anima;
-        // 角色控制
         private CharacterController _cc;
         
-        // 動畫哈希值
-        private int IsWalkHash => Animator.StringToHash("IsWalk");
+        private readonly int _isWalkHash = Animator.StringToHash("IsWalk");
 
-        [field: Header("設定"), Tooltip("狀態設定檔"), SerializeField]
-        private StateConfigSO stateConfig;
+        [field: Tooltip("參數設定"), SerializeField]
+        private StateConfig stateConfig;
 
         private void Awake()
         {
@@ -41,6 +35,7 @@ namespace Player
             var x = MoveAxes.x * stateConfig.MoveSpeed;
             var y = _cc.velocity.y;
             var z = MoveAxes.z * stateConfig.MoveSpeed;
+            
             _cc.SimpleMove(new Vector3(x, y, z) * Time.fixedDeltaTime);
         }
 
@@ -53,7 +48,7 @@ namespace Player
                 _ => _sprite.flipX
             };
             
-            _anima.SetBool(IsWalkHash, MoveAxes.x != 0 || MoveAxes.z != 0);
+            _anima.SetBool(_isWalkHash, MoveAxes.x != 0 || MoveAxes.z != 0);
         }
     }
 }
