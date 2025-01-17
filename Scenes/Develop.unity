@@ -888,6 +888,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 769323014}
+  - component: {fileID: 769323015}
   m_Layer: 0
   m_Name: Player Item Drag System
   m_TagString: Untagged
@@ -910,6 +911,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &769323015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 769323013}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 737630a73b2b4812b0980bb7dd8b08cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  previewSpawnPoint: {fileID: 156224298}
+  previewPrefab: {fileID: 4760266695139415115, guid: a5d8c6ce9aee8c34ba1f8c9cd247a72d, type: 3}
+  previewOffset: {x: -12, y: 8}
+  raycaster: {fileID: 367849547}
+  storageSlotTag: Storage Slot
 --- !u!1 &827057286
 GameObject:
   m_ObjectHideFlags: 0
