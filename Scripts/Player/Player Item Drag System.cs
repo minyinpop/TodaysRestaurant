@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Grid;
+using Storage.Slot.Core;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -10,36 +10,28 @@ namespace Player
 {
     public class PlayerItemDragSystem : MonoBehaviour
     {
-        // 裝置輸入端
         private InputManager _input;
-        // 滑鼠位置
-        private Vector2 MousePos => _input.Mouse.Position.ReadValue<Vector2>();
+        private Vector2 MousePos => _input.Mouse.MousePos.ReadValue<Vector2>();
         
-        [field: Header("基礎組件")]
-        // 第一層畫布
-        [field: SerializeField] private Canvas firstCanvas;
-        // 第二層畫布
-        [field: SerializeField] private Canvas secondCanvas;
+        private StorageSlotCore _clickedStorageSlot;
+        private StorageSlotCore _releasedStorageSlot;
         
-        // 第一層畫布的圖片雷射偵測
-        private GraphicRaycaster _raycaster;
-        
-        [field: Header("物品拖曳預覽")]
-        // 物品拖曳預覽的預製件
-        [field: SerializeField] private GameObject itemDragPreviewPrefab;
-        // 物品拖曳預覽的偏移
-        [field: SerializeField] private Vector2 itemDragPreviewOffset;
-
-        // 滑鼠左鍵點擊時所在的格子
-        private GridCore clickedGrid;
-        // 滑鼠左鍵釋放時所在的格子
-        private GridCore releasedGrid;
-        // 物品拖曳的格子
         private GameObject _itemDragPreview;
+
+        [field: Tooltip("物品拖曳預覽的預製件"), SerializeField]
+        private GameObject previewPrefab;
+
+        [field: Tooltip("物品拖曳預覽的偏移量"), SerializeField]
+        private Vector2 previewOffset;
         
-        [field: Header("標籤設定")]
-        // 物品格子的標籤
-        [field: SerializeField] private string itemGridTag = "Item Grid"; 
+        [Tooltip("物品拖曳預覽的生成點"), SerializeField]
+        private Transform previewSpawnPoint;
+
+        [field: Tooltip("哪一個畫布的圖片偵測器會被使用 ?"), SerializeField]
+        private GraphicRaycaster raycaster;
+
+        [field: Tooltip("儲存格的標籤"), SerializeField]
+        private string storageSlotTag = "Storage Slot";
 
         private void Awake()
         {
@@ -48,63 +40,57 @@ namespace Player
 
         private void OnEnable()
         {
-            _input.Mouse.LeftClick.started += OnMouseDown;
-            _input.Mouse.LeftClick.canceled += OnMouseUp;
+            _input.Mouse.LeftButton.started += OnLeftButtonPressed;
+            _input.Mouse.LeftButton.canceled += OnLeftButtonReleased;
         }
 
-        private void LateUpdate()
+        private void Update()
         {
             if (_itemDragPreview is not null)
-                _itemDragPreview.transform.position = MousePos + itemDragPreviewOffset;
+                _itemDragPreview.transform.position = MousePos + previewOffset;
         }
 
         private void OnDisable()
         {
-            _input.Mouse.LeftClick.started -= OnMouseDown;
-            _input.Mouse.LeftClick.canceled -= OnMouseUp;
+            _input.Mouse.LeftButton.started -= OnLeftButtonPressed;
+            _input.Mouse.LeftButton.canceled -= OnLeftButtonReleased;
         }
 
         /// <summary>
-        /// 當滑鼠左鍵按下時所發生的事情
+        /// 當 " Left Button " 按鈕按下時
         /// </summary>
         /// <param name="context"></param>
-        private void OnMouseDown(InputAction.CallbackContext context)
+        private void OnLeftButtonPressed(InputAction.CallbackContext context)
         {
-            clickedGrid = GridDetect();
+            _clickedStorageSlot = StorageSlotDetect();
 
-            if (clickedGrid?.GridInfo.ItemData is not null)
-            {
-                _itemDragPreview = Instantiate(itemDragPreviewPrefab, secondCanvas.transform);
-                _itemDragPreview.transform.GetChild(0).GetComponent<Image>().sprite =
-                    clickedGrid.GridInfo.ItemData.Sprite;
-            }
+            if (_clickedStorageSlot?.StorageSlotData.item is null)
+                return;
+
+            _itemDragPreview = Instantiate(previewPrefab, previewSpawnPoint);
+            _itemDragPreview.GetComponent<Image>().sprite = _clickedStorageSlot.StorageSlotData.item.Sprite;
         }
-        
-        // TODO: 繼續製作有關 Item Drag Preview 的部分
 
         /// <summary>
-        /// 當滑鼠左鍵放開時所發生的事情
+        /// 當 " Left Button " 按鈕放開時
         /// </summary>
         /// <param name="context"></param>
-        private void OnMouseUp(InputAction.CallbackContext context)
+        private void OnLeftButtonReleased(InputAction.CallbackContext context)
         {
-            releasedGrid = GridDetect();
+            _releasedStorageSlot = StorageSlotDetect();
 
-            if (_itemDragPreview is not null)
-            {
-                Destroy(_itemDragPreview);
-                _itemDragPreview = null;
-            }
+            Destroy(_itemDragPreview);
+            _itemDragPreview = null;
             
-            clickedGrid = null;
-            releasedGrid = null;
+            _clickedStorageSlot = null;
+            _releasedStorageSlot = null;
         }
 
         /// <summary>
-        /// 偵測是否有格子在滑鼠當前的位置
+        /// 偵測當前滑鼠位置底下是否有儲存格
         /// </summary>
         /// <returns></returns>
-        private GridCore GridDetect()
+        private StorageSlotCore StorageSlotDetect()
         {
             var pointer = new PointerEventData(EventSystem.current)
             {
@@ -112,19 +98,19 @@ namespace Player
             };
             var results = new List<RaycastResult>();
             
-            _raycaster.Raycast(pointer, results);
+            raycaster.Raycast(pointer, results);
 
             foreach (var result in results)
             {
                 if (result.gameObject.layer != LayerMask.NameToLayer("UI"))
                     continue;
 
-                if (!result.gameObject.CompareTag(itemGridTag))
+                if (!result.gameObject.CompareTag(storageSlotTag))
                     continue;
                 
-                return result.gameObject.GetComponent<GridCore>();
+                return result.gameObject.GetComponent<StorageSlotCore>();
             }
-            
+
             return null;
         }
     }

@@ -3,22 +3,31 @@
     "maps": [
         {
             "name": "Player",
-            "id": "b339d4a8-85b5-4c9b-bebd-49bc778fb05e",
+            "id": "5af980fe-4b8b-478c-bff6-01d06dd4bdb8",
             "actions": [
                 {
                     "name": "Move Axes",
                     "type": "Value",
-                    "id": "530efe0c-3cdc-44b3-a816-229429bf306e",
+                    "id": "17c61c06-1fc0-488c-b4e2-387b3026ed5d",
                     "expectedControlType": "Vector3",
                     "processors": "NormalizeVector3",
-                    "interactions": "Press",
+                    "interactions": "Hold",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "Open Bag",
+                    "type": "Button",
+                    "id": "eee6146b-fe3f-4810-8b3b-2555ed43eecf",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "Press",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
                 {
                     "name": "WASD",
-                    "id": "6e2be73e-0c65-48b0-a689-663b1fba980f",
+                    "id": "404bf737-d852-4f9f-9006-5ffaee9a839e",
                     "path": "3DVector",
                     "interactions": "",
                     "processors": "",
@@ -28,30 +37,8 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "left",
-                    "id": "1f9fdac2-e35d-4c46-9450-2e5eb54d26a8",
-                    "path": "<Keyboard>/a",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Move Axes",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "right",
-                    "id": "30a20d5c-729a-41e0-8ed9-fc0e67ded149",
-                    "path": "<Keyboard>/d",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Move Axes",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
                     "name": "forward",
-                    "id": "eccecf45-627f-445d-9e52-264c6cd20cc8",
+                    "id": "c5f4d9d4-571d-4792-a61e-5f2cf6dc22ff",
                     "path": "<Keyboard>/w",
                     "interactions": "",
                     "processors": "",
@@ -62,7 +49,7 @@
                 },
                 {
                     "name": "backward",
-                    "id": "49f59a0b-2e26-40a8-9553-b982f7bd7b2d",
+                    "id": "3e503168-8bb1-48ec-b388-35a967a8f421",
                     "path": "<Keyboard>/s",
                     "interactions": "",
                     "processors": "",
@@ -70,26 +57,70 @@
                     "action": "Move Axes",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "a0006b10-99bd-4287-9a25-75432814dd49",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move Axes",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "ac3cce21-831f-4d1d-9494-d19f38dffdaf",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move Axes",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "f8414892-c510-43ab-bda2-4fdc260f6059",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Open Bag",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "89aa82c0-88b4-42e4-a67a-5e7b5a0867e2",
+                    "path": "<Keyboard>/b",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Open Bag",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
         {
             "name": "Mouse",
-            "id": "a645f6a0-03ea-47da-8f14-8bba2ec429c3",
+            "id": "ab2d6738-8c23-42b2-9fd8-a8bf4c4f9440",
             "actions": [
                 {
-                    "name": "Left Click",
+                    "name": "Left Button",
                     "type": "Button",
-                    "id": "be426891-3e24-4aa7-96bf-1503b2869ba4",
+                    "id": "37607948-92c4-4ed5-bbf8-a6fb03978d19",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Position",
+                    "name": "Mouse Pos",
                     "type": "Value",
-                    "id": "b32fbc65-66ae-4c57-bb77-9f562285d718",
+                    "id": "79ba928f-2967-47d5-b76c-fc64918cfc9a",
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
@@ -99,23 +130,23 @@
             "bindings": [
                 {
                     "name": "",
-                    "id": "64ba4c6d-1479-4601-b194-7ab780788ff0",
+                    "id": "2990367d-ed9e-40b0-9bae-dc27152ecc2d",
                     "path": "<Mouse>/leftButton",
-                    "interactions": "",
+                    "interactions": "Press(behavior=2)",
                     "processors": "",
                     "groups": "",
-                    "action": "Left Click",
+                    "action": "Left Button",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "149091ba-5600-4628-a9de-1d84c80ba415",
+                    "id": "241a535b-080c-4481-b424-810383b5746f",
                     "path": "<Mouse>/position",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Position",
+                    "action": "Mouse Pos",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
