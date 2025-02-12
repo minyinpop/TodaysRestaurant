@@ -136,7 +136,16 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
                     ""id"": ""37607948-92c4-4ed5-bbf8-a6fb03978d19"",
                     ""expectedControlType"": """",
                     ""processors"": """",
-                    ""interactions"": """",
+                    ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Right Button"",
+                    ""type"": ""Button"",
+                    ""id"": ""7fda1d65-8002-4b1e-9309-845b6dc894d3"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": ""Press"",
                     ""initialStateCheck"": false
                 },
                 {
@@ -154,7 +163,7 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""2990367d-ed9e-40b0-9bae-dc27152ecc2d"",
                     ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": ""Press(behavior=2)"",
+                    ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Left Button"",
@@ -171,6 +180,17 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
                     ""action"": ""Mouse Pos"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4cd250dc-ad6d-481d-9192-a577a47f9d3e"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Right Button"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -184,6 +204,7 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
         // Mouse
         m_Mouse = asset.FindActionMap("Mouse", throwIfNotFound: true);
         m_Mouse_LeftButton = m_Mouse.FindAction("Left Button", throwIfNotFound: true);
+        m_Mouse_RightButton = m_Mouse.FindAction("Right Button", throwIfNotFound: true);
         m_Mouse_MousePos = m_Mouse.FindAction("Mouse Pos", throwIfNotFound: true);
     }
 
@@ -307,12 +328,14 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Mouse;
     private List<IMouseActions> m_MouseActionsCallbackInterfaces = new List<IMouseActions>();
     private readonly InputAction m_Mouse_LeftButton;
+    private readonly InputAction m_Mouse_RightButton;
     private readonly InputAction m_Mouse_MousePos;
     public struct MouseActions
     {
         private @InputManager m_Wrapper;
         public MouseActions(@InputManager wrapper) { m_Wrapper = wrapper; }
         public InputAction @LeftButton => m_Wrapper.m_Mouse_LeftButton;
+        public InputAction @RightButton => m_Wrapper.m_Mouse_RightButton;
         public InputAction @MousePos => m_Wrapper.m_Mouse_MousePos;
         public InputActionMap Get() { return m_Wrapper.m_Mouse; }
         public void Enable() { Get().Enable(); }
@@ -326,6 +349,9 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
             @LeftButton.started += instance.OnLeftButton;
             @LeftButton.performed += instance.OnLeftButton;
             @LeftButton.canceled += instance.OnLeftButton;
+            @RightButton.started += instance.OnRightButton;
+            @RightButton.performed += instance.OnRightButton;
+            @RightButton.canceled += instance.OnRightButton;
             @MousePos.started += instance.OnMousePos;
             @MousePos.performed += instance.OnMousePos;
             @MousePos.canceled += instance.OnMousePos;
@@ -336,6 +362,9 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
             @LeftButton.started -= instance.OnLeftButton;
             @LeftButton.performed -= instance.OnLeftButton;
             @LeftButton.canceled -= instance.OnLeftButton;
+            @RightButton.started -= instance.OnRightButton;
+            @RightButton.performed -= instance.OnRightButton;
+            @RightButton.canceled -= instance.OnRightButton;
             @MousePos.started -= instance.OnMousePos;
             @MousePos.performed -= instance.OnMousePos;
             @MousePos.canceled -= instance.OnMousePos;
@@ -364,6 +393,7 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
     public interface IMouseActions
     {
         void OnLeftButton(InputAction.CallbackContext context);
+        void OnRightButton(InputAction.CallbackContext context);
         void OnMousePos(InputAction.CallbackContext context);
     }
 }

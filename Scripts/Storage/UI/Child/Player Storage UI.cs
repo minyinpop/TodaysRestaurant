@@ -87,11 +87,11 @@ namespace Storage.UI.Child
                     {
                         @lock = StorageSlotData.LockState.No,
                         item = item,
-                        itemAmount = StorageData.storageSlotDataList[i].itemAmount
+                        itemAmount = 1
                     };
 
                     StorageData.storageSlotDataList[i] = newData;
-                    StorageSlotCoreList[i].Refresh(newData);
+                    StorageSlotCoreList[i].SetItem(newData);
                     return;
                 }
 
@@ -105,7 +105,7 @@ namespace Storage.UI.Child
                     };
                     
                     StorageData.storageSlotDataList[i] = newData;
-                    StorageSlotCoreList[i].Refresh(newData);
+                    StorageSlotCoreList[i].SetItem(newData);
                     return;
                 }
             }

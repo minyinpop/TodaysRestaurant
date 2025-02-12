@@ -8,7 +8,6 @@ namespace Storage.Slot.Core
 {
     public abstract class StorageSlotCore : MonoBehaviour
     {
-        [field: HideInInspector]
         public StorageSlotData StorageSlotData { get; private set; }
         
         [field: Tooltip("儲存格的物品顯示圖片"), SerializeField]
@@ -18,9 +17,67 @@ namespace Storage.Slot.Core
         private TextMeshProUGUI itemAmountTMP;
 
         /// <summary>
+        /// 增加一個物品到儲存格
+        /// </summary>
+        /// <param name="other"></param>
+        public void AddOneItem(StorageSlotData other)
+        {
+            if (StorageSlotData.item is null)
+            {
+                StorageSlotData = new StorageSlotData
+                {
+                    @lock = other.@lock,
+                    item = other.item,
+                    itemAmount = 1
+                };
+            }
+            else
+            {
+                StorageSlotData = new StorageSlotData
+                {
+                    @lock = StorageSlotData.@lock,
+                    item = StorageSlotData.item,
+                    itemAmount = StorageSlotData.itemAmount + 1
+                };
+            }
+
+            Refresh();
+        }
+
+        public void RemoveOneItem()
+        {
+            if (StorageSlotData.item is null)
+                return;
+
+            if (StorageSlotData.itemAmount - 1 <= 0)
+                StorageSlotData = new StorageSlotData();
+            else
+            {
+                StorageSlotData = new StorageSlotData
+                {
+                    @lock = StorageSlotData.@lock,
+                    item = StorageSlotData.item,
+                    itemAmount = StorageSlotData.itemAmount - 1
+                };
+            }
+            
+            Refresh();
+        }
+
+        /// <summary>
+        /// 賦予新的 " StorageSlotData " 並更新儲存格
+        /// </summary>
+        /// <param name="other"></param>
+        public void SetItem(StorageSlotData other)
+        {
+            StorageSlotData = other;
+            Refresh();
+        }
+        
+        /// <summary>
         /// 更新儲存格
         /// </summary>
-        public void Refresh()
+        private void Refresh()
         {
             if (StorageSlotData.item is null)
             {
@@ -32,7 +89,7 @@ namespace Storage.Slot.Core
                 itemImage.gameObject.SetActive(true);
                 itemImage.sprite = StorageSlotData.item.Sprite;
                 
-                itemAmountTMP.gameObject.SetActive(StorageSlotData.item.Stack == ItemCore.StackType.Yes);
+                itemAmountTMP.gameObject.SetActive(StorageSlotData.item.Stackable == ItemCore.StackType.Yes);
                 
                 if (itemAmountTMP.gameObject.activeSelf)
                     itemAmountTMP.text = StorageSlotData.itemAmount.ToString();
@@ -40,16 +97,24 @@ namespace Storage.Slot.Core
         }
 
         /// <summary>
-        /// 賦予新的 " StorageSlotData " 並更新儲存格
+        /// 重置格子所有資訊
         /// </summary>
-        /// <param name="other"></param>
-        public void Refresh(StorageSlotData other)
+        public void Reset()
         {
-            if (StorageSlotData.Equals(other))
-                return;
+            StorageSlotData = new StorageSlotData();
+            itemImage.gameObject.SetActive(false);
+            itemAmountTMP.gameObject.SetActive(false);
+        }
+
+        public bool CheckSlotStackable(StorageSlotData other)
+        {
+            if (StorageSlotData.item is null)
+                return false;
             
-            StorageSlotData = other;
-            Refresh();
+            if (StorageSlotData.item.Stackable == ItemCore.StackType.No)
+                return false;
+            
+            return true;
         }
     }
 }

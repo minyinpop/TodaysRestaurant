@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Storage.Data.Core;
 using Storage.Slot.Core;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -12,11 +13,10 @@ namespace Player
     {
         private InputManager _input;
         private Vector2 MousePos => _input.Mouse.MousePos.ReadValue<Vector2>();
-        
-        private StorageSlotCore _clickedStorageSlot;
-        private StorageSlotCore _releasedStorageSlot;
-        
+
         private GameObject _itemDragPreview;
+        private StorageSlotCore _previewStorageSlotCore;
+        private StorageSlotData _previewStorageSlotData;
 
         [field: Tooltip("物品拖曳預覽的預製件"), SerializeField]
         private GameObject previewPrefab;
@@ -41,7 +41,7 @@ namespace Player
         private void OnEnable()
         {
             _input.Mouse.LeftButton.started += OnLeftButtonPressed;
-            _input.Mouse.LeftButton.canceled += OnLeftButtonReleased;
+            _input.Mouse.RightButton.started += OnRightButtonPressed;
         }
 
         private void Update()
@@ -53,7 +53,7 @@ namespace Player
         private void OnDisable()
         {
             _input.Mouse.LeftButton.started -= OnLeftButtonPressed;
-            _input.Mouse.LeftButton.canceled -= OnLeftButtonReleased;
+            _input.Mouse.RightButton.started -= OnRightButtonPressed;
         }
 
         /// <summary>
@@ -62,28 +62,103 @@ namespace Player
         /// <param name="context"></param>
         private void OnLeftButtonPressed(InputAction.CallbackContext context)
         {
-            _clickedStorageSlot = StorageSlotDetect();
-
-            if (_clickedStorageSlot?.StorageSlotData.item is null)
+            var tempClickedStorageSlot = StorageSlotDetect();
+            
+            if (tempClickedStorageSlot is null)
                 return;
+            
+            var tempClickedStorageSlotData = tempClickedStorageSlot.StorageSlotData;
 
-            _itemDragPreview = Instantiate(previewPrefab, previewSpawnPoint);
-            _itemDragPreview.GetComponent<Image>().sprite = _clickedStorageSlot.StorageSlotData.item.Sprite;
+            if (_itemDragPreview is null)
+            {
+                if (tempClickedStorageSlotData.item is null)
+                    return;
+
+                _itemDragPreview = Instantiate(previewPrefab, previewSpawnPoint);
+                _previewStorageSlotCore = _itemDragPreview.GetComponent<StorageSlotCore>();
+                
+                _previewStorageSlotCore.SetItem(tempClickedStorageSlotData);
+                tempClickedStorageSlot.Reset();
+            }
+            else
+            {
+                if (tempClickedStorageSlot.StorageSlotData.item is null)
+                {
+                    tempClickedStorageSlot.SetItem(_previewStorageSlotData);
+                    
+                    Destroy(_itemDragPreview);
+                    _itemDragPreview = null;
+                    
+                    return;
+                }
+                
+                if (tempClickedStorageSlot.CheckSlotStackable(_previewStorageSlotData))
+                {
+                    if (tempClickedStorageSlotData.itemAmount +
+                        _previewStorageSlotData.itemAmount >=
+                        tempClickedStorageSlotData.item.MaxStack)
+                    {
+                        var remainingItemSpace = _previewStorageSlotData.itemAmount -
+                                                 (tempClickedStorageSlotData.item.MaxStack -
+                                                  tempClickedStorageSlotData.itemAmount);
+                        
+                        tempClickedStorageSlot.SetItem(new StorageSlotData
+                        {
+                            @lock = tempClickedStorageSlotData.@lock,
+                            item = _previewStorageSlotData.item,
+                            itemAmount = tempClickedStorageSlotData.item.MaxStack
+                        });
+                        
+                        _previewStorageSlotCore.SetItem(new StorageSlotData
+                        {
+                            @lock = tempClickedStorageSlotData.@lock,
+                            item = _previewStorageSlotData.item,
+                            itemAmount = remainingItemSpace
+                        });
+                    }
+                    else
+                    {
+                        // TODO: 如果物品可以直接堆疊並且不會剩餘
+                        
+                        var newClickedStorageSlotData = new StorageSlotData
+                        {
+                            @lock = tempClickedStorageSlotData.@lock,
+                            item = tempClickedStorageSlotData.item,
+                            itemAmount = tempClickedStorageSlotData.itemAmount + _previewStorageSlotData.itemAmount
+                        };
+                        
+                        tempClickedStorageSlot.SetItem(newClickedStorageSlotData);
+                        
+                        Destroy(_itemDragPreview);
+                        _itemDragPreview = null;
+                    }
+                }
+            }
         }
 
         /// <summary>
-        /// 當 " Left Button " 按鈕放開時
+        ///  當 " Right Button " 按鈕按下時
         /// </summary>
         /// <param name="context"></param>
-        private void OnLeftButtonReleased(InputAction.CallbackContext context)
+        private void OnRightButtonPressed(InputAction.CallbackContext context)
         {
-            _releasedStorageSlot = StorageSlotDetect();
+            var tempReleasedStorageSlot = StorageSlotDetect();
+            var tempPreviewStorageSlot = _itemDragPreview.GetComponent<StorageSlotCore>();
 
+            if (tempReleasedStorageSlot is null)
+                return;
+
+            if (_itemDragPreview is null)
+                return;
+            
+            tempReleasedStorageSlot.AddOneItem(tempPreviewStorageSlot.StorageSlotData);
+            tempPreviewStorageSlot.RemoveOneItem();
+
+            if (tempPreviewStorageSlot.StorageSlotData.itemAmount > 0)
+                return;
+            
             Destroy(_itemDragPreview);
             _itemDragPreview = null;
-            
-            _clickedStorageSlot = null;
-            _releasedStorageSlot = null;
         }
 
         /// <summary>

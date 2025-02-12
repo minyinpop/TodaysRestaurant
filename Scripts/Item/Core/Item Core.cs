@@ -11,7 +11,7 @@ namespace Item.Core
         public Sprite Sprite { get; private set; }
 
         [field: Tooltip("是否可以堆疊 ?"), SerializeField]
-        public StackType Stack { get; private set; }
+        public StackType Stackable { get; private set; }
         public enum StackType
         {
             Yes,
