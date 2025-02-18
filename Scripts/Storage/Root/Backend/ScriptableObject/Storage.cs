@@ -22,10 +22,12 @@ namespace Storage.Root.Backend.ScriptableObject
             // 剩餘的數量。
             var remainingQuantity = quantity;
             
-            // TODO: 製作儲物格被鎖起來的判斷
-            
             for (var i = 0; i < data.Count; i++)
             {
+                // 如果儲物格是被鎖起來的。
+                if (data[i].Locked)
+                    continue;
+                
                 // 如果儲物格是空的。
                 if (data[i].Item is null)
                 {
@@ -50,11 +52,47 @@ namespace Storage.Root.Backend.ScriptableObject
                         Item = item,
                         Quantity = remainingQuantity
                     };
-                    return true;
                 }
-                
-                // TODO: 製作儲物格被佔領的判斷
+                else
+                {
+                    // 如果儲物格裡面的物品跟被添加的物品是不一樣的。
+                    if (item != data[i].Item)
+                        continue;
+
+                    // 如果儲物格的物品是不可堆疊的。
+                    if (!data[i].Item.Stackable)
+                        continue;
+
+                    // 如果儲物格的物品數量堆滿了。
+                    if (data[i].Quantity >= data[i].Item.MaxStack)
+                        continue;
+                    
+                    // 不能被放完。
+                    if (remainingQuantity > item.MaxStack - data[i].Quantity)
+                    {
+                        remainingQuantity -= item.MaxStack - data[i].Quantity;
+                        
+                        data[i] = new StorageSlotData
+                        {
+                            Locked = data[i].Locked,
+                            Item = item,
+                            Quantity = item.MaxStack
+                        };
+                        continue;
+                    }
+
+                    // 能被放完。
+                    data[i] = new StorageSlotData
+                    {
+                        Locked = data[i].Locked,
+                        Item = item,
+                        Quantity = remainingQuantity + data[i].Quantity
+                    };
+                }
+                // 物品添加成功。
+                return true;
             }
+            // 物品在這個儲物介面資料庫裡，不能被添加。
             return false;
         }
     }

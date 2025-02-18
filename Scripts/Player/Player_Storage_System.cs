@@ -18,6 +18,9 @@ namespace Player
                 if (storage.AddItem(item, quantity))
                 {
                     Debug.Log("物品添加成功 !");
+                    
+                    // TODO: 物品添加完後，要同步更新顯示的儲物格。
+                    
                     break;
                 }
             }
