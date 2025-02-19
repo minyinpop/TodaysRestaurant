@@ -1,27 +1,52 @@
 using System.Collections.Generic;
-using Item.Interface;
+using Storage.Root.Backend.Struct;
 using UnityEngine;
 
 namespace Player
 {
     public class PlayerStorageSystem : MonoBehaviour
     {
+        [Tooltip("儲物介面的遊戲物件。")]
+        [SerializeField]
+        private List<Storage.Root.Frontend.Storage> storageUIList;
+        
         [Tooltip("儲物介面的資料庫。")]
         [SerializeField]
-        private List<Storage.Root.Backend.ScriptableObject.Storage> storages;
+        private List<Storage.Root.Backend.ScriptableObject.Storage> storageDataList;
 
-        public void AddItem(ITem item, int quantity)
+        public void AddItem(StorageSlotData newData)
         {
-            foreach (var storage in storages)
+            // 剩餘的數量。
+            var remainingQuantity = newData.Quantity;
+
+            // 遍歷所有的儲物格，並確認其儲物狀態。
+            foreach (var dataList in storageDataList)
             {
-                // 判斷被選擇的儲物介面的資料庫，是否添加物品成功。
-                if (storage.AddItem(item, quantity))
+                for (var i = 0; i < dataList.data.Count; i++)
                 {
-                    Debug.Log("物品添加成功 !");
-                    
-                    // TODO: 物品添加完後，要同步更新顯示的儲物格。
-                    
-                    break;
+                    switch (dataList.AddItem(i, new StorageSlotData
+                            {
+                                Locked = false,
+                                Item = newData.Item,
+                                Quantity = remainingQuantity
+                            }))
+                    {
+                        case Storage.Root.Backend.ScriptableObject.Storage.AddItemResult.Fail:
+                        {
+                            Debug.Log("Fail");
+                            continue;
+                        }
+                        case Storage.Root.Backend.ScriptableObject.Storage.AddItemResult.Finish:
+                        {
+                            Debug.Log("Finish");
+                            return;
+                        }
+                        case Storage.Root.Backend.ScriptableObject.Storage.AddItemResult.Remaining:
+                        {
+                            Debug.Log("Remaining");
+                            continue;
+                        }
+                    }
                 }
             }
         }

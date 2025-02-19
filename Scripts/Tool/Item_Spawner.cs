@@ -1,5 +1,6 @@
 using Item.Interface;
 using Player;
+using Storage.Root.Backend.Struct;
 using UnityEditor;
 using UnityEngine;
 
@@ -50,7 +51,12 @@ namespace Tool
                             break;
                         
                         case ScriptableObject and ITem item:
-                            _storage.AddItem(item, _quantity);
+                            _storage.AddItem(new StorageSlotData
+                            {
+                                Locked = false,
+                                Item = item,
+                                Quantity = _quantity
+                            });
                             break;
                         
                         default:
