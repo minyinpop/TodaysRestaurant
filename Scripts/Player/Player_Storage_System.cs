@@ -16,39 +16,7 @@ namespace Player
 
         public void AddItem(StorageSlotData newData)
         {
-            // 剩餘的數量。
-            var remainingQuantity = newData.Quantity;
-
-            // 遍歷所有的儲物格，並確認其儲物狀態。
-            foreach (var dataList in storageDataList)
-            {
-                for (var i = 0; i < dataList.data.Count; i++)
-                {
-                    switch (dataList.AddItem(i, new StorageSlotData
-                            {
-                                Locked = false,
-                                Item = newData.Item,
-                                Quantity = remainingQuantity
-                            }))
-                    {
-                        case Storage.Root.Backend.ScriptableObject.Storage.AddItemResult.Fail:
-                        {
-                            Debug.Log("Fail");
-                            continue;
-                        }
-                        case Storage.Root.Backend.ScriptableObject.Storage.AddItemResult.Finish:
-                        {
-                            Debug.Log("Finish");
-                            return;
-                        }
-                        case Storage.Root.Backend.ScriptableObject.Storage.AddItemResult.Remaining:
-                        {
-                            Debug.Log("Remaining");
-                            continue;
-                        }
-                    }
-                }
-            }
+            // 用剩餘數量來判斷物品是否需要繼續添加。
         }
     }
 }

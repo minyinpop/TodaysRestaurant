@@ -34,6 +34,10 @@ namespace Storage.Slot.Abstract.Child
                 Debug.LogError($"{gameObject.name} 的 itemQuantityTMP 是空的 !");
         }
         
+        /// <summary>
+        /// 刷新儲物格的顯示。
+        /// </summary>
+        /// <param name="newData"> 儲物格的資料。 </param>
         public override void Refresh(StorageSlotData newData)
         {
             // 更新儲物格暫存資料。
