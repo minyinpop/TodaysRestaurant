@@ -16,7 +16,28 @@ namespace Player
 
         public void AddItem(StorageSlotData newData)
         {
-            // 用剩餘數量來判斷物品是否需要繼續添加。
+            for (var i = 0; i < storageDataList.Count; i++)
+            {
+                var remainingQuantity = storageDataList[i].AddItem(newData);
+                
+                // 表示物品添加完畢。
+                if (remainingQuantity == 0)
+                {
+                    Debug.Log("物品添加完畢。");
+                    return;
+                }
+                // 表示第 i 個資料庫的儲物格皆跑過一次，但無法添加完該物品。
+                if (remainingQuantity > 0)
+                {
+                    Debug.Log("物品添加不完，切換成下一個資料庫做添加。");
+                }
+                // 表示某段程式碼發生錯誤。
+                if (remainingQuantity < 0)
+                {
+                    Debug.LogWarning("物品數量不能為負數，此情況可能發生錯誤 !");
+                }
+            }
+            // TODO: 把 UI 更新下。
         }
     }
 }
