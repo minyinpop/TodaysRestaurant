@@ -52,8 +52,6 @@ namespace Storage.Root.Backend.ScriptableObject
                 // 該儲物格內有物品。
                 else
                 {
-                    // TODO: 判斷該儲物格內有物品時的邏輯。
-                    
                     // 該儲物格的物品不可堆疊。
                     if (!slotDataList[i].Item.Stackable)
                         continue;

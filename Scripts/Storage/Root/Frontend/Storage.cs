@@ -19,6 +19,8 @@ namespace Storage.Root.Frontend
         /// </summary>
         public void Refresh()
         {
+            Debug.Log($"更新 {gameObject.name} 介面");
+            
             for (var i = 0; i < slots.Count; i++)
             {
                 // 檢查儲物介面的資料庫是否與儲物介面一樣。
@@ -27,7 +29,7 @@ namespace Storage.Root.Frontend
                     Debug.LogWarning($"{storageData.name} 的資料數量比儲物介面少");
                     return;
                 }
-                
+
                 slots[i].Refresh(storageData.slotDataList[i]);
             }
         }

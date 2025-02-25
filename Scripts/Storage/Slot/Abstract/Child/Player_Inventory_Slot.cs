@@ -8,6 +8,7 @@ namespace Storage.Slot.Abstract.Child
 {
     public class PlayerInventorySlot : StorageSlot
     {
+        [Header("儲物格的組件")]
         [Tooltip("顯示物品圖案的圖片組件。")]
         [SerializeField]
         private Image itemImage;
@@ -16,6 +17,7 @@ namespace Storage.Slot.Abstract.Child
         [SerializeField]
         private TextMeshProUGUI itemQuantityTMP;
 
+        [Header("資料庫")]
         [Tooltip("儲存格的資料。")]
         [SerializeField]
         private StorageSlotData data;
@@ -33,7 +35,11 @@ namespace Storage.Slot.Abstract.Child
             if (itemQuantityTMP is null)
                 Debug.LogError($"{gameObject.name} 的 itemQuantityTMP 是空的 !");
         }
-        
+
+        /// <summary>
+        /// 刷新儲物格的顯示。
+        /// </summary>
+        /// <param name="newData"> 儲物格的資料。 </param>
         public override void Refresh(StorageSlotData newData)
         {
             // 更新儲物格暫存資料。

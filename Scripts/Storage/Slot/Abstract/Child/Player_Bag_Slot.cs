@@ -8,6 +8,12 @@ namespace Storage.Slot.Abstract.Child
 {
     public class PlayerBagSlot : StorageSlot
     {
+        [Header("狀態圖片")]
+        [Tooltip("顯示儲物格解鎖時的圖片。")]
+        [SerializeField]
+        private Sprite unlockedSprite;
+        
+        [Header("儲物格的組件")]
         [Tooltip("顯示物品圖案的圖片組件。")]
         [SerializeField]
         private Image itemImage;
@@ -16,6 +22,7 @@ namespace Storage.Slot.Abstract.Child
         [SerializeField]
         private TextMeshProUGUI itemQuantityTMP;
 
+        [Header("資料庫")]
         [Tooltip("儲存格的資料。")]
         [SerializeField]
         private StorageSlotData data;
@@ -32,6 +39,18 @@ namespace Storage.Slot.Abstract.Child
             // 確認 itemQuantityTMP 不是空的。
             if (itemQuantityTMP is null)
                 Debug.LogError($"{gameObject.name} 的 itemQuantityTMP 是空的 !");
+        }
+
+        public override void UnLock()
+        {
+            GetComponent<Image>().sprite = unlockedSprite;
+            
+            data = new StorageSlotData
+            {
+                Locked = false,
+                Item = data.Item,
+                Quantity = data.Quantity
+            };
         }
         
         /// <summary>
