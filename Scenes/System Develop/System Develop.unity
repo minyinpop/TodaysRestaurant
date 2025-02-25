@@ -522,7 +522,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 832079754}
-  - component: {fileID: 832079753}
+  - component: {fileID: 832079755}
   m_Layer: 0
   m_Name: Input System
   m_TagString: Untagged
@@ -530,18 +530,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &832079753
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 832079752}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9e5de0e0d5ef9354c8adba859b1f9016, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &832079754
 Transform:
   m_ObjectHideFlags: 0
@@ -557,55 +545,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &956055061
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 956055063}
-  - component: {fileID: 956055062}
-  m_Layer: 0
-  m_Name: Player Storage System
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &956055062
+--- !u!114 &832079755
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 956055061}
+  m_GameObject: {fileID: 832079752}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 05d5f4902f2247b88237da6c8ecf9615, type: 3}
+  m_Script: {fileID: 11500000, guid: 30a7e1d8b2488d14d8c52192338ca193, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnPoint: {fileID: 1271469420}
-  inventoryStorageData: {fileID: 11400000, guid: 03e32550db1cfd949a2873145f88f9a6, type: 2}
-  inventoryUI: {fileID: 8862954656950152609, guid: 29662bd0df66b94458bdcbc57a3d00f7, type: 3}
-  bagStorageData: {fileID: 11400000, guid: e2dffc2c5067d7d418799605739a69ad, type: 2}
-  bagUI: {fileID: 480712595727289734, guid: b85de0df742bed949b5d5f3c1e3abbd3, type: 3}
---- !u!4 &956055063
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 956055061}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &961739749
 GameObject:
   m_ObjectHideFlags: 0
@@ -921,4 +872,3 @@ SceneRoots:
   - {fileID: 807610438}
   - {fileID: 1100787846}
   - {fileID: 832079754}
-  - {fileID: 956055063}
