@@ -1,28 +1,27 @@
 using UnityEngine;
 
-namespace Input.Custom
+namespace Input
 {
     /// <summary>
-    /// 用來集合所有輸入端的操作。
-    /// 可以從這裡做一些細部的操作。
+    /// 控制所有輸入端的啟動與關閉，可以在這裡做細部的操作。
     /// </summary>
     public class InputSystem : MonoBehaviour
     {
-        public static InputManager Input;
-
+        private static InputMap _input;
+        
         private void Awake()
         {
-            Input = new InputManager();
+            _input = new InputMap();
         }
 
         private void OnEnable()
         {
-            Input.Enable();
+            _input.Enable();
         }
         
         private void OnDisable()
         {
-            Input.Disable();
+            _input.Disable();
         }
     }
 }
