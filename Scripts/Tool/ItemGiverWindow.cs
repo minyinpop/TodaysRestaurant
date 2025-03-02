@@ -77,7 +77,7 @@ namespace Tool
 
                 var slotData = new StorageSlotData
                 {
-                    locked = false,
+                    isLocked = false,
                     itemData = item,
                     itemQuantity = itemQuantity,
                 };

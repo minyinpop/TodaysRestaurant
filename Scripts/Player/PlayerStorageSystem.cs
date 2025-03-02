@@ -21,27 +21,37 @@ namespace Player
 
         public void AddItem(StorageSlotData newSlotData)
         {
+            // 用來記錄物品剩餘數量的參數。
+            var remainingQuantity = newSlotData.itemQuantity;
+            
             foreach (var storageData in storageDataList)
             {
-                // 用來記錄物品剩餘數量的參數。
-                var remainingQuantity = storageData.AddItem(newSlotData);
+                var slotData = new StorageSlotData
+                {
+                    isLocked = newSlotData.isLocked,
+                    itemData = newSlotData.itemData,
+                    itemQuantity = remainingQuantity
+                };
+                remainingQuantity = storageData.AddItem(slotData);
+                
+                // TODO: 更新前台 UI ......
                 
                 // 判斷物品剩餘數量的邏輯。
                 switch (remainingQuantity)
                 {
                     case > 0:
                     {
-                        System.Console.WriteLine("還有物品沒被添加完畢。");
+                        print("還有物品沒被添加完畢。");
                         continue;
                     }
                     case < 0:
                     {
-                        System.Console.WriteLine("物品數量不能為負，有可能會出問題。");
+                        print("物品數量不能為負，有可能會出問題。");
                         return;
                     }
                     default:
                     {
-                        System.Console.WriteLine("物品添加完畢。");
+                        print("物品添加完畢。");
                         break;
                     }
                 }
