@@ -51,9 +51,7 @@ namespace Player
                     itemQuantity = remainingQuantity
                 };
                 remainingQuantity = storageData.AddItem(slotData);
-                
-                // TODO: 更新前台 UI ......
-                
+
                 // 判斷物品剩餘數量的邏輯。
                 switch (remainingQuantity)
                 {
@@ -70,7 +68,12 @@ namespace Player
                     default:
                     {
                         print("物品添加完畢。");
-                        break;
+                        
+                        // 更新儲物介面。
+                        _tempInventoryUI?.Refresh();
+                        _tempBagUI?.Refresh();
+
+                        return;
                     }
                 }
             }

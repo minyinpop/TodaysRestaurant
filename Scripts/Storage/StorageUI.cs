@@ -15,11 +15,15 @@ namespace Storage
         [Header("儲物格介面"), Tooltip("- 儲物介面的所有儲物格的陣列。\n- 用來刷新所有物品。"), SerializeField]
         private List<StorageSlotUI> storageSlotList;
 
+        /// <summary>
+        /// 用於更新整個儲物介面。
+        /// </summary>
         public void Refresh()
         {
-            foreach (var storageSlot in storageSlotList)
+            // 以儲物格的介面當作數量參考，來判斷要抓取多少的儲物格資料。
+            for (var i = 0; i < storageSlotList.Count; i++)
             {
-                // TODO: storageSlot.Refresh();
+                storageSlotList[i].Refresh(storageData.SlotDataList[i]);
             }
         }
     }

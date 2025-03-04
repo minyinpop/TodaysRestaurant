@@ -24,6 +24,34 @@ namespace Storage.Slot.Category
         /// <param name="newSlotData"></param>
         public override void Refresh(StorageSlotData newSlotData)
         {
+            Debug.Log($"{name} 準備更新介面 !");
+            
+            // 如果新的儲物格資訊是鎖起來的，就直接退出更新 UI。
+            if (newSlotData.isLocked)
+                return;
+            
+            Debug.Log($"{name} 更新成功 !");
+            
+            slotData = newSlotData;
+
+            // 如果儲物格資料庫的物品資料是空的，就把 itemImage 跟 itemQuantityTMP 給清空後隱藏。
+            if (slotData.itemData is null)
+            {
+                itemImage.sprite = null;
+                itemImage.gameObject.SetActive(false);
+
+                itemQuantityTMP.text = "";
+                itemQuantityTMP.gameObject.SetActive(false);
+            }
+            // 如果儲物格資料庫的物品資料是有東西的，就把 itemImage 跟 itemQuantityTMP 給開啟並附值。
+            else
+            {
+                itemImage.gameObject.SetActive(true);
+                itemImage.sprite = slotData.itemData.Sprite;
+                
+                itemQuantityTMP.gameObject.SetActive(true);
+                itemQuantityTMP.text = slotData.itemQuantity.ToString();
+            }
         }
     }
 }

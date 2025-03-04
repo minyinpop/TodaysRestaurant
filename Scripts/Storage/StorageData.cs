@@ -11,8 +11,8 @@ namespace Storage
     [CreateAssetMenu(fileName = "New Storage Data", menuName = "Storage Data", order = 1)]
     public class StorageData : ScriptableObject
     {
-        [Header("資料庫"), Tooltip("- 物品的儲物格資料的陣列。\n- 排序會影響到物品添加的先後順序。\n- 有多少的儲物格就要添加多少筆的資料。"), SerializeField]
-        private List<StorageSlotData> slotDataList;
+        [field: Header("資料庫"), Tooltip("- 物品的儲物格資料的陣列。\n- 排序會影響到物品添加的先後順序。\n- 有多少的儲物格就要添加多少筆的資料。"), SerializeField]
+        public List<StorageSlotData> SlotDataList { get; private set; }
 
         /// <summary>
         /// 使用儲存格資料來添加物品，
@@ -27,16 +27,16 @@ namespace Storage
             // 用來記錄物品剩餘數量的參數。
             var remainingQuantity = newSlotData.itemQuantity;
 
-            for (var i = 0; i < slotDataList.Count; i++)
+            for (var i = 0; i < SlotDataList.Count; i++)
             {
                 // 第 i 格的儲物個的物品資料。
-                var nowItemData = slotDataList[i].itemData;
+                var nowItemData = SlotDataList[i].itemData;
 
                 // 第 i 格的儲物格的物品數量。
-                var nowItemQuantity = slotDataList[i].itemQuantity;
+                var nowItemQuantity = SlotDataList[i].itemQuantity;
 
                 // 如果第 i 格的儲物格是鎖上的，就切換到下一個儲物格做判斷。
-                if (slotDataList[i].isLocked)
+                if (SlotDataList[i].isLocked)
                     continue;
 
                 // 如果第 i 格的儲物格是空的，就直接把物品給添加去。
@@ -45,13 +45,13 @@ namespace Storage
                     // 如果第 i 格的儲物格不能容納所有被添加的物品。
                     if (remainingQuantity >= newItemData.MaxStack)
                     {
-                        slotDataList[i] = UpdateSlotData(newItemData, newItemData.MaxStack);
+                        SlotDataList[i] = UpdateSlotData(newItemData, newItemData.MaxStack);
                         remainingQuantity -= newItemData.MaxStack;
                     }
                     // 如果第 i 格的儲物格可以容納所有被添加的物品。
                     else
                     {
-                        slotDataList[i] = UpdateSlotData(newItemData, remainingQuantity);
+                        SlotDataList[i] = UpdateSlotData(newItemData, remainingQuantity);
                         return 0;
                     }
                 }
@@ -73,12 +73,12 @@ namespace Storage
                     // 第 i 格的儲物格可以一次容納所有的物品。
                     if (remainingQuantity + nowItemQuantity <= nowItemData.MaxStack)
                     {
-                        slotDataList[i] = UpdateSlotData(nowItemData, remainingQuantity + nowItemQuantity);
+                        SlotDataList[i] = UpdateSlotData(nowItemData, remainingQuantity + nowItemQuantity);
                         return 0;
                     }
 
                     // 第 i 格的儲物格不能一次容納所有的物品。
-                    slotDataList[i] = UpdateSlotData(nowItemData, nowItemData.MaxStack);
+                    SlotDataList[i] = UpdateSlotData(nowItemData, nowItemData.MaxStack);
                     remainingQuantity -= nowItemData.MaxStack - nowItemQuantity;
                 }
             }

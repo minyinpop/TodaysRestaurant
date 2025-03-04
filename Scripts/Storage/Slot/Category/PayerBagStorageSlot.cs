@@ -11,8 +11,11 @@ namespace Storage.Slot.Category
     {
         [Header("圖片"), Tooltip("儲物格解鎖後的圖片，用於 UI。"), SerializeField]
         private Sprite unlockedSprite;
-        
-        [Header("物品顯示組件"), Tooltip("用來顯示物品圖片的圖片組件。"), SerializeField]
+
+        [Header("組件"), Tooltip("用來顯示儲物格圖片的圖片組件。"), SerializeField]
+        private Image slotImage;
+            
+        [Tooltip("用來顯示物品圖片的圖片組件。"), SerializeField]
         private Image itemImage;
         
         [Tooltip("用來顯示物品數量的文字組件。"), SerializeField]
@@ -27,15 +30,35 @@ namespace Storage.Slot.Category
         /// <param name="newSlotData"></param>
         public override void Refresh(StorageSlotData newSlotData)
         {
-            // 如果該儲物格是鎖起來的，就取消刷新該儲物格。
+            // 如果儲物格資訊是鎖起來的。
             if (slotData.isLocked)
             {
+                // 如果新的儲物格資訊是鎖起來的，就直接結束。
                 if (newSlotData.isLocked)
                     return;
-
-                slotData = newSlotData;
+                // 如果新的儲物格資訊是解鎖的，就更換儲物格的背景圖片。
+                slotImage.sprite = unlockedSprite;
+            }
                 
-                // TODO: 依照 newSlotData 來更新儲物格的介面。
+            slotData = newSlotData;
+
+            // 如果儲物格資料庫的物品資料是空的，就把 itemImage 跟 itemQuantityTMP 給清空後隱藏。
+            if (slotData.itemData is null)
+            {
+                itemImage.sprite = null;
+                itemImage.gameObject.SetActive(false);
+
+                itemQuantityTMP.text = "";
+                itemQuantityTMP.gameObject.SetActive(false);
+            }
+            // 如果儲物格資料庫的物品資料是有東西的，就把 itemImage 跟 itemQuantityTMP 給開啟並附值。
+            else
+            {
+                itemImage.gameObject.SetActive(true);
+                itemImage.sprite = slotData.itemData.Sprite;
+                
+                itemQuantityTMP.gameObject.SetActive(true);
+                itemQuantityTMP.text = slotData.itemQuantity.ToString();
             }
         }
     }
