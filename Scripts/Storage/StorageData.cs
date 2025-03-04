@@ -8,7 +8,7 @@ namespace Storage
     /// <summary>
     /// 用來控制儲物介面的資料庫。
     /// </summary>
-    [CreateAssetMenu(fileName = "New Storage Data", menuName = "New Storage Data", order = 1)]
+    [CreateAssetMenu(fileName = "New Storage Data", menuName = "Storage Data", order = 1)]
     public class StorageData : ScriptableObject
     {
         [Header("資料庫"), Tooltip("- 物品的儲物格資料的陣列。\n- 排序會影響到物品添加的先後順序。\n- 有多少的儲物格就要添加多少筆的資料。"), SerializeField]

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Character.Inventory_Space;
 using Storage;
 using Storage.Slot;
 using UnityEngine;
@@ -10,16 +11,32 @@ namespace Player
     /// </summary>
     public class PlayerStorageSystem : MonoBehaviour
     {
-        [Header("")]
+        [Header("位置"), Tooltip("介面要生成在哪一個遊戲物件的底下。"), SerializeField]
+        private Transform uiSpawnPoint;
+        
         [Header("儲物介面"), Tooltip("玩家快捷欄的儲物介面的預製件。"), SerializeField]
         private GameObject inventoryUIPrefab;
+        
+        // 用來暫存玩家快捷欄的遊戲物件。
+        private StorageUI _tempInventoryUI;
         
         [Tooltip("玩家背包的儲物介面的預製件。"), SerializeField]
         private GameObject bagUIPrefab;
         
-        [Header("資料庫"), Tooltip("- 儲物介面的資料庫陣列。\n- 排序會影響到物品添加的先後順序。"), SerializeField]
+        // 用來暫存玩家背包的遊戲物件。
+        private StorageUI _tempBagUI;
+        
+        [Header("資料庫"), Tooltip("- 玩家的角色資料庫。\n- 用來判斷背包的儲物格開啟數量有多少。"), SerializeField]
+        private CharacterInventorySpaceData characterDatabase;
+        
+        [Tooltip("- 儲物介面的資料庫陣列。\n- 排序會影響到物品添加的先後順序。"), SerializeField]
         private List<StorageData> storageDataList;
 
+        private void Awake()
+        {
+            _tempInventoryUI = Instantiate(inventoryUIPrefab, uiSpawnPoint).GetComponent<StorageUI>();
+        }
+        
         public void AddItem(StorageSlotData newSlotData)
         {
             // 用來記錄物品剩餘數量的參數。
