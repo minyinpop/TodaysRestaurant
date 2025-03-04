@@ -10,6 +10,7 @@ namespace Player
     /// </summary>
     public class PlayerStorageSystem : MonoBehaviour
     {
+        [Header("")]
         [Header("儲物介面"), Tooltip("玩家快捷欄的儲物介面的預製件。"), SerializeField]
         private GameObject inventoryUIPrefab;
         

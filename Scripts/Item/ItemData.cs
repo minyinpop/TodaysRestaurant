@@ -16,7 +16,7 @@ namespace Item
         [field: Header("堆疊設定"), Tooltip("同種物品可不可以堆疊在一起。"), SerializeField]
         public bool Stackable { get; private set; }
         
-        [field: Tooltip("如果物品可以堆疊，那最大的堆疊數量是多少。\n就算是不可以堆疊的物品，也要設置成 1"), SerializeField]
+        [field: Tooltip("- 如果物品可以堆疊，那最大的堆疊數量是多少。\n- 就算是不可以堆疊的物品，也要設置成 1"), SerializeField]
         public int MaxStack { get; private set; }
     }
 }
