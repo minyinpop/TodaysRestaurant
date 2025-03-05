@@ -7,21 +7,21 @@ namespace Input
     /// </summary>
     public class InputSystem : MonoBehaviour
     {
-        private static InputMap _input;
+        public static InputMap input;
         
         private void Awake()
         {
-            _input = new InputMap();
+            input = new InputMap();
         }
 
         private void OnEnable()
         {
-            _input.Enable();
+            input.Enable();
         }
         
         private void OnDisable()
         {
-            _input.Disable();
+            input.Disable();
         }
     }
 }

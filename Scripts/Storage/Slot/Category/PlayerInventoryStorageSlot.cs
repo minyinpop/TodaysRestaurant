@@ -24,13 +24,9 @@ namespace Storage.Slot.Category
         /// <param name="newSlotData"></param>
         public override void Refresh(StorageSlotData newSlotData)
         {
-            Debug.Log($"{name} 準備更新介面 !");
-            
             // 如果新的儲物格資訊是鎖起來的，就直接退出更新 UI。
             if (newSlotData.isLocked)
                 return;
-            
-            Debug.Log($"{name} 更新成功 !");
             
             slotData = newSlotData;
 
