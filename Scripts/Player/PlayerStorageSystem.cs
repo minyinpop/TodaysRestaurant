@@ -3,6 +3,8 @@ using Character.Inventory_Space;
 using Storage;
 using Storage.Slot;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using InputSystem = Input.InputSystem;
 
 namespace Player
 {
@@ -31,17 +33,40 @@ namespace Player
         
         [Tooltip("- 儲物介面的資料庫陣列。\n- 排序會影響到物品添加的先後順序。"), SerializeField]
         private List<StorageData> storageDataList;
+        
+        // 輸入端。
+        private InputMap _input;
 
         private void Awake()
         {
-            _tempInventoryUI = Instantiate(inventoryUIPrefab, uiSpawnPoint).GetComponent<StorageUI>();
+            _input = InputSystem.input;
         }
-        
+
+        private void Start()
+        {
+            _tempInventoryUI = Instantiate(inventoryUIPrefab, uiSpawnPoint).GetComponent<StorageUI>();
+            _tempInventoryUI.Refresh();
+        }
+
+        private void OnEnable()
+        {
+            _input.Player.Bag.performed += OnBagButtonDown;
+        }
+
+        private void OnDisable()
+        {
+            _input.Player.Bag.performed -= OnBagButtonDown;
+        }
+
+        /// <summary>
+        /// 以 Storage Data List 的順序來添加物品。
+        /// </summary>
+        /// <param name="newSlotData"></param>
         public void AddItem(StorageSlotData newSlotData)
         {
             // 用來記錄物品剩餘數量的參數。
             var remainingQuantity = newSlotData.itemQuantity;
-            
+
             foreach (var storageData in storageDataList)
             {
                 var slotData = new StorageSlotData
@@ -52,30 +77,36 @@ namespace Player
                 };
                 remainingQuantity = storageData.AddItem(slotData);
 
-                // 判斷物品剩餘數量的邏輯。
-                switch (remainingQuantity)
-                {
-                    case > 0:
-                    {
-                        print("還有物品沒被添加完畢。");
-                        continue;
-                    }
-                    case < 0:
-                    {
-                        print("物品數量不能為負，有可能會出問題。");
-                        return;
-                    }
-                    default:
-                    {
-                        print("物品添加完畢。");
-                        
-                        // 更新儲物介面。
-                        _tempInventoryUI?.Refresh();
-                        _tempBagUI?.Refresh();
+                // 還有物品沒有被添加完畢，換到下一個 storageDataList 的儲物介面的資料庫。
+                if (remainingQuantity > 0)
+                    continue;
 
-                        return;
-                    }
-                }
+                // 物品數量不能是負的。
+                if (remainingQuantity < 0)
+                    return;
+
+                _tempInventoryUI?.Refresh();
+                _tempBagUI?.Refresh();
+                return;
+            }
+        }
+
+        /// <summary>
+        /// 當 開啟背包 所設定的按鍵被按下時，所發生的事情。
+        /// </summary>
+        /// <param name="context"> 輸入系統的狀態。 </param>
+        private void OnBagButtonDown(InputAction.CallbackContext context)
+        {
+            // 判斷背包是否為關閉的狀態，進而做出不同的操作。
+            if (_tempBagUI is null)
+            {
+                _tempBagUI = Instantiate(bagUIPrefab, uiSpawnPoint).GetComponent<StorageUI>();
+                _tempBagUI.Refresh();
+            }
+            else
+            {
+                Destroy(_tempBagUI.gameObject);
+                _tempBagUI = null;
             }
         }
     }
