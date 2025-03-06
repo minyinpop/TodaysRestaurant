@@ -57,7 +57,7 @@ namespace Player
         /// <summary>
         /// 以 Storage Data List 的順序來添加物品。
         /// </summary>
-        /// <param name="newSlotData"></param>
+        /// <param name="newSlotData"> 新傳入的儲物格資訊。 </param>
         public void AddItem(StorageSlotData newSlotData)
         {
             // 用來記錄物品剩餘數量的參數。
