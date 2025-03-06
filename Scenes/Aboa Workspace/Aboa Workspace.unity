@@ -272,7 +272,6 @@ MonoBehaviour:
   uiSpawnPoint: {fileID: 1271469420}
   inventoryUIPrefab: {fileID: 8862954656950152609, guid: 29662bd0df66b94458bdcbc57a3d00f7, type: 3}
   bagUIPrefab: {fileID: 480712595727289734, guid: b85de0df742bed949b5d5f3c1e3abbd3, type: 3}
-  characterDatabase: {fileID: 11400000, guid: 28d04160d4c17a842a008bbd44d3b48f, type: 2}
   storageDataList:
   - {fileID: 11400000, guid: 3f7c0f48f3b6211449555a30e621c559, type: 2}
   - {fileID: 11400000, guid: cd6c59dfc26e0ab428dee58c4180c0fa, type: 2}
@@ -314,6 +313,51 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 473151940}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &488209832
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 488209834}
+  - component: {fileID: 488209833}
+  m_Layer: 0
+  m_Name: Player Item Drag System
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &488209833
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 488209832}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58154bcd99f3cbd40a3447bd91bae462, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemDragPreview: {fileID: 0}
+--- !u!4 &488209834
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 488209832}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -924,3 +968,4 @@ SceneRoots:
   - {fileID: 1100787846}
   - {fileID: 832079754}
   - {fileID: 301629168}
+  - {fileID: 488209834}

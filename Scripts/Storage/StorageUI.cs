@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using Character.Inventory_Space;
+using Item;
 using Storage.Slot;
 using UnityEngine;
 
@@ -14,7 +16,7 @@ namespace Storage
         
         [Header("儲物格介面"), Tooltip("- 儲物介面的所有儲物格的陣列。\n- 用來刷新所有物品。"), SerializeField]
         private List<StorageSlotUI> storageSlotList;
-
+        
         /// <summary>
         /// 用於更新整個儲物介面。
         /// </summary>

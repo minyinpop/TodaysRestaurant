@@ -15,8 +15,8 @@ namespace Storage.Slot.Category
         [Tooltip("用來顯示物品數量的文字組件。"), SerializeField]
         private TextMeshProUGUI itemQuantityTMP;
         
-        [Header("資料庫"), Tooltip("該儲物格的物品資料的數據暫存。"), SerializeField]
-        private StorageSlotData slotData;
+        [Header("資料庫"), Tooltip("該儲物格的物品資料的數據暫存。")]
+        private StorageSlotData _slotData;
         
         /// <summary>
         /// 用來刷新儲物格的介面的
@@ -28,10 +28,10 @@ namespace Storage.Slot.Category
             if (newSlotData.isLocked)
                 return;
             
-            slotData = newSlotData;
+            _slotData = newSlotData;
 
             // 如果儲物格資料庫的物品資料是空的，就把 itemImage 跟 itemQuantityTMP 給清空後隱藏。
-            if (slotData.itemData is null)
+            if (_slotData.itemData is null)
             {
                 itemImage.sprite = null;
                 itemImage.gameObject.SetActive(false);
@@ -43,10 +43,10 @@ namespace Storage.Slot.Category
             else
             {
                 itemImage.gameObject.SetActive(true);
-                itemImage.sprite = slotData.itemData.Sprite;
+                itemImage.sprite = _slotData.itemData.Sprite;
                 
                 itemQuantityTMP.gameObject.SetActive(true);
-                itemQuantityTMP.text = slotData.itemQuantity.ToString();
+                itemQuantityTMP.text = _slotData.itemQuantity.ToString();
             }
         }
     }
