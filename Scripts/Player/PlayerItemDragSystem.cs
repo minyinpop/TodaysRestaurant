@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Storage.Slot;
+using Storage.Slot.Category;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -60,18 +61,28 @@ namespace Player
         /// <param name="context"> 輸入系統的狀態。 </param>
         private void OnLeftClickPerformed(InputAction.CallbackContext context)
         {
-            // 判斷玩家有沒有物品正在被拖曳。
+            var clickedSlot = MouseDetectedSlot();
+            
+            // 如果玩家沒有在拖曳物品，就生成物品拖曳儲物格。
             if (_tempItemPreview is null)
             {
-                _tempItemPreview = Instantiate(itemDragPreviewPrefab, previewSpawnPoint);
-                _tempItemPreviewSlotData = _tempItemPreview.GetComponent<StorageSlotData>();
+                // 如果玩家沒有點擊到儲物格，就直接取消判斷。
+                if (clickedSlot is null)
+                    return;
                 
+                var clickedSlotData = clickedSlot.GetComponent<StorageSlotUI>().SlotData();
+
+                // 如果儲物格裡面是沒有東西的，就直接取消判斷。
+                if (clickedSlotData.itemData is null)
+                    return;
+                
+                _tempItemPreview = Instantiate(itemDragPreviewPrefab, previewSpawnPoint);
+                _tempItemPreview.GetComponent<PlayerItemDragPreviewSlot>().Refresh(clickedSlotData);
                 // TODO: 做後續的判斷 ......
             }
+            // 如果玩家已經在拖曳物品，就生成物品拖曳儲物格。
             else
             {
-                var clickedSlot = MouseDetectedSlot();
-
                 // 判斷玩家有沒有點擊到儲物格，並做後續的判斷。
                 if (clickedSlot is null)
                 {
@@ -80,6 +91,8 @@ namespace Player
                 }
 
                 // TODO: 判斷 clickedSlot 裡有沒有物品，而做後續的判斷。
+                
+                Destroy(_tempItemPreview);
                 _tempItemPreview = null;
             }
         }

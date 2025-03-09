@@ -25,22 +25,19 @@ namespace Storage.Slot.Category
         private StorageSlotData _slotData;
         
         /// <summary>
-        /// 用來刷新儲物格的介面的
+        /// 用來刷新儲物格的介面的方法。
         /// </summary>
-        /// <param name="newSlotData"></param>
+        /// <param name="newSlotData"> 新傳入的儲物格資料。 </param>
         public override void Refresh(StorageSlotData newSlotData)
         {
+            _slotData = newSlotData;
+            
             // 如果儲物格資訊是鎖起來的。
-            if (_slotData.isLocked)
+            if (!_slotData.isLocked)
             {
-                // 如果新的儲物格資訊是鎖起來的，就直接結束。
-                if (newSlotData.isLocked)
-                    return;
-                // 如果新的儲物格資訊是解鎖的，就更換儲物格的背景圖片。
+                // 如果傳入進來的儲物格資訊是解鎖的，就更換儲物格的圖片。
                 slotImage.sprite = unlockedSprite;
             }
-                
-            _slotData = newSlotData;
 
             // 如果儲物格資料庫的物品資料是空的，就把 itemImage 跟 itemQuantityTMP 給清空後隱藏。
             if (_slotData.itemData is null)
@@ -60,6 +57,15 @@ namespace Storage.Slot.Category
                 itemQuantityTMP.gameObject.SetActive(true);
                 itemQuantityTMP.text = _slotData.itemQuantity.ToString();
             }
+        }
+        
+        /// <summary>
+        /// 用來獲取儲物格裡面的數據。
+        /// </summary>
+        /// <returns> 返還自己的儲物格資訊。 </returns>
+        public override StorageSlotData SlotData()
+        {
+            return _slotData;
         }
     }
 }

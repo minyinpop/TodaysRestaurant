@@ -16,15 +16,17 @@ namespace Storage.Slot.Category
         private StorageSlotData _slotData;
         
         /// <summary>
-        /// 
+        /// 用來刷新儲物格的介面的方法。
         /// </summary>
-        /// <param name="newSlotData"></param>
+        /// <param name="newSlotData"> 新傳入的儲物格資料。 </param>
         public override void Refresh(StorageSlotData newSlotData)
         {
+            _slotData = newSlotData;
+            
             // 如果圖片組件存在的話，就顯示物品的圖片。
             if (itemImage is not null)
                 itemImage.sprite = _slotData.itemData.Sprite;
-            
+
             // 如果文字組件存在的話，就顯示物品數量的文字。
             if (itemQuantityTMP is not null)
                 itemQuantityTMP.text = _slotData.itemQuantity.ToString();

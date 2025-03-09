@@ -8,9 +8,18 @@ namespace Storage.Slot
     public abstract class StorageSlotUI : MonoBehaviour
     {
         /// <summary>
-        /// 用來刷新儲物格的介面的
+        /// 用來刷新儲物格的介面的方法。
         /// </summary>
-        /// <param name="newSlotData"></param>
+        /// <param name="newSlotData"> 新傳入的儲物格資料。 </param>
         public abstract void Refresh(StorageSlotData newSlotData);
+
+        /// <summary>
+        /// 用來獲取儲物格裡面的數據。
+        /// </summary>
+        /// <returns> 返還自己的儲物格資訊。 </returns>
+        public virtual StorageSlotData SlotData()
+        {
+            return new StorageSlotData();
+        }
     }
 }

@@ -19,9 +19,9 @@ namespace Storage.Slot.Category
         private StorageSlotData _slotData;
         
         /// <summary>
-        /// 用來刷新儲物格的介面的
+        /// 用來刷新儲物格的介面的方法。
         /// </summary>
-        /// <param name="newSlotData"></param>
+        /// <param name="newSlotData"> 新傳入的儲物格資料。 </param>
         public override void Refresh(StorageSlotData newSlotData)
         {
             // 如果新的儲物格資訊是鎖起來的，就直接退出更新 UI。
@@ -48,6 +48,15 @@ namespace Storage.Slot.Category
                 itemQuantityTMP.gameObject.SetActive(true);
                 itemQuantityTMP.text = _slotData.itemQuantity.ToString();
             }
+        }
+
+        /// <summary>
+        /// 用來獲取儲物格裡面的數據。
+        /// </summary>
+        /// <returns> 返還自己的儲物格資訊。 </returns>
+        public override StorageSlotData SlotData()
+        {
+            return _slotData;
         }
     }
 }
