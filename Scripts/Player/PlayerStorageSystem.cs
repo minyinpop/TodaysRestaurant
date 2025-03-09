@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Character.Inventory_Space;
 using Storage;
 using Storage.Slot;
 using UnityEngine;
@@ -27,9 +26,6 @@ namespace Player
         
         // 用來暫存玩家背包的遊戲物件。
         private StorageUI _tempBagUI;
-        
-        [Header("資料庫"), Tooltip("- 玩家的角色資料庫。\n- 用來判斷背包的儲物格開啟數量有多少。"), SerializeField]
-        private CharacterInventorySpaceData characterDatabase;
         
         [Tooltip("- 儲物介面的資料庫陣列。\n- 排序會影響到物品添加的先後順序。"), SerializeField]
         private List<StorageData> storageDataList;
@@ -61,7 +57,7 @@ namespace Player
         /// <summary>
         /// 以 Storage Data List 的順序來添加物品。
         /// </summary>
-        /// <param name="newSlotData"></param>
+        /// <param name="newSlotData"> 新傳入的儲物格資訊。 </param>
         public void AddItem(StorageSlotData newSlotData)
         {
             // 用來記錄物品剩餘數量的參數。
