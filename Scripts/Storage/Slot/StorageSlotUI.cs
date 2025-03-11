@@ -14,12 +14,14 @@ namespace Storage.Slot
         public abstract void Refresh(StorageSlotData newSlotData);
 
         /// <summary>
+        /// 用來清空儲物格的介面的方法。
+        /// </summary>
+        public abstract void Clear();
+
+        /// <summary>
         /// 用來獲取儲物格裡面的數據。
         /// </summary>
         /// <returns> 返還自己的儲物格資訊。 </returns>
-        public virtual StorageSlotData SlotData()
-        {
-            return new StorageSlotData();
-        }
+        public abstract StorageSlotData SlotData();
     }
 }

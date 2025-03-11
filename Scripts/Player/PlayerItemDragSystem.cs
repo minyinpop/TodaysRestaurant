@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Item;
 using Storage.Slot;
 using Storage.Slot.Category;
 using UnityEngine;
@@ -24,13 +25,28 @@ namespace Player
         private string storageSlotTag;
         
         // 物品預覽儲物格的遊戲物件。
-        private GameObject _tempItemPreview;
+        private GameObject _itemPreview;
+        
         // 物品預覽儲物格的資料庫。
-        private StorageSlotData _tempItemPreviewSlotData;
+        private StorageSlotData _itemPreviewSlotData;
+        
+        // 儲物格的遊戲物件，用於獲取第一次點擊到的儲物格的所有訊息。
+        private GameObject _selectedSlot;
+        private GameObject _tempSelectedSlot;
+
+        // _selectedSlot 的介面資訊，用於快速讀取資料用。
+        private StorageSlotUI _selectedSlotUI;
+        private StorageSlotUI _tempSelectedSlotUI;
+        
+        // _selectedSlot 的儲物格的資料，用於快速讀取資料用。
+        private StorageSlotData _selectedSlotData;
+        private StorageSlotData _tempSelectedSlotData;
         
         // 輸入端。
         private InputMap _input;
+        
         // 滑鼠位置。
+        // TODO: 把 MousePos 改道 InputSystem 裡面，這裡做抓取資料即可。
         private Vector2 MousePos => _input.Mouse.Position.ReadValue<Vector2>();
 
         private void Awake()
@@ -46,8 +62,8 @@ namespace Player
         private void LateUpdate()
         {
             // 如果拖曳預覽不存在的話，就不執行。
-            if (_tempItemPreview is not null)
-                _tempItemPreview.transform.position = MousePos;
+            if (_itemPreview is not null)
+                _itemPreview.transform.position = MousePos;
         }
 
         private void OnDisable()
@@ -61,46 +77,7 @@ namespace Player
         /// <param name="context"> 輸入系統的狀態。 </param>
         private void OnLeftClickPerformed(InputAction.CallbackContext context)
         {
-            var clickedSlot = MouseDetectedSlot();
-            var clickedSlotData = new StorageSlotData();
-            
-            // 如果玩家沒有在拖曳物品，就生成物品拖曳儲物格。
-            if (_tempItemPreview is null)
-            {
-                // 如果玩家沒有點擊到儲物格，就直接取消判斷。
-                if (clickedSlot is null)
-                    return;
-                
-                clickedSlotData = clickedSlot.GetComponent<StorageSlotUI>().SlotData();
-
-                // 如果儲物格裡面是沒有東西的，就直接取消判斷。
-                if (clickedSlotData.itemData is null)
-                    return;
-                
-                _tempItemPreview = Instantiate(itemDragPreviewPrefab, previewSpawnPoint);
-                _tempItemPreview.GetComponent<PlayerItemDragPreviewSlot>().Refresh(clickedSlotData);
-            }
-            // 如果玩家已經在拖曳物品，就生成物品拖曳儲物格。
-            else
-            {
-                // 判斷玩家有沒有點擊到儲物格，並做後續的判斷。
-                if (clickedSlot is null)
-                {
-                    // TODO: 可以做後續的判斷，像是在非 UI 的區域點擊，可以把物品給丟出去。
-                    return;
-                }
-                
-                clickedSlotData = clickedSlot.GetComponent<StorageSlotUI>().SlotData();
-                
-                // 如果玩家在拖曳物品時，點擊了沒有存放物品的儲物格，就直接把物品給放進去。
-                if (clickedSlotData.itemData is null)
-                {
-                    Debug.Log($"儲物格 {name} 沒有儲放物品。");
-                }
-                
-                Destroy(_tempItemPreview);
-                _tempItemPreview = null;
-            }
+            // TODO: 玩家滑鼠的各種互動。
         }
 
         /// <summary>
@@ -131,6 +108,37 @@ namespace Player
 
             // 玩家沒有點擊到儲物格，回傳空的參數。
             return null;
+        }
+        
+        /// <summary>
+        /// 用來更新儲物格的資料。
+        /// </summary>
+        /// <param name="itemData"> 儲物格的物品的資料。 </param>
+        /// <param name="itemQuantity"> 儲物格的物品的數量。 </param>
+        /// <returns> 回傳新的儲物格資料。 </returns>
+        private static StorageSlotData UpdateSlotData(ItemData itemData, int itemQuantity)
+        {
+            return new StorageSlotData
+            {
+                isLocked = false,
+                itemData = itemData,
+                itemQuantity = itemQuantity,
+            };
+        }
+
+        /// <summary>
+        /// 重置所有的儲物格的暫存的資料。
+        /// </summary>
+        private void Reset()
+        {
+            _selectedSlot = null;
+            _tempSelectedSlot = null;
+            
+            _selectedSlotUI = null;
+            _tempSelectedSlotUI = null;
+            
+            _selectedSlotData = new StorageSlotData();
+            _tempSelectedSlotData = new StorageSlotData();
         }
     }
 }

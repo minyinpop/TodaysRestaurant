@@ -49,6 +49,14 @@ namespace Storage.Slot.Category
                 itemQuantityTMP.text = _slotData.itemQuantity.ToString();
             }
         }
+        
+        /// <summary>
+        /// 用來清空儲物格的介面的方法。
+        /// </summary>
+        public override void Clear()
+        {
+            Refresh(new StorageSlotData());
+        }
 
         /// <summary>
         /// 用來獲取儲物格裡面的數據。
