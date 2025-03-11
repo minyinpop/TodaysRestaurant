@@ -62,6 +62,7 @@ namespace Player
         private void OnLeftClickPerformed(InputAction.CallbackContext context)
         {
             var clickedSlot = MouseDetectedSlot();
+            var clickedSlotData = new StorageSlotData();
             
             // 如果玩家沒有在拖曳物品，就生成物品拖曳儲物格。
             if (_tempItemPreview is null)
@@ -70,7 +71,7 @@ namespace Player
                 if (clickedSlot is null)
                     return;
                 
-                var clickedSlotData = clickedSlot.GetComponent<StorageSlotUI>().SlotData();
+                clickedSlotData = clickedSlot.GetComponent<StorageSlotUI>().SlotData();
 
                 // 如果儲物格裡面是沒有東西的，就直接取消判斷。
                 if (clickedSlotData.itemData is null)
@@ -78,7 +79,6 @@ namespace Player
                 
                 _tempItemPreview = Instantiate(itemDragPreviewPrefab, previewSpawnPoint);
                 _tempItemPreview.GetComponent<PlayerItemDragPreviewSlot>().Refresh(clickedSlotData);
-                // TODO: 做後續的判斷 ......
             }
             // 如果玩家已經在拖曳物品，就生成物品拖曳儲物格。
             else
@@ -89,8 +89,14 @@ namespace Player
                     // TODO: 可以做後續的判斷，像是在非 UI 的區域點擊，可以把物品給丟出去。
                     return;
                 }
-
-                // TODO: 判斷 clickedSlot 裡有沒有物品，而做後續的判斷。
+                
+                clickedSlotData = clickedSlot.GetComponent<StorageSlotUI>().SlotData();
+                
+                // 如果玩家在拖曳物品時，點擊了沒有存放物品的儲物格，就直接把物品給放進去。
+                if (clickedSlotData.itemData is null)
+                {
+                    Debug.Log($"儲物格 {name} 沒有儲放物品。");
+                }
                 
                 Destroy(_tempItemPreview);
                 _tempItemPreview = null;
