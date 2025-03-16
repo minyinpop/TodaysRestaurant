@@ -23,5 +23,14 @@ namespace Input
         {
             input.Disable();
         }
+
+        /// <summary>
+        /// 滑鼠的位置，
+        /// </summary>
+        /// <returns></returns>
+        public static Vector2 MousePos()
+        {
+            return input.Mouse.Position.ReadValue<Vector2>();
+        }
     }
 }

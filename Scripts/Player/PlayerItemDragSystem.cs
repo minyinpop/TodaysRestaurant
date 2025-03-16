@@ -27,38 +27,30 @@ namespace Player
         private bool _isDragging;
         
         // 物品拖曳預覽的快取資料。
-        private TempStorageSlotData _previewStorageSlotData;
+        private GameObject _previewSlot;
+        private StorageSlotUI _previewSlotUI;
+        private StorageSlotData _previewSlotData;
         
-        // 被點選的物品的快取資料。
-        private TempStorageSlotData _selectedStorageSlotData;
+        // 被點選的儲物格的快取資料。
+        private GameObject _selectedSlot;
+        private StorageSlotUI _selectedSlotUI;
+        private StorageSlotData _selectedSlotData;
         
-        // 輸入端。
-        private InputMap _input;
-        
-        // 滑鼠位置。
-        // TODO: 把 MousePos 改道 InputSystem 裡面，這裡做抓取資料即可。
-        private Vector2 MousePos => _input.Mouse.Position.ReadValue<Vector2>();
-
-        private void Awake()
-        {
-            _input = InputSystem.input;
-        }
-
         private void OnEnable()
         {
-            _input.Mouse.LeftClick.performed += OnLeftClickPerformed;
+            InputSystem.input.Mouse.LeftClick.performed += OnLeftClickPerformed;
         }
 
         private void LateUpdate()
         {
             // 如果拖曳預覽不存在的話，就不執行。
-            if (_previewStorageSlotData.slot is not null)
-                _previewStorageSlotData.slot.transform.position = MousePos;
+            if (_isDragging)
+                _previewSlot.transform.position = InputSystem.MousePos();
         }
 
         private void OnDisable()
         {
-            _input.Mouse.LeftClick.performed -= OnLeftClickPerformed;
+            InputSystem.input.Mouse.LeftClick.performed -= OnLeftClickPerformed;
         }
 
         /// <summary>
@@ -67,57 +59,100 @@ namespace Player
         /// <param name="context"> 輸入系統的狀態。 </param>
         private void OnLeftClickPerformed(InputAction.CallbackContext context)
         {
-            // TODO: 玩家滑鼠的各種互動。
-            _selectedStorageSlotData = UpdateTempSlotData(false, MouseDetectedSlot());
-            
-            // 如果玩家沒有點擊到儲物格。
-            if (_selectedStorageSlotData.slot is null)
+            _selectedSlot = MouseDetectedSlot();
+
+            if (_selectedSlot is null)
             {
+                // TODO: 未來可以製作丟物品的判斷，像是點擊到了空白的區域，可以把物品給丟出來。
             }
-            // 如果玩家點擊到儲物格。
             else
             {
-                _selectedStorageSlotData = UpdateTempSlotData(true, _selectedStorageSlotData.slot);
-                
-                // 玩家在拖曳物品時，點擊了儲物格。
+                _selectedSlotUI = _selectedSlot.GetComponent<StorageSlotUI>();
+                _selectedSlotData = _selectedSlotUI.SlotData();
+
                 if (_isDragging)
                 {
-                    // 玩家在拖曳物品的時候，點擊了空的儲物格。
-                    if (_selectedStorageSlotData.slotData.itemData is null)
+                    // 如果玩家在拖曳物品時，點擊了沒有存放物品的儲物格，就直接把物品給存放進去。
+                    if (_selectedSlotData.itemData is null)
                     {
-                        print("物品被放入了空的儲物格");
+                        Destroy(_previewSlot);
+                        
+                        _selectedSlotData = UpdateSlotData(_previewSlotData.itemData, _previewSlotData.itemQuantity);
+                        _selectedSlotUI.Refresh(_selectedSlotData);
+                        
+                        _isDragging = false;
+                        
+                        ClearSelectedSlotData();
+                        ClearPreviewSlotData();
                     }
-                    // 玩家在拖曳物品的時候，點擊了有物品的儲物格。
+                    // 如果玩家在拖曳物品時，點擊了有存放物品的儲物格，就判斷物品可否堆疊。
                     else
                     {
-                        print("物品與該儲物格內的物品做邏輯比較");
+                        // 如果被拖曳的物品與儲物格裡的物品不同，或是不可堆疊，就直接與該儲物格裡的物品做互換。
+                        if (_previewSlotData.itemData != _selectedSlotData.itemData || !_selectedSlotData.itemData.Stackable)
+                        {
+                        }
+                        // 如果被拖曳的物品，與儲物格裡的物品相同，並且可以一次堆疊完。
+                        else if (_previewSlotData.itemQuantity + _selectedSlotData.itemQuantity <= _selectedSlotData.itemData.MaxStack)
+                        {
+                            Destroy(_previewSlot);
+                            
+                            _selectedSlotData = UpdateSlotData(_previewSlotData.itemData, _previewSlotData.itemQuantity + _selectedSlotData.itemQuantity);
+                            _selectedSlotUI.Refresh(_selectedSlotData);
+                            
+                            _isDragging = false;
+                            
+                            ClearSelectedSlotData();
+                            ClearPreviewSlotData();
+                        }
+                        // 如果被拖曳的物品，與儲物格裡的物品相同，但是一次堆疊不完。
+                        else if (_previewSlotData.itemQuantity + _selectedSlotData.itemQuantity > _selectedSlotData.itemData.MaxStack)
+                        {
+                            var remainingSpace = _selectedSlotData.itemData.MaxStack - _selectedSlotData.itemQuantity;
+
+                            _previewSlotData = UpdateSlotData(_previewSlotData.itemData, _previewSlotData.itemQuantity - remainingSpace);
+                            _previewSlotUI.Refresh(_previewSlotData);
+
+                            _selectedSlotData = UpdateSlotData(_selectedSlotData.itemData, _selectedSlotData.itemData.MaxStack);
+                            _selectedSlotUI.Refresh(_selectedSlotData);
+                            
+                            ClearSelectedSlotData();
+                        }
                     }
                 }
-                // 玩家在空手時，點擊了儲物格，就判斷是否要生成物品預覽。
                 else
                 {
-                    // 玩家在空手時，點擊了沒有儲存物品的儲物格，就直接清空暫存數據，並直接退出判斷。
-                    if (_selectedStorageSlotData.slotData.itemData is null)
-                        return;
-
-                    // 玩家在空手時，點擊了有儲存物品的儲物格，就生成物品拖曳預覽，並且更新其介面。
-                    _isDragging = true;
-                    
-                    _previewStorageSlotData = UpdateTempSlotData(true, Instantiate(itemDragPreviewPrefab, previewSpawnPoint));
-                    _previewStorageSlotData.slotUI.Refresh(_selectedStorageSlotData.slotData);
+                    // 如果玩家在沒有拖曳物品的時候，點擊了沒有儲存物品的儲物格，就不判斷任何事情。
+                    if (_selectedSlotData.itemData is null)
+                    {
+                        ClearSelectedSlotData();
+                    }
+                    // 如果玩家在沒有拖曳物品的時候，點擊了有儲存物品的儲物格，就把物品給拿起來。
+                    else
+                    {
+                        _previewSlot = Instantiate(itemDragPreviewPrefab, previewSpawnPoint);
+                        _previewSlotUI = _previewSlot.GetComponent<StorageSlotUI>();
+                        _previewSlotData = _selectedSlotUI.SlotData();
+                        _previewSlotUI.Refresh(_previewSlotData);
+                        
+                        _isDragging = true;
+                        
+                        _selectedSlotUI.Clear();
+                        ClearSelectedSlotData();
+                    }
                 }
             }
         }
-
+        
         /// <summary>
-        /// 用來判斷滑鼠有沒有點擊到
+        /// 用來判斷滑鼠有沒有點擊到。
         /// </summary>
-        /// <returns></returns>
+        /// <returns> 返回被點擊到的儲物格，只會返回最前面的儲物格。 </returns>
         private GameObject MouseDetectedSlot()
         {
             var pointer = new PointerEventData(EventSystem.current)
             {
-                position = MousePos
+                position = InputSystem.MousePos()
             };
             var resultList = new List<RaycastResult>();
 
@@ -154,56 +189,25 @@ namespace Player
                 itemQuantity = itemQuantity,
             };
         }
-
-        /// <summary>
-        /// 用來更新儲物格的快取資料。
-        /// </summary>
-        /// <param name="fullData"> 是否只儲存儲物格的遊戲物件。 </param>>
-        /// <param name="slot"> 儲物格的遊戲物件。 </param>
-        /// <returns> 回傳薪的儲物格快取資料。 </returns>
-        private static TempStorageSlotData UpdateTempSlotData(bool fullData, GameObject slot)
-        {
-            if (fullData)
-            {
-                return new TempStorageSlotData
-                {
-                    slot = slot,
-                    slotUI = slot.GetComponent<StorageSlotUI>(),
-                    slotData = slot.GetComponent<StorageSlotUI>().SlotData()
-                };
-            }
-
-            return new TempStorageSlotData
-            {
-                slot = slot,
-                slotUI = null,
-                slotData = new StorageSlotData()
-            };
-        }
-
-        /// <summary>
-        /// 重置所有的儲物格的暫存的資料。
-        /// </summary>
-        private void ClearTempSlotData()
-        {
-            _previewStorageSlotData = new TempStorageSlotData();
-            _selectedStorageSlotData = new TempStorageSlotData();
-        }
-    }
-    
-    /// <summary>
-    /// 用來快速讀取儲物格的各項資料，只限於暫存專用。
-    /// </summary>
-    [System.Serializable]
-    public struct TempStorageSlotData
-    {
-        // 儲物格的遊戲物件。
-        public GameObject slot;
         
-        // 儲物格的介面資料。
-        public StorageSlotUI slotUI;
+        /// <summary>
+        /// 重置物品拖曳預覽的快取資料。
+        /// </summary>
+        private void ClearPreviewSlotData()
+        {
+            _previewSlot = null;
+            _previewSlotUI = null;
+            _previewSlotData = new StorageSlotData();
+        }
         
-        // 儲物格的儲物資料。
-        public StorageSlotData slotData;
+        /// <summary>
+        /// 重置被點擊的儲物格的快取資料。
+        /// </summary>
+        private void ClearSelectedSlotData()
+        {
+            _selectedSlot = null;
+            _selectedSlotUI = null;
+            _selectedSlotData = new StorageSlotData();
+        }
     }
 }
