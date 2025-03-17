@@ -93,14 +93,20 @@ namespace Player
         /// <param name="context"> 輸入系統的狀態。 </param>
         private void OnBagButtonDown(InputAction.CallbackContext context)
         {
-            // 判斷背包是否為關閉的狀態，進而做出不同的操作。
+            // 如果背包是關閉的狀態，那就生成背包並更新介面。
             if (_tempBagUI is null)
             {
                 _tempBagUI = Instantiate(bagUIPrefab, uiSpawnPoint).GetComponent<StorageUI>();
                 _tempBagUI.Refresh();
             }
+            // 如果背包是開啟的狀態，那就循環整個背包的儲物格，並把 StorageSlotUI 的 StorageSlotData 給儲存進 StorageData 的 StorageSlotData。
             else
             {
+                for (var i = 0; i < _tempBagUI.StorageData.SlotDataList.Count; i++)
+                {
+                    _tempBagUI.StorageData.SlotDataList[i] = _tempBagUI.StorageSlotList[i].SlotData();
+                }
+
                 Destroy(_tempBagUI.gameObject);
                 _tempBagUI = null;
             }

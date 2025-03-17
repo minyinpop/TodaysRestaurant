@@ -69,7 +69,13 @@ namespace Player
             {
                 _selectedSlotUI = _selectedSlot.GetComponent<StorageSlotUI>();
                 _selectedSlotData = _selectedSlotUI.SlotData();
+                
+                
+                
+                // BUG: 可以把物品直接拖入被鎖起來的儲物格。
 
+                
+                
                 if (_isDragging)
                 {
                     // 如果玩家在拖曳物品時，點擊了沒有存放物品的儲物格，就直接把物品給存放進去。
@@ -91,6 +97,10 @@ namespace Player
                         // 如果被拖曳的物品與儲物格裡的物品不同，或是不可堆疊，就直接與該儲物格裡的物品做互換。
                         if (_previewSlotData.itemData != _selectedSlotData.itemData || !_selectedSlotData.itemData.Stackable)
                         {
+                            (_previewSlotData, _selectedSlotData) = (_selectedSlotData, _previewSlotData);
+
+                            _previewSlotUI.Refresh(_previewSlotData);
+                            _selectedSlotUI.Refresh(_selectedSlotData);
                         }
                         // 如果被拖曳的物品，與儲物格裡的物品相同，並且可以一次堆疊完。
                         else if (_previewSlotData.itemQuantity + _selectedSlotData.itemQuantity <= _selectedSlotData.itemData.MaxStack)
