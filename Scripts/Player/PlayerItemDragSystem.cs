@@ -9,6 +9,9 @@ using InputSystem = Input.InputSystem;
 
 namespace Player
 {
+    /// <summary>
+    /// 用來控制玩家拖曳物品的類。
+    /// </summary>
     public class PlayerItemDragSystem : MonoBehaviour
     {
         [Header("拖曳預覽相關"), Tooltip("用來顯示物品拖曳時的預覽，用於 UI。"), SerializeField]
@@ -69,13 +72,14 @@ namespace Player
             {
                 _selectedSlotUI = _selectedSlot.GetComponent<StorageSlotUI>();
                 _selectedSlotData = _selectedSlotUI.SlotData();
-                
-                
-                
-                // BUG: 可以把物品直接拖入被鎖起來的儲物格。
 
-                
-                
+                // 如果被點擊的儲物格是上鎖的，就直接離開判斷。
+                if (_selectedSlotData.isLocked)
+                {
+                    ClearSelectedSlotData();
+                    return;
+                }
+                    
                 if (_isDragging)
                 {
                     // 如果玩家在拖曳物品時，點擊了沒有存放物品的儲物格，就直接把物品給存放進去。

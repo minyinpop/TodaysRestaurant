@@ -27,10 +27,19 @@ namespace Input
         /// <summary>
         /// 滑鼠的位置，
         /// </summary>
-        /// <returns></returns>
+        /// <returns> 回傳滑鼠當前的所在位置。 </returns>
         public static Vector2 MousePos()
         {
             return input.Mouse.Position.ReadValue<Vector2>();
+        }
+
+        /// <summary>
+        /// 玩家移動的方向。
+        /// </summary>
+        /// <returns> 回傳玩家的移動方向。 </returns>
+        public static Vector3 PlayerMoveDirection()
+        {
+            return input.Player.Move.ReadValue<Vector3>();
         }
     }
 }
