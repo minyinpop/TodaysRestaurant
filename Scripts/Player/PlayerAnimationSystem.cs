@@ -1,3 +1,4 @@
+using System.Collections;
 using Input;
 using Spine.Unity;
 using UnityEngine;
@@ -10,12 +11,66 @@ namespace Player
     [RequireComponent(typeof(SkeletonAnimation))]
     public class PlayerAnimationSystem : MonoBehaviour
     {
+        // 用來當作播放玩家動畫的組件。
         private SkeletonAnimation _skeletonAnimation;
-        public AnimationReferenceAsset walk;
+        
+        [Header(""), Tooltip(""), SerializeField]
+        private AnimationReferenceAsset idle;
+        
+        [Tooltip(""), SerializeField]
+        private AnimationReferenceAsset walk;
+
+        [Tooltip(""), SerializeField]
+        private AnimationReferenceAsset eyeBlink;
+
+        private bool _isWalk;
+
+        private IEnumerator _eyeBlinkCoroutine;
         
         private void Awake()
         {
             _skeletonAnimation = GetComponent<SkeletonAnimation>();
+        }
+
+        private void OnEnable()
+        {
+            _eyeBlinkCoroutine = A();
+            StartCoroutine(_eyeBlinkCoroutine);
+        }
+
+        private void OnDisable()
+        {
+            StopCoroutine(_eyeBlinkCoroutine);
+            _eyeBlinkCoroutine = null;
+        }
+
+        private void Update()
+        {
+            if (_isWalk)
+            {
+                if (InputSystem.PlayerMoveDirection() == Vector3.zero)
+                {
+                    _skeletonAnimation.AnimationState.SetAnimation(0, idle, true);
+                    _isWalk = false;
+                }
+            }
+            else
+            {
+                if (InputSystem.PlayerMoveDirection() != Vector3.zero)
+                {
+                    _skeletonAnimation.AnimationState.SetAnimation(0, walk, true);
+                    _isWalk = true;
+                }
+            }
+        }
+
+        private IEnumerator A()
+        {
+            while (true)
+            {
+                _skeletonAnimation.AnimationState.SetAnimation(1, eyeBlink, false);
+                yield return new WaitForSeconds(Random.Range(1f, 3f));
+            }
         }
     }
 }
