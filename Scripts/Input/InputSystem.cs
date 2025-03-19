@@ -25,6 +25,15 @@ namespace Input
         }
 
         /// <summary>
+        /// 滑鼠的左鍵是否一直被按住。
+        /// </summary>
+        /// <returns> 返還滑鼠的左鍵是否一直被按住。 </returns>
+        public static bool MouseLeftButtonIsInProgress()
+        {
+            return input.Mouse.LeftClick.IsInProgress();
+        }
+
+        /// <summary>
         /// 滑鼠的位置，
         /// </summary>
         /// <returns> 回傳滑鼠當前的所在位置。 </returns>
