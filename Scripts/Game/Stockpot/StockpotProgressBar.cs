@@ -11,6 +11,9 @@ namespace Game.Stockpot
     {
         [Header("組件"), Tooltip("深煮鍋小遊戲的管理器的類。"), SerializeField]
         private StockpotManager stockpotManager;
+
+        [Header("進度條設定"), Tooltip("進度條的移動速度，用於 UI。"), SerializeField]
+        private float progressBarFillSpeed;
         
         // 進度條的滑軌組件，用於 UI。
         private Slider _progressBar;
@@ -46,7 +49,7 @@ namespace Game.Stockpot
         /// </summary>
         private void RefreshProgress()
         {
-            _progressBar.value = Mathf.Lerp(_progressBar.value, _targetValue, 1 * Time.deltaTime);
+            _progressBar.value = Mathf.Lerp(_progressBar.value, _targetValue, progressBarFillSpeed * Time.deltaTime);
         }
     }
 }
