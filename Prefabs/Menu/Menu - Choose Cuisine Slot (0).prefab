@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6561176202681230552}
   - component: {fileID: 3066821747779969073}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Cuisine Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -84,11 +84,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2858390266393922478}
+  - component: {fileID: 6903736657782575459}
   - component: {fileID: 5455231490867141853}
   - component: {fileID: 3687193446736949847}
   m_Layer: 5
   m_Name: Menu - Choose Cuisine Slot (0)
-  m_TagString: Untagged
+  m_TagString: Menu - Choose Cuisine Slot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -114,6 +115,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 360, y: 83}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &6903736657782575459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3174409240398120951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a43df4f872494d5fa226f07f8dfd12d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cuisineImage: {fileID: 3066821747779969073}
+  cuisineAmountTMP: {fileID: 3276273451877939227}
 --- !u!222 &5455231490867141853
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -164,7 +179,7 @@ GameObject:
   - component: {fileID: 4117324242936753870}
   - component: {fileID: 3276273451877939227}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Cuisine Amount (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
