@@ -11,12 +11,6 @@ namespace Menu
     /// </summary>
     public class MenuUnlockCuisinePage : MonoBehaviour
     {
-        [Header("資料庫"), Tooltip("玩家解鎖的主菜的資料庫。"), SerializeField]
-        private PlayerUnlockCuisineData mainCourseData;
-        
-        [Tooltip("玩家解鎖的飲料的資料庫。"), SerializeField]
-        private PlayerUnlockCuisineData drinkData;
-        
         [Header("已解鎖的菜品"), Tooltip("用於顯示已解鎖的蔡品的預製件。"), SerializeField]
         private GameObject slotPrefab;
 
@@ -26,19 +20,22 @@ namespace Menu
         // 當前生成的格子的暫存列表，用於 UI。
         private readonly List<GameObject> _slotList = new();
 
-        private void OnEnable()
+        /// <summary>
+        /// 初始化已解鎖的儲物格的顯示，用於 UI。
+        /// </summary>
+        /// <param name="cuisineData"> 傳入的已解鎖的菜品的資料。 </param>
+        public void InitSlot(PlayerUnlockCuisineData cuisineData)
         {
-            InitSlot(mainCourseData);
+            ClearSlotList();
+            AddSlotToList(cuisineData);
         }
 
         /// <summary>
         /// 依照已解鎖的菜品來生成格子。
         /// </summary>
         /// <param name="cuisineData"> 傳入的已解鎖的菜品的資料。 </param>
-        private void InitSlot(PlayerUnlockCuisineData cuisineData)
+        private void AddSlotToList(PlayerUnlockCuisineData cuisineData)
         {
-            ClearSlotList();
-            
             foreach (var data in cuisineData.CuisineList)
             {
                 var slot = Instantiate(slotPrefab, spawnPoint);
@@ -56,16 +53,6 @@ namespace Menu
                 Destroy(slot);
 
             _slotList.Clear();
-        }
-
-        /// <summary>
-        /// 當玩家按下菜品種類的更換按鈕後，就會呼叫這個方法。
-        /// 用於 Button 的 On Clicked()。
-        /// </summary>
-        /// <param name="cuisineData"></param>
-        public void OnCuisineTypeButtonClick(PlayerUnlockCuisineData cuisineData)
-        {
-            InitSlot(cuisineData);
         }
     }
 }
