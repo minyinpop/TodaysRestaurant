@@ -10,6 +10,9 @@ namespace Item
         [field: Header("資料設定"), Tooltip("物品名稱的唯一識別碼。"), SerializeField]
         public int ID { get; private set; }
         
+        [field: Header("物品的名稱，用於 UI。"), SerializeField]
+        public string Name { get; private set; }
+        
         [field: Tooltip("物品在遊戲中的圖示，用於 UI。"), SerializeField]
         public Sprite Sprite { get; private set; }
         

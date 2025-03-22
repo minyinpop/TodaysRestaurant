@@ -14,6 +14,10 @@ namespace Menu.Slot
         
         // 當前格子所儲存的菜品資料。
         private Cuisine _cuisineData;
+        
+        // 當玩家按下該格子後，所使用的事件廣播。
+        // 目前為 MenuManager 訂閱該廣播。
+        public static event System.Action<Cuisine> onClick;
 
         /// <summary>
         /// 用來更新當前格子所擁有的菜品的資料。
@@ -26,12 +30,12 @@ namespace Menu.Slot
         }
 
         /// <summary>
-        /// 用來返回該格子裡的菜品的資料，給予 MenuCuisineDrag 做使用。
+        /// 當玩家點擊了該格子後，所發生的事情的方法。
+        /// 用於 Button 裡的 On Click()
         /// </summary>
-        /// <returns> 返回菜品資料。 </returns>
-        public Cuisine GetCuisineData()
+        public void OnClick()
         {
-            return _cuisineData;
+            onClick?.Invoke(_cuisineData);
         }
     }
 }

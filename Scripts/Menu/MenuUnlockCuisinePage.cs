@@ -21,7 +21,7 @@ namespace Menu
         private readonly List<GameObject> _slotList = new();
 
         /// <summary>
-        /// 初始化已解鎖的儲物格的顯示，用於 UI。
+        /// 初始化已解鎖的格子的顯示，用於 UI。
         /// </summary>
         /// <param name="cuisineData"> 傳入的已解鎖的菜品的資料。 </param>
         public void InitSlot(PlayerUnlockCuisineData cuisineData)

@@ -9,10 +9,34 @@ namespace Player.Menu.ChooseCuisine
     [CreateAssetMenu(fileName = "New Player Choose Cuisine Data", menuName = "Player/Menu/Choose Cuisine Data", order = 3)]
     public class PlayerChooseCuisineData : ScriptableObject
     {
-        [field: Header("資料庫"), Tooltip("- 此為解鎖的格子數量。\n- 最多可以解鎖 8 格的上架空間。"), SerializeField]
-        public int SlotQuantity { get; private set; }
+        [field: Tooltip("- 此為格子的資料。\n- 多少筆資料代表會生成多少的格子。\n- 請不要生成超過 8 筆資料。"), SerializeField]
+        public PlayerChooseCuisineSlotData[] SlotDataList { get; private set; }
+
+        /// <summary>
+        /// 用來新增菜品的資料到指定索引的格子。
+        /// </summary>
+        /// <param name="slotIndex"></param>
+        /// <param name="newCuisineData"></param>
+        public void AddSlotData(int slotIndex, Cuisine newCuisineData)
+        {
+            SlotDataList[slotIndex] = new PlayerChooseCuisineSlotData
+            {
+                isLocked = false,
+                cuisineData = newCuisineData
+            };
+        }
+    }
+
+    /// <summary>
+    /// 用來當作 PlayerChooseCuisineSlot 的資料，裡面有兩筆資料。
+    /// </summary>
+    [System.Serializable]
+    public struct PlayerChooseCuisineSlotData
+    {
+        // 該格子是否是上鎖狀態的。
+        public bool isLocked;
         
-        [field: Tooltip("- 此為格子裡的料理的資料。\n- 數量"), SerializeField]
-        public Cuisine[] CuisineList { get; private set; }
+        // 該格子裡所暫存的料理的資料。
+        public Cuisine cuisineData;
     }
 }
