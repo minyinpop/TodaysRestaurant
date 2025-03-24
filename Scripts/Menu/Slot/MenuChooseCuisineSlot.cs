@@ -46,6 +46,30 @@ namespace Menu.Slot
         // 玩家所選擇的菜品的格子資料。
         // 裡面包含了格子是否上鎖以及菜品的資料。
         private PlayerChooseCuisineSlotData _slotData;
+        
+        /// <summary>
+        /// 判斷格子是否可以添加新的菜品資料，並回添加是否成功的結果。
+        /// </summary>
+        /// <param name="newCuisineData"></param>
+        /// <returns> 菜品是否添加成功。 </returns>
+        public bool AddSlotData(Cuisine newCuisineData)
+        {
+            // 如果格子是上鎖的，就回傳添加失敗的結果。
+            if (_slotData.isLocked)
+                return false;
+            
+            // 如果格子裡已經有菜品資料了，就回傳添加失敗的結果。
+            if (_slotData.cuisineData is not null)
+                return false;
+
+            _slotData = new PlayerChooseCuisineSlotData
+            {
+                isLocked = _slotData.isLocked,
+                cuisineData = newCuisineData
+            };
+            Refresh();
+            return true;
+        }
 
         /// <summary>
         /// 刷新格子的顯示。
@@ -53,7 +77,11 @@ namespace Menu.Slot
         public void Refresh(PlayerChooseCuisineSlotData newSlotData)
         {
             _slotData = newSlotData;
+            Refresh();
+        }
 
+        private void Refresh()
+        {
             // 如果格子是上鎖的，就直接結束邏輯。
             if (_slotData.isLocked)
                 return;
@@ -64,7 +92,13 @@ namespace Menu.Slot
             if (_slotData.cuisineData is null)
                 return;
             
-            // TODO: 撰寫如果格子裡有菜品時，所執行的邏輯。
+            slotBG.sprite = _slotData.cuisineData is null ? unlockedWithoutCuisineSprite : unlockedWithCuisineSprite;
+            
+            cuisineImage.gameObject.SetActive(_slotData.cuisineData is not null);
+            cuisineImage.sprite = _slotData.cuisineData is null ? null : _slotData.cuisineData.Sprite;
+            
+            cuisineQuantityTMP.gameObject.SetActive(_slotData.cuisineData is not null);
+            cuisineQuantityTMP.text = _slotData.cuisineData is null ? "" : $"{_slotData.cuisineData.Name} x{_slotData.cuisineData.MenuQuantity}";
         }
     }
 }

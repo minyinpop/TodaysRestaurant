@@ -1,3 +1,4 @@
+using Item.Category.Cuisine;
 using Menu.Page;
 using Menu.Page.Category;
 using Menu.Slot;
@@ -52,10 +53,18 @@ namespace Menu
             MenuChooseCuisineSlot.onClick -= OnChooseCuisineSlotClick;
         }
 
-        private void OnUnlockCuisineSlotClick()
+        /// <summary>
+        /// 當已解鎖的菜品格子被點擊後所發生的事情。
+        /// </summary>
+        /// <param name="slotCuisineData"> 格子裡所持有的料理資料。 </param>>
+        private void OnUnlockCuisineSlotClick(Cuisine slotCuisineData)
         {
+            _chooseCuisineMenuPage.AddCuisineData(slotCuisineData);
         }
 
+        /// <summary>
+        /// 當已選擇的菜品的格子被點擊後所發生的事情。
+        /// </summary>
         private void OnChooseCuisineSlotClick()
         {
         }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Item.Category.Cuisine;
 using Menu.Slot;
 using Player.Menu;
 using UnityEngine;
@@ -32,6 +33,19 @@ namespace Menu.Page.Category
                 
                 _slotList.Add(Instantiate(slotPrefab, slotSpawnPoint));
                 _slotList[i].GetComponent<MenuChooseCuisineSlot>().Refresh(selectedSlotData);
+            }
+        }
+
+        /// <summary>
+        /// 添加菜品資料到格子中。
+        /// </summary>
+        /// <param name="newCuisineData"> 被添加的菜品的資料。 </param>
+        public override void AddCuisineData(Cuisine newCuisineData)
+        {
+            foreach (var slot in _slotList)
+            {
+                if (slot.GetComponent<MenuChooseCuisineSlot>().AddSlotData(newCuisineData))
+                    return;
             }
         }
     }

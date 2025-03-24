@@ -1,3 +1,4 @@
+using Item.Category.Cuisine;
 using Player.Menu;
 using UnityEngine;
 
@@ -18,5 +19,14 @@ namespace Menu.Page
         /// 用於初始化頁面的的方法。
         /// </summary>
         public abstract void InitPage(MenuData newMenuData);
+        
+        /// <summary>
+        /// 添加菜品資料到格子中。
+        /// 此方法為 MenuChooseCuisineMenuPage 做使用。
+        /// </summary>
+        /// <param name="newCuisineData"> 被添加的菜品的資料。 </param>
+        public virtual void AddCuisineData(Cuisine newCuisineData)
+        {
+        }
     }
 }

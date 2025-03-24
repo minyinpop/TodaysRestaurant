@@ -16,7 +16,7 @@ namespace Menu.Slot
         
         // 當格子被點擊後，所使用的廣播。
         // 目前為 MenuManager 做訂閱。
-        public static event System.Action onClick;
+        public static event System.Action<Cuisine> onClick;
 
         /// <summary>
         /// 用來執行 Button 的 On Click() 邏輯。
@@ -24,7 +24,7 @@ namespace Menu.Slot
         /// </summary>
         public void OnClick()
         {
-            onClick?.Invoke();
+            onClick?.Invoke(_cuisineData);
         }
         
         
