@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Item.Category.Cuisine;
 using UnityEngine;
 
@@ -10,7 +11,7 @@ namespace Player.Menu.ChooseCuisine
     public class PlayerChooseCuisineData : ScriptableObject
     {
         [field: Tooltip("- 此為格子的資料。\n- 多少筆資料代表會生成多少的格子。\n- 請不要生成超過 8 筆資料。"), SerializeField]
-        public PlayerChooseCuisineSlotData[] SlotDataList { get; private set; }
+        public List<PlayerChooseCuisineSlotData> SlotDataList { get; private set; }
 
         /// <summary>
         /// 用來新增菜品的資料到指定索引的格子。

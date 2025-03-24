@@ -1,3 +1,4 @@
+using Item.Category.Cuisine;
 using Player.Menu.ChooseCuisine;
 using TMPro;
 using UnityEngine;
@@ -6,92 +7,64 @@ using UnityEngine.UI;
 namespace Menu.Slot
 {
     /// <summary>
-    /// 用於顯示當前玩家所選擇的菜品的格子。
+    /// 用於顯示當前玩家所選擇的料理的格子。
     /// </summary>
     public class MenuChooseCuisineSlot : MonoBehaviour
     {
-        [Header("圖片"), Tooltip("格子解鎖時的底圖 (未有料理)"), SerializeField]
-        private Sprite unlockedSlotWithoutCuisineSprite;
-        
-        [Tooltip("格子解鎖時的底圖 (有料理)"), SerializeField]
-        private Sprite unlockedSlotWithCuisineSprite;
-        
-        [Header("組件"), Tooltip("用來顯示格子底圖的圖片組件。"), SerializeField]
-        private Image slotImage;
-        
-        [Tooltip("用來顯示菜品的圖片組件。"), SerializeField]
+        [Header("組件"), Tooltip("- 格子底圖的圖片組件。\n- 用來顯示當前格子的狀態。"), SerializeField]
+        private Image slotBG;
+
+        [Tooltip("- 料理的圖片組件。\n- 用來顯示當格所儲存的玩家選擇的料理。"), SerializeField]
         private Image cuisineImage;
 
-        [Tooltip("用來顯示菜品名稱與數量的文字組件。"), SerializeField]
-        private TextMeshProUGUI cuisineAmountTMP;
+        [Tooltip("- 料理的數量文字組件\n- 用來顯示當格料理的名稱與數量。"), SerializeField]
+        private TextMeshProUGUI cuisineQuantityTMP;
+
+        [Header("圖片"), Tooltip("- 格子解鎖，但是沒有菜品時的圖片。\n- 用於格子的底圖。"), SerializeField]
+        private Sprite unlockedWithoutCuisineSprite;
         
-        // 當前格子的資料。
-        private PlayerChooseCuisineSlotData _slotData;
+        [Tooltip("- 格子解鎖，但是有菜品時的圖片。\n- 用於格子的底圖。"), SerializeField]
+        private Sprite unlockedWithCuisineSprite;
         
-        // 當玩家按下該格子後，所使用的事件廣播。
-        // 目前為 MenuManager 訂閱該廣播。
+        
+        
+        // 當格子被點擊後，所使用的廣播。
+        // 目前為 MenuManager 做訂閱。
         public static event System.Action onClick;
 
         /// <summary>
-        /// 當玩家點擊 MenuUnlockCuisineSlot 後，所更新此格子用的方法。
-        /// </summary>
-        public void Refresh(PlayerChooseCuisineSlotData newSlotData)
-        {
-            SlotRefresh(newSlotData);
-        }
-
-        /// <summary>
-        /// 當玩家點擊該格子，就清空該格子裡的資料。
-        /// 給予 Button 組件裡的 On Click() 做使用。
+        /// 用來執行 Button 的 On Click() 邏輯。
+        /// 掛載在 Button 組件裡的 On Click() 做使用。
         /// </summary>
         public void OnClick()
         {
-            SlotRefresh(new PlayerChooseCuisineSlotData());
             onClick?.Invoke();
         }
+        
+        
+        
+        // 玩家所選擇的菜品的格子資料。
+        // 裡面包含了格子是否上鎖以及菜品的資料。
+        private PlayerChooseCuisineSlotData _slotData;
 
         /// <summary>
-        /// 用來執行格子顯示邏輯的方法。
+        /// 刷新格子的顯示。
         /// </summary>
-        /// <param name="newSlotData"></param>
-        private void SlotRefresh(PlayerChooseCuisineSlotData newSlotData)
+        public void Refresh(PlayerChooseCuisineSlotData newSlotData)
         {
             _slotData = newSlotData;
+
+            // 如果格子是上鎖的，就直接結束邏輯。
+            if (_slotData.isLocked)
+                return;
+
+            slotBG.sprite = unlockedWithoutCuisineSprite;
             
-            // 如果該格子是上鎖的，那就直接取消下面的判斷。
-            if (newSlotData.isLocked)
+            // 如果格子裡還沒有菜品的資料，就直接結束邏輯。
+            if (_slotData.cuisineData is null)
                 return;
             
-            // 如果該格子裡是沒有菜品的，就把格子的圖片給改成 unlockedSlotWithoutCuisineSprite，
-            // 並把 cuisineImage 與 cuisineAmountTMP 給取消顯示，
-            if (_slotData.cuisineData is null)
-            {
-                cuisineImage.sprite = unlockedSlotWithoutCuisineSprite;
-                
-                if (cuisineImage.gameObject.activeSelf)
-                {
-                    cuisineImage.sprite = null;
-                    cuisineImage.gameObject.SetActive(false);
-                }
-
-                if (cuisineAmountTMP.gameObject.activeSelf)
-                {
-                    cuisineAmountTMP.text = "";
-                    cuisineAmountTMP.gameObject.SetActive(false);
-                }
-            }
-            // 如果該格子裡是有菜品的，就把格子的圖片給改成 unlockedSlotWithCuisineSprite，
-            // 並顯示 cuisineImage 與 cuisineAmountTMP。
-            else
-            {
-                slotImage.sprite = unlockedSlotWithCuisineSprite;
-                
-                cuisineImage.gameObject.SetActive(true);
-                cuisineImage.sprite = _slotData.cuisineData.Sprite;
-                
-                cuisineAmountTMP.gameObject.SetActive(true);
-                cuisineAmountTMP.text = $"{_slotData.cuisineData.Name} x{_slotData.cuisineData.MenuQuantity}";
-            }
+            // TODO: 撰寫如果格子裡有菜品時，所執行的邏輯。
         }
     }
 }

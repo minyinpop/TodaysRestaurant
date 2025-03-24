@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Item.Category.Cuisine;
 using UnityEngine;
 
@@ -10,6 +11,6 @@ namespace Player.Menu.UnlockCuisine
     public class PlayerUnlockCuisineData : ScriptableObject
     {
         [field: Header("資料庫"), Tooltip("- 此為解鎖的料理。\n- 用於菜單選擇上架菜品用的。"), SerializeField]
-        public Cuisine[] CuisineList { get; private set; }
+        public List<Cuisine> CuisineList { get; private set; }
     }
 }

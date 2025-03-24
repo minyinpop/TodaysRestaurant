@@ -5,37 +5,40 @@ using UnityEngine.UI;
 namespace Menu.Slot
 {
     /// <summary>
-    /// 用於顯示當前玩家所解鎖的菜品的格子。
+    /// 用於顯示當前玩家所解鎖的料理的格子。
     /// </summary>
     public class MenuUnlockCuisineSlot : MonoBehaviour
     {
-        [Header("組件"), Tooltip("用來顯示菜品的圖片組件。"), SerializeField]
+        [Header("組件"), Tooltip("用來顯示料理圖片的圖片組件。"), SerializeField]
         private Image cuisineImage;
         
-        // 當前格子所儲存的菜品資料。
-        private Cuisine _cuisineData;
         
-        // 當玩家按下該格子後，所使用的事件廣播。
-        // 目前為 MenuManager 訂閱該廣播。
-        public static event System.Action<Cuisine> onClick;
+        
+        // 當格子被點擊後，所使用的廣播。
+        // 目前為 MenuManager 做訂閱。
+        public static event System.Action onClick;
 
         /// <summary>
-        /// 用來更新當前格子所擁有的菜品的資料。
+        /// 用來執行 Button 的 On Click() 邏輯。
+        /// 掛載在 Button 組件裡的 On Click() 做使用。
         /// </summary>
-        /// <param name="newCuisineData"></param>
+        public void OnClick()
+        {
+            onClick?.Invoke();
+        }
+        
+        
+        
+        // 格子裡所儲存的料理資料。
+        private Cuisine _cuisineData;
+
+        /// <summary>
+        /// 刷新格子的顯示。
+        /// </summary>
         public void Refresh(Cuisine newCuisineData)
         {
             _cuisineData = newCuisineData;
             cuisineImage.sprite = _cuisineData.Sprite;
-        }
-
-        /// <summary>
-        /// 當玩家點擊了該格子後，所發生的事情的方法。
-        /// 用於 Button 裡的 On Click()
-        /// </summary>
-        public void OnClick()
-        {
-            onClick?.Invoke(_cuisineData);
         }
     }
 }
