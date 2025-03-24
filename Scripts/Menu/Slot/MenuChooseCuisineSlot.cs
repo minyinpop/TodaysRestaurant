@@ -26,26 +26,9 @@ namespace Menu.Slot
         [Tooltip("- 格子解鎖，但是有菜品時的圖片。\n- 用於格子的底圖。"), SerializeField]
         private Sprite unlockedWithCuisineSprite;
         
-        
-        
-        // 當格子被點擊後，所使用的廣播。
-        // 目前為 MenuManager 做訂閱。
-        public static event System.Action onClick;
-
-        /// <summary>
-        /// 用來執行 Button 的 On Click() 邏輯。
-        /// 掛載在 Button 組件裡的 On Click() 做使用。
-        /// </summary>
-        public void OnClick()
-        {
-            onClick?.Invoke();
-        }
-        
-        
-        
         // 玩家所選擇的菜品的格子資料。
         // 裡面包含了格子是否上鎖以及菜品的資料。
-        private PlayerChooseCuisineSlotData _slotData;
+        public PlayerChooseCuisineSlotData SlotData { get; private set; }
         
         /// <summary>
         /// 判斷格子是否可以添加新的菜品資料，並回添加是否成功的結果。
@@ -55,16 +38,16 @@ namespace Menu.Slot
         public bool AddSlotData(Cuisine newCuisineData)
         {
             // 如果格子是上鎖的，就回傳添加失敗的結果。
-            if (_slotData.isLocked)
+            if (SlotData.isLocked)
                 return false;
             
             // 如果格子裡已經有菜品資料了，就回傳添加失敗的結果。
-            if (_slotData.cuisineData is not null)
+            if (SlotData.cuisineData is not null)
                 return false;
 
-            _slotData = new PlayerChooseCuisineSlotData
+            SlotData = new PlayerChooseCuisineSlotData
             {
-                isLocked = _slotData.isLocked,
+                isLocked = SlotData.isLocked,
                 cuisineData = newCuisineData
             };
             Refresh();
@@ -72,33 +55,41 @@ namespace Menu.Slot
         }
 
         /// <summary>
+        /// 清空格子所儲存的資訊。
+        /// 用於 Button 裡的 On Click() 做使用。
+        /// </summary>
+        public void ClearSlotData()
+        {
+            SlotData = new PlayerChooseCuisineSlotData
+            {
+                isLocked = SlotData.isLocked,
+                cuisineData = null
+            };
+            Refresh();
+        }
+
+        /// <summary>
         /// 刷新格子的顯示。
         /// </summary>
         public void Refresh(PlayerChooseCuisineSlotData newSlotData)
         {
-            _slotData = newSlotData;
+            SlotData = newSlotData;
             Refresh();
         }
 
         private void Refresh()
         {
             // 如果格子是上鎖的，就直接結束邏輯。
-            if (_slotData.isLocked)
-                return;
-
-            slotBG.sprite = unlockedWithoutCuisineSprite;
-            
-            // 如果格子裡還沒有菜品的資料，就直接結束邏輯。
-            if (_slotData.cuisineData is null)
+            if (SlotData.isLocked)
                 return;
             
-            slotBG.sprite = _slotData.cuisineData is null ? unlockedWithoutCuisineSprite : unlockedWithCuisineSprite;
+            slotBG.sprite = SlotData.cuisineData is null ? unlockedWithoutCuisineSprite : unlockedWithCuisineSprite;
             
-            cuisineImage.gameObject.SetActive(_slotData.cuisineData is not null);
-            cuisineImage.sprite = _slotData.cuisineData is null ? null : _slotData.cuisineData.Sprite;
+            cuisineImage.gameObject.SetActive(SlotData.cuisineData is not null);
+            cuisineImage.sprite = SlotData.cuisineData?.Sprite;
             
-            cuisineQuantityTMP.gameObject.SetActive(_slotData.cuisineData is not null);
-            cuisineQuantityTMP.text = _slotData.cuisineData is null ? "" : $"{_slotData.cuisineData.Name} x{_slotData.cuisineData.MenuQuantity}";
+            cuisineQuantityTMP.gameObject.SetActive(SlotData.cuisineData is not null);
+            cuisineQuantityTMP.text = SlotData.cuisineData is null ? "" : $"{SlotData.cuisineData.Name} x{SlotData.cuisineData.MenuQuantity}";
         }
     }
 }

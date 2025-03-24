@@ -12,11 +12,12 @@ namespace Menu.Slot
         [Header("組件"), Tooltip("用來顯示料理圖片的圖片組件。"), SerializeField]
         private Image cuisineImage;
         
-        
-        
         // 當格子被點擊後，所使用的廣播。
         // 目前為 MenuManager 做訂閱。
         public static event System.Action<Cuisine> onClick;
+        
+        // 格子裡所儲存的料理資料。
+        private Cuisine _cuisineData;
 
         /// <summary>
         /// 用來執行 Button 的 On Click() 邏輯。
@@ -27,11 +28,6 @@ namespace Menu.Slot
             onClick?.Invoke(_cuisineData);
         }
         
-        
-        
-        // 格子裡所儲存的料理資料。
-        private Cuisine _cuisineData;
-
         /// <summary>
         /// 刷新格子的顯示。
         /// </summary>

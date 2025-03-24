@@ -12,20 +12,6 @@ namespace Player.Menu.ChooseCuisine
     {
         [field: Tooltip("- 此為格子的資料。\n- 多少筆資料代表會生成多少的格子。\n- 請不要生成超過 8 筆資料。"), SerializeField]
         public List<PlayerChooseCuisineSlotData> SlotDataList { get; private set; }
-
-        /// <summary>
-        /// 用來新增菜品的資料到指定索引的格子。
-        /// </summary>
-        /// <param name="slotIndex"></param>
-        /// <param name="newCuisineData"></param>
-        public void AddSlotData(int slotIndex, Cuisine newCuisineData)
-        {
-            SlotDataList[slotIndex] = new PlayerChooseCuisineSlotData
-            {
-                isLocked = false,
-                cuisineData = newCuisineData
-            };
-        }
     }
 
     /// <summary>

@@ -15,11 +15,34 @@ namespace Menu.Page.Category
         public override void InitPage(MenuData newMenuData)
         {
             MenuData = newMenuData;
+            InitSlot();
+        }
 
+        /// <summary>
+        /// 用於更新整個介面的方法。
+        /// </summary>
+        /// <param name="newMenuData"> 新傳入的菜單介面資料。 </param>
+        public override void Refresh(MenuData newMenuData)
+        {
+            MenuData = newMenuData;
+            
+            foreach (var slot in _slotList)
+                Destroy(slot);
+            
+            _slotList.Clear();
+            InitSlot();
+        }
+
+        /// <summary>
+        /// 生成格子用的方法。
+        /// </summary>
+        private void InitSlot()
+        {
             foreach (var cuisine in MenuData.UnlockCuisineData.CuisineList)
             {
                 var slot = Instantiate(slotPrefab, slotSpawnPoint);
                 slot.GetComponent<MenuUnlockCuisineSlot>().Refresh(cuisine);
+                _slotList.Add(slot);
             }
         }
     }

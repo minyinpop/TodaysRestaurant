@@ -14,13 +14,13 @@ namespace Player
         // 用來當作播放玩家動畫的組件。
         private SkeletonAnimation _skeletonAnimation;
         
-        [Header(""), Tooltip(""), SerializeField]
+        [Header("動畫資產"), Tooltip("Spine 插件的閒置動畫。"), SerializeField]
         private AnimationReferenceAsset idle;
         
-        [Tooltip(""), SerializeField]
+        [Tooltip("Spine 插件的走路動畫。"), SerializeField]
         private AnimationReferenceAsset walk;
 
-        [Tooltip(""), SerializeField]
+        [Tooltip("Spine 插件的眨眼動畫"), SerializeField]
         private AnimationReferenceAsset eyeBlink;
 
         private bool _isWalk;

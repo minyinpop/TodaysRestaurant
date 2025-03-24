@@ -44,13 +44,11 @@ namespace Menu
             _chooseCuisineMenuPage.InitPage(_menuData);
             
             MenuUnlockCuisineSlot.onClick += OnUnlockCuisineSlotClick;
-            MenuChooseCuisineSlot.onClick += OnChooseCuisineSlotClick;
         }
 
         private void OnDisable()
         {
             MenuUnlockCuisineSlot.onClick -= OnUnlockCuisineSlotClick;
-            MenuChooseCuisineSlot.onClick -= OnChooseCuisineSlotClick;
         }
 
         /// <summary>
@@ -63,10 +61,15 @@ namespace Menu
         }
 
         /// <summary>
-        /// 當已選擇的菜品的格子被點擊後所發生的事情。
+        /// 當切換菜品的按鈕被點擊後所發生的事情。
+        /// 用於 Button 裡的 On Click() 做使用。
         /// </summary>
-        private void OnChooseCuisineSlotClick()
+        /// <param name="menuData"> 新傳入的介面資料。 </param>
+        public void OnCuisineTypeButtonClick(MenuData menuData)
         {
+            _menuData = menuData;
+            _unlockCuisineMenuPage.Refresh(_menuData);
+            _chooseCuisineMenuPage.Refresh(_menuData);
         }
     }
 }

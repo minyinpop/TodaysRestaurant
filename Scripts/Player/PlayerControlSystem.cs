@@ -1,5 +1,6 @@
 using Character.Attribute;
 using Input;
+using Spine.Unity;
 using UnityEngine;
 
 namespace Player
@@ -7,10 +8,14 @@ namespace Player
     /// <summary>
     /// 用來控制玩家小人物操作的類
     /// </summary>
+    [RequireComponent(typeof(SkeletonAnimation))]
     [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(BoxCollider))]
     public class PlayerControlSystem : MonoBehaviour
     {
+        // 玩家的 SkeletonAnimation 組件，用來控制玩家的動畫。
+        private SkeletonAnimation _skeletonAnimation;
+        
         // 玩家的 Rigidbody 組件，用來控制玩家的物理移動。
         private Rigidbody _rig;
         
@@ -22,6 +27,7 @@ namespace Player
 
         private void Awake()
         {
+            _skeletonAnimation = GetComponent<SkeletonAnimation>();
             _rig = GetComponent<Rigidbody>();
             _bc = GetComponent<BoxCollider>();
         }
@@ -31,6 +37,16 @@ namespace Player
             var x = InputSystem.PlayerMoveDirection().x * attributeData.MoveSpeed * Time.fixedDeltaTime;
             var z = InputSystem.PlayerMoveDirection().z * attributeData.MoveSpeed * Time.fixedDeltaTime;
             _rig.linearVelocity = new Vector3(x, _rig.linearVelocity.y, z);
+        }
+
+        private void Update()
+        {
+            _skeletonAnimation.Skeleton.ScaleX = InputSystem.PlayerMoveDirection().x switch
+            {
+                > 0 => -1,
+                < 0 => 1,
+                _ => _skeletonAnimation.Skeleton.ScaleX
+            };
         }
     }
 }
