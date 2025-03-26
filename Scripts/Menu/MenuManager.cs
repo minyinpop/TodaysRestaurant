@@ -1,8 +1,8 @@
-using Item.Category.Cuisine;
+using DataBase.Item.Category.Cuisine;
+using DataBase.Menu;
 using Menu.Page;
 using Menu.Page.Category;
 using Menu.Slot;
-using Player.Menu;
 using UnityEngine;
 
 namespace Menu

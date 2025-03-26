@@ -1,6 +1,6 @@
-using Item.Category.Cuisine;
+using DataBase.Item.Category.Cuisine;
+using DataBase.Menu;
 using Menu.Slot;
-using Player.Menu;
 
 namespace Menu.Page.Category
 {
@@ -26,13 +26,13 @@ namespace Menu.Page.Category
         public override void Refresh(MenuData newMenuData)
         {
             // 遍歷整個 _slotList，並把格子中的暫存資料給儲存進資料庫裡。
-            for (var i = 0; i < _slotList.Count; i++)
+            for (var i = 0; i < SlotList.Count; i++)
             {
-                MenuData.ChooseCuisineData.SlotDataList[i] = _slotList[i].GetComponent<MenuChooseCuisineSlot>().SlotData;
-                Destroy(_slotList[i]);
+                MenuData.ChooseCuisineData.SlotDataList[i] = SlotList[i].GetComponent<MenuChooseCuisineSlot>().SlotData;
+                Destroy(SlotList[i]);
             }
 
-            _slotList.Clear();
+            SlotList.Clear();
             
             MenuData = newMenuData;
             InitSlot();
@@ -44,7 +44,7 @@ namespace Menu.Page.Category
         /// <param name="newCuisineData"> 被添加的菜品的資料。 </param>
         public override void AddCuisineData(Cuisine newCuisineData)
         {
-            foreach (var slot in _slotList)
+            foreach (var slot in SlotList)
             {
                 if (slot.GetComponent<MenuChooseCuisineSlot>().AddSlotData(newCuisineData))
                     return;
@@ -60,8 +60,8 @@ namespace Menu.Page.Category
             {
                 var selectedSlotData = MenuData.ChooseCuisineData.SlotDataList[i];
                 
-                _slotList.Add(Instantiate(slotPrefab, slotSpawnPoint));
-                _slotList[i].GetComponent<MenuChooseCuisineSlot>().Refresh(selectedSlotData);
+                SlotList.Add(Instantiate(slotPrefab, slotSpawnPoint));
+                SlotList[i].GetComponent<MenuChooseCuisineSlot>().Refresh(selectedSlotData);
             }
         }
     }

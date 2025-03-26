@@ -1,11 +1,11 @@
 using System.Collections.Generic;
-using Item.Category.Cuisine;
-using Player.Menu;
+using DataBase.Item.Category.Cuisine;
+using DataBase.Menu;
 using UnityEngine;
 
 namespace Menu.Page
 {
-    public abstract class MenuPageBase : MonoBehaviour
+    public abstract class MenuPageBase : MenuManager
     {
         [Header("格子相關"), Tooltip("- 用來生成格子用的預製件。\n- 每個頁面都有不同的預製件。"), SerializeField]
         protected GameObject slotPrefab;
@@ -17,7 +17,7 @@ namespace Menu.Page
         protected MenuData MenuData;
         
         // 格子的暫存陣列，用於在更新頁面時，刪除格子用。
-        protected List<GameObject> _slotList = new();
+        protected List<GameObject> SlotList = new();
 
         /// <summary>
         /// 用於初始化頁面的的方法。

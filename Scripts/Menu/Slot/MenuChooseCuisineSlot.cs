@@ -1,5 +1,5 @@
-using Item.Category.Cuisine;
-using Player.Menu.ChooseCuisine;
+using DataBase.Item.Category.Cuisine;
+using DataBase.Menu.ChooseCuisine;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

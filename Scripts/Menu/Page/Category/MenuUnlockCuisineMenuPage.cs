@@ -1,5 +1,5 @@
+using DataBase.Menu;
 using Menu.Slot;
-using Player.Menu;
 
 namespace Menu.Page.Category
 {
@@ -26,10 +26,10 @@ namespace Menu.Page.Category
         {
             MenuData = newMenuData;
             
-            foreach (var slot in _slotList)
+            foreach (var slot in SlotList)
                 Destroy(slot);
             
-            _slotList.Clear();
+            SlotList.Clear();
             InitSlot();
         }
 
@@ -42,7 +42,7 @@ namespace Menu.Page.Category
             {
                 var slot = Instantiate(slotPrefab, slotSpawnPoint);
                 slot.GetComponent<MenuUnlockCuisineSlot>().Refresh(cuisine);
-                _slotList.Add(slot);
+                SlotList.Add(slot);
             }
         }
     }
