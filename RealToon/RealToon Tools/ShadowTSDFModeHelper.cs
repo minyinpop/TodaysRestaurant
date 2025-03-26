@@ -1,7 +1,3 @@
-//RealToon - ShadowT SDF Mode [Helper]
-//MJQStudioWorks
-//©2025
-
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -24,22 +20,6 @@ namespace RealToon.Script
         [SerializeField]
         [Tooltip("An object to follow the position.")]
         public Transform ObjectToFollow = null;
-
-        [Space(10)]
-
-        [SerializeField]
-        [Tooltip("The amount of light.")]
-        float LightThreshold = 200.0f;
-
-        [Space(10)]
-
-        [SerializeField]
-        [Tooltip("Invert the Foward/Front position of the object.")]
-        bool ForwardInverted = false;
-
-        [Tooltip("Invert the Right position of the object.")]
-        [SerializeField]
-        bool RightInverted = false;
 
         [HideInInspector]
         [SerializeField]
@@ -71,25 +51,8 @@ namespace RealToon.Script
                     Material.shader.name == RT_Sha_Nam_BiRP_TDFT ||
                     Material.shader.name == RT_Sha_Nam_BiRP_TDR)
                 {
-                    Material.SetFloat("_ShadowTLightThreshold", LightThreshold);
-
-                    if (ForwardInverted != true)
-                    {
-                        Material.SetVector("_ObjectForward", ObjectToFollow.transform.forward);
-                    }
-                    else
-                    {
-                        Material.SetVector("_ObjectForward", -ObjectToFollow.transform.forward);
-                    }
-
-                    if (RightInverted != true)
-                    {
-                        Material.SetVector("_ObjectRight", ObjectToFollow.transform.right);
-                    }
-                    else
-                    {
-                        Material.SetVector("_ObjectRight", -ObjectToFollow.transform.right);
-                    }
+                    Material.SetVector("_ObjectForward", ObjectToFollow.transform.forward);
+                    Material.SetVector("_ObjectRight", ObjectToFollow.transform.right);
                 }
             }
 
