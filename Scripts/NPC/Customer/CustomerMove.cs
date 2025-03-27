@@ -20,7 +20,7 @@ namespace NPC.Customer
         // 當前的路徑的索引的暫存。
         private int _nowSelectRouteIndex;
         
-        //
+        // 自身的 CustomerManager 的類，用於顧客的管理得類。
         private CustomerManager _customerManager;
 
         private void Awake()
