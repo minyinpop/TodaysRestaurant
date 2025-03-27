@@ -5832,7 +5832,7 @@ Transform:
   m_GameObject: {fileID: 7479569558163017839}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -9.96, y: -0.0009414554, z: -0.598}
+  m_LocalPosition: {x: -10.97, y: -0.0009414554, z: 0.65}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -5857,6 +5857,7 @@ GameObject:
   - component: {fileID: 8380790652373861780}
   - component: {fileID: 8380790652373861781}
   - component: {fileID: 8380790652373861776}
+  - component: {fileID: 8380790652373861782}
   m_Layer: 0
   m_Name: Ray
   m_TagString: Untagged
@@ -5999,6 +6000,27 @@ MonoBehaviour:
   thinkingBubblePrefab: {fileID: 7841888906916109873, guid: 2e42ca8af4ee25941838e7e13ffd866c, type: 3}
   waitOrderBubblePrefab: {fileID: 5202873773524053217, guid: 66b8e3bc81a52394d9d174cd50977d4e, type: 3}
   waitCuisineBubblePrefab: {fileID: 793095641638173192, guid: fd921767ffd6a52418a24196eacfd474, type: 3}
+--- !u!65 &8380790652373861782
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7479569558163017839}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 15, y: 12.423555, z: 15}
+  m_Center: {x: 0.36751842, y: 6.1481686, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

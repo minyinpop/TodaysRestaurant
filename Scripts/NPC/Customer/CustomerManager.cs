@@ -56,7 +56,9 @@ namespace NPC.Customer
         public void OnSeat()
         {
             CustomerState = State.OnSeat;
+            
             _customerAnimation.Seat();
+            _customerOrder.OnStateChange(CustomerOrder.State.Thinking);
         }
     }
 }

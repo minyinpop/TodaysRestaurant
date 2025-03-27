@@ -10,5 +10,8 @@ namespace DataBase.Item.Category.Cuisine
     {
         [field: Header("料理設定"), Tooltip("- 在菜單的被選擇的蔡品的格子中，\n- 一格可以有多少這道料理上架。"), SerializeField]
         public int MenuQuantity { get; set; }
+        
+        [field: Tooltip("- 料理所需的烹飪時間，\n- 用於顧客的等待時間的基準值。"), SerializeField]
+        public float CookTime { get; set; }
     }
 }

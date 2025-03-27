@@ -1,6 +1,8 @@
 using System.Collections;
 using DataBase.Customer.Wait;
-using NPC.Bubble.Category;
+using DataBase.Item.Category.Cuisine;
+using NPC.Bubble.Order;
+using NPC.Bubble.Order.Category;
 using UnityEngine;
 
 namespace NPC.Customer
@@ -52,6 +54,20 @@ namespace NPC.Customer
                 StopCoroutine(_currentCoroutine);
         }
 
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.gameObject.CompareTag("Player"))
+                _bubble.GetComponent<OrderBubble>().ChangeButtonInteractable(true);
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.gameObject.CompareTag("Player"))
+                _bubble.GetComponent<OrderBubble>().ChangeButtonInteractable(false);
+        }
+
+        
+        
         
         
         /// <summary>
@@ -91,7 +107,7 @@ namespace NPC.Customer
         /// <summary>
         /// 用於生成等待服務員的氣泡的類。
         /// </summary>
-        private void InitWaitOrderBubble()
+        public void InitWaitOrderBubble()
         {
             if (_currentCoroutine is not null)
             {
@@ -114,9 +130,11 @@ namespace NPC.Customer
             var targetWaitTime = Random.Range(waitTimeData.MinWaitOrderTime, waitTimeData.MaxWaitOrderTime);
 
             _bubble = Instantiate(waitOrderBubblePrefab, bubbleSpawnPoint);
-            _bubble.GetComponent<WaitOrderBubble>().InitBubble(targetWaitTime, this);
+            _bubble.GetComponent<WaitOrderBubble>().InitBubble(_customerOrder, targetWaitTime);
 
             yield return new WaitForSeconds(targetWaitTime);
+
+            print("顧客沒耐心了");
         }
         
         
@@ -126,13 +144,34 @@ namespace NPC.Customer
         /// <summary>
         /// 用於生成等待餐點的氣泡的類。
         /// </summary>
-        public void InitWaitCuisineBubble()
+        public void InitWaitCuisineBubble(Cuisine chooseCuisine)
         {
+            if (_currentCoroutine is not null)
+            {
+                StopCoroutine(_currentCoroutine);
+                _currentCoroutine = null;
+            }
+            
+            _currentCoroutine = WaitCuisineBubbleCoroutine(chooseCuisine);
+            StartCoroutine(_currentCoroutine);
         }
 
-        private IEnumerator WaitCuisineBubbleCoroutine()
+        private IEnumerator WaitCuisineBubbleCoroutine(Cuisine chooseCuisine)
         {
-            yield return new WaitForSeconds(1);
+            if (_bubble is not null)
+            {
+                Destroy(_bubble);
+                _bubble = null;
+            }
+            
+            var targetWaitTime = Random.Range(chooseCuisine.CookTime + waitTimeData.MinWaitCuisineTime, chooseCuisine.CookTime + waitTimeData.MaxWaitCuisineTime);
+
+            _bubble = Instantiate(waitCuisineBubblePrefab, bubbleSpawnPoint);
+            _bubble.GetComponent<WaitCuisineBubble>().InitBubble(_customerOrder, chooseCuisine, targetWaitTime);
+
+            yield return new WaitForSeconds(targetWaitTime);
+            
+            print("顧客沒耐心了");
         }
     }
 }
