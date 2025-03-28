@@ -10,6 +10,16 @@ namespace Menu.Page.Category
     /// </summary>
     public class MenuChooseCuisineMenuPage : MenuPageBase
     {
+        private void OnDestroy()
+        {
+            // 遍歷整個 _slotList，並把格子中的暫存資料給儲存進資料庫裡。
+            for (var i = 0; i < SlotList.Count; i++)
+            {
+                MenuData.ChooseCuisineData.SlotDataList[i] = SlotList[i].GetComponent<MenuChooseCuisineSlot>().SlotData;
+                Destroy(SlotList[i]);
+            }
+        }
+        
         /// <summary>
         /// 用於初始化頁面的的方法。
         /// </summary>

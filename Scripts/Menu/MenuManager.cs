@@ -44,11 +44,15 @@ namespace Menu
             _chooseCuisineMenuPage.InitPage(_menuData);
             
             MenuUnlockCuisineSlot.onClick += OnUnlockCuisineSlotClick;
+
+            Time.timeScale = 0;
         }
 
         private void OnDisable()
         {
             MenuUnlockCuisineSlot.onClick -= OnUnlockCuisineSlotClick;
+
+            Time.timeScale = 1;
         }
 
         /// <summary>

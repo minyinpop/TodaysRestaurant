@@ -8,7 +8,7 @@ namespace Menu.Page.Category
     /// 與 MenuManager 這個類為綁定狀態。
     /// </summary>
     public class MenuUnlockCuisineMenuPage : MenuPageBase
-    {
+    {        
         /// <summary>
         /// 用於初始化頁面的的方法。
         /// </summary>
@@ -25,7 +25,7 @@ namespace Menu.Page.Category
         public override void Refresh(MenuData newMenuData)
         {
             MenuData = newMenuData;
-            
+
             foreach (var slot in SlotList)
                 Destroy(slot);
             
