@@ -25,5 +25,8 @@ namespace DataBase.Menu.ChooseCuisine
         
         // 該格子裡所暫存的料理的資料。
         public Cuisine cuisineData;
+
+        // 該格子裡所暫存的料理的數量。
+        public int cuisineQuantity;
     }
 }

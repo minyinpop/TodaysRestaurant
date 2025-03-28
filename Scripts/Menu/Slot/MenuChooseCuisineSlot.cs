@@ -48,7 +48,8 @@ namespace Menu.Slot
             SlotData = new PlayerChooseCuisineSlotData
             {
                 isLocked = SlotData.isLocked,
-                cuisineData = newCuisineData
+                cuisineData = newCuisineData,
+                cuisineQuantity = newCuisineData.MenuQuantity
             };
             Refresh();
             return true;
@@ -63,7 +64,8 @@ namespace Menu.Slot
             SlotData = new PlayerChooseCuisineSlotData
             {
                 isLocked = SlotData.isLocked,
-                cuisineData = null
+                cuisineData = null,
+                cuisineQuantity = 0
             };
             Refresh();
         }

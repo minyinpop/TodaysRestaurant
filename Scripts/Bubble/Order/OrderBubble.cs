@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace NPC.Bubble.Order
+namespace Bubble.Order
 {
     public abstract class OrderBubble : MonoBehaviour
     {

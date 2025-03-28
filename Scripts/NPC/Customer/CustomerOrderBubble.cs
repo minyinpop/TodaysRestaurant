@@ -1,8 +1,8 @@
 using System.Collections;
+using Bubble.Order;
+using Bubble.Order.Category;
 using DataBase.Customer.Wait;
 using DataBase.Item.Category.Cuisine;
-using NPC.Bubble.Order;
-using NPC.Bubble.Order.Category;
 using UnityEngine;
 
 namespace NPC.Customer
