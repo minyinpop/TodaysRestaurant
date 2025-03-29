@@ -87,7 +87,7 @@ namespace NPC.Customer
             var canChooseCuisineList = new List<Cuisine>();
 
             // 遍歷目標資料的所有的上架菜品，並儲存進暫存陣列。
-            foreach (var slotData in cuisineData.SlotDataList)
+            foreach (var slotData in cuisineData.slotDataList)
             {
                 if (slotData.cuisineData is not null)
                     canChooseCuisineList.Add(slotData.cuisineData);

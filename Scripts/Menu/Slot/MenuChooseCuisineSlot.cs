@@ -49,7 +49,7 @@ namespace Menu.Slot
             {
                 isLocked = SlotData.isLocked,
                 cuisineData = newCuisineData,
-                cuisineQuantity = newCuisineData.MenuQuantity
+                cuisineRemaining = newCuisineData.MenuQuantity
             };
             Refresh();
             return true;
@@ -65,7 +65,7 @@ namespace Menu.Slot
             {
                 isLocked = SlotData.isLocked,
                 cuisineData = null,
-                cuisineQuantity = 0
+                cuisineRemaining = 0
             };
             Refresh();
         }

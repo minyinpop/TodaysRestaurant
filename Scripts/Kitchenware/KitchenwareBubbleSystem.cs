@@ -1,5 +1,6 @@
 using DataBase.Bubble.Kitchenware;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Kitchenware
 {
@@ -7,7 +8,7 @@ namespace Kitchenware
     /// 用來管理廚俱的氣泡的類。
     /// </summary>
     [RequireComponent(typeof(KitchenwareManager))]
-    public class KitchenwareBubble : MonoBehaviour
+    public class KitchenwareBubbleSystem : MonoBehaviour
     {
         [Header("生成位置"), Tooltip("氣泡的生成位置。"), SerializeField]
         private Transform bubbleSpawnPoint;
@@ -32,11 +33,31 @@ namespace Kitchenware
         
         // 當前的氣泡的遊戲物件的暫存。
         private GameObject _bubble;
+        
+        // 自身的 KitchenwareManager 組件，用來傳入氣泡裡的 KitchenwareManager 做使用。
+        private KitchenwareManager _kitchenwareManager;
 
+        private void Awake()
+        {
+            _kitchenwareManager = GetComponent<KitchenwareManager>();
+        }
+        
         private void Start()
         {
             _bubble = Instantiate(emptyBubblePrefab, bubbleSpawnPoint);
-            _bubble.GetComponent<Bubble.Kitchenware.KitchenwareBubble>().InitBubble(kitchenwareBubbleData);
+            _bubble.GetComponent<Bubble.Kitchenware.KitchenwareBubbleBase>().InitBubble(_kitchenwareManager, kitchenwareBubbleData);
+        }
+
+        /// <summary>
+        /// 用來改變當前氣泡的互動模式的方法。
+        /// </summary>
+        /// <param name="interactable"> 新傳入的互動。 </param>
+        public void ChangeButtonInteractable(bool interactable)
+        {
+            if (_bubble is null)
+                return;
+            
+            _bubble.GetComponent<Button>().interactable = interactable;
         }
     }
 }

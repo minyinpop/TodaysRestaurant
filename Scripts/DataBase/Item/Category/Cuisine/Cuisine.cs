@@ -22,5 +22,15 @@ namespace DataBase.Item.Category.Cuisine
         
         [field: Tooltip("- 料理所需的烹飪時間，\n- 用於顧客的等待時間的基準值。"), SerializeField]
         public float CookTime { get; set; }
+
+        /// <summary>
+        /// 用於檢查兩個料理的 ID 是否一樣的方法。
+        /// </summary>
+        /// <param name="other"> 其它料理的資料。 </param>
+        /// <returns> 返回兩者的 ID 是否一致。 </returns>
+        public bool Equals(Cuisine other)
+        {
+            return ID == other.ID;
+        }
     }
 }

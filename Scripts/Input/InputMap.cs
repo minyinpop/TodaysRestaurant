@@ -108,15 +108,6 @@ public partial class @InputMap: IInputActionCollection2, IDisposable
                     ""processors"": ""NormalizeVector3"",
                     ""interactions"": ""Hold"",
                     ""initialStateCheck"": true
-                },
-                {
-                    ""name"": ""Interactive"",
-                    ""type"": ""Button"",
-                    ""id"": ""5130405f-a02b-4d95-9107-e412e5cd2365"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -251,17 +242,6 @@ public partial class @InputMap: IInputActionCollection2, IDisposable
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""357eb2f5-19d3-43fe-9bbb-9c4dac1536e2"",
-                    ""path"": ""<Keyboard>/e"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Interactive"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -320,7 +300,6 @@ public partial class @InputMap: IInputActionCollection2, IDisposable
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Bag = m_Player.FindAction("Bag", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
-        m_Player_Interactive = m_Player.FindAction("Interactive", throwIfNotFound: true);
         // Mouse
         m_Mouse = asset.FindActionMap("Mouse", throwIfNotFound: true);
         m_Mouse_LeftClick = m_Mouse.FindAction("Left Click", throwIfNotFound: true);
@@ -408,7 +387,6 @@ public partial class @InputMap: IInputActionCollection2, IDisposable
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_Bag;
     private readonly InputAction m_Player_Move;
-    private readonly InputAction m_Player_Interactive;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -428,10 +406,6 @@ public partial class @InputMap: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/Move".
         /// </summary>
         public InputAction @Move => m_Wrapper.m_Player_Move;
-        /// <summary>
-        /// Provides access to the underlying input action "Player/Interactive".
-        /// </summary>
-        public InputAction @Interactive => m_Wrapper.m_Player_Interactive;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -464,9 +438,6 @@ public partial class @InputMap: IInputActionCollection2, IDisposable
             @Move.started += instance.OnMove;
             @Move.performed += instance.OnMove;
             @Move.canceled += instance.OnMove;
-            @Interactive.started += instance.OnInteractive;
-            @Interactive.performed += instance.OnInteractive;
-            @Interactive.canceled += instance.OnInteractive;
         }
 
         /// <summary>
@@ -484,9 +455,6 @@ public partial class @InputMap: IInputActionCollection2, IDisposable
             @Move.started -= instance.OnMove;
             @Move.performed -= instance.OnMove;
             @Move.canceled -= instance.OnMove;
-            @Interactive.started -= instance.OnInteractive;
-            @Interactive.performed -= instance.OnInteractive;
-            @Interactive.canceled -= instance.OnInteractive;
         }
 
         /// <summary>
@@ -648,13 +616,6 @@ public partial class @InputMap: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnMove(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "Interactive" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnInteractive(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Mouse" which allows adding and removing callbacks.

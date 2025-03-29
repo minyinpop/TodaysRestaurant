@@ -15,7 +15,7 @@ namespace Menu.Page.Category
             // 遍歷整個 _slotList，並把格子中的暫存資料給儲存進資料庫裡。
             for (var i = 0; i < SlotList.Count; i++)
             {
-                MenuData.ChooseCuisineData.SlotDataList[i] = SlotList[i].GetComponent<MenuChooseCuisineSlot>().SlotData;
+                MenuData.ChooseCuisineData.slotDataList[i] = SlotList[i].GetComponent<MenuChooseCuisineSlot>().SlotData;
                 Destroy(SlotList[i]);
             }
         }
@@ -38,7 +38,7 @@ namespace Menu.Page.Category
             // 遍歷整個 _slotList，並把格子中的暫存資料給儲存進資料庫裡。
             for (var i = 0; i < SlotList.Count; i++)
             {
-                MenuData.ChooseCuisineData.SlotDataList[i] = SlotList[i].GetComponent<MenuChooseCuisineSlot>().SlotData;
+                MenuData.ChooseCuisineData.slotDataList[i] = SlotList[i].GetComponent<MenuChooseCuisineSlot>().SlotData;
                 Destroy(SlotList[i]);
             }
 
@@ -66,9 +66,9 @@ namespace Menu.Page.Category
         /// </summary>
         private void InitSlot()
         {
-            for (var i = 0; i < MenuData.ChooseCuisineData.SlotDataList.Count; i++)
+            for (var i = 0; i < MenuData.ChooseCuisineData.slotDataList.Count; i++)
             {
-                var selectedSlotData = MenuData.ChooseCuisineData.SlotDataList[i];
+                var selectedSlotData = MenuData.ChooseCuisineData.slotDataList[i];
                 
                 SlotList.Add(Instantiate(slotPrefab, slotSpawnPoint));
                 SlotList[i].GetComponent<MenuChooseCuisineSlot>().Refresh(selectedSlotData);

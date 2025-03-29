@@ -5,13 +5,14 @@ using UnityEngine;
 namespace DataBase.Menu.ChooseCuisine
 {
     /// <summary>
-    /// 用來記錄玩家選擇了甚麼菜品做販售，僅限於當天的營業。
+    /// 用來記錄玩家選擇了甚麼料理做販售，僅限於當天的營業。
+    /// 裡面包含了玩家選擇了甚麼料理，以及料理剩餘的份數。
     /// </summary>
     [CreateAssetMenu(fileName = "New Player Choose Cuisine Data", menuName = "Player/Menu/Choose Cuisine Data", order = 3)]
     public class PlayerChooseCuisineData : ScriptableObject
     {
-        [field: Tooltip("- 此為格子的資料。\n- 多少筆資料代表會生成多少的格子。\n- 請不要生成超過 8 筆資料。"), SerializeField]
-        public List<PlayerChooseCuisineSlotData> SlotDataList { get; private set; }
+        [Header("當日上架的料理資料"), Tooltip("- 此為格子的資料。\n- 多少筆資料代表會生成多少的格子。\n- 請不要生成超過 8 筆資料。")]
+        public List<PlayerChooseCuisineSlotData> slotDataList;
     }
 
     /// <summary>
@@ -27,6 +28,6 @@ namespace DataBase.Menu.ChooseCuisine
         public Cuisine cuisineData;
 
         // 該格子裡所暫存的料理的數量。
-        public int cuisineQuantity;
+        public int cuisineRemaining;
     }
 }
