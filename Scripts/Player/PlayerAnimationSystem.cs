@@ -8,6 +8,7 @@ namespace Player
     /// <summary>
     /// 用來控制玩家的動畫系統的類，在此使用的是 Spine 裡的 Skeleton Animation。
     /// </summary>
+    [RequireComponent(typeof(PlayerControlSystem))]
     [RequireComponent(typeof(SkeletonAnimation))]
     public class PlayerAnimationSystem : MonoBehaviour
     {

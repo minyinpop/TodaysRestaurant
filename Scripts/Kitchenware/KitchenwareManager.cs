@@ -1,5 +1,6 @@
-using System.Collections;
+using Bubble.Kitchenware;
 using DataBase.Item.Category.Cuisine;
+using Game.Stockpot;
 using Kitchenware.Cuisine_Choose_UI;
 using UnityEngine;
 
@@ -23,20 +24,24 @@ namespace Kitchenware
         // 自身的 KitchenwareBubbleSystem 組件，用來管理廚俱的氣泡的類。
         private KitchenwareBubbleSystem _kitchenwareBubbleSystem;
 
+        // 當前廚俱所烹飪的料理的資料。
+        public Cuisine CuisineData { get; set; }
+        
         
         
         // 用來區分當前廚俱的狀態的參數。
-        public KitchenwareStateEnum KitchenwareState { get; private set; } = KitchenwareStateEnum.Empty;
-        public enum KitchenwareStateEnum
+        private KitchenwareStateEnum KitchenwareState { get; set; } = KitchenwareStateEnum.Empty;
+        private enum KitchenwareStateEnum
         {
             Empty,
             Game,
-            Done
+            Done,
+            CuisineAppear
         }
         
         
         
-        [Header("預製件"), Tooltip("- 料理選擇介面的預製件。\n- 依照 PlayerChooseCuisineData 來顯示。"), SerializeField]
+        [Header("料理選擇介面"), Tooltip("- 料理選擇介面的預製件。\n- 依照 PlayerChooseCuisineData 來顯示。"), SerializeField]
         private GameObject cuisineChooseUIPrefab;
         
         [Tooltip("料理選擇介面要在哪裡生成。"), SerializeField]
@@ -44,6 +49,22 @@ namespace Kitchenware
         
         // 料理選擇介面的暫存。
         private GameObject _cuisineChooseUI;
+        
+        
+        
+        [Header("小遊戲"), Tooltip("該廚俱的小遊戲的預製件。"), SerializeField]
+        private GameObject gamePrefab;
+        
+        [Tooltip("小遊戲的生成位置。"), SerializeField]
+        private Transform gameSpawnPoint;
+        
+        // 小遊戲的遊戲物件的暫存。
+        private GameObject _game;
+
+
+
+        // 當玩家獲取廚具中的料理時，就會觸發這個廣播。
+        public static event System.Action<Cuisine> cuisineDeliver;
         
         private void Awake()
         {
@@ -83,10 +104,28 @@ namespace Kitchenware
                 }
                 case KitchenwareStateEnum.Game:
                 {
+                    _kitchenwareBubbleSystem.Bubble.GetComponent<KitchenwareBubbleBase>().IsGameCanPlay(false);
+                    
+                    _game = Instantiate(gamePrefab, gameSpawnPoint);
+                    _game.GetComponent<StockpotManager>().OnInit(this);
                     break;
                 }
                 case KitchenwareStateEnum.Done:
                 {
+                    _kitchenwareBubbleSystem.InitCuisineBubble();
+                    KitchenwareState = KitchenwareStateEnum.CuisineAppear;
+                    break;
+                }
+                case KitchenwareStateEnum.CuisineAppear:
+                {
+                    // TODO: 玩家的頭上出現料理。
+                    print("玩家的頭上出現料理");
+                    
+                    cuisineDeliver?.Invoke(CuisineData);
+                    CuisineData = null;
+                    
+                    _kitchenwareBubbleSystem.InitEmptyBubble();
+                    KitchenwareState = KitchenwareStateEnum.Empty;
                     break;
                 }
             }
@@ -103,7 +142,20 @@ namespace Kitchenware
             
             KitchenwareState = KitchenwareStateEnum.Game;
             
-            _kitchenwareCookSystem.StartCookProcess(newCuisineData);
+            _kitchenwareCookSystem.StartCook(newCuisineData);
+        }
+
+        /// <summary>
+        /// 執行小遊戲結束時的方法。
+        /// </summary>
+        public void OnGameFinish()
+        {
+            Destroy(_game);
+            _game = null;
+            
+            KitchenwareState = KitchenwareStateEnum.Done;
+            
+            _kitchenwareCookSystem.ContinueCook();
         }
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using DataBase.Menu.ChooseCuisine;
 using TMPro;
 using UnityEngine;
@@ -12,7 +13,10 @@ namespace Kitchenware.Cuisine_Choose_UI
     [RequireComponent(typeof(Button))]
     public class StickyNote : MonoBehaviour
     {
-        [Header("組件"), Tooltip("用來顯示料理圖案的圖片組件。"), SerializeField]
+        [Header("組件"), Tooltip("用來顯示便利貼的圖片組件"), SerializeField]
+        private Image stickyNoteImage;
+        
+        [Tooltip("用來顯示料理圖案的圖片組件。"), SerializeField]
         private Image cuisineImage;
         
         [Tooltip("用來顯示料理名稱的文字組件。"), SerializeField]
@@ -20,6 +24,13 @@ namespace Kitchenware.Cuisine_Choose_UI
 
         [Tooltip("用來顯示料理剩餘份數的文字組件。"), SerializeField]
         private TextMeshProUGUI cuisineRemainingTMP;
+        
+        
+        
+        [Header("圖片"), Tooltip("便利貼的底圖的圖片素材。"), SerializeField]
+        private List<Sprite> stickyNoteSpriteList;
+        
+        
         
         // 料理的選擇的介面的類，用於回傳資訊。
         private KitchenwareCuisineChooseUI _kitchenwareCuisineChooseUI;
@@ -45,26 +56,19 @@ namespace Kitchenware.Cuisine_Choose_UI
         /// </summary>
         private void Refresh()
         {
+            stickyNoteImage.sprite = stickyNoteSpriteList[Random.Range(0, stickyNoteSpriteList.Count)];
+            
             if (_slotData.cuisineData is null)
                 return;
+            
+            cuisineImage.gameObject.SetActive(true);
+            cuisineImage.sprite = _slotData.cuisineData.Sprite;
 
-            if (cuisineImage is not null)
-            {
-                cuisineImage.gameObject.SetActive(true);
-                cuisineImage.sprite = _slotData.cuisineData.Sprite;
-            }
+            cuisineNameTMP.gameObject.SetActive(true);
+            cuisineNameTMP.text = _slotData.cuisineData.Name;
 
-            if (cuisineNameTMP is not null)
-            {
-                cuisineNameTMP.gameObject.SetActive(true);
-                cuisineNameTMP.text = _slotData.cuisineData.Name;
-            }
-
-            if (cuisineRemainingTMP is not null)
-            {
-                cuisineRemainingTMP.gameObject.SetActive(true);
-                cuisineRemainingTMP.text = _slotData.cuisineRemaining.ToString();
-            }
+            cuisineRemainingTMP.gameObject.SetActive(true);
+            cuisineRemainingTMP.text = _slotData.cuisineRemaining.ToString();
         }
 
         /// <summary>

@@ -7,7 +7,7 @@ namespace Bubble.Kitchenware.Category
 {
     [RequireComponent(typeof(Image))]
     [RequireComponent(typeof(Button))]
-    public class KitchenwareEmptyBubbleBase : KitchenwareBubbleBase
+    public class KitchenwareEmptyBubble : KitchenwareBubbleBase
     {
         [Header("氣泡設定"), Tooltip("用來顯示氣泡圖案的圖片組件。"), SerializeField]
         private Image emptyIconImage;
@@ -21,14 +21,6 @@ namespace Bubble.Kitchenware.Category
             KitchenwareBubbleData = newData;
             
             emptyIconImage.sprite = KitchenwareBubbleData.EmptyBubbleSprite;
-        }
-        
-        /// <summary>
-        /// 用於 Button 組件的 OnClick() 做使用。
-        /// </summary>
-        public void OnClick()
-        {
-            KitchenwareManager.OnBubbleClick();
         }
     }
 }

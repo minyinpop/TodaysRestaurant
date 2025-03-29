@@ -59,6 +59,12 @@ namespace NPC.Customer
             if (other.gameObject.CompareTag("Player"))
                 _bubble.GetComponent<OrderBubble>().ChangeButtonInteractable(true);
         }
+        
+        private void OnTriggerStay(Collider other)
+        {
+            if (other.gameObject.CompareTag("Player"))
+                _bubble.GetComponent<OrderBubble>().ChangeButtonInteractable(true);
+        }
 
         private void OnTriggerExit(Collider other)
         {

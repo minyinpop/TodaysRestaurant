@@ -8,6 +8,7 @@ namespace Player
     /// <summary>
     /// 用來控制玩家小人物操作的類
     /// </summary>
+    [RequireComponent(typeof(PlayerAnimationSystem))]
     [RequireComponent(typeof(SkeletonAnimation))]
     [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(BoxCollider))]

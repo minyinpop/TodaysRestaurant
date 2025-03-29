@@ -5,10 +5,12 @@ using UnityEngine.UI;
 
 namespace Bubble.Kitchenware.Category
 {
-    public class KitchenwareGameBubbleBase : KitchenwareBubbleBase
+    [RequireComponent(typeof(Image))]
+    [RequireComponent(typeof(Button))]
+    public class KitchenwareDoneBubble : KitchenwareBubbleBase
     {
         [Header("氣泡設定"), Tooltip("用來顯示氣泡圖案的圖片組件。"), SerializeField]
-        private Image gameIconImage;
+        private Image doneIconImage;
 
         /// <summary>
         /// 用來初始化氣泡的方法。
@@ -18,7 +20,7 @@ namespace Bubble.Kitchenware.Category
             KitchenwareManager = kitchenwareManager;
             KitchenwareBubbleData = newData;
             
-            gameIconImage.sprite = KitchenwareBubbleData.GameBubbleSprite;
+            doneIconImage.sprite = KitchenwareBubbleData.DoneBubbleSprite;
         }
     }
 }

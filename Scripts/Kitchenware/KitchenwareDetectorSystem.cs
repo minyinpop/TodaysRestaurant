@@ -22,6 +22,12 @@ namespace Kitchenware
                 _kitchenwareManager.OnPlayerNearby(true);
         }
 
+        private void OnTriggerStay(Collider other)
+        {
+            if (other.gameObject.CompareTag("Player"))
+                _kitchenwareManager.OnPlayerNearby(true);
+        }
+
         private void OnTriggerExit(Collider other)
         {
             if (other.gameObject.CompareTag("Player"))

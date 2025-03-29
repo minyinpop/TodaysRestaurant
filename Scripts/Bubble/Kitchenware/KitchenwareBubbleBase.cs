@@ -19,5 +19,18 @@ namespace Bubble.Kitchenware
         /// 用來初始化氣泡的方法。
         /// </summary>
         public abstract void InitBubble(KitchenwareManager kitchenwareManager ,KitchenwareBubbleData newData);
+        
+        /// <summary>
+        /// 用來執行玩家是否可以遊玩小遊戲的方法。
+        /// </summary>
+        public virtual void IsGameCanPlay(bool canPlay) { }
+
+        /// <summary>
+        /// 用於 Button 組件的 OnClick() 做使用。
+        /// </summary>
+        public void OnClick()
+        {
+            KitchenwareManager.OnBubbleClick();
+        }
     }
 }
