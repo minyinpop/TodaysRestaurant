@@ -1,3 +1,5 @@
+using System.Collections;
+using Kitchenware;
 using UnityEngine;
 
 namespace Game.Stockpot
@@ -11,7 +13,31 @@ namespace Game.Stockpot
         private StockpotProgressBar progressBar;
         
         // 用於判斷小遊戲是否結束，即為攪拌結束。
-        private bool _isFinished;
+        public bool IsFinished { get; private set; }
+
+        // 用於結束遊戲的異步協程。
+        private IEnumerator _finishProcess;
+        
+        // 目標廚俱的 KitchenwareManager 組件，
+        private KitchenwareManager _kitchenwareManager;
+        
+        private void OnDisable()
+        {
+            if (_finishProcess is not null)
+            {
+                StopCoroutine(_finishProcess);
+                _finishProcess = null;
+            }
+        }
+
+        /// <summary>
+        /// 用來初始化所執行的方法。
+        /// </summary>
+        /// <param name="kitchenwareManager"> 目標廚俱的管理器的類。 </param>
+        public void OnInit(KitchenwareManager kitchenwareManager)
+        {
+            _kitchenwareManager = kitchenwareManager;
+        }
 
         /// <summary>
         /// 用來調度 StockpotSpoon 與 StockpotProgressBar 這兩個類之間的邏輯。
@@ -19,7 +45,7 @@ namespace Game.Stockpot
         /// </summary>
         public void AddProgress()
         {
-            if (!_isFinished)
+            if (!IsFinished)
                 progressBar.AddProgress();
         }
 
@@ -28,10 +54,19 @@ namespace Game.Stockpot
         /// </summary>
         public void Finish()
         {
-            _isFinished = true;
+            _finishProcess = FinishProcess();
+            StartCoroutine(_finishProcess);
+        }
+
+        private IEnumerator FinishProcess()
+        {
+            IsFinished = true;
+            spoon.FinishGame();
             
-            print("小遊戲結束");
-            // TODO: 進度條滿了後，就完成攪拌的小遊戲。
+            yield return new WaitForSeconds(1);
+            _kitchenwareManager.OnGameFinish();
+            
+            // TODO: 未來可以做一些結束時的動畫 ......
         }
     }
 }

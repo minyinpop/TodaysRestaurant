@@ -9,9 +9,14 @@ namespace Menu.Slot
     /// <summary>
     /// 用於顯示當前玩家所選擇的料理的格子。
     /// </summary>
+    [RequireComponent(typeof(Image))]
+    [RequireComponent(typeof(Button))]
     public class MenuChooseCuisineSlot : MonoBehaviour
     {
-        [Header("組件"), Tooltip("- 格子底圖的圖片組件。\n- 用來顯示當前格子的狀態。"), SerializeField]
+        [Header("組件"), Tooltip("自身的按鈕組件。"), SerializeField]
+        private Button button;
+        
+        [Tooltip("- 格子底圖的圖片組件。\n- 用來顯示當前格子的狀態。"), SerializeField]
         private Image slotBG;
 
         [Tooltip("- 料理的圖片組件。\n- 用來顯示當格所儲存的玩家選擇的料理。"), SerializeField]
@@ -48,7 +53,8 @@ namespace Menu.Slot
             SlotData = new PlayerChooseCuisineSlotData
             {
                 isLocked = SlotData.isLocked,
-                cuisineData = newCuisineData
+                cuisineData = newCuisineData,
+                cuisineRemaining = newCuisineData.MenuQuantity
             };
             Refresh();
             return true;
@@ -63,7 +69,8 @@ namespace Menu.Slot
             SlotData = new PlayerChooseCuisineSlotData
             {
                 isLocked = SlotData.isLocked,
-                cuisineData = null
+                cuisineData = null,
+                cuisineRemaining = 0
             };
             Refresh();
         }
@@ -79,10 +86,12 @@ namespace Menu.Slot
 
         private void Refresh()
         {
+            button.interactable = SlotData.cuisineData is not null;
+            
             // 如果格子是上鎖的，就直接結束邏輯。
             if (SlotData.isLocked)
                 return;
-            
+
             slotBG.sprite = SlotData.cuisineData is null ? unlockedWithoutCuisineSprite : unlockedWithCuisineSprite;
             
             cuisineImage.gameObject.SetActive(SlotData.cuisineData is not null);

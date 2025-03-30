@@ -24,10 +24,10 @@ namespace DataBase.Customer.Wait
         
         
         
-        [field: Header("等餐的設定"), Tooltip("顧客的最長的等待餐點的時間。"), SerializeField]
+        [field: Header("等餐的設定"), Tooltip("- 顧客的最長的等待餐點的時間。\n- 會加上菜品的烹飪時間。"), SerializeField]
         public float MaxWaitCuisineTime { get; private set; }
         
-        [field: Tooltip("顧客的最短的等待餐點的時間。"), SerializeField]
+        [field: Tooltip("- 顧客的最短的等待餐點的時間。\n- 會加上菜品的烹飪時間。"), SerializeField]
         public float MinWaitCuisineTime { get; private set; }
         
         

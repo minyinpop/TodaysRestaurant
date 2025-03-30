@@ -61,10 +61,12 @@ namespace NPC.Customer
                 }
                 case State.WaitingOrder:
                 {
+                    _customerOrderBubble.InitWaitOrderBubble();
                     break;
                 }
                 case State.WaitingCuisine:
                 {
+                    _customerOrderBubble.InitWaitCuisineBubble(ChooseCuisine(mainCourseData));
                     break;
                 }
                 case State.EatingCuisine:
@@ -74,21 +76,6 @@ namespace NPC.Customer
             }
         }
         
-        /// <summary>
-        /// 用來當作顧客選擇主菜的類。
-        /// </summary>
-        public void ChooseMainCourse()
-        {
-            ChooseCuisine(mainCourseData);
-        }
-
-        /// <summary>
-        /// 用來當作顧客選擇飲品的類。
-        /// </summary>
-        public void ChooseDrink()
-        {
-            ChooseCuisine(drinkCuisineData);
-        }
 
         /// <summary>
         /// 用來執行顧客選擇菜品的類，需傳入 PlayerChooseCuisineData。
@@ -100,7 +87,7 @@ namespace NPC.Customer
             var canChooseCuisineList = new List<Cuisine>();
 
             // 遍歷目標資料的所有的上架菜品，並儲存進暫存陣列。
-            foreach (var slotData in cuisineData.SlotDataList)
+            foreach (var slotData in cuisineData.slotDataList)
             {
                 if (slotData.cuisineData is not null)
                     canChooseCuisineList.Add(slotData.cuisineData);

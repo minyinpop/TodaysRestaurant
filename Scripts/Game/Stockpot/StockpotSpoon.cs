@@ -47,8 +47,11 @@ namespace Game.Stockpot
         // 主要攝影機的組件，用於偵測滑鼠有沒有點擊到湯勺。
         private Camera _cam;
         
-        //
+        // 上一個滑鼠的位置的暫存。
         private Vector2 _lastMousePos;
+        
+        // 用來判斷小遊戲是否結束的暫存。
+        private bool _isFinish;
         
         private void Awake()
         {
@@ -86,6 +89,10 @@ namespace Game.Stockpot
         private void Update()
         {
             _rig2D.gravityScale = _isHandle ? 0 : 1;
+
+            // 當小遊戲結束，就把湯勺放下。
+            if (_isFinish)
+                return;
 
             // 當玩家握住湯勺，就讓湯勺的中心點跟著玩家的滑鼠。
             if (!_isHandle)
@@ -156,7 +163,7 @@ namespace Game.Stockpot
             var ray = _cam.ScreenPointToRay(InputSystem.MousePos());
             
             // 用於計算射線與平面之間的相交點。
-            var xyPlane = new Plane(Vector3.forward, Vector3.zero);
+            var xyPlane = new Plane(Vector3.forward, new Vector3(0, 0, transform.position.z));
 
             // 發射射線，並與 xyPlane 確認相交點位置，過後把位置儲存進 distance 裡面。
             return xyPlane.Raycast(ray, out var distance) ? ray.GetPoint(distance) : new Vector3();
@@ -184,6 +191,15 @@ namespace Game.Stockpot
             
             _rig2D.linearDamping = normalLinearDamping;
             _rig2D.angularDamping = normalAngularDamping;
+        }
+
+        /// <summary>
+        /// 用於執行小遊戲結束的方法。
+        /// </summary>
+        public void FinishGame()
+        {
+            _isFinish = true;
+            _isHandle = false;
         }
     }
 }

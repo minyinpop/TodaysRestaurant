@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Menu.Page
 {
-    public abstract class MenuPageBase : MenuManager
+    public abstract class MenuPageBase : MonoBehaviour
     {
         [Header("格子相關"), Tooltip("- 用來生成格子用的預製件。\n- 每個頁面都有不同的預製件。"), SerializeField]
         protected GameObject slotPrefab;
