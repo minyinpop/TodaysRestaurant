@@ -75,5 +75,15 @@ namespace Menu
             _unlockCuisineMenuPage.Refresh(_menuData);
             _chooseCuisineMenuPage.Refresh(_menuData);
         }
+
+        /// <summary>
+        /// 當玩家按下菜單關閉按鈕時，所執行的方法。
+        /// 用於 Button 裡的 On Click() 做使用。
+        /// </summary>
+        public void OnCloseButtonClick()
+        {
+            _chooseCuisineMenuPage.OnCloseButtonClick();
+            Destroy(gameObject);
+        }
     }
 }

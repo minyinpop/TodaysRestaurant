@@ -13,6 +13,23 @@ namespace DataBase.Menu.ChooseCuisine
     {
         [Header("當日上架的料理資料"), Tooltip("- 此為格子的資料。\n- 多少筆資料代表會生成多少的格子。\n- 請不要生成超過 8 筆資料。")]
         public List<PlayerChooseCuisineSlotData> slotDataList;
+
+        /// <summary>
+        /// 用於重置資料庫的方法。
+        /// 以防下次開啟菜單時，出現殘留的資料。
+        /// </summary>
+        public void Clear()
+        {
+            for (var i = 0; i < slotDataList.Count; i++)
+            {
+                slotDataList[i] = new PlayerChooseCuisineSlotData
+                {
+                    isLocked = slotDataList[i].isLocked,
+                    cuisineData = null,
+                    cuisineRemaining = 0
+                };
+            }
+        }
     }
 
     /// <summary>

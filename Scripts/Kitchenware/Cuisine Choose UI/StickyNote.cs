@@ -76,7 +76,9 @@ namespace Kitchenware.Cuisine_Choose_UI
         /// </summary>
         public void OnClick()
         {
-            _kitchenwareCuisineChooseUI.OnStickyNoteClick(_slotData.cuisineData);
+            // 該便利貼裡有料裡的資料，才可以繼續執行。
+            if (_slotData.cuisineData is not null)
+                _kitchenwareCuisineChooseUI.OnStickyNoteClick(_slotData.cuisineData);
         }
     }
 }

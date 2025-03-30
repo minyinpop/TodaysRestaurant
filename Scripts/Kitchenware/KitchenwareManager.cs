@@ -64,7 +64,7 @@ namespace Kitchenware
 
 
         // 當玩家獲取廚具中的料理時，就會觸發這個廣播。
-        public static event System.Action<Cuisine> cuisineDeliver;
+        public static event System.Func<Cuisine, bool> cuisineDeliver;
         
         private void Awake()
         {
@@ -79,14 +79,22 @@ namespace Kitchenware
         /// <param name="isNearby"> 玩家是否在附近。 </param>
         public void OnPlayerNearby(bool isNearby)
         {
-            _kitchenwareBubbleSystem.ChangeButtonInteractable(isNearby);
-
-            // 如果玩家在開啟料理選擇介面的時候遠離廚俱，就刪除介面，並且清空暫存資料。
-            if (!isNearby && _cuisineChooseUI is not null)
+            // 如果玩家打開料理選擇介面，就讓現有的氣泡無法互動。
+            if (_cuisineChooseUI is not null)
             {
-                Destroy(_cuisineChooseUI);
-                _cuisineChooseUI = null;
+                _kitchenwareBubbleSystem.ChangeButtonInteractable(false);
+
+                // 如果玩家遠離廚俱的附近，就關閉料理選擇介面，並清空 _cuisineChooseUI 的暫存。
+                if (!isNearby)
+                {
+                    Destroy(_cuisineChooseUI);
+                    _cuisineChooseUI = null;
+                }
+                
+                return;
             }
+            
+            _kitchenwareBubbleSystem.ChangeButtonInteractable(isNearby);
         }
 
         /// <summary>
@@ -118,14 +126,14 @@ namespace Kitchenware
                 }
                 case KitchenwareStateEnum.CuisineAppear:
                 {
-                    // TODO: 玩家的頭上出現料理。
-                    print("玩家的頭上出現料理");
-                    
-                    cuisineDeliver?.Invoke(CuisineData);
-                    CuisineData = null;
-                    
-                    _kitchenwareBubbleSystem.InitEmptyBubble();
-                    KitchenwareState = KitchenwareStateEnum.Empty;
+                    if (cuisineDeliver?.Invoke(CuisineData) == true)
+                    {
+                        CuisineData = null;
+                        
+                        _kitchenwareBubbleSystem.InitEmptyBubble();
+                        KitchenwareState = KitchenwareStateEnum.Empty;
+                    }
+
                     break;
                 }
             }

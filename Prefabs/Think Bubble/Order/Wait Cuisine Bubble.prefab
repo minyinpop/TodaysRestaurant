@@ -54,6 +54,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04f06bc3365f42e5981008ecfa5efa12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerCuisineDeliverData: {fileID: 11400000, guid: b26b5cf3eea219248a2e6a19003ea3e4, type: 2}
   cuisineImage: {fileID: 6626912381101653773}
   maskImage: {fileID: 3174908237525225445}
 --- !u!222 &6801102867108254224
@@ -137,7 +138,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8513550393526938412}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2044763920112016589}
+        m_TargetAssemblyTypeName: Bubble.Order.Category.WaitCuisineBubble, Assembly-CSharp
+        m_MethodName: OnClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &2790076883256108539
 GameObject:
   m_ObjectHideFlags: 0

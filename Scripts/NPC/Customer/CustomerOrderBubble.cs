@@ -32,6 +32,12 @@ namespace NPC.Customer
         [Tooltip("用於顯示角色在等待餐點的氣泡的預製件"), SerializeField]
         private GameObject waitCuisineBubblePrefab;
         
+        [Tooltip("用於顯示顧客開心的氣泡。"), SerializeField]
+        private GameObject happyBubblePrefab;
+
+        [Tooltip("用於顯示顧客生氣的氣泡。"), SerializeField]
+        private GameObject angryBubblePrefab;
+        
         
         
         // 當前的氣泡的遊戲物件的暫存。
@@ -53,25 +59,32 @@ namespace NPC.Customer
             if (_currentCoroutine is not null)
                 StopCoroutine(_currentCoroutine);
         }
-
-        private void OnTriggerEnter(Collider other)
-        {
-            if (other.gameObject.CompareTag("Player"))
-                _bubble.GetComponent<OrderBubble>().ChangeButtonInteractable(true);
-        }
         
         private void OnTriggerStay(Collider other)
         {
-            if (other.gameObject.CompareTag("Player"))
-                _bubble.GetComponent<OrderBubble>().ChangeButtonInteractable(true);
+            if (!other.gameObject.CompareTag("Player"))
+                return;
+
+            if (_bubble is null)
+                return;
+
+            _bubble.TryGetComponent<OrderBubble>(out var orderBubble);
+            orderBubble?.ChangeButtonInteractable();
+            orderBubble?.ChangeButtonInteractable(true);
         }
 
         private void OnTriggerExit(Collider other)
         {
-            if (other.gameObject.CompareTag("Player"))
-                _bubble.GetComponent<OrderBubble>().ChangeButtonInteractable(false);
-        }
+            if (!other.gameObject.CompareTag("Player"))
+                return;
 
+            if (_bubble is null)
+                return;
+            
+            _bubble.TryGetComponent<OrderBubble>(out var orderBubble);
+            orderBubble?.ChangeButtonInteractable(false);
+        }
+        
         
         
         
@@ -178,6 +191,34 @@ namespace NPC.Customer
             yield return new WaitForSeconds(targetWaitTime);
             
             print("顧客沒耐心了");
+        }
+
+        public void InitMoodleBubble(bool isHappy)
+        {
+            if (_currentCoroutine is not null)
+            {
+                StopCoroutine(_currentCoroutine);
+                _currentCoroutine = null;
+            }
+            
+            _currentCoroutine = HappyBubbleCoroutine(isHappy);
+            StartCoroutine(_currentCoroutine);
+        }
+
+        private IEnumerator HappyBubbleCoroutine(bool isHappy)
+        {
+            if (_bubble is not null)
+            {
+                Destroy(_bubble);
+                _bubble = null;
+            }
+            
+            _bubble = Instantiate(isHappy ? happyBubblePrefab : angryBubblePrefab, bubbleSpawnPoint);
+
+            yield return new WaitForSeconds(3);
+            
+            Destroy(_bubble);
+            _bubble = null;
         }
     }
 }

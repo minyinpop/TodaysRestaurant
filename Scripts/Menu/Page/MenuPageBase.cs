@@ -39,5 +39,12 @@ namespace Menu.Page
         public virtual void AddCuisineData(Cuisine newCuisineData)
         {
         }
+
+        /// <summary>
+        /// 當玩家按下菜單關閉按鈕時，所執行的方法。
+        /// </summary>
+        public virtual void OnCloseButtonClick()
+        {
+        }
     }
 }
