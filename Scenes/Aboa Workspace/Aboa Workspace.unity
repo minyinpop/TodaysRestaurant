@@ -589,6 +589,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 309926297}
+  - component: {fileID: 309926298}
   m_Layer: 5
   m_Name: Menu
   m_TagString: Untagged
@@ -617,6 +618,23 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &309926298
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 309926296}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ad16fdb94b24d1a87d6fdb05141a91b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unlockedMealsSlotPrefab: {fileID: 6961790785490192953, guid: 7e294c88769653e46a47f3069cc35a84, type: 3}
+  lockedMealsSlotPrefab: {fileID: 6991022553126424442, guid: 3bed79928aa6dff4e8c39fe29a1bdc43, type: 3}
+  unlockedChosenMealsSlotWithMealsPrefab: {fileID: 4120649969110292389, guid: e13a883a6c2be404894e24ef810d778e, type: 3}
+  unlockedChosenMealsSlotWithoutMealsPrefab: {fileID: 815486046316375725, guid: 3945c5746eba3ee4bae63282f5a69f54, type: 3}
+  lockedChosenMealsSlotPrefab: {fileID: 8619884262248367010, guid: 25b254c0634dc474c8a4d4c1a9e09fec, type: 3}
 --- !u!1 &366372817
 GameObject:
   m_ObjectHideFlags: 0
