@@ -10,6 +10,9 @@ namespace Database.Restaurant.ChosenMeals
     [Serializable]
     public struct ChosenMealsStruct
     {
+        [field: Header("格子狀態"), Tooltip("格子是否上鎖？"), SerializeField]
+        public bool IsLocked { get; private set; }
+        
         [field: Header("選擇格的資料"), Tooltip("料理的資料。"), SerializeField]
         public MealsData MealsData { get; private set; }
         
