@@ -1,44 +1,88 @@
-using Database.Restaurant.ChosenMeals;
+using Database.Restaurant.Menu;
+using Restaurant.Menu.Page;
 using UnityEngine;
 
 namespace Restaurant.Menu
 {
     // ==================================================
-    // 用於管理菜單的程式碼。
+    // 在餐廳經營時，玩家所選擇上架料理的菜單。
     // ==================================================
+    
+    [RequireComponent(typeof(MenuUnlockedMealsPage))]
+    [RequireComponent(typeof(MenuChosenMealsPage))]
     public class MenuManager : MonoBehaviour
     {
-        [Header("資料庫"), Tooltip("被選擇的主菜料理資料庫。"), SerializeField]
-        private ChosenMealsData mainCourseChosenMealsData;
+        // ========== { 資料相關 } ==========
         
-        [Tooltip("被選擇的飲品料理資料庫。"), SerializeField]
-        private ChosenMealsData drinksChosenMealsData;
+        [field: Header("料理種類資料庫"), Tooltip("預設料理種類的頁面資料庫。"), SerializeField]
+        public MenuPageSO DefaultMenuPage { get; private set; }
         
-        [Header("已解所料理的格子"), Tooltip("已解鎖的 料理選擇 格子預製件。"), SerializeField]
-        private GameObject unlockedMealsSlotPrefab;
-        
-        [Tooltip("已上鎖的 料理選擇 格子預製件。"), SerializeField]
-        private GameObject lockedMealsSlotPrefab;
+        // 當前的頁面資料庫。
+        private MenuPageSO CurrentMenuPage { get; set; }
         
         
         
-        [Header("選擇料理的格子"), Tooltip("已解鎖且有 選擇料理 的格子預製件。"), SerializeField]
-        private GameObject unlockedChosenMealsSlotWithMealsPrefab;
+        // ========== { 頁面相關 } ==========
         
-        [Tooltip("已解鎖但沒有 選擇料理 的格子預製件。"), SerializeField]
-        private GameObject unlockedChosenMealsSlotWithoutMealsPrefab;
+        // 用於顯示玩家，當前所選擇的料理類別，哪些料理可以上架。
+        private MenuUnlockedMealsPage UnlockedMealsPage { get; set; }
         
-        [Tooltip("未解鎖的 選擇料理 的格子預製件。"), SerializeField]
-        private GameObject lockedChosenMealsSlotPrefab;
+        // 用於顯示玩家，當前所選擇的料理類別，哪些料理被選擇上架。
+        private MenuChosenMealsPage ChosenMealsPage { get; set; }
+
+
+
+        private void Awake()
+        {
+            UnlockedMealsPage = GetComponent<MenuUnlockedMealsPage>();
+            ChosenMealsPage = GetComponent<MenuChosenMealsPage>();
+        }
+
         
+
+        private void OnDestroy()
+        {
+            // TODO: 當關閉菜單前，把暫存在 MenuChosenMealsSlot.ChosenMealsSlot 給儲存進 CurrentMenuPage.ChosenMeals。
+        }
+
         
-        
+
         /// <summary>
-        /// 當菜單開啟按鈕被點下時，所執行的方法。
-        /// 用於 Button 的 On Click() 訂閱。
+        /// 當菜單開啟按鈕被按下時，所執行的方法。
+        /// 預設打開顯示為主菜的頁面。
+        /// 僅限於給 Button 組件的 On Click() 做訂閱。
         /// </summary>
         public void OnOpenButtonPressed()
         {
+            RefreshPage(DefaultMenuPage);
+        }
+
+
+
+        /// <summary>
+        /// 當玩家按下切換料理種類的按鈕後，所執行的方法。
+        /// 僅限於給 Button 組件的 On Click() 做訂閱。
+        /// </summary>
+        /// <param name="newPage"> 新傳入的頁面資料庫。 </param>
+        public void OnChangeMealsTypeButtonPressed(MenuPageSO newPage)
+        {
+            RefreshPage(newPage);
+        }
+
+        
+        
+        /// <summary>
+        /// 用於刷新頁面的方法。
+        /// 僅限於給 MenuManager 自己做使用。
+        /// </summary>
+        /// <param name="newPage"> 新傳入的頁面資料庫。 </param>
+        private void RefreshPage(MenuPageSO newPage)
+        {
+            // TODO: 當切換頁面前，都要把暫存在 MenuChosenMealsSlot.ChosenMealsSlot 給儲存進 CurrentMenuPage.ChosenMeals。
+            
+            CurrentMenuPage = newPage;
+            UnlockedMealsPage.Refresh(newPage.UnlockedMeals);
+            ChosenMealsPage.Refresh(newPage.ChosenMeals);
         }
     }
 }

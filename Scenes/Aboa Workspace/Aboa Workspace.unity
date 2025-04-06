@@ -331,6 +331,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+      - m_Target: {fileID: 309926298}
+        m_TargetAssemblyTypeName: Restaurant.Menu.MenuManager, Assembly-CSharp
+        m_MethodName: OnOpenButtonPressed
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!114 &148995899
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -590,6 +602,8 @@ GameObject:
   m_Component:
   - component: {fileID: 309926297}
   - component: {fileID: 309926298}
+  - component: {fileID: 309926300}
+  - component: {fileID: 309926299}
   m_Layer: 5
   m_Name: Menu
   m_TagString: Untagged
@@ -630,13 +644,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ad16fdb94b24d1a87d6fdb05141a91b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainCourseChosenMealsData: {fileID: 11400000, guid: 46d806b6909e43c4986cf75cf73fa490, type: 2}
-  drinksChosenMealsData: {fileID: 11400000, guid: f11448824b572fb4d8bbf696a17b42a6, type: 2}
-  unlockedMealsSlotPrefab: {fileID: 6961790785490192953, guid: 7e294c88769653e46a47f3069cc35a84, type: 3}
-  lockedMealsSlotPrefab: {fileID: 6991022553126424442, guid: 3bed79928aa6dff4e8c39fe29a1bdc43, type: 3}
-  unlockedChosenMealsSlotWithMealsPrefab: {fileID: 4120649969110292389, guid: e13a883a6c2be404894e24ef810d778e, type: 3}
-  unlockedChosenMealsSlotWithoutMealsPrefab: {fileID: 815486046316375725, guid: 3945c5746eba3ee4bae63282f5a69f54, type: 3}
-  lockedChosenMealsSlotPrefab: {fileID: 8619884262248367010, guid: 25b254c0634dc474c8a4d4c1a9e09fec, type: 3}
+  <DefaultMenuPage>k__BackingField: {fileID: 11400000, guid: a8be9b553efe40843859b4212f7d3908, type: 2}
+--- !u!114 &309926299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 309926296}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfc55a3e669f47ab8577da9da70518c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <LockedChosenMealsSlotPrefab>k__BackingField: {fileID: 8619884262248367010, guid: 25b254c0634dc474c8a4d4c1a9e09fec, type: 3}
+  <UnlockedChosenMealsSlotWithoutMealsPrefab>k__BackingField: {fileID: 815486046316375725, guid: 3945c5746eba3ee4bae63282f5a69f54, type: 3}
+  <UnlockedChosenMealsSlotWithMealsPrefab>k__BackingField: {fileID: 4120649969110292389, guid: e13a883a6c2be404894e24ef810d778e, type: 3}
+  <SlotSpawnPoint>k__BackingField: {fileID: 1867698033}
+--- !u!114 &309926300
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 309926296}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a08406af91c14e0d882021ef69ead300, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <UnlockedMealsSlotPrefab>k__BackingField: {fileID: 6961790785490192953, guid: 7e294c88769653e46a47f3069cc35a84, type: 3}
+  <SlotSpawnPoint>k__BackingField: {fileID: 3189728}
 --- !u!1 &366372817
 GameObject:
   m_ObjectHideFlags: 0
@@ -897,7 +935,20 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 402023597}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 309926298}
+        m_TargetAssemblyTypeName: Restaurant.Menu.MenuManager, Assembly-CSharp
+        m_MethodName: OnChangeMealsTypeButtonPressed
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 11400000, guid: e41244a55993e3549814b479c2df132c, type: 2}
+          m_ObjectArgumentAssemblyTypeName: Database.Restaurant.Menu.MenuPageSO,
+            Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &402023597
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2218,7 +2269,20 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1718367585}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 309926298}
+        m_TargetAssemblyTypeName: Restaurant.Menu.MenuManager, Assembly-CSharp
+        m_MethodName: OnChangeMealsTypeButtonPressed
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 11400000, guid: a8be9b553efe40843859b4212f7d3908, type: 2}
+          m_ObjectArgumentAssemblyTypeName: Database.Restaurant.Menu.MenuPageSO,
+            Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1718367585
 MonoBehaviour:
   m_ObjectHideFlags: 0
