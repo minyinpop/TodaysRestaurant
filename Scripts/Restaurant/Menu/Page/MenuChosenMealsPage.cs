@@ -115,6 +115,22 @@ namespace Restaurant.Menu.Page
                 return;
             }
         }
+
+
+
+        /// <summary>
+        /// 用於儲存玩家所選擇的料理到資料庫中。
+        /// </summary>
+        public void SaveMeals()
+        {
+            for (var i = 0; i < ChosenMealsSlotList.Count; i++)
+            {
+                if (!ChosenMealsSlotList[i].TryGetComponent<MenuChosenMealsSlot>(out var targetChosenMealsSlot))
+                    continue;
+                
+                CurrentChosenMeals.ChosenMealsList[i] = targetChosenMealsSlot.ChosenMealsSlot;
+            }
+        }
         
         
         

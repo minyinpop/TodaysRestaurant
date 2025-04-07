@@ -17,9 +17,6 @@ namespace Restaurant.Menu
         [field: Header("料理種類資料庫"), Tooltip("預設料理種類的頁面資料庫。"), SerializeField]
         public MenuPageSO DefaultMenuPage { get; private set; }
         
-        // 當前的頁面資料庫。
-        private MenuPageSO CurrentMenuPage { get; set; }
-        
         
         
         // ========== { 頁面相關 } ==========
@@ -37,16 +34,9 @@ namespace Restaurant.Menu
             UnlockedMealsPage = GetComponent<MenuUnlockedMealsPage>();
             ChosenMealsPage = GetComponent<MenuChosenMealsPage>();
         }
-
         
-
-        private void OnDestroy()
-        {
-            // TODO: 當關閉菜單前，把暫存在 MenuChosenMealsSlot.ChosenMealsSlot 給儲存進 CurrentMenuPage.ChosenMeals。
-        }
-
         
-
+        
         /// <summary>
         /// 當菜單開啟按鈕被按下時，所執行的方法。
         /// 預設打開顯示為主菜的頁面。
@@ -55,6 +45,19 @@ namespace Restaurant.Menu
         public void OnOpenButtonPressed()
         {
             RefreshPage(DefaultMenuPage);
+        }
+        
+        
+        
+        /// <summary>
+        /// 當菜單關閉按鈕被按下時，所執行的方法。
+        /// 在關閉前，會把被選擇的料理資料給儲存進資料庫。
+        /// 僅限於給 Button 組件的 On Click() 做訂閱。 
+        /// </summary>
+        public void OnCloseButtonPressed()
+        {
+            ChosenMealsPage.SaveMeals();
+            Destroy(gameObject);
         }
 
 
@@ -78,9 +81,8 @@ namespace Restaurant.Menu
         /// <param name="newPage"> 新傳入的頁面資料庫。 </param>
         private void RefreshPage(MenuPageSO newPage)
         {
-            // TODO: 當切換頁面前，都要把暫存在 MenuChosenMealsSlot.ChosenMealsSlot 給儲存進 CurrentMenuPage.ChosenMeals。
+            ChosenMealsPage.SaveMeals();
             
-            CurrentMenuPage = newPage;
             UnlockedMealsPage.Refresh(newPage.UnlockedMeals);
             ChosenMealsPage.Refresh(newPage.ChosenMeals);
         }
