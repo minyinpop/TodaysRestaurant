@@ -13,6 +13,6 @@ namespace Database.Restaurant.Chosen
     public class ChosenMealsTypeSO : ScriptableObject
     {
         [field: Tooltip("料理格資訊陣列。"), SerializeField]
-        public List<ChosenMealsSlot> ChosenMealsList { get; set; }
+        public List<ChosenMealsSlotData> ChosenMealsSlotDataList { get; set; }
     }
 }

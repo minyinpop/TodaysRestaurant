@@ -10,7 +10,7 @@ namespace Database.Restaurant.Chosen
     // ==================================================
     
     [Serializable]
-    public struct ChosenMealsSlot
+    public struct ChosenMealsSlotData
     {
         [field: Tooltip("是否上鎖？"), SerializeField]
         public bool IsLocked { get; set; }

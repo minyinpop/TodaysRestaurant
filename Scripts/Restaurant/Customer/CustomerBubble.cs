@@ -1,14 +1,13 @@
 using UnityEngine;
 
-namespace Restaurant.Player
+namespace Restaurant.Customer
 {
     // ==================================================
     // 
     // ==================================================
     
-    [RequireComponent(typeof(PlayerAnimator))]
-    [RequireComponent(typeof(PlayerMove))]
-    public class PlayerManager : MonoBehaviour
+    [RequireComponent(typeof(CustomerManager))]
+    public class CustomerBubble : MonoBehaviour
     {
         
     }

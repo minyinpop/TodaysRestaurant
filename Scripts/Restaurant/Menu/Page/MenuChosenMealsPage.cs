@@ -69,10 +69,10 @@ namespace Restaurant.Menu.Page
                 if (!ChosenMealsSlotList[i].TryGetComponent<MenuChosenMealsSlot>(out var targetChosenMealsSlot))
                     continue;
 
-                if (targetChosenMealsSlot.ChosenMealsSlot.IsLocked)
+                if (targetChosenMealsSlot.ChosenMealsSlotData.IsLocked)
                     continue;
                 
-                if (targetChosenMealsSlot.ChosenMealsSlot.Meals is not null)
+                if (targetChosenMealsSlot.ChosenMealsSlotData.Meals is not null)
                     continue;
 
                 Destroy(targetChosenMealsSlot.gameObject);
@@ -80,7 +80,7 @@ namespace Restaurant.Menu.Page
                 
                 var newSlot = Instantiate(UnlockedChosenMealsSlotWithMealsPrefab, SlotSpawnPoint);
                 newSlot.transform.SetSiblingIndex(i);
-                newSlot.GetComponent<MenuChosenMealsSlot>().Refresh(new ChosenMealsSlot
+                newSlot.GetComponent<MenuChosenMealsSlot>().Refresh(new ChosenMealsSlotData
                 {
                     IsLocked = false,
                     Meals = newMeals,
@@ -128,7 +128,7 @@ namespace Restaurant.Menu.Page
                 if (!ChosenMealsSlotList[i].TryGetComponent<MenuChosenMealsSlot>(out var targetChosenMealsSlot))
                     continue;
                 
-                CurrentChosenMeals.ChosenMealsList[i] = targetChosenMealsSlot.ChosenMealsSlot;
+                CurrentChosenMeals.ChosenMealsSlotDataList[i] = targetChosenMealsSlot.ChosenMealsSlotData;
             }
         }
         
@@ -144,7 +144,7 @@ namespace Restaurant.Menu.Page
             ClearLegacySlot();
             CurrentChosenMeals = newChosenMeals;
 
-            foreach (var targetChosenMealsSlot in CurrentChosenMeals.ChosenMealsList)
+            foreach (var targetChosenMealsSlot in CurrentChosenMeals.ChosenMealsSlotDataList)
             {
                 GameObject targetSpawnSlot;
 

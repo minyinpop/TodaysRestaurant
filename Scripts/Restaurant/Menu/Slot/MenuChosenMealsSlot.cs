@@ -15,7 +15,7 @@ namespace Restaurant.Menu.Slot
         // ========== { 資料相關 } ==========
         
         // 格子裡所儲存的料理資料。
-        public ChosenMealsSlot ChosenMealsSlot { get; private set; }
+        public ChosenMealsSlotData ChosenMealsSlotData { get; private set; }
         
         
         
@@ -52,16 +52,16 @@ namespace Restaurant.Menu.Slot
         /// <summary>
         /// 用於刷新玩家以選擇料理的格子。
         /// </summary>
-        /// <param name="newChosenMealsSlot"> 新傳入的料理資料。 </param>
-        public void Refresh(ChosenMealsSlot newChosenMealsSlot)
+        /// <param name="newChosenMealsSlotData"> 新傳入的料理資料。 </param>
+        public void Refresh(ChosenMealsSlotData newChosenMealsSlotData)
         {
-            ChosenMealsSlot = newChosenMealsSlot;
+            ChosenMealsSlotData = newChosenMealsSlotData;
 
-            if (ChosenMealsSlot.Meals is null)
+            if (ChosenMealsSlotData.Meals is null)
                 return;
             
-            MealsImage.sprite = ChosenMealsSlot.Meals.Sprite;
-            MealsInfoTMP.text = $"{ChosenMealsSlot.Meals.Name} x{ChosenMealsSlot.Meals.Quantity}";
+            MealsImage.sprite = ChosenMealsSlotData.Meals.Sprite;
+            MealsInfoTMP.text = $"{ChosenMealsSlotData.Meals.Name} x{ChosenMealsSlotData.Meals.Quantity}";
         }
     }
 }
