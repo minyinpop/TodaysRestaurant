@@ -55,6 +55,11 @@ namespace Utage
 		[SerializeField]
 		int preloadDeep = 5;
 
+		public bool PreloadDeepJumpIf => preloadDeepJumpIf;  
+		[SerializeField]
+		bool preloadDeepJumpIf = true;
+		
+
 		/// <summary>
 		///　シナリオ開始時に呼ばれる
 		/// </summary>

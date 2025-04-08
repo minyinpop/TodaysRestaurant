@@ -380,6 +380,7 @@ namespace Utage
 					if (ScenarioPlayer.DebugOutputWaiting) Debug.Log("Wait..." + command.GetType());
 					ScenarioPlayer.OnUpdateWaitingCommand.Invoke(command);
 					command.CurrentTread = null;
+					Engine.Page.OnWaitingCommand();
 					yield return null;
 				}
 				command.CurrentTread = this;
