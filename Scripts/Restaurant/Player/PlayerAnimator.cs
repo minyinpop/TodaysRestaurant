@@ -3,6 +3,7 @@ using Database.Player.Attribute;
 using Spine.Unity;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using InputSystem = Input.InputSystem;
 
 namespace Restaurant.Player
 {
@@ -34,8 +35,8 @@ namespace Restaurant.Player
         [field: Header("移動相關的動畫資產"), Tooltip("玩家的閒置動畫。"), SerializeField]
         private AnimationReferenceAsset Idle { get; set; }
         
-        [field: Tooltip("玩家的移動動畫。"), SerializeField]
-        private AnimationReferenceAsset Move { get; set; }
+        [field: Tooltip("玩家的走路動畫。"), SerializeField]
+        private AnimationReferenceAsset Walk { get; set; }
         
         [field: Tooltip("玩家的跑步動畫。"), SerializeField]
         private AnimationReferenceAsset Run { get; set; }
@@ -65,6 +66,12 @@ namespace Restaurant.Player
         
         private void OnEnable()
         {
+            InputSystem.Input.Player.Walk.started += PlayWalkAnimation;
+            InputSystem.Input.Player.Walk.canceled += PlayIdleAnimation;
+            
+            InputSystem.Input.Player.Run.started += PlayRunAnimation;
+            InputSystem.Input.Player.Run.canceled += PlayIdleOrWalkAnimation;
+            
             EyeBlinkCoroutine = EyeBlinkProcess();
             StartCoroutine(EyeBlinkCoroutine);
         }
@@ -73,6 +80,12 @@ namespace Restaurant.Player
         
         private void OnDisable()
         {
+            InputSystem.Input.Player.Walk.started -= PlayWalkAnimation;
+            InputSystem.Input.Player.Walk.canceled -= PlayIdleAnimation;
+            
+            InputSystem.Input.Player.Run.started -= PlayRunAnimation;
+            InputSystem.Input.Player.Run.canceled -= PlayIdleOrWalkAnimation;
+            
             if (EyeBlinkCoroutine is not null)
             {
                 StopCoroutine(EyeBlinkCoroutine);
@@ -82,10 +95,20 @@ namespace Restaurant.Player
 
         
         
+        private void Update()
+        {
+            if (InputSystem.MoveDirection().x > 0)
+                SkeletonAnimation.Skeleton.ScaleX = -1;
+            else if (InputSystem.MoveDirection().x < 0)
+                SkeletonAnimation.Skeleton.ScaleX = 1;
+        }
+
+        
+        
         /// <summary>
-        /// 用於切換到玩家閒置的動畫。
+        /// 用於播放閒置動畫的方法。
         /// </summary>
-        private void PlayIdleAnimation()
+        private void PlayIdleAnimation(InputAction.CallbackContext context)
         {
             SkeletonAnimation.AnimationState.SetAnimation(1, Idle, true);
         }
@@ -93,21 +116,35 @@ namespace Restaurant.Player
         
         
         /// <summary>
-        /// 用於切換到玩家移動的動畫。
+        /// 用於播放跑步或走路動畫的方法。
+        /// 判斷玩家是否再開始走路前，就按下了跑步鍵。
         /// </summary>
-        private void PlayWalkAnimation()
+        private void PlayWalkAnimation(InputAction.CallbackContext context)
         {
-            SkeletonAnimation.AnimationState.SetAnimation(1, Move, true);
+            SkeletonAnimation.AnimationState.SetAnimation(1, PlayerAttribute.Run.IsRunning ? Run : Walk, true);
         }
 
         
         
         /// <summary>
-        /// 用於切換到玩家跑步的動畫。
+        /// 用來播放跑步動畫的方法。
+        /// 當在走路的狀態，判斷玩家是否按下跑步鍵。
         /// </summary>
-        private void PlayRunAnimation()
+        private void PlayRunAnimation(InputAction.CallbackContext context)
         {
-            SkeletonAnimation.AnimationState.SetAnimation(1, Run, true);
+            if (PlayerAttribute.Walk.IsRunning)
+                SkeletonAnimation.AnimationState.SetAnimation(1, Run, true);
+        }
+
+        
+        
+        /// <summary>
+        /// 用於播放走路或閒置動畫的方法。
+        /// 取消跑步後，判斷玩家目前是不動還是走路的狀態。
+        /// </summary>
+        private void PlayIdleOrWalkAnimation(InputAction.CallbackContext context)
+        {
+            SkeletonAnimation.AnimationState.SetAnimation(1, PlayerAttribute.Walk.IsRunning ? Walk : Idle, true);
         }
         
         

@@ -34,57 +34,34 @@ namespace Restaurant.Player
 
         private void Update()
         {
-            if (PlayerAttribute.Move.Can)
+            if (PlayerAttribute.Walk.Can)
             {
-                if (InputSystem.IsWalkButtonPressed())
+                PlayerAttribute.Walk = new CanThenRunning
                 {
-                    PlayerAttribute.Move = new CanThenRunning
-                    {
-                        Can = true,
-                        IsRunning = true
-                    };
-
-                    if (!PlayerAttribute.Run.Can)
-                        return;
-
-                    if (InputSystem.IsRunButtonPressed())
-                    {
-                        PlayerAttribute.Run = new CanThenRunning
-                        {
-                            Can = true,
-                            IsRunning = true
-                        };
-                    }
-                    else
-                    {
-                        PlayerAttribute.Run = new CanThenRunning
-                        {
-                            Can = true,
-                            IsRunning = false
-                        };
-                    }
-                }
-                else
-                {
-                    PlayerAttribute.Move = new CanThenRunning
-                    {
-                        Can = true,
-                        IsRunning = false
-                    };
-
-                    if (PlayerAttribute.Run.IsRunning)
-                    {
-                        PlayerAttribute.Run = new CanThenRunning
-                        {
-                            Can = true,
-                            IsRunning = false
-                        };
-                    }
-                }
+                    Can = true,
+                    IsRunning = InputSystem.IsWalkButtonPressed()
+                };
             }
             else
             {
-                PlayerAttribute.Move = new CanThenRunning
+                PlayerAttribute.Walk = new CanThenRunning
+                {
+                    Can = false,
+                    IsRunning = false
+                };
+            }
+            
+            if (PlayerAttribute.Run.Can)
+            {
+                PlayerAttribute.Run = new CanThenRunning
+                {
+                    Can = true,
+                    IsRunning = InputSystem.IsRunButtonPressed()
+                };
+            }
+            else
+            {
+                PlayerAttribute.Run = new CanThenRunning
                 {
                     Can = false,
                     IsRunning = false
@@ -100,8 +77,8 @@ namespace Restaurant.Player
                 ? PlayerAttribute.BasicMoveSpeed * PlayerAttribute.RunSpeedMultiplier
                 : PlayerAttribute.BasicMoveSpeed;
 
-            var x = PlayerAttribute.Move.IsRunning ? InputSystem.MoveDirection().x * targetMoveSpeed * Time.fixedDeltaTime : 0;
-            var z = PlayerAttribute.Move.IsRunning ? InputSystem.MoveDirection().z * targetMoveSpeed * Time.fixedDeltaTime : 0;
+            var x = PlayerAttribute.Walk.IsRunning ? InputSystem.MoveDirection().x * targetMoveSpeed * Time.fixedDeltaTime : 0;
+            var z = PlayerAttribute.Walk.IsRunning ? InputSystem.MoveDirection().z * targetMoveSpeed * Time.fixedDeltaTime : 0;
             var newDir = new Vector3(x, Rig.linearVelocity.y, z);
 
             Rig.linearVelocity = newDir;

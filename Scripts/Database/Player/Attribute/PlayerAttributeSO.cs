@@ -13,8 +13,8 @@ namespace Database.Player.Attribute
     {
         // ========== { 判斷相關 } ==========
         
-        [field: Header("執行設定"), Tooltip("移動判斷。"), SerializeField]
-        public CanThenRunning Move { get; set; }
+        [field: Header("執行設定"), Tooltip("走路判斷。"), SerializeField]
+        public CanThenRunning Walk { get; set; }
         
         [field: Tooltip("跑步判斷。"), SerializeField]
         public CanThenRunning Run { get; set; }

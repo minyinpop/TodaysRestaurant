@@ -472,7 +472,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skeletonDataAsset: {fileID: 11400000, guid: 0def544b569548642b5f67fc056749de, type: 2}
-  initialSkinName: Cheif Outfit
+  initialSkinName: Hunter Outfit
   fixPrefabOverrideViaMeshFilter: 2
   initialFlipX: 0
   initialFlipY: 0
@@ -526,6 +526,8 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: d6f3ac15fd4ece44190a0ebc20f38b3c, type: 2}
+  - {fileID: 2100000, guid: 8229de71277053849b73588e6dd51d73, type: 2}
+  - {fileID: 2100000, guid: 783ae7ff87150bf409c24664e7557ad6, type: 2}
   - {fileID: 2100000, guid: 8229de71277053849b73588e6dd51d73, type: 2}
   - {fileID: 2100000, guid: 783ae7ff87150bf409c24664e7557ad6, type: 2}
   - {fileID: 2100000, guid: 8229de71277053849b73588e6dd51d73, type: 2}
@@ -610,7 +612,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <PlayerAttribute>k__BackingField: {fileID: 11400000, guid: 0d65210d92fc35746817fd56cc44525a, type: 2}
   <Idle>k__BackingField: {fileID: 11400000, guid: 5995e87a5262a614a84c160d17555850, type: 2}
-  <Move>k__BackingField: {fileID: 11400000, guid: 5414c13f3b3f256498ff404c539e05a6, type: 2}
+  <Walk>k__BackingField: {fileID: 11400000, guid: 5414c13f3b3f256498ff404c539e05a6, type: 2}
   <Run>k__BackingField: {fileID: 11400000, guid: 45988524283551e4ea976f62747ad1d8, type: 2}
   <EyeBlink>k__BackingField: {fileID: 11400000, guid: 9a664d282945f0f4787912d65c7ec204, type: 2}
 --- !u!114 &535154830
@@ -1043,8 +1045,8 @@ MonoBehaviour:
   IgnoreTimeScale: 0
   WorldUpOverride: {fileID: 0}
   ChannelMask: -1
-  UpdateMethod: 2
-  BlendUpdateMethod: 1
+  UpdateMethod: 0
+  BlendUpdateMethod: 0
   LensModeOverride:
     Enabled: 0
     DefaultMode: 2

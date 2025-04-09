@@ -9,7 +9,7 @@ namespace Input
     public class InputSystem : MonoBehaviour
     {
         // 輸入端。
-        private static InputManager Input { get; set; }
+        public static InputManager Input { get; private set; }
 
         
         
