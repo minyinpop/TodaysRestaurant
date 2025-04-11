@@ -1,17 +1,18 @@
-using UnityEngine;
-
-namespace Restaurant.Bubble
+namespace Restaurant.Bubble.Category
 {
     // ==================================================
-    // 集合餐廳所有氣泡的程式碼。
+    // 
     // ==================================================
     
-    public abstract class BubbleManager : MonoBehaviour
+    public class ThinkingBubble : BubbleManager
     {
         /// <summary>
         /// 當氣泡生成時，會倒數時間，然後刪除氣泡。
         /// </summary>
         /// <param name="time"> 刪除間隔時間。 </param>
-        public abstract void OnInit(float time);
+        public override void OnInit(float time)
+        {
+            Destroy(gameObject, time);
+        }
     }
 }
