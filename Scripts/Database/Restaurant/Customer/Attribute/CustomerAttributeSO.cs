@@ -25,8 +25,11 @@ namespace Database.Restaurant.Customer.Attribute
         
         // ========== { 氣泡相關 } ==========
         
-        [field: Header("氣泡時長設定"), Tooltip("- "), SerializeField]
+        [field: Header("氣泡時長設定"), Tooltip("- 顧客思考要點甚麼餐點的時間。\n- 使用秒數來計算。"), SerializeField]
         public Range ThinkingTime { get; private set; }
+        
+        [field: Tooltip("- 顧客在等待點餐食的耐心閥值。\n- 使用秒數來計算。"), SerializeField]
+        public Range OrderingPatienceTime { get; private set; }
     }
     
     

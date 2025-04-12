@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using Database.Restaurant.Customer.Attribute;
 using Restaurant.Bubble.Customer;
@@ -69,10 +68,10 @@ namespace Restaurant.Customer
         
             CurrentBubble = Instantiate(ThinkingBubble, BubbleSpawnPoint);
             
-            var randomTime = Random.Range(CustomerAttribute.ThinkingTime.Min, CustomerAttribute.ThinkingTime.Max);
-            CurrentBubble.GetComponent<ThinkingBubble>().OnInit(randomTime);
+            var randomThinkingTime = Random.Range(CustomerAttribute.ThinkingTime.Min, CustomerAttribute.ThinkingTime.Max);
+            CurrentBubble.GetComponent<ThinkingBubble>().OnInit(randomThinkingTime);
             
-            CurrentCoroutine = InitOrderingBubble(randomTime);
+            CurrentCoroutine = InitOrderingBubble(randomThinkingTime);
             StartCoroutine(CurrentCoroutine);
         }
         
@@ -81,13 +80,16 @@ namespace Restaurant.Customer
         /// <summary>
         /// 生成顧客點餐的氣泡。
         /// </summary>
-        /// <param name="thinkingTime"> 傳入顧客的思考時間。 </param>
-        private IEnumerator InitOrderingBubble(float thinkingTime)
+        /// <param name="randomThinkingTime"> 傳入隨機的顧客思考時間。 </param>
+        private IEnumerator InitOrderingBubble(float randomThinkingTime)
         {
-            yield return new WaitForSeconds(thinkingTime + 1);
+            yield return new WaitForSeconds(randomThinkingTime + 1);
             CheckBubbleIsExist();
 
             CurrentBubble = Instantiate(OrderingBubble, BubbleSpawnPoint);
+
+            var randomPatienceTime = Random.Range(CustomerAttribute.OrderingPatienceTime.Min, CustomerAttribute.OrderingPatienceTime.Max);
+            CurrentBubble.GetComponent<OrderingBubble>().OnInit(this, randomPatienceTime);
         }
         
         

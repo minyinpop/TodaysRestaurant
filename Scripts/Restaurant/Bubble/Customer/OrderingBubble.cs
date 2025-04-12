@@ -1,5 +1,7 @@
 using System.Collections;
+using Restaurant.Customer;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Restaurant.Bubble.Customer
 {
@@ -10,19 +12,30 @@ namespace Restaurant.Bubble.Customer
     
     public class OrderingBubble : MonoBehaviour
     {
-        // ========== { 異步協程 } ==========
+        // ========== { 自身組件 } ==========
         
-        // 當前執行的異步協程。
-        private IEnumerator CurrentCoroutine { get; set; }
+        [field: /*Header("自身組件"), */Tooltip("- 自身的遮罩圖片。\n- 用於顯示顧客的耐心剩下多少。"), SerializeField]
+        private Image MaskImage { get; set; }
+        
+        // 用來管理顧客氣泡的組件。
+        private CustomerBubble CustomerBubble { get; set; }
+        
+        
+        
+        // ========== { 時間相關 } ==========
+        
+        // 顧客剩餘的耐心時間。
+        private float RemainingPatienceTime { get; set; }
 
 
 
-        private void OnDisable()
+        private void Update()
         {
-            if (CurrentCoroutine is not null)
+            MaskImage.fillAmount += Time.deltaTime / RemainingPatienceTime;
+
+            if (MaskImage.fillAmount >= 1)
             {
-                StopCoroutine(CurrentCoroutine);
-                CurrentCoroutine = null;
+                // TODO 當顧客沒耐心後，所發生的事情。
             }
         }
         
@@ -33,18 +46,15 @@ namespace Restaurant.Bubble.Customer
         /// </summary>
         public void OnClicked()
         {
+            // TODO 寫 ......
         }
         
         
         
-        public void OnInit()
+        public void OnInit(CustomerBubble customerBubble, float randomPatienceTime)
         {
-            
+            CustomerBubble = customerBubble;
+            RemainingPatienceTime = randomPatienceTime;
         }
-        
-        
-        
-        // private IEnumerator CountDownPatience()
-        // {}
     }
 }
