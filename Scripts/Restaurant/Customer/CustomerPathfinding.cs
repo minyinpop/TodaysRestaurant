@@ -44,6 +44,11 @@ namespace Restaurant.Customer
             CustomerManager = GetComponent<CustomerManager>();
             Rig = GetComponent<Rigidbody>();
         }
+
+        private void Start()
+        {
+            
+        }
         
         
         

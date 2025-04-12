@@ -98,6 +98,7 @@ namespace Restaurant.Customer
         
         
         
+        // ReSharper disable Unity.PerformanceAnalysis
         /// <summary>
         /// 用於播放坐在位子上的動畫。
         /// </summary>

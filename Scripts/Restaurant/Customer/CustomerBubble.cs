@@ -1,7 +1,9 @@
-using Cysharp.Threading.Tasks;
+using System;
+using System.Collections;
 using Database.Restaurant.Customer.Attribute;
-using Restaurant.Bubble;
+using Restaurant.Bubble.Customer;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Restaurant.Customer
 {
@@ -38,24 +40,61 @@ namespace Restaurant.Customer
         
         
         
-        /// <summary>
-        /// 用於生成思考氣泡的方法。
-        /// 顧客在思考要點甚麼餐點。
-        /// </summary>
-        public async void InitThinkingBubble()
+        // ========== { 異步協程 } ==========
+        
+        // 當前執行的異步協程。
+        private IEnumerator CurrentCoroutine { get; set; }
+        
+        
+        
+        private void OnDisable()
         {
-            CheckBubbleIsExist();
-            
-            CurrentBubble = Instantiate(ThinkingBubble, BubbleSpawnPoint);
-            
-            var randomTime = Random.Range(CustomerAttribute.ThinkingTime.Min, CustomerAttribute.ThinkingTime.Max);
-            CurrentBubble.GetComponent<BubbleManager>().OnInit(randomTime);
-
-            await UniTask.Delay((int)randomTime * 1000);
+            if (CurrentCoroutine is not null)
+            {
+                StopCoroutine(CurrentCoroutine);
+                CurrentCoroutine = null;
+            }
         }
         
         
         
+        // ReSharper disable Unity.PerformanceAnalysis
+        /// <summary>
+        /// 用於生成思考氣泡的方法。
+        /// 顧客在思考要點甚麼餐點。
+        /// </summary>
+        public void InitThinkingBubble()
+        {
+            CheckBubbleIsExist();
+        
+            CurrentBubble = Instantiate(ThinkingBubble, BubbleSpawnPoint);
+            
+            var randomTime = Random.Range(CustomerAttribute.ThinkingTime.Min, CustomerAttribute.ThinkingTime.Max);
+            CurrentBubble.GetComponent<ThinkingBubble>().OnInit(randomTime);
+            
+            CurrentCoroutine = InitOrderingBubble(randomTime);
+            StartCoroutine(CurrentCoroutine);
+        }
+        
+        
+        
+        /// <summary>
+        /// 生成顧客點餐的氣泡。
+        /// </summary>
+        /// <param name="thinkingTime"> 傳入顧客的思考時間。 </param>
+        private IEnumerator InitOrderingBubble(float thinkingTime)
+        {
+            yield return new WaitForSeconds(thinkingTime + 1);
+            CheckBubbleIsExist();
+
+            CurrentBubble = Instantiate(OrderingBubble, BubbleSpawnPoint);
+        }
+        
+        
+        
+        /// <summary>
+        /// 判斷當前是否有氣泡，並刪除以及清空暫存氣泡。
+        /// </summary>
         private void CheckBubbleIsExist()
         {
             if (CurrentBubble is null)
