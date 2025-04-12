@@ -1,7 +1,8 @@
 namespace Restaurant.Bubble.Category
 {
     // ==================================================
-    // 
+    // 思考餐點氣泡的程式碼。
+    // 顧客在思考要點甚麼餐點的氣泡。
     // ==================================================
     
     public class ThinkingBubble : BubbleManager

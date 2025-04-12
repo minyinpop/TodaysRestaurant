@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using Database.Restaurant.Customer.Attribute;
 using Restaurant.Bubble;
 using UnityEngine;
@@ -41,7 +42,7 @@ namespace Restaurant.Customer
         /// 用於生成思考氣泡的方法。
         /// 顧客在思考要點甚麼餐點。
         /// </summary>
-        public void InitThinkingBubble()
+        public async void InitThinkingBubble()
         {
             CheckBubbleIsExist();
             
@@ -49,6 +50,8 @@ namespace Restaurant.Customer
             
             var randomTime = Random.Range(CustomerAttribute.ThinkingTime.Min, CustomerAttribute.ThinkingTime.Max);
             CurrentBubble.GetComponent<BubbleManager>().OnInit(randomTime);
+
+            await UniTask.Delay((int)randomTime * 1000);
         }
         
         
