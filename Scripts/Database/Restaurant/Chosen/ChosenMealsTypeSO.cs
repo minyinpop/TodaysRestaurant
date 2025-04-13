@@ -24,37 +24,42 @@ namespace Database.Restaurant.Chosen
         /// <returns> 回傳被選擇的料理。 </returns>
         public MealsSO ReduceRandomMealsQuantity()
         {
-            var remainingSlotList = ChosenMealsSlotDataList;
-            var selectedSlotIndex = 0;
-            
-            for (var i = remainingSlotList.Count - 1; i >= 0; i--)
-            {;
-                var selectedSlot = ChosenMealsSlotDataList[Random.Range(0, remainingSlotList.Count)];
+            var remainingSlotList = new List<ChosenMealsSlotData>();
 
-                if (selectedSlot.IsLocked)
-                {
-                    selectedSlotIndex++;
-                    remainingSlotList.Remove(selectedSlot);
+            foreach (var selectedSlotData in ChosenMealsSlotDataList)
+            {
+                if (selectedSlotData.IsLocked)
                     continue;
-                }
+
+                if (selectedSlotData.Meals is null)
+                    continue;
                 
-                if (selectedSlot.Meals is null || selectedSlot.Quantity <= 0)
-                {
-                    selectedSlotIndex++;
-                    remainingSlotList.Remove(selectedSlot);
+                if (selectedSlotData.Meals is not null && selectedSlotData.Quantity <= 0)
                     continue;
-                }
-
-                ChosenMealsSlotDataList[selectedSlotIndex] = new ChosenMealsSlotData
-                {
-                    IsLocked = false,
-                    Meals = selectedSlot.Meals,
-                    Quantity = selectedSlot.Quantity - 1
-                };
-                return selectedSlot.Meals;
+                
+                remainingSlotList.Add(selectedSlotData);
             }
             
-            Debug.Log($"{name} 裡沒有料理了 !");
+            var randomIndex = Random.Range(0, remainingSlotList.Count);
+            var selectedMeal = remainingSlotList[randomIndex].Meals;
+
+            for (var i = 0; i < ChosenMealsSlotDataList.Count; i++)
+            {
+                var selectedSlotData = ChosenMealsSlotDataList[i];
+                
+                if (selectedMeal != selectedSlotData.Meals)
+                    continue;
+
+                ChosenMealsSlotDataList[i] = new ChosenMealsSlotData
+                {
+                    IsLocked = false,
+                    Meals = selectedSlotData.Meals,
+                    Quantity = selectedSlotData.Quantity - 1
+                };
+                return selectedMeal;
+            }
+
+            Debug.Log($"{name} 的料理已經賣完了！");
             return null;
         }
     }

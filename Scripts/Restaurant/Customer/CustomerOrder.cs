@@ -148,7 +148,7 @@ namespace Restaurant.Customer
             CurrentBubbleButton = CurrentBubble.GetComponent<Button>();
             
             var randomPatienceTime = Random.Range(CustomerAttribute.WaitingForMealPatienceTime.Min, CustomerAttribute.WaitingForMealPatienceTime.Max);
-            CurrentBubble.GetComponent<WaitingForMealBubble>().OnInit(this, randomPatienceTime, CustomerManager.ChooseMeals());
+            CurrentBubble.GetComponent<WaitingForMealBubble>().OnInit(this, CustomerManager.ChooseMeals(), randomPatienceTime);
         }
         
         

@@ -18,5 +18,8 @@ namespace Database.Restaurant.Meals
         
         [field: Tooltip("料理的份數。"), SerializeField]
         public int Quantity { get; private set; }
+        
+        [field: Tooltip("烹飪時長。"), SerializeField]
+        public float CookingTime { get; private set; }
     }
 }

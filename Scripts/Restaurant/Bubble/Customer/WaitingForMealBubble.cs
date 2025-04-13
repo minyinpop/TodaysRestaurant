@@ -71,11 +71,13 @@ namespace Restaurant.Bubble.Customer
         /// <param name="customerOrder"></param>
         /// <param name="randomPatienceTime"></param>
         /// <param name="chooseMeals"></param>
-        public void OnInit(CustomerOrder customerOrder, float randomPatienceTime, MealsSO chooseMeals)
+        public void OnInit(CustomerOrder customerOrder, MealsSO chooseMeals, float randomPatienceTime)
         {
             CustomerOrder = customerOrder;
-            RemainingPatienceTime = randomPatienceTime;
             ChooseMeals = chooseMeals;
+            RemainingPatienceTime = ChooseMeals.CookingTime + randomPatienceTime;
+            
+            MealsImage.sprite = ChooseMeals.Sprite;
             
             CurrentCoroutine = CountDownPatience();
             StartCoroutine(CurrentCoroutine);
