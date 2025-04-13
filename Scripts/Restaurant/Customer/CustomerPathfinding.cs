@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using Database.Restaurant.Customer.Attribute;
 using Database.Restaurant.Customer.Path;
 using UnityEngine;
@@ -36,6 +38,13 @@ namespace Restaurant.Customer
         
         // 自身的 Rigidbody 組件。
         private Rigidbody Rig { get; set; }
+        
+        
+        
+        // ========== { 異步協程 } ==========
+        
+        // 當前執行的異步協程。
+        private IEnumerator CurrentCoroutine { get; set; }
 
 
 
@@ -44,10 +53,15 @@ namespace Restaurant.Customer
             CustomerManager = GetComponent<CustomerManager>();
             Rig = GetComponent<Rigidbody>();
         }
-
+        
+        
+        
         private void Start()
         {
+            // TODO 未來可以使用條件式，讓顧客在接收到廣播後，才開始移動，可以像是，玩家關閉菜單後，會發出廣播等等 ......
             
+            CurrentCoroutine = WalkToSeatProcess();
+            StartCoroutine(CurrentCoroutine);
         }
         
         
@@ -55,6 +69,9 @@ namespace Restaurant.Customer
         private void FixedUpdate()
         {
             if (!CanMove)
+                return;
+
+            if (CurrentPathIndex >= CustomerPath.PathList.Length)
                 return;
             
             var x = CustomerPath.PathList[CurrentPathIndex].x - transform.position.x;
@@ -67,12 +84,23 @@ namespace Restaurant.Customer
         
         
         
-        private void Update()
+        private void OnDisable()
         {
-            if (!CanMove)
-                return;
-            
-            if (CustomerManager.CustomerState == CustomerManager.CustomerStateEnum.SearchingForTheSeat)
+            if (CurrentCoroutine is not null)
+            {
+                StopCoroutine(CurrentCoroutine);
+                CurrentCoroutine = null;
+            }
+        }
+        
+        
+        
+        /// <summary>
+        /// 用於執行顧客走到位子上的邏輯。
+        /// </summary>
+        private IEnumerator WalkToSeatProcess()
+        {
+            while (CustomerManager.CustomerState == CustomerManager.CustomerStateEnum.SearchingForTheSeat)
             {
                 if (CurrentPathIndex < CustomerPath.PathList.Length)
                 {
@@ -90,11 +118,17 @@ namespace Restaurant.Customer
 
                     CustomerManager.ChangeState(CustomerManager.CustomerStateEnum.OnSeat);
                 }
+                
+                yield return null;
             }
-            else if (CustomerManager.CustomerState == CustomerManager.CustomerStateEnum.Leaving)
-            {
-                // TODO: 執行顧客離開餐廳的邏輯 ......
-            }
+        }
+
+        /// <summary>
+        /// 用於執行顧客離開餐廳的邏輯。
+        /// </summary>
+        private IEnumerator LeaveProcess()
+        {
+            yield return null;
         }
     }
 }

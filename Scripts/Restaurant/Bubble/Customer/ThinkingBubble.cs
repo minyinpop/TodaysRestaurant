@@ -10,7 +10,7 @@ namespace Restaurant.Bubble.Customer
     public class ThinkingBubble : MonoBehaviour
     {
         /// <summary>
-        /// 當外部程式碼，創建氣泡並呼叫這個方法時，就會開始倒數，時間到後就會刪除該氣泡。
+        /// 當外部程式碼呼叫這個方法時，開始倒數，時間到就會刪除該氣泡。
         /// </summary>
         /// <param name="deleteTime"> 用於刪除氣泡的倒數時間。 </param>
         public void OnInit(float deleteTime)
