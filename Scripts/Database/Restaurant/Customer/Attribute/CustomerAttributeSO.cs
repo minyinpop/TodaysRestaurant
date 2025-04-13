@@ -30,6 +30,9 @@ namespace Database.Restaurant.Customer.Attribute
         
         [field: Tooltip("- 顧客在等待點餐食的耐心閥值。\n- 使用秒數來計算。"), SerializeField]
         public Range OrderingPatienceTime { get; private set; }
+        
+        [field: Tooltip("- 顧客在等待餐點的耐心閥值。\n- 使用秒數來計算。"), SerializeField]
+        public Range WaitingForMealPatienceTime { get; private set; }
     }
     
     

@@ -1405,9 +1405,9 @@ GameObject:
   - component: {fileID: 2141862729}
   - component: {fileID: 2141862725}
   - component: {fileID: 2141862726}
-  - component: {fileID: 2141862730}
   - component: {fileID: 2141862728}
   - component: {fileID: 2141862724}
+  - component: {fileID: 2141862730}
   - component: {fileID: 2141862723}
   - component: {fileID: 2141862722}
   - component: {fileID: 2141862721}
@@ -1543,7 +1543,7 @@ BoxCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -1594,6 +1594,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d179f8e1a144d22bfe926e8c903d960, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <ChosenMainCourse>k__BackingField: {fileID: 11400000, guid: d296bfd9789fa0f4f87ee33a0a1e0aa4, type: 2}
+  <ChosenDrinks>k__BackingField: {fileID: 11400000, guid: 47647b576e9b8a349be6fa7396b04866, type: 2}
 --- !u!54 &2141862728
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1613,7 +1615,7 @@ Rigidbody:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -1638,18 +1640,27 @@ MonoBehaviour:
   <Walk>k__BackingField: {fileID: 11400000, guid: 1320ba560cb0c10449f5d3102b65265d, type: 2}
   <EyeBlink>k__BackingField: {fileID: 11400000, guid: 15ec0f6cb7a85504ab8fedb7fe9527bf, type: 2}
   <Sit>k__BackingField: {fileID: 11400000, guid: 729a5b7cd8bd5f14cbcc36cc7d3ff7a7, type: 2}
---- !u!114 &2141862730
-MonoBehaviour:
+--- !u!65 &2141862730
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2141862719}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 8
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: decc4267fb25400197d2937629442909, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  serializedVersion: 3
+  m_Size: {x: 10, y: 14.206595, z: 10}
+  m_Center: {x: 0.046104908, y: 7.112713, z: 0}
 --- !u!23 &100770396118388991
 MeshRenderer:
   m_ObjectHideFlags: 0

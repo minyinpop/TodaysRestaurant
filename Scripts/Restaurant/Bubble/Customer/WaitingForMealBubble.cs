@@ -1,4 +1,5 @@
 using System.Collections;
+using Database.Restaurant.Meals;
 using Restaurant.Customer;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,22 +7,29 @@ using UnityEngine.UI;
 namespace Restaurant.Bubble.Customer
 {
     // ==================================================
-    // 準備好點餐的程式碼。
-    // 顧客思考完後，就會呼叫玩家來點餐的氣泡。
+    // 顯示想要的餐點程式碼。
+    // 在玩家幫顧客點完餐後，就會顯示顧客想要甚麼餐點，
     // ==================================================
     
-    public class OrderingBubble : MonoBehaviour
+    public class WaitingForMealBubble : MonoBehaviour
     {
         // ========== { 自身組件 } ==========
+
+        [field: Header("自身組件"), Tooltip("- 自身的料理圖片。\n- 用於顯示顧客點了甚麼料理。"), SerializeField]
+        private Image MealsImage { get; set; }
         
-        [field: Header("自身組件"), Tooltip("- 自身的遮罩圖片。\n- 用於顯示顧客的耐心剩下多少。"), SerializeField]
+        [field: Tooltip("- 自身的遮罩圖片。\n- 用於顯示顧客的耐心剩下多少。"), SerializeField]
         private Image MaskImage { get; set; }
         
         // 用來管理顧客氣泡的組件。
         private CustomerOrder CustomerOrder { get; set; }
         
-        
-        
+        // 暫存的料理資訊。
+        // 用來顯示當前顧客想要的餐點是甚麼。
+        private MealsSO ChooseMeals { get; set; }
+
+
+
         // ========== { 時間相關 } ==========
         
         // 顧客剩餘的耐心時間。
@@ -33,9 +41,9 @@ namespace Restaurant.Bubble.Customer
         
         // 當前執行的異步協程。
         private IEnumerator CurrentCoroutine { get; set; }
-
-
-
+        
+        
+        
         private void OnDisable()
         {
             if (CurrentCoroutine is not null)
@@ -44,30 +52,30 @@ namespace Restaurant.Bubble.Customer
                 CurrentCoroutine = null;
             }
         }
-        
-        
-        
+
+
+
         /// <summary>
         /// 當玩家點擊這個氣泡後，所執行的方法。
         /// 用於 Button 的 On Click() 做訂閱。
         /// </summary>
         public void OnClicked()
         {
-            CustomerOrder.InitWaitingForMealBubble();
-            Destroy(gameObject);
         }
         
         
         
         /// <summary>
-        /// 當外部程式碼呼叫這個方法時，就會開始倒數顧客的耐心值，
+        /// 
         /// </summary>
         /// <param name="customerOrder"></param>
         /// <param name="randomPatienceTime"></param>
-        public void OnInit(CustomerOrder customerOrder, float randomPatienceTime)
+        /// <param name="chooseMeals"></param>
+        public void OnInit(CustomerOrder customerOrder, float randomPatienceTime, MealsSO chooseMeals)
         {
             CustomerOrder = customerOrder;
             RemainingPatienceTime = randomPatienceTime;
+            ChooseMeals = chooseMeals;
             
             CurrentCoroutine = CountDownPatience();
             StartCoroutine(CurrentCoroutine);
