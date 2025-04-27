@@ -7,11 +7,11 @@ namespace Restaurant.Menu
     [RequireComponent(typeof(Menu))]
     public class MenuController : MonoBehaviour
     {
-        [field: Header("書本的遊戲物件")]
+        [field: Header("菜單的遊戲物件")]
         [field: SerializeField] private GameObject OpenMenu { get; set; }
         [field: SerializeField] private GameObject CloseMenu { get; set; }
         
-        [field: Header("書本控制按鈕")]
+        [field: Header("菜單控制按鈕")]
         [field: SerializeField] private Button OpenMenuButton { get; set; }
         [field: SerializeField] private Button CloseMenuButton { get; set; }
         
@@ -39,6 +39,9 @@ namespace Restaurant.Menu
 
         private void OnCloseMenuButtonClick()
         {
+            // TODO 檢測玩家是否選擇了所有的料理
+            
+            Destroy(gameObject);
         }
     }
 }
