@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace Restaurant.Player
 {
-    [RequireComponent(typeof(Player))]
     [RequireComponent(typeof(Rigidbody))]
     public class PlayerController : MonoBehaviour
     {

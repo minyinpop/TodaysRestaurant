@@ -7,7 +7,6 @@ using InputSystem = Input.InputSystem;
 
 namespace Restaurant.Player
 {
-    [RequireComponent(typeof(Player))]
     [RequireComponent(typeof(SkeletonAnimation))]
     public class PlayerAnimator : MonoBehaviour
     {
@@ -35,13 +34,16 @@ namespace Restaurant.Player
             SkeletonAnimation = GetComponent<SkeletonAnimation>();
         }
 
+        private void Start()
+        {
+            BlinkCoroutine = BlinkProcess();
+            StartCoroutine(BlinkCoroutine);
+        }
+
         private void OnEnable()
         {
             Input.Player.Walk.started += OnWalk;
             Input.Player.Walk.canceled += OnIdle;
-            
-            BlinkCoroutine = BlinkProcess();
-            StartCoroutine(BlinkCoroutine);
         }
         
         private void OnDisable()
