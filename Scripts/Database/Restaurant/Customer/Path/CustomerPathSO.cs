@@ -7,10 +7,10 @@ namespace Database.Restaurant.Customer.Path
     public class CustomerPathSO : ScriptableObject
     {
         [field: Header("門口到座位的路徑")]
-        [field: SerializeField] public List<Vector3> InSidePath { get; private set; }
+        [field: SerializeField] public List<Vector3> GoToSeat { get; private set; }
         
         [field: Header("座位到門口的路徑")]
-        [field: SerializeField] public List<Vector3> OutSidePath { get; private set; }
+        [field: SerializeField] public List<Vector3> Leave { get; private set; }
         
         [field: Header("入座點")]
         [field: SerializeField] public Vector3 SeatPoint { get; private set; }

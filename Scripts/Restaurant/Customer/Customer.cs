@@ -1,23 +1,19 @@
+using System;
 using UnityEngine;
 
 namespace Restaurant.Customer
 {
-    [RequireComponent(typeof(CustomerNavigation))]
+    [RequireComponent(typeof(CustomerController))]
     [RequireComponent(typeof(CustomerAnimator))]
+    [RequireComponent(typeof(CustomerOrder))]
+    [RequireComponent(typeof(CustomerCheckout))]
     public class Customer : MonoBehaviour
     {
-        private StateEnum State { get; set; } = StateEnum.GoInside;
-        private enum StateEnum
-        {
-            GoInside,
-            OnSeat,
-            GoOutside
-        }
+        public event Action GoToSeat;
 
-        // 僅供 GameObject 本身的 CustomerNavigation 呼叫。
-        public void OnTargetPoint()
+        private void Start()
         {
-            Debug.Log("到位置了");
+            GoToSeat?.Invoke();
         }
     }
 }
