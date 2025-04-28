@@ -51,9 +51,11 @@ namespace Database.Restaurant.Customer.Attribute
         [field: Header("每個狀態的等待時間")]
         [field: SerializeField] private Range ThinkTime { get; set; }
         [field: SerializeField] private Range OrderTime { get; set; }
+        [field: SerializeField] private Range WaitDishTime { get; set; }
         
         public float GetRandomThinkTime() => Random.Range(ThinkTime.Min, ThinkTime.Max);
         public float GetRandomOrderTime() => Random.Range(OrderTime.Min, OrderTime.Max);
+        public float GetRandomWaitDishTime() => Random.Range(WaitDishTime.Min, WaitDishTime.Max);
     }
 
     [Serializable]

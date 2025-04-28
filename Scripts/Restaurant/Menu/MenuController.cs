@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace Restaurant.Menu
 {
-    [RequireComponent(typeof(Menu))]
+    [RequireComponent(typeof(MenuManager))]
     public class MenuController : MonoBehaviour
     {
         [field: Header("菜單的遊戲物件")]

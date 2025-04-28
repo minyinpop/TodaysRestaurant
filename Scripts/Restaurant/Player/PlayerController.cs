@@ -28,7 +28,7 @@ namespace Restaurant.Player
             var y = Rig.linearVelocity.y;
             var z = MoveDir.z * PlayerAttribute.MoveAttribute.MoveSpeed * Time.fixedDeltaTime;
             
-            Rig.linearVelocity = new Vector3(x, y, z);
+            Rig.linearVelocity = transform.TransformDirection(new Vector3(x, y, z));
         }
     }
 }

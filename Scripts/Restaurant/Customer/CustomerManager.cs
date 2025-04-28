@@ -7,7 +7,7 @@ namespace Restaurant.Customer
     [RequireComponent(typeof(CustomerAnimator))]
     [RequireComponent(typeof(CustomerOrder))]
     [RequireComponent(typeof(CustomerCheckout))]
-    public class Customer : MonoBehaviour
+    public class CustomerManager : MonoBehaviour
     {
         public event Action GoToSeat;
 

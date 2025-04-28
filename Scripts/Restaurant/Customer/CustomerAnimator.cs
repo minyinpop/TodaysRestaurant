@@ -39,12 +39,14 @@ namespace Restaurant.Customer
         {
             CustomerController.GoToSeat += GoToSeat;
             CustomerController.OnSeat += OnSeat;
+            CustomerController.FlipX += FlipX;
         }
 
         private void OnDisable()
         {
             CustomerController.GoToSeat -= GoToSeat;
             CustomerController.OnSeat -= OnSeat;
+            CustomerController.FlipX -= FlipX;
             
             if (BlinkCoroutine is not null)
             {
@@ -53,15 +55,11 @@ namespace Restaurant.Customer
             }
         }
 
-        private void GoToSeat()
-        {
-            SkeletonAnimation.AnimationState.SetAnimation(1, Walk, true);
-        }
+        private void GoToSeat() => SkeletonAnimation.AnimationState.SetAnimation(1, Walk, true);
         
-        private void OnSeat()
-        {
-            SkeletonAnimation.AnimationState.SetAnimation(1, Sit, true);
-        }
+        private void OnSeat() => SkeletonAnimation.AnimationState.SetAnimation(1, Sit, true);
+
+        private void FlipX(bool isFlip) => SkeletonAnimation.Skeleton.ScaleX = isFlip ? -1 : 1;
 
         private IEnumerator BlinkProcess()
         {
