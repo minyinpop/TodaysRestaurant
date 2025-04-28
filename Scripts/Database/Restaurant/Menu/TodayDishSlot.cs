@@ -18,6 +18,15 @@ namespace Database.Restaurant.Menu
             Portion = Dish.Portion;
         }
 
+        public bool TakeDish()
+        {
+            if (Lock || Dish is null || Portion <= 0)
+                return false;
+            
+            Portion -= 1;
+            return true;
+        }
+
         public void ClearData()
         {
             Lock = false;

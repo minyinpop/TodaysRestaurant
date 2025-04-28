@@ -1,7 +1,12 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using Database.Restaurant.Customer.Attribute;
+using Database.Restaurant.Dish;
+using Database.Restaurant.Menu;
+using Restaurant.Customer.Bubble;
 using UnityEngine;
-using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 namespace Restaurant.Customer
 {
@@ -16,16 +21,23 @@ namespace Restaurant.Customer
         [field: Header("各類型氣泡的預製件")]
         [field: SerializeField] private GameObject ThinkBubble { get; set; }
         [field: SerializeField] private GameObject OrderBubble { get; set; }
+        [field: SerializeField] private GameObject WaitDishBubble { get; set; }
         [field: SerializeField] private GameObject HappyBubble { get; set; }
         [field: SerializeField] private GameObject AngryBubble { get; set; }
+
+        private OrderDish OrderAppetizer { get; set; } = new();
+        private OrderDish OrderMainCourse { get; set; } = new();
+        private OrderDish OrderDessert { get; set; } = new();
+        private OrderDish OrderDrink { get; set; } = new();
         
         private CustomerController CustomerController { get; set; }
         
-        private IEnumerator OrderCoroutine { get; set; }
-        private IEnumerator CountDownPatienceCoroutine { get; set; }
-
-        private GameObject Bubble { get; set; }
-        private bool IsBubbleClick { get; set; }
+        private IEnumerator MainCoroutine { get; set; }
+        private IEnumerator CurrentCoroutine { get; set; }
+        
+        // For OrderProcess
+        private BubbleBase BubbleBase { get; set; }
+        private bool IsClickBubble { get; set; }
 
         private void Awake()
         {
@@ -34,86 +46,170 @@ namespace Restaurant.Customer
 
         private void OnEnable()
         {
-            CustomerController.OnSeat += StartOrder;
+            CustomerController.OnSeat += StartProcess;
+            
+            if (BubbleBase is not null)
+                BubbleBase.ClickBubble += OnClickBubble;
         }
         
         private void OnDisable()
         {
-            CustomerController.OnSeat -= StartOrder;
+            CustomerController.OnSeat -= StartProcess;
             
-            if (OrderCoroutine is not null)
+            if (BubbleBase is not null)
+                BubbleBase.ClickBubble -= OnClickBubble;
+            
+            if (MainCoroutine is not null)
             {
-                StopCoroutine(OrderCoroutine);
-                OrderCoroutine = null;
+                StopCoroutine(MainCoroutine);
+                MainCoroutine = null;
             }
-            
-            if (CountDownPatienceCoroutine is not null)
+
+            if (CurrentCoroutine is not null)
             {
-                StopCoroutine(CountDownPatienceCoroutine);
-                CountDownPatienceCoroutine = null;
+                StopCoroutine(CurrentCoroutine);
+                CurrentCoroutine = null;
             }
         }
 
-        private void StartOrder()
+        private void StartProcess()
         {
-            OrderCoroutine = OrderProcess();
-            StartCoroutine(OrderCoroutine);
+            MainCoroutine = MainProcess();
+            StartCoroutine(MainCoroutine);
         }
         
+        private IEnumerator MainProcess()
+        {
+            
+            
+            
+            // TODO 使用陣列遍歷的方式來處理這一坨
+            // TODO 使用陣列遍歷的方式來處理這一坨
+            // TODO 使用陣列遍歷的方式來處理這一坨
+            
+            
+            
+            yield return new WaitForSeconds(1f);
+            
+            CurrentCoroutine = ThinkProcess();
+            yield return CurrentCoroutine;
+
+            yield return new WaitForSeconds(1f);
+            
+            CurrentCoroutine = OrderProcess();
+            yield return CurrentCoroutine;
+            
+            yield return new WaitForSeconds(1f);
+            
+            CurrentCoroutine = WaitDishProcess();
+            yield return CurrentCoroutine;
+            
+            Debug.Log($"{name} 要結帳了");
+        }
+
+        private IEnumerator ThinkProcess()
+        {
+            var randomTime = Attribute.OrderAttribute.GetRandomThinkTime();
+            Instantiate(ThinkBubble, BubbleParent).GetComponent<BubbleBase>().Init(randomTime);
+            yield return new WaitForSeconds(randomTime);
+        }
+
         private IEnumerator OrderProcess()
         {
-            Bubble = Instantiate(ThinkBubble, BubbleParent);
-            yield return new WaitForSeconds(Attribute.OrderAttribute.GetRandomThinkTime());
+            BubbleBase = Instantiate(OrderBubble, BubbleParent).GetComponent<BubbleBase>();
+            BubbleBase.Init(Attribute.OrderAttribute.GetRandomOrderTime());
+            BubbleBase.ClickBubble += OnClickBubble;
             
-            Destroy(Bubble);
-            yield return new WaitForSeconds(1f);
-
-            Bubble = Instantiate(OrderBubble, BubbleParent);
-            StartCountDownPatience();
-            Bubble.GetComponent<Button>().onClick.AddListener(OnBubbleClick);
-            yield return new WaitUntil(() => IsBubbleClick);
-
-            IsBubbleClick = false;
-            Destroy(Bubble);
-            yield return new WaitForSeconds(1f);
-            
-            // TODO 生成想要的餐點
+            yield return new WaitUntil(() => IsClickBubble);
+            IsClickBubble = false;
+            BubbleBase.ClickBubble -= OnClickBubble;
         }
 
-        private void OnBubbleClick()
+        private IEnumerator WaitDishProcess()
         {
-            StopCoroutine(CountDownPatienceCoroutine);
-            CountDownPatienceCoroutine = null;
-            
-            IsBubbleClick = true;
-        }
-        
-        private void StartCountDownPatience()
-        {
-            CountDownPatienceCoroutine = CountDownPatienceProcess();
-            StartCoroutine(CountDownPatienceCoroutine);
-        }
-
-        private IEnumerator CountDownPatienceProcess()
-        {
-            var image = Bubble.GetComponent<Image>();
-            var targetTime = Attribute.OrderAttribute.GetRandomOrderTime();
-            var currentTime = targetTime;
-
-            while (currentTime > 0)
+            if (!OrderAppetizer.HasSeen)
             {
-                currentTime -= Time.deltaTime;
-                image.fillAmount = currentTime / targetTime;
-                yield return null;
+                if (ChooseDish(OrderAppetizer, Attribute.OrderAttribute.OrderAppetizerChance, Attribute.OrderAttribute.TodayAppetizer))
+                {
+                    yield return new WaitUntil(() => IsClickBubble);
+                    IsClickBubble = false;
+                    BubbleBase.ClickBubble -= OnClickBubble;
+                    // yield break;
+                }
             }
 
-            image.fillAmount = 0;
-            Debug.Log("顧客沒耐心了！");
-        }
+            if (!OrderMainCourse.HasSeen)
+            {
+                if (ChooseDish(OrderMainCourse, Attribute.OrderAttribute.OrderMainCourseChance, Attribute.OrderAttribute.TodayMainCourse))
+                {
+                    yield return new WaitUntil(() => IsClickBubble);
+                    IsClickBubble = false;
+                    BubbleBase.ClickBubble -= OnClickBubble;
+                    // yield break;
+                }
+            }
 
-        private void NoPatience()
-        {
-            // TODO 顧客不開心 AngryBubble
+            if (!OrderDessert.HasSeen)
+            {
+                if (ChooseDish(OrderDessert, Attribute.OrderAttribute.OrderDessertChance, Attribute.OrderAttribute.TodayDessert))
+                {
+                    yield return new WaitUntil(() => IsClickBubble);
+                    IsClickBubble = false;
+                    BubbleBase.ClickBubble -= OnClickBubble;
+                    // yield break;
+                }
+            }
+
+            if (!OrderDrink.HasSeen)
+            {
+                if (ChooseDish(OrderDrink, Attribute.OrderAttribute.OrderDrinkChance, Attribute.OrderAttribute.TodayDrink))
+                {
+                    yield return new WaitUntil(() => IsClickBubble);
+                    IsClickBubble = false;
+                    BubbleBase.ClickBubble -= OnClickBubble;
+                    // yield break;
+                }
+            }
         }
+        
+        private bool ChooseDish(OrderDish orderDish, int chance, TodayDishSO todayDish)
+        {
+            orderDish.HasSeen = true;
+
+            if (Random.Range(0, 100) < chance)
+            {
+                var todayDishSlots = new List<TodayDishSlot>();
+                
+                foreach (var slot in todayDish.TodayDishSlots)
+                    todayDishSlots.Add(slot);
+
+                while (todayDishSlots.Count > 0)
+                {
+                    var slotIndex = Random.Range(0, todayDishSlots.Count);
+
+                    if (todayDishSlots[slotIndex].TakeDish())
+                    {
+                        orderDish.Dish = todayDishSlots[slotIndex].Dish;
+                        BubbleBase = Instantiate(WaitDishBubble, BubbleParent).GetComponent<BubbleBase>();
+                        BubbleBase.Init(Attribute.OrderAttribute.GetRandomWaitDishTime(), orderDish.Dish);
+                        BubbleBase.ClickBubble += OnClickBubble;
+                        return true;
+                    }
+                    
+                    todayDishSlots.RemoveAt(slotIndex);
+                }
+            }
+
+            return false;
+        }
+        
+        private void OnClickBubble() => IsClickBubble = true;
+    }
+
+    [Serializable]
+    public class OrderDish
+    {
+        public bool HasSeen { get; set; }
+        public DishSO Dish { get; set; }
     }
 }
