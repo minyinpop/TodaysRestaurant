@@ -22,6 +22,7 @@ namespace Restaurant.Customer
         [field: SerializeField] private GameObject ThinkBubble { get; set; }
         [field: SerializeField] private GameObject OrderBubble { get; set; }
         [field: SerializeField] private GameObject WaitDishBubble { get; set; }
+        [field: SerializeField] private GameObject CheckoutBubble { get; set; }
         [field: SerializeField] private GameObject HappyBubble { get; set; }
         [field: SerializeField] private GameObject AngryBubble { get; set; }
 
@@ -80,31 +81,49 @@ namespace Restaurant.Customer
         
         private IEnumerator MainProcess()
         {
+            var orderDish = new List<OrderDish>
+            {
+                OrderAppetizer,
+                OrderMainCourse,
+                OrderDessert,
+                OrderDrink
+            };
             
-            
-            
-            // TODO 使用陣列遍歷的方式來處理這一坨
-            // TODO 使用陣列遍歷的方式來處理這一坨
-            // TODO 使用陣列遍歷的方式來處理這一坨
-            
-            
-            
-            yield return new WaitForSeconds(1f);
-            
-            CurrentCoroutine = ThinkProcess();
-            yield return CurrentCoroutine;
+            var chance = new List<int>
+            {
+                Attribute.OrderAttribute.OrderAppetizerChance,
+                Attribute.OrderAttribute.OrderMainCourseChance,
+                Attribute.OrderAttribute.OrderDessertChance,
+                Attribute.OrderAttribute.OrderDrinkChance
+            };
 
-            yield return new WaitForSeconds(1f);
-            
-            CurrentCoroutine = OrderProcess();
-            yield return CurrentCoroutine;
-            
-            yield return new WaitForSeconds(1f);
-            
-            CurrentCoroutine = WaitDishProcess();
-            yield return CurrentCoroutine;
-            
-            Debug.Log($"{name} 要結帳了");
+            var todayDish = new List<TodayDishSO>
+            {
+                Attribute.OrderAttribute.TodayAppetizer,
+                Attribute.OrderAttribute.TodayMainCourse,
+                Attribute.OrderAttribute.TodayDessert,
+                Attribute.OrderAttribute.TodayDrink
+            };
+
+            for (var i = 0; i < orderDish.Count; i++)
+            {
+                // TODO 把 if 寫在這裡
+                
+                yield return new WaitForSeconds(1f);
+                
+                CurrentCoroutine = ThinkProcess();
+                yield return CurrentCoroutine;
+                
+                yield return new WaitForSeconds(1f);
+                
+                CurrentCoroutine = OrderProcess();
+                yield return CurrentCoroutine;
+                
+                yield return new WaitForSeconds(1f);
+                
+                CurrentCoroutine = WaitDishProcess(orderDish[i], chance[i], todayDish[i]);
+                yield return CurrentCoroutine;
+            }
         }
 
         private IEnumerator ThinkProcess()
@@ -125,51 +144,22 @@ namespace Restaurant.Customer
             BubbleBase.ClickBubble -= OnClickBubble;
         }
 
-        private IEnumerator WaitDishProcess()
+        private IEnumerator WaitDishProcess(OrderDish orderDish, int chance, TodayDishSO todayDish)
         {
-            if (!OrderAppetizer.HasSeen)
-            {
-                if (ChooseDish(OrderAppetizer, Attribute.OrderAttribute.OrderAppetizerChance, Attribute.OrderAttribute.TodayAppetizer))
-                {
-                    yield return new WaitUntil(() => IsClickBubble);
-                    IsClickBubble = false;
-                    BubbleBase.ClickBubble -= OnClickBubble;
-                    // yield break;
-                }
-            }
+            if (orderDish.HasSeen)
+                yield break;
+            
+            if (!ChooseDish(orderDish, chance, todayDish))
+                yield break;
+            
+            yield return new WaitUntil(() => IsClickBubble);
+            IsClickBubble = false;
+            BubbleBase.ClickBubble -= OnClickBubble;
+        }
 
-            if (!OrderMainCourse.HasSeen)
-            {
-                if (ChooseDish(OrderMainCourse, Attribute.OrderAttribute.OrderMainCourseChance, Attribute.OrderAttribute.TodayMainCourse))
-                {
-                    yield return new WaitUntil(() => IsClickBubble);
-                    IsClickBubble = false;
-                    BubbleBase.ClickBubble -= OnClickBubble;
-                    // yield break;
-                }
-            }
-
-            if (!OrderDessert.HasSeen)
-            {
-                if (ChooseDish(OrderDessert, Attribute.OrderAttribute.OrderDessertChance, Attribute.OrderAttribute.TodayDessert))
-                {
-                    yield return new WaitUntil(() => IsClickBubble);
-                    IsClickBubble = false;
-                    BubbleBase.ClickBubble -= OnClickBubble;
-                    // yield break;
-                }
-            }
-
-            if (!OrderDrink.HasSeen)
-            {
-                if (ChooseDish(OrderDrink, Attribute.OrderAttribute.OrderDrinkChance, Attribute.OrderAttribute.TodayDrink))
-                {
-                    yield return new WaitUntil(() => IsClickBubble);
-                    IsClickBubble = false;
-                    BubbleBase.ClickBubble -= OnClickBubble;
-                    // yield break;
-                }
-            }
+        private IEnumerator CheckoutProcess()
+        {
+            yield return null;
         }
         
         private bool ChooseDish(OrderDish orderDish, int chance, TodayDishSO todayDish)
