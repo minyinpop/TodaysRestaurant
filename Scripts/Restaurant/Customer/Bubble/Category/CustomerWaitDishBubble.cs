@@ -54,6 +54,7 @@ namespace Restaurant.Customer.Bubble.Category
                 yield return null;
             }
             
+            Destroy(gameObject);
             OnCustomerHaveNoPatience();
         }
     }

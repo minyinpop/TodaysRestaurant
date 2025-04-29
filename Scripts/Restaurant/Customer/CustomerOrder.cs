@@ -35,6 +35,9 @@ namespace Restaurant.Customer
         
         private IEnumerator MainCoroutine { get; set; }
         private IEnumerator CurrentCoroutine { get; set; }
+
+        public event Action HappyToLeave;
+        public event Action HaveNoPatience;
         
         // For MainProcess Only.
         private BubbleBase BubbleBase { get; set; }
@@ -130,8 +133,10 @@ namespace Restaurant.Customer
             
             CurrentCoroutine = CheckoutProcess();
             yield return CurrentCoroutine;
-            
-            Debug.Log("Order Complete");
+
+            yield return new WaitForSeconds(1f);
+
+            CustomerHappyToLeave();
         }
 
         private IEnumerator ThinkProcess()
@@ -146,10 +151,12 @@ namespace Restaurant.Customer
             BubbleBase = Instantiate(OrderBubble, BubbleParent).GetComponent<BubbleBase>();
             BubbleBase.Init(Attribute.OrderAttribute.GetRandomOrderTime());
             BubbleBase.ClickBubble += OnClickBubble;
+            BubbleBase.CustomerHaveNoPatience += CustomerHaveNoPatience;
             
             yield return new WaitUntil(() => IsClickBubble);
             IsClickBubble = false;
             BubbleBase.ClickBubble -= OnClickBubble;
+            BubbleBase.CustomerHaveNoPatience -= CustomerHaveNoPatience;
         }
 
         private IEnumerator WaitDishProcess(OrderDish orderDish, TodayDishSO todayDish)
@@ -163,6 +170,7 @@ namespace Restaurant.Customer
             yield return new WaitUntil(() => IsClickBubble);
             IsClickBubble = false;
             BubbleBase.ClickBubble -= OnClickBubble;
+            BubbleBase.CustomerHaveNoPatience -= CustomerHaveNoPatience;
         }
 
         private IEnumerator CheckoutProcess()
@@ -170,10 +178,12 @@ namespace Restaurant.Customer
             BubbleBase = Instantiate(CheckoutBubble, BubbleParent).GetComponent<BubbleBase>();
             BubbleBase.Init(Attribute.OrderAttribute.GetRandomCheckoutTime());
             BubbleBase.ClickBubble += OnClickBubble;
+            BubbleBase.CustomerHaveNoPatience += CustomerHaveNoPatience;
             
             yield return new WaitUntil(() => IsClickBubble);
             IsClickBubble = false;
             BubbleBase.ClickBubble -= OnClickBubble;
+            BubbleBase.CustomerHaveNoPatience -= CustomerHaveNoPatience;
         }
         
         private bool ChooseDish(OrderDish orderDish, TodayDishSO todayDish)
@@ -195,6 +205,7 @@ namespace Restaurant.Customer
                     BubbleBase = Instantiate(WaitDishBubble, BubbleParent).GetComponent<BubbleBase>();
                     BubbleBase.Init(Attribute.OrderAttribute.GetRandomWaitDishTime(), orderDish.Dish);
                     BubbleBase.ClickBubble += OnClickBubble;
+                    BubbleBase.CustomerHaveNoPatience += CustomerHaveNoPatience;
                     return true;
                 }
                 
@@ -205,6 +216,24 @@ namespace Restaurant.Customer
         }
         
         private void OnClickBubble() => IsClickBubble = true;
+
+        private void CustomerHappyToLeave()
+        {
+            HappyToLeave?.Invoke();
+        }
+
+        private void CustomerHaveNoPatience()
+        {
+            if (CurrentCoroutine is not null)
+            {
+                StopCoroutine(CurrentCoroutine);
+                CurrentCoroutine = null;
+            }
+
+            BubbleBase = Instantiate(AngryBubble, BubbleParent).GetComponent<BubbleBase>();
+            BubbleBase.Init(3f);
+            HaveNoPatience?.Invoke();
+        }
     }
 
     [Serializable]

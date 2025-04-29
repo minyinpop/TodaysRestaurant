@@ -37,14 +37,14 @@ namespace Restaurant.Customer
 
         private void OnEnable()
         {
-            CustomerController.GoToSeat += GoToSeat;
+            CustomerController.OnWalk += OnWalk;
             CustomerController.OnSeat += OnSeat;
             CustomerController.FlipX += FlipX;
         }
 
         private void OnDisable()
         {
-            CustomerController.GoToSeat -= GoToSeat;
+            CustomerController.OnWalk -= OnWalk;
             CustomerController.OnSeat -= OnSeat;
             CustomerController.FlipX -= FlipX;
             
@@ -55,7 +55,7 @@ namespace Restaurant.Customer
             }
         }
 
-        private void GoToSeat() => SkeletonAnimation.AnimationState.SetAnimation(1, Walk, true);
+        private void OnWalk() => SkeletonAnimation.AnimationState.SetAnimation(1, Walk, true);
         
         private void OnSeat() => SkeletonAnimation.AnimationState.SetAnimation(1, Sit, true);
 

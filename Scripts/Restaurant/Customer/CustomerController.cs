@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Database.Restaurant.Customer.Attribute;
 using Database.Restaurant.Customer.Path;
 using UnityEngine;
@@ -16,9 +17,10 @@ namespace Restaurant.Customer
         private CustomerManager CustomerManager { get; set; }
         private Rigidbody Rig { get; set; }
         
-        private IEnumerator WalkToSeatCoroutine { get; set; }
+        private IEnumerator CurrentCoroutine { get; set; }
+        private IEnumerator WalkCoroutine { get; set; }
 
-        public event Action GoToSeat;
+        public event Action OnWalk;
         public event Action OnSeat;
         public event Action<bool> FlipX;
 
@@ -31,30 +33,65 @@ namespace Restaurant.Customer
         private void OnEnable()
         {
             CustomerManager.GoToSeat += StartGoToSeat;
+            CustomerManager.Leave += StartLeave;
         }
 
         private void OnDisable()
         {
             CustomerManager.GoToSeat -= StartGoToSeat;
-            
-            if (WalkToSeatCoroutine is not null)
+            CustomerManager.Leave -= StartLeave;
+
+            if (CurrentCoroutine is not null)
             {
-                StopCoroutine(WalkToSeatCoroutine);
-                WalkToSeatCoroutine = null;
+                StopCoroutine(CurrentCoroutine);
+                CurrentCoroutine = null;
+            }
+            
+            if (WalkCoroutine is not null)
+            {
+                StopCoroutine(WalkCoroutine);
+                WalkCoroutine = null;
             }
         }
 
         private void StartGoToSeat()
         {
-            WalkToSeatCoroutine = GoToSeatProcess();
-            StartCoroutine(WalkToSeatCoroutine);
+            CurrentCoroutine = GoToSeatProcess();
+            StartCoroutine(CurrentCoroutine);
         }
 
+        private void StartLeave()
+        {
+            CurrentCoroutine = LeaveProcess();
+            StartCoroutine(CurrentCoroutine);
+        }
+        
         private IEnumerator GoToSeatProcess()
         {
-            GoToSeat?.Invoke();
+            OnWalk?.Invoke();
+
+            WalkCoroutine = WalkProcess(Path.GoToSeat);
+            yield return WalkCoroutine;
             
-            foreach (var path in Path.GoToSeat)
+            Rig.linearVelocity = Vector3.zero;
+            transform.position = Path.SeatPoint;
+
+            OnSeat?.Invoke();
+        }
+
+        private IEnumerator LeaveProcess()
+        {
+            OnWalk?.Invoke();
+
+            WalkCoroutine = WalkProcess(Path.Leave);
+            yield return WalkProcess(Path.Leave);
+            
+            Destroy(gameObject);
+        }
+
+        private IEnumerator WalkProcess(List<Vector3> paths)
+        {
+            foreach (var path in paths)
             {
                 while (Vector3.Distance(transform.position, path) > .2f)
                 {
@@ -74,11 +111,6 @@ namespace Restaurant.Customer
                     yield return new WaitForFixedUpdate();
                 }
             }
-            
-            Rig.linearVelocity = Vector3.zero;
-            transform.position = Path.SeatPoint;
-            
-            OnSeat?.Invoke();
         }
     }
 }
