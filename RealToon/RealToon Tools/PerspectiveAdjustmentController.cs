@@ -1,6 +1,6 @@
 //RealToon - Perspective Adjustment [Helper]
 //MJQStudioWorks
-//©2025
+//©2024
 
 using UnityEngine;
 
@@ -34,7 +34,7 @@ namespace RealToon.Script
 
         [SerializeField]
         [Tooltip("This will change the clipping on the object.\nChange this if the object is overlapping front or back.")]
-        public float Clip = 0;
+        public float Clip = 1;
 
         [Space(15)]
 
@@ -63,15 +63,6 @@ namespace RealToon.Script
         string RT_Sha_Nam_URP = "Universal Render Pipeline/RealToon/Version 5/Default/Default";
         string RT_Sha_Nam_HDRP = "HDRP/RealToon/Version 5/Default";
 
-        string RT_Sha_Nam_BiRP_DD = "RealToon/Version 5/Default/Default";
-        string RT_Sha_Nam_BiRP_DFT = "RealToon/Version 5/Default/Fade Transparency";
-        string RT_Sha_Nam_BiRP_DR = "RealToon/Version 5/Default/Refraction";
-        string RT_Sha_Nam_BiRP_TDD = "RealToon/Version 5/Tessellation/Default";
-        string RT_Sha_Nam_BiRP_TDFT = "RealToon/Version 5/Tessellation/Fade Transparency";
-        string RT_Sha_Nam_BiRP_TDR = "RealToon/Version 5/Tessellation/Refraction";
-        string RT_Sha_Nam_BiRP_DDL = "RealToon/Version 5/Lite/Default";
-        string RT_Sha_Nam_BiRP_DFTL = "RealToon/Version 5/Lite/Fade Transparency";
-
         [HideInInspector]
         [SerializeField]
         bool checkstart = true;
@@ -95,16 +86,7 @@ namespace RealToon.Script
                     {
                         if (Mate != null)
                         {
-                            if (Mate.shader.name == RT_Sha_Nam_URP || 
-                                Mate.shader.name == RT_Sha_Nam_HDRP ||
-                                Mate.shader.name == RT_Sha_Nam_BiRP_DD ||
-                                Mate.shader.name == RT_Sha_Nam_BiRP_DFT ||
-                                Mate.shader.name == RT_Sha_Nam_BiRP_DR ||
-                                Mate.shader.name == RT_Sha_Nam_BiRP_TDD ||
-                                Mate.shader.name == RT_Sha_Nam_BiRP_TDFT ||
-                                Mate.shader.name == RT_Sha_Nam_BiRP_TDR ||
-                                Mate.shader.name == RT_Sha_Nam_BiRP_DDL || 
-                                Mate.shader.name == RT_Sha_Nam_BiRP_DFTL)
+                            if (Mate.shader.name == RT_Sha_Nam_URP || Mate.shader.name == RT_Sha_Nam_HDRP)
                             {
                                 Set_Shad_Prop(Mate);
                             }
@@ -122,16 +104,7 @@ namespace RealToon.Script
                 {
                     if (Mate != null)
                     {
-                        if (Mate.shader.name == RT_Sha_Nam_URP ||
-                            Mate.shader.name == RT_Sha_Nam_HDRP ||
-                            Mate.shader.name == RT_Sha_Nam_BiRP_DD ||
-                            Mate.shader.name == RT_Sha_Nam_BiRP_DFT ||
-                            Mate.shader.name == RT_Sha_Nam_BiRP_DR ||
-                            Mate.shader.name == RT_Sha_Nam_BiRP_TDD ||
-                            Mate.shader.name == RT_Sha_Nam_BiRP_TDFT ||
-                            Mate.shader.name == RT_Sha_Nam_BiRP_TDR ||
-                            Mate.shader.name == RT_Sha_Nam_BiRP_DDL ||
-                            Mate.shader.name == RT_Sha_Nam_BiRP_DFTL)
+                        if (Mate.shader.name == RT_Sha_Nam_URP || Mate.shader.name == RT_Sha_Nam_HDRP)
                         {
                             Set_Shad_Prop(Mate);
                         }
@@ -169,16 +142,7 @@ namespace RealToon.Script
                 {
                     if (Mate != null)
                     {
-                        if (Mate.shader.name == RT_Sha_Nam_URP || 
-                            Mate.shader.name == RT_Sha_Nam_HDRP ||
-                            Mate.shader.name == RT_Sha_Nam_BiRP_DD ||
-                            Mate.shader.name == RT_Sha_Nam_BiRP_DFT ||
-                            Mate.shader.name == RT_Sha_Nam_BiRP_DR ||
-                            Mate.shader.name == RT_Sha_Nam_BiRP_TDD ||
-                            Mate.shader.name == RT_Sha_Nam_BiRP_TDFT ||
-                            Mate.shader.name == RT_Sha_Nam_BiRP_TDR ||
-                            Mate.shader.name == RT_Sha_Nam_BiRP_DDL ||
-                            Mate.shader.name == RT_Sha_Nam_BiRP_DFTL)
+                        if (Mate.shader.name == RT_Sha_Nam_URP || Mate.shader.name == RT_Sha_Nam_HDRP)
                         {
                             Set_Shad_Prop(Mate);
                         }
@@ -206,22 +170,11 @@ namespace RealToon.Script
             foreach (Transform Trans in attac)
             {
 
-                Debug.Log("yes");
-
                 if (Trans.GetComponent<SkinnedMeshRenderer>() == true)
                 {
                     if (Trans.GetComponent<SkinnedMeshRenderer>().sharedMaterial != null)
                     {
-                        if (Trans.GetComponent<SkinnedMeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_URP || 
-                            Trans.GetComponent<SkinnedMeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_HDRP ||
-                            Trans.GetComponent<SkinnedMeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_BiRP_DD ||
-                            Trans.GetComponent<SkinnedMeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_BiRP_DFT ||
-                            Trans.GetComponent<SkinnedMeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_BiRP_DR ||
-                            Trans.GetComponent<SkinnedMeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_BiRP_TDD ||
-                            Trans.GetComponent<SkinnedMeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_BiRP_TDFT ||
-                            Trans.GetComponent<SkinnedMeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_BiRP_TDR ||
-                            Trans.GetComponent<SkinnedMeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_BiRP_DDL ||
-                            Trans.GetComponent<SkinnedMeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_BiRP_DFTL)
+                        if (Trans.GetComponent<SkinnedMeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_URP || Trans.GetComponent<SkinnedMeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_HDRP)
                         {
                             coun_obj_wi_ralsha++;
                             coun_obj_mat += Trans.GetComponent<SkinnedMeshRenderer>().sharedMaterials.Length;
@@ -234,16 +187,7 @@ namespace RealToon.Script
                 {
                     if (Trans.GetComponent<MeshRenderer>().sharedMaterial != null)
                     {
-                        if (Trans.GetComponent<MeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_URP ||
-                            Trans.GetComponent<MeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_HDRP ||
-                            Trans.GetComponent<MeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_BiRP_DD ||
-                            Trans.GetComponent<MeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_BiRP_DFT ||
-                            Trans.GetComponent<MeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_BiRP_DR ||
-                            Trans.GetComponent<MeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_BiRP_TDD ||
-                            Trans.GetComponent<MeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_BiRP_TDFT ||
-                            Trans.GetComponent<MeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_BiRP_TDR ||
-                            Trans.GetComponent<MeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_BiRP_DDL ||
-                            Trans.GetComponent<MeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_BiRP_DFTL)
+                        if (Trans.GetComponent<MeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_URP || Trans.GetComponent<MeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_HDRP)
                         {
                             coun_obj_wi_ralsha++;
                             coun_obj_mat += Trans.GetComponent<MeshRenderer>().sharedMaterials.Length;
@@ -253,7 +197,7 @@ namespace RealToon.Script
                 }
 
             }
-            
+
             SubTran = new Transform[coun_obj_wi_ralsha];
 
             foreach (Transform Trans in attac)
@@ -262,16 +206,7 @@ namespace RealToon.Script
                 {
                     if (Trans.GetComponent<SkinnedMeshRenderer>().sharedMaterial != null)
                     {
-                        if (Trans.GetComponent<SkinnedMeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_URP ||
-                            Trans.GetComponent<SkinnedMeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_HDRP ||
-                            Trans.GetComponent<SkinnedMeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_BiRP_DD ||
-                            Trans.GetComponent<SkinnedMeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_BiRP_DFT ||
-                            Trans.GetComponent<SkinnedMeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_BiRP_DR ||
-                            Trans.GetComponent<SkinnedMeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_BiRP_TDD ||
-                            Trans.GetComponent<SkinnedMeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_BiRP_TDFT ||
-                            Trans.GetComponent<SkinnedMeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_BiRP_TDR ||
-                            Trans.GetComponent<SkinnedMeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_BiRP_DDL ||
-                            Trans.GetComponent<SkinnedMeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_BiRP_DFTL)
+                        if (Trans.GetComponent<SkinnedMeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_URP || Trans.GetComponent<SkinnedMeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_HDRP)
                         {
                             SubTran[x] = Trans;
                             x++;
@@ -285,16 +220,7 @@ namespace RealToon.Script
                 {
                     if (Trans.GetComponent<MeshRenderer>().sharedMaterial != null)
                     {
-                        if (Trans.GetComponent<MeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_URP ||
-                            Trans.GetComponent<MeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_HDRP ||
-                            Trans.GetComponent<MeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_BiRP_DD ||
-                            Trans.GetComponent<MeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_BiRP_DFT ||
-                            Trans.GetComponent<MeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_BiRP_DR ||
-                            Trans.GetComponent<MeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_BiRP_TDD ||
-                            Trans.GetComponent<MeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_BiRP_TDFT ||
-                            Trans.GetComponent<MeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_BiRP_TDR ||
-                            Trans.GetComponent<MeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_BiRP_DDL ||
-                            Trans.GetComponent<MeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_BiRP_DFTL)
+                        if (Trans.GetComponent<MeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_URP || Trans.GetComponent<MeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_HDRP)
                         {
                             SubTran[x] = Trans;
                             x++;
@@ -313,16 +239,7 @@ namespace RealToon.Script
                 {
                     if (Trans.GetComponent<SkinnedMeshRenderer>().sharedMaterial != null)
                     {
-                        if (Trans.GetComponent<SkinnedMeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_URP ||
-                            Trans.GetComponent<SkinnedMeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_HDRP ||
-                            Trans.GetComponent<SkinnedMeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_BiRP_DD ||
-                            Trans.GetComponent<SkinnedMeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_BiRP_DFT ||
-                            Trans.GetComponent<SkinnedMeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_BiRP_DR ||
-                            Trans.GetComponent<SkinnedMeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_BiRP_TDD ||
-                            Trans.GetComponent<SkinnedMeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_BiRP_TDFT ||
-                            Trans.GetComponent<SkinnedMeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_BiRP_TDR ||
-                            Trans.GetComponent<SkinnedMeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_BiRP_DDL ||
-                            Trans.GetComponent<SkinnedMeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_BiRP_DFTL)
+                        if (Trans.GetComponent<SkinnedMeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_URP || Trans.GetComponent<SkinnedMeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_HDRP)
                         {
                             for (int i = 0; i < Trans.GetComponent<SkinnedMeshRenderer>().sharedMaterials.Length; i++)
                             {
@@ -339,16 +256,7 @@ namespace RealToon.Script
                 {
                     if (Trans.GetComponent<MeshRenderer>().sharedMaterial != null)
                     {
-                        if (Trans.GetComponent<MeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_URP ||
-                            Trans.GetComponent<MeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_HDRP ||
-                            Trans.GetComponent<MeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_BiRP_DD ||
-                            Trans.GetComponent<MeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_BiRP_DFT ||
-                            Trans.GetComponent<MeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_BiRP_DR ||
-                            Trans.GetComponent<MeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_BiRP_TDD ||
-                            Trans.GetComponent<MeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_BiRP_TDFT ||
-                            Trans.GetComponent<MeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_BiRP_TDR ||
-                            Trans.GetComponent<MeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_BiRP_DDL ||
-                            Trans.GetComponent<MeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_BiRP_DFTL)
+                        if (Trans.GetComponent<MeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_URP || Trans.GetComponent<MeshRenderer>().sharedMaterial.shader.name == RT_Sha_Nam_HDRP)
                         {
 
                             for (int i = 0; i < Trans.GetComponent<MeshRenderer>().sharedMaterials.Length; i++)
@@ -393,7 +301,7 @@ namespace RealToon.Script
         void Res_Shad_Prop()
         {
             Perspective = 1.0f;
-            Clip = 0.0f;
+            Clip = 1.0f;
             CloseUpSize = 0.0f;
             CloseUpSizeSmoothTransition = 1.0f;
             CloseUpSizeDistance = 0.0f;

@@ -1,6 +1,6 @@
 ﻿//RealToon - Custom Shadow Resolution
 //MJQStudioWorks
-//©2025
+//©2018
 
 using System.Collections;
 using System.Collections.Generic;
