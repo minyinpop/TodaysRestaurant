@@ -52,10 +52,12 @@ namespace Database.Restaurant.Customer.Attribute
         [field: SerializeField] private Range ThinkTime { get; set; }
         [field: SerializeField] private Range OrderTime { get; set; }
         [field: SerializeField] private Range WaitDishTime { get; set; }
+        [field: SerializeField] private Range CheckoutTime { get; set; }
         
         public float GetRandomThinkTime() => Random.Range(ThinkTime.Min, ThinkTime.Max);
         public float GetRandomOrderTime() => Random.Range(OrderTime.Min, OrderTime.Max);
         public float GetRandomWaitDishTime() => Random.Range(WaitDishTime.Min, WaitDishTime.Max);
+        public float GetRandomCheckoutTime() => Random.Range(CheckoutTime.Min, CheckoutTime.Max);
     }
 
     [Serializable]

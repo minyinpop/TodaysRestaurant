@@ -36,7 +36,7 @@ namespace Restaurant.Customer
         private IEnumerator MainCoroutine { get; set; }
         private IEnumerator CurrentCoroutine { get; set; }
         
-        // For OrderProcess
+        // For MainProcess Only.
         private BubbleBase BubbleBase { get; set; }
         private bool IsClickBubble { get; set; }
 
@@ -105,14 +105,15 @@ namespace Restaurant.Customer
                 Attribute.OrderAttribute.TodayDrink
             };
 
+            yield return new WaitForSeconds(1f);
+            
+            CurrentCoroutine = ThinkProcess();
+            yield return CurrentCoroutine;
+            
             for (var i = 0; i < orderDish.Count; i++)
             {
-                // TODO 把 if 寫在這裡
-                
-                yield return new WaitForSeconds(1f);
-                
-                CurrentCoroutine = ThinkProcess();
-                yield return CurrentCoroutine;
+                if (Random.Range(0, 100) >= chance[i])
+                    continue;
                 
                 yield return new WaitForSeconds(1f);
                 
@@ -121,9 +122,16 @@ namespace Restaurant.Customer
                 
                 yield return new WaitForSeconds(1f);
                 
-                CurrentCoroutine = WaitDishProcess(orderDish[i], chance[i], todayDish[i]);
+                CurrentCoroutine = WaitDishProcess(orderDish[i], todayDish[i]);
                 yield return CurrentCoroutine;
             }
+            
+            yield return new WaitForSeconds(1f);
+            
+            CurrentCoroutine = CheckoutProcess();
+            yield return CurrentCoroutine;
+            
+            Debug.Log("Order Complete");
         }
 
         private IEnumerator ThinkProcess()
@@ -144,12 +152,12 @@ namespace Restaurant.Customer
             BubbleBase.ClickBubble -= OnClickBubble;
         }
 
-        private IEnumerator WaitDishProcess(OrderDish orderDish, int chance, TodayDishSO todayDish)
+        private IEnumerator WaitDishProcess(OrderDish orderDish, TodayDishSO todayDish)
         {
             if (orderDish.HasSeen)
                 yield break;
             
-            if (!ChooseDish(orderDish, chance, todayDish))
+            if (!ChooseDish(orderDish, todayDish))
                 yield break;
             
             yield return new WaitUntil(() => IsClickBubble);
@@ -159,35 +167,38 @@ namespace Restaurant.Customer
 
         private IEnumerator CheckoutProcess()
         {
-            yield return null;
+            BubbleBase = Instantiate(CheckoutBubble, BubbleParent).GetComponent<BubbleBase>();
+            BubbleBase.Init(Attribute.OrderAttribute.GetRandomCheckoutTime());
+            BubbleBase.ClickBubble += OnClickBubble;
+            
+            yield return new WaitUntil(() => IsClickBubble);
+            IsClickBubble = false;
+            BubbleBase.ClickBubble -= OnClickBubble;
         }
         
-        private bool ChooseDish(OrderDish orderDish, int chance, TodayDishSO todayDish)
+        private bool ChooseDish(OrderDish orderDish, TodayDishSO todayDish)
         {
             orderDish.HasSeen = true;
 
-            if (Random.Range(0, 100) < chance)
+            var todayDishSlots = new List<TodayDishSlot>();
+            
+            foreach (var slot in todayDish.TodayDishSlots)
+                todayDishSlots.Add(slot);
+
+            while (todayDishSlots.Count > 0)
             {
-                var todayDishSlots = new List<TodayDishSlot>();
-                
-                foreach (var slot in todayDish.TodayDishSlots)
-                    todayDishSlots.Add(slot);
+                var slotIndex = Random.Range(0, todayDishSlots.Count);
 
-                while (todayDishSlots.Count > 0)
+                if (todayDishSlots[slotIndex].TakeDish())
                 {
-                    var slotIndex = Random.Range(0, todayDishSlots.Count);
-
-                    if (todayDishSlots[slotIndex].TakeDish())
-                    {
-                        orderDish.Dish = todayDishSlots[slotIndex].Dish;
-                        BubbleBase = Instantiate(WaitDishBubble, BubbleParent).GetComponent<BubbleBase>();
-                        BubbleBase.Init(Attribute.OrderAttribute.GetRandomWaitDishTime(), orderDish.Dish);
-                        BubbleBase.ClickBubble += OnClickBubble;
-                        return true;
-                    }
-                    
-                    todayDishSlots.RemoveAt(slotIndex);
+                    orderDish.Dish = todayDishSlots[slotIndex].Dish;
+                    BubbleBase = Instantiate(WaitDishBubble, BubbleParent).GetComponent<BubbleBase>();
+                    BubbleBase.Init(Attribute.OrderAttribute.GetRandomWaitDishTime(), orderDish.Dish);
+                    BubbleBase.ClickBubble += OnClickBubble;
+                    return true;
                 }
+                
+                todayDishSlots.RemoveAt(slotIndex);
             }
 
             return false;

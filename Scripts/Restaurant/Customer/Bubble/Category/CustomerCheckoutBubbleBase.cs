@@ -1,16 +1,14 @@
 using System.Collections;
-using Database.Restaurant.Dish;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Restaurant.Customer.Bubble.Category
 {
-    public class CustomerWaitDishBubble : BubbleBase
+    public class CustomerCheckoutBubbleBase : BubbleBase
     {
         [field: Header("自身的組件")]
         [field: SerializeField] private Button Button { get; set; }
         [field: SerializeField] private Image PatienceImage { get; set; }
-        [field: SerializeField] private Image DishImage { get; set; }
         
         [field: Header("耐心顏色變化值")]
         [field: SerializeField] private Color FullColor { get; set; }
@@ -34,11 +32,9 @@ namespace Restaurant.Customer.Bubble.Category
             }
         }
 
-        public override void Init(float time, DishSO dish)
+        public override void Init(float time)
         {
-            DishImage.sprite = dish.Sprite;
-            
-            CountDownPatienceCoroutine = CountDownPatienceProcess(time + dish.CookTime);
+            CountDownPatienceCoroutine = CountDownPatienceProcess(time);
             StartCoroutine(CountDownPatienceCoroutine);
         }
 

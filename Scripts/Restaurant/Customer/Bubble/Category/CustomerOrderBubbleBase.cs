@@ -50,7 +50,6 @@ namespace Restaurant.Customer.Bubble.Category
                 yield return null;
             }
             
-            Debug.Log("顧客沒耐心了");
             OnCustomerHaveNoPatience();
         }
     }
