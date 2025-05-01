@@ -219,6 +219,8 @@ namespace Restaurant.Customer
 
         private void CustomerHappyToLeave()
         {
+            BubbleBase = Instantiate(HappyBubble, BubbleParent).GetComponent<BubbleBase>();
+            BubbleBase.Init(3f);
             HappyToLeave?.Invoke();
         }
 

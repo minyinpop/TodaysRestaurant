@@ -8,6 +8,13 @@ namespace Database.Restaurant.Dish
         [field: Header("料理資訊設定")]
         [field: SerializeField] public string Name { get; private set; }
         [field: SerializeField] public Sprite Sprite { get; private set; }
+
+        [field: Header("料理烹飪設定")]
+        [field: SerializeField] public DishEnum DishType { get; private set; }
+        public enum DishEnum
+        {
+            Stockpot,
+        }
         
         [field: Header("料理基礎設定")]
         [field: SerializeField] public int Portion { get; private set; }
