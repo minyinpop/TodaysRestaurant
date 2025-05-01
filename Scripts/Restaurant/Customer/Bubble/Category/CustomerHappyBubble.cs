@@ -1,6 +1,6 @@
 namespace Restaurant.Customer.Bubble.Category
 {
-    public class CustomerAngryBubbleBase : BubbleBase
+    public class CustomerHappyBubble : BubbleBase
     {
         public override void Init(float time) => Destroy(gameObject, time);
     }

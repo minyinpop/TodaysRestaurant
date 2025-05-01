@@ -33,5 +33,7 @@ namespace Database.Restaurant.Menu
             Dish = null;
             Portion = 0;
         }
+        
+        public bool CheckDishExist() => !Lock && Dish is not null;
     }
 }

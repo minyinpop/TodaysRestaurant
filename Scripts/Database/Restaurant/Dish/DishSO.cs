@@ -10,11 +10,7 @@ namespace Database.Restaurant.Dish
         [field: SerializeField] public Sprite Sprite { get; private set; }
 
         [field: Header("料理烹飪設定")]
-        [field: SerializeField] public DishEnum DishType { get; private set; }
-        public enum DishEnum
-        {
-            Stockpot,
-        }
+        [field: SerializeField] public CookingUtensil CookingUtensil { get; private set; }
         
         [field: Header("料理基礎設定")]
         [field: SerializeField] public int Portion { get; private set; }

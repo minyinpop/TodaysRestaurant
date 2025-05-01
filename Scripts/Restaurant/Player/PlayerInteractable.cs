@@ -19,22 +19,28 @@ namespace Restaurant.Player
         {
             Input.Player.Interact.started += Interact;
             
-            KitchenwareManager.PlayerEnter += AddInteractable;
-            KitchenwareManager.PlayerLeave += RemoveInteractable;
+            IPlayerInteractable.PlayerEnterEvent += AddInteractable;
+            IPlayerInteractable.PlayerLeaveEvent += RemoveInteractable;
         }
         
         private void OnDisable()
         {
             Input.Player.Interact.started -= Interact;
             
-            KitchenwareManager.PlayerEnter -= AddInteractable;
-            KitchenwareManager.PlayerLeave -= RemoveInteractable;
+            IPlayerInteractable.PlayerEnterEvent -= AddInteractable;
+            IPlayerInteractable.PlayerLeaveEvent -= RemoveInteractable;
         }
 
         private void AddInteractable(IPlayerInteractable interactable) => InteractableList.Add(interactable);
 
-        private void RemoveInteractable(KitchenwareManager interactable) => InteractableList.Remove(interactable);
+        private void RemoveInteractable(IPlayerInteractable interactable) => InteractableList.Remove(interactable);
 
-        private void Interact(InputAction.CallbackContext context) => InteractableList[0]?.Interact();
+        private void Interact(InputAction.CallbackContext context)
+        {
+            if (InteractableList.Count <= 0)
+                return;
+            
+            InteractableList[0]?.Interact();
+        }
     }
 }

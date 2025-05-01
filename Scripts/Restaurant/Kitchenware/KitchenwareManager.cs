@@ -1,11 +1,10 @@
-using System;
 using Interface;
 using Restaurant.Kitchenware.Cook_Menu;
 using UnityEngine;
 
 namespace Restaurant.Kitchenware
 {
-    public class KitchenwareManager : MonoBehaviour, IPlayerInteractable
+    public class KitchenwareManager : IPlayerInteractable
     {
         [field: Header("烹飪料理選擇選單的生成位置")]
         [field: SerializeField] private Transform CookMenuParent { get; set; }
@@ -13,16 +12,16 @@ namespace Restaurant.Kitchenware
         [field: Header("烹飪料理選擇選單的預製件")]
         [field: SerializeField] private GameObject CookMenuPrefab { get; set; }
         private GameObject CookMenu { get; set; }
-
-        public static event Action<KitchenwareManager> PlayerEnter;
-        public static event Action<KitchenwareManager> PlayerLeave;
+        
+        [field: Header("家具的種類")]
+        [field: SerializeField] private CookingUtensil CookingUtensil { get; set; }
 
         private void OnTriggerEnter(Collider other)
         {
             if (!other.CompareTag("Player"))
                 return;
             
-            PlayerEnter?.Invoke(this);
+            PlayerEnter(this);
         }
 
         private void OnTriggerExit(Collider other)
@@ -30,15 +29,15 @@ namespace Restaurant.Kitchenware
             if (!other.CompareTag("Player"))
                 return;
             
-            PlayerLeave?.Invoke(this);
+            PlayerLeave(this);
         }
 
-        public void Interact()
+        public override void Interact()
         {
             if (CookMenu is null)
             {
                 CookMenu = Instantiate(CookMenuPrefab, CookMenuParent);
-                CookMenu.GetComponent<CookMenuController>().Init();
+                CookMenu.GetComponent<CookMenu>().Init(CookingUtensil);
             }
             else
             {

@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace Restaurant.Customer.Bubble.Category
 {
-    public class CustomerOrderBubbleBase : BubbleBase
+    public class CustomerOrderBubble : BubbleBase
     {
         [field: Header("自身的組件")]
         [field: SerializeField] private Button Button { get; set; }

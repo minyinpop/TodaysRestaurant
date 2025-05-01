@@ -24,6 +24,12 @@ namespace Restaurant.Player
 
         private void FixedUpdate()
         {
+            if (!PlayerAttribute.MoveAttribute.CanMove)
+            {
+                Rig.linearVelocity = Vector3.zero;
+                return;
+            }
+            
             var x = MoveDir.x * PlayerAttribute.MoveAttribute.MoveSpeed * Time.fixedDeltaTime;
             var y = Rig.linearVelocity.y;
             var z = MoveDir.z * PlayerAttribute.MoveAttribute.MoveSpeed * Time.fixedDeltaTime;
