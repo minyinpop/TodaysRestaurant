@@ -24,6 +24,10 @@ namespace Database.Restaurant.Menu
                 return false;
             
             Portion -= 1;
+            
+            if (Portion <= 0)
+                ClearData();
+            
             return true;
         }
 

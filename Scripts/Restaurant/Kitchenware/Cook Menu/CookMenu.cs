@@ -1,7 +1,10 @@
+using System;
 using System.Collections.Generic;
+using Database.Restaurant.Dish;
 using Database.Restaurant.Menu;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 namespace Restaurant.Kitchenware.Cook_Menu
 {
@@ -21,10 +24,19 @@ namespace Restaurant.Kitchenware.Cook_Menu
         [field: SerializeField] private Button CraftButton { get; set; }
         [field: SerializeField] private Button CloseButton { get; set; }
         
+        private KitchenwareManager KitchenwareManager { get; set; }
+        
         private CookingUtensil CookingUtensil { get; set; }
 
-        public void Init(CookingUtensil utensil)
+        public event Action<DishSO> OnStickyNoteClickEvent;
+        
+        private void OnEnable() => StickyNote.OnClickEvent += OnStickyNoteClick;
+        
+        private void OnDisable() => StickyNote.OnClickEvent -= OnStickyNoteClick;
+
+        public void Init(KitchenwareManager kitchenware, CookingUtensil utensil)
         {
+            KitchenwareManager = kitchenware;
             CookingUtensil = utensil;
 
             foreach (var todayDish in TodayDishes)
@@ -43,6 +55,11 @@ namespace Restaurant.Kitchenware.Cook_Menu
                     StickyNotes.Add(stickyNote);
                 }
             }
+        }
+
+        private void OnStickyNoteClick(DishSO selectDish)
+        {
+            OnStickyNoteClickEvent?.Invoke(selectDish);
         }
     }
 }

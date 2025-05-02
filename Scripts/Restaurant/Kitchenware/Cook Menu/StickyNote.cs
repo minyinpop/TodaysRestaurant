@@ -1,4 +1,5 @@
 using System;
+using Database.Restaurant.Dish;
 using Database.Restaurant.Menu;
 using TMPro;
 using UnityEngine;
@@ -15,7 +16,7 @@ namespace Restaurant.Kitchenware.Cook_Menu
         
         private TodayDishSlot TodayDish { get; set; }
 
-        public event Action OnClickEvent;
+        public static event Action<DishSO> OnClickEvent;
         
         private void OnEnable() => Button.onClick.AddListener(OnClick);
         
@@ -31,7 +32,8 @@ namespace Restaurant.Kitchenware.Cook_Menu
 
         private void OnClick()
         {
-            // TODO 當便條紙被按下時所發生的事情
+            TodayDish.TakeDish();
+            OnClickEvent?.Invoke(TodayDish.Dish);
         }
     }
 }
