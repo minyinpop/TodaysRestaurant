@@ -18,6 +18,10 @@
 
 > **額外插件**
 > 1. **Dialogue System**
+> 2. **Spine For Unity**
+> 3. **Utage 4**
+> 4. **RealToon**
+> 5. **Rainbow Folders**
 
 > [!IMPORTANT]
 > **請先安裝好官方插件，額外插件已經附在 Assets 了。**
