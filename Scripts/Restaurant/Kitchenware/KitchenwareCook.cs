@@ -1,3 +1,6 @@
+using System;
+using System.Collections;
+using Restaurant.Kitchenware.Bubble;
 using UnityEngine;
 
 namespace Restaurant.Kitchenware
@@ -11,10 +14,66 @@ namespace Restaurant.Kitchenware
         [field: SerializeField] private GameObject EmptyBubblePrefab { get; set; }
         
         private GameObject CurrentBubble { get; set; }
+        private BubbleBase CurrentBubbleScript { get; set; }
+        private bool IsBubbleClick { get; set; }
+        
+        private IEnumerator MainCoroutine { get; set; }
+        private IEnumerator BubbleCoroutine { get; set; }
+        
+        private event Action OnBubbleClickEvent;
 
         private void Start()
         {
-            CurrentBubble = Instantiate(EmptyBubblePrefab, BubbleParent);
+            MainCoroutine = MainProcess();
+            StartCoroutine(MainCoroutine);
         }
+
+        private void OnDisable()
+        {
+            if (MainCoroutine is not null)
+            {
+                StopCoroutine(MainCoroutine);
+                MainCoroutine = null;
+            }
+            
+            if (BubbleCoroutine is not null)
+            {
+                StopCoroutine(BubbleCoroutine);
+                BubbleCoroutine = null;
+            }
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (!other.CompareTag("Player"))
+                return;
+
+            CurrentBubbleScript.PlayerEnter();
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            if (!other.CompareTag("Player"))
+                return;
+
+            CurrentBubbleScript.PlayerLeave();
+        }
+
+        private IEnumerator MainProcess()
+        {
+            BubbleCoroutine = InitEmptyBubble();
+            yield return BubbleCoroutine;
+        }
+
+        private IEnumerator InitEmptyBubble()
+        {
+            CurrentBubble = Instantiate(EmptyBubblePrefab, BubbleParent);
+            CurrentBubbleScript = CurrentBubble.GetComponent<BubbleBase>();
+            
+            yield return new WaitUntil(() => IsBubbleClick);
+            IsBubbleClick = false;
+        }
+        
+        private void OnBubbleClick() => IsBubbleClick = true;
     }
 }

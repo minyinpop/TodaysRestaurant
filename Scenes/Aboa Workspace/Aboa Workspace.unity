@@ -687,6 +687,7 @@ GameObject:
   m_Component:
   - component: {fileID: 290976030}
   - component: {fileID: 290976032}
+  - component: {fileID: 290976034}
   - component: {fileID: 290976033}
   - component: {fileID: 290976029}
   - component: {fileID: 290976028}
@@ -822,9 +823,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62c45c75d71141dbb6da3de3c1cc4d70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <CookMenuParent>k__BackingField: {fileID: 2046494281}
-  <CookMenuPrefab>k__BackingField: {fileID: 4937348591898514264, guid: 0a39d52ef905cde45ae7bc268c0068bf, type: 3}
-  <CookingUtensil>k__BackingField: 0
 --- !u!114 &290976033
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -839,6 +837,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <BubbleParent>k__BackingField: {fileID: 883692284}
   <EmptyBubblePrefab>k__BackingField: {fileID: 2008206380833430226, guid: f1815a08fde11d34bb4f8f8432dd7309, type: 3}
+--- !u!114 &290976034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 290976026}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07cb369728034c9ba785fe607e663016, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <UIParent>k__BackingField: {fileID: 2046494281}
+  <MaskPrefab>k__BackingField: {fileID: 3979272910636148122, guid: a94ee0b46e615ca46b527ee6cf21dc42, type: 3}
+  <CookMenuPrefab>k__BackingField: {fileID: 5307369966622011624, guid: 0a39d52ef905cde45ae7bc268c0068bf, type: 3}
+  <CookingUtensil>k__BackingField: 0
 --- !u!1 &295388591
 GameObject:
   m_ObjectHideFlags: 0

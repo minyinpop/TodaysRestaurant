@@ -42,6 +42,8 @@ namespace Restaurant.Menu
 
         private void OnEnable()
         {
+            Time.timeScale = 0;
+            
             MenuController.OnOpenMenuButtonClickEvent += Init;
             UnlockDishSlot.OnButtonClickEvent += OnUnlockDishSlotClick;
             
@@ -53,6 +55,8 @@ namespace Restaurant.Menu
         
         private void OnDisable()
         {
+            Time.timeScale = 1;
+            
             MenuController.OnOpenMenuButtonClickEvent -= Init;
             UnlockDishSlot.OnButtonClickEvent -= OnUnlockDishSlotClick;
             

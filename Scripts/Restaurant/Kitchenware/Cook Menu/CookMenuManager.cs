@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using Database.Restaurant.Dish;
 using Database.Restaurant.Menu;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,7 +6,7 @@ using Random = UnityEngine.Random;
 
 namespace Restaurant.Kitchenware.Cook_Menu
 {
-    public class CookMenu : MonoBehaviour
+    public class CookMenuManager : MonoBehaviour
     {
         [field: Header("今日販售的料理的資料")]
         [field: SerializeField] private List<TodayDishSO> TodayDishes { get; set; }
@@ -18,7 +16,6 @@ namespace Restaurant.Kitchenware.Cook_Menu
         
         [field: Header("便利貼的預製件")]
         [field: SerializeField] private List<GameObject> StickyNotePrefabs { get; set; }
-        private List<GameObject> StickyNotes { get; set; } = new();
         
         [field: Header("自身組件")]
         [field: SerializeField] private Button CraftButton { get; set; }
@@ -27,12 +24,6 @@ namespace Restaurant.Kitchenware.Cook_Menu
         private KitchenwareManager KitchenwareManager { get; set; }
         
         private CookingUtensil CookingUtensil { get; set; }
-
-        public event Action<DishSO> OnStickyNoteClickEvent;
-        
-        private void OnEnable() => StickyNote.OnClickEvent += OnStickyNoteClick;
-        
-        private void OnDisable() => StickyNote.OnClickEvent -= OnStickyNoteClick;
 
         public void Init(KitchenwareManager kitchenware, CookingUtensil utensil)
         {
@@ -50,16 +41,9 @@ namespace Restaurant.Kitchenware.Cook_Menu
                         continue;
 
                     var stickyNote = Instantiate(StickyNotePrefabs[Random.Range(0, StickyNotePrefabs.Count)], StickyNoteParent);
-                    stickyNote.GetComponent<StickyNote>().Init(todayDishSlot);
-                    
-                    StickyNotes.Add(stickyNote);
+                    stickyNote.GetComponent<StickyNoteManager>().Init(todayDishSlot);
                 }
             }
-        }
-
-        private void OnStickyNoteClick(DishSO selectDish)
-        {
-            OnStickyNoteClickEvent?.Invoke(selectDish);
         }
     }
 }
