@@ -4,6 +4,7 @@ using UnityEngine;
 namespace Restaurant.Customer
 {
     [RequireComponent(typeof(CustomerController))]
+    [RequireComponent(typeof(CustomerSkin))]
     [RequireComponent(typeof(CustomerAnimator))]
     [RequireComponent(typeof(CustomerOrder))]
     [RequireComponent(typeof(CustomerCheckout))]

@@ -31,8 +31,11 @@ namespace Restaurant.Customer
 
         private void Start()
         {
-            BlinkCoroutine = BlinkProcess();
-            StartCoroutine(BlinkCoroutine);
+            if (Blink is not null)
+            {
+                BlinkCoroutine = BlinkProcess();
+                StartCoroutine(BlinkCoroutine);
+            }
         }
 
         private void OnEnable()

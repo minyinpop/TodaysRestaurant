@@ -1,38 +1,61 @@
-using Interface;
+using Database.Restaurant.Dish;
+using Restaurant.Kitchenware.Cook_Menu;
 using UnityEngine;
 
 namespace Restaurant.Kitchenware
 {
     [RequireComponent(typeof(KitchenwareInteraction))]
     [RequireComponent(typeof(KitchenwareCook))]
-    public class KitchenwareManager : IPlayerInteractable
+    public class KitchenwareManager : MonoBehaviour
     {
-        private KitchenwareInteraction KitchenwareInteraction { get; set; }
-        private KitchenwareCook KitchenwareCook { get; set; }
+        [field: Header("UI 物件的生成位置")]
+        [field: SerializeField] private Transform UIParent { get; set; }
         
-        private void Awake()
+        [field: Header("介面遮罩的預製件")]
+        [field: SerializeField] private GameObject MaskPrefab { get; set; }
+        private GameObject Mask { get; set; }
+        
+        [field: Header("選擇料理烹飪的選單")]
+        [field: SerializeField] private GameObject CookMenuPrefab { get; set; }
+        private GameObject CookMenu { get; set; }
+        
+        [field: Header("廚具種類的資料庫")]
+        [field: SerializeField] private CookingUtensil CookingUtensil { get; set; }
+
+        private void OnEnable() => StickyNoteManager.OnClickEvent += OnStickyNoteClick;
+        
+        private void OnDisable() => StickyNoteManager.OnClickEvent -= OnStickyNoteClick;
+
+        public void Interact()
         {
-            KitchenwareInteraction = GetComponent<KitchenwareInteraction>();
-            KitchenwareCook = GetComponent<KitchenwareCook>();
+            if (CookMenu is null)
+                OpenMenu();
+            else
+                CloseMenu();
         }
         
-        private void OnTriggerEnter(Collider other)
+        private void OpenMenu()
         {
-            if (!other.CompareTag("Player"))
-                return;
-            
-            PlayerEnter(this);
+            Mask = Instantiate(MaskPrefab, UIParent);
+            CookMenu = Instantiate(CookMenuPrefab, UIParent);
+            CookMenu.GetComponent<CookMenuManager>().Init(this, CookingUtensil);
         }
 
-        private void OnTriggerExit(Collider other)
+        public void CloseMenu()
         {
-            if (!other.CompareTag("Player"))
+            if (CookMenu is null)
                 return;
             
-            PlayerLeave(this);
-            KitchenwareInteraction.CloseMenu();
+            Destroy(Mask);
+            Mask = null;
+            
+            Destroy(CookMenu);
+            CookMenu = null;
         }
 
-        public override void Interact() => KitchenwareInteraction.Interact();
+        private void OnStickyNoteClick(DishSO selectDish)
+        {
+            Debug.Log(selectDish.Name);
+        }
     }
 }
