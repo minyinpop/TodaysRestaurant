@@ -44,7 +44,7 @@ namespace Utage
         public void SetCommandArg(AdvCommand command)
         {
             // 換 skin
-            string skinName = command.ParseCellOptional<string>("Arg7", "");
+            string skinName = command.ParseCellOptional<string>(AdvColumnName.Arg7, "");
             Debug.Log("Arg7 (skinName) = " + skinName);
 
             if (!string.IsNullOrEmpty(skinName))

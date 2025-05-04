@@ -21,7 +21,13 @@ namespace Restaurant.Kitchenware
         
         [field: Header("廚具種類的資料庫")]
         [field: SerializeField] private CookingUtensil CookingUtensil { get; set; }
-
+        
+        private KitchenwareCook KitchenwareCook { get; set; }
+        
+        private DishSO CurrentCookDish { get; set; }
+        
+        private void Awake() => KitchenwareCook = GetComponent<KitchenwareCook>();
+        
         private void OnEnable() => StickyNoteManager.OnClickEvent += OnStickyNoteClick;
         
         private void OnDisable() => StickyNoteManager.OnClickEvent -= OnStickyNoteClick;
@@ -40,7 +46,7 @@ namespace Restaurant.Kitchenware
             CookMenu = Instantiate(CookMenuPrefab, UIParent);
             CookMenu.GetComponent<CookMenuManager>().Init(this, CookingUtensil);
         }
-
+        
         public void CloseMenu()
         {
             if (CookMenu is null)
@@ -52,10 +58,14 @@ namespace Restaurant.Kitchenware
             Destroy(CookMenu);
             CookMenu = null;
         }
-
+        
         private void OnStickyNoteClick(DishSO selectDish)
         {
-            Debug.Log(selectDish.Name);
+            CurrentCookDish = selectDish;
+            CloseMenu();
+            
+            KitchenwareCook.Init(selectDish);
+            KitchenwareCook.OnBubbleFinish();
         }
     }
 }

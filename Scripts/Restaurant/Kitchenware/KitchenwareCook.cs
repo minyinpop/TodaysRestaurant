@@ -1,5 +1,5 @@
-using System;
 using System.Collections;
+using Database.Restaurant.Dish;
 using Restaurant.Kitchenware.Bubble;
 using UnityEngine;
 
@@ -15,13 +15,13 @@ namespace Restaurant.Kitchenware
         
         private GameObject CurrentBubble { get; set; }
         private BubbleBase CurrentBubbleScript { get; set; }
-        private bool IsBubbleClick { get; set; }
+        private bool IsBubbleFinish { get; set; }
         
         private IEnumerator MainCoroutine { get; set; }
-        private IEnumerator BubbleCoroutine { get; set; }
+        private IEnumerator CurrentCoroutine { get; set; }
         
-        private event Action OnBubbleClickEvent;
-
+        private DishSO CurrentCookDish { get; set; }
+        
         private void Start()
         {
             MainCoroutine = MainProcess();
@@ -36,10 +36,10 @@ namespace Restaurant.Kitchenware
                 MainCoroutine = null;
             }
             
-            if (BubbleCoroutine is not null)
+            if (CurrentCoroutine is not null)
             {
-                StopCoroutine(BubbleCoroutine);
-                BubbleCoroutine = null;
+                StopCoroutine(CurrentCoroutine);
+                CurrentCoroutine = null;
             }
         }
 
@@ -59,21 +59,40 @@ namespace Restaurant.Kitchenware
             CurrentBubbleScript.PlayerLeave();
         }
 
+        public void Init(DishSO selectDish) => CurrentCookDish = selectDish;
+
         private IEnumerator MainProcess()
         {
-            BubbleCoroutine = InitEmptyBubble();
-            yield return BubbleCoroutine;
+            CurrentCoroutine = EmptyProcess();
+            yield return CurrentCoroutine;
+
+            CurrentCoroutine = CookProcess();
+            yield return CurrentCoroutine;
         }
 
-        private IEnumerator InitEmptyBubble()
+        private IEnumerator EmptyProcess()
         {
             CurrentBubble = Instantiate(EmptyBubblePrefab, BubbleParent);
             CurrentBubbleScript = CurrentBubble.GetComponent<BubbleBase>();
             
-            yield return new WaitUntil(() => IsBubbleClick);
-            IsBubbleClick = false;
+            yield return new WaitUntil(() => IsBubbleFinish);
+            IsBubbleFinish = false;
+            Destroy(CurrentBubble);
+        }
+
+        private IEnumerator CookProcess()
+        {
+            var currentTime = CurrentCookDish.CookTime;
+            
+            while (currentTime > CurrentCookDish.CookTime / 2)
+            {
+                currentTime -= Time.deltaTime;
+                yield return null;
+            }
+            
+            yield return new WaitUntil(() => IsBubbleFinish);
         }
         
-        private void OnBubbleClick() => IsBubbleClick = true;
+        public void OnBubbleFinish() => IsBubbleFinish = true;
     }
 }
