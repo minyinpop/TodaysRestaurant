@@ -35,6 +35,7 @@ namespace Utage
 		Arg4,           //引数4
 		Arg5,           //引数5
 		Arg6,           //引数6
+		Arg7,
 
 		WindowType,     //メッセージウィンドウのタイプ
 		PageCtrl,       //ページコントローラー

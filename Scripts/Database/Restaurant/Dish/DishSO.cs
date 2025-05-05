@@ -15,7 +15,5 @@ namespace Database.Restaurant.Dish
         [field: Header("料理基礎設定")]
         [field: SerializeField] public int Portion { get; private set; }
         [field: SerializeField] public float CookTime { get; private set; }
-        
-        
     }
 }
