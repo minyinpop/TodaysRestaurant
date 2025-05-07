@@ -2030,6 +2030,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1607072935}
+  - component: {fileID: 1607072940}
   - component: {fileID: 1607072939}
   - component: {fileID: 1607072934}
   - component: {fileID: 1607072938}
@@ -2264,11 +2265,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 1607072933}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce4b45073cb944fb8673f07cbb297e39, type: 3}
+  m_Script: {fileID: 11500000, guid: 867ec2a8a94d45508dc197dc0f3b6995, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Spoon>k__BackingField: {fileID: 0}
-  <ProgressBar>k__BackingField: {fileID: 0}
+  <DraggableObjectTag>k__BackingField: Mini Game - Handle
+--- !u!114 &1607072940
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1607072933}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8adc5a6af2b47d4acea023ee9c2e2e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1681118348
 GameObject:
   m_ObjectHideFlags: 0
@@ -2278,11 +2290,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1681118349}
-  - component: {fileID: 1681118353}
   - component: {fileID: 1681118350}
   - component: {fileID: 1681118352}
   - component: {fileID: 1681118351}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Spoon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2298,7 +2309,7 @@ Transform:
   m_GameObject: {fileID: 1681118348}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.05, y: 0.8, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2465,19 +2476,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 0
---- !u!114 &1681118353
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1681118348}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83b92c73e55644d6a685dff74e98ca8a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <StirringArea>k__BackingField: {fileID: 0}
 --- !u!1 &1728068374
 GameObject:
   m_ObjectHideFlags: 0
@@ -2816,7 +2814,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2050850514}
-  - component: {fileID: 2050850518}
   - component: {fileID: 2050850516}
   - component: {fileID: 2050850515}
   - component: {fileID: 2050850517}
@@ -2937,18 +2934,6 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &2050850518
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2050850513}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74619cc4ae0d4a178dca1320ce8c20b7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2061507679
 GameObject:
   m_ObjectHideFlags: 0

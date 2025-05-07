@@ -189,7 +189,7 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
                     ""id"": ""f20ef2e5-4d1a-4673-8521-724e9249ef22"",
                     ""expectedControlType"": """",
                     ""processors"": """",
-                    ""interactions"": """",
+                    ""interactions"": ""Press(behavior=2)"",
                     ""initialStateCheck"": false
                 },
                 {
