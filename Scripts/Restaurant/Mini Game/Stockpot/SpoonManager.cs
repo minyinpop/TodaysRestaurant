@@ -18,7 +18,6 @@ namespace Restaurant.Mini_Game.Stockpot
         
         private Camera MainCamera { get; set; }
         
-        // For Stirring Only
         private IEnumerator CurrentCoroutine { get; set; }
         private bool IsStirring { get; set; }
         private Vector2 LastMousePos { get; set; }
@@ -108,7 +107,6 @@ namespace Restaurant.Mini_Game.Stockpot
                     {
                         // TODO 攪拌成功，通知 Progress Bar 增加。
                         
-                        Debug.Log("攪拌成功！");
                         AddProgressBarValue?.Invoke();
                         LastMousePos = currentPos;
                     }

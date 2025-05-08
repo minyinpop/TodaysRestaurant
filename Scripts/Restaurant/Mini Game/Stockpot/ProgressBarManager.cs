@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,20 +10,48 @@ namespace Restaurant.Mini_Game.Stockpot
         [field: Header("進度條的遊戲物件")]
         [field: SerializeField] private Slider ProgressBar { get; set; }
         
+        private IEnumerator MainCoroutine { get; set; }
         private float TargetValue { get; set; }
+        public static event Action FinishStirring;
 
-        private void Update()
+        private void OnEnable()
         {
-            ProgressBar.value = TargetValue;
+            SpoonManager.AddProgressBarValue += AddValue;
+            
+            MainCoroutine = MainProcess();
+            StartCoroutine(MainCoroutine);
         }
         
-        private void OnEnable() => SpoonManager.AddProgressBarValue += AddValue;
-        
-        private void OnDisable() => SpoonManager.AddProgressBarValue -= AddValue;
+        private void OnDisable()
+        {
+            SpoonManager.AddProgressBarValue -= AddValue;
+            
+            if (MainCoroutine is not null)
+            {
+                StopCoroutine(MainCoroutine);
+                MainCoroutine = null;
+            }
+        }
 
         private void AddValue()
         {
-            TargetValue += 0.01f;
+            TargetValue += .5f;
+        }
+
+        private IEnumerator MainProcess()
+        {
+            while (ProgressBar.value < ProgressBar.maxValue)
+            {
+                ProgressBar.value = Mathf.Lerp(ProgressBar.value, TargetValue, Mathf.Abs(TargetValue - ProgressBar.value) * 1 * Time.deltaTime);
+                yield return null;
+            }
+
+            FinishStirring?.Invoke();
+            Debug.Log("Finish Stirring");
+
+            yield return new WaitForSeconds(1);
+
+            Destroy(gameObject);
         }
     }
 }
