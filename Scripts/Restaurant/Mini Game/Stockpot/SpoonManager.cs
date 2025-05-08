@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -5,19 +6,23 @@ using InputSystem = Input.InputSystem;
 
 namespace Restaurant.Mini_Game.Stockpot
 {
-    public class DragManager : MonoBehaviour
+    public class SpoonManager : MonoBehaviour
     {
-        [field: Header("可以被拖曳的物件標籤")]
-        [field: SerializeField] private string DraggableObjectTag { get; set; }
+        [field: Header("湯勺的圖層名稱")]
+        [field: SerializeField] private LayerMask SpoonLayer { get; set; }
+        private GameObject Spoon { get; set; }
+        private Rigidbody2D SpoonRig { get; set; }
         
         private InputManager Input { get; set; }
         private Vector2 MousePos => Input.Mouse.MousePos.ReadValue<Vector2>();
         
         private Camera MainCamera { get; set; }
         
-        private GameObject DraggedObject { get; set; }
-        
+        // For Stirring Only
         private IEnumerator CurrentCoroutine { get; set; }
+        private bool IsStirring { get; set; }
+        private Vector2 LastMousePos { get; set; }
+        public static event Action AddProgressBarValue;
 
         private void Awake()
         {
@@ -29,12 +34,18 @@ namespace Restaurant.Mini_Game.Stockpot
         {
             Input.Mouse.LeftClick.started += StartDetect;
             Input.Mouse.LeftClick.canceled += StopDetect;
+
+            StirringAreaManager.DraggableObjectEnter += OnEnterStirringArea;
+            StirringAreaManager.DraggableObjectExit += OnLeaveStirringArea;
         }
 
         private void OnDisable()
         {
             Input.Mouse.LeftClick.started -= StartDetect;
             Input.Mouse.LeftClick.canceled -= StopDetect;
+            
+            StirringAreaManager.DraggableObjectEnter -= OnEnterStirringArea;
+            StirringAreaManager.DraggableObjectExit -= OnLeaveStirringArea;
             
             if (CurrentCoroutine is not null)
             {
@@ -52,12 +63,13 @@ namespace Restaurant.Mini_Game.Stockpot
                 return;
             
             var hitPoint = ray.GetPoint(enter);
-            var hit = Physics2D.Raycast(hitPoint, Vector2.zero, Mathf.Infinity, LayerMask.GetMask(DraggableObjectTag));
+            var hit = Physics2D.Raycast(hitPoint, Vector2.zero, Mathf.Infinity, SpoonLayer.value);
 
             if (hit.collider is null)
                 return;
             
-            DraggedObject = hit.collider.gameObject;
+            Spoon = hit.collider.gameObject;
+            SpoonRig = Spoon.GetComponent<Rigidbody2D>();
             
             CurrentCoroutine = DragProcess();
             StartCoroutine(CurrentCoroutine);
@@ -71,7 +83,7 @@ namespace Restaurant.Mini_Game.Stockpot
                 CurrentCoroutine = null;
             }
         }
-
+        
         private IEnumerator DragProcess()
         {
             var plane = new Plane(Vector3.forward, Vector3.zero);
@@ -80,14 +92,34 @@ namespace Restaurant.Mini_Game.Stockpot
             {
                 var ray = MainCamera.ScreenPointToRay(MousePos);
 
-                if (plane.Raycast(ray, out var enter))
-                {
-                    var hitPoint = ray.GetPoint(enter);
-                    DraggedObject.transform.position = hitPoint;
-                }
+                plane.Raycast(ray, out var enter);
+                
+                var hitPoint = ray.GetPoint(enter);
+                
+                Spoon.transform.position = hitPoint;
+                SpoonRig.linearVelocity = Vector2.zero;
 
+                if (IsStirring)
+                {
+                    var currentPos = hitPoint;
+                    var distance = Vector2.Distance(LastMousePos, currentPos);
+
+                    if (distance > .1f)
+                    {
+                        // TODO 攪拌成功，通知 Progress Bar 增加。
+                        
+                        Debug.Log("攪拌成功！");
+                        AddProgressBarValue?.Invoke();
+                        LastMousePos = currentPos;
+                    }
+                }
+                
                 yield return null;
             }
         }
+
+        private void OnEnterStirringArea() => IsStirring = true;
+        
+        private void OnLeaveStirringArea() => IsStirring = false;
     }
 }

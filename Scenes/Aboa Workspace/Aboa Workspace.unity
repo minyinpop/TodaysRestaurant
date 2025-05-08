@@ -1594,6 +1594,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1401564755}
+  - component: {fileID: 1401564757}
   - component: {fileID: 1401564756}
   m_Layer: 0
   m_Name: Stirring Area
@@ -1663,6 +1664,21 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 4, y: 2}
   m_EdgeRadius: 0
+--- !u!114 &1401564757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1401564754}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2852ad0f0674dca94e9bdd9d42ad67e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <DraggableLayer>k__BackingField:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!1 &1445240588
 GameObject:
   m_ObjectHideFlags: 0
@@ -2030,9 +2046,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1607072935}
-  - component: {fileID: 1607072940}
+  - component: {fileID: 1607072943}
   - component: {fileID: 1607072939}
+  - component: {fileID: 1607072942}
   - component: {fileID: 1607072934}
+  - component: {fileID: 1607072941}
   - component: {fileID: 1607072938}
   - component: {fileID: 1607072937}
   - component: {fileID: 1607072936}
@@ -2268,8 +2286,78 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 867ec2a8a94d45508dc197dc0f3b6995, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <DraggableObjectTag>k__BackingField: Mini Game - Handle
---- !u!114 &1607072940
+  <SpoonLayer>k__BackingField:
+    serializedVersion: 2
+    m_Bits: 64
+--- !u!331 &1607072941
+SpriteMask:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1607072933}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10758, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 21300000, guid: dcbbc24387b7a9645ac054504f2650dc, type: 3}
+  m_MaskAlphaCutoff: 0.2
+  m_FrontSortingLayerID: 0
+  m_BackSortingLayerID: 0
+  m_FrontSortingLayer: 0
+  m_BackSortingLayer: 0
+  m_FrontSortingOrder: 0
+  m_BackSortingOrder: 0
+  m_IsCustomRangeActive: 0
+  m_SpriteSortPoint: 0
+  m_MaskSource: 0
+--- !u!114 &1607072942
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1607072933}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 994a22344be9491b9ea951ea94f9820a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <ProgressBar>k__BackingField: {fileID: 2050850517}
+--- !u!114 &1607072943
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2309,7 +2397,7 @@ Transform:
   m_GameObject: {fileID: 1681118348}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -3.08, y: -0.11, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2368,7 +2456,7 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
+  m_MaskInteraction: 1
   m_SpriteSortPoint: 0
 --- !u!60 &1681118351
 PolygonCollider2D:
