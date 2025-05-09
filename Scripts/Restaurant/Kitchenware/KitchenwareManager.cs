@@ -1,4 +1,3 @@
-using System;
 using Database.Restaurant.Dish;
 using Restaurant.Kitchenware.Cook_Menu;
 using UnityEngine;
@@ -7,6 +6,7 @@ namespace Restaurant.Kitchenware
 {
     [RequireComponent(typeof(KitchenwareInteraction))]
     [RequireComponent(typeof(KitchenwareCook))]
+    [RequireComponent(typeof(KitchenwareGameManager))]
     public class KitchenwareManager : MonoBehaviour
     {
         [field: Header("UI 物件的生成位置")]
@@ -23,9 +23,11 @@ namespace Restaurant.Kitchenware
         [field: Header("廚具種類的資料庫")]
         [field: SerializeField] private CookingUtensil CookingUtensil { get; set; }
         
-        private KitchenwareCook KitchenwareCook { get; set; }
-        
+        [field: Header("烤焦料理的資料")]
+        [field: SerializeField] private DishSO BurnDish { get; set; }
         private DishSO CurrentCookDish { get; set; }
+        
+        private KitchenwareCook KitchenwareCook { get; set; }
         
         private void Awake() => KitchenwareCook = GetComponent<KitchenwareCook>();
 
@@ -65,6 +67,12 @@ namespace Restaurant.Kitchenware
             
             CurrentCookDish = chooseDish;
             KitchenwareCook.StartCook(chooseDish);
+        }
+
+        public void DishBurn()
+        {
+            CurrentCookDish = BurnDish;
+            KitchenwareCook.DishBurn();
         }
     }
 }

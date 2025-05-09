@@ -528,6 +528,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 883692284}
+  - {fileID: 1089340003}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &290976031
@@ -567,6 +568,7 @@ MonoBehaviour:
   <MaskPrefab>k__BackingField: {fileID: 3979272910636148122, guid: a94ee0b46e615ca46b527ee6cf21dc42, type: 3}
   <CookMenuPrefab>k__BackingField: {fileID: 5307369966622011624, guid: 0a39d52ef905cde45ae7bc268c0068bf, type: 3}
   <CookingUtensil>k__BackingField: 0
+  <BurnDish>k__BackingField: {fileID: 0}
 --- !u!114 &290976033
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -581,6 +583,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <BubbleParent>k__BackingField: {fileID: 883692284}
   <EmptyBubblePrefab>k__BackingField: {fileID: 2008206380833430226, guid: f1815a08fde11d34bb4f8f8432dd7309, type: 3}
+  <CookBubblePrefab>k__BackingField: {fileID: 2847076010330079162, guid: 19c5aaee93c9a1b41af11df978149455, type: 3}
+  <BurnBubblePrefab>k__BackingField: {fileID: 2270411760180095779, guid: 9f9b82e547b26ed418d7bfee3e871a94, type: 3}
 --- !u!114 &290976034
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1419,6 +1423,37 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1089340002
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1089340003}
+  m_Layer: 0
+  m_Name: Mini Game Anchor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1089340003
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1089340002}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 290976030}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1203287275
 GameObject:

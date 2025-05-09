@@ -1,3 +1,4 @@
+using Database.Restaurant.Dish;
 using UnityEngine;
 
 namespace Restaurant.Kitchenware.Bubble
@@ -8,8 +9,12 @@ namespace Restaurant.Kitchenware.Bubble
         
         public virtual void PlayerLeave() {}
         
+        public virtual void OnClick() { }
+        
         public virtual void Init(KitchenwareManager manager) { }
 
-        public virtual void OnClick() { }
+        public virtual void Init(KitchenwareManager manager, DishSO currentCookDish) { }
+        
+        public virtual void Init(KitchenwareCook cook) { }
     }
 }

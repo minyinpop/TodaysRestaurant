@@ -13,6 +13,8 @@ namespace Restaurant.Kitchenware.Bubble.Category
         private void OnEnable() => Button.onClick.AddListener(OnClick);
         
         private void OnDisable() => Button.onClick.RemoveListener(OnClick);
+        
+        public override void OnClick() => KitchenwareManager.OpenMenu();
 
         public override void PlayerEnter() => Button.interactable = true;
         
@@ -20,6 +22,5 @@ namespace Restaurant.Kitchenware.Bubble.Category
         
         public override void Init(KitchenwareManager manager) => KitchenwareManager = manager;
 
-        public override void OnClick() => KitchenwareManager.OpenMenu();
     }
 }
