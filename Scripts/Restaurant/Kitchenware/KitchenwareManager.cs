@@ -1,3 +1,4 @@
+using System;
 using Database.Restaurant.Dish;
 using Restaurant.Kitchenware.Cook_Menu;
 using UnityEngine;
@@ -27,10 +28,6 @@ namespace Restaurant.Kitchenware
         private DishSO CurrentCookDish { get; set; }
         
         private void Awake() => KitchenwareCook = GetComponent<KitchenwareCook>();
-        
-        private void OnEnable() => StickyNoteManager.OnClickEvent += OnStickyNoteClick;
-        
-        private void OnDisable() => StickyNoteManager.OnClickEvent -= OnStickyNoteClick;
 
         public void Interact()
         {
@@ -40,8 +37,11 @@ namespace Restaurant.Kitchenware
                 CloseMenu();
         }
         
-        private void OpenMenu()
+        public void OpenMenu()
         {
+            if (CookMenu is not null)
+                return;
+            
             Mask = Instantiate(MaskPrefab, UIParent);
             CookMenu = Instantiate(CookMenuPrefab, UIParent);
             CookMenu.GetComponent<CookMenuManager>().Init(this, CookingUtensil);
@@ -58,14 +58,13 @@ namespace Restaurant.Kitchenware
             Destroy(CookMenu);
             CookMenu = null;
         }
-        
-        private void OnStickyNoteClick(DishSO selectDish)
+
+        public void ChooseDishAndCook(DishSO chooseDish)
         {
-            CurrentCookDish = selectDish;
             CloseMenu();
             
-            KitchenwareCook.Init(selectDish);
-            KitchenwareCook.OnBubbleFinish();
+            CurrentCookDish = chooseDish;
+            KitchenwareCook.StartCook(chooseDish);
         }
     }
 }

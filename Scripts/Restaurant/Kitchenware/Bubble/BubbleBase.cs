@@ -8,8 +8,8 @@ namespace Restaurant.Kitchenware.Bubble
         
         public virtual void PlayerLeave() {}
         
-        private void OnClick()
-        {
-        }
+        public virtual void Init(KitchenwareManager manager) { }
+
+        public virtual void OnClick() { }
     }
 }

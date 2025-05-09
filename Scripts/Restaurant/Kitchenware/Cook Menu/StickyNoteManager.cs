@@ -14,9 +14,9 @@ namespace Restaurant.Kitchenware.Cook_Menu
         [field: SerializeField] private Image DishImage { get; set; }
         [field: SerializeField] private TextMeshProUGUI DishNameTMP { get; set; }
         
+        public event Action<DishSO> OnClickEvent;
+        
         private TodayDishSlot TodayDish { get; set; }
-
-        public static event Action<DishSO> OnClickEvent;
         
         private void OnEnable() => Button.onClick.AddListener(OnClick);
         

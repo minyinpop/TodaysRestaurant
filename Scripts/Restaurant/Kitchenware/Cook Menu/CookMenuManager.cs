@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Database.Restaurant.Dish;
 using Database.Restaurant.Menu;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,12 +23,19 @@ namespace Restaurant.Kitchenware.Cook_Menu
         [field: SerializeField] private Button CloseButton { get; set; }
         
         private KitchenwareManager KitchenwareManager { get; set; }
-        
         private CookingUtensil CookingUtensil { get; set; }
+        
+        private List<StickyNoteManager> StickyNoteManagers { get; set; } = new();
 
-        public void Init(KitchenwareManager kitchenware, CookingUtensil utensil)
+        private void OnDisable()
         {
-            KitchenwareManager = kitchenware;
+            foreach (var stickyNoteManager in StickyNoteManagers)
+                stickyNoteManager.OnClickEvent -= ChooseDish;
+        }
+
+        public void Init(KitchenwareManager manager,CookingUtensil utensil)
+        {
+            KitchenwareManager = manager;
             CookingUtensil = utensil;
 
             foreach (var todayDish in TodayDishes)
@@ -40,10 +48,15 @@ namespace Restaurant.Kitchenware.Cook_Menu
                     if (todayDishSlot.Dish.CookingUtensil != CookingUtensil)
                         continue;
 
-                    var stickyNote = Instantiate(StickyNotePrefabs[Random.Range(0, StickyNotePrefabs.Count)], StickyNoteParent);
-                    stickyNote.GetComponent<StickyNoteManager>().Init(todayDishSlot);
+                    var stickyNoteManager = Instantiate(StickyNotePrefabs[Random.Range(0, StickyNotePrefabs.Count)], StickyNoteParent).GetComponent<StickyNoteManager>();
+                    StickyNoteManagers.Add(stickyNoteManager);
+                    
+                    stickyNoteManager.Init(todayDishSlot);
+                    stickyNoteManager.OnClickEvent += ChooseDish;
                 }
             }
         }
+
+        private void ChooseDish(DishSO chooseDish) => KitchenwareManager.ChooseDishAndCook(chooseDish);
     }
 }

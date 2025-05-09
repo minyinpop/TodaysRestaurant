@@ -7,9 +7,19 @@ namespace Restaurant.Kitchenware.Bubble.Category
     {
         [field: Header("自身組件")]
         [field: SerializeField] private Button Button { get; set; }
+        
+        private KitchenwareManager KitchenwareManager { get; set; }
+
+        private void OnEnable() => Button.onClick.AddListener(OnClick);
+        
+        private void OnDisable() => Button.onClick.RemoveListener(OnClick);
 
         public override void PlayerEnter() => Button.interactable = true;
         
         public override void PlayerLeave() => Button.interactable = false;
+        
+        public override void Init(KitchenwareManager manager) => KitchenwareManager = manager;
+
+        public override void OnClick() => KitchenwareManager.OpenMenu();
     }
 }

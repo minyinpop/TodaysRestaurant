@@ -13,6 +13,8 @@ namespace Restaurant.Kitchenware
         [field: Header("氣泡的預製件")]
         [field: SerializeField] private GameObject EmptyBubblePrefab { get; set; }
         
+        private KitchenwareManager KitchenwareManager { get; set; }
+        
         private GameObject CurrentBubble { get; set; }
         private BubbleBase CurrentBubbleScript { get; set; }
         private bool IsBubbleFinish { get; set; }
@@ -21,6 +23,8 @@ namespace Restaurant.Kitchenware
         private IEnumerator CurrentCoroutine { get; set; }
         
         private DishSO CurrentCookDish { get; set; }
+
+        private void Awake() => KitchenwareManager = GetComponent<KitchenwareManager>();
         
         private void Start()
         {
@@ -59,25 +63,37 @@ namespace Restaurant.Kitchenware
             CurrentBubbleScript.PlayerLeave();
         }
 
-        public void Init(DishSO selectDish) => CurrentCookDish = selectDish;
+        public void StartCook(DishSO selectDish) => CurrentCookDish = selectDish;
 
         private IEnumerator MainProcess()
         {
-            CurrentCoroutine = EmptyProcess();
-            yield return CurrentCoroutine;
+            while (true)
+            {
+                Debug.Log("Start Main Process");
 
-            CurrentCoroutine = CookProcess();
-            yield return CurrentCoroutine;
+                CurrentCoroutine = EmptyProcess();
+                yield return CurrentCoroutine;
+
+                Debug.Log("Start Cook Process");
+                
+                // TODO 開始撰寫烹飪料理的邏輯
+
+                CurrentCoroutine = CookProcess();
+                yield return CurrentCoroutine;
+            }
         }
 
         private IEnumerator EmptyProcess()
         {
             CurrentBubble = Instantiate(EmptyBubblePrefab, BubbleParent);
             CurrentBubbleScript = CurrentBubble.GetComponent<BubbleBase>();
+            CurrentBubbleScript.Init(KitchenwareManager);
             
-            yield return new WaitUntil(() => IsBubbleFinish);
-            IsBubbleFinish = false;
+            yield return new WaitUntil(() => CurrentCookDish is not null);
             Destroy(CurrentBubble);
+
+            CurrentBubble = null;
+            CurrentBubbleScript = null;
         }
 
         private IEnumerator CookProcess()

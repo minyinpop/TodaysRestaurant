@@ -47,11 +47,6 @@ namespace Restaurant.Mini_Game.Stockpot
             }
 
             FinishStirring?.Invoke();
-            Debug.Log("Finish Stirring");
-
-            yield return new WaitForSeconds(1);
-
-            Destroy(gameObject);
         }
     }
 }

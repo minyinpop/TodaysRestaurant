@@ -105,8 +105,6 @@ namespace Restaurant.Mini_Game.Stockpot
 
                     if (distance > .1f)
                     {
-                        // TODO 攪拌成功，通知 Progress Bar 增加。
-                        
                         AddProgressBarValue?.Invoke();
                         LastMousePos = currentPos;
                     }
