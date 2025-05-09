@@ -1,7 +1,7 @@
 using System;
 
 [Serializable]
-public enum CookingUtensil
+public enum CookUtensil
 {
     Stockpot,
     Others

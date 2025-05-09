@@ -1,78 +1,76 @@
+using System.Collections;
 using Database.Restaurant.Dish;
-using Restaurant.Kitchenware.Cook_Menu;
+using Restaurant.Kitchenware.Bubble;
 using UnityEngine;
 
 namespace Restaurant.Kitchenware
 {
-    [RequireComponent(typeof(KitchenwareInteraction))]
-    [RequireComponent(typeof(KitchenwareCook))]
-    [RequireComponent(typeof(KitchenwareGameManager))]
+    [RequireComponent(typeof(KitchenwareDetector))]
+    [RequireComponent(typeof(KitchenwareCookMenu))]
+    [RequireComponent(typeof(KitchenwareGame))]
     public class KitchenwareManager : MonoBehaviour
     {
-        [field: Header("UI 物件的生成位置")]
-        [field: SerializeField] private Transform UIParent { get; set; }
+        [field: Header("氣泡的生成位置")]
+        [field: SerializeField] private Transform BubbleParent { get; set; }
         
-        [field: Header("介面遮罩的預製件")]
-        [field: SerializeField] private GameObject MaskPrefab { get; set; }
-        private GameObject Mask { get; set; }
+        [field: Header("各類型氣泡的預製件")]
+        [field: SerializeField] private GameObject EmptyBubblePrefab { get; set; }
+        [field: SerializeField] private GameObject CookBubblePrefab { get; set; }
+        [field: SerializeField] private GameObject BurnBubblePrefab { get; set; }
+        private GameObject CurrentBubbleObj { get; set; }
+        public BubbleBase CurrentBubbleBase { get; private set; }
         
-        [field: Header("選擇料理烹飪的選單")]
-        [field: SerializeField] private GameObject CookMenuPrefab { get; set; }
-        private GameObject CookMenu { get; set; }
-        
-        [field: Header("廚具種類的資料庫")]
-        [field: SerializeField] private CookingUtensil CookingUtensil { get; set; }
-        
-        [field: Header("烤焦料理的資料")]
-        [field: SerializeField] private DishSO BurnDish { get; set; }
+        private IEnumerator MainCoroutine { get; set; }
+        private IEnumerator SideCoroutine { get; set; }
+
+        private KitchenwareCookMenu KitchenwareCookMenu { get; set; }
+        private bool IsClickBubble { get; set; }
         private DishSO CurrentCookDish { get; set; }
-        
-        private KitchenwareCook KitchenwareCook { get; set; }
-        
-        private void Awake() => KitchenwareCook = GetComponent<KitchenwareCook>();
 
-        public void Interact()
-        {
-            if (CookMenu is null)
-                OpenMenu();
-            else
-                CloseMenu();
-        }
+        private void Awake() => KitchenwareCookMenu = GetComponent<KitchenwareCookMenu>();
         
-        public void OpenMenu()
+        private void OnEnable()
         {
-            if (CookMenu is not null)
-                return;
-            
-            Mask = Instantiate(MaskPrefab, UIParent);
-            CookMenu = Instantiate(CookMenuPrefab, UIParent);
-            CookMenu.GetComponent<CookMenuManager>().Init(this, CookingUtensil);
-        }
-        
-        public void CloseMenu()
-        {
-            if (CookMenu is null)
-                return;
-            
-            Destroy(Mask);
-            Mask = null;
-            
-            Destroy(CookMenu);
-            CookMenu = null;
+            MainCoroutine = MainProcess();
+            StartCoroutine(MainCoroutine);
         }
 
-        public void ChooseDishAndCook(DishSO chooseDish)
+        private void OnDestroy()
         {
-            CloseMenu();
+            if (CurrentBubbleBase is not null)
+                CurrentBubbleBase.OnClickEvent -= OnClickBubble;
             
-            CurrentCookDish = chooseDish;
-            KitchenwareCook.StartCook(chooseDish);
+            if (MainCoroutine is not null)
+                StopCoroutine(MainCoroutine);
+            
+            if (SideCoroutine is not null)
+                StopCoroutine(SideCoroutine);
         }
 
-        public void DishBurn()
+        private IEnumerator MainProcess()
         {
-            CurrentCookDish = BurnDish;
-            KitchenwareCook.DishBurn();
+            SideCoroutine = EmptyProcess();
+            yield return SideCoroutine;
         }
+
+        private IEnumerator EmptyProcess()
+        {
+            CurrentBubbleObj = Instantiate(EmptyBubblePrefab, BubbleParent);
+            CurrentBubbleBase = CurrentBubbleObj.GetComponent<BubbleBase>();
+            CurrentBubbleBase.OnClickEvent += OnClickBubble;
+
+            while (CurrentCookDish is null)
+            {
+                yield return new WaitUntil(() => IsClickBubble || CurrentCookDish is not null);
+                IsClickBubble = false;
+
+                if (CurrentCookDish is not null)
+                    break;
+                
+                KitchenwareCookMenu.OpenCookMenu();
+            }
+        }
+
+        private void OnClickBubble() => IsClickBubble = true;
     }
 }

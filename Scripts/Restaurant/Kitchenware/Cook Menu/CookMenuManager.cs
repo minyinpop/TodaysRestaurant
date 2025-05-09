@@ -2,14 +2,12 @@ using System.Collections.Generic;
 using Database.Restaurant.Dish;
 using Database.Restaurant.Menu;
 using UnityEngine;
-using UnityEngine.UI;
-using Random = UnityEngine.Random;
 
 namespace Restaurant.Kitchenware.Cook_Menu
 {
     public class CookMenuManager : MonoBehaviour
     {
-        [field: Header("今日販售的料理的資料")]
+        [field: Header("今日販售料理的資料庫")]
         [field: SerializeField] private List<TodayDishSO> TodayDishes { get; set; }
         
         [field: Header("便利貼的生成位置")]
@@ -17,46 +15,40 @@ namespace Restaurant.Kitchenware.Cook_Menu
         
         [field: Header("便利貼的預製件")]
         [field: SerializeField] private List<GameObject> StickyNotePrefabs { get; set; }
-        
-        [field: Header("自身組件")]
-        [field: SerializeField] private Button CraftButton { get; set; }
-        [field: SerializeField] private Button CloseButton { get; set; }
-        
-        private KitchenwareManager KitchenwareManager { get; set; }
-        private CookingUtensil CookingUtensil { get; set; }
-        
-        private List<StickyNoteManager> StickyNoteManagers { get; set; } = new();
 
-        private void OnDisable()
+        private List<GameObject> StickyNoteObjs { get; set; } = new();
+
+        private void OnDestroy()
         {
-            foreach (var stickyNoteManager in StickyNoteManagers)
-                stickyNoteManager.OnClickEvent -= ChooseDish;
+            foreach (var stickyNoteObj in StickyNoteObjs)
+                stickyNoteObj.GetComponent<StickyNoteManager>().OnClickEvent -= OnClickStickyNote;
         }
 
-        public void Init(KitchenwareManager manager,CookingUtensil utensil)
+        public void Init(CookUtensil utensil)
         {
-            KitchenwareManager = manager;
-            CookingUtensil = utensil;
-
             foreach (var todayDish in TodayDishes)
             {
-                foreach (var todayDishSlot in todayDish.TodayDishSlots)
+                foreach (var dishSlot in todayDish.TodayDishSlots)
                 {
-                    if (!todayDishSlot.CheckDishExist())
+                    if (!dishSlot.CheckDishExist())
                         continue;
                     
-                    if (todayDishSlot.Dish.CookingUtensil != CookingUtensil)
+                    if (dishSlot.Dish.CookUtensil != utensil)
                         continue;
 
-                    var stickyNoteManager = Instantiate(StickyNotePrefabs[Random.Range(0, StickyNotePrefabs.Count)], StickyNoteParent).GetComponent<StickyNoteManager>();
-                    StickyNoteManagers.Add(stickyNoteManager);
+                    var stickyNoteObj = Instantiate(StickyNotePrefabs[Random.Range(0, StickyNotePrefabs.Count)], StickyNoteParent);
+                    StickyNoteObjs.Add(stickyNoteObj);
                     
-                    stickyNoteManager.Init(todayDishSlot);
-                    stickyNoteManager.OnClickEvent += ChooseDish;
+                    var stickyNoteManager = stickyNoteObj.GetComponent<StickyNoteManager>();
+                    stickyNoteManager.Init(dishSlot);
+                    stickyNoteManager.OnClickEvent += OnClickStickyNote;
                 }
             }
         }
 
-        private void ChooseDish(DishSO chooseDish) => KitchenwareManager.ChooseDishAndCook(chooseDish);
+        private void OnClickStickyNote(DishSO selectDish)
+        {
+            Debug.Log(selectDish.Name);
+        }
     }
 }

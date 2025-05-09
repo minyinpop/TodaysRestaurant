@@ -1,20 +1,19 @@
-using Database.Restaurant.Dish;
+using System;
+using Restaurant.Kitchenware.Cook_Menu;
 using UnityEngine;
 
 namespace Restaurant.Kitchenware.Bubble
 {
     public abstract class BubbleBase : MonoBehaviour
     {
-        public virtual void PlayerEnter() {}
+        public event Action OnClickEvent;
         
-        public virtual void PlayerLeave() {}
+        public virtual void PlayerEnter() { }
         
-        public virtual void OnClick() { }
+        public virtual void PlayerLeave() { }
         
-        public virtual void Init(KitchenwareManager manager) { }
-
-        public virtual void Init(KitchenwareManager manager, DishSO currentCookDish) { }
+        protected void OnClick() => OnClickEvent?.Invoke();
         
-        public virtual void Init(KitchenwareCook cook) { }
+        public virtual void Init(KitchenwareCookMenu cookMenu) { }
     }
 }
