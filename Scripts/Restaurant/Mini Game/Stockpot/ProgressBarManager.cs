@@ -12,7 +12,7 @@ namespace Restaurant.Mini_Game.Stockpot
         
         private IEnumerator MainCoroutine { get; set; }
         private float TargetValue { get; set; }
-        public static event Action FinishStirring;
+        public event Action FinishStirring;
 
         private void OnEnable()
         {

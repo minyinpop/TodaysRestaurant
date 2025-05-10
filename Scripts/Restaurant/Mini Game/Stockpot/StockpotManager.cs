@@ -1,25 +1,26 @@
 using System.Collections;
+using Restaurant.Kitchenware;
 using UnityEngine;
 
 namespace Restaurant.Mini_Game.Stockpot
 {
     [RequireComponent(typeof(SpoonManager))]
     [RequireComponent(typeof(ProgressBarManager))]
-    public class StockpotManager : MonoBehaviour
+    public class StockpotManager : MiniGameBase
     {
+        private KitchenwareManager KitchenwareManager { get; set; }
+        private ProgressBarManager ProgressBarManager { get; set; }
+        
         private bool IsFinish { get; set; }
         
         private IEnumerator MainCoroutine { get; set; }
 
-        private void Start()
+        private void Awake()
         {
-            MainCoroutine = MainProcess();
-            StartCoroutine(MainCoroutine);
+            ProgressBarManager = GetComponent<ProgressBarManager>();
         }
         
-        private void OnEnable() => ProgressBarManager.FinishStirring += Finish;
-        
-        private void OnDisable()
+        private void OnDestroy()
         {
             ProgressBarManager.FinishStirring -= Finish;
             
@@ -30,11 +31,22 @@ namespace Restaurant.Mini_Game.Stockpot
             }
         }
         
+        public override void Init(KitchenwareManager manager)
+        {
+            KitchenwareManager = manager;
+            
+            MainCoroutine = MainProcess();
+            StartCoroutine(MainCoroutine);
+            
+            ProgressBarManager.FinishStirring += Finish;
+        }
+        
         private IEnumerator MainProcess()
         {
             yield return new WaitUntil(() => IsFinish);
             yield return new WaitForSeconds(1);
-            
+
+            KitchenwareManager.OnGameFinish();
             Destroy(gameObject);
         }
 

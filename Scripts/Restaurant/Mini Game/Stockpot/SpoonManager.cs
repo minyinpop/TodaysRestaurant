@@ -55,7 +55,7 @@ namespace Restaurant.Mini_Game.Stockpot
 
         private void StartDetect(InputAction.CallbackContext context)
         {
-            var plane = new Plane(Vector3.forward, Vector3.zero);
+            var plane = new Plane(Vector3.forward, transform.position);
             var ray = MainCamera.ScreenPointToRay(MousePos);
 
             if (!plane.Raycast(ray, out var enter))
@@ -85,7 +85,7 @@ namespace Restaurant.Mini_Game.Stockpot
         
         private IEnumerator DragProcess()
         {
-            var plane = new Plane(Vector3.forward, Vector3.zero);
+            var plane = new Plane(Vector3.forward, transform.position);
             
             while (true)
             {

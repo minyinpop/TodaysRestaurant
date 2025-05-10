@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using Database.Restaurant.Dish;
 using Database.Restaurant.Menu;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Restaurant.Kitchenware.Cook_Menu
 {
@@ -17,6 +19,8 @@ namespace Restaurant.Kitchenware.Cook_Menu
         [field: SerializeField] private List<GameObject> StickyNotePrefabs { get; set; }
 
         private List<GameObject> StickyNoteObjs { get; set; } = new();
+        
+        public event Action<DishSO> OnClickStickyNoteEvent;
 
         private void OnDestroy()
         {
@@ -48,7 +52,7 @@ namespace Restaurant.Kitchenware.Cook_Menu
 
         private void OnClickStickyNote(DishSO selectDish)
         {
-            Debug.Log(selectDish.Name);
+            OnClickStickyNoteEvent?.Invoke(selectDish);
         }
     }
 }

@@ -10,20 +10,20 @@ namespace Restaurant.Kitchenware
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.gameObject.CompareTag("Player"))
-                Manager.CurrentBubbleBase.PlayerEnter();
+            if (other.CompareTag("Player"))
+                Manager.SetPlayerEnter(true);
         }
 
         private void OnTriggerStay(Collider other)
         {
-            if (other.gameObject.CompareTag("Player"))
-                Manager.CurrentBubbleBase.PlayerEnter();
+            if (other.CompareTag("Player"))
+                Manager.SetPlayerEnter(true);
         }
         
         private void OnTriggerExit(Collider other)
         {
-            if (other.gameObject.CompareTag("Player"))
-                Manager.CurrentBubbleBase.PlayerLeave();
+            if (other.CompareTag("Player"))
+                Manager.SetPlayerEnter(false);
         }
     }
 }
