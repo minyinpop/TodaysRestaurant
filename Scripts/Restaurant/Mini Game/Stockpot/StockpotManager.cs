@@ -8,7 +8,7 @@ namespace Restaurant.Mini_Game.Stockpot
     [RequireComponent(typeof(ProgressBarManager))]
     public class StockpotManager : MiniGameBase
     {
-        private KitchenwareManager KitchenwareManager { get; set; }
+        private KitchenwareGame KitchenwareGame { get; set; }
         private ProgressBarManager ProgressBarManager { get; set; }
         
         private bool IsFinish { get; set; }
@@ -31,9 +31,9 @@ namespace Restaurant.Mini_Game.Stockpot
             }
         }
         
-        public override void Init(KitchenwareManager manager)
+        public override void Init(KitchenwareGame game)
         {
-            KitchenwareManager = manager;
+            KitchenwareGame = game;
             
             MainCoroutine = MainProcess();
             StartCoroutine(MainCoroutine);
@@ -46,7 +46,7 @@ namespace Restaurant.Mini_Game.Stockpot
             yield return new WaitUntil(() => IsFinish);
             yield return new WaitForSeconds(1);
 
-            KitchenwareManager.OnGameFinish();
+            KitchenwareGame.OnGameFinish();
             Destroy(gameObject);
         }
 

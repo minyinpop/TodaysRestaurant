@@ -34,6 +34,7 @@ namespace Restaurant.Kitchenware.StateMachine.BubbleState
         public void PlayerLeave()
         {
             Manager.SetBubbleInteractable(false);
+            Manager.OnGameCancel();
         }
 
         public void OnClick()
@@ -48,6 +49,7 @@ namespace Restaurant.Kitchenware.StateMachine.BubbleState
             while (currentTime > 0)
             {
                 currentTime -= Time.deltaTime;
+                Manager.CurrentBubbleCountDownImage.fillAmount = currentTime / Manager.CurrentCookDish.BurnTime;
                 yield return null;
             }
 

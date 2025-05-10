@@ -22,11 +22,12 @@ namespace Restaurant.Kitchenware
         [field: SerializeField] private GameObject BurnBubblePrefab { get; set; }
         [field: SerializeField] private GameObject FinishBubblePrefab { get; set; }
         private GameObject CurrentBubbleObj { get; set; }
-        private Image CurrentBubbleCountDownImage { get; set; }
+        public Image CurrentBubbleCountDownImage { get; private set; }
         private Button CurrentBubbleButton { get; set; }
 
         private BubbleStateMachine BubbleStateMachine { get; set; } = new();
         public DishSO CurrentCookDish { get; private set; }
+        public float RemainingCookTime { get; set; }
         
         private KitchenwareDetector KitchenwareDetector { get; set; }
         private KitchenwareCookMenu KitchenwareCookMenu { get; set; }
@@ -94,22 +95,23 @@ namespace Restaurant.Kitchenware
         public void InitGameBubble()
         {
             CurrentBubbleObj = Instantiate(GameBubblePrefab, BubbleParent);
-            CurrentBubbleButton = CurrentBubbleObj.GetComponent<Button>();
             CurrentBubbleCountDownImage = CurrentBubbleObj.GetComponentInChildren<Image>();
+            CurrentBubbleButton = CurrentBubbleObj.GetComponent<Button>();
             CurrentBubbleButton.onClick.AddListener(BubbleStateMachine.OnClick);
         }
 
         public void InitBurnBubble()
         {
             CurrentBubbleObj = Instantiate(BurnBubblePrefab, BubbleParent);
-            CurrentBubbleCountDownImage = CurrentBubbleObj.GetComponentInChildren<Image>();
             CurrentBubbleButton = CurrentBubbleObj.GetComponent<Button>();
             CurrentBubbleButton.onClick.AddListener(BubbleStateMachine.OnClick);
         }
 
         public void InitFinishBubble()
         {
-            // TODO
+            CurrentBubbleObj = Instantiate(FinishBubblePrefab, BubbleParent);
+            CurrentBubbleButton = CurrentBubbleObj.GetComponent<Button>();
+            CurrentBubbleButton.onClick.AddListener(BubbleStateMachine.OnClick);
         }
 
         public void DestroyBubble()
@@ -126,18 +128,28 @@ namespace Restaurant.Kitchenware
         public void OnChooseDish(DishSO selectDish)
         {
             CurrentCookDish = selectDish;
+            RemainingCookTime = CurrentCookDish.CookTime;
             ChangeState(new CookBubble());
         }
-
+        
         public void OnGameStart()
         {
             KitchenwareGame.OnGameStart();
         }
 
+        public void OnGameCancel()
+        {
+            KitchenwareGame.OnGameCancel();
+        }
+
         public void OnGameFinish()
         {
+            ChangeState(new CookBubble());
+        }
+
+        public void GetDish()
+        {
             // TODO
-            Debug.Log("Game Finish");
         }
 
         public void ClearDish()

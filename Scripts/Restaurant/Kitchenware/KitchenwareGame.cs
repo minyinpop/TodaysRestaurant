@@ -1,5 +1,4 @@
 using Restaurant.Mini_Game;
-using Restaurant.Mini_Game.Stockpot;
 using UnityEngine;
 
 namespace Restaurant.Kitchenware
@@ -23,7 +22,24 @@ namespace Restaurant.Kitchenware
         public void OnGameStart()
         {
             GameObj = Instantiate(GamePrefab, GameParent);
-            GameObj.GetComponent<MiniGameBase>().Init(KitchenwareManager);
+            GameObj.GetComponent<MiniGameBase>().Init(this);
+        }
+
+        public void OnGameCancel()
+        {
+            if (GameObj is null)
+                return;
+
+            Destroy(GameObj);
+            GameObj = null;
+        }
+
+        public void OnGameFinish()
+        {
+            KitchenwareManager.OnGameFinish();
+            
+            Destroy(GameObj);
+            GameObj = null;
         }
     }
 }

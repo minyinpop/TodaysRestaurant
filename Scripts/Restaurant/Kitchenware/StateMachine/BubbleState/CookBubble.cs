@@ -43,15 +43,26 @@ namespace Restaurant.Kitchenware.StateMachine.BubbleState
 
         private IEnumerator CountDownCookTime()
         {
-            var currentTime = Manager.CurrentCookDish.CookTime;
-            
-            while (currentTime > Manager.CurrentCookDish.CookTime / 2)
+            if (Mathf.Approximately(Manager.RemainingCookTime, Manager.CurrentCookDish.CookTime))
             {
-                currentTime -= Time.deltaTime;
-                yield return null;
+                while (Manager.RemainingCookTime > Manager.CurrentCookDish.CookTime / 2)
+                {
+                    Manager.RemainingCookTime -= Time.deltaTime;
+                    yield return null;
+                }
+                
+                Manager.ChangeState(new GameBubble());
             }
-            
-            Manager.ChangeState(new GameBubble());
+            else
+            {
+                while (Manager.RemainingCookTime > 0)
+                {
+                    Manager.RemainingCookTime -= Time.deltaTime;
+                    yield return null;
+                }
+
+                Manager.ChangeState(new FinishBubble());
+            }
         }
     }
 }

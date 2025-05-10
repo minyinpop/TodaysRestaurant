@@ -5,6 +5,6 @@ namespace Restaurant.Mini_Game
 {
     public abstract class MiniGameBase : MonoBehaviour
     {
-        public abstract void Init(KitchenwareManager manager);
+        public abstract void Init(KitchenwareGame game);
     }
 }
