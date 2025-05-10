@@ -29,7 +29,6 @@ namespace Restaurant.Kitchenware.StateMachine.BubbleState
         public void OnClick()
         {
             Manager.GetDish();
-            Manager.ChangeState(new EmptyBubble());
         }
     }
 }

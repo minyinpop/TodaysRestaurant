@@ -1,3 +1,4 @@
+using System;
 using Database.Restaurant.Dish;
 using Restaurant.Kitchenware.StateMachine;
 using Restaurant.Kitchenware.StateMachine.BubbleState;
@@ -32,6 +33,8 @@ namespace Restaurant.Kitchenware
         private KitchenwareDetector KitchenwareDetector { get; set; }
         private KitchenwareCookMenu KitchenwareCookMenu { get; set; }
         private KitchenwareGame KitchenwareGame { get; set; }
+        
+        public static event Func<DishSO, bool> GetDishEvent;
         
         private void Awake()
         {
@@ -149,7 +152,11 @@ namespace Restaurant.Kitchenware
 
         public void GetDish()
         {
-            // TODO
+            if (GetDishEvent is null)
+                return;
+            
+            if (GetDishEvent.Invoke(CurrentCookDish))
+                ChangeState(new EmptyBubble());
         }
 
         public void ClearDish()
