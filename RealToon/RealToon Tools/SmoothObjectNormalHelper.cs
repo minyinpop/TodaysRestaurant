@@ -4,7 +4,7 @@
 
 using UnityEngine;
 
-namespace RealToon.Script
+namespace RealToon.RealToon_Tools
 {
     [ExecuteAlways]
     [AddComponentMenu("RealToon/Tools/Smooth Object Normal - Helper")]

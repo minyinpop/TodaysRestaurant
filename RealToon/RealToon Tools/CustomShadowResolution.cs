@@ -2,11 +2,9 @@
 //MJQStudioWorks
 //©2018
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace RealToon.Script
+namespace RealToon.RealToon_Tools
 {
     [ExecuteInEditMode]
     [RequireComponent(typeof(Light))]

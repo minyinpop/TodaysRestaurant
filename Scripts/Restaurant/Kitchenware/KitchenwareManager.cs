@@ -1,7 +1,7 @@
 using System;
 using Database.Restaurant.Dish;
-using Restaurant.Kitchenware.StateMachine;
-using Restaurant.Kitchenware.StateMachine.BubbleState;
+using Restaurant.Kitchenware.BubbleState;
+using Restaurant.Kitchenware.BubbleState.State;
 using UnityEngine;
 using UnityEngine.UI;
 

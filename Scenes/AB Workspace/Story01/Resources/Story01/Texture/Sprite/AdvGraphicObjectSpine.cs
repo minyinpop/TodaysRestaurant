@@ -1,9 +1,10 @@
-﻿using UnityEngine;
-using UtageExtensions;
+﻿using System.IO;
 using Spine.Unity;
-using System.IO;
+using UnityEngine;
+using Utage;
+using UtageExtensions;
 
-namespace Utage
+namespace Scenes.AB_Workspace.Story01.Resources.Story01.Texture.Sprite
 {
     [AddComponentMenu("Utage/ADV/Internal/GraphicObject/Spine/Default")]
     internal class AdvGraphicObjectSpine : MonoBehaviour
