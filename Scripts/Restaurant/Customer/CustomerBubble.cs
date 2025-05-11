@@ -1,4 +1,3 @@
-using Restaurant.Customer.BubbleState;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,8 +11,11 @@ namespace Restaurant.Customer
         
         private GameObject ThinkBubblePrefab { get; set; }
         private GameObject OrderBubblePrefab { get; set; }
+        private GameObject HappyBubblePrefab { get; set; }
+        private GameObject AngryBubblePrefab { get; set; }
         
-        private GameObject CurrentBubble { get; set; }
+        public GameObject CurrentBubble { get; private set; }
+        public Image CurrentBubbleCountDownImage { get; private set; }
         private Button CurrentBubbleButton { get; set; }
 
         private void Awake()
@@ -21,35 +23,55 @@ namespace Restaurant.Customer
             CustomerManager = GetComponent<CustomerManager>();
         }
         
-        public void Init(Transform parent, GameObject think, GameObject order)
+        public void Init(Transform parent, GameObject think, GameObject order, GameObject happy, GameObject angry)
         {
             BubbleParent = parent;
             
             ThinkBubblePrefab = think;
             OrderBubblePrefab = order;
+            HappyBubblePrefab = happy;
+            AngryBubblePrefab = angry;
         }
 
         public void SetButtonInteractable(bool interactable)
         {
-            CurrentBubbleButton.interactable = interactable;
+            if (CurrentBubbleButton is not null)
+                CurrentBubbleButton.interactable = interactable;
         }
 
         public void InitThinkBubble()
         {
             CurrentBubble = Instantiate(ThinkBubblePrefab, BubbleParent);
-            CurrentBubbleButton = CurrentBubble.GetComponent<Button>();
-            CurrentBubbleButton.onClick.AddListener(CustomerManager.BubbleStateMachine.OnClick);
         }
 
         public void InitOrderBubble()
         {
+            CurrentBubble = Instantiate(OrderBubblePrefab, BubbleParent);
+            CurrentBubbleCountDownImage = CurrentBubble.GetComponentInChildren<Image>();
+            CurrentBubbleButton = CurrentBubble.GetComponent<Button>();
+            CurrentBubbleButton.onClick.AddListener(CustomerManager.BubbleStateMachine.OnClick);
+        }
+
+        public void InitHappyBubble()
+        {
             // TODO
+        }
+
+        public void InitAngryBubble()
+        {
+            CurrentBubble = Instantiate(AngryBubblePrefab, BubbleParent);
         }
 
         public void DestroyBubble()
         {
-            CurrentBubbleButton.onClick.RemoveListener(CustomerManager.BubbleStateMachine.OnClick);
-            CurrentBubbleButton = null;
+            if (CurrentBubbleButton is not null)
+            {
+                CurrentBubbleButton.onClick.RemoveListener(CustomerManager.BubbleStateMachine.OnClick);
+                CurrentBubbleButton = null;
+            }
+            
+            if (CurrentBubbleCountDownImage is not null)
+                CurrentBubbleCountDownImage = null;
             
             Destroy(CurrentBubble);
             CurrentBubble = null;

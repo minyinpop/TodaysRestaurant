@@ -17,6 +17,12 @@ namespace Restaurant.Customer.BubbleState
             CurrentBubbleState.Enter(manager);
         }
 
+        public void ExitState()
+        {
+            CurrentBubbleState.Exit();
+            CurrentBubbleState = null;
+        }
+
         public void PlayerEnter()
         {
             CurrentBubbleState.PlayerEnter();

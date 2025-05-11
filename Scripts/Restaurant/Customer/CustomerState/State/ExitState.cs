@@ -1,8 +1,6 @@
-using Restaurant.Customer.BubbleState.State;
-
 namespace Restaurant.Customer.CustomerState.State
 {
-    public class SitState : ICustomerState
+    public class ExitState : ICustomerState
     {
         private CustomerManager Manager { get; set; }
         
@@ -10,9 +8,8 @@ namespace Restaurant.Customer.CustomerState.State
         {
             Manager = manager;
             
-            manager.SetBubbleState(new ThinkBubble());
-            manager.PlaySitAnima();
-            manager.OnSeat();
+            Manager.WalkToEntrance();
+            Manager.PlayWalkAnima();
         }
 
         public void Exit()

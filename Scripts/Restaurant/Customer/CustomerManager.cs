@@ -18,7 +18,7 @@ namespace Restaurant.Customer
     public class CustomerManager : MonoBehaviour
     {
         [field: Header("顧客的各類資料庫")]
-        [field: SerializeField] private CustomerAttributeSO CustomerAttribute { get; set; }
+        [field: SerializeField] public CustomerAttributeSO CustomerAttribute { get; private set; }
         [field: SerializeField] private CustomerPathSO CustomerPath { get; set; }
         [field: SerializeField] private List<CustomerSkinSO> CustomerSkins { get; set; }
         
@@ -33,11 +33,13 @@ namespace Restaurant.Customer
         [field: Header("各類氣泡的預製件")]
         [field: SerializeField] private GameObject ThinkBubblePrefab { get; set; }
         [field: SerializeField] private GameObject OrderBubblePrefab { get; set; }
+        [field: SerializeField] private GameObject HappyBubblePrefab { get; set; }
+        [field: SerializeField] private GameObject AngryBubblePrefab { get; set; }
         
         private CustomerAnimator CustomerAnimator { get; set; }
         private CustomerMove CustomerMove { get; set; }
         private CustomerSkin CustomerSkin { get; set; }
-        private CustomerBubble CustomerBubble { get; set; }
+        public CustomerBubble CustomerBubble { get; private set; }
         private CustomerDetector CustomerDetector { get; set; }
         
         private CustomerStateMachine CustomerStateMachine { get; set; } = new();
@@ -54,12 +56,12 @@ namespace Restaurant.Customer
             CustomerAnimator.Init(IdleClip, WalkClip, SitClip);
             CustomerMove.Init(CustomerAttribute, CustomerPath);
             CustomerSkin.Init(CustomerSkins);
-            CustomerBubble.Init(BubbleParent, ThinkBubblePrefab, OrderBubblePrefab);
+            CustomerBubble.Init(BubbleParent, ThinkBubblePrefab, OrderBubblePrefab, HappyBubblePrefab, AngryBubblePrefab);
         }
 
         private void Start()
         {
-            CustomerStateMachine.SetState(new EnterState(), this);
+            SetCustomerState(new EnterState());
         }
         
         
@@ -67,6 +69,11 @@ namespace Restaurant.Customer
         // =======
         // 狀態相關
         // =======
+        public void SetCustomerState(ICustomerState newState)
+        {
+            CustomerStateMachine.SetState(new EnterState(), this);
+        }
+        
         public void ChangeCustomerState(ICustomerState nextState)
         {
             CustomerStateMachine.ChangeState(nextState, this);
@@ -80,6 +87,11 @@ namespace Restaurant.Customer
         public void ChangeBubbleState(IBubbleState nextState)
         {
             BubbleStateMachine.ChangeState(nextState, this);
+        }
+
+        public void ExitBubbleState()
+        {
+            BubbleStateMachine.ExitState();
         }
         
         
@@ -139,7 +151,17 @@ namespace Restaurant.Customer
 
         public void InitOrderBubble()
         {
+            CustomerBubble.InitOrderBubble();
+        }
+
+        public void InitHappyBubble()
+        {
             // TODO
+        }
+
+        public void InitAngryBubble()
+        {
+            CustomerBubble.InitAngryBubble();
         }
 
         public void DestroyBubble()
@@ -154,6 +176,9 @@ namespace Restaurant.Customer
         // =======
         public void SetPlayerEnter(bool isEnter)
         {
+            if (CustomerBubble.CurrentBubble is null)
+                return;
+            
             if (isEnter)
                 BubbleStateMachine.PlayerEnter();
             else
@@ -162,7 +187,8 @@ namespace Restaurant.Customer
 
         public void SetBubbleInteractable(bool interactable)
         {
-            CustomerBubble.SetButtonInteractable(interactable);
+            if (CustomerBubble.CurrentBubble is not null)
+                CustomerBubble.SetButtonInteractable(interactable);
         }
     }
 }

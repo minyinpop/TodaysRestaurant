@@ -1,19 +1,21 @@
 using System.Collections;
+using Restaurant.Customer.CustomerState.State;
 using UnityEngine;
 
 namespace Restaurant.Customer.BubbleState.State
 {
-    public class ThinkBubble : IBubbleState
+    public class AngryBubble : IBubbleState
     {
         private CustomerManager Manager { get; set; }
         
         private IEnumerator CurrentCoroutine { get; set; }
+
         
         public void Enter(CustomerManager manager)
         {
             Manager = manager;
             
-            Manager.InitThinkBubble();
+            Manager.InitAngryBubble();
             
             CurrentCoroutine = CountDownDisplay();
             Manager.StartCoroutine(CurrentCoroutine);
@@ -21,7 +23,10 @@ namespace Restaurant.Customer.BubbleState.State
 
         public void Exit()
         {
-            Manager.StopCoroutine(CurrentCoroutine);
+            Manager.DestroyBubble();
+            
+            if (CurrentCoroutine is not null)
+                Manager.StopCoroutine(CurrentCoroutine);
         }
 
         public void PlayerEnter()
@@ -41,17 +46,16 @@ namespace Restaurant.Customer.BubbleState.State
 
         private IEnumerator CountDownDisplay()
         {
-            var countDownTime = Manager.CustomerAttribute.OrderAttribute.GetRandomThinkTime();
+            var remainingTime = 3f;
             
-            while (countDownTime > 0)
+            while (remainingTime > 0)
             {
-                countDownTime -= Time.deltaTime;
+                remainingTime -= Time.deltaTime;
                 yield return null;
             }
-
-            Manager.DestroyBubble();
-            yield return new WaitForSeconds(1);
-            Manager.ChangeBubbleState(new OrderBubble());
+            
+            Manager.ChangeCustomerState(new ExitState());
+            Manager.ExitBubbleState();
         }
     }
 }

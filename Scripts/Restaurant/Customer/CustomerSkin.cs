@@ -14,10 +14,7 @@ namespace Restaurant.Customer
         private void Awake()
         {
             CombinedSkin = GetComponent<CombinedSkin>();
-        }
-
-        private void Start()
-        {
+            
             foreach (var skin in CustomerSkins)
                 CombinedSkin.skinsToCombine.Add(skin.GetRandomSkin());
         }
