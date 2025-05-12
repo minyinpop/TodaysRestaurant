@@ -7,17 +7,21 @@ namespace Restaurant.Customer
 {
     public class CustomerSkin : MonoBehaviour
     {
-        [field: Header("顧客外觀的資料庫")]
-        [field: SerializeField] private List<CustomerSkinSO> CustomerSkins { get; set; }
-        
         private CombinedSkin CombinedSkin { get; set; }
         
+        private List<CustomerSkinSO> CustomerSkins { get; set; } = new();
+
         private void Awake()
         {
             CombinedSkin = GetComponent<CombinedSkin>();
             
-            foreach (var customerSkin in CustomerSkins)
-                CombinedSkin.skinsToCombine.Add(customerSkin.GetRandomSkin());
+            foreach (var skin in CustomerSkins)
+                CombinedSkin.skinsToCombine.Add(skin.GetRandomSkin());
+        }
+
+        public void Init(List<CustomerSkinSO> skins)
+        {
+            CustomerSkins = skins;
         }
     }
 }

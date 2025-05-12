@@ -1,19 +1,55 @@
+using System.Collections;
+using Restaurant.Kitchenware;
 using UnityEngine;
 
 namespace Restaurant.Mini_Game.Stockpot
 {
-    public class StockpotManager : MonoBehaviour
+    [RequireComponent(typeof(SpoonManager))]
+    [RequireComponent(typeof(ProgressBarManager))]
+    public class StockpotManager : MiniGameBase
     {
-        [field: Header("自身的遊戲物件")]
-        [field: SerializeField] private GameObject Spoon { get; set; }
-        [field: SerializeField] private GameObject ProgressBar { get; set; }
-        private SpoonManager SpoonManager { get; set; }
+        private KitchenwareGame KitchenwareGame { get; set; }
         private ProgressBarManager ProgressBarManager { get; set; }
+        
+        private bool IsFinish { get; set; }
+        
+        private IEnumerator MainCoroutine { get; set; }
 
         private void Awake()
         {
-            SpoonManager = Spoon.GetComponent<SpoonManager>();
-            ProgressBarManager = ProgressBar.GetComponent<ProgressBarManager>();
+            ProgressBarManager = GetComponent<ProgressBarManager>();
         }
+        
+        private void OnDestroy()
+        {
+            ProgressBarManager.FinishStirring -= Finish;
+            
+            if (MainCoroutine is not null)
+            {
+                StopCoroutine(MainCoroutine);
+                MainCoroutine = null;
+            }
+        }
+        
+        public override void Init(KitchenwareGame game)
+        {
+            KitchenwareGame = game;
+            
+            MainCoroutine = MainProcess();
+            StartCoroutine(MainCoroutine);
+            
+            ProgressBarManager.FinishStirring += Finish;
+        }
+        
+        private IEnumerator MainProcess()
+        {
+            yield return new WaitUntil(() => IsFinish);
+            yield return new WaitForSeconds(1);
+
+            KitchenwareGame.OnGameFinish();
+            Destroy(gameObject);
+        }
+
+        private void Finish() => IsFinish = true;
     }
 }

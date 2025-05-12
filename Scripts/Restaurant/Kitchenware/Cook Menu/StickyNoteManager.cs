@@ -9,31 +9,31 @@ namespace Restaurant.Kitchenware.Cook_Menu
 {
     public class StickyNoteManager : MonoBehaviour
     {
-        [field: Header("自身的組件")]
+        [field: Header("自身組件")]
         [field: SerializeField] private Button Button { get; set; }
         [field: SerializeField] private Image DishImage { get; set; }
-        [field: SerializeField] private TextMeshProUGUI DishNameTMP { get; set; }
-        
-        private TodayDishSlot TodayDish { get; set; }
+        [field: SerializeField] private TextMeshProUGUI NameTMP { get; set; }
 
-        public static event Action<DishSO> OnClickEvent;
+        public event Action<DishSO> OnClickEvent;
         
+        private TodayDishSlot DishSlot { get; set; }
+
         private void OnEnable() => Button.onClick.AddListener(OnClick);
         
         private void OnDisable() => Button.onClick.RemoveListener(OnClick);
 
-        public void Init(TodayDishSlot todayDish)
+        public void Init(TodayDishSlot dishSlot)
         {
-            TodayDish = todayDish;
+            DishSlot = dishSlot;
             
-            DishImage.sprite = TodayDish.Dish.Sprite;
-            DishNameTMP.text = TodayDish.Dish.Name;
+            DishImage.sprite = DishSlot.Dish.Sprite;
+            NameTMP.text = DishSlot.Dish.Name;
         }
 
         private void OnClick()
         {
-            TodayDish.TakeDish();
-            OnClickEvent?.Invoke(TodayDish.Dish);
+            OnClickEvent?.Invoke(DishSlot.Dish);
+            DishSlot.TakeDish();
         }
     }
 }

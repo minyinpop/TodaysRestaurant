@@ -1,5 +1,3 @@
-using System.Collections;
-using Database.Restaurant.Customer.Attribute;
 using Spine.Unity;
 using UnityEngine;
 
@@ -8,71 +6,37 @@ namespace Restaurant.Customer
     [RequireComponent(typeof(SkeletonAnimation))]
     public class CustomerAnimator : MonoBehaviour
     {
-        [field: Header("屬性資料")]
-        [field: SerializeField] private CustomerAttributeSO Attribute { get; set; }
+        private AnimationReferenceAsset IdleClip { get; set; }
+        private AnimationReferenceAsset WalkClip { get; set; }
+        private AnimationReferenceAsset SitClip { get; set; }
         
-        [field: Header("主要的 Spine 動畫資產")]
-        [field: SerializeField] private AnimationReferenceAsset Walk { get; set; }
-        [field: SerializeField] private AnimationReferenceAsset Sit { get; set; }
-        
-        [field: Header("次要的 Spine 動畫資產")]
-        [field: SerializeField] private AnimationReferenceAsset Blink { get; set; }
-        
-        private SkeletonAnimation SkeletonAnimation { get; set; }
-        private CustomerController CustomerController { get; set; }
-        
-        private IEnumerator BlinkCoroutine { get; set; }
+        private SkeletonAnimation SkeletonAnima { get; set; }
 
         private void Awake()
         {
-            SkeletonAnimation = GetComponent<SkeletonAnimation>();
-            CustomerController = GetComponent<CustomerController>();
+            SkeletonAnima = GetComponent<SkeletonAnimation>();
         }
 
-        private void Start()
+        public void Init(AnimationReferenceAsset idle, AnimationReferenceAsset walk, AnimationReferenceAsset sit)
         {
-            if (Blink is not null)
-            {
-                BlinkCoroutine = BlinkProcess();
-                StartCoroutine(BlinkCoroutine);
-            }
+            IdleClip = idle;
+            WalkClip = walk;
+            SitClip = sit;
         }
-
-        private void OnEnable()
-        {
-            CustomerController.OnWalk += OnWalk;
-            CustomerController.OnSeat += OnSeat;
-            CustomerController.FlipX += FlipX;
-        }
-
-        private void OnDisable()
-        {
-            CustomerController.OnWalk -= OnWalk;
-            CustomerController.OnSeat -= OnSeat;
-            CustomerController.FlipX -= FlipX;
-            
-            if (BlinkCoroutine is not null)
-            {
-                StopCoroutine(BlinkCoroutine);
-                BlinkCoroutine = null;
-            }
-        }
-
-        private void OnWalk() => SkeletonAnimation.AnimationState.SetAnimation(1, Walk, true);
         
-        private void OnSeat() => SkeletonAnimation.AnimationState.SetAnimation(1, Sit, true);
-
-        private void FlipX(bool isFlip) => SkeletonAnimation.Skeleton.ScaleX = isFlip ? -1 : 1;
-
-        private IEnumerator BlinkProcess()
+        public void PlayIdleAnima()
         {
-            while (true)
-            {
-                SkeletonAnimation.AnimationState.SetAnimation(2, Blink, false);
-                
-                var durationTime = Blink.Animation.Duration + Attribute.AnimationAttribute.GetRandomBlinkTime();
-                yield return new WaitForSeconds(durationTime);
-            }
+            // TODO
+        }
+        
+        public void PlayWalkAnima()
+        {
+            SkeletonAnima.AnimationState.SetAnimation(1, WalkClip, true);
+        }
+
+        public void PlaySitAnima()
+        {
+            SkeletonAnima.AnimationState.SetAnimation(1, SitClip, false);
         }
     }
 }

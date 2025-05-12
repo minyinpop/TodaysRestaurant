@@ -1,9 +1,10 @@
-using UnityEngine;
-using UtageExtensions;
-using Spine.Unity;
 using System.IO;
+using Spine.Unity;
+using UnityEngine;
+using Utage;
+using UtageExtensions;
 
-namespace Utage
+namespace Scenes.AB_Workspace.Story01.Resources.Story01.Texture.Sprite
 {
     [AddComponentMenu("Utage/ADV/Internal/GraphicObject/Spine/Animation")]
     internal class AdvGraphicObjectSpineAnimation : MonoBehaviour
@@ -31,8 +32,8 @@ namespace Utage
 
         public void OnEffectColorsChange(AdvEffectColor color)
         {
-            // SkeletonAnimation¤£¤ä´©Graphic.color
-            // ¦ý§A¥i¥H¦Û¤v¥[ shader ±±¨î¡A©Î¸õ¹L
+            // SkeletonAnimationï¿½ï¿½ï¿½ä´©Graphic.color
+            // ï¿½ï¿½ï¿½Aï¿½iï¿½Hï¿½Û¤vï¿½[ shader ï¿½ï¿½ï¿½ï¿½Aï¿½Î¸ï¿½ï¿½L
         }
 
         public void SetCommandArg(AdvCommand command)
