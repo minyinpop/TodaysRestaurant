@@ -1,10 +1,10 @@
 //RealToon - Perspective Adjustment [Helper]
 //MJQStudioWorks
-//ï¿½2024
+//©2024
 
 using UnityEngine;
 
-namespace RealToon.RealToon_Tools
+namespace RealToon.Script
 {
 
     [ExecuteAlways]

@@ -3,8 +3,9 @@
 //©2018
 
 using UnityEngine;
+using System.Collections;
 
-namespace RealToon.RealToon_Tools.FrameByFrameRendering
+namespace RealToon.Tools.FrameByFrameRendering
 {
     [AddComponentMenu("RealToon/Tools/Frame By Frame Rendering/Frame By Frame Rendering (Default)")]
     public class FrameByFrameRendering_Default : MonoBehaviour

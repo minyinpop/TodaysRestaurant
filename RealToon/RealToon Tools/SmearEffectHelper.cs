@@ -1,11 +1,11 @@
 //RealToon - Smear Effect [Helper]
 //MJQStudioWorks
-//ï¿½2024
+//©2024
 
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections.Generic;
 
-namespace RealToon.RealToon_Tools
+namespace RealToon.Script
 {
 
     [ExecuteAlways]

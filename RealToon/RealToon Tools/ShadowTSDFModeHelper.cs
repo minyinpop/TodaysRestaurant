@@ -1,6 +1,8 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-namespace RealToon.RealToon_Tools
+namespace RealToon.Script
 {
     [ExecuteAlways]
     [AddComponentMenu("RealToon/Tools/ShadowT SDF Mode - Helper")]
