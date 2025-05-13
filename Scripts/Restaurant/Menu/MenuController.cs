@@ -41,7 +41,7 @@ namespace Restaurant.Menu
         {
             // TODO 檢測玩家是否選擇了所有的料理
             
-            Destroy(gameObject);
+            Destroy(gameObject.transform.parent.gameObject);
         }
     }
 }

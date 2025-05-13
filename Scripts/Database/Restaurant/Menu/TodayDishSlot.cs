@@ -24,6 +24,10 @@ namespace Database.Restaurant.Menu
                 return false;
             
             Portion -= 1;
+            
+            if (Portion <= 0)
+                ClearData();
+            
             return true;
         }
 
@@ -33,5 +37,7 @@ namespace Database.Restaurant.Menu
             Dish = null;
             Portion = 0;
         }
+        
+        public bool CheckDishExist() => !Lock && Dish is not null;
     }
 }

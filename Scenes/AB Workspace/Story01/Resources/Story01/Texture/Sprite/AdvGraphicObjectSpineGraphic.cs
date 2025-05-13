@@ -1,11 +1,10 @@
-﻿using UnityEngine;
-using UtageExtensions;
+﻿using System.IO;
 using Spine.Unity;
-using System.IO;
-using System;
+using UnityEngine;
+using Utage;
+using UtageExtensions;
 
-
-namespace Utage
+namespace Scenes.AB_Workspace.Story01.Resources.Story01.Texture.Sprite
 {
     [AddComponentMenu("Utage/ADV/Internal/GraphicObject/Spine/Graphic")]
     internal class AdvGraphicObjectSpineGraphic : MonoBehaviour
@@ -43,11 +42,27 @@ namespace Utage
         //********描画時の引数適用********//
         public void SetCommandArg(AdvCommand command)
         {
-            string animationName = command.ParseCellOptional<string>(AdvColumnName.Arg2, "");
-            if (string.IsNullOrEmpty(animationName)) return;
+            // 換 skin
+            string skinName = command.ParseCellOptional<string>(AdvColumnName.Arg7, "");
+            Debug.Log("Arg7 (skinName) = " + skinName);
 
-            //          float fadeTime = command.ParseCellOptional<float>(AdvColumnName.Arg6, 0.2f);
-            SkeletonGraphic.AnimationState.SetAnimation(0, animationName, true);
+            if (!string.IsNullOrEmpty(skinName))
+            {
+                Debug.Log("Try set skin: " + skinName);
+                SkeletonGraphic.Skeleton.SetSkin(skinName);
+                SkeletonGraphic.Skeleton.SetSlotsToSetupPose();
+            }
+
+            // 播動畫
+            string animationName = command.ParseCellOptional<string>(AdvColumnName.Arg2, "");
+            if (!string.IsNullOrEmpty(animationName))
+            {
+                Debug.Log("Play animation: " + animationName);
+                SkeletonGraphic.AnimationState.SetAnimation(0, animationName, true);
+            }
+
+            SkeletonGraphic.AnimationState.Apply(SkeletonGraphic.Skeleton);
+            SkeletonGraphic.UpdateMesh();
         }
 
         const int Version = 0;
