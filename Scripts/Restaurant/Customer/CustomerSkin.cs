@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Restaurant.Customer
 {
-    public class CustomerSkin : MonoBehaviour
+    internal class CustomerSkin : MonoBehaviour
     {
         private CombinedSkin CombinedSkin { get; set; }
 

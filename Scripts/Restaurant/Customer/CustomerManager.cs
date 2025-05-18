@@ -20,7 +20,7 @@ namespace Restaurant.Customer
     [RequireComponent(typeof(CustomerBubble))]
     [RequireComponent(typeof(CustomerDetector))]
     [RequireComponent(typeof(CustomerOrder))]
-    public class CustomerManager : MonoBehaviour
+    internal class CustomerManager : MonoBehaviour
     {
         [field: Header("顧客的各類資料庫")]
         [field: SerializeField] public DishDeliverSO DishDeliver { get; private set; }
@@ -68,7 +68,7 @@ namespace Restaurant.Customer
         
         
         
-        private CustomerStateMachine CustomerStateMachine { get; set; } = new();
+        private StateMachine StateMachine { get; set; } = new();
         public BubbleStateMachine BubbleStateMachine { get; private set; } = new();
 
         private void Awake()
@@ -97,14 +97,14 @@ namespace Restaurant.Customer
         // =======
         // 狀態相關
         // =======
-        public void SetCustomerState(ICustomerState newState)
+        public void SetCustomerState(IState newState)
         {
-            CustomerStateMachine.SetState(new EnterState(), this);
+            StateMachine.SetState(new EnterState(), this);
         }
         
-        public void ChangeCustomerState(ICustomerState nextState)
+        public void ChangeCustomerState(IState nextState)
         {
-            CustomerStateMachine.ChangeState(nextState, this);
+            StateMachine.ChangeState(nextState, this);
         }
 
         public void SetBubbleState(IBubbleState newState)
@@ -234,9 +234,9 @@ namespace Restaurant.Customer
             return CustomerOrder.TryOrderDish();
         }
 
-        public void GetDish(out DishSO dish)
+        public DishSO TryTakeDish()
         {
-            CustomerOrder.GetDish(out dish);
+            return CustomerOrder.TryTakeDish();
         }
     }
 }

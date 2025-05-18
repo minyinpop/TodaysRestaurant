@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Restaurant.Customer
 {
-    public class CustomerDetector : MonoBehaviour
+    internal class CustomerDetector : MonoBehaviour
     {
         private CustomerManager CustomerManager { get; set; }
 

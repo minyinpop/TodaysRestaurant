@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Database.Restaurant.Menu
 {
     [Serializable]
-    public class TodayDishSlot
+    internal class TodayDishSlot
     {
         [field: SerializeField] public bool Lock { get; private set; }
         [field: SerializeField] public DishSO Dish { get; private set; }

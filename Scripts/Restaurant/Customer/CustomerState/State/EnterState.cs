@@ -1,6 +1,6 @@
 namespace Restaurant.Customer.CustomerState.State
 {
-    public class EnterState : ICustomerState
+    internal class EnterState : IState
     {
         private CustomerManager Manager { get; set; }
         

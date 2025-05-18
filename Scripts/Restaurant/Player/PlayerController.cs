@@ -6,7 +6,7 @@ using UnityEngine.Serialization;
 namespace Restaurant.Player
 {
     [RequireComponent(typeof(Rigidbody))]
-    public class PlayerController : MonoBehaviour
+    internal class PlayerController : MonoBehaviour
     {
         [field: FormerlySerializedAs("<PlayerAttribute>k__BackingField")]
         [field: Header("玩家的屬性資料")]

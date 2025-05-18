@@ -6,7 +6,7 @@ using UnityEngine.UI;
 namespace Database.Restaurant.Player.Dish_Deliver
 {
     [CreateAssetMenu(menuName = "Minyinpop/Restaurant/Player/Deliver Dish", fileName = "New Data", order = 3)]
-    public class DishDeliverSO : ScriptableObject
+    internal class DishDeliverSO : ScriptableObject
     {
         [field: Header("正在運送的料理資料")]
         [field: SerializeField] public List<DishSO> Dishes { get; private set; }
@@ -28,18 +28,19 @@ namespace Database.Restaurant.Player.Dish_Deliver
             return false;
         }
 
-        public void GetDish(out DishSO dish)
+        public DishSO TryTakeDish()
         {
             for (var i = Dishes.Count - 1; i >= 0; i--)
             {
                 if (Dishes[i] is null)
                     continue;
 
-                dish = Dishes[i];
+                var dish = Dishes[i];
                 Dishes[i] = null;
+                return dish;
             }
 
-            dish = null;
+            return null;
         }
 
         public void Clear()

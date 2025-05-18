@@ -6,7 +6,7 @@ using InputSystem = Input.InputSystem;
 
 namespace Restaurant.Player
 {
-    public class PlayerInteractable : MonoBehaviour
+    internal class PlayerInteractable : MonoBehaviour
     {
         private InputManager Input { get; set; }
         

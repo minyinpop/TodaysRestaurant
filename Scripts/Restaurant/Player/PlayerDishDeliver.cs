@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 namespace Restaurant.Player
 {
-    public class PlayerDishDeliver : MonoBehaviour
+    internal class PlayerDishDeliver : MonoBehaviour
     {
         [field: Header("在運送料理的資料")]
         [field: SerializeField] private DishDeliverSO DishDeliver { get; set; }
@@ -19,13 +19,13 @@ namespace Restaurant.Player
         private void OnEnable()
         {
             KitchenwareManager.GetDishEvent += AddDish;
-            CustomerOrder.GetDishEvent += GetDish;
+            CustomerOrder.TryTakeDishEvent += TryTakeDish;
         }
 
         private void OnDestroy()
         {
             KitchenwareManager.GetDishEvent -= AddDish;
-            CustomerOrder.GetDishEvent -= GetDish;
+            CustomerOrder.TryTakeDishEvent -= TryTakeDish;
 
             DishDeliver.Clear();
         }
@@ -35,10 +35,15 @@ namespace Restaurant.Player
             return DishDeliver.AddDish(DishImages, dish);
         }
 
-        private DishSO GetDish()
+        private DishSO TryTakeDish()
         {
-            DishDeliver.GetDish(out var dish);
-            return dish;
+            for (var i = DishImages.Count - 1; i >= 0; i--)
+            {
+                DishImages[i].sprite = null;
+                DishImages[i].gameObject.SetActive(false);
+            }
+
+            return DishDeliver.TryTakeDish();
         }
     }
 }

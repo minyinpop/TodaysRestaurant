@@ -1,6 +1,6 @@
 namespace Restaurant.Customer.CustomerState
 {
-    public interface ICustomerState
+    internal interface IState
     {
         public void Enter(CustomerManager manager);
 

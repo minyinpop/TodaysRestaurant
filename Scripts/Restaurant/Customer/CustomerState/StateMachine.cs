@@ -1,16 +1,16 @@
 namespace Restaurant.Customer.CustomerState
 {
-    public class CustomerStateMachine
+    internal class StateMachine
     {
-        private ICustomerState CurrentState { get; set; }
+        private IState CurrentState { get; set; }
 
-        public void SetState(ICustomerState newState, CustomerManager manager)
+        public void SetState(IState newState, CustomerManager manager)
         {
             CurrentState = newState;
             CurrentState.Enter(manager);
         }
 
-        public void ChangeState(ICustomerState nextState, CustomerManager manager)
+        public void ChangeState(IState nextState, CustomerManager manager)
         {
             CurrentState.Exit();
             CurrentState = nextState;

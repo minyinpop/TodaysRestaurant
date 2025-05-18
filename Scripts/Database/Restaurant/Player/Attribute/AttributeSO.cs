@@ -5,7 +5,7 @@ using Random = UnityEngine.Random;
 namespace Database.Restaurant.Player.Attribute
 {
     [CreateAssetMenu(menuName = "Minyinpop/Restaurant/Player/Attribute", fileName = "New Data", order = 2)]
-    public class AttributeSO : ScriptableObject
+    internal class AttributeSO : ScriptableObject
     {
         [field: Header("移動設定")]
         [field: SerializeField] public PlayerMoveAttribute MoveAttribute { get; set; }
@@ -15,14 +15,14 @@ namespace Database.Restaurant.Player.Attribute
     }
 
     [Serializable]
-    public class PlayerMoveAttribute
+    internal class PlayerMoveAttribute
     {
         [field: SerializeField] public bool CanMove { get; set; }
         [field: SerializeField] public float MoveSpeed { get; set; }
     }
 
     [Serializable]
-    public class PlayerAnimationAttribute
+    internal class PlayerAnimationAttribute
     {
         [field: SerializeField] public Range Blink { get; set; }
 
@@ -30,7 +30,7 @@ namespace Database.Restaurant.Player.Attribute
     }
 
     [Serializable]
-    public class Range
+    internal class Range
     {
         [field: SerializeField] public float Max { get; set; }
         [field: SerializeField] public float Min { get; set; }

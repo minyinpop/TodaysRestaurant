@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace Restaurant.Customer
 {
-    public class CustomerBubble : MonoBehaviour
+    internal class CustomerBubble : MonoBehaviour
     {
         private CustomerManager CustomerManager { get; set; }
         

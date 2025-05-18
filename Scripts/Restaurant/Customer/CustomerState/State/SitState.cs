@@ -2,7 +2,7 @@ using Restaurant.Customer.BubbleState.State;
 
 namespace Restaurant.Customer.CustomerState.State
 {
-    public class SitState : ICustomerState
+    internal class SitState : IState
     {
         private CustomerManager Manager { get; set; }
         

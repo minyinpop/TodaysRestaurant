@@ -1,6 +1,6 @@
 namespace Restaurant.Customer.BubbleState.State
 {
-    public class HappyBubble
+    internal class HappyBubble
     {
         
     }

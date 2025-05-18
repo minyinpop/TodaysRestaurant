@@ -5,7 +5,7 @@ using UnityEngine.UI;
 namespace Restaurant.Menu
 {
     [RequireComponent(typeof(MenuManager))]
-    public class MenuController : MonoBehaviour
+    internal class MenuController : MonoBehaviour
     {
         [field: Header("菜單的遊戲物件")]
         [field: SerializeField] private GameObject OpenMenu { get; set; }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Restaurant.Kitchenware
 {
-    public class KitchenwareCookMenu : MonoBehaviour
+    internal class KitchenwareCookMenu : MonoBehaviour
     {
         [field: Header("廚具的種類")]
         [field: SerializeField] private CookUtensil CookUtensil { get; set; }

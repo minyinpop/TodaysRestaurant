@@ -7,7 +7,7 @@ using UnityEngine;
 namespace Restaurant.Customer
 {
     [RequireComponent(typeof(Rigidbody))]
-    public class CustomerMove : MonoBehaviour
+    internal class CustomerMove : MonoBehaviour
     {
         private CustomerManager CustomerManager { get; set; }
         private Rigidbody Rig { get; set; }

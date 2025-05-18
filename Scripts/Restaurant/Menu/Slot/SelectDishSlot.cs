@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace Restaurant.Menu.Slot
 {
-    public class SelectDishSlot : MonoBehaviour
+    internal class SelectDishSlot : MonoBehaviour
     {
         [field: Header("自己本身的組件")]
         [field: SerializeField] private Image SlotImage { get; set; }

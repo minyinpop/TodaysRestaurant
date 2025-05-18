@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Restaurant.Customer.BubbleState.State
 {
-    public class AngryBubble : IBubbleState
+    internal class AngryBubble : IBubbleState
     {
         private CustomerManager Manager { get; set; }
         

@@ -6,7 +6,7 @@ using Random = UnityEngine.Random;
 namespace Database.Restaurant.Customer.Attribute
 {
     [CreateAssetMenu(menuName = "Minyinpop/Restaurant/Customer/Attribute", fileName = "New Data", order = 1)]
-    public class AttributeSO : ScriptableObject
+    internal class AttributeSO : ScriptableObject
     {
         [field: Header("移動設定")]
         [field: SerializeField] public CustomerMoveAttribute MoveAttribute { get; set; }
@@ -19,14 +19,14 @@ namespace Database.Restaurant.Customer.Attribute
     }
 
     [Serializable]
-    public class CustomerMoveAttribute
+    internal class CustomerMoveAttribute
     {
         [field: SerializeField] public bool CanMove { get; set; }
         [field: SerializeField] public float MoveSpeed { get; set; }
     }
     
     [Serializable]
-    public class CustomerAnimationAttribute
+    internal class CustomerAnimationAttribute
     {
         [field: SerializeField] private Range Blink { get; set; }
 
@@ -34,7 +34,7 @@ namespace Database.Restaurant.Customer.Attribute
     }
 
     [Serializable]
-    public class CustomerOrderAttribute
+    internal class CustomerOrderAttribute
     {
         [field: Header("今日販售的料理資料")]
         [field: SerializeField] public TodayDishSO TodayAppetizer { get; private set; }
@@ -61,7 +61,7 @@ namespace Database.Restaurant.Customer.Attribute
     }
 
     [Serializable]
-    public class Range
+    internal class Range
     {
         [field: SerializeField] public float Max { get; set; }
         [field: SerializeField] public float Min { get; set; }

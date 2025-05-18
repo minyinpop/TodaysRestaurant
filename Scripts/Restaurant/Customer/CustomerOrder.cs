@@ -4,15 +4,18 @@ using Database.Restaurant.Customer.Attribute;
 using Database.Restaurant.Dish;
 using Database.Restaurant.Menu;
 using Database.Restaurant.Player.Dish_Deliver;
+using Restaurant.Customer.OrderState;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace Restaurant.Customer
 {
-    public class CustomerOrder : MonoBehaviour
+    internal class CustomerOrder : MonoBehaviour
     {
         private AttributeSO Attribute { get; set; }
         private DishDeliverSO DishDeliver { get; set; }
+        
+        private OrderStateMachine OrderStateMachine { get; set; } = new();
         
         private bool IsOrderAppetizer { get; set; }
         private bool IsOrderMainCourse { get; set; }
@@ -26,7 +29,7 @@ namespace Restaurant.Customer
         private TodayDishSO TodayDessert { get; set; }
         private TodayDishSO TodayDrink { get; set; }
 
-        public static event Func<DishSO> GetDishEvent;
+        public static event Func<DishSO> TryTakeDishEvent;
         
         public void Init(AttributeSO attribute, DishDeliverSO deliver, TodayDishSO appetizer, TodayDishSO mainCourse, TodayDishSO dessert, TodayDishSO drink)
         {
@@ -46,9 +49,9 @@ namespace Restaurant.Customer
                 IsOrderAppetizer = true;
 
                 if (Random.Range(0, 101) >= Attribute.OrderAttribute.OrderAppetizerChance)
-                    return TodayAppetizer.TakeRandomDish();
+                    return TodayAppetizer.OrderRandomDish();
                 
-                var getDish = TodayAppetizer.TakeRandomDish();
+                var getDish = TodayAppetizer.OrderRandomDish();
                 OrderDishes.Add(getDish);
                 return getDish;
             }
@@ -56,9 +59,9 @@ namespace Restaurant.Customer
             return null;
         }
 
-        public void GetDish(out DishSO dish)
+        public DishSO TryTakeDish()
         {
-            dish = GetDishEvent?.Invoke();
+            return TryTakeDishEvent?.Invoke();
         }
     }
 }

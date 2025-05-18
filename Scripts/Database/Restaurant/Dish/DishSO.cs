@@ -4,7 +4,7 @@ using UnityEngine.Serialization;
 namespace Database.Restaurant.Dish
 {
     [CreateAssetMenu(menuName = "Minyinpop/Restaurant/Dish", fileName = "New Data", order = 2)]
-    public class DishSO : ScriptableObject
+    internal class DishSO : ScriptableObject
     {
         [field: Header("料理資訊設定")]
         [field: SerializeField] public string Name { get; private set; }

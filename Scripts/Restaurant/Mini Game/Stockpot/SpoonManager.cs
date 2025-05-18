@@ -6,7 +6,7 @@ using InputSystem = Input.InputSystem;
 
 namespace Restaurant.Mini_Game.Stockpot
 {
-    public class SpoonManager : MonoBehaviour
+    internal class SpoonManager : MonoBehaviour
     {
         [field: Header("湯勺的圖層名稱")]
         [field: SerializeField] private LayerMask SpoonLayer { get; set; }

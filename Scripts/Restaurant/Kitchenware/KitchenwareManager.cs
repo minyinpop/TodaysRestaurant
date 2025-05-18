@@ -10,7 +10,7 @@ namespace Restaurant.Kitchenware
     [RequireComponent(typeof(KitchenwareDetector))]
     [RequireComponent(typeof(KitchenwareCookMenu))]
     [RequireComponent(typeof(KitchenwareGame))]
-    public class KitchenwareManager : MonoBehaviour
+    internal class KitchenwareManager : MonoBehaviour
     {
         [field: Header("氣泡的生成位置")]
         [field: SerializeField]

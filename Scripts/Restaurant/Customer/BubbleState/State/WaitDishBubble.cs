@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Restaurant.Customer.BubbleState.State
 {
-    public class WaitDishBubble : IBubbleState
+    internal class WaitDishBubble : IBubbleState
     {
         private CustomerManager Manager { get; set; }
         
@@ -42,12 +42,12 @@ namespace Restaurant.Customer.BubbleState.State
 
         public void OnClick()
         {
-            Manager.GetDish(out var dish);
+            var dish = Manager.TryTakeDish();
 
             if (dish is null)
                 return;
             
-            // TODO 顧客獲得餐點後，就判斷料理是否是想要的。
+            
         }
         
         private IEnumerator CountDownPatience()

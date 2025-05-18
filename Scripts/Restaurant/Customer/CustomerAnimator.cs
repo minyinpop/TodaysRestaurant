@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Restaurant.Customer
 {
     [RequireComponent(typeof(SkeletonAnimation))]
-    public class CustomerAnimator : MonoBehaviour
+    internal class CustomerAnimator : MonoBehaviour
     {
         private AnimationReferenceAsset IdleClip { get; set; }
         private AnimationReferenceAsset WalkClip { get; set; }

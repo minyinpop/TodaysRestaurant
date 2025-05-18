@@ -9,7 +9,7 @@ using InputSystem = Input.InputSystem;
 namespace Restaurant.Player
 {
     [RequireComponent(typeof(SkeletonAnimation))]
-    public class PlayerAnimator : MonoBehaviour
+    internal class PlayerAnimator : MonoBehaviour
     {
         [field: FormerlySerializedAs("<PlayerAttribute>k__BackingField")]
         [field: Header("玩家的屬性資料")]

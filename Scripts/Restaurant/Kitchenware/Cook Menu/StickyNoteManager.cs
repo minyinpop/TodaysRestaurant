@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace Restaurant.Kitchenware.Cook_Menu
 {
-    public class StickyNoteManager : MonoBehaviour
+    internal class StickyNoteManager : MonoBehaviour
     {
         [field: Header("自身組件")]
         [field: SerializeField] private Button Button { get; set; }

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Restaurant.Customer.BubbleState.State
 {
-    public class OrderBubble : IBubbleState
+    internal class OrderBubble : IBubbleState
     {
         private CustomerManager Manager { get; set; }
         
