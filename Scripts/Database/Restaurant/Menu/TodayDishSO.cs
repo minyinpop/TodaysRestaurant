@@ -8,9 +8,9 @@ namespace Database.Restaurant.Menu
     internal class TodayDishSO : ScriptableObject
     {
         [field: Header("上架料理的清單")]
-        [field: SerializeField] public List<TodayDishSlot> TodayDishSlots { get; set; }
+        [field: SerializeField] internal List<TodayDishSlot> TodayDishSlots { get; set; }
 
-        public DishSO OrderRandomDish()
+        internal DishSO OrderRandomDish()
         {
             List<TodayDishSlot> tempSlots = new();
             

@@ -4,7 +4,6 @@ using Database.Restaurant.Customer.Attribute;
 using Database.Restaurant.Dish;
 using Database.Restaurant.Menu;
 using Database.Restaurant.Player.Dish_Deliver;
-using Restaurant.Customer.OrderState;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -14,15 +13,14 @@ namespace Restaurant.Customer
     {
         private AttributeSO Attribute { get; set; }
         private DishDeliverSO DishDeliver { get; set; }
-        
-        private OrderStateMachine OrderStateMachine { get; set; } = new();
+
+        internal DishSO CurrentOrderDish { get; private set; }
+        private List<DishSO> OrderDishes { get; set; } = new();
         
         private bool IsOrderAppetizer { get; set; }
         private bool IsOrderMainCourse { get; set; }
         private bool IsOrderDessert { get; set; }
         private bool IsOrderDrink { get; set; }
-        
-        private List<DishSO> OrderDishes { get; set; } = new();
         
         private TodayDishSO TodayAppetizer { get; set; }
         private TodayDishSO TodayMainCourse { get; set; }
@@ -48,15 +46,52 @@ namespace Restaurant.Customer
             {
                 IsOrderAppetizer = true;
 
-                if (Random.Range(0, 101) >= Attribute.OrderAttribute.OrderAppetizerChance)
-                    return TodayAppetizer.OrderRandomDish();
-                
-                var getDish = TodayAppetizer.OrderRandomDish();
-                OrderDishes.Add(getDish);
-                return getDish;
+                if (Random.Range(0, 101) <= Attribute.OrderAttribute.OrderAppetizerChance)
+                {
+                    CurrentOrderDish = TodayAppetizer.OrderRandomDish();
+                    OrderDishes.Add(CurrentOrderDish);
+                    return CurrentOrderDish;
+                }
             }
 
-            return null;
+            if (!IsOrderMainCourse)
+            {
+                IsOrderMainCourse = true;
+                
+                if (Random.Range(0, 101) <= Attribute.OrderAttribute.OrderMainCourseChance)
+                {
+                    CurrentOrderDish = TodayMainCourse.OrderRandomDish();
+                    OrderDishes.Add(CurrentOrderDish);
+                    return CurrentOrderDish;
+                }
+            }
+
+            if (!IsOrderDessert)
+            {
+                IsOrderDessert = true;
+                
+                if (Random.Range(0, 101) <= Attribute.OrderAttribute.OrderDessertChance)
+                {
+                    CurrentOrderDish = TodayDessert.OrderRandomDish();
+                    OrderDishes.Add(CurrentOrderDish);
+                    return CurrentOrderDish;
+                }
+            }
+
+            if (!IsOrderDrink)
+            {
+                IsOrderDrink = true;
+                
+                if (Random.Range(0, 101) <= Attribute.OrderAttribute.OrderDrinkChance)
+                {
+                    CurrentOrderDish = TodayDrink.OrderRandomDish();
+                    OrderDishes.Add(CurrentOrderDish);
+                    return CurrentOrderDish;
+                }
+            }
+
+            CurrentOrderDish = null;
+            return CurrentOrderDish;
         }
 
         public DishSO TryTakeDish()

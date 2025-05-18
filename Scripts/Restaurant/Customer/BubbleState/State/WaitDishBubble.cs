@@ -18,7 +18,11 @@ namespace Restaurant.Customer.BubbleState.State
             manager.InitWaitDishBubble();
             
             SelectDish = Manager.TryOrderDish();
-            Manager.CustomerBubble.CurrentBubbleDishImage.sprite = SelectDish.Sprite;
+
+            if (SelectDish is null)
+                Manager.ChangeBubbleState(new CheckoutBubble());
+            else
+                Manager.CustomerBubble.CurrentBubbleDishImage.sprite = SelectDish.Sprite;
             
             CurrentCoroutine = CountDownPatience();
             Manager.StartCoroutine(CurrentCoroutine);
@@ -26,7 +30,8 @@ namespace Restaurant.Customer.BubbleState.State
 
         public void Exit()
         {
-            // TODO
+            Manager.StopCoroutine(CurrentCoroutine);
+            Manager.DestroyBubble();
         }
 
         public void PlayerEnter()
@@ -42,12 +47,15 @@ namespace Restaurant.Customer.BubbleState.State
 
         public void OnClick()
         {
-            var dish = Manager.TryTakeDish();
+            var takeDish = Manager.TryTakeDish();
 
-            if (dish is null)
+            if (takeDish is null)
                 return;
-            
-            
+
+            if (takeDish != Manager.CustomerOrder.CurrentOrderDish)
+                Manager.ChangeBubbleState(new AngryBubble());
+            else
+                Manager.ChangeBubbleState(new ThinkBubble());
         }
         
         private IEnumerator CountDownPatience()

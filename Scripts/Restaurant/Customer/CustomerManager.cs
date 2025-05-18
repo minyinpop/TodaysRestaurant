@@ -10,7 +10,6 @@ using Restaurant.Customer.CustomerState;
 using Restaurant.Customer.CustomerState.State;
 using Spine.Unity;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Restaurant.Customer
 {
@@ -64,7 +63,7 @@ namespace Restaurant.Customer
         private CustomerSkin CustomerSkin { get; set; }
         public CustomerBubble CustomerBubble { get; private set; }
         private CustomerDetector CustomerDetector { get; set; }
-        private CustomerOrder CustomerOrder { get; set; }
+        public CustomerOrder CustomerOrder { get; private set; }
         
         
         
