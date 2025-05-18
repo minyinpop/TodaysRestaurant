@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Database.Restaurant.Dish;
 using Database.Restaurant.Player.Dish_Deliver;
+using Restaurant.Customer;
 using Restaurant.Kitchenware;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,30 +19,26 @@ namespace Restaurant.Player
         private void OnEnable()
         {
             KitchenwareManager.GetDishEvent += AddDish;
+            CustomerOrder.GetDishEvent += GetDish;
         }
 
         private void OnDestroy()
         {
             KitchenwareManager.GetDishEvent -= AddDish;
-            
-            for (var i = 0; i < DishDeliver.Dishes.Count; i++)
-                DishDeliver.Dishes[i] = null;
+            CustomerOrder.GetDishEvent -= GetDish;
+
+            DishDeliver.Clear();
         }
 
         private bool AddDish(DishSO dish)
         {
-            for (var i = DishDeliver.Dishes.Count - 1; i >= 0; i--)
-            {
-                if (DishDeliver.Dishes[i] is not null)
-                    continue;
-                
-                DishDeliver.Dishes[i] = dish;
-                DishImages[i].gameObject.SetActive(true);
-                DishImages[i].sprite = dish.Sprite;
-                return true;
-            }
+            return DishDeliver.AddDish(DishImages, dish);
+        }
 
-            return false;
+        private DishSO GetDish()
+        {
+            DishDeliver.GetDish(out var dish);
+            return dish;
         }
     }
 }

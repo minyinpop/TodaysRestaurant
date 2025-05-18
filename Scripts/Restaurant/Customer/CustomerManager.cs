@@ -10,6 +10,7 @@ using Restaurant.Customer.CustomerState;
 using Restaurant.Customer.CustomerState.State;
 using Spine.Unity;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Restaurant.Customer
 {
@@ -22,10 +23,10 @@ namespace Restaurant.Customer
     public class CustomerManager : MonoBehaviour
     {
         [field: Header("顧客的各類資料庫")]
-        [field: SerializeField] private DishDeliverSO DishDeliver { get; set; }
+        [field: SerializeField] public DishDeliverSO DishDeliver { get; private set; }
         [field: SerializeField] public AttributeSO Attribute { get; private set; }
         [field: SerializeField] private PathSO Path { get; set; }
-        [field: SerializeField] private List<SkinSO> CustomerSkins { get; set; }
+        [field: SerializeField] private List<SkinSO> Skins { get; set; }
         
         
         
@@ -81,9 +82,9 @@ namespace Restaurant.Customer
 
             CustomerAnimator.Init(IdleClip, WalkClip, SitClip);
             CustomerMove.Init(Attribute, Path);
-            CustomerSkin.Init(CustomerSkins);
+            CustomerSkin.Init(Skins);
             CustomerBubble.Init(BubbleParent, ThinkBubblePrefab, OrderBubblePrefab, WaitDishBubblePrefab, HappyBubblePrefab, AngryBubblePrefab);
-            CustomerOrder.Init(DishDeliver, TodayAppetizer, TodayMainCourse, TodayDessert, TodayDrink);
+            CustomerOrder.Init(Attribute, DishDeliver, TodayAppetizer, TodayMainCourse, TodayDessert, TodayDrink);
         }
 
         private void Start()
@@ -228,9 +229,14 @@ namespace Restaurant.Customer
             CustomerAnimator.SetFlipX(isFlip);
         }
 
-        public void GetDish(out DishSO selectDish)
+        public DishSO TryOrderDish()
         {
-            CustomerOrder.GetDish(out selectDish);
+            return CustomerOrder.TryOrderDish();
+        }
+
+        public void GetDish(out DishSO dish)
+        {
+            CustomerOrder.GetDish(out dish);
         }
     }
 }

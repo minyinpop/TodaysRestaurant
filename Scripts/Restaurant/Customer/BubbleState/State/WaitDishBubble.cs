@@ -15,14 +15,10 @@ namespace Restaurant.Customer.BubbleState.State
         public void Enter(CustomerManager manager)
         {
             Manager = manager;
-            
             manager.InitWaitDishBubble();
             
-            Manager.GetDish(out var selectDish);
-            SelectDish = selectDish;
-            
-            Debug.Log(SelectDish);
-            // BUG: SelectDish 是 null，檢查 out property
+            SelectDish = Manager.TryOrderDish();
+            Manager.CustomerBubble.CurrentBubbleDishImage.sprite = SelectDish.Sprite;
             
             CurrentCoroutine = CountDownPatience();
             Manager.StartCoroutine(CurrentCoroutine);
@@ -35,22 +31,28 @@ namespace Restaurant.Customer.BubbleState.State
 
         public void PlayerEnter()
         {
-            // TODO
+            if (Manager.DishDeliver.CheckDishExist())
+                Manager.SetBubbleInteractable(true);
         }
 
         public void PlayerLeave()
         {
-            // TODO
+            Manager.SetBubbleInteractable(false);
         }
 
         public void OnClick()
         {
-            // TODO
+            Manager.GetDish(out var dish);
+
+            if (dish is null)
+                return;
+            
+            // TODO 顧客獲得餐點後，就判斷料理是否是想要的。
         }
         
         private IEnumerator CountDownPatience()
         {
-            var selectTime = Manager.Attribute.OrderAttribute.GetRandomWaitDishTime();
+            var selectTime = SelectDish.CookTime + Manager.Attribute.OrderAttribute.GetRandomWaitDishTime();
             var remainingTime = selectTime;
             var countDownImage = Manager.CustomerBubble.CurrentBubbleCountDownImage;
 

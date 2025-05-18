@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Database.Restaurant.Dish;
 using UnityEngine;
 
 namespace Database.Restaurant.Menu
@@ -8,5 +9,28 @@ namespace Database.Restaurant.Menu
     {
         [field: Header("上架料理的清單")]
         [field: SerializeField] public List<TodayDishSlot> TodayDishSlots { get; set; }
+
+        public DishSO TakeRandomDish()
+        {
+            List<TodayDishSlot> tempSlots = new();
+            
+            foreach (var slot in TodayDishSlots)
+                tempSlots.Add(slot);
+
+            while (tempSlots.Count > 0)
+            {
+                var slot = tempSlots[Random.Range(0, tempSlots.Count)];
+
+                if (!slot.CheckDishExist())
+                {
+                    tempSlots.Remove(slot);
+                    continue;
+                }
+                
+                return slot.TakeDish();
+            }
+
+            return null;
+        }
     }
 }
