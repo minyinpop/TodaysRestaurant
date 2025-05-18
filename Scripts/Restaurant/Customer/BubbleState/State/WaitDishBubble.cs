@@ -1,19 +1,28 @@
 using System.Collections;
+using Database.Restaurant.Dish;
 using UnityEngine;
 
 namespace Restaurant.Customer.BubbleState.State
 {
-    public class OrderBubble : IBubbleState
+    public class WaitDishBubble : IBubbleState
     {
         private CustomerManager Manager { get; set; }
         
         private IEnumerator CurrentCoroutine { get; set; }
         
+        private DishSO SelectDish { get; set; }
+        
         public void Enter(CustomerManager manager)
         {
             Manager = manager;
             
-            manager.InitOrderBubble();
+            manager.InitWaitDishBubble();
+            
+            Manager.GetDish(out var selectDish);
+            SelectDish = selectDish;
+            
+            Debug.Log(SelectDish);
+            // BUG: SelectDish 是 null，檢查 out property
             
             CurrentCoroutine = CountDownPatience();
             Manager.StartCoroutine(CurrentCoroutine);
@@ -21,28 +30,27 @@ namespace Restaurant.Customer.BubbleState.State
 
         public void Exit()
         {
-            Manager.StopCoroutine(CurrentCoroutine);
-            Manager.DestroyBubble();
+            // TODO
         }
 
         public void PlayerEnter()
         {
-            Manager.SetBubbleInteractable(true);
+            // TODO
         }
 
         public void PlayerLeave()
         {
-            Manager.SetBubbleInteractable(false);
+            // TODO
         }
 
         public void OnClick()
         {
-            Manager.ChangeBubbleState(new WaitDishBubble());
+            // TODO
         }
-
+        
         private IEnumerator CountDownPatience()
         {
-            var selectTime = Manager.Attribute.OrderAttribute.GetRandomOrderTime();
+            var selectTime = Manager.Attribute.OrderAttribute.GetRandomWaitDishTime();
             var remainingTime = selectTime;
             var countDownImage = Manager.CustomerBubble.CurrentBubbleCountDownImage;
 

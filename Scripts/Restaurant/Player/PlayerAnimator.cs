@@ -3,6 +3,7 @@ using Database.Restaurant.Player.Attribute;
 using Spine.Unity;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 using InputSystem = Input.InputSystem;
 
 namespace Restaurant.Player
@@ -10,8 +11,9 @@ namespace Restaurant.Player
     [RequireComponent(typeof(SkeletonAnimation))]
     public class PlayerAnimator : MonoBehaviour
     {
+        [field: FormerlySerializedAs("<PlayerAttribute>k__BackingField")]
         [field: Header("玩家的屬性資料")]
-        [field: SerializeField] private PlayerAttributeSO PlayerAttribute { get; set; }
+        [field: SerializeField] private AttributeSO Attribute { get; set; }
         
         [field: Header("主要的 Spine 動畫資產")]
         [field: SerializeField] private AnimationReferenceAsset Idle { get; set; }
@@ -82,7 +84,7 @@ namespace Restaurant.Player
             {
                 SkeletonAnimation.AnimationState.SetAnimation(2, Blink, false);
                 
-                var durationTime = Blink.Animation.Duration + PlayerAttribute.AnimationAttribute.GetRandomBlinkTime();
+                var durationTime = Blink.Animation.Duration + Attribute.AnimationAttribute.GetRandomBlinkTime();
                 yield return new WaitForSeconds(durationTime);
             }
         }

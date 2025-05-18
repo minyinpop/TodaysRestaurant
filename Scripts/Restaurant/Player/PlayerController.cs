@@ -1,14 +1,16 @@
 using Database.Restaurant.Player.Attribute;
 using Input;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Restaurant.Player
 {
     [RequireComponent(typeof(Rigidbody))]
     public class PlayerController : MonoBehaviour
     {
+        [field: FormerlySerializedAs("<PlayerAttribute>k__BackingField")]
         [field: Header("玩家的屬性資料")]
-        [field: SerializeField] private PlayerAttributeSO PlayerAttribute { get; set; }
+        [field: SerializeField] private AttributeSO Attribute { get; set; }
 
         private InputManager Input { get; set; }
         private Vector3 MoveDir => Input.Player.Walk.ReadValue<Vector3>();
@@ -24,15 +26,15 @@ namespace Restaurant.Player
 
         private void FixedUpdate()
         {
-            if (!PlayerAttribute.MoveAttribute.CanMove)
+            if (!Attribute.MoveAttribute.CanMove)
             {
                 Rig.linearVelocity = Vector3.zero;
                 return;
             }
             
-            var x = MoveDir.x * PlayerAttribute.MoveAttribute.MoveSpeed * Time.fixedDeltaTime;
+            var x = MoveDir.x * Attribute.MoveAttribute.MoveSpeed * Time.fixedDeltaTime;
             var y = Rig.linearVelocity.y;
-            var z = MoveDir.z * PlayerAttribute.MoveAttribute.MoveSpeed * Time.fixedDeltaTime;
+            var z = MoveDir.z * Attribute.MoveAttribute.MoveSpeed * Time.fixedDeltaTime;
             
             Rig.linearVelocity = transform.TransformDirection(new Vector3(x, y, z));
         }

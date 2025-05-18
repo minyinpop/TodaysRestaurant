@@ -8,8 +8,8 @@ namespace Restaurant.Customer
     public class CustomerSkin : MonoBehaviour
     {
         private CombinedSkin CombinedSkin { get; set; }
-        
-        private List<CustomerSkinSO> CustomerSkins { get; set; } = new();
+
+        private List<SkinSO> CustomerSkins { get; set; } = new();
 
         private void Awake()
         {
@@ -19,7 +19,7 @@ namespace Restaurant.Customer
                 CombinedSkin.skinsToCombine.Add(skin.GetRandomSkin());
         }
 
-        public void Init(List<CustomerSkinSO> skins)
+        public void Init(List<SkinSO> skins)
         {
             CustomerSkins = skins;
         }

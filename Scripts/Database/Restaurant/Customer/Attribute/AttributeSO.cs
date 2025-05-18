@@ -6,7 +6,7 @@ using Random = UnityEngine.Random;
 namespace Database.Restaurant.Customer.Attribute
 {
     [CreateAssetMenu(menuName = "Minyinpop/Restaurant/Customer/Attribute", fileName = "New Data", order = 1)]
-    public class CustomerAttributeSO : ScriptableObject
+    public class AttributeSO : ScriptableObject
     {
         [field: Header("移動設定")]
         [field: SerializeField] public CustomerMoveAttribute MoveAttribute { get; set; }

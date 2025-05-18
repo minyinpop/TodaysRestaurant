@@ -12,8 +12,8 @@ namespace Restaurant.Customer
         private CustomerManager CustomerManager { get; set; }
         private Rigidbody Rig { get; set; }
         
-        private CustomerAttributeSO Attribute { get; set; }
-        private CustomerPathSO Path { get; set; }
+        private AttributeSO Attribute { get; set; }
+        private PathSO Path { get; set; }
         
         private IEnumerator CurrentCoroutine { get; set; }
 
@@ -29,7 +29,7 @@ namespace Restaurant.Customer
                 StopCoroutine(CurrentCoroutine);
         }
 
-        public void Init(CustomerAttributeSO attribute, CustomerPathSO path)
+        public void Init(AttributeSO attribute, PathSO path)
         {
             Attribute = attribute;
             Path = path;
@@ -52,6 +52,11 @@ namespace Restaurant.Customer
             {
                 while (Vector3.Distance(point, transform.position) > .1f)
                 {
+                    if (point.x - transform.position.x > 0)
+                        CustomerManager.SetFlipX(true);
+                    else if (point.x - transform.position.x < 0)
+                        CustomerManager.SetFlipX(false);
+                    
                     var direction = (point - transform.position).normalized;
                     Rig.linearVelocity = direction * Attribute.MoveAttribute.MoveSpeed * Time.fixedDeltaTime;
                     yield return new WaitForFixedUpdate();

@@ -875,7 +875,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b651381152348acb1e50d2bfc556702, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <PlayerAttribute>k__BackingField: {fileID: 11400000, guid: cdf4e6f7bf80bdf4da74990c1f1bb7c5, type: 2}
+  <Attribute>k__BackingField: {fileID: 11400000, guid: cdf4e6f7bf80bdf4da74990c1f1bb7c5, type: 2}
   <Idle>k__BackingField: {fileID: 11400000, guid: b4ec39f808d976c4b8ffaf4422771b88, type: 2}
   <Walk>k__BackingField: {fileID: 11400000, guid: fb4654137486f2b46b61503ac102a50b, type: 2}
   <Blink>k__BackingField: {fileID: 11400000, guid: 0db519279046ad9469a6259e766d955a, type: 2}
@@ -891,7 +891,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cda9ffb3780b4771906061ecfafefd4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <PlayerAttribute>k__BackingField: {fileID: 11400000, guid: cdf4e6f7bf80bdf4da74990c1f1bb7c5, type: 2}
+  <Attribute>k__BackingField: {fileID: 11400000, guid: cdf4e6f7bf80bdf4da74990c1f1bb7c5, type: 2}
 --- !u!114 &769214623
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -916,6 +916,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbb96012e2b74df0a9d4e2d9f1bee8da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <DishDeliver>k__BackingField: {fileID: 11400000, guid: 62d03125adf510940ab5f6f898275f90, type: 2}
   <DishImages>k__BackingField:
   - {fileID: 1261716604}
   - {fileID: 220744289}
@@ -1098,6 +1099,7 @@ GameObject:
   - component: {fileID: 978765805}
   - component: {fileID: 978765811}
   - component: {fileID: 978765810}
+  - component: {fileID: 978765812}
   - component: {fileID: 978765797}
   - component: {fileID: 978765796}
   - component: {fileID: 978765795}
@@ -1337,19 +1339,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd490116c8f9483aa43721c12d771fe4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <CustomerAttribute>k__BackingField: {fileID: 11400000, guid: 2c4f1b2825414184698ec87e99cc5c35, type: 2}
-  <CustomerPath>k__BackingField: {fileID: 11400000, guid: 4aa52c99c6e88fc4682e7af8deb27f43, type: 2}
+  <DishDeliver>k__BackingField: {fileID: 11400000, guid: 62d03125adf510940ab5f6f898275f90, type: 2}
+  <Attribute>k__BackingField: {fileID: 11400000, guid: 2c4f1b2825414184698ec87e99cc5c35, type: 2}
+  <Path>k__BackingField: {fileID: 11400000, guid: 4aa52c99c6e88fc4682e7af8deb27f43, type: 2}
   <CustomerSkins>k__BackingField:
   - {fileID: 11400000, guid: b6f458948b9d25148bcb3587df2766cd, type: 2}
   - {fileID: 11400000, guid: c4fe4c203ccb73349a35978d024fe465, type: 2}
   - {fileID: 11400000, guid: 18d0b43eae2fef44bb6c2ec587cfa452, type: 2}
   - {fileID: 11400000, guid: 689aba0dd3c45a842888bfb9cc1a7d9e, type: 2}
-  <IdleClip>k__BackingField: {fileID: 11400000, guid: 3c9f22cf390f80e449ff9a1e4f6af5db, type: 2}
-  <WalkClip>k__BackingField: {fileID: 11400000, guid: f3c3f4136e65d8344b0edcdd66ce342a, type: 2}
+  <TodayAppetizer>k__BackingField: {fileID: 11400000, guid: 05414dbb24b1cb84c90ce01dcfd6e258, type: 2}
+  <TodayMainCourse>k__BackingField: {fileID: 11400000, guid: 5eafe86b70fefed48a0be3fe1ca64770, type: 2}
+  <TodayDessert>k__BackingField: {fileID: 11400000, guid: 6f2139aa44a5b004d94e650d31de57f1, type: 2}
+  <TodayDrink>k__BackingField: {fileID: 11400000, guid: 28cb620b3beb796439b20637799afa58, type: 2}
+  <IdleClip>k__BackingField: {fileID: 11400000, guid: 644b2770d0863ff46ba09eac6a4ad01c, type: 2}
+  <WalkClip>k__BackingField: {fileID: 11400000, guid: 04624151c3c55a649b488c94cacc3748, type: 2}
   <SitClip>k__BackingField: {fileID: 11400000, guid: 9401af85631af9742a44140d106ee18e, type: 2}
   <BubbleParent>k__BackingField: {fileID: 172512601}
   <ThinkBubblePrefab>k__BackingField: {fileID: 2165967330320651976, guid: f3dcc53f04eea1040b653ae1fcc8a2f6, type: 3}
   <OrderBubblePrefab>k__BackingField: {fileID: 4613436651273339981, guid: ef5de2adb32234848b9dcf4cfd62c179, type: 3}
+  <WaitDishBubblePrefab>k__BackingField: {fileID: 5848401021364950565, guid: 154c6f250dc4fb64eba8961edb6e2fe8, type: 3}
   <HappyBubblePrefab>k__BackingField: {fileID: 8914588204494441778, guid: 8fb2a36aac0b00d469bbd516f0d8e7fc, type: 3}
   <AngryBubblePrefab>k__BackingField: {fileID: 5096490157088046916, guid: 9b107ad5c2b93564790fa7153bfda33d, type: 3}
 --- !u!65 &978765809
@@ -1395,6 +1403,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ac6e8c63aa3a4369869a161abe1b900e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &978765812
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 978765791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc921bb7e96c4172820da5f715bab519, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &993417757

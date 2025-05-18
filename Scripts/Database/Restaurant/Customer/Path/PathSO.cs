@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Database.Restaurant.Customer.Path
 {
     [CreateAssetMenu(menuName = "Minyinpop/Restaurant/Customer/Path", fileName = "New Data", order = 2)]
-    public class CustomerPathSO : ScriptableObject
+    public class PathSO : ScriptableObject
     {
         [field: Header("門口到座位的路徑")]
         [field: SerializeField] public List<Vector3> GoToSeat { get; private set; }

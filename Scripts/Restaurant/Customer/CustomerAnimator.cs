@@ -38,5 +38,13 @@ namespace Restaurant.Customer
         {
             SkeletonAnima.AnimationState.SetAnimation(1, SitClip, false);
         }
+
+        public void SetFlipX(bool isFlip)
+        {
+            if (isFlip)
+                SkeletonAnima.skeleton.ScaleX = -1;
+            else
+                SkeletonAnima.skeleton.ScaleX = 1;
+        }
     }
 }
