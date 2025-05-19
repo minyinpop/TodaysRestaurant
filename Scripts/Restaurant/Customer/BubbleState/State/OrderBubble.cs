@@ -70,6 +70,8 @@ namespace Restaurant.Customer.BubbleState.State
                 yield return null;
             }
             
+            Manager.DestroyBubble();
+            yield return new WaitForSeconds(1);
             Manager.ChangeBubbleState(new AngryBubble());
         }
     }

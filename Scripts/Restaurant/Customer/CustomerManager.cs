@@ -99,7 +99,7 @@ namespace Restaurant.Customer
         // =======
         public void SetCustomerState(IState newState)
         {
-            StateMachine.SetState(new WalkToSeat(), this);
+            StateMachine.SetState(newState, this);
         }
 
         public void SetBubbleState(IBubbleState newState)

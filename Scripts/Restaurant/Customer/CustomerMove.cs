@@ -69,9 +69,9 @@ namespace Restaurant.Customer
             {
                 while (Vector3.Distance(point, transform.position) > .1f)
                 {
-                    if (point.x - transform.position.x > 0)
+                    if (transform.InverseTransformDirection(point).x > 0)
                         CustomerManager.SetFlipX(true);
-                    else if (point.x - transform.position.x < 0)
+                    else if (transform.InverseTransformDirection(point).x < 0)
                         CustomerManager.SetFlipX(false);
                     
                     var direction = (point - transform.position).normalized;
