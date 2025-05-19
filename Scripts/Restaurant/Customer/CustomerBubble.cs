@@ -12,6 +12,7 @@ namespace Restaurant.Customer
         private GameObject ThinkBubblePrefab { get; set; }
         private GameObject OrderBubblePrefab { get; set; }
         private GameObject WaitDishBubblePrefab { get; set; }
+        private GameObject CheckoutBubblePrefab { get; set; }
         private GameObject HappyBubblePrefab { get; set; }
         private GameObject AngryBubblePrefab { get; set; }
         
@@ -25,13 +26,14 @@ namespace Restaurant.Customer
             CustomerManager = GetComponent<CustomerManager>();
         }
         
-        public void Init(Transform parent, GameObject think, GameObject order, GameObject waitDish,GameObject happy, GameObject angry)
+        public void Init(Transform parent, GameObject think, GameObject order, GameObject waitDish, GameObject checkout, GameObject happy, GameObject angry)
         {
             BubbleParent = parent;
             
             ThinkBubblePrefab = think;
             OrderBubblePrefab = order;
             WaitDishBubblePrefab = waitDish;
+            CheckoutBubblePrefab = checkout;
             HappyBubblePrefab = happy;
             AngryBubblePrefab = angry;
         }
@@ -64,9 +66,16 @@ namespace Restaurant.Customer
             CurrentBubbleDishImage = CurrentBubble.transform.Find("Icon").GetComponent<Image>();
         }
 
+        public void InitCheckoutBubble()
+        {
+            CurrentBubble = Instantiate(CheckoutBubblePrefab, BubbleParent);
+            CurrentBubbleButton = CurrentBubble.GetComponent<Button>();
+            CurrentBubbleButton.onClick.AddListener(CustomerManager.BubbleStateMachine.OnClick);
+        }
+
         public void InitHappyBubble()
         {
-            // TODO
+            CurrentBubble = Instantiate(HappyBubblePrefab, BubbleParent);
         }
 
         public void InitAngryBubble()

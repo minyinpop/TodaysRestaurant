@@ -2,7 +2,7 @@ using Restaurant.Customer.BubbleState.State;
 
 namespace Restaurant.Customer.CustomerState.State
 {
-    internal class SitState : IState
+    internal class OnSeat : IState
     {
         private CustomerManager Manager { get; set; }
         
@@ -13,11 +13,6 @@ namespace Restaurant.Customer.CustomerState.State
             manager.SetBubbleState(new ThinkBubble());
             manager.PlaySitAnima();
             manager.OnSeat();
-        }
-
-        public void Exit()
-        {
-            
         }
     }
 }

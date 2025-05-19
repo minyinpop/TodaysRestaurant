@@ -9,12 +9,5 @@ namespace Restaurant.Customer.CustomerState
             CurrentState = newState;
             CurrentState.Enter(manager);
         }
-
-        public void ChangeState(IState nextState, CustomerManager manager)
-        {
-            CurrentState.Exit();
-            CurrentState = nextState;
-            CurrentState.Enter(manager);
-        }
     }
 }

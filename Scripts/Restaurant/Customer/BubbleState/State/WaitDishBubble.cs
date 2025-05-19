@@ -20,7 +20,7 @@ namespace Restaurant.Customer.BubbleState.State
             SelectDish = Manager.TryOrderDish();
 
             if (SelectDish is null)
-                Manager.ChangeBubbleState(new CheckoutBubble());
+                Manager.ChangeBubbleState(new HappyBubble());
             else
                 Manager.CustomerBubble.CurrentBubbleDishImage.sprite = SelectDish.Sprite;
             
@@ -30,8 +30,11 @@ namespace Restaurant.Customer.BubbleState.State
 
         public void Exit()
         {
-            Manager.StopCoroutine(CurrentCoroutine);
-            Manager.DestroyBubble();
+            if (CurrentCoroutine is not null)
+            {
+                Manager.StopCoroutine(CurrentCoroutine);
+                CurrentCoroutine = null;
+            }
         }
 
         public void PlayerEnter()
@@ -52,10 +55,14 @@ namespace Restaurant.Customer.BubbleState.State
             if (takeDish is null)
                 return;
 
-            if (takeDish != Manager.CustomerOrder.CurrentOrderDish)
-                Manager.ChangeBubbleState(new AngryBubble());
-            else
-                Manager.ChangeBubbleState(new ThinkBubble());
+            if (CurrentCoroutine is not null)
+            {
+                Manager.StopCoroutine(CurrentCoroutine);
+                CurrentCoroutine = null;
+            }
+            
+            CurrentCoroutine = OnClickProcess(takeDish);
+            Manager.StartCoroutine(CurrentCoroutine);
         }
         
         private IEnumerator CountDownPatience()
@@ -72,6 +79,17 @@ namespace Restaurant.Customer.BubbleState.State
             }
             
             Manager.ChangeBubbleState(new AngryBubble());
+        }
+
+        private IEnumerator OnClickProcess(DishSO takeDish)
+        {
+            Manager.DestroyBubble();
+            yield return new WaitForSeconds(1);
+            
+            if (takeDish != Manager.CustomerOrder.CurrentOrderDish)
+                Manager.ChangeBubbleState(new AngryBubble());
+            else
+                Manager.ChangeBubbleState(new ThinkBubble());
         }
     }
 }

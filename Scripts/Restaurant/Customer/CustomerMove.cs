@@ -1,6 +1,8 @@
 using System.Collections;
+using System.Collections.Generic;
 using Database.Restaurant.Customer.Attribute;
 using Database.Restaurant.Customer.Path;
+using Restaurant.Customer.CustomerState;
 using Restaurant.Customer.CustomerState.State;
 using UnityEngine;
 
@@ -37,18 +39,33 @@ namespace Restaurant.Customer
         
         
         
-        // =======
-        // 走到位置
-        // =======
         public void WalkToSeat()
         {
-            CurrentCoroutine = WalkToSeatProcess();
+            StartWalkProcess(Path.WalkToSeat, new OnSeat());
+        }
+
+        public void WalkToCheckout()
+        {
+            StartWalkProcess(Path.WalkToCheckout, new WaitForCheckout());
+        }
+        
+        
+        
+        private void StartWalkProcess(List<Vector3> paths, IState nextState)
+        {
+            if (CurrentCoroutine is not null)
+            {
+                StopCoroutine(CurrentCoroutine);
+                CurrentCoroutine = null;
+            }
+
+            CurrentCoroutine = WalkProcess(paths, nextState);
             StartCoroutine(CurrentCoroutine);
         }
 
-        private IEnumerator WalkToSeatProcess()
+        private IEnumerator WalkProcess(List<Vector3> paths, IState nextState)
         {
-            foreach (var point in Path.GoToSeat)
+            foreach (var point in paths)
             {
                 while (Vector3.Distance(point, transform.position) > .1f)
                 {
@@ -63,14 +80,11 @@ namespace Restaurant.Customer
                 }
             }
 
-            CustomerManager.ChangeCustomerState(new SitState());
+            CustomerManager.SetCustomerState(nextState);
         }
         
         
         
-        // =====
-        // 在位置
-        // =====
         public void OnSeat()
         {
             Rig.linearVelocity = Vector3.zero;

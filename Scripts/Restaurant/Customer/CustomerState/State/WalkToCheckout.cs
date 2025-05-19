@@ -1,6 +1,6 @@
 namespace Restaurant.Customer.CustomerState.State
 {
-    internal class EnterState : IState
+    internal class WalkToCheckout : IState
     {
         private CustomerManager Manager { get; set; }
         
@@ -9,12 +9,7 @@ namespace Restaurant.Customer.CustomerState.State
             Manager = manager;
             
             manager.PlayWalkAnima();
-            manager.WalkToSeat();
-        }
-
-        public void Exit()
-        {
-            
+            manager.WalkToCheckout();
         }
     }
 }

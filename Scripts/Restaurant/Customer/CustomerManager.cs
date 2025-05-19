@@ -53,6 +53,7 @@ namespace Restaurant.Customer
         [field: SerializeField] private GameObject ThinkBubblePrefab { get; set; }
         [field: SerializeField] private GameObject OrderBubblePrefab { get; set; }
         [field: SerializeField] private GameObject WaitDishBubblePrefab { get; set; }
+        [field: SerializeField] private GameObject CheckoutBubblePrefab { get; set; }
         [field: SerializeField] private GameObject HappyBubblePrefab { get; set; }
         [field: SerializeField] private GameObject AngryBubblePrefab { get; set; }
         
@@ -82,13 +83,13 @@ namespace Restaurant.Customer
             CustomerAnimator.Init(IdleClip, WalkClip, SitClip);
             CustomerMove.Init(Attribute, Path);
             CustomerSkin.Init(Skins);
-            CustomerBubble.Init(BubbleParent, ThinkBubblePrefab, OrderBubblePrefab, WaitDishBubblePrefab, HappyBubblePrefab, AngryBubblePrefab);
+            CustomerBubble.Init(BubbleParent, ThinkBubblePrefab, OrderBubblePrefab, WaitDishBubblePrefab, CheckoutBubblePrefab, HappyBubblePrefab, AngryBubblePrefab);
             CustomerOrder.Init(Attribute, DishDeliver, TodayAppetizer, TodayMainCourse, TodayDessert, TodayDrink);
         }
 
         private void Start()
         {
-            SetCustomerState(new EnterState());
+            SetCustomerState(new WalkToSeat());
         }
         
         
@@ -98,12 +99,7 @@ namespace Restaurant.Customer
         // =======
         public void SetCustomerState(IState newState)
         {
-            StateMachine.SetState(new EnterState(), this);
-        }
-        
-        public void ChangeCustomerState(IState nextState)
-        {
-            StateMachine.ChangeState(nextState, this);
+            StateMachine.SetState(new WalkToSeat(), this);
         }
 
         public void SetBubbleState(IBubbleState newState)
@@ -158,7 +154,7 @@ namespace Restaurant.Customer
 
         public void WalkToCheckout()
         {
-            // TODO
+            CustomerMove.WalkToCheckout();
         }
 
         public void WalkToEntrance()
@@ -186,9 +182,14 @@ namespace Restaurant.Customer
             CustomerBubble.InitWaitDishBubble();
         }
 
+        public void InitCheckoutBubble()
+        {
+            CustomerBubble.InitCheckoutBubble();
+        }
+
         public void InitHappyBubble()
         {
-            // TODO
+            CustomerBubble.InitHappyBubble();
         }
 
         public void InitAngryBubble()

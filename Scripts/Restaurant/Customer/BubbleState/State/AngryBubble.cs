@@ -26,7 +26,10 @@ namespace Restaurant.Customer.BubbleState.State
             Manager.DestroyBubble();
             
             if (CurrentCoroutine is not null)
+            {
                 Manager.StopCoroutine(CurrentCoroutine);
+                CurrentCoroutine = null;
+            }
         }
 
         public void PlayerEnter()
@@ -54,7 +57,8 @@ namespace Restaurant.Customer.BubbleState.State
                 yield return null;
             }
             
-            Manager.ChangeCustomerState(new ExitState());
+            yield return new WaitForSeconds(1);
+            Manager.SetCustomerState(new AngryToLeave());
             Manager.ExitBubbleState();
         }
     }
