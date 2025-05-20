@@ -6,15 +6,12 @@ namespace Restaurant.Kitchenware
 {
     internal class KitchenwareCookMenu : MonoBehaviour
     {
-        [field: Header("廚具的種類")]
-        [field: SerializeField] private CookUtensil CookUtensil { get; set; }
+        private CookUtensil CookUtensil { get; set; }
+        private Transform CookMenuParent { get; set; }
+        private GameObject CookMenuPrefab { get; set; }
         
-        [field: Header("選擇烹飪料介面的生成位置")]
-        [field: SerializeField] private Transform CookMenuParent { get; set; }
-        
-        [field: Header("選擇烹飪料介面的預製件")]
-        [field: SerializeField] private GameObject CookMenuPrefab { get; set; }
         private GameObject CookMenuObj { get; set; }
+        
         private CookMenuManager CookMenuManager { get; set; }
         
         private KitchenwareManager KitchenwareManager { get; set; }
@@ -28,6 +25,13 @@ namespace Restaurant.Kitchenware
         {
             if (CookMenuManager is not null)
                 CloseCookMenu();
+        }
+        
+        public void Init(CookUtensil utensil, Transform cookMenuParent, GameObject cookMenuPrefab)
+        {
+            CookUtensil = utensil;
+            CookMenuParent = cookMenuParent;
+            CookMenuPrefab = cookMenuPrefab;
         }
 
         public void OpenCookMenu()

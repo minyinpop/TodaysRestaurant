@@ -2,6 +2,7 @@ using System;
 using Database.Restaurant.Dish;
 using Restaurant.Kitchenware.BubbleState;
 using Restaurant.Kitchenware.BubbleState.State;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,9 +13,24 @@ namespace Restaurant.Kitchenware
     [RequireComponent(typeof(KitchenwareGame))]
     internal class KitchenwareManager : MonoBehaviour
     {
+        [field: Header("虛擬相機的組件")]
+        [field: SerializeField] public CinemachineCamera CinemachineCamera { get; private set; }
+        
+        
+        
+        [field: Header("廚具的種類")]
+        [field: SerializeField] private CookUtensil CookUtensil { get; set; }
+        
+        [field: Header("選擇烹飪料介面的生成位置")]
+        [field: SerializeField] private Transform CookMenuParent { get; set; }
+        
+        [field: Header("選擇烹飪料介面的預製件")]
+        [field: SerializeField] private GameObject CookMenuPrefab { get; set; }
+        
+        
+        
         [field: Header("氣泡的生成位置")]
-        [field: SerializeField]
-        private Transform BubbleParent { get; set; }
+        [field: SerializeField] private Transform BubbleParent { get; set; }
 
         [field: Header("各類型氣泡的預製件")]
         [field: SerializeField] private GameObject EmptyBubblePrefab { get; set; }
@@ -22,6 +38,17 @@ namespace Restaurant.Kitchenware
         [field: SerializeField] private GameObject GameBubblePrefab { get; set; }
         [field: SerializeField] private GameObject BurnBubblePrefab { get; set; }
         [field: SerializeField] private GameObject FinishBubblePrefab { get; set; }
+        
+        
+        
+        [field: Header("小遊戲的生成位置")]
+        [field: SerializeField] private Transform GameParent { get; set; }
+        
+        [field: Header("小遊戲的預製件")]
+        [field: SerializeField] private GameObject GamePrefab { get; set; }
+        
+        
+        
         private GameObject CurrentBubbleObj { get; set; }
         public Image CurrentBubbleCountDownImage { get; private set; }
         private Button CurrentBubbleButton { get; set; }
@@ -41,6 +68,9 @@ namespace Restaurant.Kitchenware
             KitchenwareDetector = GetComponent<KitchenwareDetector>();
             KitchenwareCookMenu = GetComponent<KitchenwareCookMenu>();
             KitchenwareGame = GetComponent<KitchenwareGame>();
+            
+            KitchenwareCookMenu.Init(CookUtensil, CookMenuParent, CookMenuPrefab);
+            KitchenwareGame.Init(GameParent, GamePrefab);
         }
 
         private void Start()

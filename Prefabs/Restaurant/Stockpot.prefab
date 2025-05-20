@@ -32,15 +32,16 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 723954016844667349}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -10.025, y: 0.575, z: 3}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 3, y: 0.5, z: 9.75}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3950415969129146285}
   - {fileID: 7537576006382180391}
+  - {fileID: 9076854422891007273}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1527872694203288476
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -53,12 +54,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2bfc69340e84322916195783906178a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <CinemachineCamera>k__BackingField: {fileID: 3026470821915336724}
+  <CookUtensil>k__BackingField: 0
+  <CookMenuParent>k__BackingField: {fileID: 0}
+  <CookMenuPrefab>k__BackingField: {fileID: 5307369966622011624, guid: 0a39d52ef905cde45ae7bc268c0068bf, type: 3}
   <BubbleParent>k__BackingField: {fileID: 3950415969129146285}
   <EmptyBubblePrefab>k__BackingField: {fileID: 2008206380833430226, guid: f1815a08fde11d34bb4f8f8432dd7309, type: 3}
   <CookBubblePrefab>k__BackingField: {fileID: 2847076010330079162, guid: 19c5aaee93c9a1b41af11df978149455, type: 3}
   <GameBubblePrefab>k__BackingField: {fileID: 5089485467563891573, guid: 420b98fd23aaaac47b8f004a5ff6f9bb, type: 3}
   <BurnBubblePrefab>k__BackingField: {fileID: 2270411760180095779, guid: 9f9b82e547b26ed418d7bfee3e871a94, type: 3}
   <FinishBubblePrefab>k__BackingField: {fileID: 7392933373793536444, guid: fec3ac5af8adbc7499c688974f73460a, type: 3}
+  <GameParent>k__BackingField: {fileID: 7537576006382180391}
+  <GamePrefab>k__BackingField: {fileID: 106230104657200563, guid: 7d7275fd9c2431744a522152fa28d4b4, type: 3}
 --- !u!114 &2451539543458265867
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -83,9 +90,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67ea46e1e7ad4edca5dfc41ea6c494aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <CookUtensil>k__BackingField: 0
-  <CookMenuParent>k__BackingField: {fileID: 0}
-  <CookMenuPrefab>k__BackingField: {fileID: 5307369966622011624, guid: 0a39d52ef905cde45ae7bc268c0068bf, type: 3}
 --- !u!114 &4584017776259348602
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -98,8 +102,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2a866886ca14c0694f795f7b82fc8ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <GameParent>k__BackingField: {fileID: 7537576006382180391}
-  <GamePrefab>k__BackingField: {fileID: 106230104657200563, guid: 7d7275fd9c2431744a522152fa28d4b4, type: 3}
 --- !u!33 &170650971537247065
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -195,6 +197,115 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2, y: 1, z: 2}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &1275429275942758119
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9076854422891007273}
+  - component: {fileID: 3026470821915336724}
+  - component: {fileID: 3589402445694992087}
+  - component: {fileID: 7512946253066701907}
+  m_Layer: 0
+  m_Name: Cinemachine Camera
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9076854422891007273
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1275429275942758119}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 1, z: -1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3943070648218202395}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3026470821915336724
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1275429275942758119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9dfa5b682dcd46bda6128250e975f58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Priority:
+    Enabled: 1
+    m_Value: 0
+  OutputChannel: 1
+  StandbyUpdate: 2
+  m_StreamingVersion: 20241001
+  m_LegacyPriority: 0
+  Target:
+    TrackingTarget: {fileID: 7537576006382180391}
+    LookAtTarget: {fileID: 0}
+    CustomLookAtTarget: 0
+  Lens:
+    FieldOfView: 60.000004
+    OrthographicSize: 5
+    NearClipPlane: 0.3
+    FarClipPlane: 1000
+    Dutch: 0
+    ModeOverride: 0
+    PhysicalProperties:
+      GateFit: 2
+      SensorSize: {x: 21.946, y: 16.002}
+      LensShift: {x: 0, y: 0}
+      FocusDistance: 10
+      Iso: 200
+      ShutterSpeed: 0.005
+      Aperture: 16
+      BladeCount: 5
+      Curvature: {x: 2, y: 11}
+      BarrelClipping: 0.25
+      Anamorphism: 0
+  BlendHint: 0
+--- !u!114 &3589402445694992087
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1275429275942758119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b617507da6d07e749b7efdb34e1173e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TrackerSettings:
+    BindingMode: 3
+    PositionDamping: {x: 2, y: 2, z: 2}
+    AngularDampingMode: 0
+    RotationDamping: {x: 0, y: 0, z: 0}
+    QuaternionDamping: 1
+  FollowOffset: {x: 0, y: 0, z: -1}
+--- !u!114 &7512946253066701907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1275429275942758119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4afa82ae3200b82408d605c3dbdd1e38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Damping: 0
 --- !u!1 &3855361872126018522
 GameObject:
   m_ObjectHideFlags: 0

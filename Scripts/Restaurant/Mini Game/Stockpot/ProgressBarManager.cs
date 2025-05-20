@@ -35,7 +35,7 @@ namespace Restaurant.Mini_Game.Stockpot
 
         private void AddValue()
         {
-            TargetValue += .5f;
+            TargetValue += ProgressBar.maxValue / 50;
         }
 
         private IEnumerator MainProcess()
