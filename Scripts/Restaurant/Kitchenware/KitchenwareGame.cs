@@ -27,6 +27,7 @@ namespace Restaurant.Kitchenware
         public void OnGameStart()
         {
             KitchenwareManager.CinemachineCamera.Priority = 20;
+            
             GameObj = Instantiate(GamePrefab, GameParent);
             GameObj.GetComponent<MiniGameBase>().Init(this);
         }

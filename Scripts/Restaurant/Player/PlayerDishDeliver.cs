@@ -37,13 +37,32 @@ namespace Restaurant.Player
 
         private DishSO TryTakeDish()
         {
+            var takeDish = DishDeliver.TryTakeDish();
+
+            if (takeDish is null)
+                return null;
+
+            foreach (var dishImage in DishImages)
+            {
+                dishImage.sprite = null;
+                dishImage.gameObject.SetActive(false);
+            }
+            
             for (var i = DishImages.Count - 1; i >= 0; i--)
             {
+                if (DishDeliver.CheckDishExist(i))
+                {
+                    DishImages[i].gameObject.SetActive(true);
+                    DishImages[i].sprite = DishDeliver.Dishes[i].Sprite;
+                    continue;
+                }
+                
                 DishImages[i].sprite = null;
                 DishImages[i].gameObject.SetActive(false);
+                return takeDish;
             }
-
-            return DishDeliver.TryTakeDish();
+            
+            return null;
         }
     }
 }

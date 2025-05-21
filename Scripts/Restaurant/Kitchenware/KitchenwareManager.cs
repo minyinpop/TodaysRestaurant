@@ -46,8 +46,9 @@ namespace Restaurant.Kitchenware
         
         [field: Header("小遊戲的預製件")]
         [field: SerializeField] private GameObject GamePrefab { get; set; }
-        
-        
+
+
+        private bool IsGameStart { get; set; }
         
         private GameObject CurrentBubbleObj { get; set; }
         public Image CurrentBubbleCountDownImage { get; private set; }
@@ -91,6 +92,9 @@ namespace Restaurant.Kitchenware
 
         public void SetPlayerEnter(bool isEnter)
         {
+            if (IsGameStart)
+                return;
+            
             if (isEnter)
                 BubbleStateMachine.PlayerEnter();
             else
@@ -167,11 +171,13 @@ namespace Restaurant.Kitchenware
         
         public void OnGameStart()
         {
+            IsGameStart = true;
             KitchenwareGame.OnGameStart();
         }
 
         public void OnGameCancel()
         {
+            IsGameStart = false;
             KitchenwareGame.OnGameCancel();
         }
 

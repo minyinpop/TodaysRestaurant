@@ -40,6 +40,7 @@ namespace Restaurant.Kitchenware.BubbleState.State
 
         public void OnClick()
         {
+            Manager.SetBubbleInteractable(false);
             Manager.OnGameStart();
         }
         

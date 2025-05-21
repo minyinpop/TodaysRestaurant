@@ -39,8 +39,7 @@ namespace Restaurant.Customer.BubbleState.State
 
         public void PlayerEnter()
         {
-            if (Manager.DishDeliver.CheckDishExist())
-                Manager.SetBubbleInteractable(true);
+            Manager.SetBubbleInteractable(Manager.DishDeliver.CheckDishExist());
         }
 
         public void PlayerLeave()

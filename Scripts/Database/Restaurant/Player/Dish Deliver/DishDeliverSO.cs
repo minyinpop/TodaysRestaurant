@@ -30,14 +30,14 @@ namespace Database.Restaurant.Player.Dish_Deliver
 
         public DishSO TryTakeDish()
         {
-            for (var i = Dishes.Count - 1; i >= 0; i--)
+            for (var i = 0; i < Dishes.Count; i++)
             {
                 if (Dishes[i] is null)
                     continue;
 
-                var dish = Dishes[i];
+                var takeDish = Dishes[i];
                 Dishes[i] = null;
-                return dish;
+                return takeDish;
             }
 
             return null;
@@ -58,6 +58,11 @@ namespace Database.Restaurant.Player.Dish_Deliver
             }
 
             return false;
+        }
+        
+        public bool CheckDishExist(int index)
+        {
+            return Dishes[index] is not null;
         }
     }
 }
