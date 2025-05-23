@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Restaurant.Customer.BubbleState.State
 {
-    public class AngryBubble : IBubbleState
+    internal class AngryBubble : IBubbleState
     {
         private CustomerManager Manager { get; set; }
         
@@ -23,10 +23,11 @@ namespace Restaurant.Customer.BubbleState.State
 
         public void Exit()
         {
-            Manager.DestroyBubble();
-            
             if (CurrentCoroutine is not null)
+            {
                 Manager.StopCoroutine(CurrentCoroutine);
+                CurrentCoroutine = null;
+            }
         }
 
         public void PlayerEnter()
@@ -54,7 +55,9 @@ namespace Restaurant.Customer.BubbleState.State
                 yield return null;
             }
             
-            Manager.ChangeCustomerState(new ExitState());
+            Manager.DestroyBubble();
+            yield return new WaitForSeconds(1);
+            Manager.SetCustomerState(new AngryToLeave());
             Manager.ExitBubbleState();
         }
     }

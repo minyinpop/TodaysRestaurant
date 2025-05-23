@@ -3,12 +3,11 @@ using UnityEngine;
 
 namespace Restaurant.Customer.BubbleState.State
 {
-    public class OrderBubble : IBubbleState
+    internal class OrderBubble : IBubbleState
     {
         private CustomerManager Manager { get; set; }
         
         private IEnumerator CurrentCoroutine { get; set; }
-
         
         public void Enter(CustomerManager manager)
         {
@@ -22,9 +21,11 @@ namespace Restaurant.Customer.BubbleState.State
 
         public void Exit()
         {
-            Manager.StopCoroutine(CurrentCoroutine);
-            
-            Manager.DestroyBubble();
+            if (CurrentCoroutine is not null)
+            {
+                Manager.StopCoroutine(CurrentCoroutine);
+                CurrentCoroutine = null;
+            }
         }
 
         public void PlayerEnter()
@@ -39,12 +40,26 @@ namespace Restaurant.Customer.BubbleState.State
 
         public void OnClick()
         {
-            // TODO
+            if (CurrentCoroutine is not null)
+            {
+                Manager.StopCoroutine(CurrentCoroutine);
+                CurrentCoroutine = null;
+            }
+            
+            CurrentCoroutine = OnClickProcess();
+            Manager.StartCoroutine(CurrentCoroutine);
         }
 
+        private IEnumerator OnClickProcess()
+        {
+            Manager.DestroyBubble();
+            yield return new WaitForSeconds(1);
+            Manager.ChangeBubbleState(new WaitDishBubble());
+        }
+        
         private IEnumerator CountDownPatience()
         {
-            var selectTime = Manager.CustomerAttribute.OrderAttribute.GetRandomOrderTime();
+            var selectTime = Manager.Attribute.OrderAttribute.GetRandomOrderTime();
             var remainingTime = selectTime;
             var countDownImage = Manager.CustomerBubble.CurrentBubbleCountDownImage;
 
@@ -55,6 +70,8 @@ namespace Restaurant.Customer.BubbleState.State
                 yield return null;
             }
             
+            Manager.DestroyBubble();
+            yield return new WaitForSeconds(1);
             Manager.ChangeBubbleState(new AngryBubble());
         }
     }

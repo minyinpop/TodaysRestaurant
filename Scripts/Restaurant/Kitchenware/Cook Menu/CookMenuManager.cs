@@ -7,7 +7,7 @@ using Random = UnityEngine.Random;
 
 namespace Restaurant.Kitchenware.Cook_Menu
 {
-    public class CookMenuManager : MonoBehaviour
+    internal class CookMenuManager : MonoBehaviour
     {
         [field: Header("今日販售料理的資料庫")]
         [field: SerializeField] private List<TodayDishSO> TodayDishes { get; set; }

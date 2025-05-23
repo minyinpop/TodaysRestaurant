@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Database.Restaurant.Menu
 {
     [Serializable]
-    public class TodayDishSlot
+    internal class TodayDishSlot
     {
         [field: SerializeField] public bool Lock { get; private set; }
         [field: SerializeField] public DishSO Dish { get; private set; }
@@ -18,22 +18,23 @@ namespace Database.Restaurant.Menu
             Portion = Dish.Portion;
         }
 
-        public bool TakeDish()
+        public DishSO TakeDish()
         {
             if (Lock || Dish is null || Portion <= 0)
-                return false;
+                return null;
             
             Portion -= 1;
-            
+
+            var dish = Dish;
+
             if (Portion <= 0)
                 ClearData();
             
-            return true;
+            return dish;
         }
 
         public void ClearData()
         {
-            Lock = false;
             Dish = null;
             Portion = 0;
         }

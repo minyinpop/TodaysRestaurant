@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace Restaurant.Mini_Game.Stockpot
 {
-    public class ProgressBarManager : MonoBehaviour
+    internal class ProgressBarManager : MonoBehaviour
     {
         [field: Header("進度條的遊戲物件")]
         [field: SerializeField] private Slider ProgressBar { get; set; }
@@ -35,7 +35,7 @@ namespace Restaurant.Mini_Game.Stockpot
 
         private void AddValue()
         {
-            TargetValue += .5f;
+            TargetValue += ProgressBar.maxValue / 50;
         }
 
         private IEnumerator MainProcess()

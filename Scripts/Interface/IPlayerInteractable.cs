@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Interface
 {
-    public abstract class IPlayerInteractable : MonoBehaviour
+    internal abstract class IPlayerInteractable : MonoBehaviour
     {
         public static event Action<IPlayerInteractable> PlayerEnterEvent;
         public static event Action<IPlayerInteractable> PlayerLeaveEvent;

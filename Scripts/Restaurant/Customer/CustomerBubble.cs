@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace Restaurant.Customer
 {
-    public class CustomerBubble : MonoBehaviour
+    internal class CustomerBubble : MonoBehaviour
     {
         private CustomerManager CustomerManager { get; set; }
         
@@ -11,24 +11,29 @@ namespace Restaurant.Customer
         
         private GameObject ThinkBubblePrefab { get; set; }
         private GameObject OrderBubblePrefab { get; set; }
+        private GameObject WaitDishBubblePrefab { get; set; }
+        private GameObject CheckoutBubblePrefab { get; set; }
         private GameObject HappyBubblePrefab { get; set; }
         private GameObject AngryBubblePrefab { get; set; }
         
         public GameObject CurrentBubble { get; private set; }
         public Image CurrentBubbleCountDownImage { get; private set; }
         private Button CurrentBubbleButton { get; set; }
+        public Image CurrentBubbleDishImage { get; private set; }
 
         private void Awake()
         {
             CustomerManager = GetComponent<CustomerManager>();
         }
         
-        public void Init(Transform parent, GameObject think, GameObject order, GameObject happy, GameObject angry)
+        public void Init(Transform parent, GameObject think, GameObject order, GameObject waitDish, GameObject checkout, GameObject happy, GameObject angry)
         {
             BubbleParent = parent;
             
             ThinkBubblePrefab = think;
             OrderBubblePrefab = order;
+            WaitDishBubblePrefab = waitDish;
+            CheckoutBubblePrefab = checkout;
             HappyBubblePrefab = happy;
             AngryBubblePrefab = angry;
         }
@@ -47,14 +52,30 @@ namespace Restaurant.Customer
         public void InitOrderBubble()
         {
             CurrentBubble = Instantiate(OrderBubblePrefab, BubbleParent);
-            CurrentBubbleCountDownImage = CurrentBubble.GetComponentInChildren<Image>();
+            CurrentBubbleCountDownImage = CurrentBubble.GetComponent<Image>();
+            CurrentBubbleButton = CurrentBubble.GetComponent<Button>();
+            CurrentBubbleButton.onClick.AddListener(CustomerManager.BubbleStateMachine.OnClick);
+        }
+
+        public void InitWaitDishBubble()
+        {
+            CurrentBubble = Instantiate(WaitDishBubblePrefab, BubbleParent);
+            CurrentBubbleCountDownImage = CurrentBubble.GetComponent<Image>();
+            CurrentBubbleButton = CurrentBubble.GetComponent<Button>();
+            CurrentBubbleButton.onClick.AddListener(CustomerManager.BubbleStateMachine.OnClick);
+            CurrentBubbleDishImage = CurrentBubble.transform.Find("Icon").GetComponent<Image>();
+        }
+
+        public void InitCheckoutBubble()
+        {
+            CurrentBubble = Instantiate(CheckoutBubblePrefab, BubbleParent);
             CurrentBubbleButton = CurrentBubble.GetComponent<Button>();
             CurrentBubbleButton.onClick.AddListener(CustomerManager.BubbleStateMachine.OnClick);
         }
 
         public void InitHappyBubble()
         {
-            // TODO
+            CurrentBubble = Instantiate(HappyBubblePrefab, BubbleParent);
         }
 
         public void InitAngryBubble()

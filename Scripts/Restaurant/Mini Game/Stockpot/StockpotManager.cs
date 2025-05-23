@@ -6,7 +6,7 @@ namespace Restaurant.Mini_Game.Stockpot
 {
     [RequireComponent(typeof(SpoonManager))]
     [RequireComponent(typeof(ProgressBarManager))]
-    public class StockpotManager : MiniGameBase
+    internal class StockpotManager : MiniGameBase
     {
         private KitchenwareGame KitchenwareGame { get; set; }
         private ProgressBarManager ProgressBarManager { get; set; }

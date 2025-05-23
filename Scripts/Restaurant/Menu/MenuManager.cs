@@ -9,7 +9,7 @@ using UnityEngine.UI;
 namespace Restaurant.Menu
 {
     [RequireComponent(typeof(MenuController))]
-    public class MenuManager : MonoBehaviour
+    internal class MenuManager : MonoBehaviour
     {
         [field: Header("已解鎖的料理資料")]
         [field: SerializeField] private UnlockDishSO UnlockAppetizer { get; set; }

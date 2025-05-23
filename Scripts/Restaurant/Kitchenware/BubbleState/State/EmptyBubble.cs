@@ -1,6 +1,6 @@
 namespace Restaurant.Kitchenware.BubbleState.State
 {
-    public class EmptyBubble : IBubbleState
+    internal class EmptyBubble : IBubbleState
     {
         private KitchenwareManager Manager { get; set; }
         

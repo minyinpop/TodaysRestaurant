@@ -1,6 +1,6 @@
 namespace Restaurant.Customer.BubbleState
 {
-    public class BubbleStateMachine
+    internal class BubbleStateMachine
     {
         private IBubbleState CurrentBubbleState { get; set; }
 

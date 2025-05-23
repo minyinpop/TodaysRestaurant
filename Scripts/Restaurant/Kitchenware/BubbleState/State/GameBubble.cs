@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Restaurant.Kitchenware.BubbleState.State
 {
-    public class GameBubble : IBubbleState
+    internal class GameBubble : IBubbleState
     {
         private KitchenwareManager Manager { get; set; }
         
@@ -40,6 +40,7 @@ namespace Restaurant.Kitchenware.BubbleState.State
 
         public void OnClick()
         {
+            Manager.SetBubbleInteractable(false);
             Manager.OnGameStart();
         }
         

@@ -3,13 +3,12 @@ using UnityEngine;
 
 namespace Restaurant.Kitchenware
 {
-    public class KitchenwareGame : MonoBehaviour
+    internal class KitchenwareGame : MonoBehaviour
     {
-        [field: Header("小遊戲的生成位置")]
-        [field: SerializeField] private Transform GameParent { get; set; }
+        private Transform GameParent { get; set; }
         
-        [field: Header("小遊戲的預製件")]
-        [field: SerializeField] private GameObject GamePrefab { get; set; }
+        private GameObject GamePrefab { get; set; }
+        
         private GameObject GameObj { get; set; }
         
         private KitchenwareManager KitchenwareManager { get; set; }
@@ -19,14 +18,24 @@ namespace Restaurant.Kitchenware
             KitchenwareManager = GetComponent<KitchenwareManager>();
         }
 
+        public void Init(Transform gameParent, GameObject gamePrefab)
+        {
+            GameParent = gameParent;
+            GamePrefab = gamePrefab;
+        }
+
         public void OnGameStart()
         {
+            KitchenwareManager.CinemachineCamera.Priority = 20;
+            
             GameObj = Instantiate(GamePrefab, GameParent);
             GameObj.GetComponent<MiniGameBase>().Init(this);
         }
 
         public void OnGameCancel()
         {
+            KitchenwareManager.CinemachineCamera.Priority = 0;
+            
             if (GameObj is null)
                 return;
 

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Restaurant.Mini_Game.Stockpot
 {
-    public class StirringAreaManager : MonoBehaviour
+    internal class StirringAreaManager : MonoBehaviour
     {
         [field: Header("可以被拖曳的物件標籤")]
         [field: SerializeField] private LayerMask DraggableLayer { get; set; }

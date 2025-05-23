@@ -1,6 +1,6 @@
 namespace Restaurant.Customer.BubbleState
 {
-    public interface IBubbleState
+    internal interface IBubbleState
     {
         public void Enter(CustomerManager manager);
 

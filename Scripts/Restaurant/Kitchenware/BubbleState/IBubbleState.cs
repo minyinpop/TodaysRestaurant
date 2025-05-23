@@ -1,6 +1,6 @@
 namespace Restaurant.Kitchenware.BubbleState
 {
-    public interface IBubbleState
+    internal interface IBubbleState
     {
         public void Enter(KitchenwareManager manager);
         

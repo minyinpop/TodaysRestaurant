@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Restaurant.Kitchenware
 {
-    public class KitchenwareDetector : MonoBehaviour
+    internal class KitchenwareDetector : MonoBehaviour
     {
         private KitchenwareManager Manager { get; set; }
 

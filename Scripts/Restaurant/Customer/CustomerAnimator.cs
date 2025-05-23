@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Restaurant.Customer
 {
     [RequireComponent(typeof(SkeletonAnimation))]
-    public class CustomerAnimator : MonoBehaviour
+    internal class CustomerAnimator : MonoBehaviour
     {
         private AnimationReferenceAsset IdleClip { get; set; }
         private AnimationReferenceAsset WalkClip { get; set; }
@@ -37,6 +37,14 @@ namespace Restaurant.Customer
         public void PlaySitAnima()
         {
             SkeletonAnima.AnimationState.SetAnimation(1, SitClip, false);
+        }
+
+        public void SetFlipX(bool isFlip)
+        {
+            if (isFlip)
+                SkeletonAnima.skeleton.ScaleX = -1;
+            else
+                SkeletonAnima.skeleton.ScaleX = 1;
         }
     }
 }

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Input
 {
-    public class InputSystem : MonoBehaviour
+    internal class InputSystem : MonoBehaviour
     {
         public static InputManager Input { get; private set; }
 

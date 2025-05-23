@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace Restaurant.Menu.Slot
 {
-    public class UnlockDishSlot : MonoBehaviour
+    internal class UnlockDishSlot : MonoBehaviour
     {
         [field: Header("子物件的組件")]
         [field: SerializeField] private Button Button { get; set; }

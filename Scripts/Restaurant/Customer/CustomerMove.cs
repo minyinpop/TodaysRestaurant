@@ -1,19 +1,21 @@
 using System.Collections;
+using System.Collections.Generic;
 using Database.Restaurant.Customer.Attribute;
 using Database.Restaurant.Customer.Path;
+using Restaurant.Customer.CustomerState;
 using Restaurant.Customer.CustomerState.State;
 using UnityEngine;
 
 namespace Restaurant.Customer
 {
     [RequireComponent(typeof(Rigidbody))]
-    public class CustomerMove : MonoBehaviour
+    internal class CustomerMove : MonoBehaviour
     {
         private CustomerManager CustomerManager { get; set; }
         private Rigidbody Rig { get; set; }
         
-        private CustomerAttributeSO Attribute { get; set; }
-        private CustomerPathSO Path { get; set; }
+        private AttributeSO Attribute { get; set; }
+        private PathSO Path { get; set; }
         
         private IEnumerator CurrentCoroutine { get; set; }
 
@@ -29,7 +31,7 @@ namespace Restaurant.Customer
                 StopCoroutine(CurrentCoroutine);
         }
 
-        public void Init(CustomerAttributeSO attribute, CustomerPathSO path)
+        public void Init(AttributeSO attribute, PathSO path)
         {
             Attribute = attribute;
             Path = path;
@@ -37,35 +39,52 @@ namespace Restaurant.Customer
         
         
         
-        // =======
-        // 走到位置
-        // =======
         public void WalkToSeat()
         {
-            CurrentCoroutine = WalkToSeatProcess();
+            StartWalkProcess(Path.WalkToSeat, new OnSeat());
+        }
+
+        public void WalkToCheckout()
+        {
+            StartWalkProcess(Path.WalkToCheckout, new WaitForCheckout());
+        }
+        
+        
+        
+        private void StartWalkProcess(List<Vector3> paths, IState nextState)
+        {
+            if (CurrentCoroutine is not null)
+            {
+                StopCoroutine(CurrentCoroutine);
+                CurrentCoroutine = null;
+            }
+
+            CurrentCoroutine = WalkProcess(paths, nextState);
             StartCoroutine(CurrentCoroutine);
         }
 
-        private IEnumerator WalkToSeatProcess()
+        private IEnumerator WalkProcess(List<Vector3> paths, IState nextState)
         {
-            foreach (var point in Path.GoToSeat)
+            foreach (var point in paths)
             {
                 while (Vector3.Distance(point, transform.position) > .1f)
                 {
+                    if (transform.InverseTransformDirection(point).x > 0)
+                        CustomerManager.SetFlipX(true);
+                    else if (transform.InverseTransformDirection(point).x < 0)
+                        CustomerManager.SetFlipX(false);
+                    
                     var direction = (point - transform.position).normalized;
                     Rig.linearVelocity = direction * Attribute.MoveAttribute.MoveSpeed * Time.fixedDeltaTime;
                     yield return new WaitForFixedUpdate();
                 }
             }
 
-            CustomerManager.ChangeCustomerState(new SitState());
+            CustomerManager.SetCustomerState(nextState);
         }
         
         
         
-        // =====
-        // 在位置
-        // =====
         public void OnSeat()
         {
             Rig.linearVelocity = Vector3.zero;
