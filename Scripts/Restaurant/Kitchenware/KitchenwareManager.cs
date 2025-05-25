@@ -1,5 +1,6 @@
 using System;
 using Database.Restaurant.Dish;
+using PixelCrushers.DialogueSystem;
 using Restaurant.Kitchenware.BubbleState;
 using Restaurant.Kitchenware.BubbleState.State;
 using Unity.Cinemachine;
@@ -46,6 +47,9 @@ namespace Restaurant.Kitchenware
         
         [field: Header("小遊戲的預製件")]
         [field: SerializeField] private GameObject GamePrefab { get; set; }
+        
+        [field: Header("對話系統觸發組件")]
+        [field: SerializeField] private DialogueSystemTrigger DialogueSystemTrigger { get; set; }
 
 
         private bool IsGameStart { get; set; }
@@ -101,15 +105,10 @@ namespace Restaurant.Kitchenware
             else
                 BubbleStateMachine.PlayerLeave();
         }
-
-        public void SetCookMenuVisible(bool visible)
-        {
-            if (visible)
-                KitchenwareCookMenu.OpenCookMenu();
-            else
-                KitchenwareCookMenu.CloseCookMenu();
-        }
-
+        
+        public void OpenCookMenu() => KitchenwareCookMenu.OpenCookMenu();
+        public void CloseCookMenu() => KitchenwareCookMenu.CloseCookMenu();
+        
         public void SetBubbleInteractable(bool interactable)
         {
             if (CurrentBubbleButton is not null)
@@ -199,6 +198,11 @@ namespace Restaurant.Kitchenware
         public void ClearDish()
         {
             CurrentCookDish = null;
+        }
+
+        public void StartConversation()
+        {
+            DialogueSystemTrigger.OnUse();
         }
     }
 }

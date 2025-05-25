@@ -49,7 +49,6 @@ namespace Scenes.AB_Workspace.Story01.Resources.Story01.Texture.Sprite
 
             var track = command.ParseCellOptional(AdvColumnName.Track, 0);
             var isLoop = command.ParseCellOptional(AdvColumnName.Loop, false);
-            Debug.Log($"動畫：{animationName}, 軌道：{track}, 持續播放：{isLoop}");
 
             SkeletonAnimation.AnimationState.SetAnimation(track, animationName, isLoop);
         }

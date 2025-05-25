@@ -23,12 +23,13 @@ namespace Restaurant.Kitchenware.BubbleState.State
         public void PlayerLeave()
         {
             Manager.SetBubbleInteractable(false);
-            Manager.SetCookMenuVisible(false);
+            Manager.CloseCookMenu();
         }
         
         public void OnClick()
         {
-            Manager.SetCookMenuVisible(true);
+            Manager.OpenCookMenu();
+            Manager.StartConversation();
         }
     }
 }

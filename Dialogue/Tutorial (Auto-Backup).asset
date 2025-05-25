@@ -84,7 +84,7 @@ MonoBehaviour:
     - title: Name
       value: Ray
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Pictures
       value: '[]'
       type: 3
@@ -229,6 +229,18 @@ MonoBehaviour:
         destinationDialogueID: 6
         isConnector: 0
         priority: 2
+      - originConversationID: 1
+        originDialogueID: 0
+        destinationConversationID: 1
+        destinationDialogueID: 8
+        isConnector: 0
+        priority: 2
+      - originConversationID: 1
+        originDialogueID: 0
+        destinationConversationID: 1
+        destinationDialogueID: 10
+        isConnector: 0
+        priority: 2
       conditionsString: 
       userScript: 
       onExecute:
@@ -236,7 +248,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 184
+        x: 392
         y: 50
         width: 160
         height: 30
@@ -420,7 +432,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Description
-        value: "\u7E7C\u7E8C\u64AD\u653E Timeline \u7684\u52D5\u756B\u3002"
+        value: "\u7E7C\u7E8C\u64AD\u653E Tutorial 02 \u7684\u52D5\u756B\u3002"
         type: 0
         typeString: 
       - title: Actor
@@ -482,7 +494,7 @@ MonoBehaviour:
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 2
+        value: 3
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
@@ -529,7 +541,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Description
-        value: "\u7E7C\u7E8C\u64AD\u653E Timeline \u7684\u52D5\u756B\u3002"
+        value: "\u7E7C\u7E8C\u64AD\u653E Tutorial 03 \u7684\u52D5\u756B\u3002"
         type: 0
         typeString: 
       - title: Actor
@@ -576,8 +588,228 @@ MonoBehaviour:
         y: 218
         width: 160
         height: 30
+    - id: 8
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: 
+      - title: Description
+        value: 
+        type: 0
+        typeString: 
+      - title: Actor
+        value: 3
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 3
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: 
+      - title: Dialogue Text
+        value: "\u300C\u6211\u8A18\u5F97\u662F\u5148\u6253\u958B\u84CB\u5B50 ......\u300D"
+        type: 0
+        typeString: 
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: 
+      conversationID: 1
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 1
+        originDialogueID: 8
+        destinationConversationID: 1
+        destinationDialogueID: 9
+        isConnector: 0
+        priority: 2
+      conditionsString: Variable["Current_Story_Index"] == 2
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 496
+        y: 134
+        width: 160
+        height: 30
+    - id: 9
+      fields:
+      - title: Title
+        value: "\u751F\u6210\u6C23\u6CE1"
+        type: 0
+        typeString: 
+      - title: Description
+        value: "\u751F\u6210\u716E\u934B\u7684\u6599\u7406\u9078\u64C7\u6C23\u6CE1\u4EE5\u53CA\u7E7C\u7E8C\u64AD\u653E
+          Tutorial 04 \u7684\u52D5\u756B\u3002"
+        type: 0
+        typeString: 
+      - title: Actor
+        value: 3
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 3
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: 
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: 
+      - title: Sequence
+        value: Continue()
+        type: 0
+        typeString: 
+      - title: EventGuid
+        value: 5c694c24-5cd5-4d4d-81b6-4d1dab62b53f
+        type: 0
+        typeString: 
+      conversationID: 1
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks: []
+      conditionsString: 
+      userScript: Variable["Current_Story_Index"] = Variable["Current_Story_Index"]
+        + 1
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 496
+        y: 218
+        width: 160
+        height: 30
+    - id: 10
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: 
+      - title: Description
+        value: 
+        type: 0
+        typeString: 
+      - title: Actor
+        value: 3
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 3
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: 
+      - title: Dialogue Text
+        value: "\u300C\u7136\u5F8C\u716E\u96F7\u6700\u559C\u6B61\u7684\u6599\u7406
+          ......\u300D"
+        type: 0
+        typeString: 
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: 
+      conversationID: 1
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 1
+        originDialogueID: 10
+        destinationConversationID: 1
+        destinationDialogueID: 11
+        isConnector: 0
+        priority: 2
+      conditionsString: Variable["Current_Story_Index"] == 3
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 704
+        y: 134
+        width: 160
+        height: 30
+    - id: 11
+      fields:
+      - title: Title
+        value: "\u7E7C\u7E8C\u64AD\u653E"
+        type: 0
+        typeString: 
+      - title: Description
+        value: "\u7E7C\u7E8C\u64AD\u653E Tutorial 04 \u7684\u52D5\u756B\u3002"
+        type: 0
+        typeString: 
+      - title: Actor
+        value: 3
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: 
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: 
+      - title: Sequence
+        value: Continue()
+        type: 0
+        typeString: 
+      - title: EventGuid
+        value: d5bf011e-5d02-419c-a074-b5158037cd30
+        type: 0
+        typeString: 
+      conversationID: 1
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks: []
+      conditionsString: 
+      userScript: Variable["Current_Story_Index"] = Variable["Current_Story_Index"]
+        + 1
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 704
+        y: 218
+        width: 160
+        height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 12}
+    canvasScrollPosition: {x: 0, y: 0}
     canvasZoom: 1
   syncInfo:
     syncActors: 0
