@@ -30,21 +30,9 @@ namespace For_Tutorial
             EyeCoroutine = null;
         }
         
-        public void PlayIdleClip()
-        {
-            Debug.Log("Play Idle Clip");
-            SkeletonAnimation.AnimationState.SetAnimation(1, Idle, true);
-        }
-        public void PlayWalkClip()
-        {
-            Debug.Log("Play Walk Clip");
-            SkeletonAnimation.AnimationState.SetAnimation(1, Walk, true);
-        }
-        public void PlayRunClip()
-        {
-            Debug.Log("Play Run Clip");
-            SkeletonAnimation.AnimationState.SetAnimation(1, Run, true);
-        }
+        public void PlayIdleClip() => SkeletonAnimation.AnimationState.SetAnimation(1, Idle, true);
+        public void PlayWalkClip() => SkeletonAnimation.AnimationState.SetAnimation(1, Walk, true);
+        public void PlayRunClip() => SkeletonAnimation.AnimationState.SetAnimation(1, Run, true);
         
         public void SetFlipX(bool isFlipX) => SkeletonAnimation.Skeleton.ScaleX = isFlipX ? -1 : 1;
 
