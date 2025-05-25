@@ -54,7 +54,7 @@ namespace Restaurant.Kitchenware
         public Image CurrentBubbleCountDownImage { get; private set; }
         private Button CurrentBubbleButton { get; set; }
 
-        private BubbleStateMachine BubbleStateMachine { get; set; } = new();
+        private BubbleStateMachine BubbleStateMachine { get; set; }
         public DishSO CurrentCookDish { get; private set; }
         public float RemainingCookTime { get; set; }
         
@@ -74,15 +74,16 @@ namespace Restaurant.Kitchenware
             KitchenwareGame.Init(GameParent, GamePrefab);
         }
 
-        private void Start()
-        {
-            BubbleStateMachine.SetState(new EmptyBubble(), this);
-        }
-
-        private void OnDestroy()
+        private void OnDisable()
         {
             if (CurrentBubbleButton is not null)
                 CurrentBubbleButton.onClick.RemoveListener(BubbleStateMachine.OnClick);
+        }
+
+        public void Init()
+        {
+            BubbleStateMachine = new BubbleStateMachine();
+            BubbleStateMachine.SetState(new EmptyBubble(), this);
         }
 
         public void ChangeState(IBubbleState nextState)
