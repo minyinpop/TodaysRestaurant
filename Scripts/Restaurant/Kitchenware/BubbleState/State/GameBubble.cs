@@ -42,20 +42,35 @@ namespace Restaurant.Kitchenware.BubbleState.State
         {
             Manager.SetBubbleInteractableFalse();
             Manager.OnGameStart();
+            Manager.StartConversation();
         }
         
         private IEnumerator CountDownCookTime()
         {
             var currentTime = Manager.CurrentCookDish.BurnTime;
-            
-            while (currentTime > 0)
-            {
-                currentTime -= Time.deltaTime;
-                Manager.CurrentBubbleCountDownImage.fillAmount = currentTime / Manager.CurrentCookDish.BurnTime;
-                yield return null;
-            }
 
-            Manager.ChangeState(new BurnBubble());
+            if (Manager.IsTutorialCanPlayGame)
+            {
+                while (currentTime > Manager.CurrentCookDish.BurnTime * .8f)
+                {
+                    currentTime -= Time.deltaTime;
+                    Manager.CurrentBubbleCountDownImage.fillAmount = currentTime / Manager.CurrentCookDish.BurnTime;
+                    yield return null;
+                }
+                
+                Manager.StartConversation();
+            }
+            else
+            {
+                while (currentTime > 0)
+                {
+                    currentTime -= Time.deltaTime;
+                    Manager.CurrentBubbleCountDownImage.fillAmount = currentTime / Manager.CurrentCookDish.BurnTime;
+                    yield return null;
+                }
+
+                Manager.ChangeState(new BurnBubble());
+            }
         }
     }
 }

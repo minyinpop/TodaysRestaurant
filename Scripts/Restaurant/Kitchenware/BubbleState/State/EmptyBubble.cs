@@ -29,6 +29,8 @@ namespace Restaurant.Kitchenware.BubbleState.State
         public void OnClick()
         {
             Manager.OpenCookMenu();
+            if (Manager.IsTutorialCanPlayGame)
+                return;
             Manager.StartConversation();
         }
     }

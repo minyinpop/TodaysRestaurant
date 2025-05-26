@@ -51,7 +51,7 @@ namespace Restaurant.Kitchenware
         [field: Header("對話系統觸發組件")]
         [field: SerializeField] private DialogueSystemTrigger DialogueSystemTrigger { get; set; }
 
-
+        public bool IsTutorialCanPlayGame { get; set; }
         private bool IsGameStart { get; set; }
         
         private GameObject CurrentBubbleObj { get; set; }
@@ -67,7 +67,7 @@ namespace Restaurant.Kitchenware
         private KitchenwareGame KitchenwareGame { get; set; }
         
         public static event Func<DishSO, bool> GetDishEvent;
-        
+
         private void Awake()
         {
             KitchenwareDetector = GetComponent<KitchenwareDetector>();
@@ -192,14 +192,7 @@ namespace Restaurant.Kitchenware
                 ChangeState(new EmptyBubble());
         }
 
-        public void ClearDish()
-        {
-            CurrentCookDish = null;
-        }
-
-        public void StartConversation()
-        {
-            DialogueSystemTrigger.OnUse();
-        }
+        public void ClearDish() => CurrentCookDish = null;
+        public void StartConversation() => DialogueSystemTrigger.OnUse();
     }
 }

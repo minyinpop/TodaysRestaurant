@@ -13166,10 +13166,6 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-  - guid: 3d08b2f8-81fb-4c23-83b5-01a81ca848de
-    onExecute:
-      m_PersistentCalls:
-        m_Calls: []
   - guid: b5295291-8abf-42da-9021-5a7b478a7b5d
     onExecute:
       m_PersistentCalls:
@@ -13207,18 +13203,6 @@ MonoBehaviour:
     onExecute:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 2124809851}
-          m_TargetAssemblyTypeName: UnityEngine.Playables.PlayableDirector, UnityEngine
-          m_MethodName: Stop
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
         - m_Target: {fileID: 1251908966}
           m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_MethodName: SetActive
@@ -13235,18 +13219,6 @@ MonoBehaviour:
     onExecute:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 2124809851}
-          m_TargetAssemblyTypeName: UnityEngine.Playables.PlayableDirector, UnityEngine
-          m_MethodName: Stop
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
         - m_Target: {fileID: 1251908966}
           m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_MethodName: SetActive
@@ -13309,18 +13281,6 @@ MonoBehaviour:
     onExecute:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 2124809851}
-          m_TargetAssemblyTypeName: UnityEngine.Playables.PlayableDirector, UnityEngine
-          m_MethodName: Stop
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
         - m_Target: {fileID: 1251908966}
           m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_MethodName: SetActive
@@ -13344,6 +13304,52 @@ MonoBehaviour:
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - guid: 2b192d21-8065-4c5b-b8d9-b777aae71a7b
+    onExecute:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 2124809851}
+          m_TargetAssemblyTypeName: UnityEngine.Playables.PlayableDirector, UnityEngine
+          m_MethodName: Play
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 11400000, guid: 25898d2ef9e13c34c8be1f5211665c13, type: 2}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Playables.PlayableAsset,
+              UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 6691563558482853198}
+          m_TargetAssemblyTypeName: Restaurant.Kitchenware.KitchenwareManager, Assembly-CSharp
+          m_MethodName: SetBubbleInteractableTrue
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - guid: 4ff8a47f-cfbc-46ef-83d3-69b69cadf6de
+    onExecute:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 2124809851}
+          m_TargetAssemblyTypeName: UnityEngine.Playables.PlayableDirector, UnityEngine
+          m_MethodName: Play
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 11400000, guid: be82d744e0efe964e9e842f789ddb8bd, type: 2}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Playables.PlayableAsset,
+              UnityEngine
             m_IntArgument: 0
             m_FloatArgument: 0
             m_StringArgument: 
@@ -15791,7 +15797,6 @@ GameObject:
   - component: {fileID: 1251908970}
   - component: {fileID: 1251908969}
   - component: {fileID: 1251908972}
-  - component: {fileID: 1251908971}
   m_Layer: 5
   m_Name: Coach Mask
   m_TagString: Untagged
@@ -15808,15 +15813,15 @@ RectTransform:
   m_GameObject: {fileID: 1251908966}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.75, y: 0.75, z: 0.75}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4972007141336290053}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -228.375, y: 190.5}
-  m_SizeDelta: {x: 242.4211, y: 242.4211}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1251908969
 MonoBehaviour:
@@ -15831,7 +15836,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -15858,28 +15863,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1251908966}
   m_CullTransparentMesh: 1
---- !u!95 &1251908971
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1251908966}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &1251908972
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25357,6 +25340,50 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: cd604653a7da1a64ca3670bcca2bd032, type: 3}
   m_PrefabInstance: {fileID: 1986306719}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1986587981
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1986587983}
+  - component: {fileID: 1986587982}
+  m_Layer: 0
+  m_Name: Input System
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1986587982
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1986587981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9985981d43b46feb50473c05242fc1e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1986587983
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1986587981}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1997711759
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -27011,7 +27038,7 @@ PlayableDirector:
   serializedVersion: 3
   m_PlayableAsset: {fileID: 11400000, guid: 8ce6a0da3166eff4686dc2bfe2a70fb9, type: 2}
   m_InitialState: 1
-  m_WrapMode: 2
+  m_WrapMode: 0
   m_DirectorUpdateMode: 1
   m_InitialTime: 0
   m_SceneBindings:
@@ -27033,16 +27060,12 @@ PlayableDirector:
     value: {fileID: 254992718}
   - key: {fileID: 7936062905344862864, guid: 5ac0e7be473cc674c95d1e35c5e09a83, type: 2}
     value: {fileID: 8880498939177435141}
-  - key: {fileID: 8979099461998995857, guid: 5ac0e7be473cc674c95d1e35c5e09a83, type: 2}
-    value: {fileID: 1251908971}
-  - key: {fileID: 2015901510341878379, guid: 5ac0e7be473cc674c95d1e35c5e09a83, type: 2}
-    value: {fileID: 1251908966}
+  - key: {fileID: 0}
+    value: {fileID: 0}
   - key: {fileID: 7936062905344862864, guid: f8ee5d22e243bd6409d53f8fd1e16ebb, type: 2}
     value: {fileID: 8880498939177435141}
-  - key: {fileID: 8979099461998995857, guid: f8ee5d22e243bd6409d53f8fd1e16ebb, type: 2}
-    value: {fileID: 1251908971}
-  - key: {fileID: 2015901510341878379, guid: f8ee5d22e243bd6409d53f8fd1e16ebb, type: 2}
-    value: {fileID: 1251908966}
+  - key: {fileID: 0}
+    value: {fileID: 0}
   - key: {fileID: 7936062905344862864, guid: c5b8e26c536f76741af34773e857e620, type: 2}
     value: {fileID: 8880498939177435141}
   - key: {fileID: -2151595262882851592, guid: c5b8e26c536f76741af34773e857e620, type: 2}
@@ -27054,13 +27077,17 @@ PlayableDirector:
   - key: {fileID: 7936062905344862864, guid: 46152ef8c7b96104ca4daf8657658a95, type: 2}
     value: {fileID: 8880498939177435141}
   - key: {fileID: 0}
-    value: {fileID: 1251908971}
+    value: {fileID: 0}
   - key: {fileID: 0}
     value: {fileID: 1251908966}
-  - key: {fileID: -146677502146470976, guid: 46152ef8c7b96104ca4daf8657658a95, type: 2}
+  - key: {fileID: 0}
+    value: {fileID: 0}
+  - key: {fileID: 7936062905344862864, guid: 25898d2ef9e13c34c8be1f5211665c13, type: 2}
+    value: {fileID: 8880498939177435141}
+  - key: {fileID: 0}
+    value: {fileID: 0}
+  - key: {fileID: 0}
     value: {fileID: 1251908966}
-  - key: {fileID: -6450637416758059862, guid: 46152ef8c7b96104ca4daf8657658a95, type: 2}
-    value: {fileID: 1251908971}
   m_ExposedReferences:
     m_References: []
 --- !u!114 &2124809852
@@ -35033,5 +35060,6 @@ SceneRoots:
   - {fileID: 115298826}
   - {fileID: 4972007141358329155}
   - {fileID: 2124809850}
+  - {fileID: 1986587983}
   - {fileID: 1567867699}
   - {fileID: 1061372296}

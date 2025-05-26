@@ -16,7 +16,7 @@ namespace Restaurant.Mini_Game.Stockpot
         private InputManager Input { get; set; }
         private Vector2 MousePos => Input.Mouse.MousePos.ReadValue<Vector2>();
         
-        private UnityEngine.Camera MainCamera { get; set; }
+        private Camera MainCamera { get; set; }
         
         private IEnumerator CurrentCoroutine { get; set; }
         private bool IsStirring { get; set; }
@@ -26,11 +26,13 @@ namespace Restaurant.Mini_Game.Stockpot
         private void Awake()
         {
             Input = InputSystem.Input;
-            MainCamera = UnityEngine.Camera.main;
+            MainCamera = Camera.main;
         }
 
         private void OnEnable()
         {
+            InputSystem.EnableMouse();
+            
             Input.Mouse.LeftClick.started += StartDetect;
             Input.Mouse.LeftClick.canceled += StopDetect;
 
@@ -40,6 +42,8 @@ namespace Restaurant.Mini_Game.Stockpot
 
         private void OnDisable()
         {
+            InputSystem.DisableMouse();
+            
             Input.Mouse.LeftClick.started -= StartDetect;
             Input.Mouse.LeftClick.canceled -= StopDetect;
             
