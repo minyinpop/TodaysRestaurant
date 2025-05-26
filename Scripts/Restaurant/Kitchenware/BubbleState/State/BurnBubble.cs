@@ -30,6 +30,7 @@ namespace Restaurant.Kitchenware.BubbleState.State
         {
             Manager.ChangeState(new EmptyBubble());
             Manager.StartConversation();
+            Manager.CloseCoachMask();
             Manager.IsTutorialCanPlayGame = true;
         }
     }

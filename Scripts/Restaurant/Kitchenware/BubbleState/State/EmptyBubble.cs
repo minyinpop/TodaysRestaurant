@@ -32,6 +32,7 @@ namespace Restaurant.Kitchenware.BubbleState.State
             if (Manager.IsTutorialCanPlayGame)
                 return;
             Manager.StartConversation();
+            Manager.CloseCoachMask();
         }
     }
 }

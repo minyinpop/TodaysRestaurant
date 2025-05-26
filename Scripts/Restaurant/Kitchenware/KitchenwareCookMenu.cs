@@ -65,6 +65,7 @@ namespace Restaurant.Kitchenware
             if (KitchenwareManager.IsTutorialCanPlayGame)
                 return;
             KitchenwareManager.StartConversation();
+            KitchenwareManager.CloseCoachMask();
         }
     }
 }

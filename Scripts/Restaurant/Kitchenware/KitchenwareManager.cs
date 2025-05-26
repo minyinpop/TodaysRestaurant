@@ -67,6 +67,7 @@ namespace Restaurant.Kitchenware
         private KitchenwareGame KitchenwareGame { get; set; }
         
         public static event Func<DishSO, bool> GetDishEvent;
+        public static event Action CloseCoachMaskEvent;
 
         private void Awake()
         {
@@ -194,5 +195,6 @@ namespace Restaurant.Kitchenware
 
         public void ClearDish() => CurrentCookDish = null;
         public void StartConversation() => DialogueSystemTrigger.OnUse();
+        public void CloseCoachMask() => CloseCoachMaskEvent?.Invoke();
     }
 }

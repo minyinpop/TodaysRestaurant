@@ -10763,6 +10763,51 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 879446378}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &884870768
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 884870770}
+  - component: {fileID: 884870769}
+  m_Layer: 0
+  m_Name: Coach Mask Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &884870769
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 884870768}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 260069af430b4b5c930117b2def82106, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  coachMask: {fileID: 1251908967}
+--- !u!4 &884870770
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 884870768}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &894888240
 GameObject:
   m_ObjectHideFlags: 0
@@ -13112,19 +13157,6 @@ MonoBehaviour:
     onExecute:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 2124809851}
-          m_TargetAssemblyTypeName: UnityEngine.Playables.PlayableDirector, UnityEngine
-          m_MethodName: Play
-          m_Mode: 2
-          m_Arguments:
-            m_ObjectArgument: {fileID: 11400000, guid: 5ac0e7be473cc674c95d1e35c5e09a83, type: 2}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Playables.PlayableAsset,
-              UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
         - m_Target: {fileID: 6691563558482853198}
           m_TargetAssemblyTypeName: Restaurant.Kitchenware.KitchenwareManager, Assembly-CSharp
           m_MethodName: Init
@@ -13149,18 +13181,29 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+        - m_Target: {fileID: 884870769}
+          m_TargetAssemblyTypeName: For_Tutorial.CoachMaskManager, Assembly-CSharp
+          m_MethodName: Play
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 11400000, guid: 52bd74fc40e43f34a8c1f653a6c11e63, type: 2}
+            m_ObjectArgumentAssemblyTypeName: For_Tutorial.CoachManagerSO, Assembly-CSharp
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
   - guid: d5bf011e-5d02-419c-a074-b5158037cd30
     onExecute:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 2124809851}
-          m_TargetAssemblyTypeName: UnityEngine.Playables.PlayableDirector, UnityEngine
+        - m_Target: {fileID: 884870769}
+          m_TargetAssemblyTypeName: For_Tutorial.CoachMaskManager, Assembly-CSharp
           m_MethodName: Play
           m_Mode: 2
           m_Arguments:
-            m_ObjectArgument: {fileID: 11400000, guid: f8ee5d22e243bd6409d53f8fd1e16ebb, type: 2}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Playables.PlayableAsset,
-              UnityEngine
+            m_ObjectArgument: {fileID: 11400000, guid: 8e3fd908ab9102747bec1661155a14ca, type: 2}
+            m_ObjectArgumentAssemblyTypeName: For_Tutorial.CoachManagerSO, Assembly-CSharp
             m_IntArgument: 0
             m_FloatArgument: 0
             m_StringArgument: 
@@ -13252,14 +13295,13 @@ MonoBehaviour:
     onExecute:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 2124809851}
-          m_TargetAssemblyTypeName: UnityEngine.Playables.PlayableDirector, UnityEngine
+        - m_Target: {fileID: 884870769}
+          m_TargetAssemblyTypeName: For_Tutorial.CoachMaskManager, Assembly-CSharp
           m_MethodName: Play
           m_Mode: 2
           m_Arguments:
-            m_ObjectArgument: {fileID: 11400000, guid: 46152ef8c7b96104ca4daf8657658a95, type: 2}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Playables.PlayableAsset,
-              UnityEngine
+            m_ObjectArgument: {fileID: 11400000, guid: 52bd74fc40e43f34a8c1f653a6c11e63, type: 2}
+            m_ObjectArgumentAssemblyTypeName: For_Tutorial.CoachManagerSO, Assembly-CSharp
             m_IntArgument: 0
             m_FloatArgument: 0
             m_StringArgument: 
@@ -13313,14 +13355,13 @@ MonoBehaviour:
     onExecute:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 2124809851}
-          m_TargetAssemblyTypeName: UnityEngine.Playables.PlayableDirector, UnityEngine
+        - m_Target: {fileID: 884870769}
+          m_TargetAssemblyTypeName: For_Tutorial.CoachMaskManager, Assembly-CSharp
           m_MethodName: Play
           m_Mode: 2
           m_Arguments:
-            m_ObjectArgument: {fileID: 11400000, guid: 25898d2ef9e13c34c8be1f5211665c13, type: 2}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Playables.PlayableAsset,
-              UnityEngine
+            m_ObjectArgument: {fileID: 11400000, guid: 52bd74fc40e43f34a8c1f653a6c11e63, type: 2}
+            m_ObjectArgumentAssemblyTypeName: For_Tutorial.CoachManagerSO, Assembly-CSharp
             m_IntArgument: 0
             m_FloatArgument: 0
             m_StringArgument: 
@@ -15797,6 +15838,7 @@ GameObject:
   - component: {fileID: 1251908970}
   - component: {fileID: 1251908969}
   - component: {fileID: 1251908972}
+  - component: {fileID: 1251908973}
   m_Layer: 5
   m_Name: Coach Mask
   m_TagString: Untagged
@@ -15875,6 +15917,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ffade7edb5b1df45a6c3642149606c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!95 &1251908973
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1251908966}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 70ca04e16835c364594846bd5d1a245c, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1253778793
 GameObject:
   m_ObjectHideFlags: 0
@@ -35063,3 +35127,4 @@ SceneRoots:
   - {fileID: 1986587983}
   - {fileID: 1567867699}
   - {fileID: 1061372296}
+  - {fileID: 884870770}

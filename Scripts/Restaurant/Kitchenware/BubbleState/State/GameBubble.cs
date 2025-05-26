@@ -43,6 +43,7 @@ namespace Restaurant.Kitchenware.BubbleState.State
             Manager.SetBubbleInteractableFalse();
             Manager.OnGameStart();
             Manager.StartConversation();
+            Manager.CloseCoachMask();
         }
         
         private IEnumerator CountDownCookTime()
