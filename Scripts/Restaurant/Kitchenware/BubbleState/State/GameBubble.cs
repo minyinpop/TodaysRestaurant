@@ -29,18 +29,18 @@ namespace Restaurant.Kitchenware.BubbleState.State
 
         public void PlayerEnter()
         {
-            Manager.SetBubbleInteractable(true);
+            Manager.SetBubbleInteractableTrue();
         }
 
         public void PlayerLeave()
         {
-            Manager.SetBubbleInteractable(false);
+            Manager.SetBubbleInteractableFalse();
             Manager.OnGameCancel();
         }
 
         public void OnClick()
         {
-            Manager.SetBubbleInteractable(false);
+            Manager.SetBubbleInteractableFalse();
             Manager.OnGameStart();
         }
         

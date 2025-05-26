@@ -109,12 +109,9 @@ namespace Restaurant.Kitchenware
         public void OpenCookMenu() => KitchenwareCookMenu.OpenCookMenu();
         public void CloseCookMenu() => KitchenwareCookMenu.CloseCookMenu();
         
-        public void SetBubbleInteractable(bool interactable)
-        {
-            if (CurrentBubbleButton is not null)
-                CurrentBubbleButton.interactable = interactable;
-        }
-        
+        public void SetBubbleInteractableTrue() => CurrentBubbleButton.interactable = true;
+        public void SetBubbleInteractableFalse() => CurrentBubbleButton.interactable = false;
+
         public void InitEmptyBubble()
         {
             CurrentBubbleObj = Instantiate(EmptyBubblePrefab, BubbleParent);

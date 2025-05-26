@@ -60,6 +60,7 @@ namespace Restaurant.Kitchenware
         private void OnClickStickyNote(DishSO selectDish)
         {
             CloseCookMenu();
+            KitchenwareManager.StartConversation();
             KitchenwareManager.OnChooseDish(selectDish);
         }
     }
