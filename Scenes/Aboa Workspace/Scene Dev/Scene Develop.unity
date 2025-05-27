@@ -800,7 +800,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -120}
+  m_AnchoredPosition: {x: -180, y: 0}
   m_SizeDelta: {x: 64, y: 64}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &63698110
@@ -8214,7 +8214,7 @@ Transform:
   m_GameObject: {fileID: 636032880}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.000029280778, z: -0, w: 1}
-  m_LocalPosition: {x: -6, y: 2, z: 0}
+  m_LocalPosition: {x: -1.0002294, y: 2, z: 4.9993773}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10891,6 +10891,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   coachMask: {fileID: 1251908967}
+  finger: {fileID: 63698109}
 --- !u!4 &884870770
 Transform:
   m_ObjectHideFlags: 0
@@ -13504,6 +13505,35 @@ MonoBehaviour:
             m_FloatArgument: 0
             m_StringArgument: 
             m_BoolArgument: 1
+          m_CallState: 2
+        - m_Target: {fileID: 1986587982}
+          m_TargetAssemblyTypeName: Input.InputSystem, Assembly-CSharp
+          m_MethodName: EnableMouse
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 1
+          m_CallState: 2
+  - guid: 7f9d9253-04bc-4f30-ad87-00248c600e11
+    onExecute:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 2124809851}
+          m_TargetAssemblyTypeName: UnityEngine.Playables.PlayableDirector, UnityEngine
+          m_MethodName: Play
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 11400000, guid: 13d43d85f57511048a348ba50ff10bd9, type: 2}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Playables.PlayableAsset,
+              UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
           m_CallState: 2
 --- !u!4 &1061372296
 Transform:
@@ -23944,7 +23974,7 @@ Transform:
   m_GameObject: {fileID: 1841384404}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0.000029280778, z: 0, w: 1}
-  m_LocalPosition: {x: -6, y: 2, z: 0}
+  m_LocalPosition: {x: -1.0002294, y: 2, z: 4.9993773}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -27209,7 +27239,7 @@ PlayableDirector:
   m_GameObject: {fileID: 2124809849}
   m_Enabled: 1
   serializedVersion: 3
-  m_PlayableAsset: {fileID: 11400000, guid: 8ce6a0da3166eff4686dc2bfe2a70fb9, type: 2}
+  m_PlayableAsset: {fileID: 11400000, guid: 13d43d85f57511048a348ba50ff10bd9, type: 2}
   m_InitialState: 1
   m_WrapMode: 0
   m_DirectorUpdateMode: 1
@@ -27261,6 +27291,14 @@ PlayableDirector:
     value: {fileID: 0}
   - key: {fileID: 0}
     value: {fileID: 1251908966}
+  - key: {fileID: 0}
+    value: {fileID: 8880498939177435141}
+  - key: {fileID: 2150590235825046291, guid: 13d43d85f57511048a348ba50ff10bd9, type: 2}
+    value: {fileID: 8880498939177435141}
+  - key: {fileID: 1725303217111311421, guid: 13d43d85f57511048a348ba50ff10bd9, type: 2}
+    value: {fileID: 590128276}
+  - key: {fileID: 2045277257953548763, guid: 13d43d85f57511048a348ba50ff10bd9, type: 2}
+    value: {fileID: 590128280}
   m_ExposedReferences:
     m_References: []
 --- !u!114 &2124809852

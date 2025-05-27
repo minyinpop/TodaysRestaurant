@@ -21,7 +21,9 @@ namespace Restaurant.Mini_Game.Stockpot
         private IEnumerator CurrentCoroutine { get; set; }
         private bool IsStirring { get; set; }
         private Vector2 LastMousePos { get; set; }
+        
         public static event Action AddProgressBarValue;
+        public static event Action OnClickEvent;
 
         private void Awake()
         {
@@ -31,8 +33,6 @@ namespace Restaurant.Mini_Game.Stockpot
 
         private void OnEnable()
         {
-            InputSystem.EnableMouse();
-            
             Input.Mouse.LeftClick.started += StartDetect;
             Input.Mouse.LeftClick.canceled += StopDetect;
 
@@ -42,8 +42,6 @@ namespace Restaurant.Mini_Game.Stockpot
 
         private void OnDisable()
         {
-            InputSystem.DisableMouse();
-            
             Input.Mouse.LeftClick.started -= StartDetect;
             Input.Mouse.LeftClick.canceled -= StopDetect;
             
@@ -70,7 +68,7 @@ namespace Restaurant.Mini_Game.Stockpot
 
             if (hit.collider is null)
                 return;
-            
+            OnClickEvent?.Invoke();
             Spoon = hit.collider.gameObject;
             SpoonRig = Spoon.GetComponent<Rigidbody2D>();
             

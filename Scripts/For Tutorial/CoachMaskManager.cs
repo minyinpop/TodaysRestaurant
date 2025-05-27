@@ -1,5 +1,6 @@
 using System.Collections;
 using Restaurant.Kitchenware;
+using Restaurant.Mini_Game.Stockpot;
 using UnityEngine;
 using UtageExtensions;
 
@@ -9,6 +10,7 @@ namespace For_Tutorial
     {
         [Header("圖片")]
         [SerializeField] private RectTransform coachMask;
+        [SerializeField] private RectTransform finger;
 
         private void Awake()
         {
@@ -20,10 +22,28 @@ namespace For_Tutorial
                 enabled = false;
                 return;
             }
+
+            if (finger is null)
+            {
+#if UNITY_EDITOR
+                Debug.LogWarning($"{name} 遊戲物件裡的 finger 沒有被掛載，將自動關閉 {this} 組件");
+#endif
+                enabled = false;
+                return;
+            }
         }
-        
-        private void OnEnable() => KitchenwareManager.CloseCoachMaskEvent += Stop;
-        private void OnDisable() => KitchenwareManager.CloseCoachMaskEvent -= Stop;
+
+        private void OnEnable()
+        {
+            KitchenwareManager.CloseCoachMaskEvent += Stop;
+            SpoonManager.OnClickEvent += Stop;
+        }
+
+        private void OnDisable()
+        {
+            KitchenwareManager.CloseCoachMaskEvent -= Stop;
+            SpoonManager.OnClickEvent -= Stop;
+        }
 
         private void OnDestroy()
         {
@@ -49,6 +69,7 @@ namespace For_Tutorial
         private void Stop()
         {
             coachMask.gameObject.SetActive(false);
+            finger.gameObject.SetActive(false);
             if (_zoomCoroutine is null) return;
             StopCoroutine(_zoomCoroutine);
         }

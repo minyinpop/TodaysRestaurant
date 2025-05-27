@@ -8,6 +8,7 @@ namespace Restaurant.Kitchenware.BubbleState.State
         {
             Manager = manager;
             Manager.InitFinishBubble();
+            Manager.StartConversation();
         }
 
         public void Exit()
