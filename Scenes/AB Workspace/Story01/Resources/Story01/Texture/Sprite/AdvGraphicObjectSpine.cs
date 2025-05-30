@@ -2,75 +2,73 @@
 using Spine.Unity;
 using UnityEngine;
 using Utage;
-using UtageExtensions;
 
 namespace Scenes.AB_Workspace.Story01.Resources.Story01.Texture.Sprite
 {
     [AddComponentMenu("Utage/ADV/Internal/GraphicObject/Spine/Default")]
-    internal class AdvGraphicObjectSpine : MonoBehaviour
-        , IAdvGraphicObjectCustom
-        , IAdvGraphicObjectCustomCommand
-        , IAdvGraphicObjectCustomSave
+    internal class AdvGraphicObjectSpine : MonoBehaviour, IAdvGraphicObjectCustom, IAdvGraphicObjectCustomCommand, IAdvGraphicObjectCustomSave
     {
-        SkeletonAnimation SkeletonAnimation { get { return this.GetComponentCache<SkeletonAnimation>(ref skeletonAnimation); } }
-        SkeletonAnimation skeletonAnimation;
+        private Renderer Renderer { get; set; }
+        private SkeletonAnimation SkeletonAnimation { get; set; }
 
-        AdvGraphicObjectCustom AdvObj
+        private AdvGraphicObjectCustom _advObj;
+        private AdvGraphicObjectCustom AdvObj
         {
             get
             {
-                if (advObj == null)
-                {
-                    advObj = this.GetComponentInParent<AdvGraphicObjectCustom>();
-                }
-                return advObj;
+                if (_advObj is null)
+                    _advObj = GetComponentInParent<AdvGraphicObjectCustom>();
+                
+                return _advObj;
             }
         }
-        AdvGraphicObjectCustom advObj;
 
-        //描画時のリソース変更
+        private void Awake()
+        {
+            Renderer = GetComponent<Renderer>();
+            SkeletonAnimation = GetComponent<SkeletonAnimation>();
+        }
+
         public void ChangeResourceOnDrawSub(AdvGraphicInfo graphic)
         {
-            SetSortingOrder(this.AdvObj.Layer.Canvas.sortingOrder, this.AdvObj.Layer.Canvas.sortingLayerName);
+            Renderer.sortingOrder = AdvObj.Layer.Canvas.sortingOrder;
+            Renderer.sortingLayerName = AdvObj.Layer.Canvas.sortingLayerName;
         }
 
-        //描画順の設定
-        void SetSortingOrder(int sortingOrder, string sortingLayerName)
-        {
-            Renderer render = GetComponent<Renderer>();
-            render.sortingOrder = sortingOrder;
-            render.sortingLayerName = sortingLayerName;
-        }
-
-        //エフェクト用の色が変化したとき
         public void OnEffectColorsChange(AdvEffectColor color)
         {
-            //          SkeletonAnimation.color = color.MulColor;
+            SkeletonAnimation.Skeleton.SetColor(color.MulColor);
         }
 
-        //********描画時の引数適用********//
         public void SetCommandArg(AdvCommand command)
         {
-            string animationName = command.ParseCellOptional<string>(AdvColumnName.Arg2, "");
-            if (string.IsNullOrEmpty(animationName)) return;
+            var animationName = command.ParseCellOptional(AdvColumnName.Arg2, "");
 
-            //          float fadeTime = command.ParseCellOptional<float>(AdvColumnName.Arg6, 0.2f);
-            SkeletonAnimation.state.SetAnimation(0, animationName, true);
+            if (string.IsNullOrEmpty(animationName))
+                return;
+
+            var track = command.ParseCellOptional(AdvColumnName.Track, 0);
+            var isLoop = command.ParseCellOptional(AdvColumnName.Loop, false);
+
+            SkeletonAnimation.AnimationState.SetAnimation(track, animationName, isLoop);
         }
-        const int Version = 0;
+
+        private const int Version = 0;
         public void WriteSaveDataCustom(BinaryWriter writer)
         {
             writer.Write(Version);
             writer.Write(CurrentAnimationName());
         }
 
-        string CurrentAnimationName()
+        private string CurrentAnimationName()
         {
             var track = SkeletonAnimation.state.GetCurrent(0);
-            if (track == null) return "";
+            
+            if (track == null)
+                return "";
+
             var anim = track.Animation;
-            if (anim == null) return "";
-            return anim.Name;
+            return anim is null ? "" : anim.Name;
         }
 
         public void ReadSaveDataCustom(BinaryReader reader)

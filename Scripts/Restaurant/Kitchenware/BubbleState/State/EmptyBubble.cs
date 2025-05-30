@@ -17,18 +17,22 @@ namespace Restaurant.Kitchenware.BubbleState.State
 
         public void PlayerEnter()
         {
-            Manager.SetBubbleInteractable(true);
+            Manager.SetBubbleInteractableTrue();
         }
 
         public void PlayerLeave()
         {
-            Manager.SetBubbleInteractable(false);
-            Manager.SetCookMenuVisible(false);
+            Manager.SetBubbleInteractableFalse();
+            Manager.CloseCookMenu();
         }
         
         public void OnClick()
         {
-            Manager.SetCookMenuVisible(true);
+            Manager.OpenCookMenu();
+            if (Manager.IsTutorialCanPlayGame)
+                return;
+            Manager.StartConversation();
+            Manager.CloseCoachMask();
         }
     }
 }

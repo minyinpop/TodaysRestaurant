@@ -16,17 +16,19 @@ namespace Restaurant.Mini_Game.Stockpot
         private InputManager Input { get; set; }
         private Vector2 MousePos => Input.Mouse.MousePos.ReadValue<Vector2>();
         
-        private UnityEngine.Camera MainCamera { get; set; }
+        private Camera MainCamera { get; set; }
         
         private IEnumerator CurrentCoroutine { get; set; }
         private bool IsStirring { get; set; }
         private Vector2 LastMousePos { get; set; }
+        
         public static event Action AddProgressBarValue;
+        public static event Action OnClickEvent;
 
         private void Awake()
         {
             Input = InputSystem.Input;
-            MainCamera = UnityEngine.Camera.main;
+            MainCamera = Camera.main;
         }
 
         private void OnEnable()
@@ -66,7 +68,7 @@ namespace Restaurant.Mini_Game.Stockpot
 
             if (hit.collider is null)
                 return;
-            
+            OnClickEvent?.Invoke();
             Spoon = hit.collider.gameObject;
             SpoonRig = Spoon.GetComponent<Rigidbody2D>();
             

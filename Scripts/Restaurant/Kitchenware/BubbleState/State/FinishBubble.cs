@@ -8,6 +8,7 @@ namespace Restaurant.Kitchenware.BubbleState.State
         {
             Manager = manager;
             Manager.InitFinishBubble();
+            Manager.StartConversation();
         }
 
         public void Exit()
@@ -18,12 +19,12 @@ namespace Restaurant.Kitchenware.BubbleState.State
 
         public void PlayerEnter()
         {
-            Manager.SetBubbleInteractable(true);
+            Manager.SetBubbleInteractableTrue();
         }
 
         public void PlayerLeave()
         {
-            Manager.SetBubbleInteractable(false);
+            Manager.SetBubbleInteractableFalse();
         }
 
         public void OnClick()
