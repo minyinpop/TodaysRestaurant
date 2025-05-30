@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace For_Tutorial
 {
-    internal class PlayerAnimatorManager : MonoBehaviour
+    public class PlayerAnimatorManager : MonoBehaviour
     {
         [field: Header("動畫資產")]
         [field: SerializeField] private AnimationReferenceAsset Idle { get; set; }
@@ -30,9 +30,11 @@ namespace For_Tutorial
             EyeCoroutine = null;
         }
         
-        internal void PlayIdleClip() => SkeletonAnimation.AnimationState.SetAnimation(1, Idle, true);
-        internal void PlayWalkClip() => SkeletonAnimation.AnimationState.SetAnimation(1, Walk, true);
-        internal void PlayRunClip() => SkeletonAnimation.AnimationState.SetAnimation(1, Run, true);
+        public void PlayIdleClip() => SkeletonAnimation.AnimationState.SetAnimation(1, Idle, true);
+        public void PlayWalkClip() => SkeletonAnimation.AnimationState.SetAnimation(1, Walk, true);
+        public void PlayRunClip() => SkeletonAnimation.AnimationState.SetAnimation(1, Run, true);
+        
+        public void SetFlipX(bool isFlipX) => SkeletonAnimation.Skeleton.ScaleX = isFlipX ? -1 : 1;
 
         private IEnumerator EyeCoroutine { get; set; }
         private IEnumerator BlinkProcess()

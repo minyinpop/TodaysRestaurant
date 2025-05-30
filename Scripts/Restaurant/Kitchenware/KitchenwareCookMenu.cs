@@ -61,6 +61,11 @@ namespace Restaurant.Kitchenware
         {
             CloseCookMenu();
             KitchenwareManager.OnChooseDish(selectDish);
+
+            if (KitchenwareManager.IsTutorialCanPlayGame)
+                return;
+            KitchenwareManager.StartConversation();
+            KitchenwareManager.CloseCoachMask();
         }
     }
 }

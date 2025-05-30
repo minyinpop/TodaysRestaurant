@@ -1,5 +1,6 @@
 using System;
 using Database.Restaurant.Dish;
+using PixelCrushers.DialogueSystem;
 using Restaurant.Kitchenware.BubbleState;
 using Restaurant.Kitchenware.BubbleState.State;
 using Unity.Cinemachine;
@@ -46,15 +47,18 @@ namespace Restaurant.Kitchenware
         
         [field: Header("小遊戲的預製件")]
         [field: SerializeField] private GameObject GamePrefab { get; set; }
+        
+        [field: Header("對話系統觸發組件")]
+        [field: SerializeField] private DialogueSystemTrigger DialogueSystemTrigger { get; set; }
 
-
+        public bool IsTutorialCanPlayGame { get; set; }
         private bool IsGameStart { get; set; }
         
         private GameObject CurrentBubbleObj { get; set; }
         public Image CurrentBubbleCountDownImage { get; private set; }
         private Button CurrentBubbleButton { get; set; }
 
-        private BubbleStateMachine BubbleStateMachine { get; set; } = new();
+        private BubbleStateMachine BubbleStateMachine { get; set; }
         public DishSO CurrentCookDish { get; private set; }
         public float RemainingCookTime { get; set; }
         
@@ -63,7 +67,8 @@ namespace Restaurant.Kitchenware
         private KitchenwareGame KitchenwareGame { get; set; }
         
         public static event Func<DishSO, bool> GetDishEvent;
-        
+        public static event Action CloseCoachMaskEvent;
+
         private void Awake()
         {
             KitchenwareDetector = GetComponent<KitchenwareDetector>();
@@ -74,15 +79,16 @@ namespace Restaurant.Kitchenware
             KitchenwareGame.Init(GameParent, GamePrefab);
         }
 
-        private void Start()
-        {
-            BubbleStateMachine.SetState(new EmptyBubble(), this);
-        }
-
-        private void OnDestroy()
+        private void OnDisable()
         {
             if (CurrentBubbleButton is not null)
                 CurrentBubbleButton.onClick.RemoveListener(BubbleStateMachine.OnClick);
+        }
+
+        public void Init()
+        {
+            BubbleStateMachine = new BubbleStateMachine();
+            BubbleStateMachine.SetState(new EmptyBubble(), this);
         }
 
         public void ChangeState(IBubbleState nextState)
@@ -100,21 +106,13 @@ namespace Restaurant.Kitchenware
             else
                 BubbleStateMachine.PlayerLeave();
         }
-
-        public void SetCookMenuVisible(bool visible)
-        {
-            if (visible)
-                KitchenwareCookMenu.OpenCookMenu();
-            else
-                KitchenwareCookMenu.CloseCookMenu();
-        }
-
-        public void SetBubbleInteractable(bool interactable)
-        {
-            if (CurrentBubbleButton is not null)
-                CurrentBubbleButton.interactable = interactable;
-        }
         
+        public void OpenCookMenu() => KitchenwareCookMenu.OpenCookMenu();
+        public void CloseCookMenu() => KitchenwareCookMenu.CloseCookMenu();
+        
+        public void SetBubbleInteractableTrue() => CurrentBubbleButton.interactable = true;
+        public void SetBubbleInteractableFalse() => CurrentBubbleButton.interactable = false;
+
         public void InitEmptyBubble()
         {
             CurrentBubbleObj = Instantiate(EmptyBubblePrefab, BubbleParent);
@@ -195,9 +193,8 @@ namespace Restaurant.Kitchenware
                 ChangeState(new EmptyBubble());
         }
 
-        public void ClearDish()
-        {
-            CurrentCookDish = null;
-        }
+        public void ClearDish() => CurrentCookDish = null;
+        public void StartConversation() => DialogueSystemTrigger.OnUse();
+        public void CloseCoachMask() => CloseCoachMaskEvent?.Invoke();
     }
 }
