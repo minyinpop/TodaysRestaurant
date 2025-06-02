@@ -4,7 +4,7 @@ namespace Input
 {
     internal class InputSystem : MonoBehaviour
     {
-        public InputManager Input { get; private set; }
+        public static InputManager Input { get; private set; }
         private void Awake() => Input = new InputManager();
         private void OnEnable() => Input.Enable();
         private void OnDisable() => Input.Disable();
