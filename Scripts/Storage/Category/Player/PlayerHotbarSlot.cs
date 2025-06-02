@@ -3,9 +3,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Player.Storage.Category
+namespace Storage.Category.Player
 {
-    internal class PlayerHotbarSlot : PlayerStorageSlot
+    internal class PlayerHotbarSlot : StorageSlot
     {
         [field: Header("必要組件")]
         [field: SerializeField] private Image ItemImage { get; set; }
