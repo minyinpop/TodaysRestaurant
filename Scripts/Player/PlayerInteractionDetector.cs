@@ -11,7 +11,7 @@ namespace Player
     {
         private InputManager Input { get; set; }
 
-        private List<InteractableBase> Interactables { get; set; } = new();
+        private List<InteractableObjectBase> Interactables { get; set; } = new();
 
         private void Awake()
         {
@@ -43,13 +43,13 @@ namespace Player
 
         private void OnTriggerEnter(Collider other)
         {
-            if (!other.TryGetComponent<InteractableBase>(out var interactable)) return;
+            if (!other.TryGetComponent<InteractableObjectBase>(out var interactable)) return;
             Interactables.Add(interactable);
         }
 
         private void OnTriggerExit(Collider other)
         {
-            if (!other.TryGetComponent<InteractableBase>(out var interactable)) return;
+            if (!other.TryGetComponent<InteractableObjectBase>(out var interactable)) return;
             interactable.Deselect();
             Interactables.Remove(interactable);
         }

@@ -4,10 +4,12 @@ using Utility;
 
 namespace Interactable_Object
 {
-    internal class Ingredient : InteractableBase
+    internal class CollectibleIngredient : InteractableObjectBase
     {
         [field: SerializeField] private SpriteRenderer SpriteRenderer { get; set; }
         private Material Material { get; set; }
+
+        internal static event System.Action InteractEvent;
 
         private void Awake()
         {
@@ -20,6 +22,7 @@ namespace Interactable_Object
         internal override void Deselect() => Material.DisableKeyword("OUTBASE_ON");
         internal override bool Interact()
         {
+            InteractEvent?.Invoke();
             Destroy(gameObject);
             return true;
         }
