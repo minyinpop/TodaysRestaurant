@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Interactable_Object.Base
 {
-    internal abstract class Interactable : MonoBehaviour
+    internal abstract class InteractableBase : MonoBehaviour
     {
         internal abstract void Select();
         internal abstract void Deselect();

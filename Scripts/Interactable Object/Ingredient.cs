@@ -4,7 +4,7 @@ using Utility;
 
 namespace Interactable_Object
 {
-    internal class Ingredient : Interactable
+    internal class Ingredient : InteractableBase
     {
         [field: SerializeField] private SpriteRenderer SpriteRenderer { get; set; }
         private Material Material { get; set; }
