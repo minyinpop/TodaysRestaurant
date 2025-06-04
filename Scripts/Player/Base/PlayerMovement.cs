@@ -1,5 +1,6 @@
 using System;
 using Character.Attribute;
+using Character.Attribute.Base;
 using UnityEngine;
 
 namespace Player.Base
