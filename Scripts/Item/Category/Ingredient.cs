@@ -1,10 +1,11 @@
+using Item.Base;
 using Item.Settings;
 using UnityEngine;
 
-namespace Item.Base
+namespace Item.Category
 {
     [CreateAssetMenu(menuName = "Today's Restaurant/Item/Ingredient", fileName = "New Data", order = 1)]
-    internal class Ingredient : ScriptableObject, ITem
+    internal class Ingredient : ItemBase
     {
         [field: Header("資訊設定")]
         [field: SerializeField] internal InformationSettings InformationSettings { get; private set; }
@@ -12,5 +13,7 @@ namespace Item.Base
         [field: SerializeField] internal StackSettings StackSettings { get; private set; }
         [field: Header("烹飪設定")]
         [field: SerializeField] internal CookSettings CookSettings { get; private set; }
+
+        internal override StackSettings GetStackSettings() => StackSettings;
     }
 }
