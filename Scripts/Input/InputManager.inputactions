@@ -2,28 +2,28 @@
     "name": "InputManager",
     "maps": [
         {
-            "name": "Player",
+            "name": "Mouse",
             "id": "c96a3d1a-da9e-4a1d-91df-27ba53343cca",
             "actions": [
                 {
-                    "name": "Space",
-                    "type": "Button",
-                    "id": "ddebb4c3-cd04-4242-8704-7c6eb515752b",
-                    "expectedControlType": "",
+                    "name": "Position",
+                    "type": "Value",
+                    "id": "25326086-19fc-43ce-a073-c5246975b05c",
+                    "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
                 {
                     "name": "",
-                    "id": "6ac20fb2-36a7-4c96-8c8f-b11fbe46df51",
-                    "path": "<Keyboard>/space",
-                    "interactions": "Press",
+                    "id": "1b492983-b50d-4e74-8774-21e12137b01a",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Space",
+                    "action": "Position",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
