@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using BATTLE.CARD.SYSTEM;
 using SYSTEM;
 using UnityEngine;
@@ -8,15 +9,15 @@ namespace BATTLE.CARD.MANAGER
     [RequireComponent(typeof(CardSortingSystem))]
     internal class CardMainSystem : MonoBehaviour, ICardSystemHandler
     {
-        [field: Header("System Components")]
         [field: SerializeField] private CardDragSystem CardDragSystem { get; set; }
         [field: SerializeField] private CardSortingSystem CardSortingSystem { get; set; }
+        [field: SerializeField] public List<GameObject> Slots { get; private set; }
         
         private InputManager Input { get; set; }
         public Vector2 MousePosition => Input.Mouse.Position.ReadValue<Vector2>();
 
-        private GameObject DraggedCard { get; set; }
-        private Card DraggedCardComponent { get; set; }
+        public GameObject DraggedCard { get; private set; }
+        public Card DraggedCardComponent { get; private set; }
         
         private void Awake()
         {
@@ -25,16 +26,18 @@ namespace BATTLE.CARD.MANAGER
 
         private void OnEnable()
         {
+            Card.DragEvent += Drag;
             Card.BeginDragEvent += BeginDrag;
             Card.EndDragEvent += EndDrag;
         }
 
         private void OnDisable()
         {
+            Card.DragEvent -= Drag;
             Card.BeginDragEvent -= BeginDrag;
             Card.EndDragEvent -= EndDrag;
         }
-
+        
         public void BeginDrag(Card draggedCard)
         {
             DraggedCard = draggedCard.gameObject;
@@ -42,6 +45,12 @@ namespace BATTLE.CARD.MANAGER
             
             CardDragSystem.BeginDrag(DraggedCardComponent);
             CardSortingSystem.BeginDrag(DraggedCardComponent);
+        }
+        
+        public void Drag()
+        {
+            CardDragSystem.Drag();
+            CardSortingSystem.Drag();
         }
 
         public void EndDrag()

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using BATTLE.CARD.MANAGER;
 using UnityEngine;
@@ -8,7 +9,7 @@ namespace BATTLE.CARD.SYSTEM
     {
         [field: Header("Main Component")]
         [field: SerializeField] private CardMainSystem CardMainSystem { get; set; }
-        
+
         private void OnDisable()
         {
             if (DragCoroutine is null) return;
@@ -16,12 +17,15 @@ namespace BATTLE.CARD.SYSTEM
             DragCoroutine = null;
         }
 
-        private IEnumerator DragCoroutine { get; set; }
-
         public void BeginDrag(Card draggedCard)
         {
-            DragCoroutine = DragProcess(draggedCard.gameObject);
+            DragCoroutine = DragProcess();
             StartCoroutine(DragCoroutine);
+        }
+
+        public void Drag()
+        {
+            
         }
         
         public void EndDrag()
@@ -31,11 +35,13 @@ namespace BATTLE.CARD.SYSTEM
             DragCoroutine = null;
         }
 
-        private IEnumerator DragProcess(GameObject draggedCard)
+        private IEnumerator DragCoroutine { get; set; }
+
+        private IEnumerator DragProcess()
         {
             while (true)
             {
-                draggedCard.transform.position = CardMainSystem.MousePosition;
+                CardMainSystem.DraggedCard.transform.position = CardMainSystem.MousePosition;
                 yield return new WaitForEndOfFrame();
             }
         }
