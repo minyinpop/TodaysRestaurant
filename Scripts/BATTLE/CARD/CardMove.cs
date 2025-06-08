@@ -20,7 +20,7 @@ namespace BATTLE.CARD
         public void OnPointerExit()
         {
             ScaleTween?.Kill();
-            ScaleTween = Card.HandCard.transform.transform.DOScale(1f, .2f);
+            ScaleTween = Card.HandCard.transform.DOScale(1f, .2f);
         }
 
         public void OnDrag()
@@ -32,7 +32,7 @@ namespace BATTLE.CARD
         public void OnEndDrag()
         {
             MoveTween?.Kill();
-            MoveTween = Card.HandCard.transform.DOMove(Card.HandCardSlot.transform.position, .1f);
+            MoveTween = Card.HandCard.transform.DOMove(Card.HandCardSlot.transform.position, .3f);
         }
     }
 }
