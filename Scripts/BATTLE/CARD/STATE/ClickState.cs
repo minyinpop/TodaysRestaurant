@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace BATTLE.CARD.STATE
 {
-    internal class OnCursorState : ICardState
+    internal class ClickState : ICardState
     {
         private GameObject Card { get; set; }
         

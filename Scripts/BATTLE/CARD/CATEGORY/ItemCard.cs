@@ -27,5 +27,10 @@ namespace BATTLE.CARD.Category
         {
             CardStateMachine.ChangeState(new IdleState(), Card);
         }
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            CardStateMachine.ChangeState(new ClickState(), Card);
+        }
     }
 }
