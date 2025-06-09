@@ -89,12 +89,12 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
     ""maps"": [
         {
             ""name"": ""Mouse"",
-            ""id"": ""d8c88908-c0d9-4b70-9363-96bfb00c46b3"",
+            ""id"": ""e9bca46b-b9c1-498c-b268-c37d16ecb492"",
             ""actions"": [
                 {
                     ""name"": ""Position"",
                     ""type"": ""Value"",
-                    ""id"": ""091dcc6d-b2fa-4c78-800a-7e18afcc7dd6"",
+                    ""id"": ""bea34af6-fe73-49d3-b6f5-9027a049b8fd"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -104,7 +104,7 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
             ""bindings"": [
                 {
                     ""name"": """",
-                    ""id"": ""31ae222c-2e4f-41d9-bd1b-e530e3ddc9b2"",
+                    ""id"": ""e134df40-114b-4ff4-b808-f591df75acf3"",
                     ""path"": ""<Mouse>/position"",
                     ""interactions"": """",
                     ""processors"": """",
