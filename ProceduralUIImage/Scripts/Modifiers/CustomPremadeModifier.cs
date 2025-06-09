@@ -1,5 +1,4 @@
-using UnityEngine;
-using UnityEngine.UI.ProceduralImage;
+
 
 /* Uncomment this to work from it as a base for your own modifier
  * 
