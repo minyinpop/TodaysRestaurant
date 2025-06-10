@@ -1,4 +1,4 @@
-using BATTLE.CARD.MANAGER;
+using BATTLE.CARD.BASE;
 
 namespace BATTLE.CARD.CATEGORY
 {

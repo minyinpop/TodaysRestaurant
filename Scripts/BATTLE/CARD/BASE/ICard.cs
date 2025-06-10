@@ -1,6 +1,6 @@
 using UnityEngine.EventSystems;
 
-namespace BATTLE.CARD.MANAGER
+namespace BATTLE.CARD.BASE
 {
     internal interface ICard : IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
     {

@@ -2,7 +2,7 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace BATTLE.CARD.MANAGER
+namespace BATTLE.CARD.BASE
 {
     internal abstract class CardBase : MonoBehaviour, ICard
     {
