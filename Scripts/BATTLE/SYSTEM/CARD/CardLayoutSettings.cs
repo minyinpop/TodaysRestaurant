@@ -5,13 +5,10 @@ namespace BATTLE.SYSTEM.CARD
     [System.Serializable]
     internal class CardLayoutSettings
     {
-        [field: Header("Settings")]
         [field: SerializeField] public AnimationCurve Curve { get; set; }
         [field: SerializeField] public RectTransform[] Cards { get; set; }
 
-        public void Update() => ArrangeCardsByCurve();
-        
-        private void ArrangeCardsByCurve()
+        public void ArrangeCardsByCurve()
         {
             var cardCount = Cards.Length;
             for (var i = 0; i < cardCount; i++)

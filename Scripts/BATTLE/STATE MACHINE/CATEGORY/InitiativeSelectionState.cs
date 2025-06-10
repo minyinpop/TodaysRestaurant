@@ -1,4 +1,5 @@
 using BATTLE.STATE_MACHINE.BASE;
+using UnityEngine;
 
 namespace BATTLE.STATE_MACHINE.CATEGORY
 {
@@ -6,12 +7,7 @@ namespace BATTLE.STATE_MACHINE.CATEGORY
     {
         public void Enter()
         {
-            
-        }
-
-        public void OnClick()
-        {
-            
+            Debug.Log("Flip Coin!");
         }
 
         public void Exit()

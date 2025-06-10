@@ -96,5 +96,7 @@ namespace BATTLE.CARD.BASE
                         )
                 );
         }
+
+        public abstract void OnChoose();
     }
 }
