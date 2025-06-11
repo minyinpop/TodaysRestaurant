@@ -1,12 +1,18 @@
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace BATTLE.COIN
 {
     internal class Coin : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
     {
-        [field: SerializeField] private RectTransform Rect { get; set; }
+        [field: Header("Coin Transform")]
+        [field: SerializeField] private RectTransform CoinRect { get; set; }
+        
+        [field: Header("Coin Image")]
+        [field: SerializeField] private GameObject FrontImage { get; set; }
+        [field: SerializeField] private GameObject BackImage { get; set; }
         
         private bool CanClicked { get; set; } = true;
         
@@ -16,13 +22,13 @@ namespace BATTLE.COIN
         public void OnPointerEnter(PointerEventData eventData)
         {
             if (!CanClicked) return;
-            ScaleTween = Rect.DOScale(Vector3.one * 1.5f, .2f);
+            ScaleTween = CoinRect.DOScale(Vector3.one * 1.5f, .2f);
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
             if (!CanClicked) return;
-            ScaleTween = Rect.DOScale(Vector3.one, .2f);
+            ScaleTween = CoinRect.DOScale(Vector3.one, .2f);
         }
         
         public void OnPointerClick(PointerEventData eventData)
@@ -39,12 +45,24 @@ namespace BATTLE.COIN
             
             ThrowSequence = DOTween.Sequence();
             ThrowSequence
-                .Append(Rect.DOScale(Vector3.one, 1)
+                .Append(CoinRect.DOScale(Vector3.one, 1)
                     .SetEase(Ease.InBack))
-                .Join(Rect.DOAnchorPos(new Vector2(randomXDistance, randomYDistance), 1, true)
+                .Join(CoinRect.DOAnchorPos(new Vector2(randomXDistance, randomYDistance), 16, true)
                     .SetEase(Ease.OutQuad))
-                .Join(Rect.DORotate(new Vector3(randomXRotation, randomYRotation, randomZRotation), 1, RotateMode.FastBeyond360)
-                    .SetEase(Ease.OutQuad));
+                .Join(CoinRect.DORotate(new Vector3(randomXRotation, randomYRotation, randomZRotation), 16,
+                        RotateMode.FastBeyond360)
+                    .SetEase(Ease.OutQuad))
+                .OnUpdate(() =>
+                {
+                    var rotX = CoinRect.rotation.eulerAngles.x;
+                    var rotY = CoinRect.rotation.eulerAngles.y;
+
+                    if (rotY > 180)
+                    {
+                        FrontImage.SetActive(false);
+                        BackImage.SetActive(true);
+                    }
+                });
         }
     }
 }
