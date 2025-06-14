@@ -1,7 +1,6 @@
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 namespace BATTLE.COIN
 {
@@ -9,6 +8,7 @@ namespace BATTLE.COIN
     {
         [field: Header("Coin Transform")]
         [field: SerializeField] private RectTransform CoinRect { get; set; }
+        private RectTransform ShowParent { get; set; }
         
         [field: Header("Coin Image")]
         [field: SerializeField] private GameObject FrontImage { get; set; }
@@ -17,18 +17,26 @@ namespace BATTLE.COIN
         private bool CanClicked { get; set; } = true;
         
         private Sequence ThrowSequence { get; set; }
-        private Tween ScaleTween { get; set; }
+        private Sequence ShowSequence { get; set; }
+
+        // Send a boolean value to indicate whether the player is the winner
+        public event System.Action<bool> OnShowCompleteEvent;
+
+        public void Init(RectTransform showParent)
+        {
+            ShowParent = showParent;
+        }
 
         public void OnPointerEnter(PointerEventData eventData)
         {
             if (!CanClicked) return;
-            ScaleTween = CoinRect.DOScale(Vector3.one * 1.5f, .2f);
+            CoinRect.DOScale(Vector3.one * 1.5f, .2f);
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
             if (!CanClicked) return;
-            ScaleTween = CoinRect.DOScale(Vector3.one, .2f);
+            CoinRect.DOScale(Vector3.one, .2f);
         }
         
         public void OnPointerClick(PointerEventData eventData)
@@ -36,11 +44,13 @@ namespace BATTLE.COIN
             if (!CanClicked) return;
             CanClicked = false;
 
-            var randomXDistance = Random.Range(100, 801) * (Random.Range(-1, 2) == 0 ? -1 : 1);
-            var randomYDistance = Random.Range(500, 801);
+            var randomXDistance = Random.Range(0, 801) * (Random.Range(-1, 2) == 0 ? -1 : 1);
+            var randomYDistance = Random.Range(300, 801);
 
-            var randomXRotation = Random.Range(12, 16) * 180;
-            var randomZRotation = Random.Range(5, 8) * Random.Range(1, 361);
+            var rotXTimes = Random.Range(10, 16);
+            var rotZTimes = Random.Range(5, 8);
+            var randomXAngle =  rotXTimes * 180;
+            var randomZAngle =  rotZTimes * Random.Range(1, 361);
             
             ThrowSequence = DOTween.Sequence();
             ThrowSequence
@@ -48,8 +58,7 @@ namespace BATTLE.COIN
                     .SetEase(Ease.InBack))
                 .Join(CoinRect.DOAnchorPos(new Vector2(randomXDistance, randomYDistance), 2, true)
                     .SetEase(Ease.OutQuad))
-                .Join(CoinRect.DORotate(new Vector3(randomXRotation, 0, randomZRotation), 2,
-                        RotateMode.FastBeyond360)
+                .Join(CoinRect.DORotate(new Vector3(randomXAngle, 0, randomZAngle), 2, RotateMode.FastBeyond360)
                     .SetEase(Ease.OutQuad))
                 .OnUpdate(() =>
                 {
@@ -66,7 +75,17 @@ namespace BATTLE.COIN
                 })
                 .OnComplete(() =>
                 {
-                    // TODO 硬幣翻轉動畫播完後，要告訴玩家哪一面朝上
+                    transform.SetParent(ShowParent);
+                    ShowSequence = DOTween.Sequence();
+                    ShowSequence
+                        .Append(CoinRect.DOAnchorPos(Vector2.zero, .5f, true)
+                            .SetEase(Ease.OutQuad))
+                        .Append(CoinRect.DOScale(Vector2.one * 2, .5f)
+                            .SetEase(Ease.InBack))
+                        .OnComplete(() =>
+                        {
+                            OnShowCompleteEvent?.Invoke(rotXTimes % 2 == 0);
+                        });
                 });
         }
     }

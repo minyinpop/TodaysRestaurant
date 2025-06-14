@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace BATTLE.STATE_MACHINE.BASE
 {
     internal class BattleStateMachine
