@@ -7,7 +7,7 @@ namespace BATTLE.STATE_MACHINE.CATEGORY
     {
         public void Enter()
         {
-            Debug.Log("Flip Coin!");
+            
         }
 
         public void Exit()

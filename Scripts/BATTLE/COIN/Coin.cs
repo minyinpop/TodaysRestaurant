@@ -39,29 +39,34 @@ namespace BATTLE.COIN
             var randomXDistance = Random.Range(100, 801) * (Random.Range(-1, 2) == 0 ? -1 : 1);
             var randomYDistance = Random.Range(500, 801);
 
-            var randomXRotation = Random.Range(3, 11) * 180;
-            var randomYRotation = Random.Range(3, 11) * 180;
-            var randomZRotation = Random.Range(3, 11) * Random.Range(1, 361);
+            var randomXRotation = Random.Range(12, 16) * 180;
+            var randomZRotation = Random.Range(5, 8) * Random.Range(1, 361);
             
             ThrowSequence = DOTween.Sequence();
             ThrowSequence
                 .Append(CoinRect.DOScale(Vector3.one, 1)
                     .SetEase(Ease.InBack))
-                .Join(CoinRect.DOAnchorPos(new Vector2(randomXDistance, randomYDistance), 16, true)
+                .Join(CoinRect.DOAnchorPos(new Vector2(randomXDistance, randomYDistance), 2, true)
                     .SetEase(Ease.OutQuad))
-                .Join(CoinRect.DORotate(new Vector3(randomXRotation, randomYRotation, randomZRotation), 16,
+                .Join(CoinRect.DORotate(new Vector3(randomXRotation, 0, randomZRotation), 2,
                         RotateMode.FastBeyond360)
                     .SetEase(Ease.OutQuad))
                 .OnUpdate(() =>
                 {
-                    var rotX = CoinRect.rotation.eulerAngles.x;
-                    var rotY = CoinRect.rotation.eulerAngles.y;
-
-                    if (rotY > 180)
+                    if (Mathf.Abs(CoinRect.rotation.eulerAngles.x - 90) < 5)
                     {
                         FrontImage.SetActive(false);
                         BackImage.SetActive(true);
                     }
+                    else if (Mathf.Abs(CoinRect.rotation.eulerAngles.x - 270) < 5)
+                    {
+                        FrontImage.SetActive(true);
+                        BackImage.SetActive(false);
+                    }
+                })
+                .OnComplete(() =>
+                {
+                    // TODO 硬幣翻轉動畫播完後，要告訴玩家哪一面朝上
                 });
         }
     }
