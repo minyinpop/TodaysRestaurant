@@ -21,11 +21,15 @@ namespace BATTLE
         private void Awake()
         {
             BattleStateMachine = new BattleStateMachine();
-            BattleStateMachine.ChangeState(new InitiativeSelectionState());
             
             InitiativeSelectionSystem = GetComponent<InitiativeSelectionSystem>();
             BattleSystem = GetComponent<BattleSystem>();
             CardSystem = GetComponent<CardSystem>();
+        }
+
+        private void Start()
+        {
+            BattleStateMachine.ChangeState(new InitiativeSelectionState());
         }
     }
 }

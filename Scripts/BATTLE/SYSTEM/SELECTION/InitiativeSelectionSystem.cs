@@ -17,16 +17,21 @@ namespace BATTLE.SYSTEM.SELECTION
         private void OnDisable()
         {
             InitiativeSelectionState.OnEnterEvent -= SpawnCoin;
-
-            if (CoinSettings.Coin is not null)
+            
+            try
+            {
                 CoinSettings.CoinComponent.OnShowCompleteEvent -= InitiativeSelection;
+            }
+            catch (System.Exception)
+            {
+                Debug.Log("CoinComponent is null");
+            }
         }
 
         private void SpawnCoin()
         {
-            Debug.Log("Spawn Coin");
             CoinSettings.Coin = Instantiate(CoinSettings.CoinPrefab, CoinSettings.SpawnParent);
-            CoinSettings.CoinComponent = GetComponent<Coin>();
+            CoinSettings.CoinComponent = CoinSettings.Coin.GetComponent<Coin>();
             CoinSettings.CoinComponent.Init(CoinSettings.ShowParent);
             CoinSettings.CoinComponent.OnShowCompleteEvent += InitiativeSelection;
         }

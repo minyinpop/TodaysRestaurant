@@ -82,6 +82,7 @@ namespace BATTLE.COIN
                             .SetEase(Ease.OutQuad))
                         .Append(CoinRect.DOScale(Vector2.one * 2, .5f)
                             .SetEase(Ease.InBack))
+                        .AppendInterval(.5f)
                         .OnComplete(() =>
                         {
                             OnShowCompleteEvent?.Invoke(rotXTimes % 2 == 0);
