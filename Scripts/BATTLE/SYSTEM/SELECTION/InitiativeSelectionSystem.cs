@@ -35,11 +35,19 @@ namespace BATTLE.SYSTEM.SELECTION
 
         private void SpawnCoin()
         {
-            ScreenMask.DOFade(1, 1);
-            CoinSettings.Coin = Instantiate(CoinSettings.CoinPrefab, CoinSettings.SpawnParent);
-            CoinSettings.CoinComponent = CoinSettings.Coin.GetComponent<Coin>();
-            CoinSettings.CoinComponent.Init(CoinSettings.ShowParent);
-            CoinSettings.CoinComponent.OnShowCompleteEvent += InitiativeSelection;
+            DOTween.Sequence()
+                .Append(ScreenMask.DOFade(1, 1))
+                .AppendCallback(() =>
+                {
+                    CoinSettings.Coin = Instantiate(CoinSettings.CoinPrefab, CoinSettings.SpawnParent);
+                    CoinSettings.CoinRect = CoinSettings.Coin.GetComponent<RectTransform>();
+                    CoinSettings.CoinComponent = CoinSettings.Coin.GetComponent<Coin>();
+                })
+                .AppendCallback(() =>
+                {
+                    CoinSettings.CoinComponent.Init(CoinSettings.ShowParent);
+                    CoinSettings.CoinComponent.OnShowCompleteEvent += InitiativeSelection;
+                });
         }
 
         private void InitiativeSelection(bool isPlayerFirst)
@@ -47,11 +55,12 @@ namespace BATTLE.SYSTEM.SELECTION
             var topContent = isPlayerFirst ? TextSettings.Heads.TopContent : TextSettings.Tails.TopContent;
             var bottomContent = isPlayerFirst ? TextSettings.Heads.BottomContent : TextSettings.Tails.BottomContent;
             DOTween.Sequence()
+                .AppendInterval(.5f)
                 .AppendCallback(() =>
                 {
                     TextSettings.TopTMP.text = topContent;
                 })
-                .AppendInterval(.5f)
+                .AppendInterval(1)
                 .AppendCallback(() =>
                 {
                     TextSettings.BottomTMP.text = bottomContent;

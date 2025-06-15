@@ -13,6 +13,7 @@ namespace BATTLE.SYSTEM.SELECTION
         [field: Header("Object")]
         [field: SerializeField] public GameObject CoinPrefab { get; private set; }
         public GameObject Coin { get; set; }
+        public RectTransform CoinRect { get; set; }
         public Coin CoinComponent { get; set; }
     }
 }

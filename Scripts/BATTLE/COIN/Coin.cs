@@ -14,7 +14,7 @@ namespace BATTLE.COIN
         [field: SerializeField] private GameObject FrontImage { get; set; }
         [field: SerializeField] private GameObject BackImage { get; set; }
         
-        private bool CanClicked { get; set; } = true;
+        private bool CanClicked { get; set; }
         
         private Sequence ThrowSequence { get; set; }
         private Sequence ShowSequence { get; set; }
@@ -25,6 +25,7 @@ namespace BATTLE.COIN
         public void Init(RectTransform showParent)
         {
             ShowParent = showParent;
+            CanClicked = true;
         }
 
         public void OnPointerEnter(PointerEventData eventData)
@@ -82,7 +83,6 @@ namespace BATTLE.COIN
                             .SetEase(Ease.OutQuad))
                         .Append(CoinRect.DOScale(Vector2.one * 2, .5f)
                             .SetEase(Ease.InOutBack))
-                        .AppendInterval(.5f)
                         .OnComplete(() =>
                         {
                             OnShowCompleteEvent?.Invoke(rotXTimes % 2 == 0);
