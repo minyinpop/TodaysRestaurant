@@ -81,7 +81,7 @@ namespace BATTLE.COIN
                         .Append(CoinRect.DOAnchorPos(Vector2.zero, .5f, true)
                             .SetEase(Ease.OutQuad))
                         .Append(CoinRect.DOScale(Vector2.one * 2, .5f)
-                            .SetEase(Ease.InBack))
+                            .SetEase(Ease.InOutBack))
                         .AppendInterval(.5f)
                         .OnComplete(() =>
                         {

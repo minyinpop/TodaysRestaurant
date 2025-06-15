@@ -1,11 +1,16 @@
 using BATTLE.COIN;
 using BATTLE.STATE_MACHINE.CATEGORY;
+using DG.Tweening;
 using UnityEngine;
 
 namespace BATTLE.SYSTEM.SELECTION
 {
     internal class InitiativeSelectionSystem : MonoBehaviour
     {
+        [field: Header("Mask")]
+        [field: SerializeField] private CanvasGroup ScreenMask { get; set; }
+        
+        [field: Header("Settings")]
         [field: SerializeField] private CoinSettings CoinSettings { get; set; }
         [field: SerializeField] private TextSettings TextSettings { get; set; }
 
@@ -30,6 +35,7 @@ namespace BATTLE.SYSTEM.SELECTION
 
         private void SpawnCoin()
         {
+            ScreenMask.DOFade(1, 1);
             CoinSettings.Coin = Instantiate(CoinSettings.CoinPrefab, CoinSettings.SpawnParent);
             CoinSettings.CoinComponent = CoinSettings.Coin.GetComponent<Coin>();
             CoinSettings.CoinComponent.Init(CoinSettings.ShowParent);
@@ -38,16 +44,23 @@ namespace BATTLE.SYSTEM.SELECTION
 
         private void InitiativeSelection(bool isPlayerFirst)
         {
-            if (isPlayerFirst)
-            {
-                TextSettings.Heads.TopTMP.text = TextSettings.Heads.TopContent;
-                TextSettings.Heads.BottomTMP.text = TextSettings.Heads.BottomContent;
-            }
-            else
-            {
-                TextSettings.Tails.TopTMP.text = TextSettings.Tails.TopContent;
-                TextSettings.Tails.BottomTMP.text = TextSettings.Tails.BottomContent;
-            }
+            var topContent = isPlayerFirst ? TextSettings.Heads.TopContent : TextSettings.Tails.TopContent;
+            var bottomContent = isPlayerFirst ? TextSettings.Heads.BottomContent : TextSettings.Tails.BottomContent;
+            DOTween.Sequence()
+                .AppendCallback(() =>
+                {
+                    TextSettings.TopTMP.text = topContent;
+                })
+                .AppendInterval(.5f)
+                .AppendCallback(() =>
+                {
+                    TextSettings.BottomTMP.text = bottomContent;
+                })
+                .AppendInterval(3)
+                .AppendCallback(() =>
+                {
+                    ScreenMask.DOFade(0, 1);
+                });
         }
     }
 }
