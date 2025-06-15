@@ -20,8 +20,8 @@ namespace BATTLE.SYSTEM.MAIN.TYPE
             InitiativeCoin = Instantiate(InitiativeCoinPrefab, SpawnParent);
             InitiativeCoinRect = InitiativeCoin.GetComponent<RectTransform>();
             InitiativeCoinScript = InitiativeCoin.GetComponent<InitiativeCoin>();
-
-            InitiativeCoinScript.SlideInScreen();
+            
+            InitiativeCoinScript.SlideInScreen(ReadyParent);
         }
     }
 }
