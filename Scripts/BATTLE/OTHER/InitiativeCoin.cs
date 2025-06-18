@@ -10,49 +10,34 @@ namespace BATTLE.OTHER
         [field: SerializeField] private GameObject TailsObj { get; set; }
         
         // Components
+        private RectTransform ReadyParent { get; set; }
+        private RectTransform ShowParent { get; set; }
         private RectTransform RectTransform { get; set; }
         
         // State
         private bool CanClick { get; set; }
 
-        // Broadcast
-        public static event System.Action FinishFlipEvent;
+        // 當完成
+        public static event System.Action<bool> FinishFlipEvent;
 
         private void Awake()
         {
             RectTransform = GetComponent<RectTransform>();
         }
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="parent"></param>
-        public void SlideInScreen(RectTransform parent)
+
+        public void Init(RectTransform ready, RectTransform show)
         {
+            ReadyParent = ready;
+            ShowParent = show;
+            
             DOTween.Sequence()
-                .AppendCallback(() => { RectTransform.SetParent(parent); })
+                .AppendCallback(() => { RectTransform.SetParent(ReadyParent); })
                 .Append(RectTransform
                     .DOAnchorPos(Vector2.zero, .75f, true)
                     .SetEase(Ease.OutBack))
                 .OnComplete(() => { CanClick = true; });
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="parent"></param>
-        public void SlideToMiddle(RectTransform parent)
-        {
-            DOTween.Sequence()
-                .AppendCallback(() => { RectTransform.SetParent(parent); })
-                .Append(RectTransform
-                    .DOAnchorPos(Vector2.zero, .3f, true)
-                    .SetEase(Ease.OutQuad))
-                .Append(RectTransform
-                    .DOScale(Vector2.one * 2, .3f)
-                    .SetEase(Ease.InOutBack));
-        }
-
+        
         #region Pointer Events
         public void OnPointerEnter(PointerEventData eventData)
         {
@@ -75,29 +60,29 @@ namespace BATTLE.OTHER
             if (!CanClick) return;
             CanClick = false;
             
+            var randomDistanceX = Screen.width * Random.Range(-.25f, .25f);
+            var randomDistanceY = Screen.height * Random.Range(.1f, .5f);
+            
+            const int rotateAngleY = 180;
+            var rotateTimesY = Random.Range(8, 16);
+            var randomRotateY = rotateAngleY * rotateTimesY;
+
+            var rotateAngleZ = Random.Range(0, 361);
+            var rotateTimesZ = Random.Range(8, 16);
+            var randomRotateZ = rotateAngleZ * rotateTimesZ;
+            
             DOTween.Sequence()
                 .Append(RectTransform
                     .DOScale(Vector2.one, 1)
                     .SetEase(Ease.InBack))
                 .JoinCallback(() =>
                 {
-                    var randomDistanceX = Screen.width * Random.Range(-.25f, .25f);
-                    var randomDistanceY = Screen.height * Random.Range(.1f, .5f);
-                    
                     RectTransform
                         .DOAnchorPos(new Vector2(randomDistanceX, randomDistanceY), 2, true)
                         .SetEase(Ease.OutQuad);
                 })
                 .JoinCallback(() =>
                 {
-                    const int rotateAngleY = 180;
-                    var rotateTimesY = Random.Range(8, 16);
-                    var randomRotateY = rotateAngleY * rotateTimesY;
-
-                    var rotateAngleZ = Random.Range(0, 361);
-                    var rotateTimesZ = Random.Range(8, 16);
-                    var randomRotateZ = rotateAngleZ * rotateTimesZ;
-                    
                     RectTransform
                         .DORotate(new Vector3(0, randomRotateY, randomRotateZ), 2, RotateMode.FastBeyond360)
                         .SetEase(Ease.OutCubic)
@@ -117,7 +102,22 @@ namespace BATTLE.OTHER
                         });
                 })
                 .AppendInterval(1)
-                .OnComplete(() => { FinishFlipEvent?.Invoke(); });
+                .OnComplete(() =>
+                {
+                    DOTween.Sequence()
+                        .AppendCallback(() => { RectTransform.SetParent(ShowParent); })
+                        .Append(RectTransform
+                            .DOAnchorPos(Vector2.zero, .3f, true)
+                            .SetEase(Ease.OutQuad))
+                        .Append(RectTransform
+                            .DOScale(Vector2.one * 2, .3f)
+                            .SetEase(Ease.InOutBack))
+                        .AppendInterval(1)
+                        .AppendCallback(() =>
+                        {
+                            FinishFlipEvent?.Invoke(rotateTimesY % 2 == 0);
+                        });
+                });
         }
         #endregion
     }
