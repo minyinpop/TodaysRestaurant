@@ -6,12 +6,16 @@ namespace BATTLE.OTHER
 {
     internal class InitiativeCoin : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
     {
+        [field: SerializeField] private GameObject HeadsObj { get; set; }
+        [field: SerializeField] private GameObject TailsObj { get; set; }
+        
         // Components
         private RectTransform RectTransform { get; set; }
         
         // State
         private bool CanClick { get; set; }
 
+        // Broadcast
         public static event System.Action FinishFlipEvent;
 
         private void Awake()
@@ -25,11 +29,11 @@ namespace BATTLE.OTHER
         /// <param name="parent"></param>
         public void SlideInScreen(RectTransform parent)
         {
-            RectTransform.SetParent(parent);
-
-            RectTransform
-                .DOAnchorPos(Vector2.zero, .75f, true)
-                .SetEase(Ease.OutBack)
+            DOTween.Sequence()
+                .AppendCallback(() => { RectTransform.SetParent(parent); })
+                .Append(RectTransform
+                    .DOAnchorPos(Vector2.zero, .75f, true)
+                    .SetEase(Ease.OutBack))
                 .OnComplete(() => { CanClick = true; });
         }
 
@@ -39,14 +43,8 @@ namespace BATTLE.OTHER
         /// <param name="parent"></param>
         public void SlideToMiddle(RectTransform parent)
         {
-            // TODO 解決更改父物件會導致位移的問題
-            var lastRect = RectTransform.anchoredPosition;
-            
-            RectTransform.SetParent(parent);
-            
-            RectTransform.anchoredPosition = lastRect;
-            
             DOTween.Sequence()
+                .AppendCallback(() => { RectTransform.SetParent(parent); })
                 .Append(RectTransform
                     .DOAnchorPos(Vector2.zero, .3f, true)
                     .SetEase(Ease.OutQuad))
@@ -102,7 +100,21 @@ namespace BATTLE.OTHER
                     
                     RectTransform
                         .DORotate(new Vector3(0, randomRotateY, randomRotateZ), 2, RotateMode.FastBeyond360)
-                        .SetEase(Ease.OutCubic);
+                        .SetEase(Ease.OutCubic)
+                        .OnUpdate(() =>
+                        {
+                            switch (RectTransform.localEulerAngles.y)
+                            {
+                                case < 270 and > 90 when HeadsObj.activeSelf:
+                                    HeadsObj.SetActive(false);
+                                    TailsObj.SetActive(true);
+                                    break;
+                                case >= 270 or <= 90 when TailsObj.activeSelf:
+                                    HeadsObj.SetActive(true);
+                                    TailsObj.SetActive(false);
+                                    break;
+                            }
+                        });
                 })
                 .AppendInterval(1)
                 .OnComplete(() => { FinishFlipEvent?.Invoke(); });
