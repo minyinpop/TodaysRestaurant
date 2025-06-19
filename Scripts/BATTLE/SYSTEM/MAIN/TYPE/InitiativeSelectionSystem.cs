@@ -1,4 +1,5 @@
 using BATTLE.OTHER;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 
@@ -7,6 +8,10 @@ namespace BATTLE.SYSTEM.MAIN.TYPE
     [System.Serializable]
     internal class InitiativeSelectionSystem : MonoBehaviour
     {
+        [field: Header("Components")]
+        [field: SerializeField] private CanvasGroup FullScreenMask { get; set; }
+        
+        [field: Header("Settings")]
         [field: SerializeField] private InitiativeCoinSettings InitiativeCoinSettings { get; set; }
         [field: SerializeField] private ResultTextSettings ResultTextSettings { get; set; }
         
@@ -26,16 +31,32 @@ namespace BATTLE.SYSTEM.MAIN.TYPE
 
         public void Init()
         {
-            InitiativeCoinObj = Instantiate(InitiativeCoinSettings.InitiativeCoinPrefab, InitiativeCoinSettings.SpawnParent);
-            InitiativeCoinRect = InitiativeCoinObj.GetComponent<RectTransform>();
-            InitiativeCoinScript = InitiativeCoinObj.GetComponent<InitiativeCoin>();
-            
-            InitiativeCoinScript.Init(InitiativeCoinSettings.ReadyParent, InitiativeCoinSettings.ShowParent);;
+            DOTween.Sequence()
+                .Append(FullScreenMask.DOFade(1, 1))
+                .AppendCallback(() =>
+                {
+                    InitiativeCoinObj = Instantiate(InitiativeCoinSettings.InitiativeCoinPrefab, InitiativeCoinSettings.SpawnParent);
+                    InitiativeCoinRect = InitiativeCoinObj.GetComponent<RectTransform>();
+                    InitiativeCoinScript = InitiativeCoinObj.GetComponent<InitiativeCoin>();
+
+                    InitiativeCoinScript.Init(InitiativeCoinSettings.ReadyParent, InitiativeCoinSettings.ShowParent);
+                });
         }
 
         private void FinishFlip(bool isHeads)
         {
-            ResultTextSettings.SetText(isHeads);
+            DOTween.Sequence()
+                .AppendCallback(() => { ResultTextSettings.SetText(isHeads); })
+                .AppendInterval(3)
+                .Append(InitiativeCoinRect
+                    .DOScale(Vector2.zero, .5f)
+                    .SetEase(Ease.InOutBack))
+                .JoinCallback(() => { ResultTextSettings.ClearText(); })
+                .AppendCallback(() => { FullScreenMask.DOFade(0, 1); })
+                .OnComplete(() =>
+                {
+                    // TODO What will happen when player finish to flip initiative coin?
+                });
         }
     }
 
@@ -65,6 +86,12 @@ namespace BATTLE.SYSTEM.MAIN.TYPE
             BottomTMP.text = isHeads ? HeadsSettings.BottomContent : TailsSettings.BottomContent;
             TopTMP.color = isHeads ? HeadsSettings.TextColor : TailsSettings.TextColor;
             BottomTMP.color = isHeads ? HeadsSettings.TextColor : TailsSettings.TextColor;
+        }
+
+        public void ClearText()
+        {
+            TopTMP.text = "";
+            BottomTMP.text = "";
         }
     }
 

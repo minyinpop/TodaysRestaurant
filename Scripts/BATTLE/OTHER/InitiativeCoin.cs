@@ -112,7 +112,7 @@ namespace BATTLE.OTHER
                         .Append(RectTransform
                             .DOScale(Vector2.one * 2, .3f)
                             .SetEase(Ease.InOutBack))
-                        .AppendInterval(1)
+                        .AppendInterval(.5f)
                         .AppendCallback(() =>
                         {
                             FinishFlipEvent?.Invoke(rotateTimesY % 2 == 0);
