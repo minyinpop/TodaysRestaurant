@@ -6,16 +6,19 @@ using UnityEngine;
 namespace BATTLE.SYSTEM.MAIN
 {
     [RequireComponent(typeof(InitiativeSelectionSystem))]
+    [RequireComponent(typeof(HandCardSystem))]
     internal class MainSystem : MonoBehaviour
     {
         private BattleStateMachine StateMachine { get; set; } = new();
         
         // Child System
         private InitiativeSelectionSystem InitiativeSelectionSystem { get; set; }
+        private HandCardSystem HandCardSystem { get; set; }
 
         private void Awake()
         {
             InitiativeSelectionSystem = GetComponent<InitiativeSelectionSystem>();
+            HandCardSystem = GetComponent<HandCardSystem>();
         }
 
         private void Start()
