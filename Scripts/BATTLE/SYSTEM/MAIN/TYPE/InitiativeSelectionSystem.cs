@@ -82,10 +82,18 @@ namespace BATTLE.SYSTEM.MAIN.TYPE
 
         public void SetText(bool isHeads)
         {
-            TopTMP.text = isHeads ? HeadsSettings.TopContent : TailsSettings.TopContent;
-            BottomTMP.text = isHeads ? HeadsSettings.BottomContent : TailsSettings.BottomContent;
-            TopTMP.color = isHeads ? HeadsSettings.TextColor : TailsSettings.TextColor;
-            BottomTMP.color = isHeads ? HeadsSettings.TextColor : TailsSettings.TextColor;
+            DOTween.Sequence()
+                .AppendCallback(() =>
+                {
+                    TopTMP.text = isHeads ? HeadsSettings.TopContent : TailsSettings.TopContent;
+                    TopTMP.color = isHeads ? HeadsSettings.TextColor : TailsSettings.TextColor;
+                })
+                .AppendInterval(1)
+                .AppendCallback(() =>
+                {
+                    BottomTMP.text = isHeads ? HeadsSettings.BottomContent : TailsSettings.BottomContent;
+                    BottomTMP.color = isHeads ? HeadsSettings.TextColor : TailsSettings.TextColor;
+                });
         }
 
         public void ClearText()
