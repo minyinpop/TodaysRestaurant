@@ -43,6 +43,10 @@ namespace BATTLE.SYSTEM.MAIN.TYPE
                 });
         }
 
+        /// <summary>
+        /// Handles the completion of the coin flip and updates the user interface accordingly.
+        /// </summary>
+        /// <param name="isHeads"> A boolean indicating whether the coin flip resulted in heads (true) or tails (false). </param>
         private void FinishFlip(bool isHeads)
         {
             DOTween.Sequence()

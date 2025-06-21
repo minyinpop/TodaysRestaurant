@@ -1,9 +1,31 @@
+using System.Collections.Generic;
+using BATTLE.CARD;
+using BATTLE.CARD.BATTLE;
+using PLAYER.CUSTOMIZE.BATTLE.SELECTION_ORDER;
 using UnityEngine;
 
 namespace BATTLE.SYSTEM.MAIN.TYPE
 {
     internal class HandCardSystem : MonoBehaviour
     {
+        [field: SerializeField] private SelectionOrderCustomizedData SelectionOrderCustomizedData { get; set; }
         
+        private List<BattleCardBase> HandCards { get; set; } = new();
+        private List<BattleCardBase> SelectedCards { get; set; } = new();
+
+        private void OnEnable()
+        {
+            BattleCardBase.OnCardSelectedEvent += OnBattleCardSelected;
+        }
+
+        private void OnDisable()
+        {
+            BattleCardBase.OnCardSelectedEvent -= OnBattleCardSelected;
+        }
+
+        private void OnBattleCardSelected(BattleCardBase selectedCard)
+        {
+            Debug.Log($"Card Name: {selectedCard.name}");
+        }
     }
 }
