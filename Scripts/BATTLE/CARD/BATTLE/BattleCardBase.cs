@@ -16,7 +16,7 @@ namespace BATTLE.CARD.BATTLE
         private bool Selected { get; set; }
         
         // Broadcasts
-        public static event System.Func<BattleCardBase, GameObject> SelectedEvent;
+        public static event System.Action<BattleCardBase> SelectedEvent;
         public static event System.Action<BattleCardBase> DeselectEvent;
 
         private void Awake()
@@ -40,21 +40,20 @@ namespace BATTLE.CARD.BATTLE
 
         public void OnPointerClick(PointerEventData eventData)
         {
+            // TODO 要先確認是否還有空間可以選取卡片，數量低於 3 後再往下執行
+            
             Selected = !Selected;
             var targetPos = Selected
                 ? RectTransform.anchoredPosition + Vector2.up * 150
-                : RectTransform.anchoredPosition - Vector2.down * 150;
+                : RectTransform.anchoredPosition - Vector2.up * 150;
 
             DOTween.Sequence()
                 .AppendCallback(() =>
                 {
                     if (Selected)
-                        SetSelectionOrder(SelectedEvent?.Invoke(this));
+                        SelectedEvent?.Invoke(this);
                     else
-                    {
                         DeselectEvent?.Invoke(this);
-                        RemoveSelectionOrder();
-                    }
                 })
                 .Append(RectTransform
                     .DOAnchorPos(targetPos, .5f, true)
@@ -64,13 +63,18 @@ namespace BATTLE.CARD.BATTLE
                     .SetEase(Ease.OutQuad));
         }
 
-        private void SetSelectionOrder(GameObject selectionOrderObject)
+        public void SetSelectionOrder(GameObject selectionOrderObject)
         {
-            if (selectionOrderObject is null) return;
+            if (SelectionOrderObject is not null)
+            {
+                Destroy(SelectionOrderObject);
+                SelectionOrderObject = null;
+            }
+
             SelectionOrderObject = Instantiate(selectionOrderObject, SelectionOrderParent);
         }
         
-        private void RemoveSelectionOrder()
+        public void RemoveSelectionOrder()
         {
             Destroy(SelectionOrderObject);
             SelectionOrderObject = null;

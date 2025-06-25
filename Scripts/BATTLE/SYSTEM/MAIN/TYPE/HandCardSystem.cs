@@ -24,23 +24,29 @@ namespace BATTLE.SYSTEM.MAIN.TYPE
             BattleCardBase.DeselectEvent -= OnBattleCardDeselected;
         }
 
-        private GameObject OnBattleCardSelected(BattleCardBase selectedCard)
+        private void OnBattleCardSelected(BattleCardBase card)
         {
             // TODO Change 3 to character in the future.
             
             for (var i = 0; i < 3; i++)
             {
                 if (SelectedCards[i] is not null) continue;
-                SelectedCards[i] = selectedCard;
-                return SelectionOrderCustomizedData.SelectionOrderPrefabs[i];
+                SelectedCards[i] = card;
+                SelectedCards[i].SetSelectionOrder(SelectionOrderCustomizedData.SelectionOrderPrefabs[i]);
+                return;
             }
-
-            return null;
         }
 
-        private void OnBattleCardDeselected(BattleCardBase deselectedCard)
+        private void OnBattleCardDeselected(BattleCardBase card)
         {
-            Debug.Log("EWE");
+            foreach (var selectedCard in SelectedCards)
+                selectedCard?.RemoveSelectionOrder();
+
+            SelectedCards.Remove(card);
+            SelectedCards.Add(null);
+            
+            for (var i = 0; i < SelectedCards.Count; i++)
+                SelectedCards[i]?.SetSelectionOrder(SelectionOrderCustomizedData.SelectionOrderPrefabs[i]);
         }
     }
 }
