@@ -10,21 +10,37 @@ namespace BATTLE.SYSTEM.MAIN.TYPE
         [field: SerializeField] private SelectionOrderCustomizedData SelectionOrderCustomizedData { get; set; }
         
         private List<BattleCardBase> HandCards { get; set; } = new();
-        private List<BattleCardBase> SelectedCards { get; set; } = new();
-
+        private List<BattleCardBase> SelectedCards { get; set; } = new() { null, null, null };
+        
         private void OnEnable()
         {
-            BattleCardBase.OnCardSelectedEvent += OnBattleCardSelected;
+            BattleCardBase.SelectedEvent += OnBattleCardSelected;
+            BattleCardBase.DeselectEvent += OnBattleCardDeselected;
         }
 
         private void OnDisable()
         {
-            BattleCardBase.OnCardSelectedEvent -= OnBattleCardSelected;
+            BattleCardBase.SelectedEvent -= OnBattleCardSelected;
+            BattleCardBase.DeselectEvent -= OnBattleCardDeselected;
         }
 
-        private void OnBattleCardSelected(BattleCardBase selectedCard)
+        private GameObject OnBattleCardSelected(BattleCardBase selectedCard)
         {
-            Debug.Log($"Card Name: {selectedCard.name}");
+            // TODO Change 3 to character in the future.
+            
+            for (var i = 0; i < 3; i++)
+            {
+                if (SelectedCards[i] is not null) continue;
+                SelectedCards[i] = selectedCard;
+                return SelectionOrderCustomizedData.SelectionOrderPrefabs[i];
+            }
+
+            return null;
+        }
+
+        private void OnBattleCardDeselected(BattleCardBase deselectedCard)
+        {
+            Debug.Log("EWE");
         }
     }
 }
