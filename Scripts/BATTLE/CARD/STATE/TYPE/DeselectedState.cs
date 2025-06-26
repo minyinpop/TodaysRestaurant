@@ -6,10 +6,13 @@ namespace BATTLE.CARD.STATE.TYPE
 {
     internal class DeselectedState : ICardState
     {
+        // TODO 判斷這張卡片是否可以被選取，HandCardSystem 裡的 SelectedCards
+        public static event System.Func<BattleCardBase, bool> CanBeSelect;
+        
         private GameObject Card { get; set; }
         private RectTransform CardRect { get; set; }
         private BattleCardBase CardBase { get; set; }
-        
+
         public void Enter(GameObject card)
         {
             Card = card;
@@ -38,6 +41,7 @@ namespace BATTLE.CARD.STATE.TYPE
 
         public void OnPointerClick()
         {
+            if (CanBeSelect?.Invoke(CardBase) != true) return;
             CardBase.ChangeState(new SelectedState());
             
             DOTween.Sequence()
@@ -46,7 +50,13 @@ namespace BATTLE.CARD.STATE.TYPE
                     .SetEase(Ease.OutQuad))
                 .Join(CardRect
                     .DOShakeRotation(.2f, Vector3.forward * 10, 1, 90, true, ShakeRandomnessMode.Harmonic)
-                    .SetEase(Ease.OutQuad));
+                    .SetEase(Ease.OutQuad))
+                .OnComplete(() =>
+                {
+                    Card = null;
+                    CardRect = null;
+                    CardBase = null;
+                });
         }
     }
 }
