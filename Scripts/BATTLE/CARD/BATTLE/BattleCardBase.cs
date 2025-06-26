@@ -1,83 +1,38 @@
-using DG.Tweening;
+using BATTLE.CARD.STATE;
+using BATTLE.CARD.STATE.TYPE;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace BATTLE.CARD.BATTLE
 {
-    internal abstract class BattleCardBase : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
+    internal abstract class BattleCardBase : MonoBehaviour
     {
-        [field: SerializeField] private RectTransform SelectionOrderParent { get; set; }
-        private GameObject SelectionOrderObject { get; set; }
+        [field: SerializeField] private RectTransform Rect { get; set; }
         
-        // Components
-        private RectTransform RectTransform { get; set; }
+        private CardStateMachine CardStateMachine { get; set; }
         
-        // Values
-        private bool Selected { get; set; }
-        
-        // Broadcasts
-        public static event System.Action<BattleCardBase> SelectedEvent;
-        public static event System.Action<BattleCardBase> DeselectEvent;
-
         private void Awake()
         {
-            RectTransform = GetComponent<RectTransform>();
+            CardStateMachine = new CardStateMachine();
         }
 
-        public void OnPointerEnter(PointerEventData eventData)
+        private void Start()
         {
-            RectTransform
-                .DOScale(Vector2.one * 1.2f, .2f)
-                .SetEase(Ease.OutQuad);
+            CardStateMachine.ChangeState(new DeselectedState(), this);
         }
 
-        public void OnPointerExit(PointerEventData eventData)
+        public void OnPointerEnter()
         {
-            RectTransform
-                .DOScale(Vector2.one, .2f)
-                .SetEase(Ease.OutQuad);
-        }
-
-        public void OnPointerClick(PointerEventData eventData)
-        {
-            // TODO 要先確認是否還有空間可以選取卡片，數量低於 3 後再往下執行
             
-            Selected = !Selected;
-            var targetPos = Selected
-                ? RectTransform.anchoredPosition + Vector2.up * 150
-                : RectTransform.anchoredPosition - Vector2.up * 150;
-
-            DOTween.Sequence()
-                .AppendCallback(() =>
-                {
-                    if (Selected)
-                        SelectedEvent?.Invoke(this);
-                    else
-                        DeselectEvent?.Invoke(this);
-                })
-                .Append(RectTransform
-                    .DOAnchorPos(targetPos, .5f, true)
-                    .SetEase(Ease.OutQuad))
-                .Join(RectTransform
-                    .DOShakeRotation(.2f, Vector3.forward * 10, 1, 90, true, ShakeRandomnessMode.Harmonic)
-                    .SetEase(Ease.OutQuad));
         }
 
-        public void SetSelectionOrder(GameObject selectionOrderObject)
+        public void OnPointerExit()
         {
-            if (SelectionOrderObject is not null)
-            {
-                Destroy(SelectionOrderObject);
-                SelectionOrderObject = null;
-            }
-
-            SelectionOrderObject = Instantiate(selectionOrderObject, SelectionOrderParent);
+            
         }
         
-        public void RemoveSelectionOrder()
+        public void OnPointerClick()
         {
-            Destroy(SelectionOrderObject);
-            SelectionOrderObject = null;
+            
         }
     }
 }
