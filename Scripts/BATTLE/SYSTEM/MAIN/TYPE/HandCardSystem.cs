@@ -11,13 +11,5 @@ namespace BATTLE.SYSTEM.MAIN.TYPE
         
         private List<BattleCardBase> HandCards { get; set; } = new();
         private List<BattleCardBase> SelectedCards { get; set; } = new();
-        
-        private void OnEnable()
-        {
-        }
-
-        private void OnDisable()
-        {
-        }
     }
 }

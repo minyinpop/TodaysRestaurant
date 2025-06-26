@@ -1,11 +1,14 @@
-using BATTLE.CARD.BATTLE;
-using UnityEngine.EventSystems;
+using UnityEngine;
 
 namespace BATTLE.CARD.STATE
 {
-    internal interface ICardState : IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
+    internal interface ICardState
     {
-        public void Enter(BattleCardBase card);
+        public void Enter(GameObject card);
         public void Exit();
+
+        public void OnPointerEnter();
+        public void OnPointerExit();
+        public void OnPointerClick();
     }
 }
