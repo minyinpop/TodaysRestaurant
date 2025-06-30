@@ -29,6 +29,7 @@ namespace BATTLE.SYSTEM.MAIN.TYPE
             {
                 SelectedCards.Add(card);
                 RefreshSelectionOrder();
+                return true;
             }
             else
             {
