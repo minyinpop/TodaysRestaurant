@@ -1,21 +1,17 @@
 namespace BATTLE.CARD.STATE_MACHINE.STATE
 {
-    internal class SelectedState : ICardState
+    internal class OnCardPile : ICardState
     {
-        private CardBase Card;
-        
-        public void Enter(CardBase card)
+        public void Enter()
         {
-            Card = card;
+            
         }
 
         public void Exit()
         {
-            Card = null;
+            
         }
-        
-        
-        
+
         public void OnPointerEnter()
         {
             

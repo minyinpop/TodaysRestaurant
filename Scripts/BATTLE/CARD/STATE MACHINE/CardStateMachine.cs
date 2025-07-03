@@ -5,17 +5,17 @@ namespace BATTLE.CARD.STATE_MACHINE
         private ICardState CurrentState;
 
         /// <summary>
-        /// 離開當前狀態並進入到下個狀態
+        /// 退出當前的狀態
+        /// 進到下一個狀態
         /// </summary>
-        /// <param name="newState"> 下個狀態 </param>
-        /// <param name="card"> 當前互動的卡片 </param>
-        public void ChangeState(ICardState newState, CardBase card)
+        /// <param name="newState"> 下一個狀態 </param>
+        public void ChangeState(ICardState newState)
         {
             CurrentState?.Exit();
             CurrentState = newState;
-            CurrentState?.Enter(card);
+            CurrentState?.Enter();
         }
-        
+
         public void OnPointerEnter()
         {
             CurrentState?.OnPointerEnter();
@@ -25,6 +25,7 @@ namespace BATTLE.CARD.STATE_MACHINE
         {
             CurrentState?.OnPointerExit();
         }
+
         public void OnPointerClick()
         {
             CurrentState?.OnPointerClick();

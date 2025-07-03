@@ -1,9 +1,9 @@
-using BATTLE.SYSTEM.CHILD_SYSTEM;
+using BATTLE.SYSTEM.PROGRESSING_SYSTEM;
 using UnityEngine;
 
 namespace BATTLE.SYSTEM
 {
-    [RequireComponent(typeof(BattleCardSystem))]
+    [RequireComponent(typeof(ProgressingSystem))]
     internal class MainSystem : MonoBehaviour
     {
         
