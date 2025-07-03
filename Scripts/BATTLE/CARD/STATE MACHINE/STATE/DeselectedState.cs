@@ -4,6 +4,11 @@ namespace BATTLE.CARD.STATE_MACHINE.STATE
 {
     internal class DeselectedState : ICardState
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        public static event System.Func<CardBase, bool> Select;
+        
         private CardBase Card;
         
         public void Enter(CardBase card)
@@ -13,7 +18,7 @@ namespace BATTLE.CARD.STATE_MACHINE.STATE
 
         public void Exit()
         {
-            
+            Card = null;
         }
         
         
@@ -30,7 +35,14 @@ namespace BATTLE.CARD.STATE_MACHINE.STATE
 
         public void OnPointerClick()
         {
-            Debug.Log("鼠標點擊卡片");
+            if (Select?.Invoke(Card) == true)
+            {
+                Debug.Log("卡片選擇成功");
+            }
+            else
+            {
+                Debug.Log("卡片選擇失敗");
+            }
         }
     }
 }
