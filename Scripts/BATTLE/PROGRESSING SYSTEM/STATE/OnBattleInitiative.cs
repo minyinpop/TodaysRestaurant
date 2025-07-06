@@ -1,5 +1,4 @@
 using BATTLE.PROGRESSING_SYSTEM.STATE_MACHINE;
-using DG.Tweening;
 using UnityEngine;
 
 namespace BATTLE.PROGRESSING_SYSTEM.STATE
@@ -9,22 +8,23 @@ namespace BATTLE.PROGRESSING_SYSTEM.STATE
     /// </summary>
     internal class OnBattleInitiative : IState
     {
-        // TODO 當玩家投擲完硬幣後，就會自動觸發一個 Broadcast，讓管理戰鬥進程的系統知道
+        /// <summary>
+        /// 用來發送生成硬幣的 Broadcast，讓負責管理決定誰先手的系統，來執行相對應的程序
+        /// </summary>
+        public static event System.Action OnEnter;
+        /// <summary>
+        /// 當玩家投擲完硬幣，並且展示了擲完硬幣後的結果，就會觸發這個 Broadcast，以讓流程系統知道可以到下個狀態
+        /// </summary>
+        public event System.Action OnFinish;
         
         public void Enter()
         {
-            DOTween.Sequence()
-                .AppendInterval(1)
-                .OnComplete(() =>
-                {
-                    Debug.Log("玩家投擲硬幣結束");
-                    // TODO Invoke Broadcast Here...
-                });
+            OnEnter?.Invoke();
         }
 
         public void Exit()
         {
-            
+            Debug.Log("觸發 OnBattleInitiative 的 Exit");
         }
     }
 }
