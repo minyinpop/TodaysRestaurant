@@ -27,6 +27,11 @@ namespace BATTLE.SELECTION_INITIATIVE_SYSTEM
         /// </summary>
         public event System.Action<IState> Finish;
 
+        /// <summary>
+        /// 用於直接性的控制硬幣縮放
+        /// </summary>
+        private Tween ScaleTween;
+
         private void Awake()
         {
             RectTransform = GetComponent<RectTransform>();
@@ -36,16 +41,22 @@ namespace BATTLE.SELECTION_INITIATIVE_SYSTEM
         {
             if (!Interactable) return;
 
-            RectTransform
+            ScaleTween.Kill();
+            ScaleTween = null;
+
+            ScaleTween = RectTransform
                 .DOScale(Vector2.one * 1.25f, .3f)
                 .SetEase(Ease.OutQuad);
         }
-
+        
         public void OnPointerExit(PointerEventData eventData)
         {
             if (!Interactable) return;
             
-            RectTransform
+            ScaleTween.Kill();
+            ScaleTween = null;
+
+            ScaleTween = RectTransform
                 .DOScale(Vector2.one, .3f)
                 .SetEase(Ease.OutQuad);
         }
@@ -55,18 +66,49 @@ namespace BATTLE.SELECTION_INITIATIVE_SYSTEM
             if (!Interactable) return;
             Interactable = false;
 
+            ScaleTween.Kill();
+            ScaleTween = null;
+            
+            var randomXPos = Random.Range(Screen.width * .25f, Screen.width * .75f);
+            var randomYPos = Random.Range(Screen.height * .5f, Screen.height * .8f);
+
+            var randomYTurn = 180 * Random.Range(12, 25);
+            var randomZTurn = Random.Range(0, 361) * Random.Range(12, 25);
+
             DOTween.Sequence()
                 .Append(RectTransform
-                    .DOScale(Vector2.one * 1.25f, .3f)
+                    .DOAnchorPos(new Vector2(randomXPos, randomYPos), 5, true)
                     .SetEase(Ease.OutQuad))
-                .AppendCallback(() =>
+                .Join(RectTransform
+                    .DORotate(new Vector3(RectTransform.eulerAngles.x, randomYTurn, randomZTurn), 5,
+                        RotateMode.FastBeyond360)
+                    .SetEase(Ease.OutQuad))
+                .Join(RectTransform
+                    .DOScale(Vector2.one * 1.25f, 3)
+                    .SetEase(Ease.InOutBack))
+                .OnUpdate(() =>
                 {
-                    var randomXPos = Random.Range(Screen.width * .25f, Screen.width * .75f);
-                    var randomYPos = Random.Range(Screen.height * .5f, Screen.height * .8f);
-                    
-                    Debug.Log($"X: {randomXPos}, Y: {randomYPos}");
-                    
-                    // TODO 把硬幣移到目標位置
+                    var RotY = RectTransform.eulerAngles.y;
+                    if (Heads.activeSelf && RotY is <= 90 and >= 0)
+                    {
+                        Debug.Log("翻到背面");
+                        Heads.SetActive(false);
+                        Tails.SetActive(true);
+                    }
+                    else if (Tails.activeSelf && RotY is >= 270 or <= 0)
+                    {
+                        Debug.Log("翻到正面");
+                        Heads.SetActive(true);
+                        Tails.SetActive(false);
+                    }
+                })
+                .OnComplete(() =>
+                {
+                    Debug.Log("硬幣翻轉結束");
+                })
+                .OnKill(() =>
+                {
+                    Debug.Log("硬幣被殺死了");
                 });
         }
         
