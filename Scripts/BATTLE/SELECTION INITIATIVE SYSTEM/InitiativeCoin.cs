@@ -72,43 +72,46 @@ namespace BATTLE.SELECTION_INITIATIVE_SYSTEM
             var randomXPos = Random.Range(Screen.width * .25f, Screen.width * .75f);
             var randomYPos = Random.Range(Screen.height * .5f, Screen.height * .8f);
 
-            var randomYTurn = 180 * Random.Range(12, 25);
-            var randomZTurn = Random.Range(0, 361) * Random.Range(12, 25);
+            var randomYRollCount = Random.Range(12, 25);
+            var randomZRollCount = Random.Range(12, 25);
+
+            var angleY = 180 * randomYRollCount;
+            var angleZ = Random.Range(0, 361) * randomZRollCount;
 
             DOTween.Sequence()
+                .AppendCallback(() =>
+                {
+                    RectTransform.localScale = Vector2.one * 1.25f;
+                })
                 .Append(RectTransform
-                    .DOAnchorPos(new Vector2(randomXPos, randomYPos), 5, true)
+                    .DOAnchorPos(new Vector2(randomXPos, randomYPos), 3, true)
                     .SetEase(Ease.OutQuad))
                 .Join(RectTransform
-                    .DORotate(new Vector3(RectTransform.eulerAngles.x, randomYTurn, randomZTurn), 5,
+                    .DORotate(new Vector3(RectTransform.eulerAngles.x, angleY, angleZ), 3,
                         RotateMode.FastBeyond360)
                     .SetEase(Ease.OutQuad))
                 .Join(RectTransform
-                    .DOScale(Vector2.one * 1.25f, 3)
+                    .DOScale(Vector2.one, 3)
                     .SetEase(Ease.InOutBack))
+                .AppendInterval(.5f)
                 .OnUpdate(() =>
                 {
-                    var RotY = RectTransform.eulerAngles.y;
-                    if (Heads.activeSelf && RotY is <= 90 and >= 0)
+                    var rotY = RectTransform.eulerAngles.y;
+
+                    if (Heads.activeSelf && rotY is < 270 and > 90)
                     {
-                        Debug.Log("翻到背面");
                         Heads.SetActive(false);
                         Tails.SetActive(true);
                     }
-                    else if (Tails.activeSelf && RotY is >= 270 or <= 0)
+                    else if (Tails.activeSelf && rotY is < 360 and > 270)
                     {
-                        Debug.Log("翻到正面");
                         Heads.SetActive(true);
                         Tails.SetActive(false);
                     }
                 })
                 .OnComplete(() =>
                 {
-                    Debug.Log("硬幣翻轉結束");
-                })
-                .OnKill(() =>
-                {
-                    Debug.Log("硬幣被殺死了");
+                    Finish?.Invoke(randomYRollCount % 2 == 0 ? new OnPlayerRound() : new OnEnemyRound());
                 });
         }
         

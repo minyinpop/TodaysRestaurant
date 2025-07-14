@@ -37,11 +37,34 @@ namespace BATTLE.SELECTION_INITIATIVE_SYSTEM
         
         
         
+        /// <summary>
+        /// 生成決定誰先手的硬幣
+        /// </summary>
         private void SpawnCoin()
         {
             Coin = Instantiate(CoinPrefab, SpawnParent);
             CoinScript = Coin.GetComponent<InitiativeCoin>();
+            
+            CoinScript.Finish += OnCoinRollCompleted;
             CoinScript.SetPosToReady(ReadyParent);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="initiativeState"></param>
+        private void OnCoinRollCompleted(IState initiativeState)
+        {
+            // TODO 接著製作硬幣移到畫面正中間，然後顯示結果德程式碼
+            switch (initiativeState)
+            {
+                case OnPlayerRound:
+                    Debug.Log("Player First!");
+                    break;
+                case OnEnemyRound:
+                    Debug.Log("Enemy First!");
+                    break;
+            }
         }
     }
 }
