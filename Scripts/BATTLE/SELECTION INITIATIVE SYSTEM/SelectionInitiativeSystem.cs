@@ -1,30 +1,32 @@
 using BATTLE.PROGRESSING_SYSTEM.STATE_MACHINE;
 using BATTLE.PROGRESSING_SYSTEM.STATE;
 using UnityEngine;
+using UTILITY;
 
 namespace BATTLE.SELECTION_INITIATIVE_SYSTEM
 {
     internal class SelectionInitiativeSystem : MonoBehaviour
     {
         /// <summary>
-        /// 硬幣的生成位置
+        /// 硬幣生成後的父物件
         /// </summary>
         [field: SerializeField] private RectTransform SpawnParent;
-        /// <summary>
-        /// 等待玩家投擲的預備位置
-        /// </summary>
-        [field: SerializeField] private RectTransform ReadyParent;
-        /// <summary>
-        /// 顯示硬幣投擲結果的位置
-        /// </summary>
-        [field: SerializeField] private RectTransform ShowParent;
         /// <summary>
         /// 用於決定哪一方先手的硬幣
         /// </summary>
         [field: SerializeField] private GameObject CoinPrefab;
         private GameObject Coin;
         private InitiativeCoin CoinScript;
-
+        
+        /// <summary>
+        /// 等待玩家投擲的預備位置乘數
+        /// </summary>
+        [field: SerializeField] private AnchorsMult ReadyPosMult;
+        /// <summary>
+        /// 顯示硬幣投擲結果的位置乘數
+        /// </summary>
+        [field: SerializeField] private AnchorsMult ShowParentMult;
+        
         private void OnEnable()
         {
             OnBattleInitiative.OnEnter += SpawnCoin;
@@ -46,7 +48,7 @@ namespace BATTLE.SELECTION_INITIATIVE_SYSTEM
             CoinScript = Coin.GetComponent<InitiativeCoin>();
             
             CoinScript.Finish += OnCoinRollCompleted;
-            CoinScript.SetPosToReady(ReadyParent);
+            CoinScript.SetPosToReady(ReadyPosMult);
         }
 
         /// <summary>
@@ -55,15 +57,18 @@ namespace BATTLE.SELECTION_INITIATIVE_SYSTEM
         /// <param name="initiativeState"></param>
         private void OnCoinRollCompleted(IState initiativeState)
         {
-            // TODO 接著製作硬幣移到畫面正中間，然後顯示結果德程式碼
+            // CoinScript.SetPosToShow(ShowParent);
+            
             switch (initiativeState)
             {
                 case OnPlayerRound:
-                    Debug.Log("Player First!");
+                {
                     break;
+                }
                 case OnEnemyRound:
-                    Debug.Log("Enemy First!");
+                {
                     break;
+                }
             }
         }
     }

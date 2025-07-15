@@ -3,6 +3,7 @@ using BATTLE.PROGRESSING_SYSTEM.STATE;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UTILITY;
 
 namespace BATTLE.SELECTION_INITIATIVE_SYSTEM
 {
@@ -15,6 +16,9 @@ namespace BATTLE.SELECTION_INITIATIVE_SYSTEM
         
         [field: SerializeField] private GameObject Heads;
         [field: SerializeField] private GameObject Tails;
+        
+        [field: SerializeField, Range(0, 1)] public float widthMultiplier;
+        [field: SerializeField, Range(0, 1)] public float heightMultiplier;
 
         /// <summary>
         /// 用來控制硬幣是否可以被點擊
@@ -69,8 +73,9 @@ namespace BATTLE.SELECTION_INITIATIVE_SYSTEM
             ScaleTween.Kill();
             ScaleTween = null;
             
-            var randomXPos = Random.Range(Screen.width * .25f, Screen.width * .75f);
-            var randomYPos = Random.Range(Screen.height * .5f, Screen.height * .8f);
+            // 螢幕寬度的 1/4 * 左邊或是右邊
+            var randomXPos = Screen.width * widthMultiplier; /*Random.Range(1, Screen.width * .25f) * Random.Range(0, 2) * 2 - 1*/
+            var randomYPos = Screen.height * heightMultiplier;
 
             var randomYRollCount = Random.Range(12, 25);
             var randomZRollCount = Random.Range(12, 25);
@@ -114,22 +119,21 @@ namespace BATTLE.SELECTION_INITIATIVE_SYSTEM
                     Finish?.Invoke(randomYRollCount % 2 == 0 ? new OnPlayerRound() : new OnEnemyRound());
                 });
         }
-        
-        
-        
+
+
         /// <summary>
         /// 移動硬幣到準備投擲的位置
         /// </summary>
-        /// <param name="targetPos"> 目標點的位置 </param>
-        public void SetPosToReady(RectTransform targetPos)
+        /// <param name="targetPosMult"> 目標點的位置乘數 </param>
+        public void SetPosToReady(AnchorsMult targetPosMult)
         {
+            var readyPosX = Screen.width * targetPosMult.GetRandomXMult();
+            var readyPosY = Screen.height * targetPosMult.GetRandomYMult();
+            var readyPos = new Vector2(readyPosX, readyPosY);
+            
             DOTween.Sequence()
-                .AppendCallback(() =>
-                {
-                    RectTransform.SetParent(targetPos);
-                })
                 .Append(RectTransform
-                    .DOAnchorPos(Vector2.zero, 1, true)
+                    .DOAnchorPos(readyPos, 1, true)
                     .SetEase(Ease.OutBack))
                 .OnComplete(() =>
                 {
@@ -143,7 +147,10 @@ namespace BATTLE.SELECTION_INITIATIVE_SYSTEM
         /// <param name="targetPos"> 目標點的位置 </param>
         public void SetPosToShow(RectTransform targetPos)
         {
-            
+            // var midXPos = Screen.width 
+            // DOTween.Sequence()
+            //     .Append(RectTransform
+            //         .DOAnchorPos(Screen.width))
         }
     }
 }
