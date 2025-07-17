@@ -1,6 +1,6 @@
 namespace BATTLE.PROGRESSING_SYSTEM.STATE
 {
-    internal class OnBattleInitiative
+    internal class OnInitiative
     {
         
     }
