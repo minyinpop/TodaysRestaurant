@@ -125,10 +125,12 @@ namespace BATTLE.SELECTION_INITIATIVE_SYSTEM
         /// 移動硬幣到準備投擲的位置
         /// </summary>
         /// <param name="targetPosMult"> 目標點的位置乘數 </param>
-        public void SetPosToReady(AnchorsMult targetPosMult)
+        public void SetPosToReady(Canvas canvas, AnchorsMult targetPosMult)
         {
-            var readyPosX = Screen.width * targetPosMult.GetRandomXMult();
-            var readyPosY = Screen.height * targetPosMult.GetRandomYMult();
+            var rect = canvas.GetComponent<RectTransform>().rect;
+            
+            var readyPosX = rect.width * .5f;
+            var readyPosY = rect.height * .15f;
             var readyPos = new Vector2(readyPosX, readyPosY);
             
             DOTween.Sequence()

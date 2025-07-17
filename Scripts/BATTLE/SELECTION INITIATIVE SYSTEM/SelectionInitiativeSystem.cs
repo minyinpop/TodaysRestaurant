@@ -8,6 +8,11 @@ namespace BATTLE.SELECTION_INITIATIVE_SYSTEM
     internal class SelectionInitiativeSystem : MonoBehaviour
     {
         /// <summary>
+        /// 用來顯示各種資訊的主介面
+        /// </summary>
+        [field: SerializeField] private Canvas MainCanvas;
+        
+        /// <summary>
         /// 硬幣生成後的父物件
         /// </summary>
         [field: SerializeField] private RectTransform SpawnParent;
@@ -48,7 +53,7 @@ namespace BATTLE.SELECTION_INITIATIVE_SYSTEM
             CoinScript = Coin.GetComponent<InitiativeCoin>();
             
             CoinScript.Finish += OnCoinRollCompleted;
-            CoinScript.SetPosToReady(ReadyPosMult);
+            CoinScript.SetPosToReady(MainCanvas, ReadyPosMult);
         }
 
         /// <summary>
