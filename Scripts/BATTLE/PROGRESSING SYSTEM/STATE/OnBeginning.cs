@@ -4,6 +4,9 @@ namespace BATTLE.PROGRESSING_SYSTEM.STATE
 {
     internal class OnBeginning : IState
     {
+        /// <summary>
+        /// 用來管理戰鬥進程的系統
+        /// </summary>
         private ProgressingSystem ProgressingSystem;
         
         public void Enter(ProgressingSystem system)

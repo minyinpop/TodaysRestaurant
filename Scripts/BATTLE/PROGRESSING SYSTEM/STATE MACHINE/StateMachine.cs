@@ -2,6 +2,9 @@ namespace BATTLE.PROGRESSING_SYSTEM.STATE_MACHINE
 {
     internal class StateMachine
     {
+        /// <summary>
+        /// 當前的狀態
+        /// </summary>
         private IState CurrentState;
 
         /// <summary>
