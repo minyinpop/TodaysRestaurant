@@ -1,3 +1,5 @@
+using BATTLE.PROGRESSING_SYSTEM.STATE_MACHINE;
+using BATTLE.PROGRESSING_SYSTEM.STATE;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -25,11 +27,26 @@ namespace BATTLE.SELECTION_INITIATIVE_SYSTEM
         /// <summary>
         /// 準備投擲硬幣的點，在介面上的 % 位置
         /// </summary>
-        [field: SerializeField] private AnchorsMult ReadyPosMult;
+        private AnchorsMult ReadyPosMult;
         /// <summary>
         /// 當硬幣被點擊後，所落下的介面 % 位置
         /// </summary>
-        [field: SerializeField] private AnchorsMult LandingPosMult;
+        private AnchorsMult LandingPosMult;
+
+        /// <summary>
+        /// 硬幣正面的遊戲物件
+        /// </summary>
+        [field: SerializeField] private GameObject Heads;
+        /// <summary>
+        /// 硬幣反面的遊戲物件
+        /// </summary>
+        [field: SerializeField] private GameObject Tails;
+
+        /// <summary>
+        /// 當玩家投擲硬幣，並且硬幣結束翻轉及移動，就會觸發這個廣播
+        /// 這個廣播會把投擲結果給發送出去
+        /// </summary>
+        public event System.Action<IState> Finish;
 
         private void Awake()
         {
@@ -65,13 +82,18 @@ namespace BATTLE.SELECTION_INITIATIVE_SYSTEM
             var posX = CanvasRect.width * LandingPosMult.GetRandomXMult();
             // 螢幕的高度 * 螢幕高度的比例位置
             var posY = CanvasRect.height * LandingPosMult.GetRandomYMult();
+
+            // Y 軸的翻面次數
+            var rotateYCount = Random.Range(12, 24);
+            // Z 軸的旋轉次數
+            var rotateZCount = Random.Range(6, 16);
             
             // 不轉動 X 軸
             var rotateX = RectTransform.eulerAngles.x;
             // 翻轉到另一個面所需要的角度 * 翻轉幾次
-            var rotateY = 180 * Random.Range(12, 24);
+            var rotateY = 180 * rotateYCount;
             // 最後的隨機角度 * 旋轉幾次
-            var rotateZ = Random.Range(0, 361) * Random.Range(12, 24);
+            var rotateZ = Random.Range(0, 361) * rotateZCount;
 
             DOTween.Sequence()
                 .Append(RectTransform
@@ -82,9 +104,27 @@ namespace BATTLE.SELECTION_INITIATIVE_SYSTEM
                     .SetEase(Ease.OutQuad))
                 .Join(RectTransform
                     .DOScale(Vector2.one, 5)
-                    .SetEase(Ease.OutQuint));
-            
-            // TODO 07.18 當硬幣的 Y 軸翻轉過 180 後，要切換到另一個面
+                    .SetEase(Ease.OutQuint))
+                .OnUpdate(() =>
+                {
+                    if (!Tails.activeSelf && RectTransform.eulerAngles.y is < 100 and > 90)
+                    {
+                        Heads.SetActive(false);
+                        Tails.SetActive(true);
+                    }
+                    else if (!Heads.activeSelf && RectTransform.eulerAngles.y is < 280 and > 270)
+                    {
+                        Heads.SetActive(true);
+                        Tails.SetActive(false);
+                    }
+                })
+                .OnKill(() =>
+                {
+                    if (rotateYCount % 2 == 0)
+                        Finish?.Invoke(new OnPlayerRound());
+                    else
+                        Debug.Log("敵人先手");
+                });
         }
 
         /// <summary>
