@@ -30,7 +30,7 @@ namespace BATTLE.PROGRESSING_SYSTEM
                 .AppendInterval(0) // TODO 未來可修改延遲多少秒，才開始執行相機縮放敵人的程式碼
                 .AppendCallback(() =>
                 {
-                    StateMachine.ChangeState(this, new OnBeginning());
+                    ChangeState(new OnBeginning());
                 });
         }
 
@@ -39,7 +39,16 @@ namespace BATTLE.PROGRESSING_SYSTEM
         /// </summary>
         public void SpawnInitiativeCoin()
         {
-            SelectionInitiativeSystem.SpawnCoin();
+            SelectionInitiativeSystem.OnEnter();
+        }
+
+        /// <summary>
+        /// 用切換當前狀態機的狀態
+        /// </summary>
+        /// <param name="newState"> 下個狀態 </param>
+        public void ChangeState(IState newState)
+        {
+            StateMachine.ChangeState(this, newState);;
         }
     }
 }

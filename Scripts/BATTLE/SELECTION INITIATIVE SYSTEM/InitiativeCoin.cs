@@ -32,6 +32,10 @@ namespace BATTLE.SELECTION_INITIATIVE_SYSTEM
         /// 當硬幣被點擊後，所落下的介面 % 位置
         /// </summary>
         private AnchorsMult LandingPosMult;
+        /// <summary>
+        /// 當硬幣結束投擲後，所移動到顯示結果的介面 % 位置
+        /// </summary>
+        private AnchorsMult ShowPosMult;
 
         /// <summary>
         /// 硬幣正面的遊戲物件
@@ -51,6 +55,23 @@ namespace BATTLE.SELECTION_INITIATIVE_SYSTEM
         private void Awake()
         {
             RectTransform = GetComponent<RectTransform>();
+        }
+        
+        /// <summary>
+        /// 用來初始化硬幣的方法
+        /// </summary>
+        /// <param name="rect"> 硬幣所在介面的像素大小 </param>
+        /// <param name="readyPosMult"> 準備投擲硬幣的點，在介面上的 % 位置 </param>
+        /// <param name="landingPosMult"> 當硬幣被點擊後，所落下的介面 % 位置 </param>
+        /// <param name="showPosMult"> 當硬幣結束投擲後，所移動到顯示結果的介面 % 位置 </param>
+        public void Init(Rect rect, AnchorsMult readyPosMult, AnchorsMult landingPosMult, AnchorsMult showPosMult)
+        {
+            CanvasRect = rect;
+            ReadyPosMult = readyPosMult;
+            LandingPosMult = landingPosMult;
+            ShowPosMult  = showPosMult;
+            
+            MoveToReadyPos();
         }
         
         public void OnPointerEnter(PointerEventData eventData)
@@ -78,15 +99,49 @@ namespace BATTLE.SELECTION_INITIATIVE_SYSTEM
             if (!Interactable) return;
             Interactable = false;
 
+            DOTween.Sequence()
+                .Append(MoveToRandomPos())
+                .AppendInterval(.5f)
+                .Append(MoveToShowPos())
+                .AppendInterval(.5f)
+                .OnKill(() =>
+                {
+                    // TODO 廣播硬幣投擲結果
+                    Debug.Log("廣播硬幣投擲結果");
+                });
+        }
+
+        /// <summary>
+        /// 用來執行硬幣從生成點移動到準備投擲點的方法
+        /// </summary>
+        private void MoveToReadyPos()
+        {
+            var x = CanvasRect.width * ReadyPosMult.GetRandomXMult();
+            var y = CanvasRect.height * ReadyPosMult.GetRandomYMult();
+            
+            RectTransform
+                .DOAnchorPos(new Vector2(x, y), 1, true)
+                .SetEase(Ease.OutBack)
+                .OnKill(() =>
+                {
+                    Interactable = true;
+                });
+        }
+
+        /// <summary>
+        /// 用來執行當玩家點擊硬幣後，會移動到螢幕上隨機 % 的位置
+        /// </summary>
+        private Tween MoveToRandomPos()
+        {
             // 螢幕的寬度 * 螢幕寬度的比例位置
             var posX = CanvasRect.width * LandingPosMult.GetRandomXMult();
             // 螢幕的高度 * 螢幕高度的比例位置
             var posY = CanvasRect.height * LandingPosMult.GetRandomYMult();
 
             // Y 軸的翻面次數
-            var rotateYCount = Random.Range(12, 24);
+            var rotateYCount = Random.Range(24, 32);
             // Z 軸的旋轉次數
-            var rotateZCount = Random.Range(6, 16);
+            var rotateZCount = Random.Range(12, 24);
             
             // 不轉動 X 軸
             var rotateX = RectTransform.eulerAngles.x;
@@ -95,7 +150,7 @@ namespace BATTLE.SELECTION_INITIATIVE_SYSTEM
             // 最後的隨機角度 * 旋轉幾次
             var rotateZ = Random.Range(0, 361) * rotateZCount;
 
-            DOTween.Sequence()
+            return DOTween.Sequence()
                 .Append(RectTransform
                     .DOAnchorPos(new Vector2(posX, posY), 5, true)
                     .SetEase(Ease.OutQuad))
@@ -117,43 +172,24 @@ namespace BATTLE.SELECTION_INITIATIVE_SYSTEM
                         Heads.SetActive(true);
                         Tails.SetActive(false);
                     }
-                })
-                .OnKill(() =>
-                {
-                    if (rotateYCount % 2 == 0)
-                        Finish?.Invoke(new OnPlayerRound());
-                    else
-                        Debug.Log("敵人先手");
                 });
         }
 
         /// <summary>
-        /// 用來初始化硬幣的方法
+        /// 讓硬幣移動到營顯示位置，並且放大，讓玩家看得更清楚結果
         /// </summary>
-        /// <param name="rect"> 硬幣所在介面的像素大小 </param>
-        /// <param name="readyPosMult"> 準備投擲硬幣的點，在介面上的 % 位置 </param>
-        /// <param name="landingPosMult"> 當硬幣被點擊後，所落下的介面 % 位置 </param>
-        public void Init(Rect rect, AnchorsMult readyPosMult, AnchorsMult landingPosMult)
+        private Tween MoveToShowPos()
         {
-            CanvasRect = rect;
-            ReadyPosMult = readyPosMult;
-            LandingPosMult = landingPosMult;
-        }
+            var x = CanvasRect.width * ShowPosMult.GetRandomXMult();
+            var y = CanvasRect.height * ShowPosMult.GetRandomYMult();
 
-        /// <summary>
-        /// 用來執行硬幣從生成點移動到準備投擲點的方法
-        /// </summary>
-        public void MoveToReadyPos()
-        {
-            var x = CanvasRect.width * ReadyPosMult.GetRandomXMult();
-            var y = CanvasRect.height * ReadyPosMult.GetRandomYMult();
-            RectTransform
-                .DOAnchorPos(new Vector2(x, y), 1, true)
-                .SetEase(Ease.OutBack)
-                .OnKill(() =>
-                {
-                    Interactable = true;
-                });
+            return DOTween.Sequence()
+                .Append(RectTransform
+                    .DOAnchorPos(new Vector2(x, y), .3f, true)
+                    .SetEase(Ease.OutBack))
+                .Append(RectTransform
+                    .DOScale(Vector2.one * 1.5f, .3f)
+                    .SetEase(Ease.InOutBack));
         }
     }
 }
