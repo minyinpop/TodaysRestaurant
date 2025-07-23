@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 
 namespace BATTLE.SYSTEM
@@ -8,6 +9,36 @@ namespace BATTLE.SYSTEM
     /// </summary>
     internal class ScreenMaskSystem : MonoBehaviour
     {
-        // TODO 實現讓螢幕有灰色遮罩的功能
+        /// <summary>
+        /// 
+        /// </summary>
+        [field: SerializeField] private CanvasGroup ScreenMask;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private Tween FadeTween;
+
+        /// <summary>
+        /// 先中斷上個 FadeTween，
+        /// </summary>
+        public void ShowMask()
+        {
+            FadeTween?.Kill();
+            FadeTween = null;
+            
+            FadeTween = ScreenMask.DOFade(1, 1);
+        }
+
+        /// <summary>
+        /// 中斷當前會把透明度 1 調整至 0
+        /// </summary>
+        public void HideMask()
+        {
+            FadeTween?.Kill();
+            FadeTween = null;
+            
+            FadeTween = ScreenMask.DOFade(0, 1);
+        }
     }
 }

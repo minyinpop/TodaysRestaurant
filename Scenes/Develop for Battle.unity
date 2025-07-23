@@ -1516,6 +1516,7 @@ GameObject:
   - component: {fileID: 144557452}
   - component: {fileID: 144557454}
   - component: {fileID: 144557453}
+  - component: {fileID: 144557455}
   m_Layer: 5
   m_Name: Screen Mask
   m_TagString: Untagged
@@ -1555,7 +1556,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.39215687, g: 0.39215687, b: 0.39215687, a: 0.5882353}
+  m_Color: {r: 0.39215687, g: 0.39215687, b: 0.39215687, a: 0.78431374}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1580,6 +1581,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 144557451}
   m_CullTransparentMesh: 1
+--- !u!225 &144557455
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 144557451}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &363825079
 GameObject:
   m_ObjectHideFlags: 0
@@ -4169,6 +4182,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d4b5f39cb5a4db19372725ff77db25b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ScreenMask: {fileID: 0}
 --- !u!1 &1774188023
 GameObject:
   m_ObjectHideFlags: 0

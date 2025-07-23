@@ -12,7 +12,6 @@ namespace BATTLE.STATE_MACHINE
         private IProcessState CurrentState;
 
         /// <summary>
-        /// 把狀態機切換到下個狀態的方法
         /// 會先執行舊狀態的「退出」，再執行新狀態的「進入」
         /// </summary>
         /// <param name="system"> 用來管理戰鬥進程的系統 </param>

@@ -35,6 +35,28 @@ namespace BATTLE
         /// 用於切換狀態機的狀態
         /// </summary>
         /// <param name="newState"> 下一個狀態 </param>
-        private void ChangeState(IProcessState newState) => ProcessStateMachine.ChangeState(this, newState);
+        public void ChangeState(IProcessState newState) => ProcessStateMachine.ChangeState(this, newState);
+        
+        
+        
+        #region Selection Initiative System Method
+        /// <summary>
+        /// 用來生成硬幣的方法
+        /// </summary>
+        public void SpawnCoin() => SelectionInitiativeSystem.SpawnCoin();
+        #endregion
+
+        
+        
+        #region Screen Mask System Method
+        /// <summary>
+        /// 用來顯示遮罩的方法
+        /// </summary>
+        public void ShowMask() => ScreenMaskSystem.ShowMask();
+        /// <summary>
+        /// 用來隱藏遮罩的方法
+        /// </summary>
+        public void HideMask() => ScreenMaskSystem.HideMask();
+        #endregion
     }
 }
