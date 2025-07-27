@@ -77,6 +77,11 @@ namespace BATTLE
             MoveTween?.Kill();
             RotateTween?.Kill();
             ScaleTween?.Kill();
+
+            Tween = null;
+            MoveTween = null;
+            RotateTween = null;
+            ScaleTween = null;
         }
     }
 }
