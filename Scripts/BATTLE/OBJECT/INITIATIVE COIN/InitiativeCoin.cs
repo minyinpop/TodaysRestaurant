@@ -11,10 +11,13 @@ namespace BATTLE.OBJECT.INITIATIVE_COIN
         [field: SerializeField] private GameObject Heads;
         [field: SerializeField] private GameObject Tails;
 
-        private Tween Tween;
         private Tween MoveTween;
         private Tween RotateTween;
         private Tween ScaleTween;
+        
+        private RectTransform ReadyPoint;
+        private RectTransform TossPoint;
+        private RectTransform ShowPoint;
 
         private bool Interactable;
         
@@ -26,7 +29,7 @@ namespace BATTLE.OBJECT.INITIATIVE_COIN
                 KillTween();
                 
                 ScaleTween = Rect
-                    .DOScale(Vector2.one * 1.25f, .3f)
+                    .DOScale(Vector2.one * 1.25f, .25f)
                     .SetEase(Ease.OutQuad);
             }
 
@@ -37,27 +40,48 @@ namespace BATTLE.OBJECT.INITIATIVE_COIN
                 KillTween();
                 
                 ScaleTween = Rect
-                    .DOScale(Vector2.one, .3f)
+                    .DOScale(Vector2.one, .25f)
                     .SetEase(Ease.OutQuad);
             }
 
             public void OnPointerClick(PointerEventData eventData)
             {
                 if (!Interactable) return;
+                Interactable = false;
+
+                KillTween();
+                
+                Rect.SetParent(TossPoint);
+                
+                var testVector2 = TossPoint.anchoredPosition;
+
+                DOTween.Sequence()
+                    .Append(MoveTween = Rect
+                        .DOAnchorPos(testVector2, 1, true)
+                        .SetEase(Ease.OutQuad));
+                
+                // TODO 目前點擊硬幣後，它會到螢幕中心點位置
             }
         #endregion
+
+        public void Initialization(RectTransform ready, RectTransform toss, RectTransform show)
+        {
+            ReadyPoint = ready;
+            TossPoint = toss;
+            ShowPoint = show;
+        }
         
-        public void MoveCoinToTossPoint(RectTransform tossPoint)
+        public void MoveCoinToReadyPoint()
         {
             KillTween();
 
-            Tween = DOTween.Sequence()
+            DOTween.Sequence()
                 .AppendCallback(() =>
                 {
-                    Rect.SetParent(tossPoint);
+                    Rect.SetParent(ReadyPoint);
                 })
                 .Append(MoveTween = Rect
-                    .DOAnchorPos(tossPoint.anchoredPosition, 1, true)
+                    .DOAnchorPos(ReadyPoint.anchoredPosition, 1, true)
                     .SetEase(Ease.OutBack))
                 .OnComplete(() =>
                 {
@@ -65,7 +89,7 @@ namespace BATTLE.OBJECT.INITIATIVE_COIN
                 });
         }
 
-        public void MoveCoinToShowPoint(RectTransform showPoint)
+        public void MoveCoinToShowPoint()
         {
             KillTween();
             // TODO
@@ -73,12 +97,10 @@ namespace BATTLE.OBJECT.INITIATIVE_COIN
 
         private void KillTween()
         {
-            Tween?.Kill();
             MoveTween?.Kill();
             RotateTween?.Kill();
             ScaleTween?.Kill();
 
-            Tween = null;
             MoveTween = null;
             RotateTween = null;
             ScaleTween = null;

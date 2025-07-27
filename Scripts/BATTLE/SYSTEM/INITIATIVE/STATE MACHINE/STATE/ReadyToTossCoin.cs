@@ -8,7 +8,7 @@ namespace BATTLE.SYSTEM.INITIATIVE.STATE_MACHINE.STATE
         {
             InitiativeSystem = system;
             InitiativeSystem.SpawnCoin();
-            InitiativeSystem.MoveCoinToTossPoint();
+            InitiativeSystem.MoveCoinToReadyPoint();
         }
     }
 }

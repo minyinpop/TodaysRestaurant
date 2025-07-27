@@ -11,6 +11,7 @@ namespace BATTLE.SYSTEM.INITIATIVE
         private InitiativeCoin CoinScript;
 
         [field: SerializeField] private RectTransform SpawnPoint;
+        [field: SerializeField] private RectTransform ReadyPoint;
         [field: SerializeField] private RectTransform TossPoint;
         [field: SerializeField] private RectTransform ShowPoint;
         
@@ -25,19 +26,20 @@ namespace BATTLE.SYSTEM.INITIATIVE
         {
             Coin = Instantiate(CoinPrefab, SpawnPoint.position, Quaternion.identity, SpawnPoint);
             CoinScript = Coin.GetComponent<InitiativeCoin>();
+            CoinScript.Initialization(ReadyPoint, TossPoint, ShowPoint);
         }
         
         
         
         #region Initiative Coin
-            public void MoveCoinToTossPoint()
+            public void MoveCoinToReadyPoint()
             {
-                CoinScript.MoveCoinToTossPoint(TossPoint);
+                CoinScript.MoveCoinToReadyPoint();
             }
             
             public void MoveCoinToShowPoint()
             {
-                CoinScript.MoveCoinToShowPoint(ShowPoint);
+                CoinScript.MoveCoinToShowPoint();
             }
         #endregion
     }
