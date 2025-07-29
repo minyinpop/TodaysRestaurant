@@ -37,9 +37,9 @@ namespace BATTLE.SYSTEM
         #endregion
         
         #region Screen Mask System
-            public void ShowScreenMask()
+            public void ShowScreenMask(System.Action onComplete = null)
             {
-                ScreenMaskSystem.Show();
+                ScreenMaskSystem.Show(onComplete);
             }
 
             public void ShowScreenMask(Color maskColor)

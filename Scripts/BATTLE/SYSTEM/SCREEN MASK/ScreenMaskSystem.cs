@@ -13,7 +13,7 @@ namespace BATTLE.SYSTEM.SCREEN_MASK
 
         private Tween FadeTween;
 
-        public void Show()
+        public void Show(System.Action onComplete = null)
         {
             KillTween();
 
@@ -24,7 +24,11 @@ namespace BATTLE.SYSTEM.SCREEN_MASK
                 })
                 .Append(ScreenMaskCanvasGroup
                     .DOFade(1, 1)
-                    .SetEase(Ease.OutQuad));
+                    .SetEase(Ease.OutQuad))
+                .OnComplete(() =>
+                {
+                    onComplete?.Invoke();
+                });
         }
 
         public void Show(Color maskColor)

@@ -9,9 +9,11 @@ namespace BATTLE.SYSTEM.PROCESS.STATE_MACHINE.STATE
         public void Enter(ProcessSystem system)
         {
             ProcessSystem = system;
-            ProcessSystem.ChangeState(new ReadyToTossCoin());
             
-            ProcessSystem.ShowScreenMask();
+            ProcessSystem.ShowScreenMask(() =>
+            {
+                ProcessSystem.ChangeState(new ReadyToTossCoin());
+            });
         }
     }
 }
