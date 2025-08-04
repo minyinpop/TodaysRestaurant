@@ -1,6 +1,8 @@
 using BATTLE.OBJECT.INITIATIVE_COIN;
 using BATTLE.SYSTEM.INITIATIVE.STATE_MACHINE;
+using BATTLE.SYSTEM.INITIATIVE.STATE_MACHINE.STATE;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace BATTLE.SYSTEM.INITIATIVE
 {
@@ -9,7 +11,8 @@ namespace BATTLE.SYSTEM.INITIATIVE
         [field: SerializeField] private GameObject CoinPrefab;
         private GameObject Coin;
         private InitiativeCoin CoinScript;
-
+        
+        [field: SerializeField] private CanvasScaler MainCanvasScaler;
         [field: SerializeField] private RectTransform SpawnPoint;
         [field: SerializeField] private RectTransform ReadyPoint;
         [field: SerializeField] private RectTransform TossPoint;
@@ -26,7 +29,8 @@ namespace BATTLE.SYSTEM.INITIATIVE
         {
             Coin = Instantiate(CoinPrefab, SpawnPoint.position, Quaternion.identity, SpawnPoint);
             CoinScript = Coin.GetComponent<InitiativeCoin>();
-            CoinScript.Initialization(ReadyPoint, TossPoint, ShowPoint);
+            CoinScript.Initialization(MainCanvasScaler, ReadyPoint, TossPoint, ShowPoint);
+            CoinScript.OnTossComplete += () => { ChangeState(new ShowTossResult()); };
         }
         
         
@@ -41,6 +45,7 @@ namespace BATTLE.SYSTEM.INITIATIVE
             {
                 CoinScript.MoveCoinToShowPoint();
             }
+        
         #endregion
     }
 }
