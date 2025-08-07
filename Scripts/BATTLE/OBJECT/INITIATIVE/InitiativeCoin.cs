@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace BATTLE.OBJECT.INITIATIVE_COIN
+namespace BATTLE.OBJECT.INITIATIVE
 {
     internal class InitiativeCoin : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
     {
@@ -23,7 +23,8 @@ namespace BATTLE.OBJECT.INITIATIVE_COIN
 
         private bool Interactable;
 
-        public event System.Action OnTossComplete;
+        public event System.Action<int> OnTossComplete;
+        public event System.Action OnShowComplete;
         
         #region Pointer Events
             public void OnPointerEnter(PointerEventData eventData)
@@ -50,12 +51,12 @@ namespace BATTLE.OBJECT.INITIATIVE_COIN
                 Rect.SetParent(TossPoint);
 
                 DOTween.Sequence()
-                    .Append(ScaleTween = OnCoinToss())
                     .Append(MoveTween = ChooseRandomTossLandingPoint())
-                    .Join(RotateTween = ChooseRandomRotateAngles())
+                    .Join(RotateTween = ChooseRandomRotateAngles(out var resultIndex))
                     .Join(ScaleTween = OnCoinLanding())
+                    .AppendInterval(1)
                     .OnUpdate(ChangeSideWhenRotate)
-                    .OnComplete(()=>{ OnTossComplete?.Invoke(); });
+                    .OnComplete(() => { OnTossComplete?.Invoke(resultIndex); });
             }
         #endregion
 
@@ -78,7 +79,12 @@ namespace BATTLE.OBJECT.INITIATIVE_COIN
         public void MoveCoinToShowPoint()
         {
             KillTween();
-            // TODO Show the result about toss.
+            Rect.SetParent(ShowPoint);
+            DOTween.Sequence()
+                .Append(MoveTween = MoveToShowPoint())
+                .Append(ScaleTween = ScaleOnShowPoint())
+                .AppendInterval(1)
+                .OnComplete(() => { OnShowComplete?.Invoke(); });
         }
 
         private Tween OnCursorEnter()
@@ -113,22 +119,16 @@ namespace BATTLE.OBJECT.INITIATIVE_COIN
                 .SetEase(Ease.InBack);
         }
 
-        private Tween ChooseRandomRotateAngles()
+        private Tween ChooseRandomRotateAngles(out int result)
         {
-            var randomYRotTurns = Random.Range(8, 13);
-            var randomZRotTurns = Random.Range(8, 13);
+            var randomYRotTurns = Random.Range(10, 16);
+            var randomZRotTurns = Random.Range(10, 16);
             var randomYAngle = 180 * randomYRotTurns;
             var randomZAngle = Random.Range(0, 361) * randomZRotTurns;
+            result = randomYRotTurns % 2 == 0 ? 0 : 1;
             return Rect
                 .DOLocalRotate(new Vector3(transform.eulerAngles.x, randomYAngle, randomZAngle), 2, RotateMode.FastBeyond360)
                 .SetEase(Ease.InQuad);
-        }
-
-        private Tween OnCoinToss()
-        {
-            return Rect
-                .DOScale(Vector2.one * 1.25f, 1)
-                .SetEase(Ease.OutQuad);
         }
 
         private Tween OnCoinLanding()
@@ -136,6 +136,20 @@ namespace BATTLE.OBJECT.INITIATIVE_COIN
             return Rect
                 .DOScale(Vector2.one, 2)
                 .SetEase(Ease.OutSine);
+        }
+
+        private Tween MoveToShowPoint()
+        {
+            return Rect
+                .DOAnchorPos(Vector2.zero, 1, true)
+                .SetEase(Ease.OutQuad);
+        }
+
+        private Tween ScaleOnShowPoint()
+        {
+            return Rect
+                .DOScale(Vector2.one * 2, 1)
+                .SetEase(Ease.InOutBack);
         }
 
         private void ChangeSideWhenRotate()
