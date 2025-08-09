@@ -1431,6 +1431,7 @@ GameObject:
   - component: {fileID: 66636254}
   - component: {fileID: 66636253}
   - component: {fileID: 66636252}
+  - component: {fileID: 66636256}
   - component: {fileID: 66636255}
   m_Layer: 5
   m_Name: Bottom Result Text
@@ -1501,8 +1502,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1583,7 +1584,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a73e6037f8447b3b42e1897be272142, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Rect: {fileID: 66636251}
   TextTMP: {fileID: 66636253}
+--- !u!114 &66636256
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 66636250}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8ace8ced0e81c847968cdca0aeda757, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  typewriterStartsAutomatically: 0
+  animationLoop: 0
+  timeScale: 0
+  _text: <bounce a=.25 f=1 w=.2>Enemy First !!!</>
+  useDynamicScaling: 1
+  referenceFontSize: 10
+  isResettingTimeOnNewText: 1
+  useDefaultDatabases: 1
+  databaseBehaviors: {fileID: 11400000, guid: 56ae215ce2fdf9f4699b5c3e80941de1, type: 2}
+  databaseAppearances: {fileID: 11400000, guid: a14213fba792e654eafc1b6aa86c73b8, type: 2}
+  useDefaultStyleSheet: 1
+  styleSheet: {fileID: 0}
+  databaseActions: {fileID: 11400000, guid: 053905a75c0fdef4ba16af629bfc84ec, type: 2}
+  defaultAppearancesTags:
+  - size
+  defaultDisappearancesTags:
+  - fade
+  defaultBehaviorsTags: []
+  defaultTagsMode: 0
 --- !u!1 &91948461
 GameObject:
   m_ObjectHideFlags: 0
@@ -1857,6 +1890,7 @@ GameObject:
   - component: {fileID: 322141200}
   - component: {fileID: 322141199}
   - component: {fileID: 322141198}
+  - component: {fileID: 322141202}
   - component: {fileID: 322141201}
   m_Layer: 5
   m_Name: Upper Result Text
@@ -1955,7 +1989,7 @@ MonoBehaviour:
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
-  m_characterSpacing: 0
+  m_characterSpacing: 8
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -2009,7 +2043,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a73e6037f8447b3b42e1897be272142, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Rect: {fileID: 322141197}
   TextTMP: {fileID: 322141199}
+--- !u!114 &322141202
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 322141196}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8ace8ced0e81c847968cdca0aeda757, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  typewriterStartsAutomatically: 0
+  animationLoop: 0
+  timeScale: 0
+  _text: <bounce a=.25 f=1 w=.5>Heads</>
+  useDynamicScaling: 1
+  referenceFontSize: 10
+  isResettingTimeOnNewText: 1
+  useDefaultDatabases: 1
+  databaseBehaviors: {fileID: 11400000, guid: 56ae215ce2fdf9f4699b5c3e80941de1, type: 2}
+  databaseAppearances: {fileID: 11400000, guid: a14213fba792e654eafc1b6aa86c73b8, type: 2}
+  useDefaultStyleSheet: 1
+  styleSheet: {fileID: 0}
+  databaseActions: {fileID: 11400000, guid: 053905a75c0fdef4ba16af629bfc84ec, type: 2}
+  defaultAppearancesTags:
+  - size
+  defaultDisappearancesTags:
+  - fade
+  defaultBehaviorsTags: []
+  defaultTagsMode: 0
 --- !u!1 &454562057
 GameObject:
   m_ObjectHideFlags: 0
@@ -4597,12 +4663,12 @@ MonoBehaviour:
   BottomResultText: {fileID: 66636250}
   HeadsResultContentText:
     <TextColor>k__BackingField: {r: 0.9450981, g: 0.86666673, b: 0.654902, a: 1}
-    <Upper>k__BackingField: "\u6B63\u9762"
-    <Bottom>k__BackingField: "\u73A9\u5BB6\u5148\u653B"
+    <Upper>k__BackingField: <bounce a=.2 f=1 w=.5>Heads !!!</>
+    <Bottom>k__BackingField: <bounce a=.25 f=1 w=.2>Player First !!!</>
   TailsResultContentText:
     <TextColor>k__BackingField: {r: 0.8705883, g: 0.8745099, b: 0.8705883, a: 1}
-    <Upper>k__BackingField: "\u53CD\u9762"
-    <Bottom>k__BackingField: "\u6575\u4EBA\u5148\u653B"
+    <Upper>k__BackingField: <bounce a=.2 f=1 w=.5>Tails !!!</>
+    <Bottom>k__BackingField: <bounce a=.25 f=1 w=.2>Enemy First !!!</>
 --- !u!4 &1535319353
 Transform:
   m_ObjectHideFlags: 0

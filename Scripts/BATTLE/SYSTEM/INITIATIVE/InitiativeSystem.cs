@@ -2,6 +2,7 @@ using BATTLE.OBJECT.INITIATIVE;
 using BATTLE.SYSTEM.INITIATIVE.DATA;
 using BATTLE.SYSTEM.INITIATIVE.STATE_MACHINE;
 using BATTLE.SYSTEM.INITIATIVE.STATE_MACHINE.STATE;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -63,15 +64,9 @@ namespace BATTLE.SYSTEM.INITIATIVE
         
         
         #region Initiative Coin
-            public void MoveCoinToReadyPoint()
-            {
-                CoinScript.MoveCoinToReadyPoint();
-            }
-            
-            public void MoveCoinToShowPoint()
-            {
-                CoinScript.MoveCoinToShowPoint();
-            }
+            public void MoveCoinToReadyPoint() => CoinScript.MoveCoinToReadyPoint();
+            public void MoveCoinToShowPoint() => CoinScript.MoveCoinToShowPoint();
+            private Tween ShrinkCoinToZero() => CoinScript.ShrinkToZero();
         #endregion
         
         
@@ -79,23 +74,24 @@ namespace BATTLE.SYSTEM.INITIATIVE
         #region Initiative Text
             public void ShowResultText()
             {
-                UpperResultText.SetActive(true);
-                BottomResultText.SetActive(true);
-                
                 UpperResultTextScript = UpperResultText.GetComponent<InitiativeText>();
                 BottomResultTextScript = BottomResultText.GetComponent<InitiativeText>();
-
-                if (InitiativeResult.GetResult() == InitiativeResult.ResultType.Heads)
-                {
-                    UpperResultTextScript.SetText(HeadsResultContentText.TextColor, HeadsResultContentText.Upper);
-                    BottomResultTextScript.SetText(HeadsResultContentText.TextColor, HeadsResultContentText.Bottom);
-                }
-                else
-                {
-                    UpperResultTextScript.SetText(TailsResultContentText.TextColor, TailsResultContentText.Upper);
-                    BottomResultTextScript.SetText(TailsResultContentText.TextColor, TailsResultContentText.Bottom);
-                }
+                
+                DOTween.Sequence()
+                    .Append(ShowUpperResultText(InitiativeResult.GetResult() == InitiativeResult.ResultType.Heads ? HeadsResultContentText : TailsResultContentText))
+                    .Join(ShowBottomResultText(InitiativeResult.GetResult() == InitiativeResult.ResultType.Heads ? HeadsResultContentText : TailsResultContentText))
+                    .AppendInterval(2)
+                    .Append(ShrinkCoinToZero())
+                    .Join(HideUpperResultText())
+                    .Join(HideBottomResultText())
+                    .OnComplete(() => { Debug.Log("Show Result Text Complete"); });
             }
+
+            private Tween ShowUpperResultText(InitiativeResultContent content) => UpperResultTextScript.ShowText(content.TextColor, content.Upper);
+            private Tween ShowBottomResultText(InitiativeResultContent content) => BottomResultTextScript.ShowText(content.TextColor, content.Bottom);
+            
+            private Tween HideUpperResultText() => UpperResultTextScript.HideText();
+            private Tween HideBottomResultText() => BottomResultTextScript.HideText();
         #endregion
     }
 }

@@ -87,6 +87,15 @@ namespace BATTLE.OBJECT.INITIATIVE
                 .OnComplete(() => { OnShowComplete?.Invoke(); });
         }
 
+        public Tween ShrinkToZero()
+        {
+            KillTween();
+            ScaleTween = Rect
+                .DOScale(Vector2.zero, .5f)
+                .SetEase(Ease.OutQuad);
+            return ScaleTween;
+        }
+
         private Tween OnCursorEnter()
         {
             return Rect
