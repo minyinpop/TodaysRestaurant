@@ -31,7 +31,6 @@ namespace BATTLE.SYSTEM.INITIATIVE
         [field: Space(9)]
         [field: SerializeField] private InitiativeResultContent HeadsResultContentText;
         [field: SerializeField] private InitiativeResultContent TailsResultContentText;
-        private InitiativeResultContent TargetResultContent;
         
         private readonly InitiativeStateMachine StateMachine = new();
         private readonly InitiativeResult InitiativeResult = new();
@@ -80,12 +79,22 @@ namespace BATTLE.SYSTEM.INITIATIVE
         #region Initiative Text
             public void ShowResultText()
             {
-                Debug.Log(InitiativeResult.GetResult());
-                return;
+                UpperResultText.SetActive(true);
+                BottomResultText.SetActive(true);
+                
                 UpperResultTextScript = UpperResultText.GetComponent<InitiativeText>();
                 BottomResultTextScript = BottomResultText.GetComponent<InitiativeText>();
-                UpperResultTextScript.SetText(InitiativeResult.GetResult() == InitiativeResult.ResultType.Heads ? HeadsResultContentText.Upper : TailsResultContentText.Upper);
-                BottomResultTextScript.SetText(InitiativeResult.GetResult() == InitiativeResult.ResultType.Heads ? HeadsResultContentText.Bottom : TailsResultContentText.Bottom);
+
+                if (InitiativeResult.GetResult() == InitiativeResult.ResultType.Heads)
+                {
+                    UpperResultTextScript.SetText(HeadsResultContentText.TextColor, HeadsResultContentText.Upper);
+                    BottomResultTextScript.SetText(HeadsResultContentText.TextColor, HeadsResultContentText.Bottom);
+                }
+                else
+                {
+                    UpperResultTextScript.SetText(TailsResultContentText.TextColor, TailsResultContentText.Upper);
+                    BottomResultTextScript.SetText(TailsResultContentText.TextColor, TailsResultContentText.Bottom);
+                }
             }
         #endregion
     }

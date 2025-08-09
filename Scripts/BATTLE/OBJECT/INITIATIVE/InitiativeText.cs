@@ -7,8 +7,9 @@ namespace BATTLE.OBJECT.INITIATIVE
     {
         [field: SerializeField] private TextMeshProUGUI TextTMP;
 
-        public void SetText(string content)
+        public void SetText(Color textColor, string content)
         {
+            TextTMP.color = textColor;
             TextTMP.text = content;
         }
     }
