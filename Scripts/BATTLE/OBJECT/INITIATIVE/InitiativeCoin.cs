@@ -125,7 +125,7 @@ namespace BATTLE.OBJECT.INITIATIVE
             var randomZRotTurns = Random.Range(10, 16);
             var randomYAngle = 180 * randomYRotTurns;
             var randomZAngle = Random.Range(0, 361) * randomZRotTurns;
-            result = randomYRotTurns % 2 == 0 ? 0 : 1;
+            result = randomYRotTurns % 2 == 0 ? 1 : 0;
             return Rect
                 .DOLocalRotate(new Vector3(transform.eulerAngles.x, randomYAngle, randomZAngle), 2, RotateMode.FastBeyond360)
                 .SetEase(Ease.InQuad);
