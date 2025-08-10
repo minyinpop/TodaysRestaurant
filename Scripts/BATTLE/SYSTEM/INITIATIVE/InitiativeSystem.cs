@@ -1,8 +1,8 @@
+using System.Collections;
 using BATTLE.OBJECT.INITIATIVE;
 using BATTLE.SYSTEM.INITIATIVE.DATA;
 using BATTLE.SYSTEM.INITIATIVE.STATE_MACHINE;
 using BATTLE.SYSTEM.INITIATIVE.STATE_MACHINE.STATE;
-using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -26,8 +26,8 @@ namespace BATTLE.SYSTEM.INITIATIVE
         [field: Space(9)]
         [field: SerializeField] private GameObject UpperResultText;
         [field: SerializeField] private GameObject BottomResultText;
-        private InitiativeText UpperResultTextScript;
-        private InitiativeText BottomResultTextScript;
+        [field: SerializeField] private InitiativeText UpperResultTextScript;
+        [field: SerializeField] private InitiativeText BottomResultTextScript;
 
         [field: Space(9)]
         [field: SerializeField] private InitiativeResultContent HeadsResultContentText;
@@ -35,7 +35,13 @@ namespace BATTLE.SYSTEM.INITIATIVE
         
         private readonly InitiativeStateMachine StateMachine = new();
         private readonly InitiativeResult InitiativeResult = new();
-        
+
+        private IEnumerator ShowResultTextCoroutine;
+
+        public event System.Action OnTossResultShowFinish;
+
+        private void OnDisable() => ClearShowResultTextCoroutine();
+
         public void ChangeState(IInitiativeState newState)
         {
             StateMachine.ChangeState(this, newState);
@@ -55,43 +61,48 @@ namespace BATTLE.SYSTEM.INITIATIVE
             InitiativeResult.SetResult(resultIndex);
             ChangeState(new ShowTossResult());
         }
-
-        private void OnCoinShowComplete()
+        
+        private void OnCoinShowComplete() => ChangeState(new ShowResultText());
+        
+        private void ClearShowResultTextCoroutine()
         {
-            ChangeState(new ShowResultText());
+            if (ShowResultTextCoroutine is null) return;
+            StopCoroutine(ShowResultTextCoroutine);
+            ShowResultTextCoroutine = null;
         }
-        
-        
         
         #region Initiative Coin
             public void MoveCoinToReadyPoint() => CoinScript.MoveCoinToReadyPoint();
             public void MoveCoinToShowPoint() => CoinScript.MoveCoinToShowPoint();
-            private Tween ShrinkCoinToZero() => CoinScript.ShrinkToZero();
+            private void ShrinkCoinToZero() => CoinScript.ShrinkToZero();
         #endregion
-        
-        
         
         #region Initiative Text
-            public void ShowResultText()
+            public void StartShowResultText()
             {
-                UpperResultTextScript = UpperResultText.GetComponent<InitiativeText>();
-                BottomResultTextScript = BottomResultText.GetComponent<InitiativeText>();
-                
-                DOTween.Sequence()
-                    .Append(ShowUpperResultText(InitiativeResult.GetResult() == InitiativeResult.ResultType.Heads ? HeadsResultContentText : TailsResultContentText))
-                    .Join(ShowBottomResultText(InitiativeResult.GetResult() == InitiativeResult.ResultType.Heads ? HeadsResultContentText : TailsResultContentText))
-                    .AppendInterval(2)
-                    .Append(ShrinkCoinToZero())
-                    .Join(HideUpperResultText())
-                    .Join(HideBottomResultText())
-                    .OnComplete(() => { Debug.Log("Show Result Text Complete"); });
+                ClearShowResultTextCoroutine();
+                ShowResultTextCoroutine = ResultTextProcess();
+                StartCoroutine(ShowResultTextCoroutine);
             }
 
-            private Tween ShowUpperResultText(InitiativeResultContent content) => UpperResultTextScript.ShowText(content.TextColor, content.Upper);
-            private Tween ShowBottomResultText(InitiativeResultContent content) => BottomResultTextScript.ShowText(content.TextColor, content.Bottom);
-            
-            private Tween HideUpperResultText() => UpperResultTextScript.HideText();
-            private Tween HideBottomResultText() => BottomResultTextScript.HideText();
-        #endregion
+            private IEnumerator ResultTextProcess()
+            {
+                ShowUpperResultText(InitiativeResult.GetResult() == InitiativeResult.ResultType.Heads ? HeadsResultContentText : TailsResultContentText);
+                yield return new WaitForSeconds(1);
+                ShowBottomResultText(InitiativeResult.GetResult() == InitiativeResult.ResultType.Heads ? HeadsResultContentText : TailsResultContentText);
+                yield return new WaitForSeconds(2);
+                HideUpperResultText();
+                HideBottomResultText();
+                ShrinkCoinToZero();
+                yield return new WaitForSeconds(1);
+                OnTossResultShowFinish?.Invoke();
+            }
+
+            private void ShowUpperResultText(InitiativeResultContent content) => UpperResultTextScript.ShowText(content.TextColor, content.Upper);
+            private void ShowBottomResultText(InitiativeResultContent content) => BottomResultTextScript.ShowText(content.TextColor, content.Bottom);
+            private void HideUpperResultText() => UpperResultTextScript.HideText();
+            private void HideBottomResultText() => BottomResultTextScript.HideText();
+
+            #endregion
     }
 }

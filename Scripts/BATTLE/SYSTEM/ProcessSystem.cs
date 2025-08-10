@@ -24,33 +24,16 @@ namespace BATTLE.SYSTEM
             ChangeState(new FocusOnEnemy());
         }
 
-        public void ChangeState(IProcessState newState)
-        {
-            StateMachine.ChangeState(this, newState);
-        }
+        public void ChangeState(IProcessState newState) => StateMachine.ChangeState(this, newState);
         
         #region Initiative System
-            public void ChangeState(IInitiativeState newState)
-            {
-                InitiativeSystem.ChangeState(newState);
-            }
+            public void ChangeState(IInitiativeState newState) => InitiativeSystem.ChangeState(newState);
         #endregion
         
         #region Screen Mask System
-            public void ShowScreenMask(System.Action onComplete = null)
-            {
-                ScreenMaskSystem.Show(onComplete);
-            }
-
-            public void ShowScreenMask(Color maskColor)
-            {
-                ScreenMaskSystem.Show(maskColor);
-            }
-
-            public void HideScreenMask()
-            {
-                ScreenMaskSystem.Hide();
-            }
+            public void ShowScreenMask(System.Action onComplete = null) => ScreenMaskSystem.Show(onComplete);
+            public void HideScreenMask(System.Action onComplete = null) => InitiativeSystem.OnTossResultShowFinish += () => ScreenMaskSystem.Hide(onComplete);
+            // TODO Continue to coding that what will happen when ScreenMask back to 0 Alpha.
         #endregion
     }
 }

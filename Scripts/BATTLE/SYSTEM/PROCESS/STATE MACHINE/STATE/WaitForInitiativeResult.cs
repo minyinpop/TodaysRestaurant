@@ -13,6 +13,7 @@ namespace BATTLE.SYSTEM.PROCESS.STATE_MACHINE.STATE
             ProcessSystem.ShowScreenMask(() =>
             {
                 ProcessSystem.ChangeState(new ReadyToTossCoin());
+                ProcessSystem.HideScreenMask();
             });
         }
     }

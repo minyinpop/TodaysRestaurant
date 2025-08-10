@@ -31,22 +31,7 @@ namespace BATTLE.SYSTEM.SCREEN_MASK
                 });
         }
 
-        public void Show(Color maskColor)
-        {
-            KillTween();
-
-            FadeTween = DOTween.Sequence()
-                .AppendCallback(() =>
-                {
-                    ScreenMask.SetActive(true);
-                    ScreenMaskImage.color = maskColor;
-                })
-                .Append(ScreenMaskCanvasGroup
-                    .DOFade(1, 1)
-                    .SetEase(Ease.OutQuad));
-        }
-
-        public void Hide()
+        public void Hide(System.Action onComplete = null)
         {
             KillTween();
             
@@ -54,9 +39,10 @@ namespace BATTLE.SYSTEM.SCREEN_MASK
                 .Append(ScreenMaskCanvasGroup
                     .DOFade(0, 1)
                     .SetEase(Ease.OutQuad))
-                .AppendCallback(() =>
+                .OnComplete(() =>
                 {
                     ScreenMask.SetActive(false);
+                    onComplete?.Invoke();
                 });
         }
 
