@@ -20,10 +20,14 @@ namespace BATTLE.PROCESS
         private void Start()
         {
             // TODO 【2025.08.12 00:01】 Change the state in future, just for develop now.
-            ChangeState(new ShowScreenMask());
+            ChangeStateToShowScreenMask();
         }
 
-        public void ChangeState(IBattleProcessState newState) => StateMachine.ChangeState(this, newState);
+        #region State Machine
+            private void ChangeState(IBattleProcessState newState) => StateMachine.ChangeState(this, newState);
+            public void ChangeStateToShowScreenMask() => ChangeState(new ShowScreenMask());
+            public void ChangeStateToSpawnInitiativeCoinAndReadyToToss() => ChangeState(new SpawnInitiativeCoinAndReadyToToss());
+        #endregion
         
         #region Screen Mask System
             public void ShowScreenMask(System.Action onComplete = null) => ScreenMaskSystem.Show(onComplete);

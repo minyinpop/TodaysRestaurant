@@ -2,19 +2,18 @@ using BATTLE.PROCESS.STATE_MACHINE;
 
 namespace BATTLE.PROCESS.STATE_TYPE
 {
-    internal class ShowScreenMask : IBattleProcessState
+    internal class SpawnInitiativeCoinAndReadyToToss : IBattleProcessState
     {
         private BattleProcessSystem BattleProcessSystem;
         
         public void OnEnter(BattleProcessSystem system)
         {
             BattleProcessSystem = system;
-            BattleProcessSystem.ShowScreenMask(OnExit);
         }
 
         public void OnExit()
         {
-            BattleProcessSystem.ChangeStateToSpawnInitiativeCoinAndReadyToToss();
+            
         }
     }
 }
