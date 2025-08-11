@@ -32,8 +32,12 @@ namespace BATTLE.SYSTEM
         
         #region Screen Mask System
             public void ShowScreenMask(System.Action onComplete = null) => ScreenMaskSystem.Show(onComplete);
-            public void HideScreenMask(System.Action onComplete = null) => InitiativeSystem.OnTossResultShowFinish += () => ScreenMaskSystem.Hide(onComplete);
-            // TODO Continue to coding that what will happen when ScreenMask back to 0 Alpha.
+            public void HideScreenMask(System.Action onComplete = null)
+            {
+                // TODO Continue to coding that what will happen when ScreenMask back to 0 Alpha.
+                Debug.Log("Continue Here.");
+                InitiativeSystem.OnTossResultShowFinish += () => ScreenMaskSystem.Hide(onComplete);
+            }
         #endregion
     }
 }
