@@ -10,7 +10,7 @@ namespace BATTLE.PROCESS
     {
         private ScreenMaskSystem ScreenMaskSystem;
 
-        private BattleProcessStateMachine StateMachine = new();
+        private readonly BattleProcessStateMachine StateMachine = new();
 
         private void Awake()
         {
