@@ -9,6 +9,7 @@ namespace BATTLE.PROCESS_SYSTEM.STATE_TYPE
         public void OnEnter(BattleProcessSystem system)
         {
             BattleProcessSystem = system;
+            BattleProcessSystem.SpawnInitiativeBattleCoin();
         }
 
         public void OnExit()

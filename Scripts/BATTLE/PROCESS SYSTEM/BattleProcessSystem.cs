@@ -1,3 +1,4 @@
+using BATTLE.INITIATIVE_BATTLE_SYSTEM;
 using BATTLE.PROCESS_SYSTEM.STATE_MACHINE;
 using BATTLE.PROCESS_SYSTEM.STATE_TYPE;
 using BATTLE.SCREEN_MASK_SYSTEM;
@@ -6,15 +7,18 @@ using UnityEngine;
 namespace BATTLE.PROCESS_SYSTEM
 {
     [RequireComponent(typeof(ScreenMaskSystem))]
+    [RequireComponent(typeof(InitiativeBattleSystem))]
     internal class BattleProcessSystem : MonoBehaviour
     {
         private ScreenMaskSystem ScreenMaskSystem;
+        private InitiativeBattleSystem InitiativeBattleSystem;
 
         private readonly BattleProcessStateMachine StateMachine = new();
 
         private void Awake()
         {
             ScreenMaskSystem = GetComponent<ScreenMaskSystem>();
+            InitiativeBattleSystem = GetComponent<InitiativeBattleSystem>();
         }
 
         private void Start()
@@ -32,6 +36,10 @@ namespace BATTLE.PROCESS_SYSTEM
         #region Screen Mask System
             public void ShowScreenMask(System.Action onComplete = null) => ScreenMaskSystem.Show(onComplete);
             public void HideScreenMask(System.Action onComplete = null) => ScreenMaskSystem.Hide(onComplete);
+        #endregion
+        
+        #region Initiative Battle System
+            public void SpawnInitiativeBattleCoin() => InitiativeBattleSystem.SpawnCoin();
         #endregion
     }
 }
