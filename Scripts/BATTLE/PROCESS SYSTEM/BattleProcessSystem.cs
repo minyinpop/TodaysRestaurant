@@ -30,7 +30,7 @@ namespace BATTLE.PROCESS_SYSTEM
         #region State Machine
             private void ChangeState(IBattleProcessState newState) => StateMachine.ChangeState(this, newState);
             public void ChangeStateToShowScreenMask() => ChangeState(new ShowScreenMask());
-            public void ChangeStateToSpawnInitiativeCoinAndReadyToToss() => ChangeState(new SpawnInitiativeCoinAndReadyToToss());
+            public void ChangeStateToSpawnInitiativeCoinAndReadyToToss() => ChangeState(new SpawnInitiativeBattleCoinAndReadyToToss());
         #endregion
         
         #region Screen Mask System
@@ -40,6 +40,7 @@ namespace BATTLE.PROCESS_SYSTEM
         
         #region Initiative Battle System
             public void SpawnInitiativeBattleCoin() => InitiativeBattleSystem.SpawnCoin();
+            public void MoveInitiativeBattleCoinToTossPoint() => InitiativeBattleSystem.MoveCoinToTossPoint();
         #endregion
     }
 }

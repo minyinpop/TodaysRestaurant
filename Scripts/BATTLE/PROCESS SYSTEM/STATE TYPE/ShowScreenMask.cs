@@ -1,4 +1,5 @@
 using BATTLE.PROCESS_SYSTEM.STATE_MACHINE;
+using UnityEngine;
 
 namespace BATTLE.PROCESS_SYSTEM.STATE_TYPE
 {
@@ -8,13 +9,15 @@ namespace BATTLE.PROCESS_SYSTEM.STATE_TYPE
         
         public void OnEnter(BattleProcessSystem system)
         {
+            Debug.Log("Enter ShowScreenMask State.");
+            
             BattleProcessSystem = system;
-            BattleProcessSystem.ShowScreenMask(OnExit);
+            BattleProcessSystem.ShowScreenMask(BattleProcessSystem.ChangeStateToSpawnInitiativeCoinAndReadyToToss);
         }
 
         public void OnExit()
         {
-            BattleProcessSystem.ChangeStateToSpawnInitiativeCoinAndReadyToToss();
+            Debug.Log("Exit ShowScreenMask State.");
         }
     }
 }
