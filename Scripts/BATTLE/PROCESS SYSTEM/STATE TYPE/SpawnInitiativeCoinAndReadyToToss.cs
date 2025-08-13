@@ -1,6 +1,6 @@
-using BATTLE.PROCESS.STATE_MACHINE;
+using BATTLE.PROCESS_SYSTEM.STATE_MACHINE;
 
-namespace BATTLE.PROCESS.STATE_TYPE
+namespace BATTLE.PROCESS_SYSTEM.STATE_TYPE
 {
     internal class SpawnInitiativeCoinAndReadyToToss : IBattleProcessState
     {

@@ -1,9 +1,9 @@
-using BATTLE.PROCESS.STATE_MACHINE;
-using BATTLE.PROCESS.STATE_TYPE;
-using BATTLE.SCREEN_MASK;
+using BATTLE.PROCESS_SYSTEM.STATE_MACHINE;
+using BATTLE.PROCESS_SYSTEM.STATE_TYPE;
+using BATTLE.SCREEN_MASK_SYSTEM;
 using UnityEngine;
 
-namespace BATTLE.PROCESS
+namespace BATTLE.PROCESS_SYSTEM
 {
     [RequireComponent(typeof(ScreenMaskSystem))]
     internal class BattleProcessSystem : MonoBehaviour

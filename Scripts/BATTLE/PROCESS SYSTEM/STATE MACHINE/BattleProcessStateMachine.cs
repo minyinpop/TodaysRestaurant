@@ -1,4 +1,4 @@
-namespace BATTLE.PROCESS.STATE_MACHINE
+namespace BATTLE.PROCESS_SYSTEM.STATE_MACHINE
 {
     internal class BattleProcessStateMachine
     {
