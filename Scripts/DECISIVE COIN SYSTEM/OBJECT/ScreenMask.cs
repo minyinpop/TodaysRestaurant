@@ -15,25 +15,38 @@ namespace DECISIVE_COIN_SYSTEM.OBJECT
         {
             KillTween();
 
-            FadeTween = CanvasGroup
-                .DOFade(1, FadeDuration)
-                .SetEase(Ease.Linear)
-                .OnComplete(() => onComplete?.Invoke());
+            FadeTween = ShowScreenMask()
+                .OnComplete(() => onComplete());
         }
 
-        public void Hide()
+        public void Hide(System.Action onComplete)
         {
             KillTween();
             
-            FadeTween = CanvasGroup
-                .DOFade(0, FadeDuration)
-                .SetEase(Ease.Linear);
+            FadeTween = HideScreenMask()
+                .OnComplete(() => onComplete());
         }
+        
+        #region Tween
+            private Tween ShowScreenMask()
+            {
+                return CanvasGroup
+                    .DOFade(1, FadeDuration)
+                    .SetEase(Ease.Linear);
+            }
 
-        private void KillTween()
-        {
-            FadeTween?.Kill();
-            FadeTween = null;
-        }
+            private Tween HideScreenMask()
+            {
+                return CanvasGroup
+                    .DOFade(0, FadeDuration)
+                    .SetEase(Ease.Linear);
+            }
+
+            private void KillTween()
+            {
+                FadeTween?.Kill();
+                FadeTween = null;
+            }
+        #endregion
     }
 }

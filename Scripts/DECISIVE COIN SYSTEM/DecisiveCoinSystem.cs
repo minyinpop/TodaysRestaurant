@@ -10,10 +10,15 @@ namespace DECISIVE_COIN_SYSTEM
     /// </summary>
     public class DecisiveCoinSystem : MonoBehaviour
     {
-        private StateMachine StateMachine = new();
+        private readonly StateMachine StateMachine = new();
 
         [field: SerializeField] private ScreenMask ScreenMask;
         [field: SerializeField] private DecisiveCoin DecisiveCoin;
+
+        private void Start()
+        {
+            DecisiveCoin.OnTossComplete += ShowTossResultState;
+        }
 
         private void OnEnable()
         {
@@ -21,7 +26,7 @@ namespace DECISIVE_COIN_SYSTEM
             StartSystem();
         }
 
-        public void StartSystem()
+        private void StartSystem()
         {
             ShowScreenMaskState();
         }
@@ -32,7 +37,7 @@ namespace DECISIVE_COIN_SYSTEM
         }
 
         #region State Machine
-            public void ShowScreenMaskState()
+            private void ShowScreenMaskState()
             {
                 StateMachine.ChangeState(this, new ShowScreenMask());
             }
@@ -40,6 +45,11 @@ namespace DECISIVE_COIN_SYSTEM
             public void ReadyToTossCoinState()
             {
                 StateMachine.ChangeState(this, new ReadyToTossCoin());
+            }
+
+            private void ShowTossResultState()
+            {
+                StateMachine.ChangeState(this, new ShowTossResult());
             }
         #endregion
 
@@ -49,17 +59,27 @@ namespace DECISIVE_COIN_SYSTEM
                 ScreenMask.Show(onComplete);
             }
             
-            public void HideScreenMask()
+            public void HideScreenMask(System.Action onComplete)
             {
-                ScreenMask.Hide();
+                ScreenMask.Hide(onComplete);
             }
         #endregion
 
         #region Decisive Coin
-            public void MoveToTossPoint()
+            public void MoveToTossPoint(System.Action onComplete = null)
             {
-                DecisiveCoin.MoveToTossPoint();
+                DecisiveCoin.MoveToTossPoint(() =>
+                {
+                    DecisiveCoin.SetInteractable(true);
+                    onComplete?.Invoke();
+                });
             }
+
+            public void MoveToShowPoint(System.Action onComplete = null)
+            {
+                DecisiveCoin.MoveToShowPoint(() => onComplete?.Invoke());
+            }
+            
         #endregion
     }
 }
