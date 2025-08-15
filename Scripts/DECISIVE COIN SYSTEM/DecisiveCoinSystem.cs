@@ -1,7 +1,6 @@
 using DECISIVE_COIN_SYSTEM.OBJECT;
 using DECISIVE_COIN_SYSTEM.STATE_MACHINE;
 using DECISIVE_COIN_SYSTEM.STATE_TYPE;
-using DG.Tweening;
 using UnityEngine;
 
 namespace DECISIVE_COIN_SYSTEM
@@ -9,7 +8,7 @@ namespace DECISIVE_COIN_SYSTEM
     /// <summary>
     /// 如果要使用這個系統，請直接 SetActive 就可以了。
     /// </summary>
-    internal class DecisiveCoinSystem : MonoBehaviour
+    public class DecisiveCoinSystem : MonoBehaviour
     {
         private StateMachine StateMachine = new();
 
@@ -33,21 +32,21 @@ namespace DECISIVE_COIN_SYSTEM
         }
 
         #region State Machine
-            private void ShowScreenMaskState()
+            public void ShowScreenMaskState()
             {
                 StateMachine.ChangeState(this, new ShowScreenMask());
             }
 
-            private void ReadyToTossCoinState()
+            public void ReadyToTossCoinState()
             {
                 StateMachine.ChangeState(this, new ReadyToTossCoin());
             }
         #endregion
 
         #region Screen Mask
-            public void ShowScreenMask()
+            public void ShowScreenMask(System.Action onComplete)
             {
-                ScreenMask.Show(ReadyToTossCoinState);
+                ScreenMask.Show(onComplete);
             }
             
             public void HideScreenMask()

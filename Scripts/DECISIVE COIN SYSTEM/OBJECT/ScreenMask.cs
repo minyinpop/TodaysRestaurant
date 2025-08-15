@@ -11,14 +11,14 @@ namespace DECISIVE_COIN_SYSTEM.OBJECT
         
         private const float FadeDuration = .5f;
 
-        public void Show(System.Action OnComplete)
+        public void Show(System.Action onComplete)
         {
             KillTween();
 
             FadeTween = CanvasGroup
                 .DOFade(1, FadeDuration)
                 .SetEase(Ease.Linear)
-                .OnComplete(() => OnComplete?.Invoke());
+                .OnComplete(() => onComplete?.Invoke());
         }
 
         public void Hide()

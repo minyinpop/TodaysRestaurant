@@ -4,12 +4,12 @@ namespace DECISIVE_COIN_SYSTEM.STATE_TYPE
 {
     internal class ShowScreenMask : IState
     {
-        private DecisiveCoinSystem DecisiveCoinSystem;
+        private DecisiveCoinSystem MainSystem;
         
         public void OnEnter(DecisiveCoinSystem system)
         {
-            DecisiveCoinSystem = system;
-            DecisiveCoinSystem.ShowScreenMask();
+            MainSystem = system;
+            MainSystem.ShowScreenMask(() => MainSystem.ReadyToTossCoinState());
         }
 
         public void OnExit()
