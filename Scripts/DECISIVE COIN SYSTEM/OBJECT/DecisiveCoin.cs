@@ -45,7 +45,7 @@ namespace DECISIVE_COIN_SYSTEM.OBJECT
         {
             if (!Interactable) return;
             Interactable = false;
-            MoveToLandPoint();
+            MoveToLandPoint().OnComplete(() => OnTossComplete?.Invoke());
         }
         
         public void SetInteractable(bool interactable)
@@ -53,31 +53,37 @@ namespace DECISIVE_COIN_SYSTEM.OBJECT
             Interactable = interactable;
         }
         
-        public void MoveToTossPoint(System.Action onComplete)
+        public Tween MoveToTossPoint()
         {
             KillTween();
             
             Rect.SetParent(TossPoint);
-            MoveTween = MoveToZero()
-                .OnComplete(() => onComplete?.Invoke());
+            MoveTween = MoveToZero();
+            return MoveTween;
         }
 
-        private void MoveToLandPoint()
+        private Tween MoveToLandPoint()
         {
             KillTween();
             
             Rect.SetParent(LandPoint);
-            Toss()
-                .OnComplete(() => OnTossComplete?.Invoke());
+            return Toss();
         }
 
-        public void MoveToShowPoint(System.Action onComplete)
+        public Tween MoveToShowPoint()
         {
             KillTween();
             
             Rect.SetParent(ShowPoint);
-            MoveTween = ShowTossResult()
-                .OnComplete(() => onComplete?.Invoke());
+            MoveTween = ShowTossResult();
+            return MoveTween;
+        }
+
+        public Tween HideCoin()
+        {
+            KillTween();
+            ScaleTween = ScaleCoinToZeroWhenHide();
+            return ScaleTween;
         }
         
         #region Tween
@@ -188,11 +194,12 @@ namespace DECISIVE_COIN_SYSTEM.OBJECT
             
             
             
-            private Tween ShowTossResult()
+            private Tween ShowTossResult(System.Action onComplete = null)
             {
                 return DOTween.Sequence()
                     .Append(MoveTween = MoveToZero())
-                    .Append(ScaleTween = ScaleCoinWhenShowTossResult());
+                    .Append(ScaleTween = ScaleCoinWhenShowTossResult())
+                    .OnComplete(() => onComplete?.Invoke());
             }
 
             private Tween ScaleCoinWhenShowTossResult()
@@ -200,6 +207,18 @@ namespace DECISIVE_COIN_SYSTEM.OBJECT
                 return Rect
                     .DOScale(Vector2.one * 2, 1)
                     .SetEase(Ease.OutBack);
+            }
+            
+            
+            
+            
+            
+            private Tween ScaleCoinToZeroWhenHide(System.Action onComplete = null)
+            {
+                return Rect
+                    .DOScale(Vector2.zero, 1)
+                    .SetEase(Ease.InBack)
+                    .OnComplete(() => onComplete?.Invoke());
             }
             
             

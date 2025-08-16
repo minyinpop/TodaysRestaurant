@@ -6,7 +6,6 @@ namespace DECISIVE_COIN_SYSTEM.STATE_MACHINE
 
         public void ChangeState(DecisiveCoinSystem system, IState newState)
         {
-            CurrentState?.OnExit();
             CurrentState = newState;
             CurrentState?.OnEnter(system);
         }

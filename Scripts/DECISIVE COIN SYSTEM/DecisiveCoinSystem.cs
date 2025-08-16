@@ -1,6 +1,8 @@
+using DECISIVE_COIN_SYSTEM.Data;
 using DECISIVE_COIN_SYSTEM.OBJECT;
 using DECISIVE_COIN_SYSTEM.STATE_MACHINE;
 using DECISIVE_COIN_SYSTEM.STATE_TYPE;
+using DG.Tweening;
 using UnityEngine;
 
 namespace DECISIVE_COIN_SYSTEM
@@ -12,8 +14,12 @@ namespace DECISIVE_COIN_SYSTEM
     {
         private readonly StateMachine StateMachine = new();
 
+        [field: Header("Object")]
         [field: SerializeField] private ScreenMask ScreenMask;
         [field: SerializeField] private DecisiveCoin DecisiveCoin;
+        [field: SerializeField] private TossResultText TossResultText;
+
+        private readonly TossResult TossResult = new();
 
         private void Start()
         {
@@ -37,49 +43,27 @@ namespace DECISIVE_COIN_SYSTEM
         }
 
         #region State Machine
-            private void ShowScreenMaskState()
-            {
-                StateMachine.ChangeState(this, new ShowScreenMask());
-            }
-
-            public void ReadyToTossCoinState()
-            {
-                StateMachine.ChangeState(this, new ReadyToTossCoin());
-            }
-
-            private void ShowTossResultState()
-            {
-                StateMachine.ChangeState(this, new ShowTossResult());
-            }
+            private void ShowScreenMaskState() => StateMachine.ChangeState(this, new ShowScreenMask());
+            public void ReadyToTossCoinState() => StateMachine.ChangeState(this, new ReadyToTossCoin());
+            private void ShowTossResultState() => StateMachine.ChangeState(this, new ShowTossResult());
+            public void HideTossResultState() => StateMachine.ChangeState(this, new HideTossResult());
         #endregion
 
         #region Screen Mask
-            public void ShowScreenMask(System.Action onComplete)
-            {
-                ScreenMask.Show(onComplete);
-            }
-            
-            public void HideScreenMask(System.Action onComplete)
-            {
-                ScreenMask.Hide(onComplete);
-            }
+            public Tween ShowScreenMask() => ScreenMask.Show();
+            public Tween HideScreenMask() => ScreenMask.Hide();
         #endregion
 
         #region Decisive Coin
-            public void MoveToTossPoint(System.Action onComplete = null)
-            {
-                DecisiveCoin.MoveToTossPoint(() =>
-                {
-                    DecisiveCoin.SetInteractable(true);
-                    onComplete?.Invoke();
-                });
-            }
+            public void SetCoinInteractToTrue() => DecisiveCoin.SetInteractable(true);
+            public Tween MoveToTossPoint() => DecisiveCoin.MoveToTossPoint();
+            public Tween MoveToShowPoint() => DecisiveCoin.MoveToShowPoint();
+            public Tween HideCoin() => DecisiveCoin.HideCoin();
+        #endregion
 
-            public void MoveToShowPoint(System.Action onComplete = null)
-            {
-                DecisiveCoin.MoveToShowPoint(() => onComplete?.Invoke());
-            }
-            
+        #region TossResultText
+            public Tween ShowTossResultText() => TossResultText.ShowText();
+            public Tween HideTossResultText() => TossResultText.HideText();
         #endregion
     }
 }

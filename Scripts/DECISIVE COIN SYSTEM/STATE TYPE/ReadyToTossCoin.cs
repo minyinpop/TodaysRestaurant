@@ -1,19 +1,17 @@
 using DECISIVE_COIN_SYSTEM.STATE_MACHINE;
+using DG.Tweening;
 
 namespace DECISIVE_COIN_SYSTEM.STATE_TYPE
 {
     internal class ReadyToTossCoin : IState
     {
-        private DecisiveCoinSystem DecisiveCoinSystem;
+        private DecisiveCoinSystem MainSystem;
         
         public void OnEnter(DecisiveCoinSystem system)
         {
-            DecisiveCoinSystem = system;
-            DecisiveCoinSystem.MoveToTossPoint();
-        }
-
-        public void OnExit()
-        {
+            MainSystem = system;
+            MainSystem.MoveToTossPoint()
+                .OnComplete(() => MainSystem.SetCoinInteractToTrue());
         }
     }
 }

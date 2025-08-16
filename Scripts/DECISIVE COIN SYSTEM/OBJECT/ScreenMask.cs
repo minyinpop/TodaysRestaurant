@@ -11,20 +11,18 @@ namespace DECISIVE_COIN_SYSTEM.OBJECT
         
         private const float FadeDuration = .5f;
 
-        public void Show(System.Action onComplete)
+        public Tween Show()
         {
             KillTween();
-
-            FadeTween = ShowScreenMask()
-                .OnComplete(() => onComplete());
+            FadeTween = ShowScreenMask();
+            return FadeTween;
         }
 
-        public void Hide(System.Action onComplete)
+        public Tween Hide()
         {
             KillTween();
-            
-            FadeTween = HideScreenMask()
-                .OnComplete(() => onComplete());
+            FadeTween = HideScreenMask();
+            return FadeTween;
         }
         
         #region Tween

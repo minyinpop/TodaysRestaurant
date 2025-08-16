@@ -1,22 +1,22 @@
 using DECISIVE_COIN_SYSTEM.STATE_MACHINE;
 using DG.Tweening;
+using UnityEngine;
 
 namespace DECISIVE_COIN_SYSTEM.STATE_TYPE
 {
-    internal class ShowTossResult : IState
+    internal class HideTossResult : IState
     {
         private DecisiveCoinSystem MainSystem;
-
+        
         public void OnEnter(DecisiveCoinSystem system)
         {
             MainSystem = system;
             
             DOTween.Sequence()
-                .Append(MainSystem.MoveToShowPoint())
-                .AppendInterval(.5f)
-                .Append(MainSystem.ShowTossResultText())
-                .AppendInterval(2)
-                .OnComplete(() => MainSystem.HideTossResultState());
+                .Append(MainSystem.HideCoin())
+                .Join(MainSystem.HideTossResultText())
+                .Append(MainSystem.HideScreenMask())
+                .OnComplete(() => Debug.Log("Finish All Hide Methods."));
         }
     }
 }
