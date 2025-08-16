@@ -1,22 +1,22 @@
 using DECISIVE_COIN_SYSTEM.STATE_MACHINE;
 using DG.Tweening;
-using UnityEngine;
 
 namespace DECISIVE_COIN_SYSTEM.STATE_TYPE
 {
     internal class HideTossResult : IState
     {
-        private DecisiveCoinSystem MainSystem;
+        private readonly System.Action onComplete;
+        public HideTossResult(System.Action OnComplete) => onComplete = OnComplete;
         
-        public void OnEnter(DecisiveCoinSystem system)
-        {
-            MainSystem = system;
-            
-            DOTween.Sequence()
-                .Append(MainSystem.HideCoin())
-                .Join(MainSystem.HideTossResultText())
-                .Append(MainSystem.HideScreenMask())
-                .OnComplete(() => Debug.Log("Finish All Hide Methods."));
-        }
+        #region Interface
+            public void OnEnter(DecisiveCoinSystem system)
+            {
+                DOTween.Sequence()
+                    .Append(system.HideCoin())
+                    .Join(system.HideTossResultText())
+                    .Append(system.HideScreenMask())
+                    .OnComplete(() => onComplete?.Invoke());
+            }
+        #endregion
     }
 }

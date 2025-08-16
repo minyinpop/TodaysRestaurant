@@ -1,3 +1,4 @@
+using DECISIVE_COIN_SYSTEM.Data;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -25,7 +26,7 @@ namespace DECISIVE_COIN_SYSTEM.OBJECT
 
         private bool Interactable;
 
-        public event System.Action OnTossComplete;
+        public event System.Action OnClicked;
         
         public void OnPointerEnter(PointerEventData eventData)
         {
@@ -45,7 +46,7 @@ namespace DECISIVE_COIN_SYSTEM.OBJECT
         {
             if (!Interactable) return;
             Interactable = false;
-            MoveToLandPoint().OnComplete(() => OnTossComplete?.Invoke());
+            OnClicked?.Invoke();
         }
         
         public void SetInteractable(bool interactable)
@@ -62,12 +63,12 @@ namespace DECISIVE_COIN_SYSTEM.OBJECT
             return MoveTween;
         }
 
-        private Tween MoveToLandPoint()
+        public Tween Tossing(out TossResult result)
         {
             KillTween();
             
             Rect.SetParent(LandPoint);
-            return Toss();
+            return PlayAnimationWhenToss(out result);
         }
 
         public Tween MoveToShowPoint()
@@ -111,17 +112,17 @@ namespace DECISIVE_COIN_SYSTEM.OBJECT
                     .DOScale(Vector2.one, .25f)
                     .SetEase(Ease.OutExpo);
             }
-            
-            
-            
-            
-            
-            private Tween Toss()
+
+
+
+
+
+            private Tween PlayAnimationWhenToss(out TossResult result)
             {
                 return DOTween.Sequence()
                     .Append(ScaleTween = SetScaleToOneWhenClicked())
                     .Append(MoveTween = MoveCoinWhenClicked())
-                    .Join(RotateTween = TurnCoinWhenClicked())
+                    .Join(RotateTween = TurnCoinWhenClicked(out result))
                     .Join(ScaleTween = ScaleCoinWhenClicked())
                     .AppendInterval(1)
                     .OnUpdate(ChangeSideWhenToss());
@@ -147,13 +148,15 @@ namespace DECISIVE_COIN_SYSTEM.OBJECT
                     .SetEase(Ease.Linear);
             }
 
-            private Tween TurnCoinWhenClicked()
+            private Tween TurnCoinWhenClicked(out TossResult result)
             {
                 var randomYTurns = Random.Range(24, 32);
                 var randomZTurns = Random.Range(24, 32);
                 var randomYAngle = 180 * randomYTurns;
                 var randomZAngle = Random.Range(1, 361) * randomZTurns;
                 var targetAngle = new Vector3(Rect.eulerAngles.x, randomYAngle, randomZAngle);
+
+                result = randomYTurns % 2 == 0 ? TossResult.Heads : TossResult.Tails;
                 
                 return Rect
                     .DORotate(targetAngle, 2, RotateMode.FastBeyond360)

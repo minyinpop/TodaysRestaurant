@@ -5,18 +5,19 @@ namespace DECISIVE_COIN_SYSTEM.STATE_TYPE
 {
     internal class ShowTossResult : IState
     {
-        private DecisiveCoinSystem MainSystem;
-
-        public void OnEnter(DecisiveCoinSystem system)
-        {
-            MainSystem = system;
-            
-            DOTween.Sequence()
-                .Append(MainSystem.MoveToShowPoint())
-                .AppendInterval(.5f)
-                .Append(MainSystem.ShowTossResultText())
-                .AppendInterval(2)
-                .OnComplete(() => MainSystem.HideTossResultState());
-        }
+        private readonly System.Action onComplete;
+        public ShowTossResult(System.Action OnComplete) => onComplete = OnComplete;
+        
+        #region Interface
+            public void OnEnter(DecisiveCoinSystem system)
+            {
+                DOTween.Sequence()
+                    .Append(system.MoveToShowPoint())
+                    .AppendInterval(.5f)
+                    .Append(system.ShowTossResultText())
+                    .AppendInterval(2)
+                    .OnComplete(() => onComplete?.Invoke());
+            }
+        #endregion
     }
 }

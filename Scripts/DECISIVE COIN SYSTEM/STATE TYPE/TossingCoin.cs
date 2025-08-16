@@ -3,15 +3,15 @@ using DG.Tweening;
 
 namespace DECISIVE_COIN_SYSTEM.STATE_TYPE
 {
-    internal class ReadyToTossCoin : IState
+    internal class TossingCoin : IState
     {
         private readonly System.Action onComplete;
-        public ReadyToTossCoin(System.Action OnComplete) => onComplete = OnComplete;
+        public TossingCoin(System.Action OnComplete) => onComplete = OnComplete;
         
         #region Interface
             public void OnEnter(DecisiveCoinSystem system)
             {
-                system.MoveToTossPoint()
+                system.TossingCoin()
                     .OnComplete(() => onComplete?.Invoke());
             }
         #endregion

@@ -5,13 +5,15 @@ namespace DECISIVE_COIN_SYSTEM.STATE_TYPE
 {
     internal class ShowScreenMask : IState
     {
-        private DecisiveCoinSystem MainSystem;
-        
-        public void OnEnter(DecisiveCoinSystem system)
-        {
-            MainSystem = system;
-            MainSystem.ShowScreenMask()
-                .OnComplete(() => MainSystem.ReadyToTossCoinState());
-        }
+        private readonly System.Action onComplete;
+        public ShowScreenMask(System.Action OnComplete) => onComplete = OnComplete;
+
+        #region Interface
+            public void OnEnter(DecisiveCoinSystem system)
+            {
+                system.ShowScreenMask()
+                    .OnComplete(() => onComplete?.Invoke());
+            }
+        #endregion
     }
 }

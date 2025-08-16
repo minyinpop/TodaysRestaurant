@@ -7,9 +7,6 @@ using UnityEngine;
 
 namespace DECISIVE_COIN_SYSTEM
 {
-    /// <summary>
-    /// 如果要使用這個系統，請直接 SetActive 就可以了。
-    /// </summary>
     public class DecisiveCoinSystem : MonoBehaviour
     {
         private readonly StateMachine StateMachine = new();
@@ -19,11 +16,11 @@ namespace DECISIVE_COIN_SYSTEM
         [field: SerializeField] private DecisiveCoin DecisiveCoin;
         [field: SerializeField] private TossResultText TossResultText;
 
-        private readonly TossResult TossResult = new();
+        private TossResult TossResult;
 
         private void Start()
         {
-            DecisiveCoin.OnTossComplete += ShowTossResultState;
+            DecisiveCoin.OnClicked += TossingCoinState;
         }
 
         private void OnEnable()
@@ -43,10 +40,12 @@ namespace DECISIVE_COIN_SYSTEM
         }
 
         #region State Machine
-            private void ShowScreenMaskState() => StateMachine.ChangeState(this, new ShowScreenMask());
-            public void ReadyToTossCoinState() => StateMachine.ChangeState(this, new ReadyToTossCoin());
-            private void ShowTossResultState() => StateMachine.ChangeState(this, new ShowTossResult());
-            public void HideTossResultState() => StateMachine.ChangeState(this, new HideTossResult());
+            private void ChangeState(IState newState) => StateMachine.ChangeState(this, newState);
+            private void ShowScreenMaskState() => ChangeState(new ShowScreenMask(ReadyToTossCoinState));
+            private void ReadyToTossCoinState() => ChangeState(new ReadyToTossCoin(SetCoinInteractToTrue));
+            private void TossingCoinState() => ChangeState(new TossingCoin(ShowTossResultState));
+            private void ShowTossResultState() => ChangeState(new ShowTossResult(HideTossResultState));
+            private void HideTossResultState() => ChangeState(new HideTossResult(() => Debug.Log("Toss Finished.")));
         #endregion
 
         #region Screen Mask
@@ -55,14 +54,15 @@ namespace DECISIVE_COIN_SYSTEM
         #endregion
 
         #region Decisive Coin
-            public void SetCoinInteractToTrue() => DecisiveCoin.SetInteractable(true);
+            private void SetCoinInteractToTrue() => DecisiveCoin.SetInteractable(true);
             public Tween MoveToTossPoint() => DecisiveCoin.MoveToTossPoint();
+            public Tween TossingCoin() => DecisiveCoin.Tossing(out TossResult);
             public Tween MoveToShowPoint() => DecisiveCoin.MoveToShowPoint();
             public Tween HideCoin() => DecisiveCoin.HideCoin();
         #endregion
 
         #region TossResultText
-            public Tween ShowTossResultText() => TossResultText.ShowText();
+            public Tween ShowTossResultText() => TossResultText.ShowText(TossResult);
             public Tween HideTossResultText() => TossResultText.HideText();
         #endregion
     }

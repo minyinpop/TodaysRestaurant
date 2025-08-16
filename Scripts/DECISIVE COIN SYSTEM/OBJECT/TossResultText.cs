@@ -1,3 +1,4 @@
+using DECISIVE_COIN_SYSTEM.Data;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
@@ -11,16 +12,20 @@ namespace DECISIVE_COIN_SYSTEM.OBJECT
         [field: SerializeField] private RectTransform Rect;
         [field: SerializeField] private TextMeshProUGUI TextTMP;
         
+        [field: Header("Content")]
+        [field: SerializeField, TextArea] private string HeadsContent;
+        [field: SerializeField, TextArea] private string TailsContent;
+        
         private Tween ScaleTween;
 
-        public Tween ShowText()
+        public Tween ShowText(TossResult result)
         {
             KillTween();
 
             return DOTween.Sequence()
                 .AppendCallback(() =>
                 {
-                    TextTMP.text = "請修改文字";
+                    TextTMP.text = result == TossResult.Heads ? HeadsContent : TailsContent;
                     Text.SetActive(true);
                 })
                 .Append(ScaleTween = ScaleShowTween());
