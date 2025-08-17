@@ -1,4 +1,4 @@
-using BATTLE.DECISIVE_COIN_SYSTEM.Data;
+using BATTLE.DECISIVE_COIN_SYSTEM.DATA;
 using BATTLE.DECISIVE_COIN_SYSTEM.OBJECT;
 using BATTLE.DECISIVE_COIN_SYSTEM.STATE_MACHINE;
 using BATTLE.DECISIVE_COIN_SYSTEM.STATE_TYPE;
@@ -16,7 +16,7 @@ namespace BATTLE.DECISIVE_COIN_SYSTEM
         [field: SerializeField] private DecisiveCoin DecisiveCoin;
         [field: SerializeField] private TossResultText TossResultText;
 
-        private TossResult TossResult;
+        private TossResult TossResult = TossResult.Null;
 
         private void Start()
         {

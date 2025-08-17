@@ -1,4 +1,4 @@
-namespace BATTLE.DECISIVE_COIN_SYSTEM.Data
+namespace BATTLE.DECISIVE_COIN_SYSTEM.DATA
 {
     internal enum TossResult
     {

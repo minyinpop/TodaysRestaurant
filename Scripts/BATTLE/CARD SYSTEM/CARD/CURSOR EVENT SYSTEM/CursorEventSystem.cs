@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace BATTLE.CARD_SYSTEM.CURSOR_EVENT_SYSTEM
+namespace BATTLE.CARD_SYSTEM.CARD.CURSOR_EVENT_SYSTEM
 {
     internal class CursorEventSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
     {

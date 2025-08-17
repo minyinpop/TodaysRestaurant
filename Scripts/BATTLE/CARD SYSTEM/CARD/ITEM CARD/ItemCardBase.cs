@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace BATTLE.CARD_SYSTEM.ITEM_CARD
+namespace BATTLE.CARD_SYSTEM.CARD.ITEM_CARD
 {
     internal abstract class ItemCardBase : MonoBehaviour
     {

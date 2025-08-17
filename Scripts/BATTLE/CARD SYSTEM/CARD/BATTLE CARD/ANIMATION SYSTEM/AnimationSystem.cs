@@ -1,7 +1,7 @@
 using DG.Tweening;
 using UnityEngine;
 
-namespace BATTLE.CARD_SYSTEM.BATTLE_CARD.ANIMATION_SYSTEM
+namespace BATTLE.CARD_SYSTEM.CARD.BATTLE_CARD.ANIMATION_SYSTEM
 {
     internal class AnimationSystem : MonoBehaviour
     {

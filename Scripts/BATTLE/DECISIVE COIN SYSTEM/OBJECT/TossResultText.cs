@@ -1,4 +1,4 @@
-using BATTLE.DECISIVE_COIN_SYSTEM.Data;
+using BATTLE.DECISIVE_COIN_SYSTEM.DATA;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;

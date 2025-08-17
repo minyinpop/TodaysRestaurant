@@ -1,4 +1,4 @@
-namespace BATTLE.CARD_SYSTEM.BATTLE_CARD.FORK
+namespace BATTLE.CARD_SYSTEM.CARD.BATTLE_CARD.FORK
 {
     internal class Normal : BattleCardBase
     {
