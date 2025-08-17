@@ -1,19 +1,19 @@
-using BATTLE.CARD_SYSTEM.MANAGER.CARD_DRAW_SYSTEM;
+using BATTLE.CARD_SYSTEM.MANAGER.CARD_POOL_SYSTEM;
 using BATTLE.CARD_SYSTEM.MANAGER.HAND_CARD_SYSTEM;
 using UnityEngine;
 
 namespace BATTLE.CARD_SYSTEM.MANAGER
 {
-    [RequireComponent(typeof(CardDrawSystem))]
+    [RequireComponent(typeof(CardPoolSystem))]
     [RequireComponent(typeof(HandCardSystem))]
     internal class CardManagementSystem : MonoBehaviour
     {
-        private CardDrawSystem CardDrawSystem;
+        private CardPoolSystem CardPoolSystem;
         private HandCardSystem HandCardSystem;
         
         private void Awake()
         {
-            CardDrawSystem = GetComponent<CardDrawSystem>();
+            CardPoolSystem = GetComponent<CardPoolSystem>();
             HandCardSystem = GetComponent<HandCardSystem>();
         }
     }

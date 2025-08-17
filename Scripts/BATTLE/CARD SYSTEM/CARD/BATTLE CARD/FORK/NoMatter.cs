@@ -1,6 +1,6 @@
 namespace BATTLE.CARD_SYSTEM.CARD.BATTLE_CARD.FORK
 {
-    internal class XD : BattleCardBase
+    internal class NoMatter : BattleCardBase
     {
     }
 }

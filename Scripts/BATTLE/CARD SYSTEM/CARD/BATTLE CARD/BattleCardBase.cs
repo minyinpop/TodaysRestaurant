@@ -1,4 +1,5 @@
 using BATTLE.CARD_SYSTEM.CARD.BATTLE_CARD.ANIMATION_SYSTEM;
+using BATTLE.CARD_SYSTEM.CARD.BATTLE_CARD.INTERFACE;
 using BATTLE.CARD_SYSTEM.CARD.CURSOR_EVENT_SYSTEM;
 using UnityEngine;
 
@@ -6,7 +7,7 @@ namespace BATTLE.CARD_SYSTEM.CARD.BATTLE_CARD
 {
     [RequireComponent(typeof(CursorEventSystem))]
     [RequireComponent(typeof(AnimationSystem))]
-    internal abstract class BattleCardBase : MonoBehaviour
+    internal abstract class BattleCardBase : MonoBehaviour, IBattleCard
     {
         private CursorEventSystem CursorEventSystem;
         private AnimationSystem AnimationSystem;
@@ -28,32 +29,41 @@ namespace BATTLE.CARD_SYSTEM.CARD.BATTLE_CARD
             CursorEventSystem.OnCursorExit += OnCursorExit;
             CursorEventSystem.OnCursorClick += OnCursorClick;
         }
-        
-        private void OnCursorEnter()
-        {
-            ScaleUpWhenCursorEnter();
-        }
-        
-        private void OnCursorExit()
-        {
-            ScaleDownWhenCursorExit();
-        }
 
-        private void OnCursorClick()
-        {
-            IsSelected = !IsSelected;
+        #region IBattleCard Interface
+            public void Pickup()
+            {
+                
+            }
+        #endregion
+        
+        #region Cursor Event System
+            private void OnCursorEnter()
+            {
+                ScaleUpWhenCursorEnter();
+            }
             
-            if (IsSelected)
+            private void OnCursorExit()
             {
-                OnSelected?.Invoke();
-                PopUpWhenCursorClick();
+                ScaleDownWhenCursorExit();
             }
-            else
+
+            private void OnCursorClick()
             {
-                OnDeselected?.Invoke();
-                PopDownWhenCursorClick();
+                IsSelected = !IsSelected;
+                
+                if (IsSelected)
+                {
+                    OnSelected?.Invoke();
+                    PopUpWhenCursorClick();
+                }
+                else
+                {
+                    OnDeselected?.Invoke();
+                    PopDownWhenCursorClick();
+                }
             }
-        }
+        #endregion
         
         #region Animation System
             private void ScaleUpWhenCursorEnter() => AnimationSystem.ScaleUpWhenCursorEnter();
