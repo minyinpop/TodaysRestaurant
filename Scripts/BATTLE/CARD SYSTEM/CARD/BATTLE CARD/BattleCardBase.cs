@@ -1,6 +1,10 @@
 using BATTLE.CARD_SYSTEM.CARD.BATTLE_CARD.ANIMATION_SYSTEM;
+using BATTLE.CARD_SYSTEM.CARD.BATTLE_CARD.DATA;
 using BATTLE.CARD_SYSTEM.CARD.BATTLE_CARD.INTERFACE;
+using BATTLE.CARD_SYSTEM.CARD.BATTLE_CARD.STATE_MACHINE;
+using BATTLE.CARD_SYSTEM.CARD.BATTLE_CARD.STATE_TYPE;
 using BATTLE.CARD_SYSTEM.CARD.CURSOR_EVENT_SYSTEM;
+using DG.Tweening;
 using UnityEngine;
 
 namespace BATTLE.CARD_SYSTEM.CARD.BATTLE_CARD
@@ -9,9 +13,15 @@ namespace BATTLE.CARD_SYSTEM.CARD.BATTLE_CARD
     [RequireComponent(typeof(AnimationSystem))]
     internal abstract class BattleCardBase : MonoBehaviour, IBattleCard
     {
+        [field: Header("Battle Card SO")]
+        [field: SerializeField] private BattleCardSO BattleCardSO;
+        
         private CursorEventSystem CursorEventSystem;
         private AnimationSystem AnimationSystem;
 
+        private readonly StateMachine StateMachine = new();
+
+        private bool Interactable;
         private bool IsSelected;
 
         public event System.Action OnSelected;
@@ -21,6 +31,8 @@ namespace BATTLE.CARD_SYSTEM.CARD.BATTLE_CARD
         {
             CursorEventSystem = GetComponent<CursorEventSystem>();
             AnimationSystem = GetComponent<AnimationSystem>();
+
+            InCardPoolState();
         }
 
         private void Start()
@@ -29,6 +41,9 @@ namespace BATTLE.CARD_SYSTEM.CARD.BATTLE_CARD
             CursorEventSystem.OnCursorExit += OnCursorExit;
             CursorEventSystem.OnCursorClick += OnCursorClick;
         }
+        
+        private void SetInteractableToTrue() => Interactable = true;
+        private void SetInteractableToFalse() => Interactable = false;
 
         #region IBattleCard Interface
             public void Pickup()
@@ -37,19 +52,27 @@ namespace BATTLE.CARD_SYSTEM.CARD.BATTLE_CARD
             }
         #endregion
         
+        #region State Machine
+            private void ChangeState(IState newState) => StateMachine.ChangeState(this, newState);
+            private void InCardPoolState() => ChangeState(new InCardPool());
+        #endregion
+        
         #region Cursor Event System
             private void OnCursorEnter()
             {
+                if (!Interactable) return;
                 ScaleUpWhenCursorEnter();
             }
             
             private void OnCursorExit()
             {
+                if (!Interactable) return;
                 ScaleDownWhenCursorExit();
             }
 
             private void OnCursorClick()
             {
+                if (!Interactable) return;
                 IsSelected = !IsSelected;
                 
                 if (IsSelected)
@@ -66,10 +89,12 @@ namespace BATTLE.CARD_SYSTEM.CARD.BATTLE_CARD
         #endregion
         
         #region Animation System
-            private void ScaleUpWhenCursorEnter() => AnimationSystem.ScaleUpWhenCursorEnter();
-            private void ScaleDownWhenCursorExit() => AnimationSystem.ScaleDownWhenCursorExit();
-            private void PopUpWhenCursorClick() => AnimationSystem.PopUpWhenCursorClick();
-            private void PopDownWhenCursorClick() => AnimationSystem.PopDownWhenCursorClick();
+            private Tween ScaleUpWhenCursorEnter() => AnimationSystem.ScaleUpWhenCursorEnter();
+            private Tween ScaleDownWhenCursorExit() => AnimationSystem.ScaleDownWhenCursorExit();
+            private Tween PopUpWhenCursorClick() => AnimationSystem.PopUpWhenCursorClick();
+            private Tween PopDownWhenCursorClick() => AnimationSystem.PopDownWhenCursorClick();
+            private Tween TurnToFront() => AnimationSystem.TurnToFront();
+            private Tween TurnToBack() => AnimationSystem.TurnToBack();
         #endregion
     }
 }
