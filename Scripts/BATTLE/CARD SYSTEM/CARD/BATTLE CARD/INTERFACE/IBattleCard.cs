@@ -2,6 +2,6 @@ namespace BATTLE.CARD_SYSTEM.CARD.BATTLE_CARD.INTERFACE
 {
     internal interface IBattleCard
     {
-        public void Pickup();
+        public void OnSpawnInCardPool();
     }
 }

@@ -1,22 +1,66 @@
-using BATTLE.CARD_SYSTEM.MANAGER.CARD_POOL_SYSTEM.DATA;
+using System.Collections;
+using System.Collections.Generic;
+using BATTLE.CARD_SYSTEM.CARD.BATTLE_CARD.INTERFACE;
+using BATTLE.CARD_SYSTEM.MANAGER.CARD_POOL_SYSTEM.CARD_POOL_SLOT;
+using BATTLE.CARD_SYSTEM.MANAGER.CARD_POOL_SYSTEM.PLAYER_DECK;
 using UnityEngine;
 
 namespace BATTLE.CARD_SYSTEM.MANAGER.CARD_POOL_SYSTEM
 {
     internal class CardPoolSystem : MonoBehaviour
     {
+        [field: Header("Slots")]
+        [field: SerializeField] private List<CardPoolSlot> SlotList;
+        
+        [field: Header("Point")]
+        [field: SerializeField] private RectTransform SpawnPoint;
+        [field: SerializeField] private List<RectTransform> ShowPointList;
+        
+        [field: Header("Player Deck")]
         [field: SerializeField] private PlayerDeckSO PlayerDeckSO;
 
-        public void DrawCard(int drawNumber)
+        private IEnumerator CurrentCoroutine;
+        
+        private void Start()
         {
-            for (var i = 0; i < drawNumber; i++)
+            // For Development Only.
+            RefillCardPool();
+        }
+
+        private void OnDisable()
+        {
+            if (CurrentCoroutine is not null)
             {
-                var randomCard = PickupRandomCardInDeck();
+                StopCoroutine(CurrentCoroutine);
+                CurrentCoroutine = null;
             }
         }
+
+        private void RefillCardPool()
+        {
+            CurrentCoroutine = RefillCardPoolCoroutine();
+            StartCoroutine(CurrentCoroutine);
+        }
         
-        #region Player Deck
-            private GameObject PickupRandomCardInDeck() => PlayerDeckSO.GetRandomCard();
-        #endregion
+        private IEnumerator RefillCardPoolCoroutine()
+        {
+            Debug.Log("Refill Card Pool Start.");
+            
+            foreach (var slot in SlotList)
+            {
+                if (!slot.IsEmpty()) continue;
+
+                var selectedCard = PlayerDeckSO.GetRandomCard();
+                var card = Instantiate(selectedCard, SpawnPoint);
+                
+                slot.AddCard(card);
+                
+                card.transform.SetParent(slot.transform);
+                card.GetComponent<IBattleCard>().OnSpawnInCardPool();
+                yield return new WaitForSeconds(.2f);
+            }
+            
+            Debug.Log("Refill Card Pool Done.");
+        }
     }
 }
