@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
-using BATTLE.CARD_SYSTEM.CARD.BATTLE_CARD.INTERFACE;
+using BATTLE.CARD_SYSTEM.CARD;
 using BATTLE.CARD_SYSTEM.MANAGER.CARD_POOL_SYSTEM.CARD_POOL_SLOT;
 using BATTLE.CARD_SYSTEM.MANAGER.CARD_POOL_SYSTEM.PLAYER_DECK;
+using BATTLE.CARD_SYSTEM.MANAGER.DRAW_CARD_SYSTEM;
 using UnityEngine;
 
 namespace BATTLE.CARD_SYSTEM.MANAGER.CARD_POOL_SYSTEM
@@ -19,12 +20,8 @@ namespace BATTLE.CARD_SYSTEM.MANAGER.CARD_POOL_SYSTEM
         [field: SerializeField] private PlayerDeckSO PlayerDeckSO;
 
         private IEnumerator CurrentCoroutine;
-        
-        private void Start()
-        {
-            // For Development Only.
-            RefillCardPool();
-        }
+
+        public event System.Action OnRefillCardPoolComplete;
 
         private void OnDisable()
         {
@@ -36,7 +33,7 @@ namespace BATTLE.CARD_SYSTEM.MANAGER.CARD_POOL_SYSTEM
         }
 
         #region Refill Card Pool
-            private void RefillCardPool()
+            public void RefillCardPool()
             {
                 CurrentCoroutine = RefillCardPoolCoroutine();
                 StartCoroutine(CurrentCoroutine);
@@ -44,23 +41,22 @@ namespace BATTLE.CARD_SYSTEM.MANAGER.CARD_POOL_SYSTEM
             
             private IEnumerator RefillCardPoolCoroutine()
             {
-                Debug.Log("Refill Card Pool Start.");
-                
                 foreach (var slot in SlotList)
                 {
                     if (!slot.IsEmpty()) continue;
 
                     var targetParent = slot.transform;
                     var randomCard = PlayerDeckSO.GetRandomCard();
+                    
                     var card = Instantiate(randomCard, SpawnPoint);
+                    card.GetComponent<ICard>().OnSpawnInCardPool(targetParent);
                     
                     slot.AddCard(card);
-                    card.GetComponent<IBattleCard>().OnSpawnInCardPool(targetParent);
                     
                     yield return new WaitForSeconds(.2f);
                 }
-                
-                Debug.Log("Refill Card Pool Done.");
+
+                OnRefillCardPoolComplete?.Invoke();
             }
         #endregion
     }

@@ -1,3 +1,4 @@
+using BATTLE.CARD_SYSTEM.CARD;
 using UnityEngine;
 
 namespace BATTLE.CARD_SYSTEM.MANAGER.DRAW_CARD_SYSTEM
@@ -13,6 +14,7 @@ namespace BATTLE.CARD_SYSTEM.MANAGER.DRAW_CARD_SYSTEM
 
         public void DrawOneCard(GameObject card)
         {
+            card.GetComponent<ICard>().OnDrawCardAndShow(MiddlePoint);
         }
     }
 }

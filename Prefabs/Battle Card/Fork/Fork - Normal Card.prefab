@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 896646730714427130}
   - component: {fileID: 8387147396665922689}
   - component: {fileID: 5284719961952171872}
+  - component: {fileID: 1309059843700359518}
   - component: {fileID: 1746156538300559044}
   - component: {fileID: 5350698664651490825}
   - component: {fileID: 5911563479292937314}
@@ -80,6 +81,21 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1309059843700359518
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1779957173395971390}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f9626a8c046462186dc56e95478e082, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FrontImage: {fileID: 1132890026936844809}
+  BackImage: {fileID: 259134544400979781}
+  BattleCardSO: {fileID: 11400000, guid: 8b68270573cd3144aadee47a54c27477, type: 2}
 --- !u!114 &1746156538300559044
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -93,6 +109,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Rect: {fileID: 896646730714427130}
+  Front: {fileID: 6388883020535677824}
+  Back: {fileID: 7129234357791996008}
 --- !u!114 &5350698664651490825
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -119,6 +137,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CursorEventSystem: {fileID: 5350698664651490825}
   AnimationSystem: {fileID: 1746156538300559044}
+  CardSkinSystem: {fileID: 1309059843700359518}
 --- !u!1 &6388883020535677824
 GameObject:
   m_ObjectHideFlags: 0
@@ -184,7 +203,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 1916714201, guid: 21006fb5962a9114b8bd7ff86816b23b, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -259,7 +278,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: a530b84e56d5ee24799befac083df910, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

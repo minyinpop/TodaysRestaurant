@@ -1,7 +1,7 @@
 using BATTLE.CARD_SYSTEM.CARD.BATTLE_CARD.ANIMATION_SYSTEM;
-using BATTLE.CARD_SYSTEM.CARD.BATTLE_CARD.INTERFACE;
 using BATTLE.CARD_SYSTEM.CARD.BATTLE_CARD.STATE_MACHINE;
 using BATTLE.CARD_SYSTEM.CARD.BATTLE_CARD.STATE_TYPE;
+using BATTLE.CARD_SYSTEM.CARD.CARD_SKIN_SYSTEM;
 using BATTLE.CARD_SYSTEM.CARD.CURSOR_EVENT_SYSTEM;
 using DG.Tweening;
 using UnityEngine;
@@ -10,13 +10,15 @@ namespace BATTLE.CARD_SYSTEM.CARD.BATTLE_CARD
 {
     [RequireComponent(typeof(CursorEventSystem))]
     [RequireComponent(typeof(AnimationSystem))]
-    internal abstract class BattleCardBase : MonoBehaviour, IBattleCard
+    [RequireComponent(typeof(CardSkinSystem))]
+    internal abstract class BattleCardBase : MonoBehaviour, ICard
     {
         [field: Header("Component")]
         [field: SerializeField] private CursorEventSystem CursorEventSystem;
         [field: SerializeField] private AnimationSystem AnimationSystem;
+        [field: SerializeField] private CardSkinSystem CardSkinSystem;
 
-        private StateMachine StateMachine = new();
+        private readonly StateMachine StateMachine = new();
 
         private void Awake()
         {
@@ -30,11 +32,20 @@ namespace BATTLE.CARD_SYSTEM.CARD.BATTLE_CARD
             transform.SetParent(parent);
         }
         
-        #region IBattleCard
+        #region ICard
             public void OnSpawnInCardPool(Transform slotParent)
             {
                 SetParent(slotParent);
                 MoveToCardPoolSlotWhenSpawn();
+                
+                SetFrontImage();
+                SetBackImage();
+            }
+
+            public void OnDrawCardAndShow(Transform slotParent)
+            {
+                SetParent(slotParent);
+                MoveToShowPointWhenDraw();
             }
         #endregion
         
@@ -59,6 +70,12 @@ namespace BATTLE.CARD_SYSTEM.CARD.BATTLE_CARD
         
         #region Animation System
             private Tween MoveToCardPoolSlotWhenSpawn() => AnimationSystem.MoveToCardPoolSlotWhenSpawn();
+            private Tween MoveToShowPointWhenDraw() => AnimationSystem.MoveToShowPointWhenDraw();
+        #endregion
+        
+        #region Card Skin System
+            private void SetFrontImage() => CardSkinSystem.SetFrontImage();
+            private void SetBackImage() => CardSkinSystem.SetBackImage();
         #endregion
     }
 }
