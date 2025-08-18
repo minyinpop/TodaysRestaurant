@@ -14,7 +14,6 @@ namespace BATTLE.CARD_SYSTEM.MANAGER.CARD_POOL_SYSTEM
         
         [field: Header("Point")]
         [field: SerializeField] private RectTransform SpawnPoint;
-        [field: SerializeField] private List<RectTransform> ShowPointList;
         
         [field: Header("Player Deck")]
         [field: SerializeField] private PlayerDeckSO PlayerDeckSO;
@@ -36,31 +35,33 @@ namespace BATTLE.CARD_SYSTEM.MANAGER.CARD_POOL_SYSTEM
             }
         }
 
-        private void RefillCardPool()
-        {
-            CurrentCoroutine = RefillCardPoolCoroutine();
-            StartCoroutine(CurrentCoroutine);
-        }
-        
-        private IEnumerator RefillCardPoolCoroutine()
-        {
-            Debug.Log("Refill Card Pool Start.");
-            
-            foreach (var slot in SlotList)
+        #region Refill Card Pool
+            private void RefillCardPool()
             {
-                if (!slot.IsEmpty()) continue;
-
-                var selectedCard = PlayerDeckSO.GetRandomCard();
-                var card = Instantiate(selectedCard, SpawnPoint);
-                
-                slot.AddCard(card);
-                
-                card.transform.SetParent(slot.transform);
-                card.GetComponent<IBattleCard>().OnSpawnInCardPool();
-                yield return new WaitForSeconds(.2f);
+                CurrentCoroutine = RefillCardPoolCoroutine();
+                StartCoroutine(CurrentCoroutine);
             }
             
-            Debug.Log("Refill Card Pool Done.");
-        }
+            private IEnumerator RefillCardPoolCoroutine()
+            {
+                Debug.Log("Refill Card Pool Start.");
+                
+                foreach (var slot in SlotList)
+                {
+                    if (!slot.IsEmpty()) continue;
+
+                    var targetParent = slot.transform;
+                    var randomCard = PlayerDeckSO.GetRandomCard();
+                    var card = Instantiate(randomCard, SpawnPoint);
+                    
+                    slot.AddCard(card);
+                    card.GetComponent<IBattleCard>().OnSpawnInCardPool(targetParent);
+                    
+                    yield return new WaitForSeconds(.2f);
+                }
+                
+                Debug.Log("Refill Card Pool Done.");
+            }
+        #endregion
     }
 }

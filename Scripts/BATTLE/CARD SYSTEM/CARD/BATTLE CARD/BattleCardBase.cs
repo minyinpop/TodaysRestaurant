@@ -24,10 +24,16 @@ namespace BATTLE.CARD_SYSTEM.CARD.BATTLE_CARD
             CursorEventSystem.OnCursorExit += OnCursorExit;
             CursorEventSystem.OnCursorClick += OnCursorClick;
         }
+
+        private void SetParent(Transform parent)
+        {
+            transform.SetParent(parent);
+        }
         
         #region IBattleCard
-            public void OnSpawnInCardPool()
+            public void OnSpawnInCardPool(Transform slotParent)
             {
+                SetParent(slotParent);
                 MoveToCardPoolSlotWhenSpawn();
             }
         #endregion

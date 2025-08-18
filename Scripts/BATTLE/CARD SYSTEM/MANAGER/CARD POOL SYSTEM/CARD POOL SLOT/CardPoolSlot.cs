@@ -10,6 +10,11 @@ namespace BATTLE.CARD_SYSTEM.MANAGER.CARD_POOL_SYSTEM.CARD_POOL_SLOT
         {
             Card = card;
         }
+        
+        public GameObject GetCard()
+        {
+            return Card;
+        }
 
         public void RemoveCard()
         {
