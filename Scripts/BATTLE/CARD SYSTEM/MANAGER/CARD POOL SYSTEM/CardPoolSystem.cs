@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using BATTLE.CARD_SYSTEM.CARD;
 using BATTLE.CARD_SYSTEM.MANAGER.CARD_POOL_SYSTEM.CARD_POOL_SLOT;
 using BATTLE.CARD_SYSTEM.MANAGER.CARD_POOL_SYSTEM.PLAYER_DECK;
-using BATTLE.CARD_SYSTEM.MANAGER.DRAW_CARD_SYSTEM;
 using UnityEngine;
 
 namespace BATTLE.CARD_SYSTEM.MANAGER.CARD_POOL_SYSTEM
@@ -21,8 +20,6 @@ namespace BATTLE.CARD_SYSTEM.MANAGER.CARD_POOL_SYSTEM
 
         private IEnumerator CurrentCoroutine;
 
-        public event System.Action OnRefillCardPoolComplete;
-
         private void OnDisable()
         {
             if (CurrentCoroutine is not null)
@@ -33,13 +30,13 @@ namespace BATTLE.CARD_SYSTEM.MANAGER.CARD_POOL_SYSTEM
         }
 
         #region Refill Card Pool
-            public void RefillCardPool()
+            public void RefillCardPool(System.Action OnComplete)
             {
-                CurrentCoroutine = RefillCardPoolCoroutine();
+                CurrentCoroutine = RefillCardPoolCoroutine(OnComplete);
                 StartCoroutine(CurrentCoroutine);
             }
             
-            private IEnumerator RefillCardPoolCoroutine()
+            private IEnumerator RefillCardPoolCoroutine(System.Action OnComplete)
             {
                 foreach (var slot in SlotList)
                 {
@@ -56,7 +53,7 @@ namespace BATTLE.CARD_SYSTEM.MANAGER.CARD_POOL_SYSTEM
                     yield return new WaitForSeconds(.2f);
                 }
 
-                OnRefillCardPoolComplete?.Invoke();
+                OnComplete?.Invoke();
             }
         #endregion
     }

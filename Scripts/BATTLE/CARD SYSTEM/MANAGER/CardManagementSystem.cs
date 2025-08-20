@@ -1,3 +1,4 @@
+using BATTLE.BATTLE_MANAGEMENT_SYSTEM;
 using BATTLE.CARD_SYSTEM.MANAGER.CARD_POOL_SYSTEM;
 using BATTLE.CARD_SYSTEM.MANAGER.DRAW_CARD_SYSTEM;
 using BATTLE.CARD_SYSTEM.MANAGER.HAND_CARD_SYSTEM;
@@ -12,25 +13,18 @@ namespace BATTLE.CARD_SYSTEM.MANAGER
         [field: SerializeField] private DrawCardSystem DrawCardSystem;
         [field: SerializeField] private HandCardSystem HandCardSystem;
 
-        private void Awake()
+        private void OnEnable()
         {
-            CardPoolSystem.OnRefillCardPoolComplete += TEST;
-        }
-        
-        public void Start()
-        {
-            // For Development Only.
-            RefillCardPool();
+            BattleManagementSystem.OnEnterRefillCardPoolState += RefillCardPool;
         }
 
-        private void TEST()
+        private void OnDisable()
         {
-            // TODO 當卡片生成完畢後，就要抽卡並展示，等待完成。
-            Debug.Log("On Refill Card Pool Complete.");
+            BattleManagementSystem.OnEnterRefillCardPoolState -= RefillCardPool;
         }
         
         #region Card Pool System
-            private void RefillCardPool() => CardPoolSystem.RefillCardPool();
+            private void RefillCardPool(System.Action OnComplete) => CardPoolSystem.RefillCardPool(OnComplete);
         #endregion
     }
 }
