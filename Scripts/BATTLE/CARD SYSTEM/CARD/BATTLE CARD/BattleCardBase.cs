@@ -3,6 +3,7 @@ using BATTLE.CARD_SYSTEM.CARD.BATTLE_CARD.STATE_MACHINE;
 using BATTLE.CARD_SYSTEM.CARD.BATTLE_CARD.STATE_TYPE;
 using BATTLE.CARD_SYSTEM.CARD.CARD_SKIN_SYSTEM;
 using BATTLE.CARD_SYSTEM.CARD.CURSOR_EVENT_SYSTEM;
+using BATTLE.CARD_SYSTEM.MANAGER;
 using DG.Tweening;
 using UnityEngine;
 
@@ -27,24 +28,24 @@ namespace BATTLE.CARD_SYSTEM.CARD.BATTLE_CARD
             CursorEventSystem.OnCursorClick += OnCursorClick;
         }
 
-        private void SetParent(Transform parent)
+        private void SetParent(CardSlot cardSlot)
         {
-            transform.SetParent(parent);
+            transform.SetParent(cardSlot.transform);
         }
         
         #region ICard
-            public void OnSpawnInCardPool(Transform slotParent)
+            public void OnSpawnInCardPool(CardSlot cardSlot)
             {
-                SetParent(slotParent);
+                SetParent(cardSlot);
                 MoveToCardPoolSlotWhenSpawn();
                 
                 SetFrontImage();
                 SetBackImage();
             }
 
-            public void OnDrawCardAndShow(Transform slotParent)
+            public void OnDrawCardAndShow(CardSlot cardSlot)
             {
-                SetParent(slotParent);
+                SetParent(cardSlot);
                 MoveToShowPointWhenDraw();
             }
         #endregion

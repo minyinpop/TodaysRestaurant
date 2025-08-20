@@ -1,8 +1,8 @@
 using UnityEngine;
 
-namespace BATTLE.CARD_SYSTEM.MANAGER.CARD_POOL_SYSTEM.CARD_POOL_SLOT
+namespace BATTLE.CARD_SYSTEM.MANAGER
 {
-    internal class CardPoolSlot : MonoBehaviour
+    internal class CardSlot : MonoBehaviour
     {
         private GameObject Card;
 
@@ -11,13 +11,10 @@ namespace BATTLE.CARD_SYSTEM.MANAGER.CARD_POOL_SYSTEM.CARD_POOL_SLOT
             Card = card;
         }
         
-        public GameObject GetCard()
+        public void GetCard(out GameObject card)
         {
-            return Card;
-        }
-
-        public void RemoveCard()
-        {
+            card = Card;
+            Card = null;
         }
 
         public bool IsEmpty()

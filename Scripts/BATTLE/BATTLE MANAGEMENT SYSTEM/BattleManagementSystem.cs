@@ -7,6 +7,7 @@ namespace BATTLE.BATTLE_MANAGEMENT_SYSTEM
     internal class BattleManagementSystem : MonoBehaviour
     {
         public static event System.Action<System.Action> OnEnterRefillCardPoolState;
+        public static event System.Action<System.Action> OnDrawCardAndShowWhenStartBattleState;
         
         private readonly StateMachine StateMachine = new();
         
@@ -17,10 +18,25 @@ namespace BATTLE.BATTLE_MANAGEMENT_SYSTEM
         
         #region State Machine
             private void ChangeState(IState newState) => StateMachine.ChangeState(newState);
-            private void RefillCardPoolState() => ChangeState(new RefillCardPool(() => OnEnterRefillCardPoolState?.Invoke(() =>
-            {
-                Debug.Log("Refill Card Pool Complete.");
-            })));
+
+            #region Refill Card Pool State
+                private void RefillCardPoolState() => ChangeState(new RefillCardPool(() => OnEnterRefillCardPoolState?.Invoke(OnRefillCardPoolStateComplete)));
+
+                private void OnRefillCardPoolStateComplete()
+                {
+                    Debug.Log("Refill Card Pool State Complete");
+                    DrawCardAndShowWhenStartBattleState();
+                }
+            #endregion
+
+            #region Draw Card And Show When Start Battle State
+                private void DrawCardAndShowWhenStartBattleState() => ChangeState(new DrawCardWhenStartBattle(() => OnDrawCardAndShowWhenStartBattleState?.Invoke(OnDrawCardAndShowWhenStartBattleStateComplete)));
+
+                private void OnDrawCardAndShowWhenStartBattleStateComplete()
+                {
+                    Debug.Log("Draw Card Pool State Complete");
+                }
+            #endregion
         #endregion
     }
 }

@@ -33,15 +33,16 @@ namespace BATTLE.CARD_SYSTEM.CARD.BATTLE_CARD.ANIMATION_SYSTEM
                 MoveTween?.Kill();
 
                 return DOTween.Sequence()
-                    .Append(MoveTween = MoveToZeroAtShowPointWhenDraw())
-                    .Append(RotateTween = RotateToFrontAtShowPointWhenDraw());
+                    .Append(MoveToZeroAtShowPointWhenDraw())
+                    .Append(RotateToFrontAtShowPointWhenDraw())
+                    .Join(ScaleUpAndDownWhenDraw());
             }
 
             private Tween MoveToZeroAtShowPointWhenDraw()
             {
                 MoveTween?.Kill();
                 
-                Rect
+                MoveTween = Rect
                     .DOAnchorPos(Vector2.zero, 1, true)
                     .SetEase(Ease.OutExpo)
                     .OnComplete(() => Rect.anchoredPosition = Vector2.zero)
@@ -54,8 +55,8 @@ namespace BATTLE.CARD_SYSTEM.CARD.BATTLE_CARD.ANIMATION_SYSTEM
             {
                 RotateTween?.Kill();
 
-                Rect
-                    .DORotate(Vector2.up * 180, 2, RotateMode.Fast)
+                RotateTween = Rect
+                    .DORotate(Vector2.up * 180, 1, RotateMode.Fast)
                     .SetEase(Ease.Linear)
                     .OnUpdate(() =>
                     {
@@ -71,6 +72,33 @@ namespace BATTLE.CARD_SYSTEM.CARD.BATTLE_CARD.ANIMATION_SYSTEM
                     .OnKill(() => RotateTween = null);
 
                 return RotateTween;
+            }
+
+            private Tween ScaleUpAndDownWhenDraw()
+            {
+                ScaleTween?.Kill();
+                
+                ScaleTween = DOTween.Sequence()
+                    .Append(ScaleUpWhenDraw())
+                    .Append(ScaleDownWhenDraw())
+                    .OnComplete(() => ScaleTween = null)
+                    .OnKill(() => ScaleTween = null);
+                
+                return ScaleTween;
+            }
+
+            private Tween ScaleUpWhenDraw()
+            {
+                return Rect
+                    .DOScale(Vector2.one * 1.25f, .5f)
+                    .SetEase(Ease.Linear);
+            }
+            
+            private Tween ScaleDownWhenDraw()
+            {
+                return Rect
+                    .DOScale(Vector2.one, .5f)
+                    .SetEase(Ease.Linear);
             }
         #endregion
     }
