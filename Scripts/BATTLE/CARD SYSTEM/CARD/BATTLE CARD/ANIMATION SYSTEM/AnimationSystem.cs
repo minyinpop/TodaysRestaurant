@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using UnityEngine;
 
@@ -28,14 +29,13 @@ namespace BATTLE.CARD_SYSTEM.CARD.BATTLE_CARD.ANIMATION_SYSTEM
         }
 
         #region Move To Show Point When Draw
-            public Tween MoveToShowPointWhenDraw()
+            public Tween MoveToShowPointWhenDraw(Action onComplete)
             {
-                MoveTween?.Kill();
-
                 return DOTween.Sequence()
                     .Append(MoveToZeroAtShowPointWhenDraw())
                     .Append(RotateToFrontAtShowPointWhenDraw())
-                    .Join(ScaleUpAndDownWhenDraw());
+                    .Join(ScaleUpAndDownWhenDraw())
+                    .OnComplete(() => onComplete?.Invoke());
             }
 
             private Tween MoveToZeroAtShowPointWhenDraw()

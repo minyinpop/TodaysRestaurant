@@ -1,3 +1,4 @@
+using System;
 using BATTLE.CARD_SYSTEM.CARD.BATTLE_CARD.ANIMATION_SYSTEM;
 using BATTLE.CARD_SYSTEM.CARD.BATTLE_CARD.STATE_MACHINE;
 using BATTLE.CARD_SYSTEM.CARD.BATTLE_CARD.STATE_TYPE;
@@ -34,6 +35,8 @@ namespace BATTLE.CARD_SYSTEM.CARD.BATTLE_CARD
         }
         
         #region ICard
+            public event Action OnShowCardComplete;
+
             public void OnSpawnInCardPool(CardSlot cardSlot)
             {
                 SetParent(cardSlot);
@@ -71,7 +74,7 @@ namespace BATTLE.CARD_SYSTEM.CARD.BATTLE_CARD
         
         #region Animation System
             private Tween MoveToCardPoolSlotWhenSpawn() => AnimationSystem.MoveToCardPoolSlotWhenSpawn();
-            private Tween MoveToShowPointWhenDraw() => AnimationSystem.MoveToShowPointWhenDraw();
+            private Tween MoveToShowPointWhenDraw() => AnimationSystem.MoveToShowPointWhenDraw(OnShowCardComplete);
         #endregion
         
         #region Card Skin System

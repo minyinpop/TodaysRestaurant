@@ -20,17 +20,18 @@ namespace BATTLE.BATTLE_MANAGEMENT_SYSTEM
             private void ChangeState(IState newState) => StateMachine.ChangeState(newState);
 
             #region Refill Card Pool State
-                private void RefillCardPoolState() => ChangeState(new RefillCardPool(() => OnEnterRefillCardPoolState?.Invoke(OnRefillCardPoolStateComplete)));
+                private void RefillCardPoolState() => ChangeState(new RefillCardPool(() =>
+                    OnEnterRefillCardPoolState?.Invoke(OnRefillCardPoolStateComplete)));
 
                 private void OnRefillCardPoolStateComplete()
                 {
-                    Debug.Log("Refill Card Pool State Complete");
                     DrawCardAndShowWhenStartBattleState();
                 }
             #endregion
 
             #region Draw Card And Show When Start Battle State
-                private void DrawCardAndShowWhenStartBattleState() => ChangeState(new DrawCardWhenStartBattle(() => OnDrawCardAndShowWhenStartBattleState?.Invoke(OnDrawCardAndShowWhenStartBattleStateComplete)));
+                private void DrawCardAndShowWhenStartBattleState() =>ChangeState(new DrawCardWhenStartBattle(() =>
+                    OnDrawCardAndShowWhenStartBattleState?.Invoke(OnDrawCardAndShowWhenStartBattleStateComplete)));
 
                 private void OnDrawCardAndShowWhenStartBattleStateComplete()
                 {
