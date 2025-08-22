@@ -9,5 +9,10 @@ namespace Battle_Management_System.State_Machine
             CurrentState = newState;
             CurrentState?.Enter();
         }
+
+        public void Exit()
+        {
+            CurrentState?.Exit();
+        }
     }
 }

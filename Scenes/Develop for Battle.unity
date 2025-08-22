@@ -2004,6 +2004,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CardPoolSystem: {fileID: 1794684196}
+  ShowCardSystem: {fileID: 1201942789}
+  CardNumber: 5
 --- !u!1 &352664268
 GameObject:
   m_ObjectHideFlags: 0
@@ -4840,6 +4842,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1201942788}
+  - component: {fileID: 1201942789}
   m_Layer: 0
   m_Name: Show Card System
   m_TagString: Untagged
@@ -4863,6 +4866,25 @@ Transform:
   - {fileID: 2106978975}
   m_Father: {fileID: 352664269}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1201942789
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1201942786}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d96e85c3d2444e469fdbbb6918a63977, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LeftPoint01: {fileID: 134763771}
+  LeftPoint02: {fileID: 96460676}
+  MiddlePoint: {fileID: 36902722}
+  RightPoint01: {fileID: 867633083}
+  RightPoint02: {fileID: 837924247}
+  DrawDuration: 0.25
+  ShowDuration: 3
 --- !u!1 &1224655095
 GameObject:
   m_ObjectHideFlags: 0
@@ -5854,7 +5876,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53cbe0f9e2884ace9593ac6e3090bf62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerDeckData: {fileID: 11400000, guid: 258058ab7483f9b48bc7eda19cb4e681, type: 2}
   CardSlotList:
   - {fileID: 1200770607}
   - {fileID: 1628450284}
@@ -5866,6 +5887,8 @@ MonoBehaviour:
   - {fileID: 227089529}
   - {fileID: 935033669}
   - {fileID: 531152191}
+  PlayerDeckData: {fileID: 11400000, guid: 258058ab7483f9b48bc7eda19cb4e681, type: 2}
+  SpawnPoint: {fileID: 313085758}
 --- !u!1 &1805333048
 GameObject:
   m_ObjectHideFlags: 0

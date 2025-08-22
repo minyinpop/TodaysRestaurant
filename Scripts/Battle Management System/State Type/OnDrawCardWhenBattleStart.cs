@@ -3,11 +3,11 @@ using Battle_Management_System.State_Machine;
 
 namespace Battle_Management_System.State_Type
 {
-    internal class OnRefillCardWhenBattleStart : IState
+    internal class OnDrawCardWhenBattleStart : IState
     {
         private readonly Action OnEnter;
         private readonly Action OnExit;
-        public OnRefillCardWhenBattleStart(Action onEnter, Action onExit)
+        public OnDrawCardWhenBattleStart(Action onEnter, Action onExit)
         {
             OnEnter = onEnter;
             OnExit = onExit;
