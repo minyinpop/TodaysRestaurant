@@ -39,13 +39,11 @@ namespace Battle_Management_System
 
                 private void EnterOnBattleStart()
                 {
-                    Debug.Log("Enter On Battle Start");
                     RefillCardAndDrawOnBattleStart(ExitState);
                 }
                 
                 private void ExitOnBattleStart()
                 {
-                    Debug.Log("Exit On Battle Start");
                     DecisiveCoinSystem.gameObject.SetActive(true);
                 }
             #endregion

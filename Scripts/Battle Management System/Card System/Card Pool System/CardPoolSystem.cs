@@ -47,10 +47,11 @@ namespace Battle_Management_System.Card_System.Card_Pool_System
                     
                     var card = Instantiate(PlayerDeckData.GetRandomCard(), SpawnPoint);
                     slot.AddCard(card);
-                    
+
+                    var i1 = i;
                     card.GetComponent<ICard>().MoveCardToSlot(slot.transform, () =>
                     {
-                        if (i == CardSlotList.Count - 1)
+                        if (i1 == CardSlotList.Count - 1)
                             onComplete?.Invoke();
                     });
                     

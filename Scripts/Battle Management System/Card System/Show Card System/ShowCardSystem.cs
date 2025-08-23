@@ -57,7 +57,7 @@ namespace Battle_Management_System.Card_System.Show_Card_System
 
         private IEnumerator StartShowCardProcess(List<GameObject> cardList)
         {
-            CardList = cardList.ToList();
+            CardList = cardList;
             
             switch (CardList.Count)
             {

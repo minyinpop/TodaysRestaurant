@@ -24,7 +24,7 @@ namespace Battle_Management_System.Card_System
                 ShowCard(cardList, () => RefillCard(), () =>
                 {
                     GetAllShowCard(out cardList);
-                    AddCardToHand(cardList, () => onComplete?.Invoke());
+                    AddCardToHand(cardList, onComplete.Invoke);
                 });
             });
         }
@@ -56,7 +56,7 @@ namespace Battle_Management_System.Card_System
         #region Hand Card System
             private void AddCardToHand(List<GameObject> cardList, Action onComplete = null)
             {
-                HandCardSystem.AddCard(cardList, () => onComplete?.Invoke());
+                HandCardSystem.AddCard(cardList, onComplete);
             }
         #endregion
     }

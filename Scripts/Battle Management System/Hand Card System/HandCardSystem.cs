@@ -27,10 +27,11 @@ namespace Battle_Management_System.Hand_Card_System
             {
                 var card = cardList[i];
                 CardSlotList[i].GetComponent<CardSlotSystem>().AddCard(card);
-                
+
+                var i1 = i;
                 card.GetComponent<ICard>().MoveCardToSlot(CardSlotList[i].transform, () =>
                 {
-                    if (i == -1)
+                    if (i1 == cardList.Count - 1)
                         onComplete?.Invoke();
                 });
             }
