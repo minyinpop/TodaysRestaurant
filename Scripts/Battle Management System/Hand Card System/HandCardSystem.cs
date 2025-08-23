@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
-using Battle_Management_System.Card_System.Card_Slot_System;
+using Battle_Management_System.Card_Slot_System;
 using Battle_Management_System.Card_System.Card_System;
 using UnityEngine;
 
-namespace Battle_Management_System.Card_System.Hand_Card_System
+namespace Battle_Management_System.Hand_Card_System
 {
     internal class HandCardSystem : MonoBehaviour
     {

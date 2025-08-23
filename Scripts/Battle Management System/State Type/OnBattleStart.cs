@@ -1,7 +1,7 @@
 using System;
-using Battle_Management_System.Card_System.State_Machine;
+using Battle_Management_System.State_Machine;
 
-namespace Battle_Management_System.Card_System.State_Type
+namespace Battle_Management_System.State_Type
 {
     internal class OnBattleStart : IState
     {

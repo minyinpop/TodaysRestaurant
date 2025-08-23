@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Battle_Management_System.Card_System.Card_Pool_System;
-using Battle_Management_System.Card_System.Hand_Card_System;
 using Battle_Management_System.Card_System.Show_Card_System;
-using Battle_Management_System.Card_System.State_Machine;
-using Battle_Management_System.Card_System.State_Type;
+using Battle_Management_System.Hand_Card_System;
 using UnityEngine;
 
 namespace Battle_Management_System.Card_System
@@ -18,65 +16,18 @@ namespace Battle_Management_System.Card_System
 
         [field: Range(1, 5)] public int CardNumber;
 
-        private readonly StateMachine StateMachine = new();
-
-        private void Start()
+        public void RefillCardAndDrawOnBattleStart(Action onComplete)
         {
-            OnBattleStart();
+            RefillCard(() =>
+            {
+                GetCard(CardNumber, out var cardList);
+                ShowCard(cardList, () => RefillCard(), () =>
+                {
+                    GetAllShowCard(out cardList);
+                    AddCardToHand(cardList, () => onComplete?.Invoke());
+                });
+            });
         }
-        
-        #region State Machine
-            private void ChangeState(IState newState)
-            {
-                StateMachine.ChangeState(newState);
-            }
-
-            private void ExitState()
-            {
-                StateMachine.Exit();
-            }
-
-            #region On Battle Start
-                private void OnBattleStart()
-                {
-                    ChangeState(new OnBattleStart(EnterOnBattleStart, ExitOnBattleStart));
-                }
-
-                private void EnterOnBattleStart()
-                {
-                    RefillCard(() =>
-                    {
-                        GetCard(CardNumber, out var cardList);
-                        ShowCard(cardList, () => RefillCard(), () =>
-                        {
-                            GetAllShowCard(out cardList);
-                            AddCardToHand(cardList, ExitState);
-                        });
-                    });
-                }
-
-                private void ExitOnBattleStart()
-                {
-                    OnDecisiveCoin();
-                }
-            #endregion
-            
-            #region On Decisive Coin
-                private void OnDecisiveCoin()
-                {
-                    ChangeState(new OnDecisiveCoin(EnterOnDecisiveCoin, ExitOnDecisiveCoin));
-                }
-
-                private void EnterOnDecisiveCoin()
-                {
-                    Debug.Log("Enter On Decisive Coin State");
-                }
-                
-                private void ExitOnDecisiveCoin()
-                {
-                }
-            #endregion
-        #endregion
         
         #region Card Pool System
             private void RefillCard(Action onComplete = null)
@@ -105,7 +56,7 @@ namespace Battle_Management_System.Card_System
         #region Hand Card System
             private void AddCardToHand(List<GameObject> cardList, Action onComplete = null)
             {
-                HandCardSystem.AddCard(cardList, onComplete);
+                HandCardSystem.AddCard(cardList, () => onComplete?.Invoke());
             }
         #endregion
     }

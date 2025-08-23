@@ -2,7 +2,7 @@ namespace Battle_Management_System.State_Machine
 {
     internal interface IState
     {
-        public void OnEnter();
-        public void OnExit();
+        public void Enter();
+        public void Exit();
     }
 }

@@ -7,12 +7,12 @@ namespace Battle_Management_System.State_Machine
         public void ChangeState(IState newState)
         {
             CurrentState = newState;
-            CurrentState?.OnEnter();
+            CurrentState?.Enter();
         }
 
         public void Exit()
         {
-            CurrentState?.OnExit();
+            CurrentState?.Exit();
         }
     }
 }

@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Battle_Management_System.Card_System.Card_Slot_System;
+using Battle_Management_System.Card_Slot_System;
 using Battle_Management_System.Card_System.Card_System;
 using UnityEngine;
 

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Battle_Management_System.Card_System.Card_Slot_System
+namespace Battle_Management_System.Card_Slot_System
 {
     internal class CardSlotSystem : MonoBehaviour
     {
