@@ -1,0 +1,6 @@
+namespace Battle_Management_System.Card_System.Card_System.Battle_Card
+{
+    internal interface IBattleCard
+    {
+    }
+}
