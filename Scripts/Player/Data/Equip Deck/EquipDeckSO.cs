@@ -1,35 +1,40 @@
 using System.Collections.Generic;
-using Battle_Management.Card.Base;
+using Battle.Card.Base;
 using UnityEngine;
 
 namespace Player.Data.Equip_Deck
 {
-    [CreateAssetMenu(menuName = "Minyinpop/Player/Equip Deck", fileName = "New Equip Deck")]
-    internal class EquipDeckSO : ScriptableObject
+    [CreateAssetMenu(menuName = "Minyinpop/Player/Equip Deck", fileName = "New Name")]
+    internal sealed class EquipDeckSO : ScriptableObject
     {
-        [field: Header("Equip Card Prefabs")]
-        [field: SerializeField] private List<GameObject> EquipCardPrefabs;
+        [field: Header("Card Prefabs")]
+        [field: SerializeField] private List<GameObject> EquipCards;
 
-        public void GetRandomCard(out GameObject prefab)
+        public void GetRandomCard(out GameObject Card)
         {
-            var totalChance = 0f;
-            foreach (var equipCard in EquipCardPrefabs)
+            var totalDrawChance = 0f;
+
+            foreach (GameObject card in EquipCards)
             {
-                equipCard.GetComponent<ICard>().GetDrawChance(out var chance);
-                totalChance += chance;
+                card.GetComponent<ICard>().GetDrawChance(out float chance);
+                totalDrawChance += chance;
+            }
+            
+            var randomDrawChance = Random.Range(0f, totalDrawChance);
+
+            foreach (GameObject card in EquipCards)
+            {
+                card.GetComponent<ICard>().GetDrawChance(out float chance);
+                randomDrawChance -= chance;
+                
+                if (randomDrawChance <= 0f)
+                {
+                    Card = card;
+                    return;
+                }
             }
 
-            var randomChance = Random.Range(0f, totalChance);
-            foreach (var equipCard in EquipCardPrefabs)
-            {
-                equipCard.GetComponent<ICard>().GetDrawChance(out var chance);
-                randomChance -= chance;
-                if (randomChance > 0f) continue;
-                prefab = equipCard;
-                return;
-            }
-
-            prefab = null;
+            Card = null;
         }
     }
 }
