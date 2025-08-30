@@ -1,5 +1,6 @@
 using System;
 using Battle_System.Card_Pool_System;
+using Battle_System.Show_Card_System;
 using Battle_System.State_Machine;
 using Battle_System.State_Machine.Type;
 using UnityEngine;
@@ -10,6 +11,7 @@ namespace Battle_System
     {
         [field: Header("System")]
         [field: SerializeField] private CardPoolSystem CardPoolSystem;
+        [field: SerializeField] private ShowCardSystem ShowCardSystem;
         
         private readonly StateMachine StateMachine = new StateMachine();
 
@@ -34,7 +36,9 @@ namespace Battle_System
 
                 private void OnBattleStartEnter()
                 {
-                    RefillCardPool();
+                    RefillCardPool(() =>
+                    {
+                    });
                 }
 
                 private void OnBattleStartExit()

@@ -3,26 +3,23 @@ using UnityEngine;
 
 namespace DoTween_Settings
 {
-    internal sealed class DoAnchorPosSettings
+    internal sealed class DoScaleSettings
     {
         private readonly Vector3 TargetValue;
         private readonly float Duration;
-        private readonly bool Snapping;
         private readonly Ease Ease;
 
-        public DoAnchorPosSettings(Vector3 TargetValue, float Duration, bool Snapping, Ease Ease)
+        public DoScaleSettings(Vector3 TargetValue, float Duration, Ease Ease)
         {
             this.TargetValue = TargetValue;
             this.Duration = Duration;
-            this.Snapping = Snapping;
             this.Ease = Ease;
         }
         
-        public void GetValues(out Vector3 TargetValue, out float Duration, out bool Snapping, out Ease Ease)
+        public void GetValues(out Vector3 TargetValue, out float Duration, out Ease Ease)
         {
             TargetValue = this.TargetValue;
             Duration = this.Duration;
-            Snapping = this.Snapping;
             Ease = this.Ease;
         }
     }

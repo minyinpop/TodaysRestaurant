@@ -16,6 +16,8 @@ namespace Battle_System.Card_System.Base
         [field: Header("Data")]
         [field: SerializeField] private CardSO CardData;
 
+        private bool IsFront;
+
         #region ICard
             public void GetDrawChance(out float DrawChance)
             {
@@ -26,6 +28,10 @@ namespace Battle_System.Card_System.Base
             {
                 Rect.SetParent(Parent);
                 AnimationSystem.MoveTo(Settings, OnComplete);
+            }
+
+            public void FlipCard()
+            {
             }
         #endregion
     }
