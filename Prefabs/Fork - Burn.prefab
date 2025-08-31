@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 8611566611659508437}
   - component: {fileID: 9220918656955516711}
   - component: {fileID: 2201184378739166817}
+  - component: {fileID: 3886250448542532993}
+  - component: {fileID: 1221894466457806385}
   m_Layer: 5
   m_Name: Fork - Burn
   m_TagString: Untagged
@@ -77,6 +79,34 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &3886250448542532993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5699270825872941529}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 808b6a02e6544d0bb83f79a99508ecf7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Battle.Object.Card.Child_System.AnimationSystem
+  Rect: {fileID: 8611566611659508437}
+--- !u!114 &1221894466457806385
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5699270825872941529}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d01a59fdf68744038f2e5ee057ab53bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Battle.Object.Card.Type.Battle.Fork.Burn
+  Rect: {fileID: 8611566611659508437}
+  AnimationSystem: {fileID: 3886250448542532993}
+  CardSO: {fileID: 11400000, guid: 3cde992b481e1de418a9f0b548d66f80, type: 2}
 --- !u!1 &5945443936457204660
 GameObject:
   m_ObjectHideFlags: 0
