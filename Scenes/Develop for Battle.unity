@@ -1422,6 +1422,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &86232575 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7380749744261002411, guid: 511a948331ecf5b4bbac7ce445adc34a, type: 3}
+  m_PrefabInstance: {fileID: 372988410}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &91948461
 GameObject:
   m_ObjectHideFlags: 0
@@ -1549,6 +1554,11 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!1 &229015077 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7380749744261002411, guid: 511a948331ecf5b4bbac7ce445adc34a, type: 3}
+  m_PrefabInstance: {fileID: 1187205550}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &246679409
 GameObject:
   m_ObjectHideFlags: 0
@@ -1845,6 +1855,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Battle.BattleSystem
   CardPoolSystem: {fileID: 617590892}
   DrawCardSystem: {fileID: 357759059}
+--- !u!1 &330327010 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7380749744261002411, guid: 511a948331ecf5b4bbac7ce445adc34a, type: 3}
+  m_PrefabInstance: {fileID: 793319282}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &357759057
 GameObject:
   m_ObjectHideFlags: 0
@@ -1996,17 +2011,11 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 273658739175776772, guid: 511a948331ecf5b4bbac7ce445adc34a, type: 3}
   m_PrefabInstance: {fileID: 372988410}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &372988412 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8848568429782204150, guid: 511a948331ecf5b4bbac7ce445adc34a, type: 3}
-  m_PrefabInstance: {fileID: 372988410}
+--- !u!1 &376505633 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7380749744261002411, guid: 511a948331ecf5b4bbac7ce445adc34a, type: 3}
+  m_PrefabInstance: {fileID: 997136332}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 28286ef21d2b4eb6812eacd7bb566214, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Battle.Object.Card_Slot.CardSlot
 --- !u!1001 &394507615
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2109,17 +2118,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 273658739175776772, guid: 511a948331ecf5b4bbac7ce445adc34a, type: 3}
   m_PrefabInstance: {fileID: 394507615}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &394507617 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8848568429782204150, guid: 511a948331ecf5b4bbac7ce445adc34a, type: 3}
-  m_PrefabInstance: {fileID: 394507615}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 28286ef21d2b4eb6812eacd7bb566214, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Battle.Object.Card_Slot.CardSlot
 --- !u!1 &410223415
 GameObject:
   m_ObjectHideFlags: 0
@@ -2586,17 +2584,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 273658739175776772, guid: 511a948331ecf5b4bbac7ce445adc34a, type: 3}
   m_PrefabInstance: {fileID: 516875689}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &516875691 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8848568429782204150, guid: 511a948331ecf5b4bbac7ce445adc34a, type: 3}
-  m_PrefabInstance: {fileID: 516875689}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 28286ef21d2b4eb6812eacd7bb566214, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Battle.Object.Card_Slot.CardSlot
 --- !u!43 &519802947
 Mesh:
   m_ObjectHideFlags: 0
@@ -2912,18 +2899,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17960af25a474fee81aac83f16a19833, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Battle.Child_System.CardPoolSystem
-  CardSlotList:
-  - {fileID: 1267849250}
-  - {fileID: 394507617}
-  - {fileID: 1410406760}
-  - {fileID: 793319284}
-  - {fileID: 1187205552}
-  - {fileID: 997136334}
-  - {fileID: 1462075607}
-  - {fileID: 516875691}
-  - {fileID: 372988412}
-  - {fileID: 1592735329}
-  CardSpawnParent: {fileID: 1375852830}
+  Slots:
+  - {fileID: 1736201428}
+  - {fileID: 1502961301}
+  - {fileID: 1196626771}
+  - {fileID: 330327010}
+  - {fileID: 229015077}
+  - {fileID: 376505633}
+  - {fileID: 782189842}
+  - {fileID: 1139522679}
+  - {fileID: 86232575}
+  - {fileID: 1888033763}
+  SpawnParent: {fileID: 1375852830}
   PlayerBattleCardDeckSO: {fileID: 11400000, guid: 3664955bace585244978c4518fd0c3f3, type: 2}
 --- !u!1 &707734884
 GameObject:
@@ -2956,6 +2943,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &782189842 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7380749744261002411, guid: 511a948331ecf5b4bbac7ce445adc34a, type: 3}
+  m_PrefabInstance: {fileID: 1462075605}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &793319282
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3058,17 +3050,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 273658739175776772, guid: 511a948331ecf5b4bbac7ce445adc34a, type: 3}
   m_PrefabInstance: {fileID: 793319282}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &793319284 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8848568429782204150, guid: 511a948331ecf5b4bbac7ce445adc34a, type: 3}
-  m_PrefabInstance: {fileID: 793319282}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 28286ef21d2b4eb6812eacd7bb566214, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Battle.Object.Card_Slot.CardSlot
 --- !u!1 &809165791
 GameObject:
   m_ObjectHideFlags: 0
@@ -3339,17 +3320,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 273658739175776772, guid: 511a948331ecf5b4bbac7ce445adc34a, type: 3}
   m_PrefabInstance: {fileID: 997136332}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &997136334 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8848568429782204150, guid: 511a948331ecf5b4bbac7ce445adc34a, type: 3}
-  m_PrefabInstance: {fileID: 997136332}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 28286ef21d2b4eb6812eacd7bb566214, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Battle.Object.Card_Slot.CardSlot
 --- !u!1 &998911809
 GameObject:
   m_ObjectHideFlags: 0
@@ -4649,6 +4619,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 270, y: 0, z: 0}
+--- !u!1 &1139522679 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7380749744261002411, guid: 511a948331ecf5b4bbac7ce445adc34a, type: 3}
+  m_PrefabInstance: {fileID: 516875689}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1187205550
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4751,17 +4726,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 273658739175776772, guid: 511a948331ecf5b4bbac7ce445adc34a, type: 3}
   m_PrefabInstance: {fileID: 1187205550}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1187205552 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8848568429782204150, guid: 511a948331ecf5b4bbac7ce445adc34a, type: 3}
-  m_PrefabInstance: {fileID: 1187205550}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 28286ef21d2b4eb6812eacd7bb566214, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Battle.Object.Card_Slot.CardSlot
 --- !u!1 &1194379206
 GameObject:
   m_ObjectHideFlags: 0
@@ -4793,6 +4757,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1196626771 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7380749744261002411, guid: 511a948331ecf5b4bbac7ce445adc34a, type: 3}
+  m_PrefabInstance: {fileID: 1410406758}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1224655095
 GameObject:
   m_ObjectHideFlags: 0
@@ -5063,17 +5032,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 273658739175776772, guid: 511a948331ecf5b4bbac7ce445adc34a, type: 3}
   m_PrefabInstance: {fileID: 1267849248}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1267849250 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8848568429782204150, guid: 511a948331ecf5b4bbac7ce445adc34a, type: 3}
-  m_PrefabInstance: {fileID: 1267849248}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 28286ef21d2b4eb6812eacd7bb566214, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Battle.Object.Card_Slot.CardSlot
 --- !u!1 &1353790684
 GameObject:
   m_ObjectHideFlags: 0
@@ -5242,17 +5200,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 273658739175776772, guid: 511a948331ecf5b4bbac7ce445adc34a, type: 3}
   m_PrefabInstance: {fileID: 1410406758}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1410406760 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8848568429782204150, guid: 511a948331ecf5b4bbac7ce445adc34a, type: 3}
-  m_PrefabInstance: {fileID: 1410406758}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 28286ef21d2b4eb6812eacd7bb566214, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Battle.Object.Card_Slot.CardSlot
 --- !u!1 &1428986612
 GameObject:
   m_ObjectHideFlags: 0
@@ -5392,17 +5339,11 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 273658739175776772, guid: 511a948331ecf5b4bbac7ce445adc34a, type: 3}
   m_PrefabInstance: {fileID: 1462075605}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1462075607 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8848568429782204150, guid: 511a948331ecf5b4bbac7ce445adc34a, type: 3}
-  m_PrefabInstance: {fileID: 1462075605}
+--- !u!1 &1502961301 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7380749744261002411, guid: 511a948331ecf5b4bbac7ce445adc34a, type: 3}
+  m_PrefabInstance: {fileID: 394507615}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 28286ef21d2b4eb6812eacd7bb566214, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Battle.Object.Card_Slot.CardSlot
 --- !u!43 &1512326363
 Mesh:
   m_ObjectHideFlags: 0
@@ -5683,17 +5624,11 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 273658739175776772, guid: 511a948331ecf5b4bbac7ce445adc34a, type: 3}
   m_PrefabInstance: {fileID: 1592735327}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1592735329 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8848568429782204150, guid: 511a948331ecf5b4bbac7ce445adc34a, type: 3}
-  m_PrefabInstance: {fileID: 1592735327}
+--- !u!1 &1736201428 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7380749744261002411, guid: 511a948331ecf5b4bbac7ce445adc34a, type: 3}
+  m_PrefabInstance: {fileID: 1267849248}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 28286ef21d2b4eb6812eacd7bb566214, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Battle.Object.Card_Slot.CardSlot
 --- !u!1 &1774188023
 GameObject:
   m_ObjectHideFlags: 0
@@ -5725,6 +5660,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1888033763 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7380749744261002411, guid: 511a948331ecf5b4bbac7ce445adc34a, type: 3}
+  m_PrefabInstance: {fileID: 1592735327}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
