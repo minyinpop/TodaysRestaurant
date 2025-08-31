@@ -9,5 +9,7 @@ namespace Battle.Object.Card.Base
         public void GetDrawChance(out float DrawChance);
 
         public void MoveToParent(Transform Parent, DoAnchorPosValue DoAnchorPosValue, Action OnComplete = null);
+
+        public void FlipCard(DoFlipValue DoFlipValue, Action OnComplete = null);
     }
 }

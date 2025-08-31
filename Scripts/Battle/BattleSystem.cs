@@ -13,6 +13,8 @@ namespace Battle
 
         private readonly BattleStateMachine BattleStateMachine = new();
 
+        private const int OnBattleStartDrawNumber = 6;
+
         private void Start()
         {
             OnBattleStart();
@@ -27,7 +29,11 @@ namespace Battle
         {
             CardPoolSystem.Refill(() =>
             {
-                Debug.Log("Refill Complete.");
+                CardPoolSystem.GetAllSlots(out var CardPoolSlots);
+                DrawCardSystem.DrawCardFromCardPool(CardPoolSlots, OnBattleStartDrawNumber, () =>
+                {
+                    Debug.Log("Draw Card Complete.");
+                });
             });
         }
 

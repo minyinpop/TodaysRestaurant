@@ -23,5 +23,10 @@ namespace Battle.Object.Card.Base
             Rect.SetParent(Parent);
             AnimationSystem.MoveTo(DoAnchorPosValue, OnComplete);
         }
+
+        public void FlipCard(DoFlipValue DoFlipValue, Action OnComplete = null)
+        {
+            AnimationSystem.FlipCard(DoFlipValue, OnComplete);
+        }
     }
 }
