@@ -1,4 +1,5 @@
 using System;
+using Battle_System.State_Machine.Base;
 
 namespace Battle_System.State_Machine.Type
 {
@@ -6,18 +7,18 @@ namespace Battle_System.State_Machine.Type
     {
         private readonly Action OnEnter;
         private readonly Action OnExit;
-
-        public OnBattleStart(Action onEnter, Action onExit)
+        
+        public OnBattleStart(Action OnEnter, Action OnExit)
         {
-            OnEnter = onEnter;
-            OnExit = onExit;
+            this.OnEnter = OnEnter;
+            this.OnExit = OnExit;
         }
 
         public void Enter()
         {
             OnEnter?.Invoke();
         }
-
+        
         public void Exit()
         {
             OnExit?.Invoke();

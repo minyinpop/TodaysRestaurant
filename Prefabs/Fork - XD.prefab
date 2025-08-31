@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 8611566611659508437}
   - component: {fileID: 9220918656955516711}
   - component: {fileID: 2201184378739166817}
-  - component: {fileID: 8179522576552750988}
-  - component: {fileID: 4099856472820440822}
+  - component: {fileID: 2988364063341836400}
+  - component: {fileID: 2858102730273637784}
   m_Layer: 5
   m_Name: Fork - XD
   m_TagString: Untagged
@@ -79,7 +79,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &8179522576552750988
+--- !u!114 &2988364063341836400
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -88,13 +88,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 5699270825872941529}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4fe73676b6a4485185706f2f62a49a5b, type: 3}
+  m_Script: {fileID: 11500000, guid: 5878708a469748d7a5c7e736e19b1bd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Rect: {fileID: 8611566611659508437}
-  AnimationSystem: {fileID: 4099856472820440822}
-  CardData: {fileID: 11400000, guid: 6bf6ee04a8765d742ad015f64d8a3d4d, type: 2}
---- !u!114 &4099856472820440822
+  Front: {fileID: 6026536278173454867}
+  Back: {fileID: 5945443936457204660}
+--- !u!114 &2858102730273637784
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -103,10 +103,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 5699270825872941529}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f3c4e590a0946b6951d2074252970c8, type: 3}
+  m_Script: {fileID: 11500000, guid: d650fa4496fb4181a22bcf8494460759, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Rect: {fileID: 8611566611659508437}
+  AnimationSystem: {fileID: 2988364063341836400}
+  CardSO: {fileID: 11400000, guid: fa66acf14072cdb4399eec3175d483f5, type: 2}
 --- !u!1 &5945443936457204660
 GameObject:
   m_ObjectHideFlags: 0

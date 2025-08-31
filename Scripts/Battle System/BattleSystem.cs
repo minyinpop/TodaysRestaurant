@@ -1,7 +1,5 @@
-using System;
-using Battle_System.Card_Pool_System;
-using Battle_System.Show_Card_System;
-using Battle_System.State_Machine;
+using Battle_System.Child_System;
+using Battle_System.State_Machine.Base;
 using Battle_System.State_Machine.Type;
 using UnityEngine;
 
@@ -9,9 +7,9 @@ namespace Battle_System
 {
     internal sealed class BattleSystem : MonoBehaviour
     {
-        [field: Header("System")]
         [field: SerializeField] private CardPoolSystem CardPoolSystem;
-        [field: SerializeField] private ShowCardSystem ShowCardSystem;
+        [field: SerializeField] private DrawCardSystem DrawCardSystem;
+        [field: SerializeField] private HandCardSystem HandCardSystem;
         
         private readonly StateMachine StateMachine = new StateMachine();
 
@@ -20,13 +18,6 @@ namespace Battle_System
             OnBattleStart();
         }
         
-        #region CardPoolSystem
-            private void RefillCardPool(Action OnComplete = null)
-            {
-                CardPoolSystem.Refill(OnComplete);
-            }
-        #endregion
-
         #region StateMachine
             #region OnBattleStart
                 private void OnBattleStart()
@@ -36,9 +27,7 @@ namespace Battle_System
 
                 private void OnBattleStartEnter()
                 {
-                    RefillCardPool(() =>
-                    {
-                    });
+                    CardPoolSystem.Refill(() => Debug.Log("Refill Complete."));
                 }
 
                 private void OnBattleStartExit()
