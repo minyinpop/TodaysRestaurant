@@ -1,4 +1,4 @@
-namespace Card_Battle_System.Main_System.State_Machine
+namespace Card_Battle_System.System.Main.State_Machine
 {
     internal interface IState
     {

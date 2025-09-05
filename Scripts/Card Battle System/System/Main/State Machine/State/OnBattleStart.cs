@@ -1,6 +1,6 @@
 using System;
 
-namespace Card_Battle_System.Main_System.State_Machine.State
+namespace Card_Battle_System.System.Main.State_Machine.State
 {
     internal sealed class OnBattleStart : IState
     {
