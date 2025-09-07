@@ -7,17 +7,28 @@ namespace Card_Battle_System.System.Main.State_Machine.State
         private readonly Action OnEnter;
         private readonly Action OnExit;
         
-        public OnBattleStart(Action OnEnter, Action OnExit)
+        /// <summary>
+        /// 設定各狀態所執行的方法
+        /// </summary>
+        /// <param name="onEnter">進入時所執行的方法</param>
+        /// <param name="onExit">離開時所執行的方法</param>
+        public OnBattleStart(Action onEnter, Action onExit)
         {
-            this.OnEnter = OnEnter;
-            this.OnExit = OnExit;
+            OnEnter = onEnter;
+            OnExit = onExit;
         }
 
+        /// <summary>
+        /// 進入時所執行的方法
+        /// </summary>
         public void Enter()
         {
             OnEnter?.Invoke();
         }
-        
+
+        /// <summary>
+        /// 離開時所執行的方法
+        /// </summary>
         public void Exit()
         {
             OnExit?.Invoke();

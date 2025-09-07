@@ -3,12 +3,16 @@ namespace Card_Battle_System.System.Main.State_Machine
     internal sealed class StateMachine
     {
         private IState CurrentState;
-
-        public void ChangeState(IState NewState)
+        
+        /// <summary>
+        /// 退出狀態後進到新傳入的狀態。
+        /// </summary>
+        /// <param name="nextState">下一個狀態</param>
+        public void ChangeState(IState nextState)
         {
             CurrentState?.Exit();
-            CurrentState = NewState;
-            CurrentState.Enter();
+            CurrentState = nextState;
+            CurrentState?.Enter();
         }
     }
 }

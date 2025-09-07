@@ -12,23 +12,19 @@ namespace Card_Battle_System.System.Main
         
         private readonly StateMachine StateMachine = new();
         
-        private void Start()
-        {
-            OnBattleStart();
-        }
-
         #region StateMachine
             #region OnBattleStart
                 private void OnBattleStart()
                 {
-                    StateMachine.ChangeState(new OnBattleStart(OnBattleStartEnter, OnBattleStartExit));
+                    StateMachine.ChangeState(new OnBattleStart(OnBattleStart_Enter, OnBattleStart_Exit));
                 }
 
-                private void OnBattleStartEnter()
+                private void OnBattleStart_Enter()
                 {
+                    CardPoolSystem.Refill(() => { Debug.Log("CardPoolSystem Refill Complete."); });
                 }
-
-                private void OnBattleStartExit()
+                
+                private void OnBattleStart_Exit()
                 {
                 }
             #endregion
