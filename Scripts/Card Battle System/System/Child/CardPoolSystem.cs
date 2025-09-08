@@ -44,8 +44,7 @@ namespace Card_Battle_System.System.Child
         }
         
         /// <summary>
-        /// 會把重新整理卡片的順序，並且重新填充卡池
-        /// 會回傳完成填充後的訊息
+        /// 會把重新整理卡片的順序，並且重新填充卡池，並回傳完成填充後的訊息
         /// </summary>
         /// <param name="onComplete">完成填充</param>
         public void Refill(Action onComplete = null)

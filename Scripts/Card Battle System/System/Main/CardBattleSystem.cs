@@ -9,6 +9,7 @@ namespace Card_Battle_System.System.Main
     {
         [field: Header("Child System")]
         [field: SerializeField] private CardPoolSystem CardPoolSystem;
+        [field: SerializeField] private DrawCardSystem DrawCardSystem;
         
         private readonly StateMachine StateMachine = new();
 

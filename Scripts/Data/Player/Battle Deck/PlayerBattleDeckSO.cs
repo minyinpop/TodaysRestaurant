@@ -10,8 +10,7 @@ namespace Data.Player.Battle_Deck
         [field: SerializeField] private BattleCard[] BattleCards;
 
         /// <summary>
-        /// 從戰鬥卡包中隨機抽取一張戰鬥卡片
-        /// 會回傳戰鬥卡片的 Prefab 與是否獲取成功
+        /// 從戰鬥卡包中隨機抽取一張戰鬥卡片，並回傳戰鬥卡片的 Prefab 與是否獲取成功
         /// </summary>
         /// <paramref name="cardPrefab">戰鬥卡片的 Prefab</paramref>
         /// <returns>是否獲取成功</returns>
