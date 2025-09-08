@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using Card_Battle_System.Object.Card_Slot;
 using Card_Battle_System.Object.Card.Base;
+using Card_Battle_System.Object.Card.Type.Battle.System.Main;
 using Data.DOTween;
+using Data.Player.Battle_Deck;
 using DG.Tweening;
 using UnityEngine;
 
@@ -11,13 +13,20 @@ namespace Card_Battle_System.System.Child
 {
     internal sealed class CardPoolSystem : MonoBehaviour
     {
+        [field: Header("Parent")]
+        [field: SerializeField] private Transform SpawnParent;
+        
         [field: Header("Card Slot")]
         [field: SerializeField] private CardSlot[] CardSlots;
+        
+        [field: Header("Data")]
+        [field: SerializeField] private PlayerBattleDeckSO PlayerBattleDeckData;
         
         private IEnumerator SortCor;
         private IEnumerator RefillCor;
 
         private const float RefillDuration = .25f;
+        private readonly DoAnchorPos RefillAnimation = new(Vector3.zero, .5f, true, Ease.OutExpo);
 
         private void OnDisable()
         {
@@ -34,6 +43,11 @@ namespace Card_Battle_System.System.Child
             }
         }
         
+        /// <summary>
+        /// 會把重新整理卡片的順序，並且重新填充卡池
+        /// 會回傳完成填充後的訊息
+        /// </summary>
+        /// <param name="onComplete">完成填充</param>
         public void Refill(Action onComplete = null)
         {
             SortCor = SortCoroutine();
@@ -52,27 +66,68 @@ namespace Card_Battle_System.System.Child
                 remainingCards.Add(card);
             }
 
-            for (var i = 0; i < remainingCards.Count; i++)
+            switch (remainingCards.Count)
             {
-                var index = i;
-                var slot = CardSlots[index];
-                var card = remainingCards[index];
-
-                card.MoveToParent(slot.transform, new DoAnchorPos(slot.transform.position, .5f, true, Ease.OutExpo),
-                    () =>
+                case 0:
+                {
+                    StartCoroutine(RefillCor);
+                    SortCor = null;
+                    
+                    break;
+                }
+                case > 0:
+                {
+                    for (var i = 0; i < remainingCards.Count; i++)
                     {
-                        if (index != remainingCards.Count - 1) return;
-                        StartCoroutine(RefillCoroutine());
-                        SortCor = null;
-                    });
-                
-                yield return new WaitForSeconds(RefillDuration);
+                        var index = i;
+                        var slot = CardSlots[index];
+                        var card = remainingCards[index];
+
+                        card.MoveToParent(slot.transform, RefillAnimation, () =>
+                        {
+                            if (index != remainingCards.Count - 1) return;
+                            StartCoroutine(RefillCor);
+                            SortCor = null;
+                        });
+
+                        yield return new WaitForSeconds(RefillDuration);
+                    }
+
+                    break;
+                }
             }
         }
         
         private IEnumerator RefillCoroutine(Action onComplete = null)
         {
-            yield break;
+            for (var i = 0; i < CardSlots.Length; i++)
+            {
+                var index = i;
+                var slot = CardSlots[index];
+                
+                if (!slot.IsEmpty()) continue;
+
+                if (PlayerBattleDeckData.GetRandomBattleCard(out var battleCardPrefab))
+                {
+                    var card = Instantiate(battleCardPrefab, SpawnParent);
+                    var battleCard = card.GetComponent<BattleCard>();
+
+                    slot.Set(battleCard);
+                    battleCard.MoveToParent(slot.transform, RefillAnimation, () =>
+                    {
+                        if (index != CardSlots.Length - 1) return;
+                        onComplete?.Invoke();
+                        RefillCor = null;
+                    });
+
+                    yield return new WaitForSeconds(RefillDuration);
+                }
+                else
+                {
+                    // TODO 強制退出玩家到主介面，並重新 Reload 玩家的資料
+                    throw new Exception("PlayerBattleDeckData.GetRandomBattleCard() is null.");
+                }
+            }
         }
     }
 }

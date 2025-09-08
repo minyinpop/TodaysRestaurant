@@ -12,9 +12,9 @@ namespace Card_Battle_System.Object.Card_Slot
         /// </summary>
         /// <param name="card">卡片的資料</param>
         /// <returns>是否添加成功</returns>
-        public bool Add(ICard card)
+        public bool Set(ICard card)
         {
-            if (Card is not null) return false;
+            if (!IsEmpty()) return false;
             
             Card = card;
             return true;
@@ -27,7 +27,7 @@ namespace Card_Battle_System.Object.Card_Slot
         /// <returns>是否獲取成功</returns>
         public bool Get(out ICard card)
         {
-            if (Card is null)
+            if (IsEmpty())
             {
                 card = null;
                 return false;
@@ -36,6 +36,15 @@ namespace Card_Battle_System.Object.Card_Slot
             card = Card;
             Card = null;
             return true;
+        }
+
+        /// <summary>
+        /// 判斷卡槽是否為空
+        /// </summary>
+        /// <returns>是否為空</returns>
+        public bool IsEmpty()
+        {
+            return Card is null;
         }
     }
 }

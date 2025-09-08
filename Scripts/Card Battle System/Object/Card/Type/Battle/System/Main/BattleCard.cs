@@ -1,6 +1,7 @@
 using System;
 using Card_Battle_System.Object.Card.Base;
 using Card_Battle_System.Object.Card.Type.Battle.System.Child;
+using Data.Card.Battle;
 using Data.DOTween;
 using UnityEngine;
 
@@ -12,9 +13,22 @@ namespace Card_Battle_System.Object.Card.Type.Battle.System.Main
         [field: Header("Component")]
         [field: SerializeField] private RectTransform Rect;
         
+        [field: Header("Data")]
+        [field: SerializeField] private BattleCardSO BattleCardData;
+        
         [field: Header("Child System")]
         [field: SerializeField] private AnimationSystem AnimationSystem;
-        
+
+        /// <summary>
+        /// 獲取該卡片被抽到的機率
+        /// </summary>
+        /// <paramref name="chance">回傳被抽到的機率</paramref>
+        public void GetDrawChance(out float chance)
+        {
+            BattleCardData.GetDrawChance(out var drawChance);
+            chance = drawChance;
+        }
+
         /// <summary>
         /// 設定卡片的父物件，並呼叫動畫系統，執行移動的動畫，並會在播放完畢後回傳
         /// </summary>

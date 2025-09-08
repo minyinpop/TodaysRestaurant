@@ -11,6 +11,11 @@ namespace Card_Battle_System.System.Main
         [field: SerializeField] private CardPoolSystem CardPoolSystem;
         
         private readonly StateMachine StateMachine = new();
+
+        private void Start()
+        {
+            OnBattleStart();
+        }
         
         #region StateMachine
             #region OnBattleStart
