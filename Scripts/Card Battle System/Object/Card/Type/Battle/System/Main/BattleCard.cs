@@ -22,7 +22,7 @@ namespace Card_Battle_System.Object.Card.Type.Battle.System.Main
         /// <summary>
         /// 獲取該卡片被抽到的機率
         /// </summary>
-        /// <paramref name="chance">回傳被抽到的機率</paramref>
+        /// <param name="chance">回傳被抽到的機率</param>
         public void GetDrawChance(out float chance)
         {
             BattleCardData.GetDrawChance(out var drawChance);

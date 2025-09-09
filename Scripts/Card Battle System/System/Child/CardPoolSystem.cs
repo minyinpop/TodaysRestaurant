@@ -128,5 +128,24 @@ namespace Card_Battle_System.System.Child
                 }
             }
         }
+        
+        /// <summary>
+        /// 輸入需要多少的卡片，並從卡池中抽取後，返回抽取到的卡片
+        /// </summary>
+        /// <param name="number">要抽取多少張的卡片 (不超過卡池裡的卡槽總數)</param>
+        /// <param name="cards">返回被抽到的卡片</param>
+        public void GetCard(int number, out List<ICard> cards)
+        {
+            number = Mathf.Clamp(number, 0, CardSlots.Length);
+            
+            cards = new List<ICard>();
+            
+            for (var i = 0; i < number; i++)
+            {
+                var slot = CardSlots[i];
+                slot.Get(out var card);
+                cards.Add(card);
+            }
+        }
     }
 }

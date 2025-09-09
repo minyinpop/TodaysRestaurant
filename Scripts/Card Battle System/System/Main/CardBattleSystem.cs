@@ -27,7 +27,11 @@ namespace Card_Battle_System.System.Main
 
                 private void OnBattleStart_Enter()
                 {
-                    CardPoolSystem.Refill(() => { Debug.Log("CardPoolSystem Refill Complete."); });
+                    CardPoolSystem.Refill(() =>
+                    {
+                        CardPoolSystem.GetCard(6, out var battleCards);
+                        // TODO 製作抽卡的邏輯
+                    });
                 }
                 
                 private void OnBattleStart_Exit()
