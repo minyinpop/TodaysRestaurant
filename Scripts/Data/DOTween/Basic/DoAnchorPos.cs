@@ -1,7 +1,7 @@
 using DG.Tweening;
 using UnityEngine;
 
-namespace Data.DOTween
+namespace Data.DOTween.Basic
 {
     internal sealed class DoAnchorPos
     {

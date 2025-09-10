@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Card_Battle_System.Object.Card_Slot;
 using Card_Battle_System.Object.Card.Base;
 using Card_Battle_System.Object.Card.Type.Battle.System.Main;
-using Data.DOTween;
+using Data.DOTween.Basic;
 using Data.Player.Battle_Deck;
 using DG.Tweening;
 using UnityEngine;
@@ -130,11 +130,11 @@ namespace Card_Battle_System.System.Child
         }
         
         /// <summary>
-        /// 輸入需要多少的卡片，並從卡池中抽取後，返回抽取到的卡片
+        /// 從卡池中，抽取一定數量的卡片，並返回被抽到的卡片
         /// </summary>
         /// <param name="number">要抽取多少張的卡片 (不超過卡池裡的卡槽總數)</param>
         /// <param name="cards">返回被抽到的卡片</param>
-        public void GetCard(int number, out List<ICard> cards)
+        public void DrawCard(int number, out List<ICard> cards)
         {
             number = Mathf.Clamp(number, 0, CardSlots.Length);
             

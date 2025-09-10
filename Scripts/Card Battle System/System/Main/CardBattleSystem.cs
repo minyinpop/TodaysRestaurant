@@ -9,7 +9,7 @@ namespace Card_Battle_System.System.Main
     {
         [field: Header("Child System")]
         [field: SerializeField] private CardPoolSystem CardPoolSystem;
-        [field: SerializeField] private DrawCardSystem DrawCardSystem;
+        [field: SerializeField] private ShowCardSystem ShowCardSystem;
         
         private readonly StateMachine StateMachine = new();
 
@@ -29,8 +29,8 @@ namespace Card_Battle_System.System.Main
                 {
                     CardPoolSystem.Refill(() =>
                     {
-                        CardPoolSystem.GetCard(6, out var battleCards);
-                        // TODO 製作抽卡的邏輯
+                        CardPoolSystem.DrawCard(6, out var cards);
+                        ShowCardSystem.ShowCard(cards, () => Debug.Log("Show Card"));
                     });
                 }
                 
