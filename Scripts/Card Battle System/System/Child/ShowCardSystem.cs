@@ -24,7 +24,7 @@ namespace Card_Battle_System.System.Child
             new DoScale(Vector2.one * 1.25f, .5f, Ease.InSine),
             new DoScale(Vector2.one, .5f, Ease.OutSine));
         
-        private const float ShowDuration = .25f;
+        private const float DrawDuration = .25f;
         
         private IEnumerator ShowCor;
 
@@ -37,6 +37,11 @@ namespace Card_Battle_System.System.Child
             }
         }
         
+        /// <summary>
+        /// 展示從卡池裡抽到的卡片
+        /// </summary>
+        /// <param name="cards">被抽到的卡片</param>
+        /// <param name="onComplete">完成後的回傳</param>
         public void ShowCard(List<ICard> cards, Action onComplete = null)
         {
             ShowCor = ShowCardCoroutine(cards, onComplete);
@@ -45,14 +50,24 @@ namespace Card_Battle_System.System.Child
 
         private IEnumerator ShowCardCoroutine(List<ICard> cards, Action onComplete = null)
         {
+            foreach (var slot in CardSlots)
+                Destroy(slot.gameObject);
+            CardSlots.Clear();
+            
+            for (var i = 0; i < cards.Count; i++)
+            {
+                var slot = Instantiate(SlotPrefab, SpawnParent);
+                var slotScript = slot.GetComponent<CardSlot>();
+                CardSlots.Add(slotScript);
+            }
+
             for (var i = 0; i < cards.Count; i++)
             {
                 var index = i;
-                var slot = Instantiate(SlotPrefab, SpawnParent);
-                var slotScript = slot.GetComponent<CardSlot>();
+                var slot = CardSlots[index];
                 var card = cards[index];
                 
-                slotScript.Set(card);
+                slot.Set(card);
                 card.MoveToShowPoint(slot.transform, AnchorPosSettings, FlipSettings, () =>
                 {
                     if (index != cards.Count - 1) return;
@@ -60,7 +75,22 @@ namespace Card_Battle_System.System.Child
                     ShowCor = null;
                 });
                 
-                yield return new WaitForSeconds(ShowDuration);
+                yield return new WaitForSeconds(DrawDuration);
+            }
+        }
+
+        /// <summary>
+        /// 獲取展示中的所有卡片
+        /// </summary>
+        /// <param name="cards">展示中的卡片</param>
+        public void GetShowCards(out List<ICard> cards)
+        {
+            cards = new List<ICard>();
+
+            foreach (var slot in CardSlots)
+            {
+                slot.Get(out var card);
+                cards.Add(card);
             }
         }
     }

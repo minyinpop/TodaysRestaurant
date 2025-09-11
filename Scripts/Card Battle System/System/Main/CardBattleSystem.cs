@@ -10,6 +10,7 @@ namespace Card_Battle_System.System.Main
         [field: Header("Child System")]
         [field: SerializeField] private CardPoolSystem CardPoolSystem;
         [field: SerializeField] private ShowCardSystem ShowCardSystem;
+        [field: SerializeField] private HandCardSystem HandCardSystem;
         
         private readonly StateMachine StateMachine = new();
 
@@ -30,11 +31,31 @@ namespace Card_Battle_System.System.Main
                     CardPoolSystem.Refill(() =>
                     {
                         CardPoolSystem.DrawCard(6, out var cards);
-                        ShowCardSystem.ShowCard(cards, () => Debug.Log("Show Card"));
+                        ShowCardSystem.ShowCard(cards, () =>
+                        {
+                            CardPoolSystem.Refill();
+                            ShowCardSystem.GetShowCards(out var showCards);
+                            HandCardSystem.Add(showCards, OnInitiativeCoin);
+                        });
                     });
                 }
                 
                 private void OnBattleStart_Exit()
+                {
+                }
+            #endregion
+            
+            #region OnInitiativeCoin
+                private void OnInitiativeCoin()
+                {
+                    StateMachine.ChangeState(new OnInitiativeCoin(OnInitiativeCoin_Enter, OnInitiativeCoin_Exit));
+                }
+
+                private void OnInitiativeCoin_Enter()
+                {
+                }
+                
+                private void OnInitiativeCoin_Exit()
                 {
                 }
             #endregion
