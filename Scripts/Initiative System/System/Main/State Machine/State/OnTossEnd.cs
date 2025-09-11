@@ -2,7 +2,7 @@ using System;
 
 namespace Initiative_System.System.Main.State_Machine.State
 {
-    internal sealed class OnPrepareToToss : IState
+    internal sealed class OnTossEnd : IState
     {
         private readonly Action OnEnter;
         private readonly Action OnExit;
@@ -12,7 +12,7 @@ namespace Initiative_System.System.Main.State_Machine.State
         /// </summary>
         /// <param name="onEnter">進入時所執行的方法</param>
         /// <param name="onExit">離開時所執行的方法</param>
-        public OnPrepareToToss(Action onEnter, Action onExit)
+        public OnTossEnd(Action onEnter, Action onExit)
         {
             OnEnter = onEnter;
             OnExit = onExit;

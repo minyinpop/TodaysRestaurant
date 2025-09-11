@@ -12,6 +12,9 @@ namespace Card_Battle_System.System.Main
         [field: SerializeField] private ShowCardSystem ShowCardSystem;
         [field: SerializeField] private HandCardSystem HandCardSystem;
         
+        [field: Header("Develop Only")]
+        [field: SerializeField] private GameObject InitiativeSystem;
+        
         private readonly StateMachine StateMachine = new();
 
         private void Start()
@@ -53,6 +56,8 @@ namespace Card_Battle_System.System.Main
 
                 private void OnInitiativeCoin_Enter()
                 {
+                    // TODO 因為開發需求，日後改成生成 InitiativeSystem
+                    InitiativeSystem.SetActive(true);
                 }
                 
                 private void OnInitiativeCoin_Exit()

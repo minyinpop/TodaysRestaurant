@@ -35,7 +35,8 @@ namespace Card_Battle_System.Object.Card.Type.Battle.System.Child
                 CurrentSequence = DOTween.Sequence()
                     .Append(RotateTo(rotateSettings))
                     .Join(ScaleTo(scaleSettings01)
-                        .OnComplete(() => ScaleTo(scaleSettings02)));
+                        .OnComplete(() => ScaleTo(scaleSettings02)))
+                    .OnKill(() => CurrentSequence = null);
                 
                 return CurrentSequence;
             }

@@ -9,20 +9,31 @@ namespace Initiative_System.System.Child
         [field: Header("Object")]
         [field: SerializeField] private CanvasGroup ScreenMask;
         
+        private const float FadeDuration = .5f;
+        
         private Tween FadeTween;
 
-        public Tween FadeIn(Action onComplete = null)
+        public Tween FadeIn()
         {
             FadeTween?.Kill();
 
             FadeTween = ScreenMask
-                .DOFade(1, .5f)
+                .DOFade(1, FadeDuration)
                 .SetEase(Ease.Linear)
-                .OnComplete(() =>
-                {
-                    ScreenMask.alpha = 1;
-                    onComplete?.Invoke();
-                })
+                .OnComplete(() => ScreenMask.alpha = 1)
+                .OnKill(() => FadeTween = null);
+            
+            return FadeTween;
+        }
+
+        public Tween FadeOut()
+        {
+            FadeTween?.Kill();
+            
+            FadeTween = ScreenMask
+                .DOFade(0, FadeDuration)
+                .SetEase(Ease.Linear)
+                .OnComplete(() => ScreenMask.alpha = 0)
                 .OnKill(() => FadeTween = null);
             
             return FadeTween;
