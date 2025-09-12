@@ -43,11 +43,27 @@ namespace System.Card_Battle_System.System.Child
         private void OnClickCard(ICard card)
         {
             if (card is not BattleCard battleCard) return;
-            if (SelectedCards.Count >= MaxSelectedCards) return;
 
-            SelectedCards.Add(battleCard);
-            var orderPrefab = CardOrderPrefabs[SelectedCards.Count - 1];
-            battleCard.SetCardOrder(orderPrefab);
+            if (SelectedCards.Contains(battleCard))
+            {
+                SelectedCards.Remove(battleCard);
+                battleCard.RemoveCardOrder();
+                
+                for (var i = 0; i < SelectedCards.Count; i++)
+                {
+                    var selectedCard = SelectedCards[i];
+                    var cardOrderPrefab = CardOrderPrefabs[i];
+                    selectedCard.RefreshCardOrder(cardOrderPrefab);
+                }
+            }
+            else
+            {
+                if (SelectedCards.Count >= MaxSelectedCards) return;
+                
+                SelectedCards.Add(battleCard);
+                var orderPrefab = CardOrderPrefabs[SelectedCards.Count - 1];
+                battleCard.SetCardOrder(orderPrefab);
+            }
         }
 
         #region Add
@@ -80,7 +96,6 @@ namespace System.Card_Battle_System.System.Child
                     yield return new WaitForSeconds(.25f);
                 }
             }
-
-            #endregion
+        #endregion
     }
 }

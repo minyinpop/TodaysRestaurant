@@ -42,6 +42,12 @@ namespace System.Card_Battle_System.Object.Card.Type.Battle.System.Main
                 AnimationSystem.MoveTo(CardRect, new DoAnchorPos(Vector2.up * 100, .25f, true, Ease.OutExpo));
             }
             
+            public void RefreshCardOrder(GameObject cardOrderPrefab)
+            {
+                Destroy(CardOrder);
+                CardOrder = Instantiate(cardOrderPrefab, CardOrderParent);
+            }
+            
             public void RemoveCardOrder()
             {
                 Destroy(CardOrder);
