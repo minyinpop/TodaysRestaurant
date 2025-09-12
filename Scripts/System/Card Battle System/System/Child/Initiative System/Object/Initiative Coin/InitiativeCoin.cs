@@ -47,7 +47,7 @@ namespace System.Card_Battle_System.System.Child.Initiative_System.Object.Initia
             var finalPos = new Vector2(randomXPos, randomYPos);
 
             // Angle Y
-            var randomYTurns = UnityEngine.Random.Range(12, 24);
+            var randomYTurns = UnityEngine.Random.Range(24, 32);
             var finalYAngle = 180 * randomYTurns;
             
             // Angle Z

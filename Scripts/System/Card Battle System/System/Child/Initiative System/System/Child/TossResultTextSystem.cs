@@ -49,6 +49,7 @@ namespace System.Card_Battle_System.System.Child.Initiative_System.System.Child
             private IEnumerator ShowProcess(ContentSettings settings, float callbackDelay, Action onComplete = null)
             {
                 const float showDelay = 1f;
+                var textShowComplete = false;
                 
                 settings.GetTextColor(out var textColor);
                 
@@ -58,7 +59,8 @@ namespace System.Card_Battle_System.System.Child.Initiative_System.System.Child
                 TopText.Show(textColor, topContent);
                 yield return new WaitForSeconds(showDelay);
                 
-                BottomText.Show(textColor, bottomContent);
+                BottomText.Show(textColor, bottomContent, () => textShowComplete = true);
+                yield return new WaitUntil(() => textShowComplete);
                 yield return new WaitForSeconds(callbackDelay);
                 
                 onComplete?.Invoke();

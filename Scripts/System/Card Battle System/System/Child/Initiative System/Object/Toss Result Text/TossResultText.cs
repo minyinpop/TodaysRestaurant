@@ -14,11 +14,12 @@ namespace System.Card_Battle_System.System.Child.Initiative_System.Object.Toss_R
         [field: Header("Child System")]
         [field: SerializeField] private AnimationSystem AnimationSystem;
 
-        public void Show(Color color, string content)
+        public void Show(Color color, string content, Action onComplete = null)
         {
             Text.color = color;
             Text.text = content;
-            Text.gameObject.SetActive(true);
+            AnimationSystem.ScaleTo(new DoScale(Vector2.one, 1, Ease.OutBack))
+                .OnComplete(() => onComplete?.Invoke());
         }
 
         public void Hide(float hideDuration)
