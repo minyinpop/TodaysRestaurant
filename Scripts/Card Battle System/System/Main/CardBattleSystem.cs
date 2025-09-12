@@ -1,6 +1,8 @@
 using Card_Battle_System.System.Child;
 using Card_Battle_System.System.Main.State_Machine;
 using Card_Battle_System.System.Main.State_Machine.State;
+using Data.Initiative_Coin;
+using Initiative_System.System.Main;
 using UnityEngine;
 
 namespace Card_Battle_System.System.Main
@@ -12,8 +14,8 @@ namespace Card_Battle_System.System.Main
         [field: SerializeField] private ShowCardSystem ShowCardSystem;
         [field: SerializeField] private HandCardSystem HandCardSystem;
         
-        [field: Header("Develop Only")]
-        [field: SerializeField] private GameObject InitiativeSystem;
+        [field: Header("Other System")]
+        [field: SerializeField] private InitiativeSystem InitiativeSystem;
         
         private readonly StateMachine StateMachine = new();
 
@@ -56,8 +58,9 @@ namespace Card_Battle_System.System.Main
 
                 private void OnInitiativeCoin_Enter()
                 {
-                    // TODO 因為開發需求，日後改成生成 InitiativeSystem
-                    InitiativeSystem.SetActive(true);
+                    var system = Instantiate(InitiativeSystem.gameObject);
+                    var systemScript = system.GetComponent<InitiativeSystem>();
+                    systemScript.OnShowResultComplete += OnInitiativeSystemComplete;
                 }
                 
                 private void OnInitiativeCoin_Exit()
@@ -65,5 +68,10 @@ namespace Card_Battle_System.System.Main
                 }
             #endregion
         #endregion
+
+        private void OnInitiativeSystemComplete(TossResult result)
+        {
+            Debug.Log(result);
+        }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using Data.Initiative_Coin;
 using DG.Tweening;
 using Initiative_System.Object.Initiative_Coin;
@@ -19,7 +20,9 @@ namespace Initiative_System.System.Main
 
         private readonly StateMachine StateMachine = new();
 
-        private TossResult TossResult = TossResult.Null;
+        private TossResult TossResult = TossResult.Tails;
+
+        public event Action<TossResult> OnShowResultComplete;
 
         private void Start()
         {
@@ -77,7 +80,7 @@ namespace Initiative_System.System.Main
                         InitiativeCoin.Hide(coinHideDuration, () =>
                         {
                             ScreenMaskSystem.FadeOut()
-                                .OnComplete(() => Debug.Log("Initiative System End"));
+                                .OnComplete(() => OnShowResultComplete?.Invoke(TossResult));
                         });
                     });
                 }
