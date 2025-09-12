@@ -15,20 +15,41 @@ namespace System.Card_Battle_System.Object.Card.Type.Battle.System.Main
         [field: SerializeField] private RectTransform CardRect;
         [field: SerializeField] private RectTransform CardSurfaceRect;
         
+        [field: Header("Child System")]
+        [field: SerializeField] private AnimationSystem AnimationSystem;
+        
         [field: Header("Data")]
         [field: SerializeField] private BattleCardSO BattleCardData;
         
-        [field: Header("Child System")]
-        [field: SerializeField] private AnimationSystem AnimationSystem;
-
+        [field: Header("Card Order")]
+        [field: SerializeField] private Transform CardOrderParent;
+        private GameObject CardOrder;
+        
         private bool Interactable;
         private bool IsSelected;
+
+        public event Action<ICard> OnClick;
         
         public void GetDrawChance(out float chance)
         {
             chance = BattleCardData.DrawChance;
         }
-        
+
+        #region Card Order
+            public void SetCardOrder(GameObject cardOrderPrefab)
+            {
+                CardOrder = Instantiate(cardOrderPrefab, CardOrderParent);
+                AnimationSystem.MoveTo(CardRect, new DoAnchorPos(Vector2.up * 100, .25f, true, Ease.OutExpo));
+            }
+            
+            public void RemoveCardOrder()
+            {
+                Destroy(CardOrder);
+                CardOrder = null;
+                AnimationSystem.MoveTo(CardRect, new DoAnchorPos(Vector2.zero, .25f, true, Ease.OutExpo));
+            }
+        #endregion
+
         #region CustomPointerEventHandler
             protected override void OnPointerEnter()
             {
@@ -45,6 +66,8 @@ namespace System.Card_Battle_System.Object.Card.Type.Battle.System.Main
             protected override void OnPointerClick()
             {
                 if (!Interactable) return;
+                IsSelected = !IsSelected;
+                OnClick?.Invoke(this);
             }
         #endregion
 

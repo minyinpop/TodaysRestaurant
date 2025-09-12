@@ -30,7 +30,7 @@ namespace System.Card_Battle_System.Object.Card_Slot
 
         public void SetInteractable(bool interactable)
         {
-            Card.SetInteractable(interactable);
+            Card?.SetInteractable(interactable);
         }
 
         public bool IsEmpty()

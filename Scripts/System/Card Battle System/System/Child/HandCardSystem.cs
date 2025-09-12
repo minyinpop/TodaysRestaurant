@@ -1,5 +1,6 @@
 using System.Card_Battle_System.Object.Card_Slot;
 using System.Card_Battle_System.Object.Card.Base;
+using System.Card_Battle_System.Object.Card.Type.Battle.System.Main;
 using System.Collections;
 using System.Collections.Generic;
 using Data.DOTween.Basic;
@@ -14,11 +15,13 @@ namespace System.Card_Battle_System.System.Child
         [field: SerializeField] private Transform SpawnParent;
         [field: SerializeField] private GameObject SlotPrefab;
         
+        [field: Header("Card Order")]
+        [field: SerializeField] private List<GameObject> CardOrderPrefabs;
+        
         private readonly List<CardSlot> CardSlots = new();
+        private readonly List<BattleCard> SelectedCards = new();
         
-        private readonly DoAnchorPos AnchorPosSettings = new(Vector3.zero, .5f, true, Ease.OutExpo);
-        
-        private const float AddDuration = .25f;
+        private const int MaxSelectedCards = 3;
         
         private IEnumerator AddCor;
 
@@ -31,6 +34,22 @@ namespace System.Card_Battle_System.System.Child
             }
         }
         
+        public void SetCardsInteractable(bool interactable)
+        {
+            foreach (var cardSlot in CardSlots)
+                cardSlot.SetInteractable(interactable);
+        }
+
+        private void OnClickCard(ICard card)
+        {
+            if (card is not BattleCard battleCard) return;
+            if (SelectedCards.Count >= MaxSelectedCards) return;
+
+            SelectedCards.Add(battleCard);
+            var orderPrefab = CardOrderPrefabs[SelectedCards.Count - 1];
+            battleCard.SetCardOrder(orderPrefab);
+        }
+
         #region Add
             public void Add(List<ICard> cards, Action onComplete = null)
             {
@@ -49,24 +68,19 @@ namespace System.Card_Battle_System.System.Child
                     
                     CardSlots.Add(slotScript);
                     slotScript.Set(card);
-                    card.MoveToParent(slot.transform, AnchorPosSettings, () =>
+                    card.MoveToParent(slot.transform, new DoAnchorPos(Vector3.zero, .5f, true, Ease.OutExpo), () =>
                     {
                         if (index != cards.Count - 1) return;
                         onComplete?.Invoke();
                         AddCor = null;
                     });
                     
-                    yield return new WaitForSeconds(AddDuration);
+                    card.OnClick += OnClickCard;
+
+                    yield return new WaitForSeconds(.25f);
                 }
             }
-        #endregion
 
-        public void SetCardsInteractable(bool interactable)
-        {
-            foreach (var cardSlot in CardSlots)
-            {
-                cardSlot.SetInteractable(interactable);
-            }
-        }
+            #endregion
     }
 }

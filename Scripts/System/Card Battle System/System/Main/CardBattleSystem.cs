@@ -45,7 +45,9 @@ namespace System.Card_Battle_System.System.Main
                         {
                             CardPoolSystem.Refill();
                             ShowCardSystem.GetShowCards(out var showCards);
-                            HandCardSystem.Add(showCards, OnInitiativeCoin);
+                            
+                            HandCardSystem.Add(showCards, OnPlayerTurn); // Develop Only
+                            // HandCardSystem.Add(showCards, OnInitiativeCoin);
                         });
                     });
                 }
@@ -75,8 +77,7 @@ namespace System.Card_Battle_System.System.Main
                             }
                             case TossResult.Tails:
                             {
-                                OnPlayerTurn(); // Develop Only
-                                // OnEnemyTurn();
+                                OnEnemyTurn();
                                 break;
                             }
                             default:
