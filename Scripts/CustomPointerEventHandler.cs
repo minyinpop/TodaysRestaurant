@@ -17,7 +17,7 @@ internal abstract class CustomPointerEventHandler : MonoBehaviour, IPointerEnter
     {
         OnPointerClick();
     }
-        
+
     protected virtual void OnPointerEnter()
     {
     }

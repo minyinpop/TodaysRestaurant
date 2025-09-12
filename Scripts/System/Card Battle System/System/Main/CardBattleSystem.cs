@@ -1,5 +1,6 @@
 using System.Card_Battle_System.System.Child;
 using System.Card_Battle_System.System.Child.Initiative_System.System.Main;
+using System.Card_Battle_System.System.Child.Player_System.System.Main;
 using System.Card_Battle_System.System.Main.State_Machine;
 using System.Card_Battle_System.System.Main.State_Machine.State;
 using Data.Initiative_Coin;
@@ -14,9 +15,12 @@ namespace System.Card_Battle_System.System.Main
         [field: SerializeField] private ShowCardSystem ShowCardSystem;
         [field: SerializeField] private HandCardSystem HandCardSystem;
         
-        [field: Header("Other System")]
+        [field: Header("Initiative System")]
         [field: SerializeField] private InitiativeSystem InitiativeSystem;
         private GameObject InitiativeSystemObject;
+        
+        [field: Header("Player System")]
+        [field: SerializeField] private PlayerSystem PlayerSystem;
         
         private readonly StateMachine StateMachine = new();
 
@@ -71,7 +75,8 @@ namespace System.Card_Battle_System.System.Main
                             }
                             case TossResult.Tails:
                             {
-                                OnEnemyTurn();
+                                OnPlayerTurn(); // Develop Only
+                                // OnEnemyTurn();
                                 break;
                             }
                             default:
@@ -97,7 +102,7 @@ namespace System.Card_Battle_System.System.Main
                 
                 private void OnPlayerTurn_Enter()
                 {
-                    Debug.Log("Player's turn");
+                    HandCardSystem.SetCardsInteractable(true);
                 }
                 
                 private void OnPlayerTurn_Exit()

@@ -31,36 +31,41 @@ namespace System.Card_Battle_System.System.Child
             }
         }
         
-        /// <summary>
-        /// 添加卡片到玩家的牌堆
-        /// </summary>
-        /// <param name="cards">被添加的卡片</param>
-        /// <param name="onComplete">完成後的回傳</param>
-        public void Add(List<ICard> cards, Action onComplete = null)
-        {
-            AddCor = AddCoroutine(cards, onComplete);
-            StartCoroutine(AddCor);
-        }
-
-        private IEnumerator AddCoroutine(List<ICard> cards, Action onComplete = null)
-        {
-            for (var i = 0; i < cards.Count; i++)
+        #region Add
+            public void Add(List<ICard> cards, Action onComplete = null)
             {
-                var index = i;
-                var slot = Instantiate(SlotPrefab, SpawnParent);
-                var slotScript = slot.GetComponent<CardSlot>();
-                var card = cards[index];
-                
-                CardSlots.Add(slotScript);
-                slotScript.Set(card);
-                card.MoveToParent(slot.transform, AnchorPosSettings, () =>
+                AddCor = AddCoroutine(cards, onComplete);
+                StartCoroutine(AddCor);
+            }
+
+            private IEnumerator AddCoroutine(List<ICard> cards, Action onComplete = null)
+            {
+                for (var i = 0; i < cards.Count; i++)
                 {
-                    if (index != cards.Count - 1) return;
-                    onComplete?.Invoke();
-                    AddCor = null;
-                });
-                
-                yield return new WaitForSeconds(AddDuration);
+                    var index = i;
+                    var slot = Instantiate(SlotPrefab, SpawnParent);
+                    var slotScript = slot.GetComponent<CardSlot>();
+                    var card = cards[index];
+                    
+                    CardSlots.Add(slotScript);
+                    slotScript.Set(card);
+                    card.MoveToParent(slot.transform, AnchorPosSettings, () =>
+                    {
+                        if (index != cards.Count - 1) return;
+                        onComplete?.Invoke();
+                        AddCor = null;
+                    });
+                    
+                    yield return new WaitForSeconds(AddDuration);
+                }
+            }
+        #endregion
+
+        public void SetCardsInteractable(bool interactable)
+        {
+            foreach (var cardSlot in CardSlots)
+            {
+                cardSlot.SetInteractable(interactable);
             }
         }
     }

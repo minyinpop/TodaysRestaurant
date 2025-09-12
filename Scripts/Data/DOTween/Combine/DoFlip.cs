@@ -9,12 +9,6 @@ namespace Data.DOTween.Combine
         private readonly DoScale ScaleSettings01;
         private readonly DoScale ScaleSettings02;
 
-        /// <summary>
-        /// 設置動畫參數
-        /// </summary>
-        /// <param name="rotateSettings">旋轉的動畫參數</param>
-        /// <param name="scaleSettings01">前半部分的動畫參數</param>
-        /// <param name="scaleSettings02">後半部分的動畫參數</param>
         public DoFlip(DoRotate rotateSettings, DoScale scaleSettings01, DoScale scaleSettings02)
         {
             RotateSettings = rotateSettings;
@@ -23,12 +17,6 @@ namespace Data.DOTween.Combine
             ScaleSettings02 = scaleSettings02;
         }
         
-        /// <summary>
-        /// 獲取動畫的參數
-        /// </summary>
-        /// <param name="rotateSettings">旋轉的動畫參數</param>
-        /// <param name="scaleSettings01">前半部分的動畫參數</param>
-        /// <param name="scaleSettings02">後半部分的動畫參數</param>
         public void GetValues(out DoRotate rotateSettings, out DoScale scaleSettings01, out DoScale scaleSettings02)
         {
             rotateSettings = RotateSettings;
