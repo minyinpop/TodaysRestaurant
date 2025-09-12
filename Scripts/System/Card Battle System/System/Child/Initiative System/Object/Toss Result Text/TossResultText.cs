@@ -3,7 +3,7 @@ using DG.Tweening;
 using TMPro;
 using UnityEngine;
 
-namespace System.Initiative_System.Object.Toss_Result_Text
+namespace System.Card_Battle_System.System.Child.Initiative_System.Object.Toss_Result_Text
 {
     [RequireComponent(typeof(AnimationSystem))]
     internal sealed class TossResultText : MonoBehaviour

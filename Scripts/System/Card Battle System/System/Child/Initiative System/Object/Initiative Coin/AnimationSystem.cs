@@ -3,7 +3,7 @@ using Data.DOTween.Combine;
 using DG.Tweening;
 using UnityEngine;
 
-namespace System.Initiative_System.Object.Initiative_Coin
+namespace System.Card_Battle_System.System.Child.Initiative_System.Object.Initiative_Coin
 {
     internal sealed class AnimationSystem : MonoBehaviour
     {

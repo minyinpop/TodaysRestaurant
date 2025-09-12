@@ -1,12 +1,12 @@
-using System.Initiative_System.Object.Initiative_Coin;
-using System.Initiative_System.System.Child;
-using System.Initiative_System.System.Main.State_Machine;
-using System.Initiative_System.System.Main.State_Machine.State;
+using System.Card_Battle_System.System.Child.Initiative_System.Object.Initiative_Coin;
+using System.Card_Battle_System.System.Child.Initiative_System.System.Child;
+using System.Card_Battle_System.System.Child.Initiative_System.System.Main.State_Machine;
+using System.Card_Battle_System.System.Child.Initiative_System.System.Main.State_Machine.State;
 using Data.Initiative_Coin;
 using DG.Tweening;
 using UnityEngine;
 
-namespace System.Initiative_System.System.Main
+namespace System.Card_Battle_System.System.Child.Initiative_System.System.Main
 {
     internal sealed class InitiativeSystem : MonoBehaviour
     {

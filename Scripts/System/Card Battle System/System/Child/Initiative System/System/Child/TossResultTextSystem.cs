@@ -1,9 +1,9 @@
+using System.Card_Battle_System.System.Child.Initiative_System.Object.Toss_Result_Text;
 using System.Collections;
-using System.Initiative_System.Object.Toss_Result_Text;
 using Data.Initiative_Coin;
 using UnityEngine;
 
-namespace System.Initiative_System.System.Child
+namespace System.Card_Battle_System.System.Child.Initiative_System.System.Child
 {
     internal sealed class TossResultTextSystem : MonoBehaviour
     {

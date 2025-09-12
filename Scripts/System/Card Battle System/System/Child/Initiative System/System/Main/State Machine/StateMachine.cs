@@ -1,4 +1,4 @@
-namespace System.Initiative_System.System.Main.State_Machine
+namespace System.Card_Battle_System.System.Child.Initiative_System.System.Main.State_Machine
 {
     internal sealed class StateMachine
     {

@@ -1,7 +1,7 @@
 using System.Card_Battle_System.System.Child;
+using System.Card_Battle_System.System.Child.Initiative_System.System.Main;
 using System.Card_Battle_System.System.Main.State_Machine;
 using System.Card_Battle_System.System.Main.State_Machine.State;
-using System.Initiative_System.System.Main;
 using Data.Initiative_Coin;
 using UnityEngine;
 
