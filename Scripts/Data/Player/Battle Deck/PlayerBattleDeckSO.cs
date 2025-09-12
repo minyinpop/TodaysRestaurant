@@ -1,4 +1,4 @@
-using Card_Battle_System.Object.Card.Type.Battle.System.Main;
+using System.Card_Battle_System.Object.Card.Type.Battle.System.Main;
 using UnityEngine;
 
 namespace Data.Player.Battle_Deck
