@@ -60,7 +60,7 @@ namespace System.Card_Battle_System.System.Child
                 var card = cards[index];
                 
                 slot.Set(card);
-                card.MoveToShowPoint(slot.transform, AnchorPosSettings, FlipSettings, () =>
+                card.MoveAndFlip(slot.transform, AnchorPosSettings, FlipSettings, () =>
                 {
                     if (index != cards.Count - 1) return;
                     onComplete?.Invoke();

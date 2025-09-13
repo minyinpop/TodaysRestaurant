@@ -26,7 +26,6 @@ namespace System.Card_Battle_System.Object.Card.Type.Battle.System.Main
         private GameObject CardOrder;
         
         private bool Interactable;
-        private bool IsSelected;
 
         public event Action<ICard> OnClick;
         
@@ -38,21 +37,16 @@ namespace System.Card_Battle_System.Object.Card.Type.Battle.System.Main
         #region Card Order
             public void SetCardOrder(GameObject cardOrderPrefab)
             {
-                CardOrder = Instantiate(cardOrderPrefab, CardOrderParent);
-                AnimationSystem.MoveTo(CardRect, new DoAnchorPos(Vector2.up * 100, .25f, true, Ease.OutExpo));
-            }
-            
-            public void RefreshCardOrder(GameObject cardOrderPrefab)
-            {
-                Destroy(CardOrder);
+                if (CardOrder is not null)
+                    Destroy(CardOrder);
                 CardOrder = Instantiate(cardOrderPrefab, CardOrderParent);
             }
             
             public void RemoveCardOrder()
             {
+                if (CardOrder is null) return;
                 Destroy(CardOrder);
                 CardOrder = null;
-                AnimationSystem.MoveTo(CardRect, new DoAnchorPos(Vector2.zero, .25f, true, Ease.OutExpo));
             }
         #endregion
 
@@ -72,7 +66,6 @@ namespace System.Card_Battle_System.Object.Card.Type.Battle.System.Main
             protected override void OnPointerClick()
             {
                 if (!Interactable) return;
-                IsSelected = !IsSelected;
                 OnClick?.Invoke(this);
             }
         #endregion
@@ -83,14 +76,14 @@ namespace System.Card_Battle_System.Object.Card.Type.Battle.System.Main
                 Interactable = interactable;
             }
 
-            public void MoveToParent(Transform parent, DoAnchorPos settings, Action onComplete = null)
+            public void Move(Transform parent, DoAnchorPos settings, Action onComplete = null)
             {
                 CardRect.SetParent(parent);
                 AnimationSystem.MoveTo(CardRect, settings)
                     .OnComplete(() => onComplete?.Invoke());
             }
 
-            public void MoveToShowPoint(Transform parent, DoAnchorPos anchorPosSettings, DoFlip flipSettings, Action onComplete = null)
+            public void MoveAndFlip(Transform parent, DoAnchorPos anchorPosSettings, DoFlip flipSettings, Action onComplete = null)
             {
                 CardRect.SetParent(parent);
                 

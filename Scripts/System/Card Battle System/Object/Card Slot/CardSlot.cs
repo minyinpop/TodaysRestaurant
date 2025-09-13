@@ -27,15 +27,20 @@ namespace System.Card_Battle_System.Object.Card_Slot
             Card = null;
             return true;
         }
-
+        
+        public bool IsEmpty()
+        {
+            return Card is null;
+        }
+        
         public void SetInteractable(bool interactable)
         {
             Card?.SetInteractable(interactable);
         }
 
-        public bool IsEmpty()
+        public bool Compare(ICard card)
         {
-            return Card is null;
+            return card == Card;
         }
     }
 }

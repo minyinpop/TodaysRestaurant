@@ -10,8 +10,12 @@ namespace System.Card_Battle_System.Object.Card.Base
         
         public void SetInteractable(bool interactable);
         
-        public void MoveToParent(Transform parent, DoAnchorPos settings, Action onComplete = null);
-
-        public void MoveToShowPoint(Transform parent, DoAnchorPos anchorPosSettings, DoFlip flipSettings, Action onComplete = null);
+        #region Card Order
+            public void SetCardOrder(GameObject cardOrderPrefab);
+            public void RemoveCardOrder();
+        #endregion
+        
+        public void Move(Transform parent, DoAnchorPos settings, Action onComplete = null);
+        public void MoveAndFlip(Transform parent, DoAnchorPos anchorPosSettings, DoFlip flipSettings, Action onComplete = null);
     }
 }

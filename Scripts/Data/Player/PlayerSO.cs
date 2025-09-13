@@ -1,10 +1,10 @@
 using System.Card_Battle_System.Object.Card.Type.Battle.System.Main;
 using UnityEngine;
 
-namespace Data.Player.Battle_Deck
+namespace Data.Player
 {
     [CreateAssetMenu(menuName = "Minyinpop/Player/Battle Deck", fileName = "New Data")]
-    internal sealed class PlayerBattleDeckSO : ScriptableObject
+    internal sealed class PlayerSO : ScriptableObject
     {
         [field: Header("Character")]
         [field: SerializeField] private int ActiveCharacterNumber;

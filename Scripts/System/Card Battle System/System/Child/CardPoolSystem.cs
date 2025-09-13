@@ -4,7 +4,7 @@ using System.Card_Battle_System.Object.Card.Type.Battle.System.Main;
 using System.Collections;
 using System.Collections.Generic;
 using Data.DOTween.Basic;
-using Data.Player.Battle_Deck;
+using Data.Player;
 using DG.Tweening;
 using UnityEngine;
 
@@ -19,7 +19,7 @@ namespace System.Card_Battle_System.System.Child
         [field: SerializeField] private CardSlot[] CardSlots;
         
         [field: Header("Data")]
-        [field: SerializeField] private PlayerBattleDeckSO PlayerBattleDeckData;
+        [field: SerializeField] private PlayerSO playerData;
         
         private IEnumerator SortCor;
         private IEnumerator RefillCor;
@@ -81,7 +81,7 @@ namespace System.Card_Battle_System.System.Child
                         var slot = CardSlots[index];
                         var card = remainingCards[index];
 
-                        card.MoveToParent(slot.transform, RefillAnimation, () =>
+                        card.Move(slot.transform, RefillAnimation, () =>
                         {
                             if (index != remainingCards.Count - 1) return;
                             StartCoroutine(RefillCor);
@@ -105,13 +105,13 @@ namespace System.Card_Battle_System.System.Child
                 
                 if (!slot.IsEmpty()) continue;
 
-                if (PlayerBattleDeckData.GetRandomBattleCard(out var battleCardPrefab))
+                if (playerData.GetRandomBattleCard(out var battleCardPrefab))
                 {
                     var card = Instantiate(battleCardPrefab, SpawnParent);
                     var battleCard = card.GetComponent<BattleCard>();
 
                     slot.Set(battleCard);
-                    battleCard.MoveToParent(slot.transform, RefillAnimation, () =>
+                    battleCard.Move(slot.transform, RefillAnimation, () =>
                     {
                         if (index != CardSlots.Length - 1) return;
                         onComplete?.Invoke();

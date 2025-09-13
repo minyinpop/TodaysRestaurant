@@ -10,10 +10,10 @@ namespace System.Card_Battle_System.System.Main
     internal sealed class CardBattleSystem : MonoBehaviour
     {
         [field: Header("Child System")]
+        [field: SerializeField] private SelectedCardSystem SelectedCardSystem;
         [field: SerializeField] private CardPoolSystem CardPoolSystem;
         [field: SerializeField] private ShowCardSystem ShowCardSystem;
         [field: SerializeField] private HandCardSystem HandCardSystem;
-        [field: SerializeField] private SelectedCardSystem SelectedCardSystem;
         
         [field: Header("Initiative System")]
         [field: SerializeField] private InitiativeSystem InitiativeSystem;
@@ -101,6 +101,7 @@ namespace System.Card_Battle_System.System.Main
                 private void OnPlayerTurn_Enter()
                 {
                     HandCardSystem.SetCardsInteractable(true);
+                    SelectedCardSystem.OpenSelectedCardUI();
                 }
                 
                 private void OnPlayerTurn_Exit()

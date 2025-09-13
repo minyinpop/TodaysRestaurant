@@ -1,6 +1,5 @@
 using System.Card_Battle_System.Object.Card_Slot;
 using System.Card_Battle_System.Object.Card.Base;
-using System.Card_Battle_System.Object.Card.Type.Battle.System.Main;
 using System.Collections;
 using System.Collections.Generic;
 using Data.DOTween.Basic;
@@ -15,14 +14,20 @@ namespace System.Card_Battle_System.System.Child
         [field: SerializeField] private Transform SpawnParent;
         [field: SerializeField] private GameObject SlotPrefab;
         
-        private readonly List<CardSlot> HandCardSlots = new();
+        private readonly List<CardSlot> CardSlots = new();
         
         private IEnumerator AddCor;
 
-        public static event Func<bool> CanSelectCard;
+        public static event Func<ICard, bool> TryAddCardToSelected;
+
+        private void OnEnable()
+        {
+            SelectedCardSystem.ReturnCardToHand += Add;
+        }
 
         private void OnDisable()
         {
+            SelectedCardSystem.ReturnCardToHand -= Add;
             if (AddCor is not null)
             {
                 StopCoroutine(AddCor);
@@ -32,20 +37,35 @@ namespace System.Card_Battle_System.System.Child
         
         public void SetCardsInteractable(bool interactable)
         {
-            foreach (var cardSlot in HandCardSlots)
+            foreach (var cardSlot in CardSlots)
                 cardSlot.SetInteractable(interactable);
         }
 
-        private void OnClickCard(ICard card)
+        private void OnCardClicked(ICard card)
         {
-            Debug.Log("A");
-            if (card is not BattleCard battleCard) return;
-            Debug.Log("B");
-            // if (CanSelectCard?.Invoke() ?? false) return;
-            Debug.Log(CanSelectCard?.Invoke());
+            if (TryAddCardToSelected?.Invoke(card) == false) return;
+            card.OnClick -= OnCardClicked;
+            for (var i = 0; i < CardSlots.Count; i++)
+            {
+                var slot = CardSlots[i];
+                if (!slot.Compare(card)) continue;
+                CardSlots.Remove(slot);
+                Destroy(slot.gameObject);
+                return;
+            }
         }
 
         #region Add
+            private void Add(ICard card)
+            {
+                var slot = Instantiate(SlotPrefab, SpawnParent);
+                var slotScript = slot.GetComponent<CardSlot>();
+                CardSlots.Add(slotScript);
+                slotScript.Set(card);
+                card.Move(slot.transform, new DoAnchorPos(Vector2.zero, .5f, true, Ease.OutExpo));
+                card.OnClick += OnCardClicked;
+            }
+
             public void Add(List<ICard> cards, Action onComplete = null)
             {
                 AddCor = AddCoroutine(cards, onComplete);
@@ -60,18 +80,15 @@ namespace System.Card_Battle_System.System.Child
                     var slot = Instantiate(SlotPrefab, SpawnParent);
                     var slotScript = slot.GetComponent<CardSlot>();
                     var card = cards[index];
-                    
-                    HandCardSlots.Add(slotScript);
+                    CardSlots.Add(slotScript);
                     slotScript.Set(card);
-                    card.MoveToParent(slot.transform, new DoAnchorPos(Vector3.zero, .5f, true, Ease.OutExpo), () =>
+                    card.Move(slot.transform, new DoAnchorPos(Vector2.zero, .5f, true, Ease.OutExpo), () =>
                     {
                         if (index != cards.Count - 1) return;
                         onComplete?.Invoke();
                         AddCor = null;
                     });
-                    
-                    card.OnClick += OnClickCard;
-
+                    card.OnClick += OnCardClicked;
                     yield return new WaitForSeconds(.25f);
                 }
             }

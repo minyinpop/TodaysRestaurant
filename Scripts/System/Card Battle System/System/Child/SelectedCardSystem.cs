@@ -1,5 +1,10 @@
 using System.Card_Battle_System.Object.Card_Slot;
+using System.Card_Battle_System.Object.Card.Base;
+using System.Card_Battle_System.Object.Card.Type.Battle.System.Main;
 using System.Collections.Generic;
+using Data.DOTween.Basic;
+using Data.Player;
+using DG.Tweening;
 using UnityEngine;
 
 namespace System.Card_Battle_System.System.Child
@@ -15,22 +20,83 @@ namespace System.Card_Battle_System.System.Child
         
         [field: Header("Object")]
         [field: SerializeField] private GameObject SelectedCardUI;
+        
+        [field: Header("Data")]
+        [field: SerializeField] private PlayerSO PlayerData;
 
-        private List<CardSlot> CardSlots = new();
+        private readonly List<CardSlot> CardSlots = new();
+
+        public static event Action<ICard> ReturnCardToHand;
 
         private void OnEnable()
         {
-            HandCardSystem.CanSelectCard += AddCard;
+            HandCardSystem.TryAddCardToSelected += TryAdd;
         }
         
         private void OnDisable()
         {
-            HandCardSystem.CanSelectCard -= AddCard;
+            HandCardSystem.TryAddCardToSelected -= TryAdd;
         }
 
-        private bool AddCard()
+        #region SelectedCardUI
+            public void OpenSelectedCardUI()
+            {
+                SelectedCardUI.SetActive(true);
+                PlayerData.GetActiveCharacterNumber(out var number);
+                for (var i = 0; i < number; i++)
+                {
+                    var slot = Instantiate(SlotPrefab, SpawnParent);
+                    var slotScript = slot.GetComponent<CardSlot>();
+                    CardSlots.Add(slotScript);
+                }
+            }
+
+            public void CloseSelectedCardUI()
+            {
+            }
+        #endregion
+
+        private bool TryAdd(ICard card)
         {
+            for (var i = 0; i < CardSlots.Count; i++)
+            {
+                var slot = CardSlots[i];
+                if (!slot.IsEmpty()) continue;
+                slot.Set(card);
+                card.SetCardOrder(CardOrderPrefabs[i]);
+                card.Move(slot.transform, new DoAnchorPos(Vector2.zero, .5f, true, Ease.OutExpo));
+                card.OnClick += OnCardClicked;
+                return true;
+            }
+
             return false;
+        }
+
+        private void OnCardClicked(ICard card)
+        {
+            card.OnClick -= OnCardClicked;
+            card.RemoveCardOrder();
+            ReturnCardToHand?.Invoke(card);
+            for (var i = 0; i < CardSlots.Count; i++)
+            {
+                var slot = CardSlots[i];
+                if (!slot.Compare(card)) continue;
+                CardSlots.Remove(slot);
+                Destroy(slot.gameObject);
+                break;
+            }
+                    
+            var newSlot = Instantiate(SlotPrefab, SpawnParent);
+            var newSlotScript = newSlot.GetComponent<CardSlot>();
+            CardSlots.Add(newSlotScript);
+            for (var i = 0; i < CardSlots.Count; i++)
+            {
+                var slot = CardSlots[i];
+                if (slot.IsEmpty()) continue;
+                slot.Get(out var thisCard);
+                thisCard.SetCardOrder(CardOrderPrefabs[i]);
+                slot.Set(thisCard);
+            }
         }
     }
 }
