@@ -15,15 +15,11 @@ namespace System.Card_Battle_System.System.Child
         [field: SerializeField] private Transform SpawnParent;
         [field: SerializeField] private GameObject SlotPrefab;
         
-        [field: Header("Card Order")]
-        [field: SerializeField] private List<GameObject> CardOrderPrefabs;
-        
-        private readonly List<CardSlot> CardSlots = new();
-        private readonly List<BattleCard> SelectedCards = new();
-        
-        private const int MaxSelectedCards = 3;
+        private readonly List<CardSlot> HandCardSlots = new();
         
         private IEnumerator AddCor;
+
+        public static event Func<bool> CanSelectCard;
 
         private void OnDisable()
         {
@@ -36,34 +32,17 @@ namespace System.Card_Battle_System.System.Child
         
         public void SetCardsInteractable(bool interactable)
         {
-            foreach (var cardSlot in CardSlots)
+            foreach (var cardSlot in HandCardSlots)
                 cardSlot.SetInteractable(interactable);
         }
 
         private void OnClickCard(ICard card)
         {
+            Debug.Log("A");
             if (card is not BattleCard battleCard) return;
-
-            if (SelectedCards.Contains(battleCard))
-            {
-                SelectedCards.Remove(battleCard);
-                battleCard.RemoveCardOrder();
-                
-                for (var i = 0; i < SelectedCards.Count; i++)
-                {
-                    var selectedCard = SelectedCards[i];
-                    var cardOrderPrefab = CardOrderPrefabs[i];
-                    selectedCard.RefreshCardOrder(cardOrderPrefab);
-                }
-            }
-            else
-            {
-                if (SelectedCards.Count >= MaxSelectedCards) return;
-                
-                SelectedCards.Add(battleCard);
-                var orderPrefab = CardOrderPrefabs[SelectedCards.Count - 1];
-                battleCard.SetCardOrder(orderPrefab);
-            }
+            Debug.Log("B");
+            // if (CanSelectCard?.Invoke() ?? false) return;
+            Debug.Log(CanSelectCard?.Invoke());
         }
 
         #region Add
@@ -82,7 +61,7 @@ namespace System.Card_Battle_System.System.Child
                     var slotScript = slot.GetComponent<CardSlot>();
                     var card = cards[index];
                     
-                    CardSlots.Add(slotScript);
+                    HandCardSlots.Add(slotScript);
                     slotScript.Set(card);
                     card.MoveToParent(slot.transform, new DoAnchorPos(Vector3.zero, .5f, true, Ease.OutExpo), () =>
                     {
