@@ -1,4 +1,4 @@
-using System.Card_Battle_System.Object.Card.Type.Battle.System.Main;
+using System.Battle_System.Object.Card.Type.Battle.System.Main;
 using UnityEngine;
 
 namespace Data.Player
@@ -6,6 +6,10 @@ namespace Data.Player
     [CreateAssetMenu(menuName = "Minyinpop/Player/Battle Deck", fileName = "New Data")]
     internal sealed class PlayerSO : ScriptableObject
     {
+        [field: Header("State")]
+        [field: SerializeField] private int MaxHealth;
+        [field: SerializeField] private int CurrentHealth;
+        
         [field: Header("Character")]
         [field: SerializeField] private int ActiveCharacterNumber;
 
