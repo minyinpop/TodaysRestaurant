@@ -1,11 +1,11 @@
 using System.Card_Battle_System.Object.Card_Slot;
 using System.Card_Battle_System.Object.Card.Base;
-using System.Card_Battle_System.Object.Card.Type.Battle.System.Main;
 using System.Collections.Generic;
 using Data.DOTween.Basic;
 using Data.Player;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace System.Card_Battle_System.System.Child
 {
@@ -20,6 +20,7 @@ namespace System.Card_Battle_System.System.Child
         
         [field: Header("Object")]
         [field: SerializeField] private GameObject SelectedCardUI;
+        [field: SerializeField] private Button ConfirmButton;
         
         [field: Header("Data")]
         [field: SerializeField] private PlayerSO PlayerData;
@@ -31,11 +32,29 @@ namespace System.Card_Battle_System.System.Child
         private void OnEnable()
         {
             HandCardSystem.TryAddCardToSelected += TryAdd;
+            ConfirmButton.onClick.AddListener(OnConfirmButtonClick);
         }
         
         private void OnDisable()
         {
             HandCardSystem.TryAddCardToSelected -= TryAdd;
+            ConfirmButton.onClick.RemoveListener(OnConfirmButtonClick);
+        }
+
+        private void OnConfirmButtonClick()
+        {
+            for (var i = 0; i < CardSlots.Count; i++)
+            {
+                var slot = CardSlots[i];
+                if (slot.IsEmpty())
+                {
+                    Debug.Log("還有卡片可以選擇");
+                    return;
+                }
+
+                if (i == CardSlots.Count - 1)
+                    CloseSelectedCardUI();
+            }
         }
 
         #region SelectedCardUI
@@ -53,6 +72,7 @@ namespace System.Card_Battle_System.System.Child
 
             public void CloseSelectedCardUI()
             {
+                SelectedCardUI.SetActive(false);
             }
         #endregion
 
