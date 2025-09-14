@@ -1,6 +1,6 @@
 using System.Battle_System.Object.Card_Slot;
 using System.Battle_System.Object.Card.Base;
-using System.Collections;
+using System.Battle_System.System.Child.Selected_Card_System.Child;
 using System.Collections.Generic;
 using Data.DOTween.Basic;
 using Data.Player;
@@ -8,10 +8,14 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace System.Battle_System.System.Child
+namespace System.Battle_System.System.Child.Selected_Card_System.Main
 {
+    [RequireComponent(typeof(AnimationSystem))]
     internal sealed class SelectedCardSystem : MonoBehaviour
     {
+        [field: Header("Child System")]
+        [field: SerializeField] private AnimationSystem AnimationSystem;
+        
         [field: Header("Card Slot")]
         [field: SerializeField] private Transform SpawnParent;
         [field: SerializeField] private GameObject SlotPrefab;
@@ -20,7 +24,6 @@ namespace System.Battle_System.System.Child
         [field: SerializeField] private List<GameObject> CardOrderPrefabs;
         
         [field: Header("Object")]
-        [field: SerializeField] private GameObject SelectedCardUI;
         [field: SerializeField] private Button ConfirmButton;
         
         [field: Header("Data")]
@@ -29,6 +32,8 @@ namespace System.Battle_System.System.Child
         private readonly List<CardSlot> CardSlots = new();
 
         public static event Action<ICard> ReturnCardToHand;
+        public static event Action<List<ICard>, Action> BeforeCloseUI;
+        public event Action AfterCloseUI;
 
         private void OnEnable()
         {
@@ -42,10 +47,10 @@ namespace System.Battle_System.System.Child
             ConfirmButton.onClick.RemoveListener(OnConfirmButtonClick);
         }
 
-        #region SelectedCardUI
-            public void OpenSelectedCardUI()
+        #region UI
+            public void OpenUI(Action onUIOpen = null, Action onUIClose = null)
             {
-                SelectedCardUI.SetActive(true);
+                AfterCloseUI = onUIClose;
                 PlayerData.GetActiveCharacterNumber(out var number);
                 for (var i = 0; i < number; i++)
                 {
@@ -53,11 +58,22 @@ namespace System.Battle_System.System.Child
                     var slotScript = slot.GetComponent<CardSlot>();
                     CardSlots.Add(slotScript);
                 }
+
+                AnimationSystem.FadeIn()
+                    .OnComplete(() => onUIOpen?.Invoke());
             }
 
-            public void CloseSelectedCardUI()
+            private void CloseUI()
             {
-                SelectedCardUI.SetActive(false);
+                var selectedCards = new List<ICard>();
+                foreach (var slot in CardSlots)
+                {
+                    slot.Get(out var card);
+                    selectedCards.Add(card);
+                }
+
+                BeforeCloseUI?.Invoke(selectedCards, () => AnimationSystem.FadeOut()
+                    .OnComplete(() => AfterCloseUI?.Invoke()));
             }
         #endregion
 
@@ -111,26 +127,13 @@ namespace System.Battle_System.System.Child
                 var slot = CardSlots[i];
                 if (slot.IsEmpty())
                 {
-                    Debug.Log("還有卡片可以選擇");
+                    Debug.Log("跳出提示介面: 還有卡片可以選擇");
                     return;
                 }
 
                 if (i == CardSlots.Count - 1)
-                {
-                    CloseSelectedCardUI();
-                }
+                    CloseUI();
             }
-        }
-
-        private IEnumerator RENAME()
-        {
-            foreach (var slot in CardSlots)
-            {
-                slot.Get(out var card);
-                // card.
-            }
-
-            yield break;
         }
     }
 }

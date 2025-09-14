@@ -1,5 +1,6 @@
 using System.Battle_System.System.Child;
 using System.Battle_System.System.Child.Initiative_System.System.Main;
+using System.Battle_System.System.Child.Selected_Card_System.Main;
 using System.Battle_System.System.Main.State_Machine;
 using System.Battle_System.System.Main.State_Machine.State;
 using Data.Initiative_Coin;
@@ -14,6 +15,7 @@ namespace System.Battle_System.System.Main
         [field: SerializeField] private CardPoolSystem CardPoolSystem;
         [field: SerializeField] private ShowCardSystem ShowCardSystem;
         [field: SerializeField] private HandCardSystem HandCardSystem;
+        [field: SerializeField] private UseCardSystem UseCardSystem;
         
         [field: Header("Initiative System")]
         [field: SerializeField] private InitiativeSystem InitiativeSystem;
@@ -25,7 +27,7 @@ namespace System.Battle_System.System.Main
         {
             OnBattleStart();
         }
-        
+
         #region StateMachine
             #region OnBattleStart
                 private void OnBattleStart()
@@ -100,8 +102,18 @@ namespace System.Battle_System.System.Main
                 
                 private void OnPlayerTurn_Enter()
                 {
-                    HandCardSystem.SetCardsInteractable(true);
-                    SelectedCardSystem.OpenSelectedCardUI();
+                    SelectedCardSystem.OpenUI(
+                        onUIOpen: () =>
+                    {
+                        HandCardSystem.SetCardsInteractable(true);
+                    }, 
+                        onUIClose: () =>
+                    {
+                        UseCardSystem.Use(() =>
+                        {
+                            Debug.Log("Use Card Complete.");
+                        });
+                    });
                 }
                 
                 private void OnPlayerTurn_Exit()

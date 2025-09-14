@@ -1,5 +1,6 @@
 using System.Battle_System.Object.Card_Slot;
 using System.Battle_System.Object.Card.Base;
+using System.Battle_System.System.Child.Selected_Card_System.Main;
 using System.Collections;
 using System.Collections.Generic;
 using Data.DOTween.Basic;

@@ -1,4 +1,5 @@
 using System.Battle_System.Object.Card.Type.Battle.System.Main;
+using Data.Attribute;
 using UnityEngine;
 
 namespace Data.Player
@@ -6,16 +7,12 @@ namespace Data.Player
     [CreateAssetMenu(menuName = "Minyinpop/Player/Battle Deck", fileName = "New Data")]
     internal sealed class PlayerSO : ScriptableObject
     {
-        [field: Header("State")]
-        [field: SerializeField] private int MaxHealth;
-        [field: SerializeField] private int CurrentHealth;
-        
-        [field: Header("Character")]
-        [field: SerializeField] private int ActiveCharacterNumber;
+        [field: SerializeField] private HealthValue HealthValue;
+        [field: SerializeField] private TeamValue TeamValue;
 
         public void GetActiveCharacterNumber(out int number)
         {
-            number = ActiveCharacterNumber;
+            TeamValue.GetCharacterNumber(out number);
         }
 
         [field: Header("Battle Card")]

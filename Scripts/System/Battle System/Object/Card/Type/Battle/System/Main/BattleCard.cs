@@ -1,5 +1,6 @@
 using System.Battle_System.Object.Card.Base;
 using System.Battle_System.Object.Card.Type.Battle.System.Child;
+using Data.Attribute;
 using Data.Card.Battle;
 using Data.DOTween.Basic;
 using Data.DOTween.Combine;
@@ -19,7 +20,7 @@ namespace System.Battle_System.Object.Card.Type.Battle.System.Main
         [field: SerializeField] private AnimationSystem AnimationSystem;
         
         [field: Header("Data")]
-        [field: SerializeField] private BattleCardSO BattleCardData;
+        [field: SerializeField] protected BattleCardSO BattleCardData;
         
         [field: Header("Card Order")]
         [field: SerializeField] private Transform CardOrderParent;
@@ -28,28 +29,13 @@ namespace System.Battle_System.Object.Card.Type.Battle.System.Main
         private bool Interactable;
 
         public event Action<ICard> OnClick;
+        public static event Action<BattleCard, SkeletonAnimationValue, Action> OnUse;
         
         public void GetDrawChance(out float chance)
         {
-            chance = BattleCardData.DrawChance;
+            BattleCardData.ChanceValue.GetDrawChance(out chance);
         }
-
-        #region Card Order
-            public void SetCardOrder(GameObject cardOrderPrefab)
-            {
-                if (CardOrder is not null)
-                    Destroy(CardOrder);
-                CardOrder = Instantiate(cardOrderPrefab, CardOrderParent);
-            }
-            
-            public void RemoveCardOrder()
-            {
-                if (CardOrder is null) return;
-                Destroy(CardOrder);
-                CardOrder = null;
-            }
-        #endregion
-
+        
         #region CustomPointerEventHandler
             protected override void OnPointerEnter()
             {
@@ -71,19 +57,47 @@ namespace System.Battle_System.Object.Card.Type.Battle.System.Main
         #endregion
 
         #region ICard
-            public void SetInteractable(bool interactable)
+            public virtual void SetInteractable(bool interactable)
             {
                 Interactable = interactable;
             }
 
-            public void Move(Transform parent, DoAnchorPos settings, Action onComplete = null)
+            public void Use(Action onComplete = null)
+            {
+                BattleCardData.GetRandomAnimation(out var anima);
+                OnUse?.Invoke(this, anima, () => onComplete?.Invoke());
+            }
+
+            public void Destroy()
+            {
+                Destroy(gameObject);
+            }
+
+            #region Card Order
+                public virtual void SetCardOrder(GameObject cardOrderPrefab)
+                {
+                    if (CardOrder is not null)
+                        Destroy(CardOrder);
+                    CardOrder = Instantiate(cardOrderPrefab, CardOrderParent);
+                }
+                
+                public virtual void RemoveCardOrder()
+                {
+                    if (CardOrder is null) return;
+                    Destroy(CardOrder);
+                    CardOrder = null;
+                }
+            #endregion
+            
+            #region AnimationSystem
+            public virtual void Move(Transform parent, DoAnchorPos settings, Action onComplete = null)
             {
                 CardRect.SetParent(parent);
                 AnimationSystem.MoveTo(CardRect, settings)
                     .OnComplete(() => onComplete?.Invoke());
             }
 
-            public void MoveAndFlip(Transform parent, DoAnchorPos anchorPosSettings, DoFlip flipSettings, Action onComplete = null)
+            public virtual void MoveAndFlip(Transform parent, DoAnchorPos anchorPosSettings, DoFlip flipSettings, Action onComplete = null)
             {
                 CardRect.SetParent(parent);
                 
@@ -93,6 +107,7 @@ namespace System.Battle_System.Object.Card.Type.Battle.System.Main
                     .OnComplete(() => AnimationSystem.FlipToFront(CardSurfaceRect, rotateSettings, scaleSettings01, scaleSettings02)
                         .OnComplete(() => onComplete?.Invoke()));
             }
+            #endregion
         #endregion
     }
 }

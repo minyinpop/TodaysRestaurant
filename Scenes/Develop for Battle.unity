@@ -1831,8 +1831,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7ffe743a0ca4aa8b2a6efd21f3b66bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::System.Battle_System.System.Child.UseCardSystem
-  SpawnParent: {fileID: 0}
-  SlotPrefab: {fileID: 0}
+  SpawnParent: {fileID: 1352844379}
+  SlotPrefab: {fileID: 7380749744261002411, guid: 511a948331ecf5b4bbac7ce445adc34a, type: 3}
 --- !u!1 &246679409
 GameObject:
   m_ObjectHideFlags: 0
@@ -2010,6 +2010,56 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &315858258
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 315858261}
+  - component: {fileID: 315858260}
+  m_Layer: 0
+  m_Name: Player System
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &315858260
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 315858258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72e3adf747e54bb5947c9497ad42bf75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::System.Battle_System.System.Child.PlayerSystem
+  SkeletonAnimation: {fileID: 1243039381}
+  PlayerData: {fileID: 11400000, guid: a37bded247f73c0408a706fa494a4d5e, type: 2}
+  IdleAnimation:
+    Layer: 0
+    AnimationName: Breath
+    Loop: 1
+--- !u!4 &315858261
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 315858258}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &390171379
 GameObject:
   m_ObjectHideFlags: 0
@@ -2041,10 +2091,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 427653683}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 155.845, y: -32}
-  m_SizeDelta: {x: 247.69, y: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &390171381
 MonoBehaviour:
@@ -2360,10 +2410,10 @@ RectTransform:
   - {fileID: 390171380}
   m_Father: {fileID: 607347107}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 155.845, y: -81.005}
-  m_SizeDelta: {x: 311.69, y: 162.01}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &427653685
 MonoBehaviour:
@@ -2901,6 +2951,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 607347107}
+  - component: {fileID: 607347110}
   - component: {fileID: 607347109}
   - component: {fileID: 607347108}
   m_Layer: 5
@@ -2909,7 +2960,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &607347107
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2929,7 +2980,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 311.69, y: 162.01}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &607347108
 MonoBehaviour:
@@ -2971,6 +3022,18 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!225 &607347110
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 607347106}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1001 &677218924
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3427,10 +3490,10 @@ RectTransform:
   - {fileID: 1694250168}
   m_Father: {fileID: 607347107}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 155.845, y: -0}
-  m_SizeDelta: {x: 311.69, y: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &960485102
 GameObject:
@@ -3510,7 +3573,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 1
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
@@ -3555,6 +3618,7 @@ MonoBehaviour:
   CardPoolSystem: {fileID: 415005216}
   ShowCardSystem: {fileID: 1847446588}
   HandCardSystem: {fileID: 1387491316}
+  UseCardSystem: {fileID: 239885601}
   InitiativeSystem: {fileID: 3104198548672938272, guid: c509b3d71a19bb943abc6716f6228c09, type: 3}
 --- !u!1 &998911809
 GameObject:
@@ -5163,8 +5227,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skeletonDataAsset: {fileID: 11400000, guid: 6ca93fdc61d51474c9885c83cdcd9acc, type: 2}
-  initialSkinName: Hunter Outfit
+  skeletonDataAsset: {fileID: 11400000, guid: 6d075ee2e98653d488c6823098b475f4, type: 2}
+  initialSkinName: 
   fixPrefabOverrideViaMeshFilter: 2
   initialFlipX: 0
   initialFlipY: 0
@@ -5191,7 +5255,7 @@ MonoBehaviour:
   physicsMovementRelativeTo: {fileID: 0}
   updateTiming: 1
   unscaledTime: 0
-  _animationName: Default (Without Smile)_01
+  _animationName: Breath
   loop: 1
   timeScale: 1
 --- !u!23 &1243039382
@@ -5219,11 +5283,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 68b2dfd698cad1343b7215f13529cbeb, type: 2}
-  - {fileID: 2100000, guid: b376030592b3b1145bf1a6dbd3556f64, type: 2}
-  - {fileID: 2100000, guid: 68b2dfd698cad1343b7215f13529cbeb, type: 2}
-  - {fileID: 2100000, guid: 004367a1490dc1449a4c423487a30ddf, type: 2}
-  - {fileID: 2100000, guid: 68b2dfd698cad1343b7215f13529cbeb, type: 2}
+  - {fileID: 2100000, guid: 9c967e4a545bde24c8c6d5a089728928, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5301,8 +5361,8 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 239885600}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.975, y: 0.15}
-  m_AnchorMax: {x: 0.975, y: 0.15}
+  m_AnchorMin: {x: 0.985, y: 0.125}
+  m_AnchorMax: {x: 0.985, y: 0.125}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 1, y: 0}
@@ -6006,10 +6066,10 @@ RectTransform:
   - {fileID: 1755326763}
   m_Father: {fileID: 427653683}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 155.845, y: -97.005}
-  m_SizeDelta: {x: 247.69, y: 66.009995}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1629688695
 MonoBehaviour:
@@ -6339,10 +6399,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1629688694}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 123.845, y: -33.004997}
-  m_SizeDelta: {x: 175.69, y: 42.009995}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1755326764
 MonoBehaviour:
@@ -6658,6 +6718,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1897533359}
+  - component: {fileID: 1897533361}
   - component: {fileID: 1897533360}
   m_Layer: 5
   m_Name: Selected Card System
@@ -6698,15 +6759,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59b424fea95a4ce58227c08d2f8fd267, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::System.Card_Battle_System.System.Child.SelectedCardSystem
+  AnimationSystem: {fileID: 1897533361}
   SpawnParent: {fileID: 390171380}
   SlotPrefab: {fileID: 7365358058170198015, guid: 8468f92ee19dcdd4b8db93c1fb82a11f, type: 3}
   CardOrderPrefabs:
   - {fileID: 5587431052363678179, guid: b20ced098e0c73a498213f166ee8a12e, type: 3}
   - {fileID: 5587431052363678179, guid: 97eaeb32188537247a3fc6c44c6c7e3f, type: 3}
   - {fileID: 5587431052363678179, guid: f4b5c3fb2abf8094e973eecba4456da7, type: 3}
-  SelectedCardUI: {fileID: 607347106}
   ConfirmButton: {fileID: 1629688700}
   PlayerData: {fileID: 11400000, guid: a37bded247f73c0408a706fa494a4d5e, type: 2}
+--- !u!114 &1897533361
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1897533358}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f829e747926407d953f962d4bd5f087, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::System.Battle_System.System.Child.Selected_Card_System.Child.AnimationSystem
+  UICanvasGroup: {fileID: 607347110}
 --- !u!114 &1966636558 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 471684147901498423, guid: 511a948331ecf5b4bbac7ce445adc34a, type: 3}
@@ -6886,3 +6960,4 @@ SceneRoots:
   - {fileID: 707734885}
   - {fileID: 459623311}
   - {fileID: 960485106}
+  - {fileID: 315858261}
