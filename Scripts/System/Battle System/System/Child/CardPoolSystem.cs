@@ -53,7 +53,6 @@ namespace System.Battle_System.System.Child
         private IEnumerator SortCoroutine()
         {
             var remainingCards = new List<ICard>();
-
             foreach (var slot in CardSlots)
             {
                 if (!slot.Get(out var card)) continue;
@@ -66,7 +65,6 @@ namespace System.Battle_System.System.Child
                 {
                     StartCoroutine(RefillCor);
                     SortCor = null;
-                    
                     break;
                 }
                 case > 0:
@@ -76,14 +74,13 @@ namespace System.Battle_System.System.Child
                         var index = i;
                         var slot = CardSlots[index];
                         var card = remainingCards[index];
-
+                        slot.Set(card);
                         card.Move(slot.transform, RefillAnimation, () =>
                         {
                             if (index != remainingCards.Count - 1) return;
                             StartCoroutine(RefillCor);
                             SortCor = null;
                         });
-
                         yield return new WaitForSeconds(RefillDuration);
                     }
 
@@ -98,14 +95,11 @@ namespace System.Battle_System.System.Child
             {
                 var index = i;
                 var slot = CardSlots[index];
-                
                 if (!slot.IsEmpty()) continue;
-
                 if (playerData.GetRandomBattleCard(out var battleCardPrefab))
                 {
                     var card = Instantiate(battleCardPrefab, SpawnParent);
                     var battleCard = card.GetComponent<BattleCard>();
-
                     slot.Set(battleCard);
                     battleCard.Move(slot.transform, RefillAnimation, () =>
                     {
@@ -113,7 +107,6 @@ namespace System.Battle_System.System.Child
                         onComplete?.Invoke();
                         RefillCor = null;
                     });
-
                     yield return new WaitForSeconds(RefillDuration);
                 }
                 else
@@ -127,9 +120,7 @@ namespace System.Battle_System.System.Child
         public void DrawCard(int number, out List<ICard> cards)
         {
             number = Mathf.Clamp(number, 0, CardSlots.Length);
-            
             cards = new List<ICard>();
-            
             for (var i = 0; i < number; i++)
             {
                 var slot = CardSlots[i];
