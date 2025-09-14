@@ -1,5 +1,6 @@
 using System.Battle_System.Object.Card_Slot;
 using System.Battle_System.Object.Card.Base;
+using System.Collections;
 using System.Collections.Generic;
 using Data.DOTween.Basic;
 using Data.Player;
@@ -39,24 +40,6 @@ namespace System.Battle_System.System.Child
         {
             HandCardSystem.TryAddCardToSelected -= TryAdd;
             ConfirmButton.onClick.RemoveListener(OnConfirmButtonClick);
-        }
-
-        private void OnConfirmButtonClick()
-        {
-            for (var i = 0; i < CardSlots.Count; i++)
-            {
-                var slot = CardSlots[i];
-                if (slot.IsEmpty())
-                {
-                    Debug.Log("還有卡片可以選擇");
-                    return;
-                }
-
-                if (i == CardSlots.Count - 1)
-                {
-                    CloseSelectedCardUI();
-                }
-            }
         }
 
         #region SelectedCardUI
@@ -119,6 +102,35 @@ namespace System.Battle_System.System.Child
                 thisCard.SetCardOrder(CardOrderPrefabs[i]);
                 slot.Set(thisCard);
             }
+        }
+        
+        private void OnConfirmButtonClick()
+        {
+            for (var i = 0; i < CardSlots.Count; i++)
+            {
+                var slot = CardSlots[i];
+                if (slot.IsEmpty())
+                {
+                    Debug.Log("還有卡片可以選擇");
+                    return;
+                }
+
+                if (i == CardSlots.Count - 1)
+                {
+                    CloseSelectedCardUI();
+                }
+            }
+        }
+
+        private IEnumerator RENAME()
+        {
+            foreach (var slot in CardSlots)
+            {
+                slot.Get(out var card);
+                // card.
+            }
+
+            yield break;
         }
     }
 }

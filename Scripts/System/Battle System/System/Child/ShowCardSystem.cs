@@ -39,26 +39,23 @@ namespace System.Battle_System.System.Child
             foreach (var slot in CardSlots)
                 Destroy(slot.gameObject);
             CardSlots.Clear();
-            
             for (var i = 0; i < cards.Count; i++)
             {
                 var slot = Instantiate(SlotPrefab, SpawnParent);
                 var slotScript = slot.GetComponent<CardSlot>();
                 CardSlots.Add(slotScript);
             }
-            
+
             var AnchorPosSettings = new DoAnchorPos(Vector3.zero, .5f, true, Ease.OutExpo);
             var FlipSettings = new DoFlip(
                 new DoRotate(Vector2.down * 180, 1, RotateMode.Fast, Ease.Linear),
                 new DoScale(Vector2.one * 1.25f, .5f, Ease.InSine),
                 new DoScale(Vector2.one, .5f, Ease.OutSine));
-
             for (var i = 0; i < cards.Count; i++)
             {
                 var index = i;
                 var slot = CardSlots[index];
                 var card = cards[index];
-                
                 slot.Set(card);
                 card.MoveAndFlip(slot.transform, AnchorPosSettings, FlipSettings, () =>
                 {
@@ -66,7 +63,6 @@ namespace System.Battle_System.System.Child
                     onComplete?.Invoke();
                     ShowCor = null;
                 });
-                
                 yield return new WaitForSeconds(.25f);
             }
         }
@@ -74,7 +70,6 @@ namespace System.Battle_System.System.Child
         public void GetShowCards(out List<ICard> cards)
         {
             cards = new List<ICard>();
-
             foreach (var slot in CardSlots)
             {
                 slot.Get(out var card);
