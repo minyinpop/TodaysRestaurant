@@ -1,9 +1,9 @@
 using System.Battle_System.Object.Card.Base;
 using System.Battle_System.Object.Card.Type.Battle.System.Child;
-using Data.Attribute;
+using Data.Animation.DOTween.Basic;
+using Data.Animation.DOTween.Combine;
+using Data.Animation.Spine;
 using Data.Card.Battle;
-using Data.DOTween.Basic;
-using Data.DOTween.Combine;
 using DG.Tweening;
 using UnityEngine;
 
@@ -29,11 +29,11 @@ namespace System.Battle_System.Object.Card.Type.Battle.System.Main
         private bool Interactable;
 
         public event Action<ICard> OnClick;
-        public static event Action<BattleCard, SkeletonAnimationValue, Action> OnUse;
+        public static event Action<BattleCard, SkeletonAnimationSettings, Action> OnUse;
         
         public void GetDrawChance(out float chance)
         {
-            BattleCardData.ChanceValue.GetDrawChance(out chance);
+            BattleCardData.GetDrawChance(out chance);
         }
         
         #region CustomPointerEventHandler

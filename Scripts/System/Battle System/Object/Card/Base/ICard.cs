@@ -1,5 +1,5 @@
-using Data.DOTween.Basic;
-using Data.DOTween.Combine;
+using Data.Animation.DOTween.Basic;
+using Data.Animation.DOTween.Combine;
 using UnityEngine;
 
 namespace System.Battle_System.Object.Card.Base

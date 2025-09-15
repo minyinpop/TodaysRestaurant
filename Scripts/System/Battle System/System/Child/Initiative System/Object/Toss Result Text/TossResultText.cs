@@ -1,4 +1,4 @@
-using Data.DOTween.Basic;
+using Data.Animation.DOTween.Basic;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;

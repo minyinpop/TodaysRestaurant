@@ -1,5 +1,5 @@
-using Data.DOTween.Basic;
-using Data.DOTween.Combine;
+using Data.Animation.DOTween.Basic;
+using Data.Animation.DOTween.Combine;
 using DG.Tweening;
 using UnityEngine;
 

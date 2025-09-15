@@ -3,8 +3,8 @@ using System.Battle_System.Object.Card.Base;
 using System.Battle_System.Object.Card.Type.Battle.System.Main;
 using System.Collections;
 using System.Collections.Generic;
-using Data.DOTween.Basic;
-using Data.Player;
+using Data.Animation.DOTween.Basic;
+using Data.Character.Player;
 using DG.Tweening;
 using UnityEngine;
 

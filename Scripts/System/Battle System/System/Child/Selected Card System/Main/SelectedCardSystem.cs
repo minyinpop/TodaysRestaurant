@@ -2,8 +2,8 @@ using System.Battle_System.Object.Card_Slot;
 using System.Battle_System.Object.Card.Base;
 using System.Battle_System.System.Child.Selected_Card_System.Child;
 using System.Collections.Generic;
-using Data.DOTween.Basic;
-using Data.Player;
+using Data.Animation.DOTween.Basic;
+using Data.Character.Player;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
@@ -51,7 +51,7 @@ namespace System.Battle_System.System.Child.Selected_Card_System.Main
             public void OpenUI(Action onUIOpen = null, Action onUIClose = null)
             {
                 AfterCloseUI = onUIClose;
-                PlayerData.GetActiveCharacterNumber(out var number);
+                PlayerData.GetCharacterNumber(out var number);
                 for (var i = 0; i < number; i++)
                 {
                     var slot = Instantiate(SlotPrefab, SpawnParent);

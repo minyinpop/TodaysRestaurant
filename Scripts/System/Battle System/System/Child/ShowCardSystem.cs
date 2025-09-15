@@ -2,8 +2,8 @@ using System.Battle_System.Object.Card_Slot;
 using System.Battle_System.Object.Card.Base;
 using System.Collections;
 using System.Collections.Generic;
-using Data.DOTween.Basic;
-using Data.DOTween.Combine;
+using Data.Animation.DOTween.Basic;
+using Data.Animation.DOTween.Combine;
 using DG.Tweening;
 using UnityEngine;
 
