@@ -36,6 +36,17 @@ namespace System.Battle_System.System.Child.Selected_Card_System.Main
         public static event Action<List<ICard>, Action> BeforeCloseUI;
         public event Action AfterCloseUI;
 
+        private void Start()
+        {
+            PlayerData.GetCharacterNumber(out var number);
+            for (var i = 0; i < number; i++)
+            {
+                var slot = Instantiate(SlotPrefab, SpawnParent);
+                var slotScript = slot.GetComponent<CardSlot>();
+                CardSlots.Add(slotScript);
+            }
+        }
+
         private void OnEnable()
         {
             HandCardSystem.TryAddCardToSelected += TryAdd;
@@ -53,13 +64,6 @@ namespace System.Battle_System.System.Child.Selected_Card_System.Main
             {
                 UICanvasGroup.gameObject.SetActive(true);
                 AfterCloseUI = onUIClose;
-                PlayerData.GetCharacterNumber(out var number);
-                for (var i = 0; i < number; i++)
-                {
-                    var slot = Instantiate(SlotPrefab, SpawnParent);
-                    var slotScript = slot.GetComponent<CardSlot>();
-                    CardSlots.Add(slotScript);
-                }
 
                 AnimationSystem.FadeIn()
                     .OnComplete(() => onUIOpen?.Invoke());

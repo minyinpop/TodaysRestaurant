@@ -77,12 +77,9 @@ namespace System.Battle_System.System.Child
                 onComplete?.Invoke();
             }
 
-            for (var i = 0; i < CardSlots.Count; i++)
-            {
-                var slot = CardSlots[i];
-                CardSlots.Remove(slot);
+            foreach (var slot in CardSlots)
                 Destroy(slot.gameObject);
-            }
+            CardSlots.Clear();
         }
     }
 }
