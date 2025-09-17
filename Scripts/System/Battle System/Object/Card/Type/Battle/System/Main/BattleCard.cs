@@ -35,7 +35,12 @@ namespace System.Battle_System.Object.Card.Type.Battle.System.Main
         {
             BattleCardData.GetDrawChance(out chance);
         }
-        
+
+        public void GetDamage(out float damage)
+        {
+            BattleCardData.GetDamage(out damage);
+        }
+
         #region CustomPointerEventHandler
             protected override void OnPointerEnter()
             {

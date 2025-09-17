@@ -7,7 +7,18 @@ namespace Data.Card.Battle
     [CreateAssetMenu(menuName = "Minyinpop/Card/Battle", fileName = "New Data")]
     internal sealed class BattleCardSO : ScriptableObject
     {
+        #region Damage
+            [field: Header("Damage")]
+            [field: SerializeField] private float Damage;
+
+            public void GetDamage(out float damage)
+            {
+                damage = Damage;
+            }
+        #endregion
+        
         #region DrawChance
+            [field: Header("Draw Chance")]
             [field: SerializeField, Range(0, 100)] private float DrawChance;
             
             public void GetDrawChance(out float chance)

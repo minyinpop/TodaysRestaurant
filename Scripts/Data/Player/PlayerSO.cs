@@ -1,8 +1,7 @@
-using Data.Character.Player.Data;
 using Data.Player.Data;
 using UnityEngine;
 
-namespace Data.Character.Player
+namespace Data.Player
 {
     [CreateAssetMenu(menuName = "Minyinpop/Player/Data", fileName = "New Data")]
     internal sealed class PlayerSO : ScriptableObject

@@ -3,7 +3,7 @@ using System.Battle_System.Object.Card.Type.Battle.System.Main;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace Data.Character.Player.Data
+namespace Data.Player.Data
 {
     [Serializable]
     internal sealed class Deck

@@ -3,7 +3,7 @@ using System.Battle_System.Object.Card.Base;
 using System.Battle_System.System.Child.Selected_Card_System.Child;
 using System.Collections.Generic;
 using Data.Animation.DOTween.Basic;
-using Data.Character.Player;
+using Data.Player;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
@@ -24,6 +24,7 @@ namespace System.Battle_System.System.Child.Selected_Card_System.Main
         [field: SerializeField] private List<GameObject> CardOrderPrefabs;
         
         [field: Header("Object")]
+        [field: SerializeField] private CanvasGroup UICanvasGroup;
         [field: SerializeField] private Button ConfirmButton;
         
         [field: Header("Data")]
@@ -50,6 +51,7 @@ namespace System.Battle_System.System.Child.Selected_Card_System.Main
         #region UI
             public void OpenUI(Action onUIOpen = null, Action onUIClose = null)
             {
+                UICanvasGroup.gameObject.SetActive(true);
                 AfterCloseUI = onUIClose;
                 PlayerData.GetCharacterNumber(out var number);
                 for (var i = 0; i < number; i++)
@@ -73,7 +75,11 @@ namespace System.Battle_System.System.Child.Selected_Card_System.Main
                 }
 
                 BeforeCloseUI?.Invoke(selectedCards, () => AnimationSystem.FadeOut()
-                    .OnComplete(() => AfterCloseUI?.Invoke()));
+                    .OnComplete(() =>
+                    {
+                        AfterCloseUI?.Invoke();
+                        UICanvasGroup.gameObject.SetActive(false);
+                    }));
             }
         #endregion
 

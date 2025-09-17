@@ -16,6 +16,8 @@ namespace System.Battle_System.System.Main
         [field: SerializeField] private ShowCardSystem ShowCardSystem;
         [field: SerializeField] private HandCardSystem HandCardSystem;
         [field: SerializeField] private UseCardSystem UseCardSystem;
+        [field: SerializeField] private PlayerTeamSystem PlayerTeamSystem;
+        [field: SerializeField] private EnemyTeamSystem EnemyTeamSystem;
         
         [field: Header("Initiative System")]
         [field: SerializeField] private InitiativeSystem InitiativeSystem;
@@ -103,15 +105,15 @@ namespace System.Battle_System.System.Main
                 private void OnPlayerTurn_Enter()
                 {
                     SelectedCardSystem.OpenUI(
-                        onUIOpen: () =>
+                    onUIOpen: () =>
                     {
                         HandCardSystem.SetCardsInteractable(true);
                     }, 
-                        onUIClose: () =>
+                    onUIClose: () =>
                     {
                         UseCardSystem.Use(() =>
                         {
-                            Debug.Log("Use Card Complete.");
+                            OnEnemyTurn();
                         });
                     });
                 }
@@ -129,7 +131,9 @@ namespace System.Battle_System.System.Main
                 
                 private void OnEnemyTurn_Enter()
                 {
-                    Debug.Log("Enemy's turn");
+                    EnemyTeamSystem.Attack(() =>
+                    {
+                    });
                 }
                 
                 private void OnEnemyTurn_Exit()

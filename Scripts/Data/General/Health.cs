@@ -6,7 +6,14 @@ namespace Data.General
     [Serializable]
     internal class Health
     {
+        [field: Header("Values")]
         [field: SerializeField] private int MaxHealth;
-        public int CurrentHealth;
+        [field: SerializeField] private int MinHealth;
+
+        public void GetValues(out int min, out int max)
+        {
+            min = MinHealth;
+            max = MaxHealth;
+        }
     }
 }
