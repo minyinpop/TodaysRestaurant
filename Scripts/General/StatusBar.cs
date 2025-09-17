@@ -46,7 +46,7 @@ namespace General
             CurrentValue = Mathf.Clamp(CurrentValue -= value, MinValue, MaxValue);
             ValueTween?.Kill();
             ValueTween = OuterFill
-                .DOValue(CurrentValue, .25f)
+                .DOValue(CurrentValue, .5f)
                 .OnKill(() => ValueTween = null);
         }
     }

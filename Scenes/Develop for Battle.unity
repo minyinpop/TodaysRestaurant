@@ -2868,6 +2868,8 @@ GameObject:
   - component: {fileID: 332358172}
   - component: {fileID: 332358171}
   - component: {fileID: 332358170}
+  - component: {fileID: 332358175}
+  - component: {fileID: 332358174}
   m_Layer: 0
   m_Name: Ray
   m_TagString: Untagged
@@ -2990,6 +2992,42 @@ Transform:
   - {fileID: 276592294}
   m_Father: {fileID: 1936474372}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &332358174
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 332358168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 338d7abb2e0a4177913fdc460a49241e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::System.Battle_System.Object.Character.Type.Friendly.System.AnimationSystem
+  SkeletonAnimation: {fileID: 332358170}
+  IdleAnimationSettings:
+    Layer: 0
+    AnimationName: Breath
+    Loop: 1
+  HurtAnimationSettings:
+    Layer: 0
+    AnimationName: Hurt_01
+    Loop: 0
+--- !u!114 &332358175
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 332358168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9ef2dd017a341c5827c66d3dfe61972, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::System.Battle_System.Object.Character.Type.Friendly.Type.Ray
+  AnimationSystem: {fileID: 332358174}
+  HealthBar: {fileID: 2018182168}
+  FriendlyData: {fileID: 11400000, guid: a0ef56a109f62cc41a3a429bb3dfe622, type: 2}
 --- !u!1 &353381598
 GameObject:
   m_ObjectHideFlags: 0
@@ -3833,6 +3871,7 @@ GameObject:
   m_Component:
   - component: {fileID: 454709730}
   - component: {fileID: 454709731}
+  - component: {fileID: 454709732}
   m_Layer: 5
   m_Name: Slots
   m_TagString: Untagged
@@ -3872,8 +3911,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.HorizontalLayoutGroup
   m_Padding:
-    m_Left: 32
-    m_Right: 32
+    m_Left: 0
+    m_Right: 0
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 4
@@ -3885,6 +3924,20 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &454709732
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 454709729}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.ContentSizeFitter
+  m_HorizontalFit: 2
+  m_VerticalFit: 2
 --- !u!1 &459623308
 GameObject:
   m_ObjectHideFlags: 0
@@ -6966,7 +7019,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::System.Battle_System.System.Child.PlayerTeamSystem
   Bernard: {fileID: 1243039386}
-  Ray: {fileID: 0}
+  Ray: {fileID: 332358175}
   Muu: {fileID: 0}
 --- !u!1001 &1194138061
 PrefabInstance:
@@ -8011,6 +8064,7 @@ MonoBehaviour:
   PlayerTeamSystem: {fileID: 1153366124}
   EnemyTeamSystem: {fileID: 12423715}
   InitiativeSystem: {fileID: 3104198548672938272, guid: c509b3d71a19bb943abc6716f6228c09, type: 3}
+  PlayerData: {fileID: 11400000, guid: f6faef0ee01b35e478f45e9da0d7e8a1, type: 2}
 --- !u!4 &1458437870
 Transform:
   m_ObjectHideFlags: 0

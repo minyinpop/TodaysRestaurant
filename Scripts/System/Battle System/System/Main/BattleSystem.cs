@@ -5,6 +5,7 @@ using System.Battle_System.System.Main.State_Machine;
 using System.Battle_System.System.Main.State_Machine.State;
 using System.Collections;
 using Data.Initiative_Coin;
+using Data.Player;
 using UnityEngine;
 
 namespace System.Battle_System.System.Main
@@ -23,6 +24,9 @@ namespace System.Battle_System.System.Main
         [field: Header("Initiative System")]
         [field: SerializeField] private InitiativeSystem InitiativeSystem;
         private GameObject InitiativeSystemObject;
+        
+        [field: Header("Data")]
+        [field: SerializeField] private PlayerSO PlayerData;
         
         private readonly StateMachine StateMachine = new();
         
@@ -64,7 +68,9 @@ namespace System.Battle_System.System.Main
                 {
                     CardPoolSystem.Refill(() =>
                     {
-                        DrawAndShowCard(6, OnInitiativeCoin);
+                        PlayerData.GetCharacterNumber(out var number);
+                        number *= 2;
+                        DrawAndShowCard(number, OnInitiativeCoin);
                     });
                 },
                 onExit: () =>
@@ -140,7 +146,8 @@ namespace System.Battle_System.System.Main
                         }
 
                         yield return new WaitUntil(() => playerTurnEnd && enemyTurnEnd);
-                        DrawAndShowCard(3, () => drawAndShowEnd = true);
+                        PlayerData.GetCharacterNumber(out var number);
+                        DrawAndShowCard(number, () => drawAndShowEnd = true);
                         yield return new WaitUntil(() => drawAndShowEnd);
                         yield return new WaitForEndOfFrame();
                     }
