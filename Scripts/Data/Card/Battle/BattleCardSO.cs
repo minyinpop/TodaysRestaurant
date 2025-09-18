@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using Data.Animation.Spine;
+using Data.General;
+using Data.General.Damage.Base;
 using UnityEngine;
 
 namespace Data.Card.Battle
@@ -9,9 +11,9 @@ namespace Data.Card.Battle
     {
         #region Damage
             [field: Header("Damage")]
-            [field: SerializeField] private float Damage;
+            [field: SerializeField] private Damage Damage;
 
-            public void GetDamage(out float damage)
+            public void GetDamage(out Damage damage)
             {
                 damage = Damage;
             }

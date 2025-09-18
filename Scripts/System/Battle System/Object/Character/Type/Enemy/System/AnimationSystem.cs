@@ -15,6 +15,7 @@ namespace System.Battle_System.Object.Character.Type.Enemy.System
         [field: SerializeField] private SkeletonAnimationSettings IdleAnimationSettings;
         [field: SerializeField] private SkeletonAnimationSettings AttackAnimationSettings;
         [field: SerializeField] private SkeletonAnimationSettings HurtAnimationSettings;
+        [field: SerializeField] private SkeletonAnimationSettings DeathAnimationSettings;
         
         private TrackEntry CurrentEntry;
         
@@ -48,6 +49,20 @@ namespace System.Battle_System.Object.Character.Type.Enemy.System
         public void Hurt(Action onComplete = null)
         {
             HurtAnimationSettings.GetValues(out var layer, out var animationName, out var loop);
+            CurrentEntry = SkeletonAnimation.AnimationState.SetAnimation(layer, animationName, loop);
+            CurrentEntry.Complete += OnComplete;
+            return;
+            
+            void OnComplete(TrackEntry entry)
+            {
+                CurrentEntry.Complete -= OnComplete;
+                onComplete?.Invoke();
+            }
+        }
+
+        public void Death(Action onComplete = null)
+        {
+            DeathAnimationSettings.GetValues(out var layer, out var animationName, out var loop);
             CurrentEntry = SkeletonAnimation.AnimationState.SetAnimation(layer, animationName, loop);
             CurrentEntry.Complete += OnComplete;
             return;

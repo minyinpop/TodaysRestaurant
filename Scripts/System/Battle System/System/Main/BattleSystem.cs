@@ -30,17 +30,27 @@ namespace System.Battle_System.System.Main
         
         private readonly StateMachine StateMachine = new();
         
-        private TossResult TossResult = TossResult.Tails;
+        private TossResult TossResult = TossResult.Heads; // TODO Tails
 
         private IEnumerator CurrentCor;
+
+        private bool IsEnd;
 
         private void Start()
         {
             OnBattleStart();
         }
 
+        private void OnEnable()
+        {
+            PlayerTeamSystem.OnAllDeath += OnEnemyWin;
+            EnemyTeamSystem.OnAllDeath += OnPlayerWin;
+        }
+
         private void OnDisable()
         {
+            PlayerTeamSystem.OnAllDeath -= OnEnemyWin;
+            EnemyTeamSystem.OnAllDeath -= OnPlayerWin;
             if (CurrentCor is not null)
             {
                 StopCoroutine(CurrentCor);
@@ -55,48 +65,51 @@ namespace System.Battle_System.System.Main
             {
                 CardPoolSystem.Refill();
                 ShowCardSystem.GetShowCards(out var showCards);
-
                 HandCardSystem.Add(showCards, onComplete);
             });
         }
 
         #region StateMachine
-            private void OnBattleStart()
-            {
-                StateMachine.ChangeState(new OnBattleStart(
-                onEnter: () =>
+            #region OnBattleStart
+                private void OnBattleStart()
                 {
-                    CardPoolSystem.Refill(() =>
-                    {
-                        PlayerData.GetCharacterNumber(out var number);
-                        number *= 2;
-                        DrawAndShowCard(number, OnInitiativeCoin);
-                    });
-                },
-                onExit: () =>
-                {
-                    // Exit.
-                }));
-            }
+                    StateMachine.ChangeState(new OnBattleStart(
+                        onEnter: () =>
+                        {
+                            CardPoolSystem.Refill(() =>
+                            {
+                                PlayerData.GetCharacterNumber(out var number);
+                                number *= 2;
+                                DrawAndShowCard(number, TurnManager); // OnInitiativeCoin
+                            });
+                        },
+                        onExit: () =>
+                        {
+                            // Exit.
+                        }));
+                }
+            #endregion
             
-            private void OnInitiativeCoin()
-            {
-                StateMachine.ChangeState(new OnInitiativeCoin(
-                onEnter: () =>
+            #region OnInitiativeCoin
+                private void OnInitiativeCoin()
                 {
-                    InitiativeSystemObject = Instantiate(InitiativeSystem.gameObject);
-                    InitiativeSystemObject.GetComponent<InitiativeSystem>().OnShowResultComplete += result =>
-                    {
-                        TossResult = result;
-                        TurnManager();
-                    };
-                },
-                onExit: () =>
-                {
-                    Destroy(InitiativeSystemObject);
-                    InitiativeSystemObject = null;
-                }));
-            }
+                    StateMachine.ChangeState(new OnInitiativeCoin(
+                        onEnter: () =>
+                        {
+                            InitiativeSystemObject = Instantiate(InitiativeSystem.gameObject);
+                            InitiativeSystemObject.GetComponent<InitiativeSystem>().OnShowResultComplete += result =>
+                            {
+                                TossResult = result;
+                                TurnManager();
+                            };
+                        },
+                        onExit: () =>
+                        {
+                            Destroy(InitiativeSystemObject);
+                            InitiativeSystemObject = null;
+                        }));
+                }
+            #endregion
             
             #region TurnManager
                 private void TurnManager()
@@ -107,7 +120,7 @@ namespace System.Battle_System.System.Main
 
                 private IEnumerator TurnManagerCoroutine()
                 {
-                    while (true)
+                    while (!IsEnd)
                     {
                         var playerTurnEnd = false;
                         var enemyTurnEnd = false;
@@ -154,45 +167,91 @@ namespace System.Battle_System.System.Main
                 }
             #endregion
 
-            private void OnPlayerTurn(Action onComplete = null)
-            {
-                StateMachine.ChangeState(new OnPlayerTurn(
-                onEnter: () =>
+            #region OnPlayerTurn
+                private void OnPlayerTurn(Action onComplete = null)
                 {
-                    SelectedCardSystem.OpenUI(
-                    onUIOpen: () =>
-                    {
-                        HandCardSystem.SetCardsInteractable(true);
-                    }, 
-                    onUIClose: () =>
-                    {
-                        UseCardSystem.Use(() =>
+                    StateMachine.ChangeState(new OnPlayerTurn(
+                        onEnter: () =>
                         {
-                            onComplete?.Invoke();
-                        });
-                    });
-                },
-                onExit: () =>
-                {
-                    // Exit.
-                }));
-            }
+                            SelectedCardSystem.OpenUI(
+                            onUIOpen: () =>
+                            {
+                                HandCardSystem.SetCardsInteractable(true);
+                            }, 
+                            onUIClose: () =>
+                            {
+                                UseCardSystem.Use(() =>
+                                {
+                                    onComplete?.Invoke();
+                                });
+                            });
+                        },
+                        onExit: () =>
+                        {
+                            // Exit.
+                        }));
+                }
+            #endregion
             
-            private void OnEnemyTurn(Action onComplete = null)
-            {
-                StateMachine.ChangeState(new OnEnemyTurn(
-                onEnter: () =>
+            #region OnEnemyTurn
+                private void OnEnemyTurn(Action onComplete = null)
                 {
-                    EnemyTeamSystem.Attack(() =>
+                    StateMachine.ChangeState(new OnEnemyTurn(
+                        onEnter: () =>
+                        {
+                            EnemyTeamSystem.Attack(() =>
+                            {
+                                onComplete?.Invoke();
+                            });
+                        },
+                        onExit: () =>
+                        {
+                            // Exit.
+                        }));
+                }
+            #endregion
+            
+            #region OnPlayerWin
+                private void OnPlayerWin()
+                {
+                    if (CurrentCor is not null)
                     {
-                        onComplete?.Invoke();
-                    });
-                },
-                onExit: () =>
+                        StopCoroutine(CurrentCor);
+                        CurrentCor = null;
+                    }
+
+                    StateMachine.ChangeState(new OnPlayerWin(
+                        onEnter: () =>
+                        {
+                            IsEnd = true;
+                            Debug.Log("Player Win!");
+                        },
+                        onExit: () =>
+                        {
+                        }));
+                }
+            #endregion
+            
+            #region OnEnemyWin
+                private void OnEnemyWin()
                 {
-                    // Exit.
-                }));
-            }
+                    if (CurrentCor is not null)
+                    {
+                        StopCoroutine(CurrentCor);
+                        CurrentCor = null;
+                    }
+                    
+                    StateMachine.ChangeState(new OnEnemyWin(
+                        onEnter: () =>
+                        {
+                            IsEnd = true;
+                            Debug.Log("Enemy Win!");
+                        },
+                        onExit: () =>
+                        {
+                        }));
+                }
+            #endregion
         #endregion
     }
 }

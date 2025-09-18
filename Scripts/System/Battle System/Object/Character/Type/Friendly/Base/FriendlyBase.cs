@@ -19,6 +19,8 @@ namespace System.Battle_System.Object.Character.Type.Friendly.Base
         [field: Header("Data")]
         [field: SerializeField] private FriendlySO FriendlyData;
 
+        private bool IsDeath;
+        
         public static event Action<BattleCard, Action> OnAttack;
 
         private void Start()
@@ -27,12 +29,7 @@ namespace System.Battle_System.Object.Character.Type.Friendly.Base
             HealthBar.Init(min, max);
         }
 
-        public void OnEnable()
-        {
-            Idle();
-        }
-
-        public void Idle()
+        private void OnEnable()
         {
             AnimationSystem.Idle();
         }
@@ -44,17 +41,30 @@ namespace System.Battle_System.Object.Character.Type.Friendly.Base
             {
                 OnAttack?.Invoke(card, onComplete);
             },
-            onComplete: Idle);
+            onComplete: AnimationSystem.Idle);
         }
 
-        public void Hurt(float damage, Action onComplete = null)
+        public void Hurt(float damage, Action isDeath = null, Action onComplete = null)
         {
-            HealthBar.Subtract(damage);
-            AnimationSystem.Hurt(() =>
-            {
-                Idle();
-                onComplete?.Invoke();
-            });
+            if (IsDeath) return;
+            HealthBar.Subtract(damage,
+                isAlive: () =>
+                {
+                    AnimationSystem.Hurt(() =>
+                    {
+                        AnimationSystem.Idle();
+                        onComplete?.Invoke();
+                    });
+                },
+                isDeath: () =>
+                {
+                    AnimationSystem.Death(() =>
+                    {
+                        IsDeath = true;
+                        isDeath?.Invoke();
+                        onComplete?.Invoke();
+                    });
+                });
         }
     }
 }

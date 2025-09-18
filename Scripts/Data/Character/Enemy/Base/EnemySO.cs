@@ -1,4 +1,5 @@
 using Data.General;
+using Data.General.Damage.Base;
 using UnityEngine;
 
 namespace Data.Character.Enemy.Base
@@ -20,9 +21,9 @@ namespace Data.Character.Enemy.Base
             [field: Header("Damage")]
             [field: SerializeField] private Damage Damage;
 
-            public void GetDamageValues(out int basicDamage)
+            public void GetDamage(out Damage damage)
             {
-                Damage.GetValues(out basicDamage);
+                damage = Damage;
             }
         #endregion
     }

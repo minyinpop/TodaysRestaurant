@@ -4,6 +4,8 @@ using Data.Animation.DOTween.Basic;
 using Data.Animation.DOTween.Combine;
 using Data.Animation.Spine;
 using Data.Card.Battle;
+using Data.General;
+using Data.General.Damage.Base;
 using DG.Tweening;
 using UnityEngine;
 
@@ -36,7 +38,7 @@ namespace System.Battle_System.Object.Card.Type.Battle.System.Main
             BattleCardData.GetDrawChance(out chance);
         }
 
-        public void GetDamage(out float damage)
+        public void GetDamage(out Damage damage)
         {
             BattleCardData.GetDamage(out damage);
         }

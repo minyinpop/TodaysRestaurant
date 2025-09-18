@@ -1,6 +1,6 @@
-using System.Battle_System.Object.Card.Type.Battle.System.Main;
 using System.Battle_System.Object.Character.Type.Enemy.System;
 using Data.Character.Enemy.Base;
+using Data.General.Damage.Base;
 using General;
 using UnityEngine;
 
@@ -18,7 +18,9 @@ namespace System.Battle_System.Object.Character.Type.Enemy.Base
         [field: Header("Data")]
         [field: SerializeField] private EnemySO EnemyData;
 
-        public static event Action<float, Action> OnAttack;
+        private bool IsDeath;
+
+        public static event Action<Damage, Action> OnAttack;
 
         private void Start()
         {
@@ -26,12 +28,7 @@ namespace System.Battle_System.Object.Character.Type.Enemy.Base
             HealthBar.Init(min, max);
         }
 
-        public void OnEnable()
-        {
-            Idle();
-        }
-
-        public void Idle()
+        private void OnEnable()
         {
             AnimationSystem.Idle();
         }
@@ -41,22 +38,33 @@ namespace System.Battle_System.Object.Character.Type.Enemy.Base
             AnimationSystem.Attack(
             onAttackPoint: () =>
             {
-                EnemyData.GetDamageValues(out var damage);
+                EnemyData.GetDamage(out var damage);
                 OnAttack?.Invoke(damage, onComplete);
             },
-            onComplete: Idle);
+            onComplete: AnimationSystem.Idle);
         }
 
-        public void Hurt(BattleCard card, Action onComplete = null)
+        public void Hurt(int damage, Action isDeath = null, Action onComplete = null)
         {
-            card.GetDamage(out var damage);
-            HealthBar.Subtract(damage);
-            
-            AnimationSystem.Hurt(() =>
-            {
-                Idle();
-                onComplete?.Invoke();
-            });
+            if (IsDeath) return;
+            HealthBar.Subtract(damage,
+                isAlive: () =>
+                {
+                    AnimationSystem.Hurt(() =>
+                    {
+                        AnimationSystem.Idle();
+                        onComplete?.Invoke();
+                    });
+                },
+                isDeath: () =>
+                {
+                    AnimationSystem.Death(() =>
+                    {
+                        IsDeath = true;
+                        isDeath?.Invoke();
+                        onComplete?.Invoke();
+                    });
+                });
         }
     }
 }

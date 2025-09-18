@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,11 +12,11 @@ namespace General
         [field: SerializeField] private Slider OuterFill;
 
         private float MaxValue = 1;
-        private float MinValue = 0;
+        private float MinValue;
         
         private float CurrentValue;
 
-        private Tween ValueTween;
+        private Tween CurrentTween;
 
         public void Init(float minValue, float maxValue)
         {
@@ -36,18 +37,23 @@ namespace General
         
         public void Add(float value)
         {
-            CurrentValue = Mathf.Clamp(CurrentValue += value, MinValue, MaxValue);
-            InnerFill.value = CurrentValue;
-            OuterFill.value = CurrentValue;
+            // TODO
         }
         
-        public void Subtract(float value)
+        public void Subtract(float value, Action isAlive = null, Action isDeath = null)
         {
             CurrentValue = Mathf.Clamp(CurrentValue -= value, MinValue, MaxValue);
-            ValueTween?.Kill();
-            ValueTween = OuterFill
-                .DOValue(CurrentValue, .5f)
-                .OnKill(() => ValueTween = null);
+            if (Mathf.Approximately(CurrentValue, MinValue))
+                isDeath?.Invoke();
+            else
+                isAlive?.Invoke();
+            CurrentTween?.Kill();
+            CurrentTween = DOTween.Sequence()
+                .Append(OuterFill
+                    .DOValue(CurrentValue, .25f))
+                .Join(InnerFill
+                    .DOValue(CurrentValue, 1))
+                .OnKill(() => CurrentTween = null);
         }
     }
 }
