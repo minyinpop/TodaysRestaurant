@@ -25,7 +25,7 @@ namespace System.Battle_System.Object.Mob.Type.Enemy.System
             CurrentEntry = SkeletonAnimation.AnimationState.SetAnimation(layer, animationName, loop);
         }
 
-        public void Attack(Action onAttackPoint = null, Action onComplete = null)
+        public void Attack(Action onAttackPoint, Action onComplete)
         {
             AttackAnimationSettings.GetValues(out var layer, out var animationName, out var loop);
             CurrentEntry = SkeletonAnimation.AnimationState.SetAnimation(layer, animationName, loop);
@@ -46,7 +46,7 @@ namespace System.Battle_System.Object.Mob.Type.Enemy.System
             }
         }
 
-        public void Hurt(Action onComplete = null)
+        public void Hurt(Action onComplete)
         {
             HurtAnimationSettings.GetValues(out var layer, out var animationName, out var loop);
             CurrentEntry = SkeletonAnimation.AnimationState.SetAnimation(layer, animationName, loop);
@@ -60,7 +60,7 @@ namespace System.Battle_System.Object.Mob.Type.Enemy.System
             }
         }
 
-        public void Death(Action onComplete = null)
+        public void Death(Action onComplete)
         {
             DeathAnimationSettings.GetValues(out var layer, out var animationName, out var loop);
             CurrentEntry = SkeletonAnimation.AnimationState.SetAnimation(layer, animationName, loop);

@@ -18,7 +18,7 @@ namespace System.Battle_System.System.Main
         [field: SerializeField] private ShowCardSystem ShowCardSystem;
         [field: SerializeField] private HandCardSystem HandCardSystem;
         [field: SerializeField] private UseCardSystem UseCardSystem;
-        [field: SerializeField] private PlayerTeamSystem PlayerTeamSystem;
+        [field: SerializeField] private CharacterTeamSystem characterTeamSystem;
         [field: SerializeField] private EnemyTeamSystem EnemyTeamSystem;
         
         [field: Header("Initiative System")]
@@ -33,7 +33,7 @@ namespace System.Battle_System.System.Main
         private TossResult TossResult = TossResult.Heads; // TODO Tails
 
         private IEnumerator TurnCor;
-        private IEnumerator UseCardCor;
+        private IEnumerator AttackCor;
 
         private bool IsEnd;
 
@@ -42,24 +42,18 @@ namespace System.Battle_System.System.Main
             OnBattleStart();
         }
 
-        private void OnEnable()
-        {
-            PlayerTeamSystem.OnAllDeath += OnEnemyWin;
-        }
-
         private void OnDisable()
         {
-            PlayerTeamSystem.OnAllDeath -= OnEnemyWin;
             if (TurnCor is not null)
             {
                 StopCoroutine(TurnCor);
                 TurnCor = null;
             }
 
-            if (UseCardCor is not null)
+            if (AttackCor is not null)
             {
-                StopCoroutine(UseCardCor);
-                UseCardCor = null;
+                StopCoroutine(AttackCor);
+                AttackCor = null;
             }
         }
         
@@ -139,45 +133,52 @@ namespace System.Battle_System.System.Main
                                     haveEnemyAlive: () =>
                                     {
                                         playerTurnEnd = true;
-                                        OnEnemyTurn(() =>
-                                        {
-                                            enemyTurnEnd = true;
-                                        });
+                                        OnEnemyTurn(
+                                            haveCharacterAlive: () =>
+                                            {
+                                                enemyTurnEnd = true;
+                                            },
+                                            characterAllDead: () =>
+                                            {
+                                                StopCoroutine(TurnCor);
+                                                TurnCor = null;
+                                                OnEnemyWin();
+                                            });
                                     },
                                     enemyAllDeath: () =>
                                     {
-                                        Debug.Log("Enemies are all dead.");
-                                        // TODO
+                                        StopCoroutine(TurnCor);
+                                        TurnCor = null;
+                                        OnPlayerWin();
                                     });
                                 break;
                             }
                             case TossResult.Tails:
                             {
-                                OnEnemyTurn(() =>
-                                {
-                                    enemyTurnEnd = true;
-                                    OnPlayerTurn(
-                                        haveEnemyAlive: () =>
-                                        {
-                                            playerTurnEnd = true;
-                                        },
-                                        enemyAllDeath: () =>
-                                        {
-                                        });
-                                });
+                                OnEnemyTurn(
+                                    haveCharacterAlive: () =>
+                                    {
+                                        enemyTurnEnd = true;
+                                        OnPlayerTurn(
+                                            haveEnemyAlive: () =>
+                                            {
+                                                playerTurnEnd = true;
+                                            },
+                                            enemyAllDeath: () =>
+                                            {
+                                            });
+                                    },
+                                    characterAllDead: () =>
+                                    {
+                                    });
                                 break;
                             }
-                            default:
-                            {
-                                throw new ArgumentOutOfRangeException(nameof(TossResult), TossResult, null);
-                            }
                         }
-
+                        
                         yield return new WaitUntil(() => playerTurnEnd && enemyTurnEnd);
                         PlayerData.GetCharacterNumber(out var number);
                         DrawAndShowCard(number, () => drawAndShowEnd = true);
                         yield return new WaitUntil(() => drawAndShowEnd);
-                        yield return new WaitForEndOfFrame();
                     }
                 }
             #endregion
@@ -195,17 +196,17 @@ namespace System.Battle_System.System.Main
                                 }, 
                                 onUIClose: () =>
                                 {
-                                    UseCardCor = UseCardCoroutine();
-                                    StartCoroutine(UseCardCor);
+                                    AttackCor = UseCardCoroutine();
+                                    StartCoroutine(AttackCor);
                                     return;
 
                                     IEnumerator UseCardCoroutine()
                                     {
                                         var canContinue = true;
-                                        var onUseComplete = false;
                                         var haveAnyEnemyAlive = false;
                                         while (canContinue)
                                         {
+                                            var onUseComplete = false;
                                             UseCardSystem.Use(
                                                 haveEnemyAlive: hasCards =>
                                                 {
@@ -218,15 +219,15 @@ namespace System.Battle_System.System.Main
                                                     canContinue = false;
                                                     onUseComplete = true;
                                                     enemyAllDeath?.Invoke();
-                                                    StopCoroutine(UseCardCor);
-                                                    UseCardCor = null;
+                                                    StopCoroutine(AttackCor);
+                                                    AttackCor = null;
                                                 });
                                             yield return new WaitUntil(() => onUseComplete);
                                         }
-                                        
+
                                         if (haveAnyEnemyAlive)
                                             haveEnemyAlive?.Invoke();
-                                        UseCardCor = null;
+                                        AttackCor = null;
                                     }
                                 });
                         },
@@ -238,15 +239,20 @@ namespace System.Battle_System.System.Main
             #endregion
             
             #region OnEnemyTurn
-                private void OnEnemyTurn(Action onComplete = null)
+                private void OnEnemyTurn(Action haveCharacterAlive, Action characterAllDead)
                 {
                     StateMachine.ChangeState(new OnEnemyTurn(
                         onEnter: () =>
                         {
-                            EnemyTeamSystem.Attack(() =>
-                            {
-                                onComplete?.Invoke();
-                            });
+                            EnemyTeamSystem.Attack(
+                                haveCharacterAlive: () =>
+                                {
+                                    haveCharacterAlive?.Invoke();
+                                },
+                                characterAllDead: () =>
+                                {
+                                    characterAllDead?.Invoke();
+                                });
                         },
                         onExit: () =>
                         {

@@ -1,6 +1,6 @@
 namespace Data.General.Damage.Child
 {
-    public enum AttackType
+    internal enum AttackType
     {
         Single,
         All

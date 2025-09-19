@@ -1,9 +1,11 @@
 using System.Battle_System.Object.Card.Base;
 using System.Battle_System.Object.Card.Type.Battle.System.Child;
+using System.Battle_System.Object.Mob.Type.Character.Base;
 using Data.Animation.DOTween.Basic;
 using Data.Animation.DOTween.Combine;
 using Data.Animation.Spine;
 using Data.Card.Battle;
+using Data.General;
 using Data.General.Damage.Base;
 using DG.Tweening;
 using UnityEngine;
@@ -30,16 +32,22 @@ namespace System.Battle_System.Object.Card.Type.Battle.System.Main
         private bool Interactable;
 
         public event Action<ICard> OnClick;
-        public static event Action<BattleCard, SkeletonAnimationSettings, Action, Action> OnUse;
-        
-        public void GetDrawChance(out float chance)
+        public static event Action<ICard, SkeletonAnimationSettings, Action, Action> OnUse;
+
+        private void OnEnable()
         {
-            BattleCardData.GetDrawChance(out chance);
+            CharacterBase.RecycleCard += DestroyCard;
         }
 
-        public void GetDamage(out Damage damage)
+        private void OnDisable()
         {
-            BattleCardData.GetDamage(out damage);
+            CharacterBase.RecycleCard -= DestroyCard;
+        }
+
+        private void DestroyCard(CardType type, Action onComplete)
+        {
+            if (Equals(type)) return;
+            DestroyCard(onComplete);
         }
 
         #region CustomPointerEventHandler
@@ -62,12 +70,31 @@ namespace System.Battle_System.Object.Card.Type.Battle.System.Main
             }
         #endregion
 
-        #region ICard
-            public virtual void SetInteractable(bool interactable)
+        #region Information
+            public void GetCardType(out CardType type)
+            {
+                BattleCardData.GetCardType(out type);
+            }
+            
+            public void GetDrawChance(out float chance)
+            {
+                BattleCardData.GetDrawChance(out chance);
+            }
+            
+            public void GetDamage(out Damage damage)
+            {
+                BattleCardData.GetDamage(out damage);
+            }
+        #endregion
+        
+        #region Status
+            public void SetInteractable(bool interactable)
             {
                 Interactable = interactable;
             }
+        #endregion
 
+        #region Main Function
             public void Use(Action haveEnemyAlive, Action enemyAllDeath)
             {
                 BattleCardData.GetRandomAnimation(out var anima);
@@ -84,36 +111,42 @@ namespace System.Battle_System.Object.Card.Type.Battle.System.Main
                     });
             }
 
-            public void Destroy()
+            public void DestroyCard(Action onComplete)
             {
-                Destroy(gameObject);
+                AnimationSystem.ScaleTo(CardRect, new DoScale(Vector2.zero, .25f, Ease.InBack))
+                    .OnComplete(() =>
+                    {
+                        onComplete?.Invoke();
+                        Destroy(gameObject);
+                    });
             }
+        #endregion
 
-            #region Card Order
-                public virtual void SetCardOrder(GameObject cardOrderPrefab)
-                {
-                    if (CardOrder is not null)
-                        Destroy(CardOrder);
-                    CardOrder = Instantiate(cardOrderPrefab, CardOrderParent);
-                }
-                
-                public virtual void RemoveCardOrder()
-                {
-                    if (CardOrder is null) return;
+        #region Order
+            public void SetCardOrder(GameObject cardOrderPrefab)
+            {
+                if (CardOrder is not null)
                     Destroy(CardOrder);
-                    CardOrder = null;
-                }
-            #endregion
+                CardOrder = Instantiate(cardOrderPrefab, CardOrderParent);
+            }
             
-            #region AnimationSystem
-            public virtual void Move(Transform parent, DoAnchorPos settings, Action onComplete = null)
+            public void RemoveCardOrder()
+            {
+                if (CardOrder is null) return;
+                Destroy(CardOrder);
+                CardOrder = null;
+            }
+        #endregion
+            
+        #region Animation
+            public void Move(Transform parent, DoAnchorPos settings, Action onComplete = null)
             {
                 CardRect.SetParent(parent);
                 AnimationSystem.MoveTo(CardRect, settings)
                     .OnComplete(() => onComplete?.Invoke());
             }
 
-            public virtual void MoveAndFlip(Transform parent, DoAnchorPos anchorPosSettings, DoFlip flipSettings, Action onComplete = null)
+            public void MoveAndFlip(Transform parent, DoAnchorPos anchorPosSettings, DoFlip flipSettings, Action onComplete = null)
             {
                 CardRect.SetParent(parent);
                 
@@ -123,7 +156,6 @@ namespace System.Battle_System.Object.Card.Type.Battle.System.Main
                     .OnComplete(() => AnimationSystem.FlipToFront(CardSurfaceRect, rotateSettings, scaleSettings01, scaleSettings02)
                         .OnComplete(() => onComplete?.Invoke()));
             }
-            #endregion
         #endregion
     }
 }

@@ -20,52 +20,66 @@ namespace System.Battle_System.Object.Mob.Type.Enemy.Base
 
         private bool IsDeath;
 
-        public static event Action<Damage, Action> OnAttack;
+        public static event Action<Damage, Action, Action> OnAttack;
 
         private void Start()
         {
             EnemyData.GetHealthValues(out var min, out var max);
             HealthBar.Init(min, max);
-        }
-
-        private void OnEnable()
-        {
+            
             AnimationSystem.Idle();
         }
 
-        public void Attack(Action onComplete = null)
-        {
-            AnimationSystem.Attack(
-            onAttackPoint: () =>
+        #region Attack
+            public void Attack(Action haveCharacterAlive, Action characterAllDead)
             {
-                EnemyData.GetDamage(out var damage);
-                OnAttack?.Invoke(damage, onComplete);
-            },
-            onComplete: AnimationSystem.Idle);
-        }
-
-        public void Hurt(int damage, Action isAlive, Action isDeath)
-        {
-            if (IsDeath) return;
-            HealthBar.Subtract(damage,
-                isAlive: () =>
-                {
-                    AnimationSystem.Hurt(() =>
+                AnimationSystem.Attack(
+                    onAttackPoint: () =>
                     {
-                        Debug.Log($"{name} is alive.");
+                        EnemyData.GetDamage(out var damage);
+                        OnAttack?.Invoke(damage,
+                            () =>
+                            {
+                                // haveCharacterAlive
+                                haveCharacterAlive?.Invoke();
+                            },
+                            () =>
+                            {
+                                // characterAllDead
+                                characterAllDead?.Invoke();
+                            });
+                    },
+                    onComplete: () =>
+                    {
                         AnimationSystem.Idle();
-                        isAlive?.Invoke();
                     });
-                },
-                isDeath: () =>
-                {
-                    AnimationSystem.Death(() =>
+            }
+        #endregion
+
+        #region Hurt
+            public void Hurt(int damage, Action isAlive, Action isDeath)
+            {
+                if (IsDeath) return;
+                HealthBar.Subtract(damage,
+                    isAlive: () =>
                     {
-                        Debug.Log($"{name} is dead.");
-                        IsDeath = true;
-                        isDeath?.Invoke();
+                        AnimationSystem.Hurt(
+                            onComplete: () =>
+                            {
+                                AnimationSystem.Idle();
+                                isAlive?.Invoke();
+                            });
+                    },
+                    isDeath: () =>
+                    {
+                        AnimationSystem.Death(
+                            onComplete: () =>
+                            {
+                                IsDeath = true;
+                                isDeath?.Invoke();
+                            });
                     });
-                });
-        }
+            }
+        #endregion
     }
 }

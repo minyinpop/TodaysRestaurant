@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using Data.General;
+using Data.General.Character_Information.Base;
 using UnityEngine;
 
 namespace Data.Mob.Character.Base
@@ -6,6 +8,25 @@ namespace Data.Mob.Character.Base
     [CreateAssetMenu(menuName = "Minyinpop/Character/Friendly", fileName = "New Data")]
     internal sealed class CharacterSO : ScriptableObject
     {
+        #region CharacterInformatin
+            #region CharacterType
+                [field: Header("Information")]
+                [field: SerializeField] private CharacterInformation CharacterInformation;
+
+                public void GetCharacterType(out CharacterType type)
+                {
+                    CharacterInformation.GetCharacterType(out type);
+                }
+            #endregion
+            
+            #region UseCardType
+                public void GetUseCardType(out List<CardType> cardType)
+                {
+                    CharacterInformation.GetUseCardType(out cardType);
+                }
+            #endregion
+        #endregion
+        
         #region Health
             [field: Header("Health")]
             [field: SerializeField] private Health Health;
@@ -15,5 +36,6 @@ namespace Data.Mob.Character.Base
                 Health.GetValues(out min, out max);
             }
         #endregion
+        
     }
 }
