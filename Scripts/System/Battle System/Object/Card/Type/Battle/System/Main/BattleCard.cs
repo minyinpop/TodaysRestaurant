@@ -1,6 +1,5 @@
 using System.Battle_System.Object.Card.Base;
 using System.Battle_System.Object.Card.Type.Battle.System.Child;
-using System.Battle_System.Object.Mob.Type.Character.Base;
 using Data.Animation.DOTween.Basic;
 using Data.Animation.DOTween.Combine;
 using Data.Animation.Spine;
@@ -33,22 +32,6 @@ namespace System.Battle_System.Object.Card.Type.Battle.System.Main
 
         public event Action<ICard> OnClick;
         public static event Action<ICard, SkeletonAnimationSettings, Action, Action> OnUse;
-
-        private void OnEnable()
-        {
-            CharacterBase.RecycleCard += DestroyCard;
-        }
-
-        private void OnDisable()
-        {
-            CharacterBase.RecycleCard -= DestroyCard;
-        }
-
-        private void DestroyCard(CardType type, Action onComplete)
-        {
-            if (Equals(type)) return;
-            DestroyCard(onComplete);
-        }
 
         #region CustomPointerEventHandler
             protected override void OnPointerEnter()

@@ -3,7 +3,9 @@ using System.Battle_System.Object.Card.Base;
 using System.Battle_System.System.Child.Selected_Card_System.Main;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Data.Animation.DOTween.Basic;
+using Data.General;
 using DG.Tweening;
 using UnityEngine;
 
@@ -18,6 +20,7 @@ namespace System.Battle_System.System.Child
         private readonly List<CardSlot> CardSlots = new();
         
         private IEnumerator AddCor;
+        private IEnumerator RecycleCor;
 
         public static event Func<ICard, bool> TryAddCardToSelected;
 
@@ -33,6 +36,12 @@ namespace System.Battle_System.System.Child
             {
                 StopCoroutine(AddCor);
                 AddCor = null;
+            }
+            
+            if (RecycleCor is not null)
+            {
+                StopCoroutine(RecycleCor);
+                RecycleCor = null;
             }
         }
         
@@ -94,5 +103,37 @@ namespace System.Battle_System.System.Child
                 }
             }
         #endregion
+        
+        public void RecycleCard(CardType targetType, Action onComplete)
+        {
+            RecycleCor = RecycleCardCoroutine();
+            StartCoroutine(RecycleCor);
+            return;
+            
+            IEnumerator RecycleCardCoroutine()
+            {
+                var completes = new List<bool>();
+                foreach (var slot in CardSlots)
+                {
+                    slot.Get(out var card);
+                    card.GetCardType(out var type);
+                    if (type == targetType)
+                    {
+                        completes.Add(false);
+                        var index = completes.Count - 1;
+                        card.DestroyCard(
+                            onComplete: () =>
+                            {
+                                completes[index] = true;
+                            });
+                    }
+                    else
+                        slot.Set(card);
+                }
+                
+                yield return new WaitUntil(() => completes.All(c => c));
+                onComplete?.Invoke();
+            }
+        }
     }
 }

@@ -2,7 +2,6 @@ using System.Battle_System.Object.Card.Base;
 using System.Battle_System.Object.Mob.Type.Character.System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Data.Animation.Spine;
 using Data.General;
 using Data.Mob.Character.Base;
@@ -26,7 +25,7 @@ namespace System.Battle_System.Object.Mob.Type.Character.Base
         private bool IsDeath;
         
         public static event Action<ICard, Action, Action> OnAttack;
-        public static event Action<CardType, Action> RecycleCard;
+        public static event Action<List<CardType>, Action> RecycleCard;
 
         private IEnumerator CurrentCor;
 
@@ -92,20 +91,11 @@ namespace System.Battle_System.Object.Mob.Type.Character.Base
                         
                         IEnumerator RecycleCardCoroutine(Action onComplete)
                         {
-                            var completes = new List<bool>();
-                            CharacterData.GetUseCardType(out var cardType);
-                            foreach (var type in cardType)
-                            {
-                                completes.Add(false);
-                                RecycleCard?.Invoke(type, () =>
-                                    {
-                                        completes[cardType.IndexOf(type)] = true;
-                                    });
-                            }
-
-                            yield return new WaitUntil(() => completes.All(c => c));
+                            var complete = false;
+                            CharacterData.GetUseCardType(out var cardTypes);
+                            RecycleCard?.Invoke(cardTypes, () => complete = true);
+                            yield return new WaitUntil(() => complete);
                             onComplete?.Invoke();
-                            StopCoroutine(CurrentCor);
                             CurrentCor = null;
                         }
                     });

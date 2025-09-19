@@ -1,9 +1,13 @@
+using System.Battle_System.Object.Mob.Type.Character.Base;
 using System.Battle_System.System.Child;
 using System.Battle_System.System.Child.Initiative_System.System.Main;
 using System.Battle_System.System.Child.Selected_Card_System.Main;
 using System.Battle_System.System.Main.State_Machine;
 using System.Battle_System.System.Main.State_Machine.State;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using Data.General;
 using Data.Initiative_Coin;
 using Data.Player;
 using UnityEngine;
@@ -34,6 +38,7 @@ namespace System.Battle_System.System.Main
 
         private IEnumerator TurnCor;
         private IEnumerator AttackCor;
+        private IEnumerator CharacterDeathCor;
 
         private bool IsEnd;
 
@@ -42,8 +47,14 @@ namespace System.Battle_System.System.Main
             OnBattleStart();
         }
 
+        private void OnEnable()
+        {
+            CharacterBase.RecycleCard += OnCharacterDead;
+        }
+
         private void OnDisable()
         {
+            CharacterBase.RecycleCard -= OnCharacterDead;
             if (TurnCor is not null)
             {
                 StopCoroutine(TurnCor);
@@ -54,6 +65,12 @@ namespace System.Battle_System.System.Main
             {
                 StopCoroutine(AttackCor);
                 AttackCor = null;
+            }
+            
+            if (CharacterDeathCor is not null)
+            {
+                StopCoroutine(CharacterDeathCor);
+                CharacterDeathCor = null;
             }
         }
         
@@ -66,6 +83,61 @@ namespace System.Battle_System.System.Main
                 ShowCardSystem.GetShowCards(out var showCards);
                 HandCardSystem.Add(showCards, onComplete);
             });
+        }
+
+        private void OnCharacterDead(List<CardType> cardTypes, Action onComplete)
+        {
+            CharacterDeathCor = RecycleCardCoroutine();
+            StartCoroutine(CharacterDeathCor);
+            return;
+
+            IEnumerator RecycleCardCoroutine()
+            {
+                var completes = new List<bool>();
+                for (var i = 0; i < cardTypes.Count; i++)
+                {
+                    var index = i;
+                    var type = cardTypes[index];
+                    completes.Add(false);
+                    
+                    var CardPoolRecycleComplete = false;
+                    var HandCardRecycleComplete = false;
+                    var UseCardRecycleComplete = false;
+                    
+                    CardPoolSystem.RecycleCard(type, 
+                        onComplete:() =>
+                        {
+                            CardPoolRecycleComplete = true;
+                        });
+                    
+                    HandCardSystem.RecycleCard(type,
+                        onComplete: () =>
+                        {
+                            HandCardRecycleComplete = true;
+                        });
+                    
+                    UseCardSystem.RecycleCard(type,
+                        onComplete: () =>
+                        {
+                            UseCardRecycleComplete = true;
+                        });
+                    
+                    yield return new WaitUntil(() => CardPoolRecycleComplete && HandCardRecycleComplete && UseCardRecycleComplete);
+                    completes[index] = true;
+                }
+                
+                yield return new WaitUntil(() => completes.All(c => c));
+                var CardPoolRefillComplete = false;
+                
+                CardPoolSystem.Refill(
+                    onComplete: () =>
+                    {
+                        CardPoolRefillComplete = true;
+                    });
+                
+                yield return new WaitUntil(() => CardPoolRefillComplete);
+                onComplete?.Invoke();
+            }
         }
 
         #region StateMachine
@@ -166,10 +238,16 @@ namespace System.Battle_System.System.Main
                                             },
                                             enemyAllDeath: () =>
                                             {
+                                                StopCoroutine(TurnCor);
+                                                TurnCor = null;
+                                                OnPlayerWin();
                                             });
                                     },
                                     characterAllDead: () =>
                                     {
+                                        StopCoroutine(TurnCor);
+                                        TurnCor = null;
+                                        OnEnemyWin();
                                     });
                                 break;
                             }

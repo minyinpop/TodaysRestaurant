@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Data.Animation.DOTween.Basic;
+using Data.General;
 using DG.Tweening;
 using UnityEngine;
 
@@ -16,9 +17,10 @@ namespace System.Battle_System.System.Child
         [field: SerializeField] private Transform SpawnParent;
         [field: SerializeField] private GameObject SlotPrefab;
         
-        private /*readonly*/ List<CardSlot> CardSlots = new();
+        private readonly List<CardSlot> CardSlots = new();
 
         private IEnumerator CurrentCor;
+        private IEnumerator RecycleCor;
 
         private void OnEnable()
         {
@@ -32,6 +34,12 @@ namespace System.Battle_System.System.Child
             {
                 StopCoroutine(CurrentCor);
                 CurrentCor = null;
+            }
+            
+            if (RecycleCor is not null)
+            {
+                StopCoroutine(RecycleCor);
+                RecycleCor = null;
             }
         }
 
@@ -87,6 +95,38 @@ namespace System.Battle_System.System.Child
             else
                 enemyAllDeath?.Invoke();
             CurrentCor = null;
+        }
+        
+        public void RecycleCard(CardType targetType, Action onComplete)
+        {
+            RecycleCor = RecycleCardCoroutine();
+            StartCoroutine(RecycleCor);
+            return;
+            
+            IEnumerator RecycleCardCoroutine()
+            {
+                var completes = new List<bool>();
+                foreach (var slot in CardSlots)
+                {
+                    slot.Get(out var card);
+                    card.GetCardType(out var type);
+                    if (type == targetType)
+                    {
+                        completes.Add(false);
+                        var index = completes.Count - 1;
+                        card.DestroyCard(
+                            onComplete: () =>
+                            {
+                                completes[index] = true;
+                            });
+                    }
+                    else
+                        slot.Set(card);
+                }
+                
+                yield return new WaitUntil(() => completes.All(c => c));
+                onComplete?.Invoke();
+            }
         }
     }
 }
