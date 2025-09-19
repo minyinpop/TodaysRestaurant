@@ -4,7 +4,6 @@ using Data.Animation.DOTween.Basic;
 using Data.Animation.DOTween.Combine;
 using Data.Animation.Spine;
 using Data.Card.Battle;
-using Data.General;
 using Data.General.Damage.Base;
 using DG.Tweening;
 using UnityEngine;
@@ -31,7 +30,7 @@ namespace System.Battle_System.Object.Card.Type.Battle.System.Main
         private bool Interactable;
 
         public event Action<ICard> OnClick;
-        public static event Action<BattleCard, SkeletonAnimationSettings, Action> OnUse;
+        public static event Action<BattleCard, SkeletonAnimationSettings, Action, Action> OnUse;
         
         public void GetDrawChance(out float chance)
         {
@@ -69,10 +68,20 @@ namespace System.Battle_System.Object.Card.Type.Battle.System.Main
                 Interactable = interactable;
             }
 
-            public void Use(Action onComplete = null)
+            public void Use(Action haveEnemyAlive, Action enemyAllDeath)
             {
                 BattleCardData.GetRandomAnimation(out var anima);
-                OnUse?.Invoke(this, anima, () => onComplete?.Invoke());
+                OnUse?.Invoke(this, anima,
+                    () =>
+                    {
+                        // haveEnemyAlive
+                        haveEnemyAlive?.Invoke();
+                    },
+                    () =>
+                    {
+                        // enemyAllDeath
+                        enemyAllDeath?.Invoke();
+                    });
             }
 
             public void Destroy()

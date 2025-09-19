@@ -1,14 +1,14 @@
 using System.Battle_System.Object.Card.Type.Battle.System.Main;
-using System.Battle_System.Object.Character.Type.Friendly.System;
+using System.Battle_System.Object.Mob.Type.Character.System;
 using Data.Animation.Spine;
-using Data.Character.Friendly.Base;
+using Data.Mob.Character.Base;
 using General;
 using UnityEngine;
 
-namespace System.Battle_System.Object.Character.Type.Friendly.Base
+namespace System.Battle_System.Object.Mob.Type.Character.Base
 {
     [RequireComponent(typeof(AnimationSystem))]
-    internal abstract class FriendlyBase : MonoBehaviour
+    internal abstract class CharacterBase : MonoBehaviour
     {
         [field: Header("Child System")]
         [field: SerializeField] private AnimationSystem AnimationSystem;
@@ -17,15 +17,15 @@ namespace System.Battle_System.Object.Character.Type.Friendly.Base
         [field: SerializeField] private StatusBar HealthBar;
         
         [field: Header("Data")]
-        [field: SerializeField] private FriendlySO FriendlyData;
+        [field: SerializeField] private CharacterSO characterData;
 
         private bool IsDeath;
         
-        public static event Action<BattleCard, Action> OnAttack;
+        public static event Action<BattleCard, Action, Action> OnAttack;
 
         private void Start()
         {
-            FriendlyData.GetHealthValues(out var min, out var max);
+            characterData.GetHealthValues(out var min, out var max);
             HealthBar.Init(min, max);
         }
 
@@ -34,12 +34,12 @@ namespace System.Battle_System.Object.Character.Type.Friendly.Base
             AnimationSystem.Idle();
         }
 
-        public void Attack(BattleCard card, SkeletonAnimationSettings settings, Action onComplete = null)
+        public void Attack(BattleCard card, SkeletonAnimationSettings settings, Action haveEnemyAlive, Action enemyAllDeath)
         {
             AnimationSystem.Attack(settings,
             onAttackPoint: () =>
             {
-                OnAttack?.Invoke(card, onComplete);
+                OnAttack?.Invoke(card, haveEnemyAlive, enemyAllDeath);
             },
             onComplete: AnimationSystem.Idle);
         }

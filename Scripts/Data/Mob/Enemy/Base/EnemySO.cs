@@ -2,7 +2,7 @@ using Data.General;
 using Data.General.Damage.Base;
 using UnityEngine;
 
-namespace Data.Character.Enemy.Base
+namespace Data.Mob.Enemy.Base
 {
     [CreateAssetMenu(menuName = "Minyinpop/Character/Enemy", fileName = "New Data")]
     internal sealed class EnemySO : ScriptableObject

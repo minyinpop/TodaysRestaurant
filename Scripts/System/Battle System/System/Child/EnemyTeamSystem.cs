@@ -1,6 +1,6 @@
 using System.Battle_System.Object.Card.Type.Battle.System.Main;
-using System.Battle_System.Object.Character.Type.Enemy.Base;
-using System.Battle_System.Object.Character.Type.Friendly.Base;
+using System.Battle_System.Object.Mob.Type.Character.Base;
+using System.Battle_System.Object.Mob.Type.Enemy.Base;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,17 +15,15 @@ namespace System.Battle_System.System.Child
         [field: SerializeField] private List<EnemyBase> Enemies;
 
         private IEnumerator CurrentCor;
-
-        public static event Action OnAllDeath;
         
         private void OnEnable()
         {
-            FriendlyBase.OnAttack += Hurt;
+            CharacterBase.OnAttack += Hurt;
         }
 
         private void OnDisable()
         {
-            FriendlyBase.OnAttack -= Hurt;
+            CharacterBase.OnAttack -= Hurt;
             if (CurrentCor is not null)
             {
                 StopCoroutine(CurrentCor);
@@ -69,7 +67,7 @@ namespace System.Battle_System.System.Child
         #endregion
 
         #region Hurt
-            private void Hurt(BattleCard card, Action onComplete = null)
+            private void Hurt(BattleCard card, Action haveEnemyAlive, Action enemyAllDeath)
             {
                 if (CurrentCor is not null)
                 {
@@ -77,11 +75,11 @@ namespace System.Battle_System.System.Child
                     CurrentCor = null;
                 }
 
-                CurrentCor = HurtCoroutine(card, onComplete);
+                CurrentCor = HurtCoroutine(card, haveEnemyAlive, enemyAllDeath);
                 StartCoroutine(CurrentCor);
             }
 
-            private IEnumerator HurtCoroutine(BattleCard card, Action onComplete = null)
+            private IEnumerator HurtCoroutine(BattleCard card, Action haveEnemyAlive, Action enemyAllDeath)
             {
                 card.GetDamage(out var damage);
                 damage.GetValues(out var attackType, out var basicDamage);
@@ -89,19 +87,23 @@ namespace System.Battle_System.System.Child
                 {
                     case AttackType.Single:
                     {
-                        Enemies[0].Hurt(basicDamage,
+                        var enemy = Enemies[0];
+                        enemy.Hurt(basicDamage,
+                            isAlive: () =>
+                            {
+                                haveEnemyAlive?.Invoke();
+                            },
                             isDeath: () =>
                             {
-                                Enemies.Remove(Enemies[0]);
-                            },
-                            onComplete: () =>
-                            {
-                                onComplete?.Invoke();
+                                Enemies.Remove(enemy);
+                                if (Enemies.Any()) return;
+                                enemyAllDeath?.Invoke();
                             });
-                        yield break;
+                        break;
                     }
                     case AttackType.All:
                     {
+                        var isAnyEnemyAlive = false;
                         var completes = new List<bool>();
                         for (var i = 0; i < Enemies.Count; i++)
                         {
@@ -109,25 +111,26 @@ namespace System.Battle_System.System.Child
                             var enemy = Enemies[index];
                             completes.Add(false);
                             enemy.Hurt(basicDamage,
+                                isAlive: () =>
+                                {
+                                    isAnyEnemyAlive = true;
+                                    completes[index] = true;
+                                },
                                 isDeath: () =>
                                 {
                                     Enemies.Remove(enemy);
-                                    if (Enemies.Any()) return;
-                                    OnAllDeath?.Invoke();
-                                },
-                                onComplete: () =>
-                                {
                                     completes[index] = true;
                                 });
                         }
-
+                        
                         yield return new WaitUntil(() => completes.All(c => c));
-                        onComplete?.Invoke();
-                        yield break;
+                        if (isAnyEnemyAlive)
+                            haveEnemyAlive?.Invoke();
+                        else
+                            enemyAllDeath?.Invoke();
+                        break;
                     }
                 }
-
-                CurrentCor = null;
             }
         #endregion
     }

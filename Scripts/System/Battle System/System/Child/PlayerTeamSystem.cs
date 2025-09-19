@@ -1,7 +1,7 @@
 using System.Battle_System.Object.Card.Base.Card_Type;
 using System.Battle_System.Object.Card.Type.Battle.System.Main;
-using System.Battle_System.Object.Character.Type.Enemy.Base;
-using System.Battle_System.Object.Character.Type.Friendly.Base;
+using System.Battle_System.Object.Mob.Type.Character.Base;
+using System.Battle_System.Object.Mob.Type.Enemy.Base;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,11 +15,11 @@ namespace System.Battle_System.System.Child
     internal sealed class PlayerTeamSystem : MonoBehaviour
     {
         [field: Header("Character")]
-        [field: SerializeField] private FriendlyBase Bernard;
-        [field: SerializeField] private FriendlyBase Ray;
-        [field: SerializeField] private FriendlyBase Muu;
+        [field: SerializeField] private CharacterBase Bernard;
+        [field: SerializeField] private CharacterBase Ray;
+        [field: SerializeField] private CharacterBase Muu;
 
-        private readonly List<FriendlyBase> CharacterOrder = new();
+        private readonly List<CharacterBase> CharacterOrder = new();
         
         private IEnumerator CurrentCor;
 
@@ -50,18 +50,18 @@ namespace System.Battle_System.System.Child
         }
 
         #region Attack
-            private void Attack(BattleCard card, SkeletonAnimationSettings settings, Action onComplete = null)
+            private void Attack(BattleCard card, SkeletonAnimationSettings settings, Action haveEnemyAlive, Action enemyAllDeath)
             {
                 switch (card)
                 {
                     case IForkCard:
                     {
-                        Bernard.Attack(card, settings, onComplete);
+                        Bernard.Attack(card, settings, haveEnemyAlive, enemyAllDeath);
                         break;
                     }
                     case ISpoonCard:
                     {
-                        Ray.Attack(card, settings, onComplete);
+                        Ray.Attack(card, settings, haveEnemyAlive, enemyAllDeath);
                         break;
                     }
                 }

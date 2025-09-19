@@ -40,7 +40,7 @@ namespace General
             // TODO
         }
         
-        public void Subtract(float value, Action isAlive = null, Action isDeath = null)
+        public void Subtract(float value, Action isAlive, Action isDeath)
         {
             CurrentValue = Mathf.Clamp(CurrentValue -= value, MinValue, MaxValue);
             if (Mathf.Approximately(CurrentValue, MinValue))

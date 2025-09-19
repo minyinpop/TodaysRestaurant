@@ -4,7 +4,7 @@ using Spine.Unity;
 using UnityEngine;
 using Event = Spine.Event;
 
-namespace System.Battle_System.Object.Character.Type.Friendly.System
+namespace System.Battle_System.Object.Mob.Type.Enemy.System
 {
     internal sealed class AnimationSystem : MonoBehaviour
     {
@@ -13,25 +13,26 @@ namespace System.Battle_System.Object.Character.Type.Friendly.System
         
         [field: Header("Skeleton Animation Settings")]
         [field: SerializeField] private SkeletonAnimationSettings IdleAnimationSettings;
+        [field: SerializeField] private SkeletonAnimationSettings AttackAnimationSettings;
         [field: SerializeField] private SkeletonAnimationSettings HurtAnimationSettings;
         [field: SerializeField] private SkeletonAnimationSettings DeathAnimationSettings;
         
         private TrackEntry CurrentEntry;
-
+        
         public void Idle()
         {
             IdleAnimationSettings.GetValues(out var layer, out var animationName, out var loop);
             CurrentEntry = SkeletonAnimation.AnimationState.SetAnimation(layer, animationName, loop);
         }
 
-        public void Attack(SkeletonAnimationSettings settings, Action onAttackPoint = null, Action onComplete = null)
+        public void Attack(Action onAttackPoint = null, Action onComplete = null)
         {
-            settings.GetValues(out var layer, out var animationName, out var loop);
+            AttackAnimationSettings.GetValues(out var layer, out var animationName, out var loop);
             CurrentEntry = SkeletonAnimation.AnimationState.SetAnimation(layer, animationName, loop);
             CurrentEntry.Event += OnAttackPoint;
             CurrentEntry.Complete += OnComplete;
             return;
-            
+
             void OnAttackPoint(TrackEntry entry, Event @event)
             {
                 CurrentEntry.Event -= OnAttackPoint;
@@ -58,7 +59,7 @@ namespace System.Battle_System.Object.Character.Type.Friendly.System
                 onComplete?.Invoke();
             }
         }
-        
+
         public void Death(Action onComplete = null)
         {
             DeathAnimationSettings.GetValues(out var layer, out var animationName, out var loop);

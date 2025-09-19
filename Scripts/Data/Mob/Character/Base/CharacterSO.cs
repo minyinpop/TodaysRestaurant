@@ -1,10 +1,10 @@
 using Data.General;
 using UnityEngine;
 
-namespace Data.Character.Friendly.Base
+namespace Data.Mob.Character.Base
 {
     [CreateAssetMenu(menuName = "Minyinpop/Character/Friendly", fileName = "New Data")]
-    internal sealed class FriendlySO : ScriptableObject
+    internal sealed class CharacterSO : ScriptableObject
     {
         #region Health
             [field: Header("Health")]

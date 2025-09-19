@@ -1,10 +1,10 @@
-using System.Battle_System.Object.Character.Type.Enemy.System;
-using Data.Character.Enemy.Base;
+using System.Battle_System.Object.Mob.Type.Enemy.System;
 using Data.General.Damage.Base;
+using Data.Mob.Enemy.Base;
 using General;
 using UnityEngine;
 
-namespace System.Battle_System.Object.Character.Type.Enemy.Base
+namespace System.Battle_System.Object.Mob.Type.Enemy.Base
 {
     [RequireComponent(typeof(AnimationSystem))]
     internal abstract class EnemyBase : MonoBehaviour
@@ -44,7 +44,7 @@ namespace System.Battle_System.Object.Character.Type.Enemy.Base
             onComplete: AnimationSystem.Idle);
         }
 
-        public void Hurt(int damage, Action isDeath = null, Action onComplete = null)
+        public void Hurt(int damage, Action isAlive, Action isDeath)
         {
             if (IsDeath) return;
             HealthBar.Subtract(damage,
@@ -52,17 +52,18 @@ namespace System.Battle_System.Object.Character.Type.Enemy.Base
                 {
                     AnimationSystem.Hurt(() =>
                     {
+                        Debug.Log($"{name} is alive.");
                         AnimationSystem.Idle();
-                        onComplete?.Invoke();
+                        isAlive?.Invoke();
                     });
                 },
                 isDeath: () =>
                 {
                     AnimationSystem.Death(() =>
                     {
+                        Debug.Log($"{name} is dead.");
                         IsDeath = true;
                         isDeath?.Invoke();
-                        onComplete?.Invoke();
                     });
                 });
         }

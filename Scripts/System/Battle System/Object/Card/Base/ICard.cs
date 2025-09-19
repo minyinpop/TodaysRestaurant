@@ -9,7 +9,7 @@ namespace System.Battle_System.Object.Card.Base
         public event Action<ICard> OnClick;
         
         public void SetInteractable(bool interactable);
-        public void Use(Action onComplete = null);
+        public void Use(Action haveEnemyAlive, Action enemyAllDeath);
         public void Destroy();
         
         #region Card Order

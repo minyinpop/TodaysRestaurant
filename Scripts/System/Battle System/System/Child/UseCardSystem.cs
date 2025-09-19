@@ -3,6 +3,7 @@ using System.Battle_System.Object.Card.Base;
 using System.Battle_System.System.Child.Selected_Card_System.Main;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Data.Animation.DOTween.Basic;
 using DG.Tweening;
 using UnityEngine;
@@ -17,7 +18,7 @@ namespace System.Battle_System.System.Child
         
         private readonly List<CardSlot> CardSlots = new();
 
-        private IEnumerator UseCor;
+        private IEnumerator CurrentCor;
 
         private void OnEnable()
         {
@@ -27,10 +28,10 @@ namespace System.Battle_System.System.Child
         private void OnDisable()
         {
             SelectedCardSystem.BeforeCloseUI -= Add;
-            if (UseCor is not null)
+            if (CurrentCor is not null)
             {
-                StopCoroutine(UseCor);
-                UseCor = null;
+                StopCoroutine(CurrentCor);
+                CurrentCor = null;
             }
         }
 
@@ -52,34 +53,39 @@ namespace System.Battle_System.System.Child
             }
         }
         
-        public void Use(Action onComplete = null)
+        public void Use(Action<bool> haveEnemyAlive, Action enemyAllDeath)
         {
-            UseCor = UseCoroutine(onComplete);
-            StartCoroutine(UseCor);
+            CurrentCor = UseCoroutine(haveEnemyAlive, enemyAllDeath);
+            StartCoroutine(CurrentCor);
         }
 
-        private IEnumerator UseCoroutine(Action onComplete = null)
+        private IEnumerator UseCoroutine(Action<bool> haveEnemyAlive, Action enemyAllDeath)
         {
-            for (var i = 0; i < CardSlots.Count; i++)
-            {
-                var index = i;
-                var onUseComplete = false;
-                var slot = CardSlots[i];
-                slot.Get(out var card);
-                card.Use(() =>
+            var onUseComplete = false;
+            var haveAnyEnemyAlive = false;
+            var slot = CardSlots[0];
+            slot.Get(out var card);
+            card.Use(
+                haveEnemyAlive: () =>
+                {
+                    card.Destroy();
+                    onUseComplete = true;
+                    haveAnyEnemyAlive = true;
+                },
+                enemyAllDeath: () =>
                 {
                     card.Destroy();
                     onUseComplete = true;
                 });
-                yield return new WaitUntil(() => onUseComplete);
-                yield return new WaitForSeconds(.5f);
-                if (index != CardSlots.Count - 1) continue;
-                onComplete?.Invoke();
-            }
-
-            foreach (var slot in CardSlots)
-                Destroy(slot.gameObject);
-            CardSlots.Clear();
+            yield return new WaitUntil(() => onUseComplete);
+            yield return new WaitForSeconds(1);
+            CardSlots.Remove(slot);
+            Destroy(slot.gameObject);
+            if (haveAnyEnemyAlive)
+                haveEnemyAlive?.Invoke(CardSlots.Any());
+            else
+                enemyAllDeath?.Invoke();
+            CurrentCor = null;
         }
     }
 }
