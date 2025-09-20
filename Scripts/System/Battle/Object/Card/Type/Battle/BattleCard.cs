@@ -112,7 +112,7 @@ namespace System.Battle.Object.Card.Type.Battle
             public void DestroyCard(Action onComplete)
             {
                 DoAnimation.DoScale(
-                    rect: CardSurfaceRect,
+                    rect: CardRect,
                     settings: new DoScale(Vector2.zero, .5f, Ease.InOutBack),
                     onComplete: () =>
                     {

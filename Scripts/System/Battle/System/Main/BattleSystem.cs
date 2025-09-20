@@ -38,6 +38,7 @@ namespace System.Battle.System.Main
         private IEnumerator TurnCor;
         private IEnumerator AttackCor;
         private IEnumerator CharacterDeathCor;
+        private IEnumerator DrawCardAndShowCardCor;
 
         private bool IsEnd;
 
@@ -73,15 +74,35 @@ namespace System.Battle.System.Main
             }
         }
         
-        private void DrawAndShowCard(int drawNumber, Action onComplete = null)
+        private void DrawAndShowCard(int drawNumber, Action onComplete)
         {
-            CardPoolSystem.DrawCard(drawNumber, out var cards);
-            ShowCardSystem.ShowCard(cards, () =>
+            DrawCardAndShowCardCor = DrawAndShowCardCoroutine();
+            StartCoroutine(DrawCardAndShowCardCor);
+            return;
+            
+            IEnumerator DrawAndShowCardCoroutine()
             {
-                CardPoolSystem.Refill();
-                ShowCardSystem.GetShowCards(out var showCards);
-                HandCardSystem.Add(showCards, onComplete);
-            });
+                var cardPoolRefillComplete = false;
+                var AddCardToHandComplete = false;
+                CardPoolSystem.DrawCard(drawNumber, out var cards);
+                ShowCardSystem.ShowCard(cards, () =>
+                {
+                    CardPoolSystem.Refill(
+                        onComplete: () =>
+                        {
+                            cardPoolRefillComplete = true;
+                        });
+                    ShowCardSystem.GetShowCards(out var showCards);
+                    HandCardSystem.Add(showCards,
+                        onComplete: () =>
+                        {
+                            AddCardToHandComplete = true;
+                        });
+                });
+                yield return new WaitUntil(() => cardPoolRefillComplete && AddCardToHandComplete);
+                onComplete?.Invoke();
+                DrawCardAndShowCardCor = null;
+            }
         }
 
         private void OnRecycleCard(List<CardType> cardTypes, Action onComplete)
@@ -150,8 +171,8 @@ namespace System.Battle.System.Main
                                 onComplete:() =>
                                 {
                                     PlayerData.GetCharacterNumber(out var number);
-                                    number = Mathf.Clamp(number * 3, 1, 8);
-                                    DrawAndShowCard(number, TurnManager); // OnInitiativeCoin
+                                    number = Mathf.Clamp(number * 2, 1, 8);
+                                    DrawAndShowCard(number, OnInitiativeCoin); // OnInitiativeCoin
                                 });
                         },
                         onExit: () =>

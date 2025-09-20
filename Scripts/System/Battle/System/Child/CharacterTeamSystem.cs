@@ -20,7 +20,7 @@ namespace System.Battle.System.Child
         [field: SerializeField] private CharacterBase Ray;
         [field: SerializeField] private CharacterBase Muu;
 
-        private readonly List<CharacterBase> AliveCharacters = new();
+        public /*readonly*/ List<CharacterBase> AliveCharacters = new();
         
         public static event Action<List<CardType>, Action> RecycleCard;
         
@@ -28,8 +28,8 @@ namespace System.Battle.System.Child
 
         private void Start()
         {
-            AliveCharacters.Add(Bernard);
-            AliveCharacters.Add(Ray);
+            // AliveCharacters.Add(Bernard);
+            // AliveCharacters.Add(Ray);
             // CharacterOrder.Add(Muu);
         }
 
@@ -127,11 +127,13 @@ namespace System.Battle.System.Child
                                     {
                                         AliveCharacters.Remove(character);
                                         deadCharacters.Add(character, index);
+                                        completes[index] = true;
                                     });
-                                Debug.Log($"{character.name} is dead.");
-                                Debug.Log(deadCharacters.Any());
                             }
 
+                            yield return new WaitUntil(() => completes.All(c => c));
+                            for (var i = 0; i < completes.Count; i++)
+                                completes[i] = false;
                             foreach (var (character, index) in deadCharacters)
                             {
                                 character.GetCharacterData(out var characterData);
@@ -145,7 +147,6 @@ namespace System.Battle.System.Child
                                 yield return new WaitUntil(() => completes[index]);
                             }
                             
-                            yield return new WaitUntil(() => completes.All(c => c));
                             if (isAnyCharacterAlive)
                                 haveCharacterAlive?.Invoke();
                             else
