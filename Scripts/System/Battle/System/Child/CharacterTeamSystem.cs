@@ -128,6 +128,8 @@ namespace System.Battle.System.Child
                                         AliveCharacters.Remove(character);
                                         deadCharacters.Add(character, index);
                                     });
+                                Debug.Log($"{character.name} is dead.");
+                                Debug.Log(deadCharacters.Any());
                             }
 
                             foreach (var (character, index) in deadCharacters)
