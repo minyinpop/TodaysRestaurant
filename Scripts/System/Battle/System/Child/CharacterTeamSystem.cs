@@ -24,7 +24,7 @@ namespace System.Battle.System.Child
         
         public static event Action<List<CardType>, Action> RecycleCard;
         
-        private IEnumerator CurrentCor;
+        private IEnumerator HurtCor;
 
         private void Start()
         {
@@ -43,10 +43,10 @@ namespace System.Battle.System.Child
         {
             BattleCard.OnUse -= Attack;
             EnemyBase.OnAttack -= Hurt;
-            if (CurrentCor is not null)
+            if (HurtCor is not null)
             {
-                StopCoroutine(CurrentCor);
-                CurrentCor = null;
+                StopCoroutine(HurtCor);
+                HurtCor = null;
             }
         }
 
@@ -73,78 +73,87 @@ namespace System.Battle.System.Child
         #region Hurt
             private void Hurt(Damage damage, Action haveCharacterAlive, Action characterAllDead)
             {
-                if (CurrentCor is not null)
-                {
-                    StopCoroutine(CurrentCor);
-                    CurrentCor = null;
-                }
+                HurtCor = HurtCoroutine();
+                StartCoroutine(HurtCor);
+                return;
                 
-                CurrentCor = HurtCoroutine(damage, haveCharacterAlive, characterAllDead);
-                StartCoroutine(CurrentCor);
-            }
-
-            private IEnumerator HurtCoroutine(Damage damage, Action haveCharacterAlive, Action characterAllDead)
-            {
-                damage.GetValues(out var attackType, out var basicDamage);
-                switch (attackType)
+                IEnumerator HurtCoroutine()
                 {
-                    case AttackType.Single:
+                    damage.GetValues(out var attackType, out var basicDamage);
+                    switch (attackType)
                     {
-                        var character = AliveCharacters[0];
-                        character.Hurt(basicDamage,
-                            isAlive: () =>
+                        case AttackType.Single:
+                        {
+                            var character = AliveCharacters[0];
+                            character.Hurt(basicDamage,
+                                isAlive: () =>
+                                {
+                                    haveCharacterAlive?.Invoke();
+                                },
+                                isDeath: () =>
+                                {
+                                    AliveCharacters.Remove(character);
+                                    character.GetCharacterData(out var characterData);
+                                    characterData.GetUseCardType(out var cardTypes);
+                                    RecycleCard?.Invoke(cardTypes,
+                                        () =>
+                                        {
+                                            // onComplete
+                                            if (AliveCharacters.Any())
+                                                haveCharacterAlive?.Invoke();
+                                            else
+                                                characterAllDead?.Invoke();
+                                        });
+                                });
+                            yield break;
+                        }
+                        case AttackType.All:
+                        {
+                            var isAnyCharacterAlive = false;
+                            var completes = new List<bool>();
+                            var deadCharacters = new Dictionary<CharacterBase, int>();
+                            for (var i = 0; i < AliveCharacters.Count; i++)
                             {
-                                haveCharacterAlive?.Invoke();
-                            },
-                            isDeath: () =>
+                                var index = i;
+                                var character = AliveCharacters[index];
+                                completes.Add(false);
+                                character.Hurt(basicDamage,
+                                    isAlive: () =>
+                                    {
+                                        isAnyCharacterAlive = true;
+                                        completes[index] = true;
+                                    },
+                                    isDeath: () =>
+                                    {
+                                        AliveCharacters.Remove(character);
+                                        deadCharacters.Add(character, index);
+                                    });
+                            }
+
+                            foreach (var (character, index) in deadCharacters)
                             {
-                                AliveCharacters.Remove(character);
                                 character.GetCharacterData(out var characterData);
                                 characterData.GetUseCardType(out var cardTypes);
                                 RecycleCard?.Invoke(cardTypes,
                                     () =>
                                     {
                                         // onComplete
-                                        if (AliveCharacters.Any())
-                                            haveCharacterAlive?.Invoke();
-                                        else
-                                            characterAllDead?.Invoke();
+                                        completes[index] = true;
                                     });
-                            });
-                        yield break;
-                    }
-                    case AttackType.All:
-                    {
-                        var isAnyCharacterAlive = false;
-                        var completes = new List<bool>();
-                        for (var i = 0; i < AliveCharacters.Count; i++)
-                        {
-                            var index = i;
-                            var character = AliveCharacters[index];
-                            completes.Add(false);
-                            character.Hurt(basicDamage,
-                                isAlive: () =>
-                                {
-                                    isAnyCharacterAlive = true;
-                                    completes[index] = true;
-                                },
-                                isDeath: () =>
-                                {
-                                    AliveCharacters.Remove(character);
-                                    completes[index] = true;
-                                });
+                                yield return new WaitUntil(() => completes[index]);
+                            }
+                            
+                            yield return new WaitUntil(() => completes.All(c => c));
+                            if (isAnyCharacterAlive)
+                                haveCharacterAlive?.Invoke();
+                            else
+                                characterAllDead?.Invoke();
+                            yield break;
                         }
-
-                        yield return new WaitUntil(() => completes.All(c => c));
-                        if (isAnyCharacterAlive)
-                            haveCharacterAlive?.Invoke();
-                        else
-                            characterAllDead?.Invoke();
-                        yield break;
                     }
-                }
 
-                CurrentCor = null;
+                    HurtCor = null;
+                }
             }
         #endregion
     }
