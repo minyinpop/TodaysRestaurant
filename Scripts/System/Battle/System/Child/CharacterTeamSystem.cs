@@ -139,7 +139,7 @@ namespace System.Battle.System.Child
                                 RecycleCard?.Invoke(cardTypes,
                                     () =>
                                     {
-                                        // onComplete
+                                        // onComplete.
                                         completes[index] = true;
                                     });
                                 yield return new WaitUntil(() => completes[index]);
