@@ -22,6 +22,8 @@ namespace System.Battle_System.System.Child
 
         private readonly List<CharacterBase> AliveCharacters = new();
         
+        public static event Action<List<CardType>, Action> RecycleCard;
+        
         private IEnumerator CurrentCor;
 
         private void Start()
@@ -97,10 +99,17 @@ namespace System.Battle_System.System.Child
                             isDeath: () =>
                             {
                                 AliveCharacters.Remove(character);
-                                if (AliveCharacters.Any())
-                                    haveCharacterAlive?.Invoke();
-                                else
-                                    characterAllDead?.Invoke();
+                                character.GetCharacterData(out var characterData);
+                                characterData.GetUseCardType(out var cardTypes);
+                                RecycleCard?.Invoke(cardTypes,
+                                    () =>
+                                    {
+                                        // onComplete
+                                        if (AliveCharacters.Any())
+                                            haveCharacterAlive?.Invoke();
+                                        else
+                                            characterAllDead?.Invoke();
+                                    });
                             });
                         yield break;
                     }

@@ -1,4 +1,3 @@
-using System.Battle_System.Object.Mob.Type.Character.Base;
 using System.Battle_System.System.Child;
 using System.Battle_System.System.Child.Initiative_System.System.Main;
 using System.Battle_System.System.Child.Selected_Card_System.Main;
@@ -34,7 +33,7 @@ namespace System.Battle_System.System.Main
         
         private readonly StateMachine StateMachine = new();
         
-        private TossResult TossResult = TossResult.Heads; // TODO Tails
+        private TossResult TossResult = TossResult.Tails;
 
         private IEnumerator TurnCor;
         private IEnumerator AttackCor;
@@ -49,12 +48,12 @@ namespace System.Battle_System.System.Main
 
         private void OnEnable()
         {
-            CharacterBase.RecycleCard += OnCharacterDead;
+            CharacterTeamSystem.RecycleCard += OnRecycleCard;
         }
 
         private void OnDisable()
         {
-            CharacterBase.RecycleCard -= OnCharacterDead;
+            CharacterTeamSystem.RecycleCard -= OnRecycleCard;
             if (TurnCor is not null)
             {
                 StopCoroutine(TurnCor);
@@ -85,7 +84,7 @@ namespace System.Battle_System.System.Main
             });
         }
 
-        private void OnCharacterDead(List<CardType> cardTypes, Action onComplete)
+        private void OnRecycleCard(List<CardType> cardTypes, Action onComplete)
         {
             CharacterDeathCor = RecycleCardCoroutine();
             StartCoroutine(CharacterDeathCor);
@@ -150,7 +149,7 @@ namespace System.Battle_System.System.Main
                             CardPoolSystem.Refill(() =>
                             {
                                 PlayerData.GetCharacterNumber(out var number);
-                                number *= 2;
+                                number = Mathf.Clamp(number * 3, 1, 8);
                                 DrawAndShowCard(number, TurnManager); // OnInitiativeCoin
                             });
                         },

@@ -1,11 +1,10 @@
 using System.Battle_System.Object.Card.Base;
 using System.Battle_System.Object.Mob.Type.Character.System;
 using System.Collections;
-using System.Collections.Generic;
 using Data.Animation.Spine;
-using Data.General;
 using Data.Mob.Character.Base;
 using General;
+using General.Object;
 using UnityEngine;
 
 namespace System.Battle_System.Object.Mob.Type.Character.Base
@@ -21,11 +20,8 @@ namespace System.Battle_System.Object.Mob.Type.Character.Base
         
         [field: Header("Data")]
         [field: SerializeField] private CharacterSO CharacterData;
-
-        private bool IsDeath;
         
         public static event Action<ICard, Action, Action> OnAttack;
-        public static event Action<List<CardType>, Action> RecycleCard;
 
         private IEnumerator CurrentCor;
 
@@ -49,6 +45,13 @@ namespace System.Battle_System.Object.Mob.Type.Character.Base
             }
         }
 
+        #region Data
+            public void GetCharacterData(out CharacterSO data)
+            {
+                data = CharacterData;
+            }
+        #endregion
+
         #region Attack
             public void Attack(ICard card, SkeletonAnimationSettings settings, Action haveEnemyAlive, Action enemyAllDead)
             {
@@ -67,7 +70,6 @@ namespace System.Battle_System.Object.Mob.Type.Character.Base
         #region Hurt
             public void Hurt(float damage, Action isAlive, Action isDeath)
             {
-                if (IsDeath) return;
                 HealthBar.Subtract(damage,
                     isAlive: () =>
                     {
@@ -79,25 +81,11 @@ namespace System.Battle_System.Object.Mob.Type.Character.Base
                     },
                     isDeath: () =>
                     {
-                        CurrentCor = RecycleCardCoroutine(
+                        AnimationSystem.Death(
                             onComplete: () =>
                             {
-                                IsDeath = true;
                                 isDeath?.Invoke();
                             });
-                        StartCoroutine(CurrentCor);
-                        AnimationSystem.Death();
-                        return;
-                        
-                        IEnumerator RecycleCardCoroutine(Action onComplete)
-                        {
-                            var complete = false;
-                            CharacterData.GetUseCardType(out var cardTypes);
-                            RecycleCard?.Invoke(cardTypes, () => complete = true);
-                            yield return new WaitUntil(() => complete);
-                            onComplete?.Invoke();
-                            CurrentCor = null;
-                        }
                     });
             }
         #endregion

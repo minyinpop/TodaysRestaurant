@@ -3,7 +3,7 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace General
+namespace General.Object
 {
     internal sealed class StatusBar : MonoBehaviour
     {

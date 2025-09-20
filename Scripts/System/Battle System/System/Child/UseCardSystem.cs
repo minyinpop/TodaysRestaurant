@@ -16,8 +16,8 @@ namespace System.Battle_System.System.Child
         [field: Header("Card Slot")]
         [field: SerializeField] private Transform SpawnParent;
         [field: SerializeField] private GameObject SlotPrefab;
-        
-        public /*readonly*/ List<CardSlot> CardSlots = new();
+
+        private readonly List<CardSlot> CardSlots = new();
 
         private IEnumerator CurrentCor;
         private IEnumerator RecycleCor;

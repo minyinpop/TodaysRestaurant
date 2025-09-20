@@ -96,7 +96,7 @@ namespace System.Battle_System.Object.Card.Type.Battle.System.Main
 
             public void DestroyCard(Action onComplete)
             {
-                AnimationSystem.ScaleTo(CardRect, new DoScale(Vector2.zero, .25f, Ease.InBack))
+                AnimationSystem.ScaleTo(CardRect, new DoScale(Vector2.zero, .5f, Ease.InOutBack))
                     .OnComplete(() =>
                     {
                         onComplete?.Invoke();

@@ -2,6 +2,7 @@ using System.Battle_System.Object.Mob.Type.Enemy.System;
 using Data.General.Damage.Base;
 using Data.Mob.Enemy.Base;
 using General;
+using General.Object;
 using UnityEngine;
 
 namespace System.Battle_System.Object.Mob.Type.Enemy.Base
@@ -17,8 +18,6 @@ namespace System.Battle_System.Object.Mob.Type.Enemy.Base
         
         [field: Header("Data")]
         [field: SerializeField] private EnemySO EnemyData;
-
-        private bool IsDeath;
 
         public static event Action<Damage, Action, Action> OnAttack;
 
@@ -59,7 +58,6 @@ namespace System.Battle_System.Object.Mob.Type.Enemy.Base
         #region Hurt
             public void Hurt(int damage, Action isAlive, Action isDeath)
             {
-                if (IsDeath) return;
                 HealthBar.Subtract(damage,
                     isAlive: () =>
                     {
@@ -75,7 +73,6 @@ namespace System.Battle_System.Object.Mob.Type.Enemy.Base
                         AnimationSystem.Death(
                             onComplete: () =>
                             {
-                                IsDeath = true;
                                 isDeath?.Invoke();
                             });
                     });

@@ -21,14 +21,19 @@ namespace System.Battle_System.System.Child
         [field: SerializeField] private CardSlot[] CardSlots;
         
         [field: Header("Data")]
-        [field: SerializeField] private PlayerSO playerData;
+        [field: SerializeField] private PlayerSO PlayerData;
+
+        private readonly Deck DeckData = new();
         
         private IEnumerator SortCor;
         private IEnumerator RefillCor;
         private IEnumerator RecycleCor;
-
-        private const float RefillDuration = .25f;
-        private readonly DoAnchorPos RefillAnimation = new(Vector3.zero, .5f, true, Ease.OutExpo);
+        
+        private void Start()
+        {
+            PlayerData.GetCardPrefabs(out var cardPrefabs);
+            DeckData.Set(cardPrefabs);
+        }
 
         private void OnDisable()
         {
@@ -85,13 +90,14 @@ namespace System.Battle_System.System.Child
                             var slot = CardSlots[index];
                             var card = remainingCards[index];
                             slot.Set(card);
-                            card.Move(slot.transform, RefillAnimation, () =>
-                            {
-                                if (index != remainingCards.Count - 1) return;
-                                StartCoroutine(RefillCor);
-                                SortCor = null;
-                            });
-                            yield return new WaitForSeconds(RefillDuration);
+                            card.Move(slot.transform, new(Vector3.zero, .5f, true, Ease.OutExpo),
+                                onComplete: () =>
+                                {
+                                    if (index != remainingCards.Count - 1) return;
+                                    StartCoroutine(RefillCor);
+                                    SortCor = null;
+                                });
+                            yield return new WaitForSeconds(.2f);
                         }
 
                         break;
@@ -99,26 +105,30 @@ namespace System.Battle_System.System.Child
                 }
             }
             
-            private IEnumerator RefillCoroutine(Action onComplete = null)
+            private IEnumerator RefillCoroutine(Action onComplete)
             {
                 for (var i = 0; i < CardSlots.Length; i++)
                 {
                     var index = i;
                     var slot = CardSlots[index];
                     if (!slot.IsEmpty()) continue;
-                    if (playerData.GetRandomBattleCard(out var battleCardPrefab))
+                    if (!DeckData.GetRandomCard(out var cardPrefab))
                     {
-                        var card = Instantiate(battleCardPrefab, SpawnParent);
-                        var battleCard = card.GetComponent<BattleCard>();
-                        slot.Set(battleCard);
-                        battleCard.Move(slot.transform, RefillAnimation, () =>
+                        onComplete?.Invoke();
+                        yield break;
+                    }
+
+                    var card = Instantiate(cardPrefab, SpawnParent);
+                    var battleCard = card.GetComponent<BattleCard>();
+                    slot.Set(battleCard);
+                    battleCard.Move(slot.transform, new DoAnchorPos(Vector3.zero, .5f, true, Ease.OutExpo),
+                        onComplete: () =>
                         {
                             if (index != CardSlots.Length - 1) return;
                             onComplete?.Invoke();
                             RefillCor = null;
                         });
-                        yield return new WaitForSeconds(RefillDuration);
-                    }
+                    yield return new WaitForSeconds(.2f);
                 }
             }
         #endregion
@@ -157,6 +167,7 @@ namespace System.Battle_System.System.Child
                         card.DestroyCard(
                             onComplete: () =>
                             {
+                                DeckData.Remove(targetType);
                                 completes[index] = true;
                             });
                     }

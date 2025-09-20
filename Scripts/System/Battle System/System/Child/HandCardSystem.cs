@@ -124,6 +124,8 @@ namespace System.Battle_System.System.Child
                         card.DestroyCard(
                             onComplete: () =>
                             {
+                                CardSlots.Remove(slot);
+                                Destroy(slot.gameObject);
                                 completes[index] = true;
                             });
                     }

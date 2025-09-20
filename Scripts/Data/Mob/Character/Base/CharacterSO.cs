@@ -9,10 +9,10 @@ namespace Data.Mob.Character.Base
     internal sealed class CharacterSO : ScriptableObject
     {
         #region CharacterInformatin
+            [field: Header("Information")]
+            [field: SerializeField] private CharacterInformation CharacterInformation;
+            
             #region CharacterType
-                [field: Header("Information")]
-                [field: SerializeField] private CharacterInformation CharacterInformation;
-
                 public void GetCharacterType(out CharacterType type)
                 {
                     CharacterInformation.GetCharacterType(out type);
@@ -36,6 +36,5 @@ namespace Data.Mob.Character.Base
                 Health.GetValues(out min, out max);
             }
         #endregion
-        
     }
 }

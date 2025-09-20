@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Data.Player.Data
+namespace Data.General
 {
     [Serializable]
     internal sealed class Team
