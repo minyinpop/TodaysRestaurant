@@ -1,5 +1,5 @@
 using System;
-using System.Battle_System.Object.Card.Base;
+using System.Battle.Object.Card.Base;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;

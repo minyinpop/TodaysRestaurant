@@ -48,8 +48,8 @@ GameObject:
   - component: {fileID: 8611566611659508437}
   - component: {fileID: 9220918656955516711}
   - component: {fileID: 2201184378739166817}
-  - component: {fileID: 898027975587515323}
-  - component: {fileID: 6876499214107591082}
+  - component: {fileID: -2173726563729798862}
+  - component: {fileID: 5386000621071273904}
   m_Layer: 5
   m_Name: Spoon - Normal
   m_TagString: Untagged
@@ -116,21 +116,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &898027975587515323
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5699270825872941529}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c8420f434b441988112953e31d41d7a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Card_Battle_System.Object.Card.Type.Battle.System.Child.AnimationSystem
-  Front: {fileID: 6026536278173454867}
-  Back: {fileID: 5945443936457204660}
---- !u!114 &6876499214107591082
+--- !u!114 &-2173726563729798862
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -141,12 +127,26 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ba5154987a944e6f81bf3be8ab08484c, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::System.Battle_System.Object.Card.Type.Battle.Type.Spoon.Normal
+  m_EditorClassIdentifier: Assembly-CSharp::System.Battle.Object.Card.Type.Battle.Type.Spoon.Normal
   CardRect: {fileID: 8611566611659508437}
   CardSurfaceRect: {fileID: 4343158120092845625}
-  AnimationSystem: {fileID: 898027975587515323}
+  CardFront: {fileID: 6026536278173454867}
+  CardBack: {fileID: 5945443936457204660}
+  DoAnimation: {fileID: 5386000621071273904}
   BattleCardData: {fileID: 11400000, guid: 1f78a7472585aea469db3905e790930e, type: 2}
   CardOrderParent: {fileID: 4554304401512707390}
+--- !u!114 &5386000621071273904
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5699270825872941529}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a817bf6649934d0e8fef10e3075e14a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::System.General.DOTween.DoAnimation
 --- !u!1 &5945443936457204660
 GameObject:
   m_ObjectHideFlags: 0
