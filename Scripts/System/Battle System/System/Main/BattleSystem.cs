@@ -150,7 +150,7 @@ namespace System.Battle_System.System.Main
                             CardPoolSystem.Refill(() =>
                             {
                                 PlayerData.GetCharacterNumber(out var number);
-                                number *= 1;
+                                number *= 2;
                                 DrawAndShowCard(number, TurnManager); // OnInitiativeCoin
                             });
                         },

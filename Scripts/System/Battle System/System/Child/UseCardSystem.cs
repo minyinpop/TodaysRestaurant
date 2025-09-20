@@ -17,7 +17,7 @@ namespace System.Battle_System.System.Child
         [field: SerializeField] private Transform SpawnParent;
         [field: SerializeField] private GameObject SlotPrefab;
         
-        private readonly List<CardSlot> CardSlots = new();
+        public /*readonly*/ List<CardSlot> CardSlots = new();
 
         private IEnumerator CurrentCor;
         private IEnumerator RecycleCor;
@@ -89,7 +89,7 @@ namespace System.Battle_System.System.Child
                 Destroy(slot.gameObject);
             });
             yield return new WaitUntil(() => onUseComplete);
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(.25f);
             if (haveAnyEnemyAlive)
                 haveEnemyAlive?.Invoke(CardSlots.Any());
             else

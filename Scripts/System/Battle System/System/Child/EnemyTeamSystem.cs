@@ -1,5 +1,4 @@
 using System.Battle_System.Object.Card.Base;
-using System.Battle_System.Object.Card.Type.Battle.System.Main;
 using System.Battle_System.Object.Mob.Type.Character.Base;
 using System.Battle_System.Object.Mob.Type.Enemy.Base;
 using System.Collections;
@@ -106,8 +105,10 @@ namespace System.Battle_System.System.Child
                             isDeath: () =>
                             {
                                 AliveEnemies.Remove(enemy);
-                                if (AliveEnemies.Any()) return;
-                                enemyAllDead?.Invoke();
+                                if (AliveEnemies.Any())
+                                    haveEnemyAlive?.Invoke();
+                                else
+                                    enemyAllDead?.Invoke();
                             });
                         break;
                     }
