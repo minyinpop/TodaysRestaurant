@@ -1,9 +1,10 @@
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace General
 {
-    internal abstract class CustomPointerEventHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
+    internal abstract class PointerEvent : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
     {
         public void OnPointerEnter(PointerEventData eventData)
         {

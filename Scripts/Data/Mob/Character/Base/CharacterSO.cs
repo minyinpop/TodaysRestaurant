@@ -12,13 +12,6 @@ namespace Data.Mob.Character.Base
             [field: Header("Information")]
             [field: SerializeField] private CharacterInformation CharacterInformation;
             
-            #region CharacterType
-                public void GetCharacterType(out CharacterType type)
-                {
-                    CharacterInformation.GetCharacterType(out type);
-                }
-            #endregion
-            
             #region UseCardType
                 public void GetUseCardType(out List<CardType> cardType)
                 {

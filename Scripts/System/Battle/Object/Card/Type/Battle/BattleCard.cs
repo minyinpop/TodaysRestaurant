@@ -14,7 +14,7 @@ using UnityEngine;
 namespace System.Battle.Object.Card.Type.Battle
 {
     [RequireComponent(typeof(DoAnimation))]
-    internal abstract class BattleCard : CustomPointerEventHandler, ICard
+    internal abstract class BattleCard : PointerEvent, ICard
     {
         [field: Header("Component")]
         [field: SerializeField] private RectTransform CardRect;
@@ -48,7 +48,7 @@ namespace System.Battle.Object.Card.Type.Battle
             }
         }
 
-        #region CustomPointerEventHandler
+        #region PointerEvent
             protected override void OnPointerEnter()
             {
                 if (!Interactable) return;

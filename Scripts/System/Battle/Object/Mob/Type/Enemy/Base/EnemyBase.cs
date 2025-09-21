@@ -2,6 +2,7 @@ using System.Battle.Object.Mob.Type.Enemy.System;
 using Data.General.Damage.Base;
 using Data.Mob.Enemy.Base;
 using General;
+using General.Object;
 using UnityEngine;
 
 namespace System.Battle.Object.Mob.Type.Enemy.Base

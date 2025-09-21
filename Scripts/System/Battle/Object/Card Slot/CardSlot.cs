@@ -32,11 +32,6 @@ namespace System.Battle.Object.Card_Slot
         {
             return Card is null;
         }
-        
-        public void SetInteractable(bool interactable)
-        {
-            Card?.SetInteractable(interactable);
-        }
 
         public bool Compare(ICard card)
         {
