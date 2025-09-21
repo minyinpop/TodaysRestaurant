@@ -76,30 +76,36 @@ namespace System.Battle.System.Child
                 card.OnClick += OnCardClicked;
             }
 
-            public void Add(List<ICard> cards, Action onComplete = null)
+            public void Add(List<ICard> cards, Action onComplete)
             {
-                AddCor = AddCoroutine(cards, onComplete);
+                AddCor = AddCoroutine();
                 StartCoroutine(AddCor);
-            }
+                return;
 
-            private IEnumerator AddCoroutine(List<ICard> cards, Action onComplete = null)
-            {
-                for (var i = 0; i < cards.Count; i++)
+                IEnumerator AddCoroutine()
                 {
-                    var index = i;
-                    var slot = Instantiate(SlotPrefab, SpawnParent);
-                    var slotScript = slot.GetComponent<CardSlot>();
-                    var card = cards[index];
-                    CardSlots.Add(slotScript);
-                    slotScript.Set(card);
-                    card.Move(slot.transform, new DoAnchorPos(Vector2.zero, .5f, true, Ease.OutExpo), () =>
+                    var completes = new List<bool>();
+                    for (var i = 0; i < cards.Count; i++)
                     {
-                        if (index != cards.Count - 1) return;
-                        onComplete?.Invoke();
-                        AddCor = null;
-                    });
-                    card.OnClick += OnCardClicked;
-                    yield return new WaitForSeconds(.25f);
+                        completes.Add(false);
+                        var index = i;
+                        var slot = Instantiate(SlotPrefab, SpawnParent);
+                        var slotScript = slot.GetComponent<CardSlot>();
+                        var card = cards[index];
+                        CardSlots.Add(slotScript);
+                        slotScript.Set(card);
+                        card.Move(slot.transform, new DoAnchorPos(Vector2.zero, .5f, true, Ease.OutExpo), 
+                            onComplete: () =>
+                            {
+                                completes[index] = true;
+                            });
+                        card.OnClick += OnCardClicked;
+                        yield return new WaitForSeconds(.2f);
+                    }
+                    
+                    yield return new WaitUntil(() => completes.All(c => c));
+                    onComplete?.Invoke();
+                    AddCor = null;
                 }
             }
         #endregion
