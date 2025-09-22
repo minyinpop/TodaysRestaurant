@@ -1,7 +1,9 @@
 using System.Battle.Object.Card_Slot;
 using System.Battle.Object.Card.Base;
 using System.Battle.System.Child.Selected_Card_System.Child;
+using System.Collections;
 using System.Collections.Generic;
+using System.Message.Main;
 using Data.Animation.DOTween.Basic;
 using Data.Player;
 using DG.Tweening;
@@ -26,15 +28,19 @@ namespace System.Battle.System.Child.Selected_Card_System.Main
         [field: Header("Object")]
         [field: SerializeField] private CanvasGroup UICanvasGroup;
         [field: SerializeField] private Button ConfirmButton;
+        [field: SerializeField] private MessageSystem MessageSystem;
         
         [field: Header("Data")]
         [field: SerializeField] private PlayerSO PlayerData;
 
         private readonly List<CardSlot> CardSlots = new();
+        private readonly List<ICard> SelectedCards = new();
 
         public static event Action<ICard> ReturnCardToHand;
         public static event Action<List<ICard>, Action> BeforeCloseUI;
         public event Action AfterCloseUI;
+
+        private IEnumerator OnClickConfirmButtonCor;
 
         private void Start()
         {
@@ -50,13 +56,16 @@ namespace System.Battle.System.Child.Selected_Card_System.Main
         private void OnEnable()
         {
             HandCardSystem.TryAddCardToSelected += TryAdd;
-            ConfirmButton.onClick.AddListener(OnConfirmButtonClick);
         }
         
         private void OnDisable()
         {
             HandCardSystem.TryAddCardToSelected -= TryAdd;
-            ConfirmButton.onClick.RemoveListener(OnConfirmButtonClick);
+            if (OnClickConfirmButtonCor is not null)
+            {
+                StopCoroutine(OnClickConfirmButtonCor);
+                OnClickConfirmButtonCor = null;
+            }
         }
 
         #region UI
@@ -66,22 +75,23 @@ namespace System.Battle.System.Child.Selected_Card_System.Main
                 AfterCloseUI = onUIClose;
 
                 AnimationSystem.FadeIn()
-                    .OnComplete(() => onUIOpen?.Invoke());
+                    .OnComplete(() =>
+                    {
+                        ConfirmButton.onClick.AddListener(OnConfirmButtonClick);
+                        onUIOpen?.Invoke();
+                    });
             }
 
             private void CloseUI()
             {
-                var selectedCards = new List<ICard>();
-                foreach (var slot in CardSlots)
-                {
-                    slot.Get(out var card);
-                    selectedCards.Add(card);
-                }
-
-                BeforeCloseUI?.Invoke(selectedCards, () => AnimationSystem.FadeOut()
+                ConfirmButton.onClick.RemoveListener(OnConfirmButtonClick);
+                foreach (var card in SelectedCards)
+                    card.SetInteractable(false);
+                BeforeCloseUI?.Invoke(SelectedCards, () => AnimationSystem.FadeOut()
                     .OnComplete(() =>
                     {
                         AfterCloseUI?.Invoke();
+                        SelectedCards.Clear();
                         UICanvasGroup.gameObject.SetActive(false);
                     }));
             }
@@ -132,17 +142,67 @@ namespace System.Battle.System.Child.Selected_Card_System.Main
         
         private void OnConfirmButtonClick()
         {
-            for (var i = 0; i < CardSlots.Count; i++)
+            OnClickConfirmButtonCor = OnConfirmButtonClickCoroutine();
+            StartCoroutine(OnClickConfirmButtonCor);
+            return;
+
+            IEnumerator OnConfirmButtonClickCoroutine()
             {
-                var slot = CardSlots[i];
-                if (slot.IsEmpty())
+                var onConfirm = false;
+                var onClose = false;
+                var selectedCards = new Dictionary<int, ICard>();
+                for (var i = 0; i < CardSlots.Count; i++)
                 {
-                    Debug.Log("跳出提示介面: 還有卡片可以選擇");
-                    return;
+                    var index = i;
+                    var slot = CardSlots[index];
+                    slot.Get(out var card);
+                    if (card is null) continue;
+                    selectedCards.Add(index, card);
                 }
 
-                if (i == CardSlots.Count - 1)
+                if (selectedCards.Count == CardSlots.Count)
+                {
                     CloseUI();
+                    OnClickConfirmButtonCor = null;
+                    yield break;
+                }
+
+                if (selectedCards.Count == 0)
+                {
+                    Debug.Log("Select one card at lease.");
+                }
+                else
+                {
+                    MessageSystem.ShowSwitchUI(
+                        message: "還可以選擇卡片\n確定要直接開始戰鬥嗎？",
+                        onShow: () =>
+                        {
+                            foreach (var (_, card) in selectedCards)
+                                card.SetInteractable(false);
+                        },
+                        onConfirm: () =>
+                        {
+                            foreach (var (_, card) in selectedCards)
+                                SelectedCards.Add(card);
+                            onConfirm = true;
+                        },
+                        onCancel: () =>
+                        {
+                            foreach (var (index, card) in selectedCards)
+                            {
+                                card.SetInteractable(true);
+                                CardSlots[index].Set(card);
+                            }
+                        },
+                        onClose: () =>
+                        {
+                            onClose = true;
+                        });
+                }
+
+                yield return new WaitUntil(() => onConfirm && onClose);
+                if (onConfirm) CloseUI();
+                OnClickConfirmButtonCor = null;
             }
         }
     }

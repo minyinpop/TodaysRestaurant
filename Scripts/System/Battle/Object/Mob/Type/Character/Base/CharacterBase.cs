@@ -4,6 +4,7 @@ using System.Collections;
 using Data.Animation.Spine;
 using Data.Mob.Character.Base;
 using General;
+using General.Object;
 using UnityEngine;
 
 namespace System.Battle.Object.Mob.Type.Character.Base

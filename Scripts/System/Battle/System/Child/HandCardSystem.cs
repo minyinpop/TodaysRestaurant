@@ -48,7 +48,11 @@ namespace System.Battle.System.Child
         public void SetCardsInteractable(bool interactable)
         {
             foreach (var cardSlot in CardSlots)
-                cardSlot.SetInteractable(interactable);
+            {
+                cardSlot.Get(out var card);
+                card.SetInteractable(interactable);
+                cardSlot.Set(card);
+            }
         }
 
         private void OnCardClicked(ICard card)

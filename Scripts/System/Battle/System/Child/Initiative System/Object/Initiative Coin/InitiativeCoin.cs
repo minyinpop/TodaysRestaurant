@@ -8,15 +8,15 @@ using UnityEngine;
 namespace System.Battle.System.Child.Initiative_System.Object.Initiative_Coin
 {
     [RequireComponent(typeof(AnimationSystem))]
-    [RequireComponent(typeof(CustomPointerEventHandler))]
-    internal sealed class InitiativeCoin : CustomPointerEventHandler
+    [RequireComponent(typeof(PointerEvent))]
+    internal sealed class InitiativeCoin : PointerEvent
     {
         [field: Header("Component")]
         [field: SerializeField] private RectTransform Rect;
         
         [field: Header("Child System")]
         [field: SerializeField] private AnimationSystem AnimationSystem;
-        [field: SerializeField] private CustomPointerEventHandler CustomPointerEventHandler;
+        [field: SerializeField] private PointerEvent pointerEvent;
 
         [field: Header("Parent")]
         [field: SerializeField] private RectTransform ReadyParent;
@@ -94,7 +94,7 @@ namespace System.Battle.System.Child.Initiative_System.Object.Initiative_Coin
                 .OnComplete(() => onComplete?.Invoke());
         }
 
-        #region CustomPointerEventHandler
+        #region PointerEvent
             protected override void OnPointerEnter()
             {
                 if (!Interactable) return;

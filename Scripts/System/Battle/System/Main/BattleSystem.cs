@@ -172,7 +172,7 @@ namespace System.Battle.System.Main
                                 {
                                     PlayerData.GetCharacterNumber(out var number);
                                     number = Mathf.Clamp(number * 2, 1, 8);
-                                    DrawAndShowCard(number, OnInitiativeCoin); // OnInitiativeCoin
+                                    DrawAndShowCard(number, TurnManager);
                                 });
                         },
                         onExit: () =>
