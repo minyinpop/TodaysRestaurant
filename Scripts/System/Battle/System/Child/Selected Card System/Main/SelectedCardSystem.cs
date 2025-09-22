@@ -150,18 +150,18 @@ namespace System.Battle.System.Child.Selected_Card_System.Main
             {
                 var onConfirm = false;
                 var onClose = false;
-                var selectedCards = new Dictionary<int, ICard>();
-                for (var i = 0; i < CardSlots.Count; i++)
+                var selectedCards = new List<ICard>();
+                foreach (var slot in CardSlots)
                 {
-                    var index = i;
-                    var slot = CardSlots[index];
+                    if (slot.IsEmpty()) continue;
                     slot.Get(out var card);
-                    if (card is null) continue;
-                    selectedCards.Add(index, card);
+                    selectedCards.Add(card);
                 }
 
                 if (selectedCards.Count == CardSlots.Count)
                 {
+                    foreach (var card in selectedCards)
+                        SelectedCards.Add(card);
                     CloseUI();
                     OnClickConfirmButtonCor = null;
                     yield break;
@@ -177,21 +177,23 @@ namespace System.Battle.System.Child.Selected_Card_System.Main
                         message: "還可以選擇卡片\n確定要直接開始戰鬥嗎？",
                         onShow: () =>
                         {
-                            foreach (var (_, card) in selectedCards)
+                            foreach (var card in selectedCards)
                                 card.SetInteractable(false);
                         },
                         onConfirm: () =>
                         {
-                            foreach (var (_, card) in selectedCards)
+                            foreach (var card in selectedCards)
                                 SelectedCards.Add(card);
                             onConfirm = true;
                         },
                         onCancel: () =>
                         {
-                            foreach (var (index, card) in selectedCards)
+                            for (var i = 0; i < selectedCards.Count; i++)
                             {
+                                var slot = CardSlots[i];
+                                var card = selectedCards[i];
+                                slot.Set(card);
                                 card.SetInteractable(true);
-                                CardSlots[index].Set(card);
                             }
                         },
                         onClose: () =>
