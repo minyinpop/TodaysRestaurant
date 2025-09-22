@@ -2882,19 +2882,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::System.Battle_System.Object.Character.Type.Enemy.System.AnimationSystem
   SkeletonAnimation: {fileID: 284453960}
-  IdleAnimationSettings:
+  IdleAnima:
     Layer: 0
     AnimationName: Stand
     Loop: 1
-  AttackAnimationSettings:
+  AttackAnima:
     Layer: 0
     AnimationName: Attack
     Loop: 0
-  HurtAnimationSettings:
+  HurtAnima:
     Layer: 0
     AnimationName: Hurt
     Loop: 0
-  DeathAnimationSettings:
+  DeadAnima:
     Layer: 0
     AnimationName: Die
     Loop: 0
@@ -3147,7 +3147,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skeletonDataAsset: {fileID: 11400000, guid: 956adf6291bbfcf40968bec1efb61a17, type: 2}
+  skeletonDataAsset: {fileID: 11400000, guid: c658f1fea7debf546b0aef536a8fb24a, type: 2}
   initialSkinName: 
   fixPrefabOverrideViaMeshFilter: 2
   initialFlipX: 0
@@ -3203,7 +3203,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f70145cac02c3d643bad99883681b7dc, type: 2}
+  - {fileID: 2100000, guid: 4dfd3c01cd3ffba4e8c8e4f96989f837, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3262,18 +3262,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::System.Battle_System.Object.Character.Type.Friendly.System.AnimationSystem
   SkeletonAnimation: {fileID: 332358170}
-  IdleAnimationSettings:
+  IdleAnima:
     Layer: 0
     AnimationName: Breath
     Loop: 1
-  HurtAnimationSettings:
+  HurtAnima:
     Layer: 0
     AnimationName: Hurt_01
     Loop: 0
-  DeathAnimationSettings:
-    Layer: 0
-    AnimationName: Defeat
-    Loop: 1
+  DeadAnima:
+    Animations:
+    - Layer: 0
+      AnimationName: Defeat
+      Loop: 0
+    - Layer: 0
+      AnimationName: Defeat_loop
+      Loop: 1
 --- !u!114 &332358175
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4148,19 +4152,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::System.Battle_System.Object.Character.Type.Enemy.System.AnimationSystem
   SkeletonAnimation: {fileID: 454562058}
-  IdleAnimationSettings:
+  IdleAnima:
     Layer: 0
     AnimationName: Stand
     Loop: 1
-  AttackAnimationSettings:
+  AttackAnima:
     Layer: 0
     AnimationName: Attack
     Loop: 0
-  HurtAnimationSettings:
+  HurtAnima:
     Layer: 0
     AnimationName: Hurt
     Loop: 0
-  DeathAnimationSettings:
+  DeadAnima:
     Layer: 0
     AnimationName: Die
     Loop: 0
@@ -7355,19 +7359,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::System.Battle_System.Object.Character.Type.Enemy.System.AnimationSystem
   SkeletonAnimation: {fileID: 1027227819}
-  IdleAnimationSettings:
+  IdleAnima:
     Layer: 0
     AnimationName: Stand
     Loop: 1
-  AttackAnimationSettings:
+  AttackAnima:
     Layer: 0
     AnimationName: Attack
     Loop: 0
-  HurtAnimationSettings:
+  HurtAnima:
     Layer: 0
     AnimationName: Hurt
     Loop: 0
-  DeathAnimationSettings:
+  DeadAnima:
     Layer: 0
     AnimationName: Die
     Loop: 0
@@ -8003,18 +8007,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::System.Battle_System.Object.Character.Type.Friendly.System.AnimationSystem
   SkeletonAnimation: {fileID: 1243039381}
-  IdleAnimationSettings:
+  IdleAnima:
     Layer: 0
     AnimationName: Breath
     Loop: 1
-  HurtAnimationSettings:
+  HurtAnima:
     Layer: 0
     AnimationName: Hurt
     Loop: 0
-  DeathAnimationSettings:
-    Layer: 0
-    AnimationName: Defeat
-    Loop: 1
+  DeadAnima:
+    Animations:
+    - Layer: 0
+      AnimationName: Defeat
+      Loop: 0
+    - Layer: 0
+      AnimationName: Defeat_loop
+      Loop: 1
 --- !u!114 &1243039386
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10227,7 +10235,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1936474372}
   m_Layer: 0
-  m_Name: = = = = = = Friendly = = = = = =
+  m_Name: = = = = = = Character = = = = = =
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

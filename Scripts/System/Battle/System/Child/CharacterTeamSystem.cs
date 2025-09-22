@@ -51,19 +51,19 @@ namespace System.Battle.System.Child
         }
 
         #region Attack
-            private void Attack(ICard card, SkeletonAnimationSettings settings, Action haveEnemyAlive, Action enemyAllDead)
+            private void Attack(ICard card, SpineAnimation animation, Action haveEnemyAlive, Action enemyAllDead)
             {
                 card.GetCardType(out var cardType);
                 switch (cardType)
                 {
                     case CardType.BattleCard_Fork:
                     {
-                        Bernard.Attack(card, settings, haveEnemyAlive, enemyAllDead);
+                        Bernard.Attack(card, animation, haveEnemyAlive, enemyAllDead);
                         break;
                     }
                     case CardType.BattleCard_Spoon:
                     {
-                        Ray.Attack(card, settings, haveEnemyAlive, enemyAllDead);
+                        Ray.Attack(card, animation, haveEnemyAlive, enemyAllDead);
                         break;
                     }
                 }

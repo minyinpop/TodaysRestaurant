@@ -40,12 +40,12 @@ namespace Data.Card.Battle
         #endregion
         
         #region SkeletonAnimation
-            [field: SerializeField] private List<SkeletonAnimationSettings> SkeletonAnimationValue;
+            [field: SerializeField] private List<SpineAnimation> AttackAnima;
 
-            public void GetRandomAnimation(out SkeletonAnimationSettings animationSettings)
+            public void GetRandomAnimation(out SpineAnimation animationAnimation)
             {
-                var randomIndex = Random.Range(0, SkeletonAnimationValue.Count);
-                animationSettings = SkeletonAnimationValue[randomIndex];
+                var randomIndex = Random.Range(0, AttackAnima.Count);
+                animationAnimation = AttackAnima[randomIndex];
             }
         #endregion
     }

@@ -53,9 +53,9 @@ namespace System.Battle.Object.Mob.Type.Character.Base
         #endregion
 
         #region Attack
-            public void Attack(ICard card, SkeletonAnimationSettings settings, Action haveEnemyAlive, Action enemyAllDead)
+            public void Attack(ICard card, SpineAnimation animation, Action haveEnemyAlive, Action enemyAllDead)
             {
-                AnimationSystem.Attack(settings,
+                AnimationSystem.Attack(animation,
                     onAttackPoint: () =>
                     {
                         OnAttack?.Invoke(card, haveEnemyAlive, enemyAllDead);
@@ -81,7 +81,7 @@ namespace System.Battle.Object.Mob.Type.Character.Base
                     },
                     isDeath: () =>
                     {
-                        AnimationSystem.Death(
+                        AnimationSystem.Dead(
                             onComplete: () =>
                             {
                                 isDeath?.Invoke();

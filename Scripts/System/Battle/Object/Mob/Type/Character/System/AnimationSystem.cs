@@ -1,8 +1,10 @@
+using System.Collections;
 using Data.Animation.Spine;
 using Spine;
 using Spine.Unity;
 using UnityEngine;
 using Event = Spine.Event;
+using SpineAnimation = Data.Animation.Spine.SpineAnimation;
 
 namespace System.Battle.Object.Mob.Type.Character.System
 {
@@ -12,21 +14,32 @@ namespace System.Battle.Object.Mob.Type.Character.System
         [field: SerializeField] private SkeletonAnimation SkeletonAnimation;
         
         [field: Header("Skeleton Animation Settings")]
-        [field: SerializeField] private SkeletonAnimationSettings IdleAnimationSettings;
-        [field: SerializeField] private SkeletonAnimationSettings HurtAnimationSettings;
-        [field: SerializeField] private SkeletonAnimationSettings DeathAnimationSettings;
+        [field: SerializeField] private SpineAnimation IdleAnima;
+        [field: SerializeField] private SpineAnimation HurtAnima;
+        [field: SerializeField] private SpineChainAnimation DeadAnima;
         
         private TrackEntry CurrentEntry;
 
+        private IEnumerator DeadCor;
+        
+        private void OnDisable()
+        {
+            if (DeadCor is not null)
+            {
+                StopCoroutine(DeadCor);
+                DeadCor = null;
+            }
+        }
+
         public void Idle()
         {
-            IdleAnimationSettings.GetValues(out var layer, out var animationName, out var loop);
+            IdleAnima.GetValues(out var layer, out var animationName, out var loop);
             CurrentEntry = SkeletonAnimation.AnimationState.SetAnimation(layer, animationName, loop);
         }
 
-        public void Attack(SkeletonAnimationSettings settings, Action onAttackPoint = null, Action onComplete = null)
+        public void Attack(SpineAnimation anima, Action onAttackPoint, Action onComplete)
         {
-            settings.GetValues(out var layer, out var animationName, out var loop);
+            anima.GetValues(out var layer, out var animationName, out var loop);
             CurrentEntry = SkeletonAnimation.AnimationState.SetAnimation(layer, animationName, loop);
             CurrentEntry.Event += OnAttackPoint;
             CurrentEntry.Complete += OnComplete;
@@ -45,9 +58,9 @@ namespace System.Battle.Object.Mob.Type.Character.System
             }
         }
 
-        public void Hurt(Action onComplete = null)
+        public void Hurt(Action onComplete)
         {
-            HurtAnimationSettings.GetValues(out var layer, out var animationName, out var loop);
+            HurtAnima.GetValues(out var layer, out var animationName, out var loop);
             CurrentEntry = SkeletonAnimation.AnimationState.SetAnimation(layer, animationName, loop);
             CurrentEntry.Complete += OnComplete;
             return;
@@ -59,17 +72,31 @@ namespace System.Battle.Object.Mob.Type.Character.System
             }
         }
         
-        public void Death(Action onComplete = null)
+        public void Dead(Action onComplete)
         {
-            DeathAnimationSettings.GetValues(out var layer, out var animationName, out var loop);
-            CurrentEntry = SkeletonAnimation.AnimationState.SetAnimation(layer, animationName, loop);
-            CurrentEntry.Complete += OnComplete;
+            DeadCor = DeadCoroutine();
+            StartCoroutine(DeadCor);
             return;
             
-            void OnComplete(TrackEntry entry)
+            IEnumerator DeadCoroutine()
             {
-                CurrentEntry.Complete -= OnComplete;
                 onComplete?.Invoke();
+                DeadAnima.GetValues(out var animas);
+                var complete = false;
+                foreach (var anima in animas)
+                {
+                    anima.GetValues(out var layer, out var animationName, out var loop);
+                    CurrentEntry = SkeletonAnimation.AnimationState.SetAnimation(layer, animationName, loop);
+                    CurrentEntry.Complete += OnComplete;
+                    yield return new WaitUntil(() => complete);
+                    continue;
+                    
+                    void OnComplete(TrackEntry entry)
+                    {
+                        CurrentEntry.Complete -= OnComplete;
+                        complete = true;
+                    }
+                }
             }
         }
     }

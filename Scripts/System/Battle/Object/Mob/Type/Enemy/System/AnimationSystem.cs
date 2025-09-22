@@ -1,8 +1,8 @@
-using Data.Animation.Spine;
 using Spine;
 using Spine.Unity;
 using UnityEngine;
 using Event = Spine.Event;
+using SpineAnimation = Data.Animation.Spine.SpineAnimation;
 
 namespace System.Battle.Object.Mob.Type.Enemy.System
 {
@@ -12,22 +12,22 @@ namespace System.Battle.Object.Mob.Type.Enemy.System
         [field: SerializeField] private SkeletonAnimation SkeletonAnimation;
         
         [field: Header("Skeleton Animation Settings")]
-        [field: SerializeField] private SkeletonAnimationSettings IdleAnimationSettings;
-        [field: SerializeField] private SkeletonAnimationSettings AttackAnimationSettings;
-        [field: SerializeField] private SkeletonAnimationSettings HurtAnimationSettings;
-        [field: SerializeField] private SkeletonAnimationSettings DeathAnimationSettings;
+        [field: SerializeField] private SpineAnimation IdleAnima;
+        [field: SerializeField] private SpineAnimation AttackAnima;
+        [field: SerializeField] private SpineAnimation HurtAnima;
+        [field: SerializeField] private SpineAnimation DeadAnima;
         
         private TrackEntry CurrentEntry;
         
         public void Idle()
         {
-            IdleAnimationSettings.GetValues(out var layer, out var animationName, out var loop);
+            IdleAnima.GetValues(out var layer, out var animationName, out var loop);
             CurrentEntry = SkeletonAnimation.AnimationState.SetAnimation(layer, animationName, loop);
         }
 
         public void Attack(Action onAttackPoint, Action onComplete)
         {
-            AttackAnimationSettings.GetValues(out var layer, out var animationName, out var loop);
+            AttackAnima.GetValues(out var layer, out var animationName, out var loop);
             CurrentEntry = SkeletonAnimation.AnimationState.SetAnimation(layer, animationName, loop);
             CurrentEntry.Event += OnAttackPoint;
             CurrentEntry.Complete += OnComplete;
@@ -48,7 +48,7 @@ namespace System.Battle.Object.Mob.Type.Enemy.System
 
         public void Hurt(Action onComplete)
         {
-            HurtAnimationSettings.GetValues(out var layer, out var animationName, out var loop);
+            HurtAnima.GetValues(out var layer, out var animationName, out var loop);
             CurrentEntry = SkeletonAnimation.AnimationState.SetAnimation(layer, animationName, loop);
             CurrentEntry.Complete += OnComplete;
             return;
@@ -60,9 +60,9 @@ namespace System.Battle.Object.Mob.Type.Enemy.System
             }
         }
 
-        public void Death(Action onComplete)
+        public void Dead(Action onComplete)
         {
-            DeathAnimationSettings.GetValues(out var layer, out var animationName, out var loop);
+            DeadAnima.GetValues(out var layer, out var animationName, out var loop);
             CurrentEntry = SkeletonAnimation.AnimationState.SetAnimation(layer, animationName, loop);
             CurrentEntry.Complete += OnComplete;
             return;

@@ -35,7 +35,7 @@ namespace System.Battle.Object.Card.Type.Battle
         private bool Interactable;
 
         public event Action<ICard> OnClick;
-        public static event Action<ICard, SkeletonAnimationSettings, Action, Action> OnUse;
+        public static event Action<ICard, SpineAnimation, Action, Action> OnUse;
         
         private IEnumerator MoveAndFlipCor;
 

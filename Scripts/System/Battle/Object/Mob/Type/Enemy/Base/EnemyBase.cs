@@ -70,7 +70,7 @@ namespace System.Battle.Object.Mob.Type.Enemy.Base
                     },
                     isDeath: () =>
                     {
-                        AnimationSystem.Death(
+                        AnimationSystem.Dead(
                             onComplete: () =>
                             {
                                 isDeath?.Invoke();

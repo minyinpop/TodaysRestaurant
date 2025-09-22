@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Data.Animation.Spine
 {
     [Serializable]
-    internal sealed class SkeletonAnimationSettings
+    internal sealed class SpineAnimation
     {
         [field: SerializeField] private int Layer;
         [field: SerializeField] private string AnimationName;
