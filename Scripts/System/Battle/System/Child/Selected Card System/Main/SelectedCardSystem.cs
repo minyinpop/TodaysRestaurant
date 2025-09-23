@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Message.Main;
 using Data.Animation.DOTween.Basic;
+using Data.General;
 using Data.Player;
 using DG.Tweening;
 using General.Object;
@@ -172,7 +173,11 @@ namespace System.Battle.System.Child.Selected_Card_System.Main
                 if (selectedCards.Count == 0)
                 {
                     ConfirmButton.SetInteractable(false);
-                    MessageSystem.ShowTipUI("至少要選擇一張卡片",
+                    MessageSystem.ShowTipUI(
+                        content: new PopUpUIContent(
+                            message:"請選擇至少一張卡牌",
+                            confirmBtnTitle: "確定",
+                            cancelBtnTitle: string.Empty),
                         onConfirm: () =>
                         {
                             ConfirmButton.SetInteractable(true);
@@ -181,7 +186,10 @@ namespace System.Battle.System.Child.Selected_Card_System.Main
                 else
                 {
                     MessageSystem.ShowSwitchUI(
-                        message: "還可以選擇卡片\n確定要直接開始戰鬥嗎？",
+                        content: new PopUpUIContent(
+                            message: "還可以選擇卡片\n確定要直接開始戰鬥嗎？",
+                            confirmBtnTitle: "確定",
+                            cancelBtnTitle: "返回"),
                         onShow: () =>
                         {
                             foreach (var card in selectedCards)

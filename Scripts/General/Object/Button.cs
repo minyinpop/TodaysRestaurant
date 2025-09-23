@@ -2,6 +2,7 @@ using System;
 using System.General.DOTween;
 using Data.Animation.DOTween.Basic;
 using DG.Tweening;
+using TMPro;
 using UnityEngine;
 
 namespace General.Object
@@ -11,6 +12,9 @@ namespace General.Object
     {
         [field: Header("Component")]
         [field: SerializeField] private RectTransform Rect;
+        
+        [field: Header("Object")]
+        [field: SerializeField] private TextMeshProUGUI TitleTMP;
         
         [field: Header("Child System")]
         [field: SerializeField] private DoAnimation DoAnimation;
@@ -25,6 +29,11 @@ namespace General.Object
 
             if (!interactable)
                 DoAnimation.DoScale(Rect, new DoScale(Vector2.one, .15f, Ease.OutExpo));
+        }
+
+        public void SetTitle(string title)
+        {
+            TitleTMP.text = title;
         }
         
         #region PointerEvent

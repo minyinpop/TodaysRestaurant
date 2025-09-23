@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Message.Child;
+using Data.General;
 using Data.Item.Base;
 using UnityEngine;
 
@@ -10,18 +11,18 @@ namespace System.Message.Main
         #region TipSystem
             [field: SerializeField] private TipSystem TipSystem;
 
-            public void ShowTipUI(string message, Action onConfirm)
+            public void ShowTipUI(PopUpUIContent content, Action onConfirm)
             {
-                TipSystem.Show(message, onConfirm);
+                TipSystem.Show(content, onConfirm);
             }
         #endregion
         
         #region SwitchSystem
             [field: SerializeField] private SwitchSystem SwitchSystem;
 
-            public void ShowSwitchUI(string message, Action onShow, Action onConfirm, Action onCancel, Action onClose)
+            public void ShowSwitchUI(PopUpUIContent content, Action onShow, Action onConfirm, Action onCancel, Action onClose)
             {
-                SwitchSystem.Show(message, onShow, onConfirm, onCancel, onClose);
+                SwitchSystem.Show(content, onShow, onConfirm, onCancel, onClose);
             }
         #endregion
         
@@ -29,9 +30,9 @@ namespace System.Message.Main
             [field: SerializeField] private ItemGetSystem ItemGetSystem;
             [field: SerializeField] private List<ItemSO> TempItems;
 
-            public void ShowItemGetUI()
+            public void ShowItemGetUI(PopUpUIContent content, Action onConfirm)
             {
-                ItemGetSystem.Show(TempItems);
+                ItemGetSystem.Show(content, TempItems, onConfirm);
             }
         #endregion
     }

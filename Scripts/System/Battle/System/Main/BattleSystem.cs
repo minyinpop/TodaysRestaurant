@@ -7,6 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Message.Main;
+using Data.General;
 using Data.General.Enum;
 using Data.Player;
 using UnityEngine;
@@ -374,7 +375,12 @@ namespace System.Battle.System.Main
                         onEnter: () =>
                         {
                             IsEnd = true;
-                            MessageSystem.ShowItemGetUI();
+                            MessageSystem.ShowItemGetUI(
+                                content: new PopUpUIContent(string.Empty, "拿取物品", string.Empty),
+                                onConfirm: () =>
+                                {
+                                    Debug.Log("Grab all items.");
+                                });
                         },
                         onExit: () =>
                         {

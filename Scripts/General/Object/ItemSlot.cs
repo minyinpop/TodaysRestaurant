@@ -25,13 +25,13 @@ namespace General.Object
         #region PointerEvent
             protected override void OnPointerEnter()
             {
-                if (!Interactable) return;
-                    DoAnimation.DoScale(Rect, new DoScale(Vector2.one * 1.5f, .2f, Ease.OutExpo));
+                if (Interactable)
+                    DoAnimation.DoScale(Rect, new DoScale(Vector2.one * 1.2f, .2f, Ease.OutExpo));
             }
 
             protected override void OnPointerExit()
             {
-                if (!Interactable) return;
+                if (Interactable)
                     DoAnimation.DoScale(Rect, new DoScale(Vector2.one, .2f, Ease.OutExpo));
             }
         #endregion
