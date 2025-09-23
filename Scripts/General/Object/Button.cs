@@ -22,17 +22,22 @@ namespace General.Object
         public void SetInteractable(bool interactable)
         {
             Interactable = interactable;
+
+            if (!interactable)
+                DoAnimation.DoScale(Rect, new DoScale(Vector2.one, .15f, Ease.OutExpo));
         }
         
         #region PointerEvent
             protected override void OnPointerEnter()
             {
-                DoAnimation.DoScale(Rect, new DoScale(Vector2.one * 1.1f, .15f, Ease.OutQuart));
+                if (Interactable)
+                    DoAnimation.DoScale(Rect, new DoScale(Vector2.one * 1.1f, .15f, Ease.OutQuart));
             }
             
             protected override void OnPointerExit()
             {
-                DoAnimation.DoScale(Rect, new DoScale(Vector2.one, .15f, Ease.OutQuart));
+                if (Interactable)
+                    DoAnimation.DoScale(Rect, new DoScale(Vector2.one, .15f, Ease.OutQuart));
             }
 
             protected override void OnPointerClick()

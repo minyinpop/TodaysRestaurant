@@ -295,6 +295,7 @@ namespace System.Battle.System.Main
                                 }, 
                                 onUIClose: () =>
                                 {
+                                    HandCardSystem.SetCardsInteractable(false);
                                     AttackCor = UseCardCoroutine();
                                     StartCoroutine(AttackCor);
                                     return;

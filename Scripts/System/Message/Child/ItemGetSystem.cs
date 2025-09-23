@@ -44,7 +44,7 @@ namespace System.Message.Child
         public void Show(List<ItemSO> items)
         {
             ItemGetUI.SetActive(true);
-            DoAnimation.DoFade_CanvasGroup(ItemGetUICanvasGroup, new DoFade_CanvasGroup(1, .5f, Ease.Linear),
+            DoAnimation.DoFade_CanvasGroup(ItemGetUICanvasGroup, new DoFade_CanvasGroup(1, .15f, Ease.Linear),
                 onComplete: () =>
                 {
                     ShowCor = ShowCoroutine();

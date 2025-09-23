@@ -7,6 +7,15 @@ namespace System.Message.Main
 {
     internal sealed class MessageSystem : MonoBehaviour
     {
+        #region TipSystem
+            [field: SerializeField] private TipSystem TipSystem;
+
+            public void ShowTipUI(string message, Action onConfirm)
+            {
+                TipSystem.Show(message, onConfirm);
+            }
+        #endregion
+        
         #region SwitchSystem
             [field: SerializeField] private SwitchSystem SwitchSystem;
 

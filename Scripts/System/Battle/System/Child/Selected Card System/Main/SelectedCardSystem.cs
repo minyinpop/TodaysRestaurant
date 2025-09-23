@@ -7,8 +7,8 @@ using System.Message.Main;
 using Data.Animation.DOTween.Basic;
 using Data.Player;
 using DG.Tweening;
+using General.Object;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace System.Battle.System.Child.Selected_Card_System.Main
 {
@@ -55,11 +55,13 @@ namespace System.Battle.System.Child.Selected_Card_System.Main
 
         private void OnEnable()
         {
+            ConfirmButton.OnClick += OnConfirmButtonClick;
             HandCardSystem.TryAddCardToSelected += TryAdd;
         }
         
         private void OnDisable()
         {
+            ConfirmButton.OnClick -= OnConfirmButtonClick;
             HandCardSystem.TryAddCardToSelected -= TryAdd;
             if (OnClickConfirmButtonCor is not null)
             {
@@ -77,14 +79,14 @@ namespace System.Battle.System.Child.Selected_Card_System.Main
                 AnimationSystem.FadeIn()
                     .OnComplete(() =>
                     {
-                        ConfirmButton.onClick.AddListener(OnConfirmButtonClick);
+                        ConfirmButton.SetInteractable(true);
                         onUIOpen?.Invoke();
                     });
             }
 
             private void CloseUI()
             {
-                ConfirmButton.onClick.RemoveListener(OnConfirmButtonClick);
+                ConfirmButton.SetInteractable(false);
                 foreach (var card in SelectedCards)
                     card.SetInteractable(false);
                 BeforeCloseUI?.Invoke(SelectedCards, () => AnimationSystem.FadeOut()
@@ -169,7 +171,12 @@ namespace System.Battle.System.Child.Selected_Card_System.Main
 
                 if (selectedCards.Count == 0)
                 {
-                    Debug.Log("Select one card at lease.");
+                    ConfirmButton.SetInteractable(false);
+                    MessageSystem.ShowTipUI("至少要選擇一張卡片",
+                        onConfirm: () =>
+                        {
+                            ConfirmButton.SetInteractable(true);
+                        });
                 }
                 else
                 {
