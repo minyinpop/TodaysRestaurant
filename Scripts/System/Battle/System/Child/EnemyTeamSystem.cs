@@ -4,7 +4,8 @@ using System.Battle.Object.Mob.Type.Enemy.Base;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Data.General.Damage.Child;
+using Data.General;
+using Data.General.Enum;
 using UnityEngine;
 
 namespace System.Battle.System.Child

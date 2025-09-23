@@ -2,7 +2,7 @@ using System.Battle.System.Child.Initiative_System.Object.Initiative_Coin;
 using System.Battle.System.Child.Initiative_System.System.Child;
 using System.Battle.System.Child.Initiative_System.System.Main.State_Machine;
 using System.Battle.System.Child.Initiative_System.System.Main.State_Machine.State;
-using Data.Initiative_Coin;
+using Data.General.Enum;
 using DG.Tweening;
 using UnityEngine;
 

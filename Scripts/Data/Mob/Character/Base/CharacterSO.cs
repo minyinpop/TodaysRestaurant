@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using Data.General;
-using Data.General.Character_Information.Base;
+using Data.General.Enum;
 using UnityEngine;
 
 namespace Data.Mob.Character.Base
 {
-    [CreateAssetMenu(menuName = "Minyinpop/Character/Friendly", fileName = "New Data")]
+    [CreateAssetMenu(menuName = "Minyinpop/Mob/Character Data", fileName = "New Data")]
     internal sealed class CharacterSO : ScriptableObject
     {
         #region CharacterInformatin

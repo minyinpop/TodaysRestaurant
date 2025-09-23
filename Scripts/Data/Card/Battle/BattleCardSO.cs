@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using Data.Animation.Spine;
 using Data.General;
-using Data.General.Damage.Base;
+using Data.General.Enum;
 using UnityEngine;
 
 namespace Data.Card.Battle
 {
-    [CreateAssetMenu(menuName = "Minyinpop/Card/Battle", fileName = "New Data")]
+    [CreateAssetMenu(menuName = "Minyinpop/Card/Battle Data", fileName = "New Data")]
     internal sealed class BattleCardSO : ScriptableObject
     {
         #region CardType

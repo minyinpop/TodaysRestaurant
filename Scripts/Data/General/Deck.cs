@@ -2,6 +2,7 @@ using System;
 using System.Battle.Object.Card.Base;
 using System.Collections.Generic;
 using System.Linq;
+using Data.General.Enum;
 using UnityEngine;
 
 namespace Data.General

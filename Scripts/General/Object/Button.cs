@@ -15,7 +15,7 @@ namespace General.Object
         [field: Header("Child System")]
         [field: SerializeField] private DoAnimation DoAnimation;
 
-        private bool Interactable = false;
+        private bool Interactable;
 
         public event Action OnClick;
         

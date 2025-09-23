@@ -1,10 +1,9 @@
 using Data.General;
-using Data.General.Damage.Base;
 using UnityEngine;
 
 namespace Data.Mob.Enemy.Base
 {
-    [CreateAssetMenu(menuName = "Minyinpop/Character/Enemy", fileName = "New Data")]
+    [CreateAssetMenu(menuName = "Minyinpop/Mob/Enemy Data", fileName = "New Data")]
     internal sealed class EnemySO : ScriptableObject
     {
         #region Health

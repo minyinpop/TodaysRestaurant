@@ -1,5 +1,5 @@
 using System.Battle.Object.Mob.Type.Enemy.System;
-using Data.General.Damage.Base;
+using Data.General;
 using Data.Mob.Enemy.Base;
 using General;
 using General.Object;

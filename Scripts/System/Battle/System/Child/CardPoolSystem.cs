@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Data.Animation.DOTween.Basic;
 using Data.General;
+using Data.General.Enum;
 using Data.Player;
 using DG.Tweening;
 using UnityEngine;

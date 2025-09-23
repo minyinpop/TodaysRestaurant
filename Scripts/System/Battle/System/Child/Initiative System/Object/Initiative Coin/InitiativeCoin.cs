@@ -1,6 +1,6 @@
 using Data.Animation.DOTween.Basic;
 using Data.Animation.DOTween.Combine;
-using Data.Initiative_Coin;
+using Data.General.Enum;
 using DG.Tweening;
 using General;
 using UnityEngine;

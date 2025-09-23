@@ -1,6 +1,6 @@
 using System.Battle.System.Child.Initiative_System.Object.Toss_Result_Text;
 using System.Collections;
-using Data.Initiative_Coin;
+using Data.General.Enum;
 using UnityEngine;
 
 namespace System.Battle.System.Child.Initiative_System.System.Child

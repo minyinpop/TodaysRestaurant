@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Data.Player
 {
-    [CreateAssetMenu(menuName = "Minyinpop/Player/Data", fileName = "New Data")]
+    [CreateAssetMenu(menuName = "Minyinpop/Player Data", fileName = "New Data")]
     internal sealed class PlayerSO : ScriptableObject
     {
         #region Team

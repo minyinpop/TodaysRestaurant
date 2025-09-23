@@ -6,8 +6,8 @@ using System.Battle.System.Main.State_Machine.State;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Data.General;
-using Data.Initiative_Coin;
+using System.Message.Main;
+using Data.General.Enum;
 using Data.Player;
 using UnityEngine;
 
@@ -20,13 +20,11 @@ namespace System.Battle.System.Main
         [field: SerializeField] private CardPoolSystem CardPoolSystem;
         [field: SerializeField] private ShowCardSystem ShowCardSystem;
         [field: SerializeField] private HandCardSystem HandCardSystem;
-        [field: SerializeField] private UseCardSystem UseCardSystem;
-        [field: SerializeField] private CharacterTeamSystem characterTeamSystem;
-        [field: SerializeField] private EnemyTeamSystem EnemyTeamSystem;
-        
-        [field: Header("Initiative System")]
         [field: SerializeField] private InitiativeSystem InitiativeSystem;
-        private GameObject InitiativeSystemObject;
+        [field: SerializeField] private UseCardSystem UseCardSystem;
+        [field: SerializeField] private CharacterTeamSystem CharacterTeamSystem;
+        [field: SerializeField] private EnemyTeamSystem EnemyTeamSystem;
+        [field: SerializeField] private MessageSystem MessageSystem;
         
         [field: Header("Data")]
         [field: SerializeField] private PlayerSO PlayerData;
@@ -34,6 +32,8 @@ namespace System.Battle.System.Main
         private readonly StateMachine StateMachine = new();
         
         private TossResult TossResult = TossResult.Tails;
+        
+        private GameObject InitiativeSystemObject;
 
         private IEnumerator TurnCor;
         private IEnumerator AttackCor;
@@ -373,7 +373,7 @@ namespace System.Battle.System.Main
                         onEnter: () =>
                         {
                             IsEnd = true;
-                            Debug.Log("Player Win!");
+                            MessageSystem.ShowItemGetUI();
                         },
                         onExit: () =>
                         {

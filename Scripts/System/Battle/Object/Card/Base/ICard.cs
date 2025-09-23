@@ -1,7 +1,7 @@
 using Data.Animation.DOTween.Basic;
 using Data.Animation.DOTween.Combine;
 using Data.General;
-using Data.General.Damage.Base;
+using Data.General.Enum;
 using UnityEngine;
 
 namespace System.Battle.Object.Card.Base

@@ -6,7 +6,7 @@ using Data.Animation.DOTween.Combine;
 using Data.Animation.Spine;
 using Data.Card.Battle;
 using Data.General;
-using Data.General.Damage.Base;
+using Data.General.Enum;
 using DG.Tweening;
 using General;
 using UnityEngine;

@@ -7,8 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Data.Animation.Spine;
 using Data.General;
-using Data.General.Damage.Base;
-using Data.General.Damage.Child;
+using Data.General.Enum;
 using UnityEngine;
 
 namespace System.Battle.System.Child
