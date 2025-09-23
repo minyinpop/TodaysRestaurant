@@ -1,4 +1,5 @@
 using System;
+using System.General;
 using System.General.DOTween;
 using Data.Animation.DOTween.Basic;
 using DG.Tweening;
@@ -40,7 +41,7 @@ namespace General.Object
             protected override void OnPointerEnter()
             {
                 if (Interactable)
-                    DoAnimation.DoScale(Rect, new DoScale(Vector2.one * 1.1f, .15f, Ease.OutQuart));
+                    DoAnimation.DoScale(Rect, new DoScale(Vector2.one * 1.05f, .15f, Ease.OutQuart));
             }
             
             protected override void OnPointerExit()

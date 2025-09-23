@@ -35,5 +35,14 @@ namespace System.Message.Main
                 ItemGetSystem.Show(content, TempItems, onConfirm);
             }
         #endregion
+        
+        #region DefeatSystem
+            [field: SerializeField] private DefeatSystem DefeatSystem;
+
+            public void ShowDefeatUI(PopUpUIContent content, Action onConfirm)
+            {
+                DefeatSystem.Show(content, onConfirm);
+            }
+        #endregion
     }
 }

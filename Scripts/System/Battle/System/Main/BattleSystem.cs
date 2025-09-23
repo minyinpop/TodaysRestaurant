@@ -401,7 +401,15 @@ namespace System.Battle.System.Main
                         onEnter: () =>
                         {
                             IsEnd = true;
-                            Debug.Log("Enemy Win!");
+                            MessageSystem.ShowDefeatUI(
+                                content: new PopUpUIContent(
+                                    message: "被打敗了",
+                                    confirmBtnTitle: "返回餐廳",
+                                    cancelBtnTitle: string.Empty),
+                                onConfirm: () =>
+                                {
+                                    Debug.Log("Return to restaurant.");
+                                });
                         },
                         onExit: () =>
                         {

@@ -1,5 +1,4 @@
 using System.Collections;
-using System.General.DOTween;
 using Data.Animation.DOTween.Basic;
 using Data.General;
 using DG.Tweening;
@@ -8,7 +7,6 @@ using UnityEngine;
 
 namespace System.Message.Child
 {
-    [RequireComponent(typeof(DoAnimation))]
     internal sealed class TipSystem : MonoBehaviour
     {
         [field: SerializeField] private PopUpUI PopUpUI;

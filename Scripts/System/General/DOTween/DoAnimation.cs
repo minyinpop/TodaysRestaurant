@@ -8,6 +8,7 @@ namespace System.General.DOTween
     {
         #region Move
             private Tween MoveTween;
+            
             public void DoAnchorPos(RectTransform rect, DoAnchorPos settings, Action onComplete = null)
             {
                 MoveTween?.Kill();
@@ -30,6 +31,7 @@ namespace System.General.DOTween
         
         #region Rotate
             private Tween RotateTween;
+            
             public void DoRotate(Transform rect, DoRotate settings, Action onUpdate = null, Action onComplete = null)
             {
                 RotateTween?.Kill();
@@ -57,6 +59,7 @@ namespace System.General.DOTween
         
         #region Scale
             private Tween ScaleTween;
+            
             public void DoScale(Transform rect, DoScale settings, Action onComplete = null)
             {
                 ScaleTween?.Kill();
@@ -79,6 +82,7 @@ namespace System.General.DOTween
         
         #region Fade
             private Tween DoFade_CanvasGroup_Tween;
+            
             public void DoFade_CanvasGroup(CanvasGroup canvasGroup, DoFade_CanvasGroup settings, Action onComplete = null)
             {
                 DoFade_CanvasGroup_Tween?.Kill();

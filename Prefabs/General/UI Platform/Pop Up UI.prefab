@@ -155,6 +155,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6465073788992492502}
   - component: {fileID: 8985034715180180130}
+  - component: {fileID: 4006014848759545503}
   - component: {fileID: 7028325939788252784}
   m_Layer: 0
   m_Name: Mask
@@ -190,6 +191,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2768226973631218624}
   m_CullTransparentMesh: 1
+--- !u!225 &4006014848759545503
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2768226973631218624}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!114 &7028325939788252784
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -230,6 +243,7 @@ GameObject:
   m_Component:
   - component: {fileID: 691363239945776625}
   - component: {fileID: 2090422469635806388}
+  - component: {fileID: 7816227132319231908}
   - component: {fileID: 6145902434546932302}
   - component: {fileID: 2525192210199637646}
   - component: {fileID: 2796459206693095656}
@@ -269,6 +283,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2950506646653412007}
   m_CullTransparentMesh: 1
+--- !u!225 &7816227132319231908
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2950506646653412007}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!114 &6145902434546932302
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -649,7 +675,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8151233362359472600}
-  - component: {fileID: 3520891411724422868}
   - component: {fileID: 5875549886258959015}
   - component: {fileID: 3895546791419745546}
   m_Layer: 0
@@ -680,18 +705,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!225 &3520891411724422868
-CanvasGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8368273867094221560}
-  m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
-  m_IgnoreParentGroups: 0
 --- !u!114 &5875549886258959015
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -704,9 +717,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f003f9bdf6424510818d3321efea89bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::General.Object.PopUpUI
-  UI: {fileID: 8368273867094221560}
-  CanvasGroup: {fileID: 3520891411724422868}
   DoAnimation: {fileID: 3895546791419745546}
+  Mask: {fileID: 4006014848759545503}
+  UI: {fileID: 7816227132319231908}
   MessageTMP: {fileID: 4419623720367158112}
   SpawnParent: {fileID: 7339887067407683292}
   SlotPrefab: {fileID: 2384381619580153008, guid: d470de681b7f2744d8f198ec9a43907b, type: 3}

@@ -34,28 +34,74 @@ namespace General.Object
             }
         }
         
-        #region UI
-            [field: Header("UI")]
-            [field: SerializeField] private GameObject UI;
-            [field: SerializeField] private CanvasGroup CanvasGroup;
+        #region General
+            [field: Header("General")]
             [field: SerializeField] private DoAnimation DoAnimation;
+
+            private IEnumerator ShowCor;
 
             public void Show(PopUpUIContent content, DoFade_CanvasGroup settings, Action onComplete)
             {
                 SetContent(content);
-                UI.SetActive(true);
-                DoAnimation.DoFade_CanvasGroup(CanvasGroup, settings, onComplete);
+                gameObject.SetActive(true);
+                ShowCor = ShowCoroutine();
+                StartCoroutine(ShowCor);
+                return;
+
+                IEnumerator ShowCoroutine()
+                {
+                    var maskComplete = false;
+                    var uiComplete = false;
+                    DoAnimation.DoFade_CanvasGroup(
+                        canvasGroup: Mask,
+                        settings: settings,
+                        onComplete: () =>
+                        {
+                            maskComplete = true;
+                            DoAnimation.DoFade_CanvasGroup(
+                                canvasGroup: UI,
+                                settings: settings,
+                                onComplete: () =>
+                                {
+                                    uiComplete = true;
+                                });
+                        });
+                    yield return new WaitUntil(() => maskComplete && uiComplete);
+                    onComplete?.Invoke();
+                    ShowCor = null;
+                }
             }
             
             public void Hide(DoFade_CanvasGroup settings, Action onComplete)
             {
-                DoAnimation.DoFade_CanvasGroup(CanvasGroup, settings,
-                    onComplete: () =>
-                    {
-                        onComplete?.Invoke();
-                        UI.SetActive(false);
-                        RemoveContent();
-                    });
+                ShowCor = HideCoroutine();
+                StartCoroutine(ShowCor);
+                return;
+
+                IEnumerator HideCoroutine()
+                {
+                    var maskComplete = false;
+                    var uiComplete = false;
+                    DoAnimation.DoFade_CanvasGroup(
+                        canvasGroup: UI,
+                        settings: settings,
+                        onComplete: () =>
+                        {
+                            uiComplete = true;
+                            DoAnimation.DoFade_CanvasGroup(
+                                canvasGroup: Mask,
+                                settings: settings,
+                                onComplete: () =>
+                                {
+                                    maskComplete = true;
+                                });
+                        });
+                    yield return new WaitUntil(() => maskComplete && uiComplete);
+                    onComplete?.Invoke();
+                    gameObject.SetActive(false);
+                    RemoveContent();
+                    ShowCor = null;
+                }
             }
 
             private void SetContent(PopUpUIContent content)
@@ -71,6 +117,59 @@ namespace General.Object
                 MessageTMP?.SetText(string.Empty);
                 ConfirmButton?.SetTitle(string.Empty);
                 CancelButton?.SetTitle(string.Empty);
+            }
+        #endregion
+        
+        #region Mask
+            [field: Header("Mask")]
+            [field: SerializeField] private CanvasGroup Mask;
+
+            public void ShowMask(DoFade_CanvasGroup settings, Action onComplete)
+            {
+                gameObject.SetActive(true);
+                DoAnimation.DoFade_CanvasGroup(
+                    canvasGroup: Mask,
+                    settings: settings,
+                    onComplete: onComplete);
+            }
+            
+            public void HideMask(DoFade_CanvasGroup settings, Action onComplete)
+            {
+                DoAnimation.DoFade_CanvasGroup(
+                    canvasGroup: Mask,
+                    settings: settings,
+                    onComplete: () =>
+                    {
+                        onComplete?.Invoke();
+                        gameObject.SetActive(false);   
+                    });
+            }
+        #endregion
+        
+        #region UI
+            [field: SerializeField] private CanvasGroup UI;
+
+            public void ShowUI(PopUpUIContent content, DoFade_CanvasGroup settings, Action onComplete)
+            {
+                SetContent(content);
+                gameObject.SetActive(true);
+                DoAnimation.DoFade_CanvasGroup(
+                    canvasGroup: UI,
+                    settings: settings,
+                    onComplete: onComplete);
+            }
+
+            public void HideUI(DoFade_CanvasGroup settings, Action onComplete)
+            {
+                DoAnimation.DoFade_CanvasGroup(
+                    canvasGroup: UI,
+                    settings: settings,
+                    onComplete: () =>
+                    {
+                        onComplete?.Invoke();
+                        gameObject.SetActive(false);
+                        RemoveContent();
+                    });
             }
         #endregion
         
@@ -115,6 +214,7 @@ namespace General.Object
                     
                     yield return new WaitUntil(() => completes.All(c => c));
                     onComplete?.Invoke();
+                    ShowItemCor = null;
                 }
             }
         #endregion
