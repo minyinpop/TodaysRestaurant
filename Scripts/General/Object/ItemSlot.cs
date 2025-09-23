@@ -1,12 +1,12 @@
+using System;
 using System.General.DOTween;
 using Data.Animation.DOTween.Basic;
 using Data.Item.Base;
 using DG.Tweening;
-using General;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace System.General.Item_Slot
+namespace General.Object
 {
     [RequireComponent(typeof(DoAnimation))]
     internal sealed class ItemSlot : PointerEvent

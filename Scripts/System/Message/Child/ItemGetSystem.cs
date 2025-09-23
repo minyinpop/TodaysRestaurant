@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.General.DOTween;
-using System.General.Item_Slot;
 using System.Linq;
 using Data.Animation.DOTween.Basic;
 using Data.Item.Base;
