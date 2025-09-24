@@ -1,13 +1,18 @@
+using System;
 using DG.Tweening;
+using UnityEngine;
 
 namespace Data.Animation.DOTween.Basic
 {
+    [Serializable]
     internal sealed class DoFade_CanvasGroup
     {
-        private readonly float EndValue;
-        private readonly float Duration;
+        [field: Header("Values")]
+        [field: SerializeField] private float EndValue;
+        [field: SerializeField] private float Duration;
         
-        private readonly Ease Ease;
+        [field: Header("Ease")]
+        [field: SerializeField] private Ease Ease;
         
         public DoFade_CanvasGroup(float endValue, float duration, Ease ease)
         {

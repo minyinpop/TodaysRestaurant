@@ -28,6 +28,8 @@ namespace System
         
         public void ChangeScene(string sceneName)
         {
+            ChangeSceneCor = ChangeSceneCoroutine();
+            StartCoroutine(ChangeSceneCor);
             return;
 
             IEnumerator ChangeSceneCoroutine()

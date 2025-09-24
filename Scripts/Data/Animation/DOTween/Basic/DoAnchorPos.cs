@@ -1,15 +1,19 @@
+using System;
 using DG.Tweening;
 using UnityEngine;
 
 namespace Data.Animation.DOTween.Basic
 {
+    [Serializable]
     internal sealed class DoAnchorPos
     {
-        private readonly Vector3 EndValue;
-        private readonly float Duration;
-        private readonly bool Snapping;
+        [field: Header("Values")]
+        [field: SerializeField] private Vector3 EndValue;
+        [field: SerializeField] private float Duration;
+        [field: SerializeField] private bool Snapping;
 
-        private readonly Ease Ease;
+        [field: Header("Ease")]
+        [field: SerializeField] private Ease Ease;
         
         public DoAnchorPos(Vector3 endValue, float duration, bool snapping, Ease ease)
         {

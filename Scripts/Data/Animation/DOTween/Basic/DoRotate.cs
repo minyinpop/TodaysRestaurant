@@ -1,15 +1,19 @@
+using System;
 using DG.Tweening;
 using UnityEngine;
 
 namespace Data.Animation.DOTween.Basic
 {
+    [Serializable]
     internal sealed class DoRotate
     {
-        private readonly Vector3 EndValue;
-        private readonly float Duration;
-        private readonly RotateMode RotateMode;
+        [field: Header("Values")]
+        [field: SerializeField] private Vector3 EndValue;
+        [field: SerializeField] private float Duration;
+        [field: SerializeField] private RotateMode RotateMode;
         
-        private readonly Ease Ease;
+        [field: Header("Ease")]
+        [field: SerializeField] private Ease Ease;
         
         public DoRotate(Vector3 endValue, float duration, RotateMode rotateMode, Ease ease)
         {

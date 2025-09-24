@@ -1,14 +1,18 @@
+using System;
 using DG.Tweening;
 using UnityEngine;
 
 namespace Data.Animation.DOTween.Basic
 {
+    [Serializable]
     internal sealed class DoScale
     {
-        private readonly Vector3 EndValue;
-        private readonly float Duration;
+        [field: Header("Values")]
+        [field: SerializeField] private Vector3 EndValue;
+        [field: SerializeField] private float Duration;
         
-        private readonly Ease Ease;
+        [field: Header("Ease")]
+        [field: SerializeField] private Ease Ease;
         
         public DoScale(Vector3 endValue, float duration, Ease ease)
         {

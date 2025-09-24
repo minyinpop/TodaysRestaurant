@@ -21,7 +21,7 @@ namespace System.Message.Child
                 {
                     PopUpUI.ShowUI(
                         content: content,
-                        settings: new DoFade_CanvasGroup(1, .2f, Ease.Linear),
+                        settings: new DoFade_CanvasGroup(1, 1.5f, Ease.Linear),
                         onComplete: () =>
                         {
                             PopUpUI.SetButtonInteractable(true);

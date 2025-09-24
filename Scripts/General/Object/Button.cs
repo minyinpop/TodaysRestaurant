@@ -2,7 +2,6 @@ using System;
 using System.General;
 using System.General.DOTween;
 using Data.Animation.DOTween.Basic;
-using DG.Tweening;
 using TMPro;
 using UnityEngine;
 
@@ -20,7 +19,12 @@ namespace General.Object
         [field: Header("Child System")]
         [field: SerializeField] private DoAnimation DoAnimation;
 
-        private bool Interactable;
+        [field: Header("Status")]
+        [field: SerializeField] private bool Interactable;
+        
+        [field: Header("Animation Settings")]
+        [field: SerializeField] private DoScale OnPointerEnterScale;
+        [field: SerializeField] private DoScale OnPointerExitScale;
 
         public event Action OnClick;
         
@@ -29,25 +33,25 @@ namespace General.Object
             Interactable = interactable;
 
             if (!interactable)
-                DoAnimation.DoScale(Rect, new DoScale(Vector2.one, .15f, Ease.OutExpo));
+                DoAnimation?.DoScale(Rect, OnPointerExitScale);
         }
 
         public void SetTitle(string title)
         {
-            TitleTMP.text = title;
+            TitleTMP?.SetText(title);
         }
         
         #region PointerEvent
             protected override void OnPointerEnter()
             {
                 if (Interactable)
-                    DoAnimation.DoScale(Rect, new DoScale(Vector2.one * 1.05f, .15f, Ease.OutQuart));
+                    DoAnimation?.DoScale(Rect, OnPointerEnterScale);
             }
             
             protected override void OnPointerExit()
             {
                 if (Interactable)
-                    DoAnimation.DoScale(Rect, new DoScale(Vector2.one, .15f, Ease.OutQuart));
+                    DoAnimation?.DoScale(Rect, OnPointerExitScale);
             }
 
             protected override void OnPointerClick()
