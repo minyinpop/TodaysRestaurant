@@ -176,8 +176,9 @@ namespace System.Battle.System.Child.Selected_Card_System.Main
                     MessageSystem.ShowTipUI(
                         content: new PopUpUIContent(
                             message:"請選擇至少一張卡牌",
-                            confirmBtnTitle: "確定",
-                            cancelBtnTitle: string.Empty),
+                            confirmButtonTitle: "確定",
+                            cancelButtonTitle: string.Empty,
+                            closeButtonTitle: string.Empty),
                         onConfirm: () =>
                         {
                             ConfirmButton.SetInteractable(true);
@@ -188,8 +189,9 @@ namespace System.Battle.System.Child.Selected_Card_System.Main
                     MessageSystem.ShowSwitchUI(
                         content: new PopUpUIContent(
                             message: "還可以選擇卡片\n確定要直接開始戰鬥嗎？",
-                            confirmBtnTitle: "確定",
-                            cancelBtnTitle: "返回"),
+                            confirmButtonTitle: "確定",
+                            cancelButtonTitle: "返回",
+                            closeButtonTitle: string.Empty),
                         onShow: () =>
                         {
                             foreach (var card in selectedCards)

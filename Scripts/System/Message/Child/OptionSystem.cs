@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace System.Message.Child
 {
-    internal sealed class TipSystem : MonoBehaviour
+    internal sealed class OptionSystem : MonoBehaviour
     {
         [field: SerializeField] private PopUpUI PopUpUI;
 
@@ -22,7 +22,7 @@ namespace System.Message.Child
             }
         }
 
-        public void Show(PopUpUIContent content, Action onConfirm)
+        public void Show(PopUpUIContent content, Action onClose)
         {
             ShowCor = ShowCoroutine();
             StartCoroutine(ShowCor);
@@ -30,20 +30,24 @@ namespace System.Message.Child
 
             IEnumerator ShowCoroutine()
             {
-                var confirm = false;
+                var close = false;
                 PopUpUI.Show(
-                    content: content,
+                    content: new PopUpUIContent(
+                        message: string.Empty,
+                        confirmButtonTitle: string.Empty,
+                        cancelButtonTitle: string.Empty,
+                        closeButtonTitle: string.Empty),
                     settings: new DoFade_CanvasGroup(
                         endValue: 1,
                         duration: .2f,
                         ease: Ease.Linear),
                     onComplete: () =>
                     {
-                        PopUpUI.OnClickConfirmButton += OnConfirmButtonClicked;
+                        PopUpUI.OnClickCloseButton += OnCloseButtonClicked;
                         PopUpUI.SetButtonInteractable(true);
                     });
-                yield return new WaitUntil(() => confirm);
-                PopUpUI.OnClickConfirmButton -= OnConfirmButtonClicked;
+                yield return new WaitUntil(() => close);
+                PopUpUI.OnClickCloseButton -= OnCloseButtonClicked;
                 PopUpUI.SetButtonInteractable(false);
                 PopUpUI.Hide(
                     settings: new DoFade_CanvasGroup(
@@ -52,14 +56,13 @@ namespace System.Message.Child
                         ease: Ease.Linear),
                     onComplete: () =>
                     {
-                        onConfirm?.Invoke();
-                        ShowCor = null;
                     });
+                onClose?.Invoke();
                 yield break;
-
-                void OnConfirmButtonClicked()
+                
+                void OnCloseButtonClicked()
                 {
-                    confirm = true;
+                    close = true;
                 }
             }
         }

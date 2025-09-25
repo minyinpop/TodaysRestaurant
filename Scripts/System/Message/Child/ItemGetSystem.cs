@@ -39,12 +39,12 @@ namespace System.Message.Child
                         PopUpUI.ShowItem(items,
                             onComplete: () =>
                             {
-                                PopUpUI.OnConfirm += OnConfirmButtonClicked;
+                                PopUpUI.OnClickConfirmButton += OnConfirmButtonClicked;
                                 PopUpUI.SetButtonInteractable(true);
                             });
                     });
                 yield return new WaitUntil(() => confirm);
-                PopUpUI.OnConfirm -= OnConfirmButtonClicked;
+                PopUpUI.OnClickConfirmButton -= OnConfirmButtonClicked;
                 PopUpUI.SetButtonInteractable(false);
                 PopUpUI.Hide(
                     settings: new DoFade_CanvasGroup(0, .2f, Ease.Linear),

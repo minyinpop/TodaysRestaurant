@@ -16,12 +16,18 @@ namespace System.Message.Child
         public void Show(PopUpUIContent content, Action onConfirm)
         {
             PopUpUI.ShowMask(
-                settings: new DoFade_CanvasGroup(1, 3, Ease.Linear),
+                settings: new DoFade_CanvasGroup(
+                    endValue: 1,
+                    duration: 3,
+                    ease: Ease.Linear),
                 onComplete: () =>
                 {
                     PopUpUI.ShowUI(
                         content: content,
-                        settings: new DoFade_CanvasGroup(1, 1.5f, Ease.Linear),
+                        settings: new DoFade_CanvasGroup(
+                            endValue: 1,
+                            duration: 1.5f,
+                            ease: Ease.Linear),
                         onComplete: () =>
                         {
                             PopUpUI.SetButtonInteractable(true);

@@ -30,7 +30,6 @@ namespace General.Object
         public void SetInteractable(bool interactable)
         {
             Interactable = interactable;
-
             if (!interactable)
                 DoAnimation?.DoScale(Rect, OnPointerExitScale);
         }

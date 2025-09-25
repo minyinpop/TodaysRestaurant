@@ -376,7 +376,11 @@ namespace System.Battle.System.Main
                         {
                             IsEnd = true;
                             MessageSystem.ShowItemGetUI(
-                                content: new PopUpUIContent(string.Empty, "拿取物品", string.Empty),
+                                content: new PopUpUIContent(
+                                    message: string.Empty,
+                                    confirmButtonTitle: "拿取物品",
+                                    cancelButtonTitle: string.Empty,
+                                    closeButtonTitle: string.Empty),
                                 onConfirm: () =>
                                 {
                                     Debug.Log("Grab all items.");
@@ -404,8 +408,9 @@ namespace System.Battle.System.Main
                             MessageSystem.ShowDefeatUI(
                                 content: new PopUpUIContent(
                                     message: "被打敗了",
-                                    confirmBtnTitle: "返回餐廳",
-                                    cancelBtnTitle: string.Empty),
+                                    confirmButtonTitle: "返回餐廳",
+                                    cancelButtonTitle: string.Empty,
+                                    closeButtonTitle: string.Empty),
                                 onConfirm: () =>
                                 {
                                     Debug.Log("Return to restaurant.");

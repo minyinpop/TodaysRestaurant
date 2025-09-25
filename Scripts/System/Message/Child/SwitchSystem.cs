@@ -37,14 +37,14 @@ namespace System.Message.Child
                 PopUpUI.Show(content, new DoFade_CanvasGroup(1, .2f, Ease.Linear),
                     onComplete: () =>
                     {
-                        PopUpUI.OnConfirm += OnConfirmButtonClicked;
-                        PopUpUI.OnCancel += OnCancelButtonClicked;
+                        PopUpUI.OnClickConfirmButton += OnConfirmButtonClicked;
+                        PopUpUI.OnClickCancelButton += OnCancelButtonClicked;
                         PopUpUI.SetButtonInteractable(true);
                         complete = true;
                     });
                 yield return new WaitUntil(() => complete && (confirm || cancel));
-                PopUpUI.OnConfirm -= OnConfirmButtonClicked;
-                PopUpUI.OnCancel -= OnCancelButtonClicked;
+                PopUpUI.OnClickConfirmButton -= OnConfirmButtonClicked;
+                PopUpUI.OnClickCancelButton -= OnCancelButtonClicked;
                 PopUpUI.SetButtonInteractable(false);
                 if (confirm)
                     onConfirm?.Invoke();
