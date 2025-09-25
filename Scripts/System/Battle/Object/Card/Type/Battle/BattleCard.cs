@@ -1,7 +1,6 @@
 using System.Battle.Object.Card.Base;
 using System.Collections;
 using System.General;
-using System.General.DOTween;
 using Data.Animation.DOTween.Basic;
 using Data.Animation.DOTween.Combine;
 using Data.Animation.Spine;

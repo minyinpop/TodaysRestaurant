@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.General.DOTween;
+using System.General;
 using System.Linq;
 using Data.Animation.DOTween.Basic;
 using Data.General;

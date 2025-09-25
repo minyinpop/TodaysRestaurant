@@ -1,13 +1,13 @@
 using System.Collections;
-using System.General.DOTween;
+using System.General;
 using Data.Animation.DOTween.Basic;
 using DG.Tweening;
 using UnityEngine;
 
-namespace System
+namespace System.Singleton
 {
     [RequireComponent(typeof(DoAnimation))]
-    internal sealed class SceneChangeSystem : MonoBehaviour
+    internal sealed class SceneLoadSystem : MonoBehaviour
     {
         [field: Header("Child System")]
         [field: SerializeField] private DoAnimation DoAnimation;

@@ -2,7 +2,7 @@ using Data.Animation.DOTween.Basic;
 using DG.Tweening;
 using UnityEngine;
 
-namespace System.General.DOTween
+namespace System.General
 {
     internal sealed class DoAnimation : MonoBehaviour
     {

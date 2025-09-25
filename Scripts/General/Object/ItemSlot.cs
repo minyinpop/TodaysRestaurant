@@ -1,6 +1,5 @@
 using System;
 using System.General;
-using System.General.DOTween;
 using Data.Animation.DOTween.Basic;
 using Data.Item.Base;
 using DG.Tweening;
