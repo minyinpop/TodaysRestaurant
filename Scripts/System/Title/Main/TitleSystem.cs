@@ -53,6 +53,7 @@ namespace System.Title.Main
         
         private void OnQuitButtonClicked()
         {
+            Application.Quit();
         }
         #endregion
     }
