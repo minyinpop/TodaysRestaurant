@@ -257,7 +257,7 @@ namespace PixelCrushers.DialogueSystem
             OpenOnStartConversation(portraitSprite, portraitActorName, displayName, dialogueActor);
         }
 
-        [System.Obsolete("Use OpenOnStartConversation(Sprite,string,DialogueActor) instead.")]
+        [Obsolete("Use OpenOnStartConversation(Sprite,string,DialogueActor) instead.")]
         public virtual void OpenOnStartConversation(Texture2D portraitTexture, string portraitName, DialogueActor dialogueActor)
         {
             OpenOnStartConversation(UITools.CreateSprite(portraitTexture), portraitName, portraitName, dialogueActor);
