@@ -39,8 +39,7 @@ namespace System.Title.Main
                 () =>
                 {
                     // onComplete
-                    Debug.Log("Complete.");
-                    PlayDialogue?.Invoke("Start", 1);
+                    PlayDialogue?.Invoke("Start", 0);
                 });
         }
 

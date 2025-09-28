@@ -37,10 +37,13 @@ namespace Utage4
 
         public void SetCommandArg(AdvCommand command)
         {
-            var animationName = command.ParseCellOptional<string>(AdvColumnName.Arg2, "");
+            var trackIndex = command.ParseCellOptional(AdvColumnName.Arg7, 0);
+            var animationName = command.ParseCellOptional(AdvColumnName.Arg8, "");
+            var isLoop = command.ParseCellOptional(AdvColumnName.Arg9, false);
+            
             if (string.IsNullOrEmpty(animationName)) return;
             // var fadeTime = command.ParseCellOptional<float>(AdvColumnName.Arg6, 0.2f);
-            SkeletonGraphic.AnimationState.SetAnimation(0, animationName, true);
+            SkeletonGraphic.AnimationState.SetAnimation(trackIndex, animationName, isLoop);
         }
 
         private const int Version = 0;
