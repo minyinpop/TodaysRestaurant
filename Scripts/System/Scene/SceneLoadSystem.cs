@@ -42,7 +42,7 @@ namespace System.Scene
             }
         }
 
-        private void ChangeScene(string sceneName)
+        private void ChangeScene(string sceneName, Action onComplete)
         {
             ChangeSceneCor = ChangeSceneCoroutine();
             StartCoroutine(ChangeSceneCor);
@@ -99,6 +99,7 @@ namespace System.Scene
                         complete = true;
                     });
                 yield return new WaitUntil(predicate: () => complete);
+                onComplete?.Invoke();
             }
         }
     }

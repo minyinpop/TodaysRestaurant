@@ -15,7 +15,8 @@ namespace System.Title.Main
         [field: SerializeField] private Button OptionButton;
         [field: SerializeField] private Button QuitButton;
 
-        public static event Action<string> OnClickStartGameButton;
+        public static event Action<string, Action> OnClickStartGameButton;
+        public static event Action<string, int> PlayDialogue;
 
         private void OnEnable()
         {
@@ -34,7 +35,12 @@ namespace System.Title.Main
         #region Button
         private void OnStartButtonClicked()
         {
-            OnClickStartGameButton?.Invoke("Battle");
+            OnClickStartGameButton?.Invoke("Dialogue System",
+                () =>
+                {
+                    // onComplete
+                    PlayDialogue?.Invoke("Start", 0);
+                });
         }
 
         private void OnOptionButtonClicked()
