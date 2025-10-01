@@ -39,7 +39,7 @@ namespace General.Object
         public void Add(ITem item, Action onComplete)
         {
             Item = item;
-            Item.GetInformationSettings(out var sprite);
+            Item.GetItemSprite(out var sprite);
             ItemImage.sprite = sprite;
             Rect.localScale = Vector2.one * 1.25f;
             DoAnimation.DoScale(Rect, new DoScale(Vector2.one, .5f, Ease.OutBounce),

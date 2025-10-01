@@ -6,6 +6,7 @@ using System.Linq;
 using Data.Animation.DOTween.Basic;
 using Data.General;
 using Data.Item.Base;
+using Data.Item.Type.Ingredient;
 using TMPro;
 using UnityEngine;
 
@@ -193,7 +194,7 @@ namespace General.Object
         
         private IEnumerator ShowItemCor;
 
-        public void ShowItem(List<ItemSO> items, Action onComplete)
+        public void ShowItem(List<IngredientSO> items, Action onComplete)
         {
             ShowItemCor = ShowItemCoroutine();
             StartCoroutine(ShowItemCor);

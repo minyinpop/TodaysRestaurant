@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Message.Child;
 using Data.General;
 using Data.Item.Base;
+using Data.Item.Type.Ingredient;
 using UnityEngine;
 // using Utage;
 
@@ -29,7 +30,7 @@ namespace System.Message.Main
         
         #region ItemGetSystem
         [field: SerializeField] private ItemGetSystem ItemGetSystem;
-        [field: SerializeField] private List<ItemSO> TempItems;
+        [field: SerializeField] private List<IngredientSO> TempItems;
 
         public void ShowItemGetUI(PopUpUIContent content, Action onConfirm)
         {

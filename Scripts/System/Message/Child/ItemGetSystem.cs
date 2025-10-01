@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Data.Animation.DOTween.Basic;
 using Data.General;
 using Data.Item.Base;
+using Data.Item.Type.Ingredient;
 using DG.Tweening;
 using General.Object;
 using UnityEngine;
@@ -24,7 +25,7 @@ namespace System.Message.Child
             }
         }
 
-        public void Show(PopUpUIContent content, List<ItemSO> items, Action onConfirm)
+        public void Show(PopUpUIContent content, List<IngredientSO> items, Action onConfirm)
         {
             ShowCor = ShowCoroutine();
             StartCoroutine(ShowCor);
