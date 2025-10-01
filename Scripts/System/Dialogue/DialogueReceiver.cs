@@ -1,12 +1,12 @@
 using System.Title.Main;
 using UnityEngine;
-using Utage;
+// using Utage;
 
 namespace System.Dialogue
 {
     internal sealed class DialogueReceiver : MonoBehaviour
     {
-        [field: SerializeField] private AdvEngine AdvEngine;
+        // [field: SerializeField] private AdvEngine AdvEngine;
 
         private void OnEnable()
         {
@@ -20,7 +20,7 @@ namespace System.Dialogue
 
         private void StartScenario(string label, int page)
         {
-            AdvEngine.StartScenario(label, page);
+            // AdvEngine.StartScenario(label, page);
         }
     }
 }
