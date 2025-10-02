@@ -4,13 +4,12 @@ using UnityEngine;
 namespace Data.Item.Type.Ingredient
 {
     [CreateAssetMenu(menuName = "Minyinpop/Item/Ingredient Data", fileName = "New Data")]
-    internal sealed class IngredientSO : ScriptableObject, ITem
+    internal sealed class IngredientSO : ItemSO
     {
         #region Name
         [field: Header("Name")]
         [field: SerializeField] private string ItemName;
-
-        public void GetItemName(out string itemName)
+        public override void GetItemName(out string itemName)
         {
             itemName = ItemName;
         }
@@ -19,10 +18,27 @@ namespace Data.Item.Type.Ingredient
         #region Sprite
         [field: Header("Sprite")]
         [field: SerializeField] private Sprite ItemSprite;
-        
-        public void GetItemSprite(out Sprite itemSprite)
+        public override void GetItemSprite(out Sprite itemSprite)
         {
             itemSprite = ItemSprite;
+        }
+        #endregion
+        
+        #region Cook Time
+        [field: Header("Cook Time")]
+        [field: SerializeField] private float CookTime;
+        public override void GetCookTime(out float cookTime)
+        {
+            cookTime = CookTime;
+        }
+        #endregion
+        
+        #region Price
+        [field: Header("Price")]
+        [field: SerializeField] private int Price;
+        public override void GetPrice(out int price)
+        {
+            price = Price;
         }
         #endregion
     }

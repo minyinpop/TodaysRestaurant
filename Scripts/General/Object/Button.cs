@@ -3,9 +3,11 @@ using System.General;
 using Data.Animation.DOTween.Basic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace General.Object
 {
+    [RequireComponent(typeof(Image))]
     [RequireComponent(typeof(DoAnimation))]
     internal sealed class Button : PointerEvent
     {
