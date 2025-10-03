@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 264325939416065817}
   - component: {fileID: 174882334131752031}
   - component: {fileID: 3459452237623242829}
-  - component: {fileID: 4938076472476984920}
-  - component: {fileID: 6637823701036559978}
+  - component: {fileID: 3384555392931546114}
+  - component: {fileID: 4754010815345393634}
   m_Layer: 0
-  m_Name: Item Slot
+  m_Name: Item Get Slot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -78,7 +78,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &4938076472476984920
+--- !u!114 &3384555392931546114
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -87,13 +87,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 2384381619580153008}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dcae560a0a7448d995f3e3439a3c50fd, type: 3}
+  m_Script: {fileID: 11500000, guid: 22e73a8681fd4f91b56f08a22763dc03, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::System.General.Item_Slot.ItemSlot
-  Rect: {fileID: 5710194468911876270}
+  m_EditorClassIdentifier: Assembly-CSharp::General.Object.Item_Slot.Type.ItemGetSlot
+  BackgroundRect: {fileID: 5710194468911876270}
   ItemImage: {fileID: 1793524457923033734}
-  DoAnimation: {fileID: 6637823701036559978}
---- !u!114 &6637823701036559978
+  DoAnimation: {fileID: 4754010815345393634}
+  Interactable: 1
+--- !u!114 &4754010815345393634
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -104,7 +105,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a817bf6649934d0e8fef10e3075e14a7, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::System.General.DOTween.DoAnimation
+  m_EditorClassIdentifier: Assembly-CSharp::System.General.DoAnimation
 --- !u!1 &2741992694546838074
 GameObject:
   m_ObjectHideFlags: 0

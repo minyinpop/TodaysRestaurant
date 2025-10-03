@@ -27,6 +27,20 @@ namespace System.Scene
         
         private IEnumerator ChangeSceneCor;
 
+        private static GameObject Instance;
+
+        private void Awake()
+        {
+            if (Instance is not null)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
+            Instance = gameObject;
+            DontDestroyOnLoad(gameObject);
+        }
+
         private void OnEnable()
         {
             TitleSystem.OnClickStartGameButton += ChangeScene;

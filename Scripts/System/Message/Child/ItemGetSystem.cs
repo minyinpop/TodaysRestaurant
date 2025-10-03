@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using Data.Animation.DOTween.Basic;
 using Data.General;
-using Data.Item.Base;
 using Data.Item.Type.Ingredient;
 using DG.Tweening;
 using General.Object;
