@@ -12,6 +12,11 @@ namespace General.Object.Item_Slot.Base
         protected override void OnPointerExit() { }
         protected override void OnPointerClick() { }
 
-        public virtual bool Add(ItemSO item, Action onComplete) { return false; }
+        public virtual void Add(ItemSO item) { }
+        public virtual void Add(ItemSO item, Action onComplete) { }
+        
+        public virtual void Get(ref ItemSO item) { item = null; }
+
+        public virtual bool IsEmpty() { return true; }
     }
 }

@@ -1,4 +1,3 @@
-using System;
 using System.General;
 using Data.Animation.DOTween.Basic;
 using Data.Item.Base;
@@ -24,8 +23,6 @@ namespace General.Object.Item_Slot.Type
         [field: Header("Develop Only")]
         [field: SerializeField] private ItemSO ItemData;
         
-        public static event Func<ItemSO, bool> OnClicked;
-        
         #region PointerEvent
         protected override void OnPointerEnter()
         {
@@ -38,33 +35,29 @@ namespace General.Object.Item_Slot.Type
             if (!Interactable) return;
             DoAnimation.DoScale(BackgroundRect, new DoScale(Vector2.one, .2f, Ease.OutExpo));
         }
-
-        protected override void OnPointerClick()
-        {
-            if (!Interactable) return;
-            if (OnClicked?.Invoke(ItemData) is true)
-            {
-            }
-            else
-            {
-            }
-        }
         #endregion
 
-        public override bool Add(ItemSO item, Action onComplete)
+        public override void Add(ItemSO item)
         {
-            if (item is null) return false;
+            if (item is null) return;
             ItemData = item;
             ItemData.GetItemSprite(out var sprite);
             ItemImage.sprite = sprite;
-            BackgroundRect.localScale = Vector2.one * 1.25f;
-            DoAnimation.DoScale(BackgroundRect, new DoScale(Vector2.one, .5f, Ease.OutBounce),
-                onComplete: () =>
-                {
-                    Interactable = true;
-                    onComplete?.Invoke();
-                });
-            return true;
+            ItemImage.gameObject.SetActive(true);
+        }
+
+        public override void Get(ref ItemSO item)
+        {
+            if (ItemData is null) item = null;
+            item = ItemData;
+            ItemData = null;
+            ItemImage.gameObject.SetActive(false);
+            ItemImage.sprite = null;
+        }
+
+        public override bool IsEmpty()
+        {
+            return ItemData is null;
         }
     }
 }

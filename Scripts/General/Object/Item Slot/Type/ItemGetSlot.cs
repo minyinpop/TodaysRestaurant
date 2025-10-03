@@ -35,12 +35,13 @@ namespace General.Object.Item_Slot.Type
             DoAnimation.DoScale(BackgroundRect, new DoScale(Vector2.one, .2f, Ease.OutExpo));
         }
         
-        public override bool Add(ItemSO item, Action onComplete)
+        public override void Add(ItemSO item, Action onComplete)
         {
-            if (item is null) return false;
+            if (item is null) return;
             ItemData = item;
             ItemData.GetItemSprite(out var sprite);
             ItemImage.sprite = sprite;
+            ItemImage.gameObject.SetActive(true);
             BackgroundRect.localScale = Vector2.one * 1.25f;
             DoAnimation.DoScale(BackgroundRect, new DoScale(Vector2.one, .5f, Ease.OutBounce),
                 onComplete: () =>
@@ -48,7 +49,6 @@ namespace General.Object.Item_Slot.Type
                     Interactable = true;
                     onComplete?.Invoke();
                 });
-            return true;
         }
     }
 }

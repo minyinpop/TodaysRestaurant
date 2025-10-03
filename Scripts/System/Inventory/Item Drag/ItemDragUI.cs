@@ -1,5 +1,4 @@
 using System.Input.Main;
-using Data.Item.Base;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,18 +9,15 @@ namespace System.Inventory.Item_Drag
         [field: Header("Component")]
         [field: SerializeField] private Image Image;
         
-        private ItemSO ItemData;
-
         private void LateUpdate()
         {
             InputSystem.GetMousePosition(out var position);
             transform.position = position;
         }
         
-        public void Add(ItemSO item)
+        public void SetSprite(Sprite itemSprite)
         {
-            item.GetItemSprite(out var sprite);
-            Image.sprite = sprite;
+            Image.sprite = itemSprite;
         }
     }
 }
