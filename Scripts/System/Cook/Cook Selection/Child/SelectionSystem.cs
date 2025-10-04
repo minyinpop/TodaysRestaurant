@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using System.Cook.Selection_UI.Object;
+using System.Cook.Cook_Selection.Object;
 using System.General;
 using Data.Animation.DOTween.Basic;
 using Data.Item.Type.Dish;
@@ -8,10 +8,10 @@ using DG.Tweening;
 using General.Object;
 using UnityEngine;
 
-namespace System.Cook.Selection_UI.Main
+namespace System.Cook.Cook_Selection.Child
 {
     [RequireComponent(typeof(DoAnimation))]
-    internal sealed class CookSelectionSystem : MonoBehaviour
+    internal sealed class SelectionSystem : MonoBehaviour
     {
         [field: Header("Child System")]
         [field: SerializeField] private DoAnimation DoAnimation;
@@ -29,17 +29,7 @@ namespace System.Cook.Selection_UI.Main
         [field: Header("Data")]
         [field: SerializeField] private PlayerSO PlayerData;
 
-        private void OnEnable()
-        {
-            Cookware.Cookware.OnClickEmptyBubble += Open;
-        }
-
-        private void OnDisable()
-        {
-            Cookware.Cookware.OnClickEmptyBubble -= Open;
-        }
-
-        private void Open(Action<DishSO> onConfirm)
+        public void Show(Action<DishSO> onSelect)
         {
             PlayerData.GetUnlockedDishes(out var dishes);
             foreach (var dish in dishes)
@@ -67,13 +57,7 @@ namespace System.Cook.Selection_UI.Main
 
             void OnClickStickyNote(DishSO dishData)
             {
-                TurnOffAllButtons();
-                DoAnimation.DoFade_CanvasGroup(UICanvasGroup, new DoFade_CanvasGroup(0, .2f, Ease.Linear),
-                    onComplete: () =>
-                    {
-                        onConfirm?.Invoke(dishData);
-                        UIObject.SetActive(false);
-                    });
+                onSelect?.Invoke(dishData);
             }
 
             void OnClickCloseButton()
@@ -82,8 +66,11 @@ namespace System.Cook.Selection_UI.Main
                 DoAnimation.DoFade_CanvasGroup(UICanvasGroup, new DoFade_CanvasGroup(0, .2f, Ease.Linear),
                     onComplete: () =>
                     {
-                        onConfirm?.Invoke(null);
                         UIObject.SetActive(false);
+                        foreach (var stickyNote in StickyNotes)
+                            Destroy(stickyNote.gameObject);
+                        StickyNotes.Clear();
+                        onSelect?.Invoke(null);
                     });
             }
 
@@ -98,6 +85,11 @@ namespace System.Cook.Selection_UI.Main
                 CloseButton.SetInteractable(false);
                 CloseButton.OnClick -= OnClickCloseButton;
             }
+        }
+
+        public void Hide()
+        {
+            // TODO
         }
     }
 }

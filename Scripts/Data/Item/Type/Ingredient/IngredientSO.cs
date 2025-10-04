@@ -1,3 +1,4 @@
+using Data.General.Enum;
 using Data.Item.Base;
 using UnityEngine;
 
@@ -23,7 +24,18 @@ namespace Data.Item.Type.Ingredient
             itemSprite = ItemSprite;
         }
         #endregion
-        
+
+        #region Item Type
+        [field: Header("Item Type")]
+        [field: SerializeField] private ItemType ItemType;
+        [field: SerializeField, Range(1, 3)] private int ItemLevel;
+        public override void GetItemType(out ItemType itemType, out int itemLevel)
+        {
+            itemType = ItemType;
+            itemLevel = ItemLevel;
+        }
+        #endregion
+
         #region Cook Time
         [field: Header("Cook Time")]
         [field: SerializeField] private float CookTime;

@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace System.Cook.Cookware
 {
-    internal sealed class Cookware : MonoBehaviour
+    internal sealed class CookwareSystem : MonoBehaviour
     {
         [field: Header("Bubble")]
         [field: SerializeField] private GameObject EmptyBubblePrefab;

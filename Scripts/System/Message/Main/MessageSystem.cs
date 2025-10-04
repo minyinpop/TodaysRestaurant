@@ -1,10 +1,8 @@
 using System.Collections.Generic;
 using System.Message.Child;
 using Data.General;
-using Data.Item.Base;
 using Data.Item.Type.Ingredient;
 using UnityEngine;
-// using Utage;
 
 namespace System.Message.Main
 {
@@ -13,7 +11,7 @@ namespace System.Message.Main
         #region TipSystem
         [field: SerializeField] private TipSystem TipSystem;
 
-        public void ShowTipUI(PopUpUIContent content, Action onConfirm)
+        public void ShowTipUI(PopUpUIContent content, Action onConfirm = null)
         {
             TipSystem?.Show(content, onConfirm);
         }
@@ -22,7 +20,7 @@ namespace System.Message.Main
         #region SwitchSystem
         [field: SerializeField] private SwitchSystem SwitchSystem;
 
-        public void ShowSwitchUI(PopUpUIContent content, Action onShow, Action onConfirm, Action onCancel, Action onClose)
+        public void ShowSwitchUI(PopUpUIContent content, Action onShow = null, Action onConfirm = null, Action onCancel = null, Action onClose = null)
         {
             SwitchSystem?.Show(content, onShow, onConfirm, onCancel, onClose);
         }
@@ -32,7 +30,7 @@ namespace System.Message.Main
         [field: SerializeField] private ItemGetSystem ItemGetSystem;
         [field: SerializeField] private List<IngredientSO> TempItems;
 
-        public void ShowItemGetUI(PopUpUIContent content, Action onConfirm)
+        public void ShowItemGetUI(PopUpUIContent content, Action onConfirm = null)
         {
             ItemGetSystem?.Show(content, TempItems, onConfirm);
         }
@@ -41,7 +39,7 @@ namespace System.Message.Main
         #region DefeatSystem
         [field: SerializeField] private DefeatSystem DefeatSystem;
 
-        public void ShowDefeatUI(PopUpUIContent content, Action onConfirm)
+        public void ShowDefeatUI(PopUpUIContent content, Action onConfirm = null)
         {
             DefeatSystem?.Show(content, onConfirm);
         }
@@ -50,7 +48,7 @@ namespace System.Message.Main
         #region OptionSystem
         [field: SerializeField] private OptionSystem OptionSystem;
 
-        public void ShowOptionUI(PopUpUIContent content, Action onClose)
+        public void ShowOptionUI(PopUpUIContent content, Action onClose = null)
         {
             OptionSystem?.Show(content, onClose);
         }

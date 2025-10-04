@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Data.General.Enum;
 using UnityEngine;
 
 namespace Data.Item.Base
@@ -16,6 +17,14 @@ namespace Data.Item.Base
         public virtual void GetItemSprite(out Sprite itemSprite)
         {
             itemSprite = null;
+        }
+        #endregion
+
+        #region Item Type
+        public virtual void GetItemType(out ItemType itemType, out int itemLevel)
+        {
+            itemType = ItemType.Null;
+            itemLevel = 1;
         }
         #endregion
         

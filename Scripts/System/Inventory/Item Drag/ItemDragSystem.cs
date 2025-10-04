@@ -16,7 +16,7 @@ namespace System.Inventory.Item_Drag
         
         [field: Header("Event System")]
         [field: SerializeField] private EventSystem EventSystem;
-        [field: SerializeField] private string InventorySlotTag;
+        [field: SerializeField] private string ItemSlotTag;
         
         private GameObject DragUI;
         private ItemDragUI DragUIScript;
@@ -59,7 +59,7 @@ namespace System.Inventory.Item_Drag
                 };
                 var results = new List<RaycastResult>();
                 EventSystem.RaycastAll(pointer, results);
-                foreach (var result in results.Where(result => result.gameObject.CompareTag(InventorySlotTag)))
+                foreach (var result in results.Where(result => result.gameObject.CompareTag(ItemSlotTag)))
                 {
                     clickedSlot = result.gameObject;
                     return;
@@ -70,8 +70,7 @@ namespace System.Inventory.Item_Drag
             
             void TryToTakeItem()
             {
-                ItemSO item = null;
-                slot.GetComponent<ItemSlot>().Get(ref item);
+                slot.GetComponent<ItemSlot>().Get(out var item);
                 if (item is null) return;
                 DraggedItemData = item;
                 DragUI = Instantiate(DragUIPrefab, DragUIParent);
@@ -82,7 +81,7 @@ namespace System.Inventory.Item_Drag
 
             void PutItemToEmptySlot(ItemSlot currentItemSlotScript)
             {
-                currentItemSlotScript.Add(DraggedItemData);
+                if (!currentItemSlotScript.Add(DraggedItemData)) return;
                 Destroy(DragUI);
                 DragUI = null;
                 DragUIScript = null;
@@ -91,8 +90,7 @@ namespace System.Inventory.Item_Drag
 
             void SwitchItem(ItemSlot currentItemSlotScript)
             {
-                ItemSO item = null;
-                currentItemSlotScript.Get(ref item);
+                currentItemSlotScript.Get(out var item);
                 currentItemSlotScript.Add(DraggedItemData);
                 DraggedItemData = item;
                 DraggedItemData.GetItemSprite(out var sprite);

@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 namespace General.Object.Item_Slot.Type
 {
-    internal sealed class InventorySlot : ItemSlot
+    internal sealed class PutIngredientSlot : ItemSlot
     {
         [field: Header("Object")]
         [field: SerializeField] private RectTransform BackgroundRect;
@@ -19,10 +19,12 @@ namespace General.Object.Item_Slot.Type
         
         [field: Header("State")]
         [field: SerializeField] private bool Interactable;
+        [field: SerializeField] private Color HaveItemColor;
+        [field: SerializeField] private Color NoItemColor;
 
-        [field: Header("Develop Only")]
-        [field: SerializeField] private ItemSO ItemData;
-        
+        private ItemSO TargetItemData;
+        private ItemSO ItemData;
+
         #region PointerEvent
         protected override void OnPointerEnter()
         {
@@ -40,22 +42,34 @@ namespace General.Object.Item_Slot.Type
         public override bool Add(ItemSO item)
         {
             if (item is null) return false;
-            ItemData = item;
-            ItemData.GetItemSprite(out var sprite);
-            ItemImage.sprite = sprite;
-            ItemImage.gameObject.SetActive(true);
+            if (ItemData is not null) return false;
+            
+            if (TargetItemData is null)
+            {
+                TargetItemData = item;
+                TargetItemData.GetItemSprite(out var sprite);
+                ItemImage.sprite = sprite;
+            }
+            else
+            {
+                item.GetItemType(out var type01, out var level01);
+                TargetItemData.GetItemType(out var type02, out var level02);
+                if (!Equals(type01, type02)) return false; // TODO 物品類型不同會跳出 Message System
+                if (level01 < level02) return false; // TODO 物品類型相同但等級比 TargetItemData 還低，一樣跳出 Message System
+                ItemData = item;
+                ItemData.GetItemSprite(out var sprite);
+                ItemImage.sprite = sprite;
+                ItemImage.color = HaveItemColor;
+            }
+
             return true;
         }
 
         public override void Get(out ItemSO item)
         {
-            if (ItemData is null) item = null;
-            item = ItemData;
-            ItemData = null;
-            ItemImage.gameObject.SetActive(false);
-            ItemImage.sprite = null;
+            item = null;
         }
-
+        
         public override bool IsEmpty()
         {
             return ItemData is null;
