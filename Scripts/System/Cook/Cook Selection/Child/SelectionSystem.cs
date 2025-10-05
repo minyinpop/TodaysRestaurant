@@ -29,6 +29,16 @@ namespace System.Cook.Cook_Selection.Child
         [field: Header("Data")]
         [field: SerializeField] private PlayerSO PlayerData;
 
+        private void OnEnable()
+        {
+            CloseButton.OnClick += OnCloseButtonClicked;
+        }
+        
+        private void OnDisable()
+        {
+            CloseButton.OnClick -= OnCloseButtonClicked;
+        }
+
         public void Show(Action<DishSO> onSelect)
         {
             PlayerData.GetUnlockedDishes(out var dishes);
@@ -45,51 +55,40 @@ namespace System.Cook.Cook_Selection.Child
             DoAnimation.DoFade_CanvasGroup(UICanvasGroup, new DoFade_CanvasGroup(1, .2f, Ease.Linear),
                 onComplete: () =>
                 {
-                    CloseButton.OnClick += OnClickCloseButton;
                     CloseButton.SetInteractable(true);
                     foreach (var stickyNote in StickyNotes)
                     {
-                        stickyNote.OnClick += OnClickStickyNote;
+                        stickyNote.OnClick += OnStickyNoteClicked;
                         stickyNote.SetInteractable(true);
                     }
                 });
             return;
 
-            void OnClickStickyNote(DishSO dishData)
+            void OnStickyNoteClicked(DishSO dishData)
             {
                 onSelect?.Invoke(dishData);
             }
-
-            void OnClickCloseButton()
-            {
-                TurnOffAllButtons();
-                DoAnimation.DoFade_CanvasGroup(UICanvasGroup, new DoFade_CanvasGroup(0, .2f, Ease.Linear),
-                    onComplete: () =>
-                    {
-                        UIObject.SetActive(false);
-                        foreach (var stickyNote in StickyNotes)
-                            Destroy(stickyNote.gameObject);
-                        StickyNotes.Clear();
-                        onSelect?.Invoke(null);
-                    });
-            }
-
-            void TurnOffAllButtons()
-            {
-                foreach (var stickyNote in StickyNotes)
-                {
-                    stickyNote.SetInteractable(false);
-                    stickyNote.OnClick -= OnClickStickyNote;
-                }
-
-                CloseButton.SetInteractable(false);
-                CloseButton.OnClick -= OnClickCloseButton;
-            }
         }
 
-        public void Hide()
+        public void Hide(Action onComplete = null)
         {
-            // TODO
+            CloseButton.SetInteractable(false);
+            foreach (var stickyNote in StickyNotes)
+                stickyNote.SetInteractable(false);
+            DoAnimation.DoFade_CanvasGroup(UICanvasGroup, new DoFade_CanvasGroup(0, .2f, Ease.Linear),
+                onComplete: () =>
+                {
+                    UIObject.SetActive(false);
+                    foreach (var stickyNote in StickyNotes)
+                        Destroy(stickyNote.gameObject);
+                    StickyNotes.Clear();
+                    onComplete?.Invoke();
+                });
+        }
+
+        private void OnCloseButtonClicked()
+        {
+            Hide();
         }
     }
 }

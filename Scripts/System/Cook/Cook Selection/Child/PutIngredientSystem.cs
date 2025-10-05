@@ -22,20 +22,27 @@ namespace System.Cook.Cook_Selection.Child
         [field: Header("UI")]
         [field: SerializeField] private GameObject UIObject;
         [field: SerializeField] private CanvasGroup UICanvasGroup;
-        [field: SerializeField] private Button CookButton;
-        [field: SerializeField] private Button ReturnButton;
+        [field: SerializeField] private Button ConfirmButton;
+        [field: SerializeField] private Button CancelButton;
         
         [field: Header("Item Slot")]
         [field: SerializeField] private GameObject ItemSlotPrefab;
         [field: SerializeField] private Transform SpawnParent;
         private readonly List<ItemSlot> ItemSlots = new();
-        
-        private DishSO SelectedDishData;
 
-        public void Show(DishSO selectedDish, Action onCook, Action onReturn)
+        private void OnEnable()
         {
-            SelectedDishData = selectedDish;
-            SelectedDishData.GetRecipeSheet(out var recipeSheet);
+            CancelButton.OnClick += OnCancelButtonClicked;
+        }
+        
+        private void OnDisable()
+        {
+            CancelButton.OnClick -= OnCancelButtonClicked;
+        }
+
+        public void Show(DishSO selectedDishData, Action onConfirm)
+        {
+            selectedDishData.GetRecipeSheet(out var recipeSheet);
 
             foreach (var item in recipeSheet)
             {
@@ -49,14 +56,13 @@ namespace System.Cook.Cook_Selection.Child
             DoAnimation.DoFade_CanvasGroup(UICanvasGroup, new DoFade_CanvasGroup(1, .2f, Ease.Linear),
                 onComplete: () =>
                 {
-                    CookButton.OnClick += OnClickCookButton;
-                    CookButton.SetInteractable(true);
-                    ReturnButton.OnClick += OnClickReturnButton;
-                    ReturnButton.SetInteractable(true);
+                    ConfirmButton.OnClick += OnConfirmButtonClicked;
+                    ConfirmButton.SetInteractable(true);
+                    CancelButton.SetInteractable(true);
                 });
             return;
 
-            void OnClickCookButton()
+            void OnConfirmButtonClicked()
             {
                 if (ItemSlots.Any(itemSlot => itemSlot.IsEmpty()))
                 {
@@ -68,31 +74,28 @@ namespace System.Cook.Cook_Selection.Child
                     return;
                 }
 
-                TurnOffAllButtons();
-                onCook?.Invoke();
+                onConfirm?.Invoke();
             }
-            
-            void OnClickReturnButton()
-            {
-                TurnOffAllButtons();
-                DoAnimation.DoFade_CanvasGroup(UICanvasGroup, new DoFade_CanvasGroup(0, .2f, Ease.Linear),
-                    onComplete: () =>
-                    {
-                        UIObject.SetActive(false);
-                        foreach (var itemSlot in ItemSlots)
-                            Destroy(itemSlot.gameObject);
-                        ItemSlots.Clear();
-                        onReturn?.Invoke();
-                    });
-            }
+        }
 
-            void TurnOffAllButtons()
-            {
-                CookButton.SetInteractable(false);
-                CookButton.OnClick -= OnClickCookButton;
-                ReturnButton.SetInteractable(false);
-                ReturnButton.OnClick -= OnClickReturnButton;
-            }
+        public void Hide(Action onComplete = null)
+        {
+            ConfirmButton.SetInteractable(false);
+            CancelButton.SetInteractable(false);
+            DoAnimation.DoFade_CanvasGroup(UICanvasGroup, new DoFade_CanvasGroup(0, .2f, Ease.Linear),
+                onComplete: () =>
+                {
+                    UIObject.SetActive(false);
+                    foreach (var itemSlot in ItemSlots)
+                        Destroy(itemSlot.gameObject);
+                    ItemSlots.Clear();
+                    onComplete?.Invoke();
+                });
+        }
+        
+        private void OnCancelButtonClicked()
+        {
+            Hide();
         }
     }
 }

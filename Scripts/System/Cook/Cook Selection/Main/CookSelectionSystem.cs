@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Cook.Cook_Selection.Child;
 using System.Cook.Cookware;
 using Data.Item.Type.Dish;
@@ -11,6 +12,8 @@ namespace System.Cook.Cook_Selection.Main
         [field: SerializeField] private SelectionSystem SelectionSystem;
         [field: SerializeField] private PutIngredientSystem PutIngredientSystem;
 
+        private IEnumerator CloseUICor;
+
         private void OnEnable()
         {
             CookwareSystem.OnClickEmptyBubble += OnClickEmptyBubble;
@@ -19,6 +22,11 @@ namespace System.Cook.Cook_Selection.Main
         private void OnDisable()
         {
             CookwareSystem.OnClickEmptyBubble -= OnClickEmptyBubble;
+            if (CloseUICor is not null)
+            {
+                StopCoroutine(CloseUICor);
+                CloseUICor = null;
+            }
         }
 
         private void OnClickEmptyBubble(Action<DishSO> onConfirm)
@@ -27,13 +35,23 @@ namespace System.Cook.Cook_Selection.Main
                 onSelect: selectedDishData =>
                 {
                     PutIngredientSystem.Show(selectedDishData,
-                        onCook: () =>
+                        onConfirm: () =>
                         {
-                            Debug.Log("Cooked.");
-                        },
-                        onReturn: () =>
-                        {
-                            // TODO Return.
+                            CloseUICor = CloseUICoroutine();
+                            StartCoroutine(CloseUICor);
+                            return;
+
+                            IEnumerator CloseUICoroutine()
+                            {
+                                var isSelectionUIClosed = false;
+                                var isPutIngredientUIClosed = false;
+                                SelectionSystem.Hide(
+                                    onComplete: () => isSelectionUIClosed = true);
+                                PutIngredientSystem.Hide(
+                                    onComplete: () => isPutIngredientUIClosed = true);
+                                yield return new WaitUntil(() => isSelectionUIClosed && isPutIngredientUIClosed);
+                                onConfirm?.Invoke(selectedDishData);
+                            }
                         });
                 });
         }

@@ -32,63 +32,61 @@ namespace System.Cook.Cookware
         }
         
         #region State Machine
-        #region OnEmptyState
-        private void OnEmptyState()
-        {
-            StateMachine.ChangeState(new OnEmpty(
-                onEnter: () =>
+            #region OnEmptyState
+                private void OnEmptyState()
                 {
-                    Bubble = Instantiate(EmptyBubblePrefab, SpawnParent);
-                    BubbleScript = Bubble.GetComponent<Button>();
-                    BubbleScript.SetInteractable(true);
-                    BubbleScript.OnClick += OnClick;
-                },
-                onExit: () =>
-                {
-                    BubbleScript.OnClick -= OnClick;
-                    BubbleScript.SetInteractable(false);
-                    Destroy(Bubble);
-                    Bubble = null;
-                    BubbleScript = null;
-                }));
-            return;
-            
-            void OnClick()
-            {
-                BubbleScript.SetInteractable(false);
-                OnClickEmptyBubble?.Invoke(
-                    dishData =>
+                    StateMachine.ChangeState(new OnEmpty(
+                        onEnter: () =>
+                        {
+                            Bubble = Instantiate(EmptyBubblePrefab, SpawnParent);
+                            BubbleScript = Bubble.GetComponent<Button>();
+                            BubbleScript.SetInteractable(true);
+                            BubbleScript.OnClick += OnClick;
+                        },
+                        onExit: () =>
+                        {
+                            Destroy(Bubble);
+                            Bubble = null;
+                            BubbleScript = null;
+                        }));
+                    return;
+                    
+                    void OnClick()
                     {
-                        DishData = dishData;
-                        if (dishData is null) BubbleScript.SetInteractable(true);
-                        else OnCookState();
-                    });
-            }
-        }
-        #endregion
+                        BubbleScript.SetInteractable(false);
+                        OnClickEmptyBubble?.Invoke(
+                            dishData =>
+                            {
+                                DishData = dishData;
+                                if (dishData is null) BubbleScript.SetInteractable(true);
+                                else OnCookState();
+                            });
+                    }
+                }
+            #endregion
 
         #region OnCookState
-        private void OnCookState()
-        {
-            StateMachine.ChangeState(new OnCook(
-                onEnter: () =>
+                private void OnCookState()
                 {
-                    Bubble = Instantiate(CookBubblePrefab, SpawnParent);
-                    BubbleScript = Bubble.GetComponent<Button>();
-                    CookCor = CookCoroutine();
-                    StartCoroutine(CookCor);
-                    return;
+                    StateMachine.ChangeState(new OnCook(
+                        onEnter: () =>
+                        {
+                            Bubble = Instantiate(CookBubblePrefab, SpawnParent);
+                            BubbleScript = Bubble.GetComponent<Button>();
+                            CookCor = CookCoroutine();
+                            StartCoroutine(CookCor);
+                            return;
 
-                    IEnumerator CookCoroutine()
-                    {
-                        yield break;
-                    }
-                },
-                onExit: () =>
-                {
-                }));
-        }
-        #endregion
+                            IEnumerator CookCoroutine()
+                            {
+                                yield break;
+                            }
+                        },
+                        onExit: () =>
+                        {
+                        }));
+                }
+            #endregion
         #endregion
     }
 }
