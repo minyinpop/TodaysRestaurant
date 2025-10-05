@@ -34,7 +34,7 @@ namespace System.Message.Child
                 var confirm = false;
                 var cancel = false;
                 onShow?.Invoke();
-                PopUpUI.Show(content, new DoFade_CanvasGroup(1, .2f, Ease.Linear),
+                PopUpUI.Show(content, new DoFade_CanvasGroup(true, .2f, Ease.Linear),
                     onComplete: () =>
                     {
                         PopUpUI.OnClickConfirmButton += OnConfirmButtonClicked;
@@ -51,7 +51,7 @@ namespace System.Message.Child
                 else if (cancel)
                     onCancel?.Invoke();
                 PopUpUI.Hide(
-                    settings: new DoFade_CanvasGroup(0, .2f, Ease.Linear),
+                    settings: new DoFade_CanvasGroup(false, .2f, Ease.Linear),
                     onComplete: () =>
                     {
                         onClose?.Invoke();

@@ -21,8 +21,11 @@ namespace System.Title.Main
         private void OnEnable()
         {
             StartButton.OnClick += OnStartButtonClicked;
+            StartButton.SetInteractable(true);
             OptionButton.OnClick += OnOptionButtonClicked;
+            OptionButton.SetInteractable(true);
             QuitButton.OnClick += OnQuitButtonClicked;
+            QuitButton.SetInteractable(true);
         }
 
         private void OnDisable()

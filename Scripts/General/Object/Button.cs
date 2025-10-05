@@ -19,13 +19,12 @@ namespace General.Object
         
         [field: Header("Child System")]
         [field: SerializeField] private DoAnimation DoAnimation;
-
-        [field: Header("Status")]
-        [field: SerializeField] private bool Interactable;
         
         [field: Header("Animation Settings")]
         [field: SerializeField] private DoScale OnPointerEnterScale;
         [field: SerializeField] private DoScale OnPointerExitScale;
+        
+        private bool Interactable;
 
         public event Action OnClick;
         

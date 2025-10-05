@@ -1,6 +1,8 @@
+using System;
 using System.General;
 using Data.Animation.DOTween.Basic;
 using Data.Item.Base;
+using Data.Item.Type.Dish;
 using DG.Tweening;
 using General.Object.Item_Slot.Base;
 using UnityEngine;
@@ -36,6 +38,11 @@ namespace General.Object.Item_Slot.Type
         {
             if (!Interactable) return;
             DoAnimation.DoScale(BackgroundRect, new DoScale(Vector2.one, .2f, Ease.OutExpo));
+        }
+
+        protected override void OnPointerClick()
+        {
+            
         }
         #endregion
 
@@ -73,6 +80,11 @@ namespace General.Object.Item_Slot.Type
         public override bool IsEmpty()
         {
             return ItemData is null;
+        }
+
+        public override void OnClick(Action<ItemSO> onClick)
+        {
+            onClick?.Invoke(ItemData);
         }
     }
 }
