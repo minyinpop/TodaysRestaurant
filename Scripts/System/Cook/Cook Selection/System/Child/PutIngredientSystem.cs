@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.General;
 using System.Linq;
 using Data.Animation.DOTween.Basic;
+using Data.Item.Base;
 using Data.Item.Type.Dish;
 using General.Object;
 using General.Object.Item_Slot.Base;
@@ -81,16 +82,26 @@ namespace System.Cook.Cook_Selection.System.Child
                 });
         }
 
-        public bool CheckRecipeIsCorrect()
-        {
-            return !ItemSlots.Where(itemSlot => itemSlot.IsEmpty()).Any();
-        }
-
         public void SetInteractable(bool interactable)
         {
             ConfirmButton.SetInteractable(interactable);
             CloseButton.SetInteractable(interactable);
             foreach (var itemSlot in ItemSlots) itemSlot.SetInteractable(interactable);
+        }
+        
+        public bool CheckRecipeIsCorrect()
+        {
+            return !ItemSlots.Where(itemSlot => itemSlot.IsEmpty()).Any();
+        }
+
+        public void GetIngredients(out List<ItemSO> ingredients)
+        {
+            ingredients = new List<ItemSO>();
+            foreach (var itemSlot in ItemSlots)
+            {
+                itemSlot.Get(out var item);
+                ingredients.Add(item);
+            }
         }
     }
 }

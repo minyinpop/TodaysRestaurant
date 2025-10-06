@@ -3,7 +3,6 @@ using System.Cook.Cook_Selection.System.Child;
 using System.Cook.Cookware;
 using System.Message.Main;
 using Data.General;
-using Data.Item.Type.Dish;
 using UnityEngine;
 
 namespace System.Cook.Cook_Selection.System.Main
@@ -34,7 +33,7 @@ namespace System.Cook.Cook_Selection.System.Main
             }
         }
 
-        private void OnEmptyBubbleClicked(Action<DishSO> onConfirm, Action onCancel)
+        private void OnEmptyBubbleClicked(Action<CookDish> onConfirm, Action onCancel)
         {
             SelectionSystem.Show(
                 onSelect: selectedDishData =>
@@ -64,6 +63,28 @@ namespace System.Cook.Cook_Selection.System.Main
 
                             IEnumerator CloseUICoroutine()
                             {
+                                var totalCookTime = 0f;
+                                var totalPrice = 0;
+                
+                                // Dish
+                                selectedDishData.GetCookTime(out var dishCookTime);
+                                selectedDishData.GetPrice(out var dishPrice);
+                                totalCookTime += dishCookTime;
+                                totalPrice += dishPrice;
+                
+                                // Ingredient
+                                PutIngredientSystem.GetIngredients(out var ingredients);
+                                foreach (var ingredient in ingredients)
+                                {
+                                    ingredient.GetCookTime(out var ingredientCookTime);
+                                    ingredient.GetPrice(out var ingredientPrice);
+                                    totalCookTime += ingredientCookTime;
+                                    totalPrice += ingredientPrice;
+                                }
+
+                                var cookDish = new CookDish(selectedDishData, totalCookTime, totalPrice);
+                                
+                                // UI
                                 var isSelectionUIClosed = false;
                                 var isPutIngredientUIClosed = false;
                                 SelectionSystem.Hide(
@@ -71,7 +92,7 @@ namespace System.Cook.Cook_Selection.System.Main
                                 PutIngredientSystem.Hide(
                                     onComplete: () => isPutIngredientUIClosed = true);
                                 yield return new WaitUntil(() => isSelectionUIClosed && isPutIngredientUIClosed);
-                                onConfirm?.Invoke(selectedDishData);
+                                onConfirm?.Invoke(cookDish);
                             }
                         },
                         onCancel: () =>
