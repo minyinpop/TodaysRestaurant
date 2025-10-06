@@ -1,7 +1,6 @@
 using System.General;
 using Data.Animation.DOTween.Basic;
 using Data.Item.Base;
-using DG.Tweening;
 using General.Object.Item_Slot.Base;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,23 +16,26 @@ namespace General.Object.Item_Slot.Type
         [field: Header("Child System")]
         [field: SerializeField] private DoAnimation DoAnimation;
         
-        [field: Header("State")]
-        [field: SerializeField] private bool Interactable;
-
+        [field: Header("Animation Settings")]
+        [field: SerializeField] private DoScale ScaleUpSettings;
+        [field: SerializeField] private DoScale ScaleDownSettings;
+        
         [field: Header("Develop Only")]
         [field: SerializeField] private ItemSO ItemData;
+
+        private bool Interactable = true;
         
         #region PointerEvent
         protected override void OnPointerEnter()
         {
             if (!Interactable) return;
-            DoAnimation.DoScale(BackgroundRect, new DoScale(Vector2.one * 1.2f, .2f, Ease.OutExpo));
+            DoAnimation.DoScale(BackgroundRect, ScaleUpSettings);
         }
 
         protected override void OnPointerExit()
         {
             if (!Interactable) return;
-            DoAnimation.DoScale(BackgroundRect, new DoScale(Vector2.one, .2f, Ease.OutExpo));
+            DoAnimation.DoScale(BackgroundRect, ScaleDownSettings);
         }
         #endregion
 

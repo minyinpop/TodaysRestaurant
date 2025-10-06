@@ -1,9 +1,6 @@
-using System;
 using System.General;
 using Data.Animation.DOTween.Basic;
 using Data.Item.Base;
-using Data.Item.Type.Dish;
-using DG.Tweening;
 using General.Object.Item_Slot.Base;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,29 +17,29 @@ namespace General.Object.Item_Slot.Type
         [field: SerializeField] private DoAnimation DoAnimation;
         
         [field: Header("State")]
-        [field: SerializeField] private bool Interactable;
         [field: SerializeField] private Color HaveItemColor;
         [field: SerializeField] private Color NoItemColor;
+        
+        [field: Header("Animation Settings")]
+        [field: SerializeField] private DoScale ScaleUpSettings;
+        [field: SerializeField] private DoScale ScaleDownSettings;
 
         private ItemSO TargetItemData;
         private ItemSO ItemData;
+        
+        private bool Interactable;
 
         #region PointerEvent
         protected override void OnPointerEnter()
         {
             if (!Interactable) return;
-            DoAnimation.DoScale(BackgroundRect, new DoScale(Vector2.one * 1.2f, .2f, Ease.OutExpo));
+            DoAnimation.DoScale(BackgroundRect, ScaleUpSettings);
         }
 
         protected override void OnPointerExit()
         {
             if (!Interactable) return;
-            DoAnimation.DoScale(BackgroundRect, new DoScale(Vector2.one, .2f, Ease.OutExpo));
-        }
-
-        protected override void OnPointerClick()
-        {
-            
+            DoAnimation.DoScale(BackgroundRect, ScaleDownSettings);
         }
         #endregion
 
@@ -82,9 +79,11 @@ namespace General.Object.Item_Slot.Type
             return ItemData is null;
         }
 
-        public override void OnClick(Action<ItemSO> onClick)
+        public override void SetInteractable(bool interactable)
         {
-            onClick?.Invoke(ItemData);
+            Interactable = interactable;
+            if (!interactable)
+                DoAnimation?.DoScale(BackgroundRect, ScaleDownSettings);
         }
     }
 }

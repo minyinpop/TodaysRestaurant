@@ -10,7 +10,6 @@ namespace General.Object.Item_Slot.Base
     {
         protected override void OnPointerEnter() { }
         protected override void OnPointerExit() { }
-        protected override void OnPointerClick() { }
 
         public virtual bool Add(ItemSO item) { return false; }
 
@@ -20,6 +19,6 @@ namespace General.Object.Item_Slot.Base
         
         public virtual bool IsEmpty() { return true; }
 
-        public virtual void OnClick(Action<ItemSO> onClick) { onClick?.Invoke(null); }
+        public virtual void SetInteractable(bool interactable) { }
     }
 }
