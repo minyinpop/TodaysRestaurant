@@ -134,9 +134,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 1, b: 0, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
+  m_Maskable: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -348,6 +348,7 @@ GameObject:
   - component: {fileID: 2305654664208141453}
   - component: {fileID: 2894952397178316264}
   - component: {fileID: 2181199041796286105}
+  - component: {fileID: 3535374218145786443}
   - component: {fileID: 1850391851162815149}
   - component: {fileID: 19019641302317244}
   m_Layer: 0
@@ -416,6 +417,22 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &3535374218145786443
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7852260040052447994}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6236566e5df6479dbad6eb17126b16e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::System.Cook.Cook_Bubble.CookBubble
+  Button: {fileID: 1850391851162815149}
+  ProgressBar: {fileID: 73266492088319603}
+  FullColor: {r: 0, g: 1, b: 0, a: 1}
+  EmptyColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &1850391851162815149
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -431,9 +448,8 @@ MonoBehaviour:
   Rect: {fileID: 1282159769737588392}
   TitleTMP: {fileID: 0}
   DoAnimation: {fileID: 19019641302317244}
-  Interactable: 1
   OnPointerEnterScale:
-    EndValue: {x: 1.2, y: 1.2, z: 1}
+    EndValue: {x: 1.1, y: 1.1, z: 1}
     Duration: 0.2
     Ease: 18
   OnPointerExitScale:

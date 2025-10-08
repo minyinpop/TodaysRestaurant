@@ -71,11 +71,17 @@ namespace General.Object.Item_Slot.Type
 
         public override void Get(out ItemSO item)
         {
-            if (ItemData is null) item = null;
+            if (ItemData is null)
+            {
+                item = null;
+                return;
+            }
+
             item = ItemData;
             ItemData = null;
-            ItemImage.gameObject.SetActive(false);
-            ItemImage.sprite = null;
+            TargetItemData.GetItemSprite(out var sprite);
+            ItemImage.sprite = sprite;
+            ItemImage.color = NoItemColor;
         }
         
         public override bool IsEmpty()

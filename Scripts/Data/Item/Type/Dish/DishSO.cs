@@ -39,15 +39,7 @@ namespace Data.Item.Type.Dish
         [field: SerializeField] private float CookTime;
         public override void GetCookTime(out float cookTime)
         {
-            var totalTime = 0f;
-            foreach (var item in RecipeSheet)
-            {
-                item.GetCookTime(out var time);
-                totalTime += time;
-            }
-
-            totalTime += CookTime;
-            cookTime = totalTime;
+            cookTime = Mathf.Abs(CookTime);
         }
         #endregion
         
@@ -56,15 +48,7 @@ namespace Data.Item.Type.Dish
         [field: SerializeField] private int Price;
         public override void GetPrice(out int price)
         {
-            var totalPrice = 0;
-            foreach (var item in RecipeSheet)
-            {
-                item.GetPrice(out var priceItem);
-                totalPrice += priceItem;
-            }
-
-            totalPrice += Price;
-            price = totalPrice;
+            price = Mathf.Abs(Price);
         }
         #endregion
     }

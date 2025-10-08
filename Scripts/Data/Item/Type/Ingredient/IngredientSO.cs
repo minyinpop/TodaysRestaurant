@@ -41,7 +41,7 @@ namespace Data.Item.Type.Ingredient
         [field: SerializeField] private float CookTime;
         public override void GetCookTime(out float cookTime)
         {
-            cookTime = CookTime;
+            cookTime = Mathf.Abs(CookTime);
         }
         #endregion
         
@@ -50,7 +50,7 @@ namespace Data.Item.Type.Ingredient
         [field: SerializeField] private int Price;
         public override void GetPrice(out int price)
         {
-            price = Price;
+            price = Mathf.Abs(Price);
         }
         #endregion
     }
