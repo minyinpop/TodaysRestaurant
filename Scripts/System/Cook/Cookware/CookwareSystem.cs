@@ -85,7 +85,7 @@ namespace System.Cook.Cookware
                         {
                             CurrentBubble = Instantiate(CookBubblePrefab, BubbleParent);
                             CurrentBubble_CookBubble = CurrentBubble.GetComponent<CookBubble>();
-                            CookDish.GetValues(out _, out var cookTime, out _); Debug.Log(cookTime / 2);
+                            CookDish.GetValues(out _, out var cookTime, out _);
                             CurrentBubble_CookBubble.CoutDown(cookTime / 2,
                                 onComplete: OnGameTimeState);
                         },
@@ -106,9 +106,16 @@ namespace System.Cook.Cookware
                         {
                             CurrentBubble = Instantiate(GameTimeBubblePrefab, BubbleParent);
                             CurrentBubble_CookBubble = CurrentBubble.GetComponent<CookBubble>();
+                            CurrentBubble_CookBubble.OnClick += OnBubbleClicked;
+                            AllActiveActions.Add(() => CurrentBubble_CookBubble.OnClick -= OnBubbleClicked);
                             CurrentBubble_CookBubble.SetInteractable(true);
                             CurrentBubble_CookBubble.CoutDown(Mathf.Abs(GameTimeDuration),
                                 onComplete: OnOvercookedState);
+                            return;
+
+                            void OnBubbleClicked()
+                            {
+                            }
                         },
                         onExit: () =>
                         {

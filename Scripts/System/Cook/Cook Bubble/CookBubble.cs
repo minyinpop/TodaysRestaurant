@@ -57,7 +57,7 @@ namespace System.Cook.Cook_Bubble
                     var value = ProgressBar.fillAmount;
                     while (true)
                     {
-                        var newValue = Mathf.Clamp01(value -= Time.deltaTime / time); Debug.Log(newValue);
+                        var newValue = Mathf.Clamp01(value -= Time.deltaTime / time);
                         ProgressBar.fillAmount = newValue;
                         ProgressBar.color = Color.Lerp(EmptyColor, FullColor, newValue);
                         if (Mathf.Approximately(newValue, 0f)) break;
