@@ -75,11 +75,6 @@ namespace System.Cook.Cookware
                         },
                         onExit: () =>
                         {
-                            CookDish.GetValues(out var cookDish, out var cookTime, out var price);
-                            Debug.Log(cookDish);
-                            Debug.Log(cookTime);
-                            Debug.Log(price);
-                            
                             Destroy(CurrentBubble);
                             CurrentBubble = null;
                             CurrentBubble_Button = null;
@@ -93,13 +88,16 @@ namespace System.Cook.Cookware
                     StateMachine.ChangeState(new OnCook(
                         onEnter: () =>
                         {
-                            CurrentBubble = Instantiate(CookBubblePrefab, BubbleParent);
-                            CurrentBubble_Button = CurrentBubble.GetComponent<Button>();
+                            CountDownCor = CountDownCoroutine();
+                            StartCoroutine(CountDownCor);
                             return;
 
                             IEnumerator CountDownCoroutine()
                             {
-                                yield return new WaitForSeconds(1);
+                                CurrentBubble = Instantiate(CookBubblePrefab, BubbleParent);
+                                CurrentBubble_Button = CurrentBubble.GetComponent<Button>();
+                                CookDish.GetValues(out var cookDish, out var cookTime, out var price);
+                                yield return new WaitForSeconds(cookTime / 2);
                             }
                         },
                         onExit: () =>
