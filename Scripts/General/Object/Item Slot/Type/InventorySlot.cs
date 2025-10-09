@@ -26,17 +26,17 @@ namespace General.Object.Item_Slot.Type
         private bool Interactable = true;
         
         #region PointerEvent
-        protected override void OnPointerEnter()
-        {
-            if (!Interactable) return;
-            DoAnimation.DoScale(BackgroundRect, ScaleUpSettings);
-        }
+            protected override void OnPointerEnter()
+            {
+                if (!Interactable) return;
+                DoAnimation.DoScale(BackgroundRect, ScaleUpSettings);
+            }
 
-        protected override void OnPointerExit()
-        {
-            if (!Interactable) return;
-            DoAnimation.DoScale(BackgroundRect, ScaleDownSettings);
-        }
+            protected override void OnPointerExit()
+            {
+                if (!Interactable) return;
+                DoAnimation.DoScale(BackgroundRect, ScaleDownSettings);
+            }
         #endregion
 
         public override bool Add(ItemSO item)

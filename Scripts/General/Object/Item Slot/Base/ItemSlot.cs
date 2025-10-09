@@ -12,7 +12,6 @@ namespace General.Object.Item_Slot.Base
         protected override void OnPointerExit() { }
 
         public virtual bool Add(ItemSO item) { return false; }
-
         public virtual void Add(ItemSO item, Action onComplete) { onComplete?.Invoke(); }
         
         public virtual void Get(out ItemSO item) { item = null; }

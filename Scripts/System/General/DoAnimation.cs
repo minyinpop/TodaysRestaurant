@@ -6,6 +6,14 @@ namespace System.General
 {
     internal sealed class DoAnimation : MonoBehaviour
     {
+        private void OnDisable()
+        {
+            MoveTween?.Kill();
+            RotateTween?.Kill();
+            ScaleTween?.Kill();
+            DoFade_CanvasGroup_Tween?.Kill();
+        }
+
         #region Move
             private Tween MoveTween;
             

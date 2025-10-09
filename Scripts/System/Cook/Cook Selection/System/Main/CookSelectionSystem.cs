@@ -109,7 +109,7 @@ namespace System.Cook.Cook_Selection.System.Main
                     SelectionSystem.Hide(
                         onComplete: () =>
                         {
-                            Debug.Log("Can Click Empty Bubble.");
+                            // TODO
                         });
                 });
         }
