@@ -52,13 +52,13 @@ namespace System.Battle.Object.Card.Type.Battle
             protected override void OnPointerEnter()
             {
                 if (!Interactable) return;
-                DoAnimation.DoScale(CardSurfaceRect, new DoScale(Vector2.one * 1.25f, .25f, Ease.OutCubic));
+                DoAnimation.DoScale_UI(CardSurfaceRect, new DoScale(Vector2.one * 1.25f, .25f, Ease.OutCubic));
             }
             
             protected override void OnPointerExit()
             {
                 if (!Interactable) return;
-                DoAnimation.DoScale(CardSurfaceRect, new DoScale(Vector2.one, .25f, Ease.OutCubic));
+                DoAnimation.DoScale_UI(CardSurfaceRect, new DoScale(Vector2.one, .25f, Ease.OutCubic));
             }
             
             protected override void OnPointerClick()
@@ -111,7 +111,7 @@ namespace System.Battle.Object.Card.Type.Battle
 
             public void DestroyCard(Action onComplete)
             {
-                DoAnimation.DoScale(
+                DoAnimation.DoScale_UI(
                     rect: CardRect,
                     settings: new DoScale(Vector2.zero, .5f, Ease.InOutBack),
                     onComplete: () =>
@@ -189,12 +189,12 @@ namespace System.Battle.Object.Card.Type.Battle
                                 {
                                     rotateComplete = true;
                                 });
-                            DoAnimation.DoScale(
+                            DoAnimation.DoScale_UI(
                                 rect: CardSurfaceRect,
                                 settings: scaleSettings01,
                                 onComplete: () =>
                                 {
-                                    DoAnimation.DoScale(
+                                    DoAnimation.DoScale_UI(
                                         rect: CardSurfaceRect,
                                         settings: scaleSettings02,
                                         onComplete: () =>

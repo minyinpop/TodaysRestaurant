@@ -17,8 +17,8 @@ namespace General.Object.Item_Slot.Type
         [field: SerializeField] private DoAnimation DoAnimation;
         
         [field: Header("Animation Settings")]
-        [field: SerializeField] private DoScale ScaleUpSettings;
-        [field: SerializeField] private DoScale ScaleDownSettings;
+        [field: SerializeField] private DoScale scaleUpSettings;
+        [field: SerializeField] private DoScale scaleDownSettings;
         
         [field: Header("Develop Only")]
         [field: SerializeField] private ItemSO ItemData;
@@ -29,13 +29,13 @@ namespace General.Object.Item_Slot.Type
             protected override void OnPointerEnter()
             {
                 if (!Interactable) return;
-                DoAnimation.DoScale(BackgroundRect, ScaleUpSettings);
+                DoAnimation.DoScale_UI(BackgroundRect, scaleUpSettings);
             }
 
             protected override void OnPointerExit()
             {
                 if (!Interactable) return;
-                DoAnimation.DoScale(BackgroundRect, ScaleDownSettings);
+                DoAnimation.DoScale_UI(BackgroundRect, scaleDownSettings);
             }
         #endregion
 

@@ -1,18 +1,13 @@
-using System.Cook.Cook_Game.Object;
 using UnityEngine;
 
 namespace System.Cook.Cook_Game.System.Child
 {
     internal sealed class DetectSystem : MonoBehaviour
     {
-        [field: Header("Component")]
-        [field: SerializeField] private BoxCollider2D BC2;
-        
         [field: Header("Tag")]
         [field: SerializeField] private string UtensilsTag;
-        
-        [field: Header("Object")]
-        [field: SerializeField] private Utensils Utensils;
+
+        public event Action<bool> UtensilsDetected;
 
         private void OnTriggerEnter2D(Collider2D other)
         {
@@ -28,7 +23,7 @@ namespace System.Cook.Cook_Game.System.Child
         {
             if (other is null) return;
             if (!other.CompareTag(UtensilsTag)) return;
-            Utensils.IsInDetectArea(inDetectArea);
+            UtensilsDetected?.Invoke(inDetectArea);
         }
     }
 }

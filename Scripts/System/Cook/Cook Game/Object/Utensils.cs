@@ -10,21 +10,23 @@ namespace System.Cook.Cook_Game.Object
         [field: SerializeField] private Rigidbody2D Rig2D;
 
         [Header("Physics Settings")]
-        [SerializeField] private float MaxSpeed   = 6f;
-        [SerializeField] private float Accel      = 40f;
-        [SerializeField] private float SlowRadius = 1.0f;
-        [SerializeField] private float StopRadius = 0.02f;
+        [SerializeField] private float MaxSpeed   = 10;
+        [SerializeField] private float Accel      = 80;
+        [SerializeField] private float SlowRadius = 1;
+        [SerializeField] private float StopRadius = .02f;
         
         private float OriginalGravity;
-        
+
+        private bool CanPick = true;
         private bool IsPicked;
-        private bool InDetectArea;
 
         private Plane DragPlane;
         private Vector3 DragOffset;
         private Camera MainCamera;
 
         private IEnumerator MoveCor;
+
+        public event Action<Vector2> OnPick;
 
         private void OnDisable()
         {
@@ -37,6 +39,7 @@ namespace System.Cook.Cook_Game.Object
 
         public void OnClick(Camera mainCamera)
         {
+            if (!CanPick) return;
             IsPicked = !IsPicked;
             if (IsPicked) Pick();
             else UnPick();
@@ -65,20 +68,6 @@ namespace System.Cook.Cook_Game.Object
                 StartCoroutine(MoveCor);
             }
 
-            void UnPick()
-            {
-                if (MoveCor is not null)
-                {
-                    StopCoroutine(MoveCor);
-                    MoveCor = null;
-                }
-
-                Rig2D.gravityScale = OriginalGravity;
-
-                if (Mathf.Approximately(Rig2D.linearVelocity.sqrMagnitude, .0025f))
-                    Rig2D.linearVelocity = Vector2.zero;
-            }
-
             IEnumerator MoveCoroutine()
             {
                 while (IsPicked)
@@ -105,6 +94,8 @@ namespace System.Cook.Cook_Game.Object
                             target: desiredVel,
                             maxDistanceDelta: Accel * Time.fixedDeltaTime);
                         
+                        OnPick?.Invoke(desiredVel);
+                        
                         if (dist < StopRadius && Mathf.Approximately(Rig2D.linearVelocity.sqrMagnitude, .0025f))
                         {
                             Rig2D.position = t;
@@ -125,9 +116,24 @@ namespace System.Cook.Cook_Game.Object
             Rig2D.rotation = 0;
         }
 
-        public void IsInDetectArea(bool inDetectArea)
+        public void Disable()
         {
-            InDetectArea = inDetectArea;
+            CanPick = false;
+            UnPick();
+        }
+
+        private void UnPick()
+        {
+            if (MoveCor is not null)
+            {
+                StopCoroutine(MoveCor);
+                MoveCor = null;
+            }
+
+            Rig2D.gravityScale = OriginalGravity;
+
+            if (Mathf.Approximately(Rig2D.linearVelocity.sqrMagnitude, .0025f))
+                Rig2D.linearVelocity = Vector2.zero;
         }
     }
 }

@@ -16,13 +16,15 @@ namespace System.Cook.Cookware
         [field: SerializeField] private GameObject OvercookedBubblePrefab;
         [field: SerializeField] private Transform BubbleParent;
         
-        [field: Header("Settings")]
-        [field: SerializeField] private float GameTimeDuration;
-
-        [field: SerializeField] private GameObject MiniGame;
-
         private GameObject CurrentBubble;
         private CookBubble CurrentBubble_CookBubble;
+        
+        [field: Header("Game")]
+        [field: SerializeField] private float GameTimeDuration;
+        [field: SerializeField] private GameObject CookGamePrefab;
+        [field: SerializeField] private Transform GameParent;
+
+        private GameObject CookGame;
         
         private readonly StateMachine StateMachine = new();
 
@@ -117,7 +119,7 @@ namespace System.Cook.Cookware
 
                             void OnBubbleClicked()
                             {
-                                MiniGame.SetActive(true);
+                                CookGame = Instantiate(CookGamePrefab, GameParent);
                             }
                         },
                         onExit: () =>
