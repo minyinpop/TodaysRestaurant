@@ -20,6 +20,8 @@ namespace System.Cook.Cook_Game.System.Main
         
         private readonly List<Action> AllActions = new();
 
+        public event Action OnComplete;
+
         private void Start()
         {
             DoAnimation.DoScale_WorldSpace(gameObject.transform, ZoomIn,
@@ -29,7 +31,11 @@ namespace System.Cook.Cook_Game.System.Main
                     AllActions.Add(() => DetectSystem.UtensilsDetected -= UtensilsDetected);
                     
                     Utensils.OnPick += OnUtensilsPicked;
-                    AllActions.Add(() => Utensils.OnPick -= OnUtensilsPicked);
+                    AllActions.Add(() =>
+                    {
+                        Utensils.Disable();
+                        Utensils.OnPick -= OnUtensilsPicked;
+                    });
                     
                     ProgressBar.OnMaxValue += OnProgressComplete;
                     AllActions.Add(() => ProgressBar.OnMaxValue -= OnProgressComplete);
@@ -89,7 +95,13 @@ namespace System.Cook.Cook_Game.System.Main
 
             private void OnProgressComplete()
             {
-                Close();
+                ClearAllActions();
+                DoAnimation.DoScale_WorldSpace(gameObject.transform, ZoomOut,
+                    onComplete: () =>
+                    {
+                        OnComplete?.Invoke();
+                        Destroy(gameObject);
+                    });
             }
         #endregion
 
@@ -106,17 +118,11 @@ namespace System.Cook.Cook_Game.System.Main
             
             private void OnCloseButtonClicked()
             {
-                Close();
+                ClearAllActions();
+                DoAnimation.DoScale_WorldSpace(gameObject.transform, ZoomOut,
+                    onComplete: () => Destroy(gameObject));
             }
         #endregion
-
-        private void Close()
-        {
-            Utensils.Disable();
-            ClearAllActions();
-            DoAnimation.DoScale_WorldSpace(gameObject.transform, ZoomOut,
-                onComplete: () => Destroy(gameObject));
-        }
 
         private void ClearAllActions()
         {

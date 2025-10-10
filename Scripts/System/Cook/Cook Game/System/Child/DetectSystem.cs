@@ -14,6 +14,11 @@ namespace System.Cook.Cook_Game.System.Child
             Detect(other.gameObject, true);
         }
         
+        private void OnTriggerStay2D(Collider2D other)
+        {
+            Detect(other.gameObject, true);
+        }
+        
         private void OnTriggerExit2D(Collider2D other)
         {
             Detect(other.gameObject, false);
