@@ -2,7 +2,7 @@ using System.Input.Main;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace System.Mouse.Child.Item
+namespace System.Mouse.Child.Item.Object
 {
     internal sealed class ItemDragUI : MonoBehaviour
     {

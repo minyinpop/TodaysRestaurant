@@ -1,12 +1,12 @@
+using System.Cook.Cook_Game.Object;
 using System.General;
-using System.Mouse.Child.Mini_Game.Object;
 using General.Object;
 using UnityEngine;
 
-namespace System.Mouse.Child.Mini_Game
+namespace System.Cook.Cook_Game.System.Main
 {
     [RequireComponent(typeof(DoAnimation))]
-    internal sealed class MiniGameSystem : MonoBehaviour
+    internal sealed class CookGameSystem : MonoBehaviour
     {
         [field: Header("Component")]
         [field: SerializeField] private DoAnimation DoAnimation;
