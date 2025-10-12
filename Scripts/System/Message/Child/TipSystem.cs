@@ -34,7 +34,7 @@ namespace System.Message.Child
                 PopUpUI.Show(
                     content: content,
                     settings: new DoFade_CanvasGroup(
-                        endValue: true,
+                        endValue: 1,
                         duration: .2f,
                         ease: Ease.Linear),
                     onComplete: () =>
@@ -47,7 +47,7 @@ namespace System.Message.Child
                 PopUpUI.SetButtonInteractable(false);
                 PopUpUI.Hide(
                     settings: new DoFade_CanvasGroup(
-                        endValue: false,
+                        endValue: 0,
                         duration: .2f,
                         ease: Ease.Linear),
                     onComplete: () =>

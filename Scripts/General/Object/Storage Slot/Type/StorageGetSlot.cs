@@ -1,13 +1,14 @@
+using System;
 using System.General;
 using Data.Animation.DOTween.Basic;
 using Data.Item.Base;
-using General.Object.Item_Slot.Base;
+using General.Object.Storage_Slot.Base;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace General.Object.Storage_Slot.Type
 {
-    internal sealed class UnlockDishSlot : StorageSlot
+    internal sealed class StorageGetSlot : StorageSlot
     {
         [field: Header("Object")]
         [field: SerializeField] private RectTransform BackgroundRect;
@@ -34,6 +35,22 @@ namespace General.Object.Storage_Slot.Type
         {
             if (!Interactable) return;
             DoAnimation.DoScale_UI(BackgroundRect, ScaleDownSettings);
+        }
+        
+        public override void Add(ItemSO item, Action onComplete)
+        {
+            if (item is null) return;
+            ItemData = item;
+            ItemData.GetItemSprite(out var sprite);
+            ItemImage.sprite = sprite;
+            ItemImage.gameObject.SetActive(true);
+            BackgroundRect.localScale = Vector2.one * 1.25f;
+            DoAnimation.DoScale_UI(BackgroundRect, ScaleDownSettings,
+                onComplete: () =>
+                {
+                    Interactable = true;
+                    onComplete?.Invoke();
+                });
         }
     }
 }

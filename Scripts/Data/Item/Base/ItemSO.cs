@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using Data.General.Enum;
-using Data.General.Enum.Item.Child;
-using Data.General.Enum.Item.Main;
 using UnityEngine;
 
 namespace Data.Item.Base
@@ -23,10 +21,11 @@ namespace Data.Item.Base
         #endregion
 
         #region Item Type
-            public virtual void GetItemType(out ItemType itemType, out DishType dishType)
+            public virtual void GetItemType(out ItemType itemType, out CookType cookType, out FoodType foodType)
             {
                 itemType = ItemType.Null;
-                dishType = DishType.Null;
+                cookType = CookType.Null;
+                foodType = FoodType.Null;
             }
 
             public virtual void GetItemType(out ItemType itemType, out int itemLevel)

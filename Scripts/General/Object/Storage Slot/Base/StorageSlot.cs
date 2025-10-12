@@ -3,7 +3,7 @@ using System.General;
 using Data.Item.Base;
 using UnityEngine;
 
-namespace General.Object.Item_Slot.Base
+namespace General.Object.Storage_Slot.Base
 {
     [RequireComponent(typeof(DoAnimation))]
     internal abstract class StorageSlot : PointerEvent

@@ -17,7 +17,7 @@ namespace System.Message.Child
         {
             PopUpUI.ShowMask(
                 settings: new DoFade_CanvasGroup(
-                    endValue: true,
+                    endValue: 1,
                     duration: 3,
                     ease: Ease.Linear),
                 onComplete: () =>
@@ -25,7 +25,7 @@ namespace System.Message.Child
                     PopUpUI.ShowUI(
                         content: content,
                         settings: new DoFade_CanvasGroup(
-                            endValue: false,
+                            endValue: 0,
                             duration: 1.5f,
                             ease: Ease.Linear),
                         onComplete: () =>

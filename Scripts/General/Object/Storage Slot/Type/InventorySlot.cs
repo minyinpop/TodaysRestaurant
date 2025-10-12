@@ -1,11 +1,11 @@
 using System.General;
 using Data.Animation.DOTween.Basic;
 using Data.Item.Base;
-using General.Object.Item_Slot.Base;
+using General.Object.Storage_Slot.Base;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace General.Object.Item_Slot.Type
+namespace General.Object.Storage_Slot.Type
 {
     internal sealed class InventorySlot : StorageSlot
     {

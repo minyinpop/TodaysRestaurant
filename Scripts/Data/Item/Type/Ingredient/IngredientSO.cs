@@ -1,4 +1,4 @@
-using Data.General.Enum.Item.Main;
+using Data.General.Enum;
 using Data.Item.Base;
 using UnityEngine;
 

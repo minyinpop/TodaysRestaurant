@@ -1,4 +1,4 @@
-using System;
+using System.Collections.Generic;
 using System.General;
 using Data.Animation.DOTween.Basic;
 using Data.Item.Base;
@@ -8,11 +8,16 @@ using UnityEngine.UI;
 
 namespace General.Object.Item_Slot.Type
 {
-    internal sealed class StorageGetSlot : StorageSlot
+    internal sealed class UnlockDishSlot : ItemSlot
     {
         [field: Header("Object")]
         [field: SerializeField] private RectTransform BackgroundRect;
         [field: SerializeField] private Image ItemImage;
+        
+        [field: Header("Alpha")]
+        [field: SerializeField] private List<Image> AllImage;
+        [field: SerializeField, Range(0, 1)] private float OnSelectAlpha;
+        [field: SerializeField, Range(0, 1)] private float UnSelectAlpha;
         
         [field: Header("Child System")]
         [field: SerializeField] private DoAnimation DoAnimation;
@@ -23,7 +28,8 @@ namespace General.Object.Item_Slot.Type
 
         private ItemSO ItemData;
 
-        private bool Interactable = true;
+        private bool Interactable;
+        private bool OnSelect;
         
         protected override void OnPointerEnter()
         {
@@ -36,21 +42,26 @@ namespace General.Object.Item_Slot.Type
             if (!Interactable) return;
             DoAnimation.DoScale_UI(BackgroundRect, ScaleDownSettings);
         }
-        
-        public override void Add(ItemSO item, Action onComplete)
+
+        protected override void OnPointerClick()
         {
-            if (item is null) return;
-            ItemData = item;
-            ItemData.GetItemSprite(out var sprite);
-            ItemImage.sprite = sprite;
-            ItemImage.gameObject.SetActive(true);
-            BackgroundRect.localScale = Vector2.one * 1.25f;
-            DoAnimation.DoScale_UI(BackgroundRect, ScaleDownSettings,
-                onComplete: () =>
-                {
-                    Interactable = true;
-                    onComplete?.Invoke();
-                });
+            if (!Interactable) return;
+            OnSelect = !OnSelect;
+            OnClicked(OnSelect, ItemData);
+        }
+
+        public override void SetInteractable(bool interactable)
+        {
+            Interactable = interactable;
+        }
+
+        public override void SetAlpha()
+        {
+            foreach (var image in AllImage) image.color = new Color(
+                image.color.r,
+                image.color.g,
+                image.color.b,
+                OnSelect ? OnSelectAlpha : UnSelectAlpha);
         }
     }
 }

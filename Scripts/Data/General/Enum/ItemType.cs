@@ -1,9 +1,9 @@
-namespace Data.General.Enum.Item.Main
+namespace Data.General.Enum
 {
     internal enum ItemType
     {
         Null,
-        Dish,
+        Food,
         Ingredient
     }
 }

@@ -5,7 +5,7 @@ using Data.Animation.DOTween.Basic;
 using Data.Item.Base;
 using Data.Item.Type.Dish;
 using General.Object;
-using General.Object.Item_Slot.Base;
+using General.Object.Storage_Slot.Base;
 using UnityEngine;
 
 namespace System.Cook.Cook_Selection.System.Child

@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Data.General;
-using Data.Item.Type.Dish;
 using UnityEngine;
 
 namespace Data.Player
@@ -28,8 +27,8 @@ namespace Data.Player
         
         #region Unlock Dishes
             [field: Header("Unlock Dishes")]
-            [field: SerializeField] private List<DishSO> UnlockedDishes;
-            public void GetUnlockedDishes(out List<DishSO> dishes)
+            [field: SerializeField] private List<DishCategory> UnlockedDishes;
+            public void GetUnlockedDishes(out List<DishCategory> dishes)
             {
                 dishes = UnlockedDishes;
             }

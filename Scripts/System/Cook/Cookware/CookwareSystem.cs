@@ -4,12 +4,16 @@ using System.Cook.Cook_Game.System.Main;
 using System.Cook.Cookware.State_Machine;
 using System.Cook.Cookware.State_Machine.State;
 using Data.General;
+using Data.General.Enum;
 using UnityEngine;
 
 namespace System.Cook.Cookware
 {
     internal sealed class CookwareSystem : MonoBehaviour
     {
+        [field: Header("Type")]
+        [field: SerializeField] private CookType CookwareType;
+        
         [field: Header("Bubble")]
         [field: SerializeField] private GameObject EmptyBubblePrefab;
         [field: SerializeField] private GameObject CookBubblePrefab;
@@ -34,7 +38,7 @@ namespace System.Cook.Cookware
 
         private bool IsCookGameComplete;
 
-        public static event Action<Action<CookDish>, Action> OnClickEmptyBubble;
+        public static event Action<CookType, Action<CookDish>, Action> OnClickEmptyBubble;
 
         private void Start()
         {
@@ -63,7 +67,7 @@ namespace System.Cook.Cookware
 
                             void OnBubbleClicked()
                             {
-                                OnClickEmptyBubble?.Invoke(
+                                OnClickEmptyBubble?.Invoke(CookwareType,
                                     /* onConfirm */ cookDish =>
                                     {
                                         CookDish = cookDish;

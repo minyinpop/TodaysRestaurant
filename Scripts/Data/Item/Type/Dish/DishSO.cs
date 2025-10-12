@@ -1,6 +1,5 @@
 using System.Collections.Generic;
-using Data.General.Enum.Item.Child;
-using Data.General.Enum.Item.Main;
+using Data.General.Enum;
 using Data.Item.Base;
 using UnityEngine;
 
@@ -30,11 +29,13 @@ namespace Data.Item.Type.Dish
         #region Item Type
             [field: Header("Item Type")]
             [field: SerializeField] private ItemType ItemType;
-            [field: SerializeField] private DishType DishType;
-            public override void GetItemType(out ItemType itemType, out DishType dishType)
+            [field: SerializeField] private CookType CookType;
+            [field: SerializeField] private FoodType FoodType;
+            public override void GetItemType(out ItemType itemType, out CookType cookType, out FoodType foodType)
             {
                 itemType = ItemType;
-                dishType = DishType;
+                cookType = CookType;
+                foodType = FoodType;
             }
         #endregion
         

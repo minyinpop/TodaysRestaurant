@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Cook.Cook_Selection.Object;
 using System.General;
 using Data.Animation.DOTween.Basic;
+using Data.General.Enum;
 using Data.Item.Type.Dish;
 using Data.Player;
 using General.Object;
@@ -41,7 +42,7 @@ namespace System.Cook.Cook_Selection.System.Child
             CloseAction.Clear();
         }
 
-        public void Show(Action<DishSO> onSelect, Action onClose)
+        public void Show(CookType cookwareType, Action<DishSO> onSelect, Action onClose)
         {
             if (SelectionUI.activeSelf) return;
             
@@ -51,15 +52,21 @@ namespace System.Cook.Cook_Selection.System.Child
             
             // StickyNote
             PlayerData.GetUnlockedDishes(out var unlockedDishesData);
-            foreach (var dishData in unlockedDishesData)
+            foreach (var category in unlockedDishesData)
             {
-                var randomIndex = UnityEngine.Random.Range(0, StickyNotePrefabs.Count);
-                var stickyNote = Instantiate(StickyNotePrefabs[randomIndex], StickyNoteParent);
-                var stickyNote_StickyNote = stickyNote.GetComponent<StickyNote>();
-                StickyNotes.Add(stickyNote_StickyNote);
-                stickyNote_StickyNote.Init(dishData);
-                stickyNote_StickyNote.OnClick += onSelect;
-                CloseAction.Add(() => stickyNote_StickyNote.OnClick -= onSelect);
+                category.GetValues(out _, out var dishesData);
+                foreach (var dishData in dishesData)
+                {
+                    dishData.GetItemType(out _, out var cookType, out _);
+                    if (cookType != cookwareType) continue;
+                    var randomIndex = UnityEngine.Random.Range(0, StickyNotePrefabs.Count);
+                    var stickyNote = Instantiate(StickyNotePrefabs[randomIndex], StickyNoteParent);
+                    var stickyNote_StickyNote = stickyNote.GetComponent<StickyNote>();
+                    StickyNotes.Add(stickyNote_StickyNote);
+                    stickyNote_StickyNote.Init(dishData);
+                    stickyNote_StickyNote.OnClick += onSelect;
+                    CloseAction.Add(() => stickyNote_StickyNote.OnClick -= onSelect);
+                }
             }
             
             // UI

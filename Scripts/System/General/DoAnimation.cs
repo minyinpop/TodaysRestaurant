@@ -117,7 +117,7 @@ namespace System.General
                 DoFade_CanvasGroup_Tween?.Kill();
                 settings.GetValues(out var endValue, out var duration, out var ease);
                 DoFade_CanvasGroup_Tween = canvasGroup
-                    .DOFade(endValue ? 1 : 0, duration)
+                    .DOFade(endValue, duration)
                     .SetEase(ease)
                     .OnComplete(() =>
                     {

@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using Data.General.Enum.Item.Child;
-using Data.General.Enum.Item.Main;
+using Data.General.Enum;
+using Data.Item.Base;
 using Data.Player;
-using General.Object.Storage_Slot.Base;
+using General.Object.Item_Slot.Base;
 using UnityEngine;
 
 namespace System.Cook.Cook_Menu.System.Child
@@ -30,16 +30,46 @@ namespace System.Cook.Cook_Menu.System.Child
         [field: Header("Data")]
         [field: SerializeField] private PlayerSO PlayerData;
 
-        private DishType CurrentDishType = DishType.Soup;
+        private FoodType CurrentFoodType = FoodType.Soup;
+        
+        private readonly List<Action> ActiveActions = new();
+
+        private void OnDisable()
+        {
+            foreach (var action in ActiveActions) action?.Invoke();
+            ActiveActions.Clear();
+        }
         
 
         public void Open()
         {
+            UI.SetActive(true);
             PlayerData.GetUnlockedDishes(out var dishes);
             foreach (var dish in dishes)
             {
-                dish.GetItemType(out ItemType itemType, out DishType dishType);
-                if (dishType != CurrentDishType) continue;
+                dish.GetValues(out var foodType, out var dishesData);
+                if (foodType != CurrentFoodType) continue;
+                foreach (var dishData in dishesData)
+                {
+                    var slot = Instantiate(UnlockDishSlotPrefab, UnlockDishSlotParent);
+                    var slot_ItemSlot = slot.GetComponent<ItemSlot>();
+                    UnlockDishSlots.Add(slot_ItemSlot);
+                    slot_ItemSlot.Add(dishData);
+                    slot_ItemSlot.OnClick += OnClicked;
+                    ActiveActions.Add(() =>
+                    {
+                        slot_ItemSlot.OnClick -= OnClicked;
+                        slot_ItemSlot.SetInteractable(false);
+                    });
+                    slot_ItemSlot.SetInteractable(true);
+                    continue;
+
+                    void OnClicked(bool onSelect, ItemSO itemData)
+                    {
+                        // TODO 檢查是否可以再增加料理到右側
+                        slot_ItemSlot.SetAlpha();
+                    }
+                }
             }
         }
     }

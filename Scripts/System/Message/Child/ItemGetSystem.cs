@@ -33,7 +33,7 @@ namespace System.Message.Child
             IEnumerator ShowCoroutine()
             {
                 var confirm = false;
-                PopUpUI.Show(content, new DoFade_CanvasGroup(true, .2f, Ease.Linear),
+                PopUpUI.Show(content, new DoFade_CanvasGroup(1, .2f, Ease.Linear),
                     onComplete: () =>
                     {
                         PopUpUI.ShowItem(items,
@@ -47,7 +47,7 @@ namespace System.Message.Child
                 PopUpUI.OnClickConfirmButton -= OnConfirmButtonClicked;
                 PopUpUI.SetButtonInteractable(false);
                 PopUpUI.Hide(
-                    settings: new DoFade_CanvasGroup(false, .2f, Ease.Linear),
+                    settings: new DoFade_CanvasGroup(0, .2f, Ease.Linear),
                     onComplete: () =>
                     {
                         onConfirm?.Invoke();

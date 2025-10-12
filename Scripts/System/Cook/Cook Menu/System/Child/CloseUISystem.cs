@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using General.Object;
 using UnityEngine;
 
@@ -13,14 +14,19 @@ namespace System.Cook.Cook_Menu.System.Child
         
         public event Action OnClickOpenButton;
 
+        private readonly List<Action> ActiveActions = new();
+
         private void OnEnable()
         {
             OpenButton.OnClick += OnOpenButtonClicked;
+            ActiveActions.Add(() => OpenButton.OnClick -= OnOpenButtonClicked);
+            OpenButton.SetInteractable(true);
         }
         
         private void OnDisable()
         {
-            OpenButton.OnClick -= OnOpenButtonClicked;
+            foreach (var action in ActiveActions) action?.Invoke();
+            ActiveActions.Clear();
         }
 
         private void OnOpenButtonClicked()

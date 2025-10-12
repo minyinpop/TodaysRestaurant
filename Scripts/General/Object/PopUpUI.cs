@@ -7,7 +7,7 @@ using Data.Animation.DOTween.Basic;
 using Data.General;
 using Data.Item.Base;
 using Data.Item.Type.Ingredient;
-using General.Object.Item_Slot.Base;
+using General.Object.Storage_Slot.Base;
 using TMPro;
 using UnityEngine;
 
