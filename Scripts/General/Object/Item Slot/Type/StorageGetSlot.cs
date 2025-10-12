@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 namespace General.Object.Item_Slot.Type
 {
-    internal sealed class ItemGetSlot : ItemSlot
+    internal sealed class StorageGetSlot : StorageSlot
     {
         [field: Header("Object")]
         [field: SerializeField] private RectTransform BackgroundRect;
@@ -18,8 +18,8 @@ namespace General.Object.Item_Slot.Type
         [field: SerializeField] private DoAnimation DoAnimation;
         
         [field: Header("Animation Settings")]
-        [field: SerializeField] private DoScale scaleUpSettings;
-        [field: SerializeField] private DoScale scaleDownSettings;
+        [field: SerializeField] private DoScale ScaleUpSettings;
+        [field: SerializeField] private DoScale ScaleDownSettings;
 
         private ItemSO ItemData;
 
@@ -28,13 +28,13 @@ namespace General.Object.Item_Slot.Type
         protected override void OnPointerEnter()
         {
             if (!Interactable) return;
-            DoAnimation.DoScale_UI(BackgroundRect, scaleUpSettings);
+            DoAnimation.DoScale_UI(BackgroundRect, ScaleUpSettings);
         }
 
         protected override void OnPointerExit()
         {
             if (!Interactable) return;
-            DoAnimation.DoScale_UI(BackgroundRect, scaleDownSettings);
+            DoAnimation.DoScale_UI(BackgroundRect, ScaleDownSettings);
         }
         
         public override void Add(ItemSO item, Action onComplete)
@@ -45,7 +45,7 @@ namespace General.Object.Item_Slot.Type
             ItemImage.sprite = sprite;
             ItemImage.gameObject.SetActive(true);
             BackgroundRect.localScale = Vector2.one * 1.25f;
-            DoAnimation.DoScale_UI(BackgroundRect, scaleDownSettings,
+            DoAnimation.DoScale_UI(BackgroundRect, ScaleDownSettings,
                 onComplete: () =>
                 {
                     Interactable = true;

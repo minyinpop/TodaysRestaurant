@@ -6,7 +6,7 @@ using UnityEngine;
 namespace General.Object.Item_Slot.Base
 {
     [RequireComponent(typeof(DoAnimation))]
-    internal abstract class ItemSlot : PointerEvent
+    internal abstract class StorageSlot : PointerEvent
     {
         protected override void OnPointerEnter() { }
         protected override void OnPointerExit() { }

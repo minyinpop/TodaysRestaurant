@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using Data.General.Enum.Item.Child;
+using Data.General.Enum.Item.Main;
 using Data.Item.Base;
 using UnityEngine;
 
@@ -8,48 +10,59 @@ namespace Data.Item.Type.Dish
     internal sealed class DishSO : ItemSO
     {
         #region Name
-        [field: Header("Name")]
-        [field: SerializeField] private string ItemName;
-        public override void GetItemName(out string itemName)
-        {
-            itemName = ItemName;
-        }
+            [field: Header("Name")]
+            [field: SerializeField] private string ItemName;
+            public override void GetItemName(out string itemName)
+            {
+                itemName = ItemName;
+            }
         #endregion
         
         #region Sprite
-        [field: Header("Sprite")]
-        [field: SerializeField] private Sprite ItemSprite;
-        public override void GetItemSprite(out Sprite itemSprite)
-        {
-            itemSprite = ItemSprite;
-        }
+            [field: Header("Sprite")]
+            [field: SerializeField] private Sprite ItemSprite;
+            public override void GetItemSprite(out Sprite itemSprite)
+            {
+                itemSprite = ItemSprite;
+            }
+        #endregion
+        
+        #region Item Type
+            [field: Header("Item Type")]
+            [field: SerializeField] private ItemType ItemType;
+            [field: SerializeField] private DishType DishType;
+            public override void GetItemType(out ItemType itemType, out DishType dishType)
+            {
+                itemType = ItemType;
+                dishType = DishType;
+            }
         #endregion
         
         #region Recipe Sheet
-        [field: Header("Recipe Sheet")]
-        [field: SerializeField] private List<ItemSO> RecipeSheet;
-        public override void GetRecipeSheet(out List<ItemSO> recipeSheet)
-        {
-            recipeSheet = RecipeSheet;
-        }
+            [field: Header("Recipe Sheet")]
+            [field: SerializeField] private List<ItemSO> RecipeSheet;
+            public override void GetRecipeSheet(out List<ItemSO> recipeSheet)
+            {
+                recipeSheet = RecipeSheet;
+            }
         #endregion
         
         #region Cook Time
-        [field: Header("Cook Time")]
-        [field: SerializeField] private float CookTime;
-        public override void GetCookTime(out float cookTime)
-        {
-            cookTime = Mathf.Abs(CookTime);
-        }
+            [field: Header("Cook Time")]
+            [field: SerializeField] private float CookTime;
+            public override void GetCookTime(out float cookTime)
+            {
+                cookTime = Mathf.Abs(CookTime);
+            }
         #endregion
         
         #region Price
-        [field: Header("Price")]
-        [field: SerializeField] private int Price;
-        public override void GetPrice(out int price)
-        {
-            price = Mathf.Abs(Price);
-        }
+            [field: Header("Price")]
+            [field: SerializeField] private int Price;
+            public override void GetPrice(out int price)
+            {
+                price = Mathf.Abs(Price);
+            }
         #endregion
     }
 }

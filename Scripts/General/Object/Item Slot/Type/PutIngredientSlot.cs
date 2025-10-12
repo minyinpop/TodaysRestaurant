@@ -1,5 +1,6 @@
 using System.General;
 using Data.Animation.DOTween.Basic;
+using Data.General.Enum.Item.Main;
 using Data.Item.Base;
 using General.Object.Item_Slot.Base;
 using UnityEngine;
@@ -7,7 +8,7 @@ using UnityEngine.UI;
 
 namespace General.Object.Item_Slot.Type
 {
-    internal sealed class PutIngredientSlot : ItemSlot
+    internal sealed class PutIngredientSlot : StorageSlot
     {
         [field: Header("Object")]
         [field: SerializeField] private RectTransform BackgroundRect;
@@ -21,8 +22,8 @@ namespace General.Object.Item_Slot.Type
         [field: SerializeField] private Color NoItemColor;
         
         [field: Header("Animation Settings")]
-        [field: SerializeField] private DoScale scaleUpSettings;
-        [field: SerializeField] private DoScale scaleDownSettings;
+        [field: SerializeField] private DoScale ScaleUpSettings;
+        [field: SerializeField] private DoScale ScaleDownSettings;
 
         private ItemSO TargetItemData;
         private ItemSO ItemData;
@@ -33,13 +34,13 @@ namespace General.Object.Item_Slot.Type
         protected override void OnPointerEnter()
         {
             if (!Interactable) return;
-            DoAnimation.DoScale_UI(BackgroundRect, scaleUpSettings);
+            DoAnimation.DoScale_UI(BackgroundRect, ScaleUpSettings);
         }
 
         protected override void OnPointerExit()
         {
             if (!Interactable) return;
-            DoAnimation.DoScale_UI(BackgroundRect, scaleDownSettings);
+            DoAnimation.DoScale_UI(BackgroundRect, ScaleDownSettings);
         }
         #endregion
 
@@ -56,8 +57,8 @@ namespace General.Object.Item_Slot.Type
             }
             else
             {
-                item.GetItemType(out var type01, out var level01);
-                TargetItemData.GetItemType(out var type02, out var level02);
+                item.GetItemType(out ItemType type01, out int level01);
+                TargetItemData.GetItemType(out ItemType type02, out int level02);
                 if (!Equals(type01, type02)) return false; // TODO 物品類型不同會跳出 Message System
                 if (level01 < level02) return false; // TODO 物品類型相同但等級比 TargetItemData 還低，一樣跳出 Message System
                 ItemData = item;
@@ -93,7 +94,7 @@ namespace General.Object.Item_Slot.Type
         {
             Interactable = interactable;
             if (!interactable)
-                DoAnimation?.DoScale_UI(BackgroundRect, scaleDownSettings);
+                DoAnimation?.DoScale_UI(BackgroundRect, ScaleDownSettings);
         }
     }
 }
