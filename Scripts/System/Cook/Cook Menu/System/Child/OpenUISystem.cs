@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Cook.Cook_Menu.System.Object;
 using Data.General.Enum;
 using Data.Item.Base;
 using Data.Player;
@@ -22,15 +23,17 @@ namespace System.Cook.Cook_Menu.System.Child
         [field: SerializeField] private GameObject SelectDishSlotPrefab_01;
         [field: SerializeField] private GameObject SelectDishSlotPrefab_02;
         [field: SerializeField] private GameObject SelectDishSlotPrefab_03;
+        private readonly List<ItemSlot> SelectDishSlots = new();
         
-        [field: Header("Dish Type Button")]
-        [field: SerializeField] private Transform DishTypeButtonParent;
-        [field: SerializeField] private GameObject DishTypeButtonPrefab;
+        [field: Header("Food Type Button")]
+        [field: SerializeField] private Transform FoodTypeButtonParent;
+        [field: SerializeField] private GameObject FoodTypeButtonPrefab;
+        private readonly List<FoodTypeButton> FoodTypeButtons = new();
         
         [field: Header("Data")]
         [field: SerializeField] private PlayerSO PlayerData;
 
-        private FoodType CurrentFoodType = FoodType.Soup;
+        private FoodType CurrentFoodType = FoodType.Soup; // Default is Soup.
         
         private readonly List<Action> ActiveActions = new();
 
@@ -44,10 +47,36 @@ namespace System.Cook.Cook_Menu.System.Child
         public void Open()
         {
             UI.SetActive(true);
-            PlayerData.GetUnlockedDishes(out var dishes);
-            foreach (var dish in dishes)
+            PlayerData.GetUnlockedDishes(out var dishCategory);
+            
+            // Dish Type Button
+            foreach (var category in dishCategory)
             {
-                dish.GetValues(out var foodType, out var dishesData);
+                category.GetValues(out var foodTypeData, out _);
+                var button = Instantiate(FoodTypeButtonPrefab, FoodTypeButtonParent);
+                var button_FoodTypeButton = button.GetComponent<FoodTypeButton>();
+                FoodTypeButtons.Add(button_FoodTypeButton);
+                button_FoodTypeButton.Init(foodTypeData);
+                button_FoodTypeButton.OnClick += OnClicked;
+                ActiveActions.Add(() =>
+                {
+                    button_FoodTypeButton.OnClick -= OnClicked;
+                    button_FoodTypeButton.SetInteractable(false);
+                });
+                button_FoodTypeButton.SetInteractable(true);
+                return;
+
+                void OnClicked(FoodType foodType)
+                {
+                    Debug.Log(foodType);
+                }
+            }
+
+            // Unlock Dish Page
+            foreach (var category in dishCategory)
+            {
+                category.GetValues(out var foodTypeData, out var dishesData);
+                foodTypeData.GetValues(out var foodType, out _, out _);
                 if (foodType != CurrentFoodType) continue;
                 foreach (var dishData in dishesData)
                 {
@@ -70,6 +99,14 @@ namespace System.Cook.Cook_Menu.System.Child
                         slot_ItemSlot.SetAlpha();
                     }
                 }
+            }
+            
+            // Select Dish Page
+            for (var i = 0; i < 12; i++)
+            {
+                var slot = Instantiate(i > 2 ? SelectDishSlotPrefab_01 : SelectDishSlotPrefab_02, SelectDishSlotParent);
+                var slot_ItemSlot = slot.GetComponent<ItemSlot>();
+                SelectDishSlots.Add(slot_ItemSlot);
             }
         }
     }

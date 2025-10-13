@@ -8,15 +8,13 @@ namespace General.Object.Item_Slot.Base
     {
         public event Action<bool, ItemSO> OnClick;
         protected void OnClicked(bool onSelect, ItemSO itemData) { OnClick?.Invoke(onSelect, itemData); }
-        
+
         protected override void OnPointerEnter() { }
         protected override void OnPointerExit() { }
         protected override void OnPointerClick() { }
 
         public virtual bool Add(ItemSO item) { return false; }
-        
-        public virtual void Get(out ItemSO item) { item = null; }
-        
+
         public virtual void SetInteractable(bool interactable) { }
         public virtual void SetAlpha() { }
     }

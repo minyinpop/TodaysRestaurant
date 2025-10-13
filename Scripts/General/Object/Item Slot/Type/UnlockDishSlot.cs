@@ -50,6 +50,16 @@ namespace General.Object.Item_Slot.Type
             OnClicked(OnSelect, ItemData);
         }
 
+        public override bool Add(ItemSO itemData)
+        {
+            if (ItemData is not null) return false;
+            ItemData = itemData;
+            ItemData.GetItemSprite(out var sprite);
+            ItemImage.sprite = sprite;
+            ItemImage.gameObject.SetActive(true);
+            return true;
+        }
+
         public override void SetInteractable(bool interactable)
         {
             Interactable = interactable;
