@@ -427,7 +427,7 @@ MonoBehaviour:
   PutIngredientUI: {fileID: 1668443338}
   PutIngredientUI_CanvasGroup: {fileID: 1668443340}
   FadeInSettings:
-    EndValue: 0
+    EndValue: 1
     Duration: 0.2
     Ease: 1
   FadeOutSettings:
@@ -2323,8 +2323,44 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 784459586}
+  - {fileID: 1869278643}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &456637290
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 456637291}
+  m_Layer: 0
+  m_Name: Bubble Parent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &456637291
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 456637290}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 645663869}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 1}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &459623308
 GameObject:
   m_ObjectHideFlags: 0
@@ -2464,7 +2500,7 @@ GameObject:
   m_Component:
   - component: {fileID: 497107327}
   m_Layer: 0
-  m_Name: Close UI
+  m_Name: UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2477,13 +2513,13 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 497107326}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1088041431}
-  m_Father: {fileID: 1506540761}
+  m_Father: {fileID: 1029254604}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2734,6 +2770,108 @@ MonoBehaviour:
   m_Spacing: {x: 16, y: 16}
   m_Constraint: 2
   m_ConstraintCount: 2
+--- !u!1 &645663868
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 645663869}
+  - component: {fileID: 645663872}
+  - component: {fileID: 645663871}
+  - component: {fileID: 645663870}
+  m_Layer: 0
+  m_Name: Canvas
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &645663869
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 645663868}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 456637291}
+  m_Father: {fileID: 1869278643}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &645663870
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 645663868}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.GraphicRaycaster
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+--- !u!114 &645663871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 645663868}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.CanvasScaler
+  m_UiScaleMode: 0
+  m_ReferencePixelsPerUnit: 100
+  m_ScaleFactor: 1
+  m_ReferenceResolution: {x: 800, y: 600}
+  m_ScreenMatchMode: 0
+  m_MatchWidthOrHeight: 0
+  m_PhysicalUnit: 3
+  m_FallbackScreenDPI: 96
+  m_DefaultSpriteDPI: 96
+  m_DynamicPixelsPerUnit: 1
+  m_PresetInfoIsWorld: 1
+--- !u!223 &645663872
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 645663868}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 899800339}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
+  m_AdditionalShaderChannelsFlag: 0
+  m_UpdateRectTransformForStandalone: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
 --- !u!1001 &654407358
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3181,7 +3319,7 @@ Transform:
   m_GameObject: {fileID: 784459585}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -10, y: 0, z: 0}
+  m_LocalPosition: {x: -12, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3955,6 +4093,88 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1016827879}
   m_CullTransparentMesh: 1
+--- !u!1 &1029254603
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1029254604}
+  - component: {fileID: 1029254605}
+  m_Layer: 0
+  m_Name: Close UI System
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1029254604
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1029254603}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 497107327}
+  m_Father: {fileID: 1506540761}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1029254605
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1029254603}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04adae8bfec14332b339c32d42c5fe38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::System.Cook.Cook_Menu.System.Child.CloseUISystem
+  UI: {fileID: 497107326}
+  OpenButton: {fileID: 102756147}
+--- !u!1 &1071874454
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1071874455}
+  m_Layer: 0
+  m_Name: Mini Game Parent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1071874455
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1071874454}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 2.25, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1869278643}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1088041430
 GameObject:
   m_ObjectHideFlags: 0
@@ -4105,8 +4325,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1237206363}
   - component: {fileID: 1237206364}
-  - component: {fileID: 1237206366}
-  - component: {fileID: 1237206365}
   m_Layer: 0
   m_Name: Cook Menu System
   m_TagString: Untagged
@@ -4142,44 +4360,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a574d7ba4e34a20810b7e2cdddef24b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::System.Cook.Cook_Menu.System.Main.CookMenuSystem
-  OpenUISystem: {fileID: 1237206366}
-  CloseUISystem: {fileID: 1237206365}
---- !u!114 &1237206365
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1237206362}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 04adae8bfec14332b339c32d42c5fe38, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::System.Cook.Cook_Menu.System.Child.CloseUISystem
-  UI: {fileID: 497107326}
-  OpenButton: {fileID: 102756147}
---- !u!114 &1237206366
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1237206362}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 253cf2ad49944bfc98151ecc8c135461, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::System.Cook.Cook_Menu.System.Child.OpenUISystem
-  UI: {fileID: 1659497418}
-  UnlockDishSlotParent: {fileID: 1407834665}
-  UnlockDishSlotPrefab: {fileID: 5277290961093288109, guid: 43722516392d5c747a5f5c741b09f1eb, type: 3}
-  SelectDishSlotParent: {fileID: 1578297269}
-  SelectDishSlotPrefab_01: {fileID: 691982390061300402, guid: 324158cb445a3984fa4bbf4cab2df729, type: 3}
-  SelectDishSlotPrefab_02: {fileID: 691982390061300402, guid: cf52a910fe15b0d40a259cff02da5f88, type: 3}
-  SelectDishSlotPrefab_03: {fileID: 6930142179265803306, guid: c191a5a4779bcbf44b86cd8e6b201983, type: 3}
-  DishTypeButtonParent: {fileID: 210362792}
-  DishTypeButtonPrefab: {fileID: 7674888563974020716, guid: e9bd5ca5e937d5c47870e90fd1d47f81, type: 3}
-  PlayerData: {fileID: 11400000, guid: f6faef0ee01b35e478f45e9da0d7e8a1, type: 2}
+  OpenUISystem: {fileID: 1794641393}
+  CloseUISystem: {fileID: 1029254605}
 --- !u!1 &1256046350
 GameObject:
   m_ObjectHideFlags: 0
@@ -4423,7 +4605,7 @@ GameObject:
   - component: {fileID: 1407834666}
   - component: {fileID: 1407834667}
   m_Layer: 0
-  m_Name: Unlock Dish Slot Parent
+  m_Name: Unlock Food Slot Parent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4728,8 +4910,8 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1659497419}
-  - {fileID: 497107327}
+  - {fileID: 1794641392}
+  - {fileID: 1029254604}
   m_Father: {fileID: 1237206363}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -4930,7 +5112,7 @@ GameObject:
   - component: {fileID: 1578297271}
   - component: {fileID: 1578297270}
   m_Layer: 0
-  m_Name: Select Dish Slot Parent
+  m_Name: Select Food Slot Parent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5061,7 +5243,7 @@ MonoBehaviour:
   SelectionUI: {fileID: 460888034}
   SelectionUI_CanvasGroup: {fileID: 460888036}
   FadeInSettings:
-    EndValue: 0
+    EndValue: 1
     Duration: 0.2
     Ease: 1
   FadeOutSettings:
@@ -5268,7 +5450,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1659497419}
   m_Layer: 0
-  m_Name: Open UI
+  m_Name: UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5281,13 +5463,13 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1659497418}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1634740370}
-  m_Father: {fileID: 1506540761}
+  m_Father: {fileID: 1794641392}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -5552,8 +5734,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1699605711}
+  - component: {fileID: 1699605712}
   m_Layer: 0
-  m_Name: Unlock Dish Page
+  m_Name: Unlock Food Page
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5580,6 +5763,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1699605712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1699605710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e16aec6dab048d296ba0421342b5efb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::System.Cook.Cook_Menu.System.Child.Open_UI_System.Child.UnlockFoodPage
+  UnlockFoodSlotParent: {fileID: 1407834665}
+  UnlockFoodSlotPrefab: {fileID: 5277290961093288109, guid: 43722516392d5c747a5f5c741b09f1eb, type: 3}
 --- !u!114 &1714943707 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6781819637183997077, guid: 6c7b54f1484690a4fadc86f9a0b3e878, type: 3}
@@ -5591,6 +5788,61 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b98354d339b7416e91546b8df61e8b79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::General.Object.Button
+--- !u!1 &1794641391
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1794641392}
+  - component: {fileID: 1794641393}
+  m_Layer: 0
+  m_Name: Open UI System
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1794641392
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1794641391}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1659497419}
+  m_Father: {fileID: 1506540761}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1794641393
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1794641391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 253cf2ad49944bfc98151ecc8c135461, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::System.Cook.Cook_Menu.System.Child.OpenUISystem
+  UI: {fileID: 1659497418}
+  UnlockFoodPage: {fileID: 1699605712}
+  SelectFoodPage: {fileID: 1910117712}
+  FoodTypeButtonParent: {fileID: 210362792}
+  FoodTypeButtonPrefab: {fileID: 7674888563974020716, guid: e9bd5ca5e937d5c47870e90fd1d47f81, type: 3}
+  PlayerData: {fileID: 11400000, guid: f6faef0ee01b35e478f45e9da0d7e8a1, type: 2}
 --- !u!1001 &1808301045
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5850,6 +6102,142 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!1 &1869278642
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1869278643}
+  - component: {fileID: 1869278647}
+  - component: {fileID: 1869278646}
+  - component: {fileID: 1869278645}
+  - component: {fileID: 1869278644}
+  m_Layer: 0
+  m_Name: Brew Station
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1869278643
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1869278642}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -8, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 645663869}
+  - {fileID: 1071874455}
+  m_Father: {fileID: 412674053}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1869278644
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1869278642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34b43ed2351242baa12d4f665503ab37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::General.Object.Cook.Cookware.Cookware
+  CookwareType: 2
+  EmptyBubblePrefab: {fileID: 4629397611317286650, guid: 32a3285c2fed7cd4493d9405c9c9ca0a, type: 3}
+  CookBubblePrefab: {fileID: 4629397611317286650, guid: 17ddefbb15401e542815260e65a312a2, type: 3}
+  GameTimeBubblePrefab: {fileID: 7852260040052447994, guid: 6678c712261e56a46baa936118fe8a94, type: 3}
+  CompleteBubblePrefab: {fileID: 4629397611317286650, guid: abcedab21bcc3b1488f586113e99cdf2, type: 3}
+  OvercookedBubblePrefab: {fileID: 550562492830469709, guid: 5a00ba58dc9f7fb4a84abe3de6c79417, type: 3}
+  BubbleParent: {fileID: 456637291}
+  GameTimeDuration: 60
+  CookGamePrefab: {fileID: 5709886616096664502, guid: d27c2ed33b4f74341a2a011257094aa8, type: 3}
+  GameParent: {fileID: 1071874455}
+--- !u!65 &1869278645
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1869278642}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &1869278646
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1869278642}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &1869278647
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1869278642}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1001 &1900657787
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6083,8 +6471,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1910117711}
+  - component: {fileID: 1910117712}
   m_Layer: 0
-  m_Name: Select Dish Page
+  m_Name: Select Food Page
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6112,6 +6501,22 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1910117712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1910117710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fdfa7ac612314b41b3c880fc42b2de50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::System.Cook.Cook_Menu.System.Child.Open_UI_System.Child.SelectFoodPage
+  SelectFoodSlotParent: {fileID: 1578297269}
+  SelectFoodSlotPrefab_01: {fileID: 691982390061300402, guid: 324158cb445a3984fa4bbf4cab2df729, type: 3}
+  SelectFoodSlotPrefab_02: {fileID: 691982390061300402, guid: cf52a910fe15b0d40a259cff02da5f88, type: 3}
+  SelectFoodSlotPrefab_03: {fileID: 6930142179265803306, guid: c191a5a4779bcbf44b86cd8e6b201983, type: 3}
 --- !u!1 &1925445997
 GameObject:
   m_ObjectHideFlags: 0

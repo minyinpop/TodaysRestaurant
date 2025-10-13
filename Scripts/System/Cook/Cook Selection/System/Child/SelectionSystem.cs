@@ -5,6 +5,7 @@ using Data.Animation.DOTween.Basic;
 using Data.General.Enum;
 using Data.Item.Type.Dish;
 using Data.Player;
+using Data.Player.Base;
 using General.Object;
 using UnityEngine;
 
@@ -51,7 +52,7 @@ namespace System.Cook.Cook_Selection.System.Child
             CloseAction.Add(() => CloseButton.OnClick -= onClose);
             
             // StickyNote
-            PlayerData.GetUnlockedDishes(out var unlockedDishesData);
+            PlayerData.GetUnlockFoods(out var unlockedDishesData);
             foreach (var category in unlockedDishesData)
             {
                 category.GetValues(out _, out var dishesData);

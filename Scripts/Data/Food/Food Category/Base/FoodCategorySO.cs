@@ -11,13 +11,13 @@ namespace Data.Food.Food_Category.Base
         [field: Header("Food Type")]
         [field: SerializeField] private FoodTypeSO FoodTypeData;
         
-        [field: Header("Dish Data")]
-        [field: SerializeField] private List<DishSO> DishData;
+        [field: Header("Food Data")]
+        [field: SerializeField] private List<DishSO> FoodsData;
         
-        public void GetValues(out FoodTypeSO foodTypeData, out List<DishSO> dishesData)
+        public void GetValues(out FoodTypeSO foodTypeData, out List<DishSO> foodsData)
         {
             foodTypeData = FoodTypeData;
-            dishesData = DishData;
+            foodsData = FoodsData;
         }
     }
 }

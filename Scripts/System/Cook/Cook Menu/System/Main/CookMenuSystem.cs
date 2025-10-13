@@ -1,11 +1,10 @@
 using System.Collections.Generic;
 using System.Cook.Cook_Menu.System.Child;
+using System.Cook.Cook_Menu.System.Child.Open_UI_System.Main;
 using UnityEngine;
 
 namespace System.Cook.Cook_Menu.System.Main
 {
-    [RequireComponent(typeof(OpenUISystem))]
-    [RequireComponent(typeof(CloseUISystem))]
     internal sealed class CookMenuSystem : MonoBehaviour
     {
         [field: Header("Child System")]
