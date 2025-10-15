@@ -34,7 +34,7 @@ namespace System.Cook.Cook_Selection.System.Main
             }
         }
 
-        private void OnEmptyBubbleClicked(CookType cookwareType, Action<CookDish> onConfirm, Action onCancel)
+        private void OnEmptyBubbleClicked(CookType cookwareType, Action<CookFood> onConfirm, Action onCancel)
         {
             SelectionSystem.Show(cookwareType,
                 onSelect: selectedDishData =>
@@ -83,7 +83,7 @@ namespace System.Cook.Cook_Selection.System.Main
                                     totalPrice += ingredientPrice;
                                 }
 
-                                var cookDish = new CookDish(selectedDishData, totalCookTime, totalPrice);
+                                var cookDish = new CookFood(selectedDishData, totalCookTime, totalPrice);
                                 
                                 // UI
                                 var isSelectionUIClosed = false;

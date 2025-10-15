@@ -16,9 +16,9 @@ namespace System.Cook.Cook_Selection.Object
         [field: SerializeField] private Image Image;
         [field: SerializeField] private TextMeshProUGUI TMPro;
 
-        private DishSO DishData;
+        private FoodSO FoodData;
 
-        public event Action<DishSO> OnClick;
+        public event Action<FoodSO> OnClick;
 
         private void OnEnable()
         {
@@ -30,12 +30,12 @@ namespace System.Cook.Cook_Selection.Object
             Button.OnClick -= OnStickyNoteClicked;
         }
 
-        public void Init(DishSO dishData)
+        public void Init(FoodSO foodData)
         {
-            DishData = dishData;
-            dishData.GetItemSprite(out var dishSprite);
+            FoodData = foodData;
+            foodData.GetItemSprite(out var dishSprite);
             Image.sprite = dishSprite;
-            dishData.GetItemName(out var dishName);
+            foodData.GetItemName(out var dishName);
             TMPro.text = dishName;
         }
 
@@ -46,7 +46,7 @@ namespace System.Cook.Cook_Selection.Object
 
         private void OnStickyNoteClicked()
         {
-            OnClick?.Invoke(DishData);
+            OnClick?.Invoke(FoodData);
         }
     }
 }

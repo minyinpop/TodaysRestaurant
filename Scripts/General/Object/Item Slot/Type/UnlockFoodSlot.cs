@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 namespace General.Object.Item_Slot.Type
 {
-    internal sealed class UnlockDishSlot : ItemSlot
+    internal sealed class UnlockFoodSlot : ItemSlot
     {
         [field: Header("Object")]
         [field: SerializeField] private RectTransform BackgroundRect;

@@ -6,8 +6,8 @@ namespace General.Object.Item_Slot.Base
 {
     internal abstract class ItemSlot : PointerEvent
     {
-        public event Action<bool, ItemSO> OnClick;
-        protected void OnClicked(bool onSelect, ItemSO itemData) { OnClick?.Invoke(onSelect, itemData); }
+        public event Action<ItemSlot, bool, ItemSO> OnClick;
+        protected void OnClicked(bool onSelect, ItemSO itemData) { OnClick?.Invoke(this, onSelect, itemData); }
 
         protected override void OnPointerEnter() { }
         protected override void OnPointerExit() { }

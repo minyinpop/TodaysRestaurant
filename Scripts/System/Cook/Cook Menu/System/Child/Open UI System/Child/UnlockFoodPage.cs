@@ -13,6 +13,8 @@ namespace System.Cook.Cook_Menu.System.Child.Open_UI_System.Child
         [field: SerializeField] private GameObject UnlockFoodSlotPrefab;
         private readonly List<ItemSlot> UnlockFoodSlots = new();
         private readonly List<Action> UnlockFoodSlot_Actions = new();
+
+        public event Action<ItemSlot, bool, ItemSO> OnClick;
         
         private void OnDisable()
         {
@@ -29,21 +31,18 @@ namespace System.Cook.Cook_Menu.System.Child.Open_UI_System.Child
                 var slot_ItemSlot = slot.GetComponent<ItemSlot>();
                 UnlockFoodSlots.Add(slot_ItemSlot);
                 slot_ItemSlot.Add(dishData);
-                slot_ItemSlot.OnClick += OnClicked;
+                slot_ItemSlot.OnClick += OnClick;
                 UnlockFoodSlot_Actions.Add(() =>
                 {
                     slot_ItemSlot.SetInteractable(false);
-                    slot_ItemSlot.OnClick -= OnClicked;
+                    slot_ItemSlot.OnClick -= OnClick;
                 });
                 slot_ItemSlot.SetInteractable(true);
-                continue;
-
-                void OnClicked(bool onSelect, ItemSO itemData)
-                {
-                    // TODO 檢查是否可以再增加料理到右側
-                    slot_ItemSlot.SetAlpha();
-                }
             }
+        }
+
+        public void OnClicked(ItemSlot itemSlot, bool onSelect, ItemSO itemData)
+        {
         }
 
         public void Clear()

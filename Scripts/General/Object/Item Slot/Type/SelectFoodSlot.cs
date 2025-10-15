@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace General.Object.Item_Slot.Type
 {
-    internal sealed class SelectDishSlot : ItemSlot
+    internal sealed class SelectFoodSlot : ItemSlot
     {
         [field: Header("Object")]
         [field: SerializeField] private RectTransform BackgroundRect;
@@ -40,6 +40,20 @@ namespace General.Object.Item_Slot.Type
         protected override void OnPointerClick()
         {
             if (!Interactable) return;
+            // TODO 清除資料
+        }
+
+        public override bool Add(ItemSO item)
+        {
+            if (item is null) return false;
+            ItemData = item;
+            ItemData.GetItemSprite(out var sprite);
+            DishImage.sprite = sprite;
+            DishImage.gameObject.SetActive(true);
+            ItemData.GetItemName(out var itemName);
+            DishNameTMP.text = itemName;
+            DishNameTMP.gameObject.SetActive(true);
+            return true;
         }
     }
 }

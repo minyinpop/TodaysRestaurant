@@ -43,7 +43,7 @@ namespace System.Cook.Cook_Selection.System.Child
             CloseAction.Clear();
         }
 
-        public void Show(CookType cookwareType, Action<DishSO> onSelect, Action onClose)
+        public void Show(CookType cookwareType, Action<FoodSO> onSelect, Action onClose)
         {
             if (SelectionUI.activeSelf) return;
             

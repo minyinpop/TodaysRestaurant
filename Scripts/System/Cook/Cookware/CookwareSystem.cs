@@ -34,11 +34,11 @@ namespace System.Cook.Cookware
 
         private readonly List<Action> AllActions = new();
 
-        private CookDish CookDish;
+        private CookFood CookFood;
 
         private bool IsCookGameComplete;
 
-        public static event Action<CookType, Action<CookDish>, Action> OnClickEmptyBubble;
+        public static event Action<CookType, Action<CookFood>, Action> OnClickEmptyBubble;
 
         private void Start()
         {
@@ -70,7 +70,7 @@ namespace System.Cook.Cookware
                                 OnClickEmptyBubble?.Invoke(CookwareType,
                                     /* onConfirm */ cookDish =>
                                     {
-                                        CookDish = cookDish;
+                                        CookFood = cookDish;
                                         OnCookState();
                                     },
                                     /* onCancel: */ () =>
@@ -95,7 +95,7 @@ namespace System.Cook.Cookware
                         {
                             CurrentBubble = Instantiate(CookBubblePrefab, BubbleParent);
                             CurrentBubble_CookBubble = CurrentBubble.GetComponent<CookBubble>();
-                            CookDish.GetValues(out _, out var cookTime, out _);
+                            CookFood.GetValues(out _, out var cookTime, out _);
                             CurrentBubble_CookBubble.CoutDown(cookTime / 2,
                                 onComplete: () =>
                                 {

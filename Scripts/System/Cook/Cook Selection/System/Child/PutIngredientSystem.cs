@@ -40,7 +40,7 @@ namespace System.Cook.Cook_Selection.System.Child
             CloseAction.Clear();
         }
 
-        public void Show(DishSO selectedDishData, Action onConfirm, Action onCancel)
+        public void Show(FoodSO selectedFoodData, Action onConfirm, Action onCancel)
         {
             if (PutIngredientUI.activeSelf) return;
             
@@ -51,7 +51,7 @@ namespace System.Cook.Cook_Selection.System.Child
             CloseAction.Add(() => CloseButton.OnClick -= onCancel);
             
             // Item Slot
-            selectedDishData.GetRecipeSheet(out var recipeSheet);
+            selectedFoodData.GetRecipeSheet(out var recipeSheet);
             foreach (var itemData in recipeSheet)
             {
                 var itemSlot = Instantiate(ItemSlotPrefab, ItemSlotParent);

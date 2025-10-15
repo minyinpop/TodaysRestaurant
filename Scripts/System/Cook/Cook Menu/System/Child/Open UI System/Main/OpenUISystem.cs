@@ -3,7 +3,9 @@ using System.Cook.Cook_Menu.System.Child.Open_UI_System.Child;
 using System.Cook.Cook_Menu.System.Object;
 using Data.Food.Food_Category.Base;
 using Data.General.Enum;
+using Data.Item.Base;
 using Data.Player.Base;
+using General.Object.Item_Slot.Base;
 using UnityEngine;
 
 namespace System.Cook.Cook_Menu.System.Child.Open_UI_System.Main
@@ -27,6 +29,16 @@ namespace System.Cook.Cook_Menu.System.Child.Open_UI_System.Main
         [field: SerializeField] private PlayerSO PlayerData;
 
         private FoodType CurrentFoodType = FoodType.Soup; // Default is Soup.
+
+        private void OnEnable()
+        {
+            UnlockFoodPage.OnClick += OnUnlockFoodSlotClicked;
+        }
+        
+        private void OnDisable()
+        {
+            UnlockFoodPage.OnClick -= OnUnlockFoodSlotClicked;
+        }
 
         public void Open()
         {
@@ -67,19 +79,25 @@ namespace System.Cook.Cook_Menu.System.Child.Open_UI_System.Main
             }
         }
 
-        private void FindCategory(FoodType targetFoodType, out FoodCategorySO targetFoodCategory)
+        private void OnUnlockFoodSlotClicked(ItemSlot itemSlot, bool onSelect, ItemSO itemData)
         {
-            PlayerData.GetUnlockFoods(out var foodCategory);
-            foreach (var category in foodCategory)
-            {
-                category.GetValues(out var foodTypeData, out _);
-                foodTypeData.GetValues(out var foodType, out _, out _);
-                if (foodType != targetFoodType) continue;
-                targetFoodCategory = category;
-                return;
-            }
-            
-            targetFoodCategory = null;
         }
+
+        #region Tools
+            private void FindCategory(FoodType targetFoodType, out FoodCategorySO targetFoodCategory)
+            {
+                PlayerData.GetUnlockFoods(out var foodCategory);
+                foreach (var category in foodCategory)
+                {
+                    category.GetValues(out var foodTypeData, out _);
+                    foodTypeData.GetValues(out var foodType, out _, out _);
+                    if (foodType != targetFoodType) continue;
+                    targetFoodCategory = category;
+                    return;
+                }
+                
+                targetFoodCategory = null;
+            }
+        #endregion
     }
 }
