@@ -3,6 +3,7 @@ using System.Cook.Cook_Selection.System.Child;
 using System.Cook.Cookware;
 using System.Message.Main;
 using Data.General;
+using Data.General.Enum;
 using UnityEngine;
 
 namespace System.Cook.Cook_Selection.System.Main
@@ -33,9 +34,9 @@ namespace System.Cook.Cook_Selection.System.Main
             }
         }
 
-        private void OnEmptyBubbleClicked(Action<CookDish> onConfirm, Action onCancel)
+        private void OnEmptyBubbleClicked(CookType cookwareType, Action<CookDish> onConfirm, Action onCancel)
         {
-            SelectionSystem.Show(
+            SelectionSystem.Show(cookwareType,
                 onSelect: selectedDishData =>
                 {
                     SelectionSystem.SetInteractable(false);
@@ -109,7 +110,7 @@ namespace System.Cook.Cook_Selection.System.Main
                     SelectionSystem.Hide(
                         onComplete: () =>
                         {
-                            Debug.Log("Can Click Empty Bubble.");
+                            // TODO
                         });
                 });
         }

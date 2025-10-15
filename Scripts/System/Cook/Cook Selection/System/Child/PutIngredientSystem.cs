@@ -5,7 +5,7 @@ using Data.Animation.DOTween.Basic;
 using Data.Item.Base;
 using Data.Item.Type.Dish;
 using General.Object;
-using General.Object.Item_Slot.Base;
+using General.Object.Storage_Slot.Base;
 using UnityEngine;
 
 namespace System.Cook.Cook_Selection.System.Child
@@ -30,7 +30,7 @@ namespace System.Cook.Cook_Selection.System.Child
         [field: SerializeField] private GameObject ItemSlotPrefab;
         [field: SerializeField] private Transform ItemSlotParent;
         
-        private readonly List<ItemSlot> ItemSlots = new();
+        private readonly List<StorageSlot> ItemSlots = new();
         
         private readonly List<Action> CloseAction = new();
 
@@ -55,7 +55,7 @@ namespace System.Cook.Cook_Selection.System.Child
             foreach (var itemData in recipeSheet)
             {
                 var itemSlot = Instantiate(ItemSlotPrefab, ItemSlotParent);
-                var itemSlot_ItemSlot = itemSlot.GetComponent<ItemSlot>();
+                var itemSlot_ItemSlot = itemSlot.GetComponent<StorageSlot>();
                 ItemSlots.Add(itemSlot_ItemSlot);
                 itemSlot_ItemSlot.Add(itemData);
             }

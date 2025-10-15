@@ -7,7 +7,7 @@ using Data.Animation.DOTween.Basic;
 using Data.General;
 using Data.Item.Base;
 using Data.Item.Type.Ingredient;
-using General.Object.Item_Slot.Base;
+using General.Object.Storage_Slot.Base;
 using TMPro;
 using UnityEngine;
 
@@ -191,7 +191,7 @@ namespace General.Object
         [field: SerializeField] private Transform SpawnParent;
         [field: SerializeField] private GameObject SlotPrefab;
 
-        private List<ItemSlot> ItemSlots = new();
+        private List<StorageSlot> ItemSlots = new();
         
         private IEnumerator ShowItemCor;
 
@@ -208,7 +208,7 @@ namespace General.Object
                 {
                     var index = i;
                     var slot = Instantiate(SlotPrefab, SpawnParent);
-                    var slotScript = slot.GetComponent<ItemSlot>();
+                    var slotScript = slot.GetComponent<StorageSlot>();
                     var item = items[index];
                     completes.Add(false);
                     ItemSlots.Add(slotScript);

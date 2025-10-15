@@ -1,11 +1,21 @@
 using Data.Animation.DOTween.Basic;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace System.General
 {
     internal sealed class DoAnimation : MonoBehaviour
     {
+        private void OnDisable()
+        {
+            MoveTween?.Kill();
+            RotateTween?.Kill();
+            ScaleTween?.Kill();
+            DoFade_CanvasGroup_Tween?.Kill();
+            DoValue_Slider_Tween?.Kill();
+        }
+
         #region Move
             private Tween MoveTween;
             
@@ -60,11 +70,30 @@ namespace System.General
         #region Scale
             private Tween ScaleTween;
             
-            public void DoScale(Transform rect, DoScale settings, Action onComplete = null)
+            public void DoScale_UI(RectTransform rect, DoScale settings, Action onComplete = null)
             {
                 ScaleTween?.Kill();
                 settings.GetValues(out var endValue, out var duration, out var ease);
                 ScaleTween = rect
+                    .DOScale(endValue, duration)
+                    .SetEase(ease)
+                    .OnComplete(
+                        () =>
+                        {
+                            onComplete?.Invoke();
+                        })
+                    .OnKill(
+                        () =>
+                        {
+                            ScaleTween = null;
+                        });
+            }
+
+            public void DoScale_WorldSpace(Transform trans, DoScale settings, Action onComplete = null)
+            {
+                ScaleTween?.Kill();
+                settings.GetValues(out var endValue, out var duration, out var ease);
+                ScaleTween = trans
                     .DOScale(endValue, duration)
                     .SetEase(ease)
                     .OnComplete(
@@ -88,7 +117,7 @@ namespace System.General
                 DoFade_CanvasGroup_Tween?.Kill();
                 settings.GetValues(out var endValue, out var duration, out var ease);
                 DoFade_CanvasGroup_Tween = canvasGroup
-                    .DOFade(endValue ? 1 : 0, duration)
+                    .DOFade(endValue, duration)
                     .SetEase(ease)
                     .OnComplete(() =>
                     {
@@ -97,6 +126,27 @@ namespace System.General
                     .OnKill(() =>
                     {
                         DoFade_CanvasGroup_Tween = null;
+                    });
+            }
+        #endregion
+        
+        #region Value
+            private Tween DoValue_Slider_Tween;
+
+            public void DoValue_Slider(Slider slider, DoValue_Slider settings, Action onComplete = null)
+            {
+                DoValue_Slider_Tween?.Kill();
+                settings.GetValues(out var endValue, out var duration, out var snapping, out var ease);
+                DoValue_Slider_Tween = slider
+                    .DOValue(endValue, duration, snapping)
+                    .SetEase(ease)
+                    .OnComplete(() =>
+                    {
+                        onComplete?.Invoke();
+                    })
+                    .OnKill(() =>
+                    {
+                        DoValue_Slider_Tween = null;
                     });
             }
         #endregion

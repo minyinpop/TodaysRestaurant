@@ -68,7 +68,7 @@ namespace System.Scene
                 UI.SetActive(true);
                 DoAnimation.DoFade_CanvasGroup(
                     canvasGroup: UICanvasGroup,
-                    settings: new DoFade_CanvasGroup(true, 1, Ease.Linear),
+                    settings: new DoFade_CanvasGroup(1, 1, Ease.Linear),
                     onComplete: () =>
                     {
                         complete = true;
@@ -84,14 +84,14 @@ namespace System.Scene
                 }
                 
                 complete = false;
-                DoAnimation.DoScale(
+                DoAnimation.DoScale_UI(
                     rect: HandlerRect,
                     settings: new DoScale(Vector2.zero, .5f, Ease.OutBounce),
                     onComplete: () =>
                     {
                         LoadingImage.SetActive(false);
                         CompleteImage.SetActive(true);
-                        DoAnimation.DoScale(
+                        DoAnimation.DoScale_UI(
                             rect: HandlerRect,
                             settings: new DoScale(Vector2.one, .5f, Ease.OutBounce),
                             onComplete: () =>
@@ -104,7 +104,7 @@ namespace System.Scene
                 complete = false;
                 DoAnimation.DoFade_CanvasGroup(
                     canvasGroup: UICanvasGroup,
-                    settings: new DoFade_CanvasGroup(false, 1, Ease.Linear),
+                    settings: new DoFade_CanvasGroup(0, 1, Ease.Linear),
                     onComplete: () =>
                     {
                         LoadingImage.SetActive(true);

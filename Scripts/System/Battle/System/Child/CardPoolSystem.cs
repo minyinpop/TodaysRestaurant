@@ -8,6 +8,7 @@ using Data.Animation.DOTween.Basic;
 using Data.General;
 using Data.General.Enum;
 using Data.Player;
+using Data.Player.Base;
 using DG.Tweening;
 using UnityEngine;
 
