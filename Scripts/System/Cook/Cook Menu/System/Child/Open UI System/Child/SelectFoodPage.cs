@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Data.Cook.Select_Food_Type;
 using Data.General.Enum;
 using Data.Item.Base;
 using General.Object.Item_Slot.Base;
@@ -13,6 +14,10 @@ namespace System.Cook.Cook_Menu.System.Child.Open_UI_System.Child
         [field: SerializeField] private GameObject SelectFoodSlotPrefab;
         private readonly List<ItemSlot> SelectFoodSlots = new();
         private readonly List<Action> SelectFoodSlot_Actions = new();
+        
+        [field: Header("Select Food Type Data")]
+        [field: SerializeField] private SelectFoodTypeSO SelectSoupTypeData;
+        [field: SerializeField] private SelectFoodTypeSO SelectDrinkTypeData;
         
         [field: Header("Develop Only")]
         [field: SerializeField, Range(0, 12)] private int UnlockSoupSlotIndex;
@@ -44,24 +49,34 @@ namespace System.Cook.Cook_Menu.System.Child.Open_UI_System.Child
                         SelectFoodSlots.Add(slot_ItemSlot);
                         slot_ItemSlot.OnClick += OnClick;
                         SelectFoodSlot_Actions.Add(() => slot_ItemSlot.OnClick -= OnClick);
-                        
                         if (i < UnlockSoupSlotIndex) { slot_ItemSlot.SetSlotState(ItemSlotState.NoItem); }
                         else if (i >= UnlockSoupSlotIndex) { slot_ItemSlot.SetSlotState(ItemSlotState.Lock); }
                     }
                     break;
                 }
-                // TODO 2025.10.18
-                // case FoodType.Drink:
-                // {
-                //     for (var i = 0; i < UnlockDrinkSlotIndex; i++)
-                //     {
-                //         var slot = Instantiate(SelectFoodSlotPrefab, SelectFoodSlotParent);
-                //         var slot_ItemSlot = slot.GetComponent<ItemSlot>();
-                //         SelectFoodSlots.Add(slot_ItemSlot);
-                //     }
-                //     break;
-                // }
+                case FoodType.Drink:
+                {
+                    for (var i = 0; i < TotalSlotCount; i++)
+                    {
+                        var slot = Instantiate(SelectFoodSlotPrefab, SelectFoodSlotParent);
+                        var slot_ItemSlot = slot.GetComponent<ItemSlot>();
+                        SelectFoodSlots.Add(slot_ItemSlot);
+                        slot_ItemSlot.OnClick += OnClick;
+                        SelectFoodSlot_Actions.Add(() => slot_ItemSlot.OnClick -= OnClick);
+                        if (i < UnlockDrinkSlotIndex) { slot_ItemSlot.SetSlotState(ItemSlotState.NoItem); }
+                        else if (i >= UnlockDrinkSlotIndex) { slot_ItemSlot.SetSlotState(ItemSlotState.Lock); }
+                    }
+                    break;
+                }
             }
+        }
+
+        public void Clear()
+        {
+            foreach (var action in SelectFoodSlot_Actions) action?.Invoke();
+            SelectFoodSlot_Actions.Clear();
+            foreach (var slot in SelectFoodSlots) Destroy(slot.gameObject);
+            SelectFoodSlots.Clear();
         }
 
         public bool Add(ItemSO itemData)

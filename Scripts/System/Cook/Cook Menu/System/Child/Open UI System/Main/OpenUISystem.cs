@@ -74,36 +74,44 @@ namespace System.Cook.Cook_Menu.System.Child.Open_UI_System.Main
                 void OnClicked(FoodType foodType)
                 {
                     CurrentFoodType = foodType;
-                    UnlockFoodPage.Clear();
                     FindCategory(CurrentFoodType, out var foodCategory);
+                    
+                    // Unlock Food Page
+                    UnlockFoodPage.Clear();
                     UnlockFoodPage.Spawn(foodCategory);
+                    
+                    // Select Food Page
+                    SelectFoodPage.Clear();
+                    SelectFoodPage.Spawn(CurrentFoodType);
                 }
             }
         }
 
-        private void OnUnlockFoodSlotClicked(ItemSlot slot, ItemSO itemData)
-        {
-            slot.GetSlotState(out var slotState);
-            switch (slotState)
+        #region On Item Slot Clicked
+            private void OnUnlockFoodSlotClicked(ItemSlot slot, ItemSO itemData)
             {
-                case ItemSlotState.Select:
+                slot.GetSlotState(out var slotState);
+                switch (slotState)
                 {
-                    if (SelectFoodPage.Remove(itemData)) UnlockFoodPage.ChangeSelectState(slot);
-                    break;
-                }
-                case ItemSlotState.UnSelect:
-                {
-                    if (SelectFoodPage.Add(itemData)) UnlockFoodPage.ChangeSelectState(slot);
-                    break;
+                    case ItemSlotState.Select:
+                    {
+                        if (SelectFoodPage.Remove(itemData)) UnlockFoodPage.ChangeSelectState(slot);
+                        break;
+                    }
+                    case ItemSlotState.UnSelect:
+                    {
+                        if (SelectFoodPage.Add(itemData)) UnlockFoodPage.ChangeSelectState(slot);
+                        break;
+                    }
                 }
             }
-        }
 
-        private void OnSelectFoodSlotClicked(ItemSlot slot, ItemSO itemData)
-        {
-            SelectFoodPage.CancelSelect(slot);
-            UnlockFoodPage.CancelSelect(itemData);
-        }
+            private void OnSelectFoodSlotClicked(ItemSlot slot, ItemSO itemData)
+            {
+                SelectFoodPage.CancelSelect(slot);
+                UnlockFoodPage.CancelSelect(itemData);
+            }
+        #endregion
 
         #region Tools
             private void FindCategory(FoodType targetFoodType, out FoodCategorySO targetFoodCategory)
