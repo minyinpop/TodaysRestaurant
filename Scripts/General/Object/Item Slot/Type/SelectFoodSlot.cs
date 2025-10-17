@@ -2,6 +2,7 @@ using System.General;
 using Data.Animation.DOTween.Basic;
 using Data.Item.Base;
 using General.Object.Item_Slot.Base;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,49 +12,148 @@ namespace General.Object.Item_Slot.Type
     {
         [field: Header("Object")]
         [field: SerializeField] private RectTransform BackgroundRect;
-        [field: SerializeField] private Image DishImage;
-        [field: SerializeField] private Text DishNameTMP;
+        [field: SerializeField] private Image BackgroundImage;
+        [field: SerializeField] private Image FoodImage;
+        [field: SerializeField] private TextMeshProUGUI FoodNameTMP;
         
         [field: Header("Child System")]
         [field: SerializeField] private DoAnimation DoAnimation;
+        
+        [field: Header("Slot Sprite")]
+        [field: SerializeField] private Sprite LockSprite;
+        [field: SerializeField] private Sprite NoItemSprite;
+        [field: SerializeField] private Sprite HaveItemSprite;
         
         [field: Header("Animation Settings")]
         [field: SerializeField] private DoScale ScaleUpSettings;
         [field: SerializeField] private DoScale ScaleDownSettings;
 
         private ItemSO ItemData;
-
-        private bool Interactable;
+        
+        private ItemSlotState SlotState = ItemSlotState.Lock;
         
         protected override void OnPointerEnter()
         {
-            if (!Interactable) return;
+            if (SlotState != ItemSlotState.HaveItem) return;
             DoAnimation.DoScale_UI(BackgroundRect, ScaleUpSettings);
         }
 
         protected override void OnPointerExit()
         {
-            if (!Interactable) return;
+            if (SlotState != ItemSlotState.HaveItem) return;
             DoAnimation.DoScale_UI(BackgroundRect, ScaleDownSettings);
         }
 
         protected override void OnPointerClick()
         {
-            if (!Interactable) return;
-            // TODO 清除資料
+            if (SlotState != ItemSlotState.HaveItem) return;
+            DoAnimation.DoScale_UI(BackgroundRect, ScaleDownSettings);
+            OnClicked(ItemData);
         }
 
+        #region Item Slot State
+            public override void SetSlotState(ItemSlotState slotState)
+            {
+                SlotState = slotState;
+                switch (SlotState)
+                {
+                    case ItemSlotState.Lock:
+                    {
+                        LockState();
+                        break;
+                    }
+                    case ItemSlotState.NoItem:
+                    {
+                        NoItemState();
+                        break;
+                    }
+                    case ItemSlotState.HaveItem:
+                    {
+                        HaveItemState();
+                        break;
+                    }
+                }
+
+                return;
+
+                void LockState()
+                {
+                    BackgroundImage.sprite = LockSprite;
+                    SlotState = ItemSlotState.Lock;
+                    ItemData = null;
+                    HideFoodInfo();
+                }
+
+                void NoItemState()
+                {
+                    BackgroundImage.sprite = NoItemSprite;
+                    SlotState = ItemSlotState.NoItem;
+                    ItemData = null;
+                    HideFoodInfo();
+                }
+                
+                void HaveItemState()
+                {
+                    BackgroundImage.sprite = HaveItemSprite;
+                    SlotState = ItemSlotState.HaveItem;
+                }
+            }
+            
+            public override void GetSlotState(out ItemSlotState slotState)
+            {
+                slotState = SlotState;
+            }
+        #endregion
+        
         public override bool Add(ItemSO item)
         {
-            if (item is null) return false;
+            if (SlotState is ItemSlotState.Lock or ItemSlotState.HaveItem) return false;
+            SlotState = ItemSlotState.HaveItem;
             ItemData = item;
-            ItemData.GetItemSprite(out var sprite);
-            DishImage.sprite = sprite;
-            DishImage.gameObject.SetActive(true);
-            ItemData.GetItemName(out var itemName);
-            DishNameTMP.text = itemName;
-            DishNameTMP.gameObject.SetActive(true);
+            BackgroundImage.sprite = HaveItemSprite;
+            ShowFoodInfo();
             return true;
         }
+
+        public override void Get(out ItemSO itemData)
+        {
+            if (ItemData is null)
+            {
+                itemData = null;
+                return;
+            }
+
+            itemData = ItemData;
+            Reset();
+        }
+
+        public override void Reset()
+        {
+            if (SlotState is not ItemSlotState.HaveItem) return;
+            SlotState = ItemSlotState.NoItem;
+            ItemData = null;
+            BackgroundImage.sprite = NoItemSprite;
+            HideFoodInfo();
+        }
+
+        #region Info
+            private void ShowFoodInfo()
+            {
+                ItemData.GetItemSprite(out var sprite);
+                FoodImage.sprite = sprite;
+                FoodImage.gameObject.SetActive(true);
+                ItemData.GetItemName(out var itemName);
+                FoodNameTMP.text = itemName;
+                FoodNameTMP.gameObject.SetActive(true);
+            }
+
+            private void HideFoodInfo()
+            {
+                FoodImage.gameObject.SetActive(false);
+                FoodImage.sprite = null;
+                FoodNameTMP.gameObject.SetActive(false);
+                FoodNameTMP.text = string.Empty;
+            }
+        #endregion
     }
 }

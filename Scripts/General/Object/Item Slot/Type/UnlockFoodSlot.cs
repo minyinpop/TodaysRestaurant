@@ -28,28 +28,46 @@ namespace General.Object.Item_Slot.Type
 
         private ItemSO ItemData;
 
-        private bool Interactable;
-        private bool OnSelect;
+        private ItemSlotState SlotState = ItemSlotState.Lock;
         
         protected override void OnPointerEnter()
         {
-            if (!Interactable) return;
+            if (SlotState == ItemSlotState.Lock) return;
             DoAnimation.DoScale_UI(BackgroundRect, ScaleUpSettings);
         }
 
         protected override void OnPointerExit()
         {
-            if (!Interactable) return;
+            if (SlotState == ItemSlotState.Lock) return;
             DoAnimation.DoScale_UI(BackgroundRect, ScaleDownSettings);
         }
 
         protected override void OnPointerClick()
         {
-            if (!Interactable) return;
-            OnSelect = !OnSelect;
-            OnClicked(OnSelect, ItemData);
+            if (SlotState == ItemSlotState.Lock) return;
+            OnClicked(ItemData);
         }
 
+        public override void SetSlotState(ItemSlotState slotState)
+        {
+            SlotState = slotState;
+        }
+        
+        public override void GetSlotState(out ItemSlotState slotState)
+        {
+            slotState = SlotState;
+        }
+
+        public override void ChangeSelectState()
+        {
+            SlotState = SlotState switch
+            {
+                ItemSlotState.Select => ItemSlotState.UnSelect,
+                ItemSlotState.UnSelect => ItemSlotState.Select,
+                _ => SlotState
+            };
+        }
+        
         public override bool Add(ItemSO itemData)
         {
             if (ItemData is not null) return false;
@@ -60,18 +78,22 @@ namespace General.Object.Item_Slot.Type
             return true;
         }
 
-        public override void SetInteractable(bool interactable)
+        public override void Get(out ItemSO itemData)
         {
-            Interactable = interactable;
+            itemData = ItemData;
         }
 
         public override void SetAlpha()
         {
-            foreach (var image in AllImage) image.color = new Color(
-                image.color.r,
-                image.color.g,
-                image.color.b,
-                OnSelect ? OnSelectAlpha : UnSelectAlpha);
+            foreach (var image in AllImage)
+            {
+                image.color = SlotState switch
+                {
+                    ItemSlotState.Select => new Color(image.color.r, image.color.g, image.color.b, OnSelectAlpha),
+                    ItemSlotState.UnSelect => new Color(image.color.r, image.color.g, image.color.b, UnSelectAlpha),
+                    _ => image.color
+                };
+            }
         }
     }
 }

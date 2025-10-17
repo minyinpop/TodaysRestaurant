@@ -14,7 +14,7 @@ namespace System.Cook.Cook_Menu.System.Child.Open_UI_System.Child
         private readonly List<ItemSlot> UnlockFoodSlots = new();
         private readonly List<Action> UnlockFoodSlot_Actions = new();
 
-        public event Action<ItemSlot, bool, ItemSO> OnClick;
+        public event Action<ItemSlot, ItemSO> OnClick;
         
         private void OnDisable()
         {
@@ -32,17 +32,9 @@ namespace System.Cook.Cook_Menu.System.Child.Open_UI_System.Child
                 UnlockFoodSlots.Add(slot_ItemSlot);
                 slot_ItemSlot.Add(dishData);
                 slot_ItemSlot.OnClick += OnClick;
-                UnlockFoodSlot_Actions.Add(() =>
-                {
-                    slot_ItemSlot.SetInteractable(false);
-                    slot_ItemSlot.OnClick -= OnClick;
-                });
-                slot_ItemSlot.SetInteractable(true);
+                UnlockFoodSlot_Actions.Add(() => slot_ItemSlot.OnClick -= OnClick);
+                slot_ItemSlot.SetSlotState(ItemSlotState.UnSelect);
             }
-        }
-
-        public void OnClicked(ItemSlot itemSlot, bool onSelect, ItemSO itemData)
-        {
         }
 
         public void Clear()
@@ -51,6 +43,23 @@ namespace System.Cook.Cook_Menu.System.Child.Open_UI_System.Child
             UnlockFoodSlot_Actions.Clear();
             foreach (var slot in UnlockFoodSlots) Destroy(slot.gameObject);
             UnlockFoodSlots.Clear();
+        }
+        
+        public void ChangeSelectState(ItemSlot itemSlot)
+        {
+            itemSlot.ChangeSelectState();
+            itemSlot.SetAlpha();
+        }
+        
+        public void CancelSelect(ItemSO targetItemData)
+        {
+            foreach (var slot in UnlockFoodSlots)
+            {
+                slot.Get(out var itemData);
+                if (targetItemData != itemData) continue;
+                slot.ChangeSelectState();
+                slot.SetAlpha();
+            }
         }
     }
 }

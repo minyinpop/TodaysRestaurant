@@ -68,7 +68,7 @@ MonoBehaviour:
   m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 307cd3319757fe24e9f702460e2f3168, type: 2}
-  m_sharedMaterial: {fileID: -3692536504375636659, guid: 307cd3319757fe24e9f702460e2f3168, type: 2}
+  m_sharedMaterial: {fileID: -8150822488320326744, guid: 307cd3319757fe24e9f702460e2f3168, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -203,7 +203,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: e16c4d091b4ac634ab9a299e37048024, type: 3}
+  m_Sprite: {fileID: 21300000, guid: cbc24868b45405246b3a72cfa92f312e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -299,10 +299,11 @@ GameObject:
   - component: {fileID: 7957380887645519201}
   - component: {fileID: 6359567716742308258}
   - component: {fileID: 4997809276220495921}
+  - component: {fileID: 8094469596449305392}
   - component: {fileID: 8186239021945817124}
   - component: {fileID: 1048547215542089235}
   m_Layer: 0
-  m_Name: Select Food Slot 03
+  m_Name: Select Food Slot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -366,6 +367,34 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &8094469596449305392
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6930142179265803306}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61b8f4405f85457186d83f8937304071, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::General.Object.Item_Slot.Type.SelectFoodSlot
+  BackgroundRect: {fileID: 7877399180816542598}
+  BackgroundImage: {fileID: 4068379233244007432}
+  FoodImage: {fileID: 8072032707863152439}
+  FoodNameTMP: {fileID: 8529657994214367737}
+  DoAnimation: {fileID: 1048547215542089235}
+  LockSprite: {fileID: 21300000, guid: cbc24868b45405246b3a72cfa92f312e, type: 3}
+  NoItemSprite: {fileID: 21300000, guid: c0b074965049a6249ac278c045ea5911, type: 3}
+  HaveItemSprite: {fileID: 21300000, guid: e16c4d091b4ac634ab9a299e37048024, type: 3}
+  ScaleUpSettings:
+    EndValue: {x: 1.1, y: 1.1, z: 1}
+    Duration: 0.2
+    Ease: 18
+  ScaleDownSettings:
+    EndValue: {x: 1, y: 1, z: 1}
+    Duration: 0.2
+    Ease: 18
 --- !u!114 &8186239021945817124
 MonoBehaviour:
   m_ObjectHideFlags: 0

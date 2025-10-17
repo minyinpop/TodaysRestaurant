@@ -33,11 +33,13 @@ namespace System.Cook.Cook_Menu.System.Child.Open_UI_System.Main
         private void OnEnable()
         {
             UnlockFoodPage.OnClick += OnUnlockFoodSlotClicked;
+            SelectFoodPage.OnClick += OnSelectFoodSlotClicked;
         }
         
         private void OnDisable()
         {
             UnlockFoodPage.OnClick -= OnUnlockFoodSlotClicked;
+            SelectFoodPage.OnClick -= OnSelectFoodSlotClicked;
         }
 
         public void Open()
@@ -49,7 +51,7 @@ namespace System.Cook.Cook_Menu.System.Child.Open_UI_System.Main
             UnlockFoodPage.Spawn(foodCategory);
             
             // Select Dish Page
-            SelectFoodPage.Spawn();
+            SelectFoodPage.Spawn(CurrentFoodType);
             
             // Food Type Button
             PlayerData.GetUnlockFoods(out var dishCategory);
@@ -79,8 +81,28 @@ namespace System.Cook.Cook_Menu.System.Child.Open_UI_System.Main
             }
         }
 
-        private void OnUnlockFoodSlotClicked(ItemSlot itemSlot, bool onSelect, ItemSO itemData)
+        private void OnUnlockFoodSlotClicked(ItemSlot slot, ItemSO itemData)
         {
+            slot.GetSlotState(out var slotState);
+            switch (slotState)
+            {
+                case ItemSlotState.Select:
+                {
+                    if (SelectFoodPage.Remove(itemData)) UnlockFoodPage.ChangeSelectState(slot);
+                    break;
+                }
+                case ItemSlotState.UnSelect:
+                {
+                    if (SelectFoodPage.Add(itemData)) UnlockFoodPage.ChangeSelectState(slot);
+                    break;
+                }
+            }
+        }
+
+        private void OnSelectFoodSlotClicked(ItemSlot slot, ItemSO itemData)
+        {
+            SelectFoodPage.CancelSelect(slot);
+            UnlockFoodPage.CancelSelect(itemData);
         }
 
         #region Tools
