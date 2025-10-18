@@ -31,8 +31,10 @@ namespace System.Cook.Cook_Menu.System.Child.Open_UI_System.Child
                 var slot_ItemSlot = slot.GetComponent<ItemSlot>();
                 UnlockFoodSlots.Add(slot_ItemSlot);
                 slot_ItemSlot.Add(dishData);
+                
                 slot_ItemSlot.OnClick += OnClick;
                 UnlockFoodSlot_Actions.Add(() => slot_ItemSlot.OnClick -= OnClick);
+                
                 slot_ItemSlot.SetSlotState(ItemSlotState.UnSelect);
             }
         }

@@ -74,11 +74,11 @@ namespace System.Cook.Cook_Menu.System.Child.Open_UI_System.Main
                 void OnClicked(FoodType foodType)
                 {
                     CurrentFoodType = foodType;
-                    FindCategory(CurrentFoodType, out var foodCategory);
+                    FindCategory(CurrentFoodType, out var newFoodCategory);
                     
                     // Unlock Food Page
                     UnlockFoodPage.Clear();
-                    UnlockFoodPage.Spawn(foodCategory);
+                    UnlockFoodPage.Spawn(newFoodCategory);
                     
                     // Select Food Page
                     SelectFoodPage.Clear();
@@ -95,12 +95,14 @@ namespace System.Cook.Cook_Menu.System.Child.Open_UI_System.Main
                 {
                     case ItemSlotState.Select:
                     {
-                        if (SelectFoodPage.Remove(itemData)) UnlockFoodPage.ChangeSelectState(slot);
+                        SelectFoodPage.Remove(itemData);
+                        UnlockFoodPage.ChangeSelectState(slot);
                         break;
                     }
                     case ItemSlotState.UnSelect:
                     {
-                        if (SelectFoodPage.Add(itemData)) UnlockFoodPage.ChangeSelectState(slot);
+                        SelectFoodPage.Add(itemData);
+                        UnlockFoodPage.ChangeSelectState(slot);
                         break;
                     }
                 }

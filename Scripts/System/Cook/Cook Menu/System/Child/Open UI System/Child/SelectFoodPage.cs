@@ -25,7 +25,8 @@ namespace System.Cook.Cook_Menu.System.Child.Open_UI_System.Child
 
         private const int TotalSlotCount = 12;
 
-        private FoodType FoodType = FoodType.Soup;
+        private FoodType CurrentFoodType = FoodType.Soup;
+        private SelectFoodTypeSO CurrentSelectFoodTypeSO;
 
         public event Action<ItemSlot, ItemSO> OnClick;
         
@@ -37,35 +38,49 @@ namespace System.Cook.Cook_Menu.System.Child.Open_UI_System.Child
 
         public void Spawn(FoodType foodType)
         {
-            FoodType = foodType;
-            switch (FoodType)
+            CurrentFoodType = foodType;
+            switch (CurrentFoodType)
             {
                 case FoodType.Soup:
                 {
+                    CurrentSelectFoodTypeSO = SelectSoupTypeData;
+                    CurrentSelectFoodTypeSO.Clear();
+                    CurrentSelectFoodTypeSO.Init(UnlockSoupSlotIndex);
+                    
                     for (var i = 0; i < TotalSlotCount; i++)
                     {
                         var slot = Instantiate(SelectFoodSlotPrefab, SelectFoodSlotParent);
                         var slot_ItemSlot = slot.GetComponent<ItemSlot>();
                         SelectFoodSlots.Add(slot_ItemSlot);
+                        
                         slot_ItemSlot.OnClick += OnClick;
                         SelectFoodSlot_Actions.Add(() => slot_ItemSlot.OnClick -= OnClick);
+                        
                         if (i < UnlockSoupSlotIndex) { slot_ItemSlot.SetSlotState(ItemSlotState.NoItem); }
                         else if (i >= UnlockSoupSlotIndex) { slot_ItemSlot.SetSlotState(ItemSlotState.Lock); }
                     }
+
                     break;
                 }
                 case FoodType.Drink:
                 {
+                    CurrentSelectFoodTypeSO = SelectDrinkTypeData;
+                    CurrentSelectFoodTypeSO.Clear();
+                    CurrentSelectFoodTypeSO.Init(UnlockSoupSlotIndex);
+                    
                     for (var i = 0; i < TotalSlotCount; i++)
                     {
                         var slot = Instantiate(SelectFoodSlotPrefab, SelectFoodSlotParent);
                         var slot_ItemSlot = slot.GetComponent<ItemSlot>();
                         SelectFoodSlots.Add(slot_ItemSlot);
+                        
                         slot_ItemSlot.OnClick += OnClick;
                         SelectFoodSlot_Actions.Add(() => slot_ItemSlot.OnClick -= OnClick);
+                        
                         if (i < UnlockDrinkSlotIndex) { slot_ItemSlot.SetSlotState(ItemSlotState.NoItem); }
                         else if (i >= UnlockDrinkSlotIndex) { slot_ItemSlot.SetSlotState(ItemSlotState.Lock); }
                     }
+
                     break;
                 }
             }
@@ -79,28 +94,27 @@ namespace System.Cook.Cook_Menu.System.Child.Open_UI_System.Child
             SelectFoodSlots.Clear();
         }
 
-        public bool Add(ItemSO itemData)
+        public void Add(ItemSO targetItemData)
         {
             foreach (var slot in SelectFoodSlots)
             {
-                if (!slot.Add(itemData)) continue;
-                return true;
+                slot.Add(targetItemData, out var isSuccess);
+                if (!isSuccess) continue;
+                CurrentSelectFoodTypeSO.Add(targetItemData);
+                return;
             }
-
-            return false;
         }
 
-        public bool Remove(ItemSO unlockedSlotItemData)
+        public void Remove(ItemSO targetItemData)
         {
             foreach (var slot in SelectFoodSlots)
             {
                 slot.Get(out var itemData);
                 if (itemData is null) continue;
-                if (itemData == unlockedSlotItemData) return true;
-                slot.Add(itemData);
+                if (itemData != targetItemData) continue;
+                slot.Reset();
+                return;
             }
-
-            return false;
         }
 
         public void CancelSelect(ItemSlot slot)

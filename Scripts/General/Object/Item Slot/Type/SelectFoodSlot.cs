@@ -105,26 +105,24 @@ namespace General.Object.Item_Slot.Type
             }
         #endregion
         
-        public override bool Add(ItemSO item)
+        public override void Add(ItemSO item, out bool isSuccess)
         {
-            if (SlotState is ItemSlotState.Lock or ItemSlotState.HaveItem) return false;
+            if (SlotState is ItemSlotState.Lock or ItemSlotState.HaveItem)
+            {
+                isSuccess = false;
+                return;
+            }
+
             SlotState = ItemSlotState.HaveItem;
             ItemData = item;
             BackgroundImage.sprite = HaveItemSprite;
             ShowFoodInfo();
-            return true;
+            isSuccess = true;
         }
 
         public override void Get(out ItemSO itemData)
         {
-            if (ItemData is null)
-            {
-                itemData = null;
-                return;
-            }
-
             itemData = ItemData;
-            Reset();
         }
 
         public override void Reset()

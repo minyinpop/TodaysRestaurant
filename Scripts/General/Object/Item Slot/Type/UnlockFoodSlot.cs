@@ -68,14 +68,13 @@ namespace General.Object.Item_Slot.Type
             };
         }
         
-        public override bool Add(ItemSO itemData)
+        public override void Add(ItemSO itemData)
         {
-            if (ItemData is not null) return false;
+            if (itemData is null) return;
             ItemData = itemData;
             ItemData.GetItemSprite(out var sprite);
             ItemImage.sprite = sprite;
             ItemImage.gameObject.SetActive(true);
-            return true;
         }
 
         public override void Get(out ItemSO itemData)
