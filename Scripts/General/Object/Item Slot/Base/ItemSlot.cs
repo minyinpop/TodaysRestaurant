@@ -15,7 +15,7 @@ namespace General.Object.Item_Slot.Base
 
         public virtual void SetSlotState(ItemSlotState slotState) { }
         public virtual void GetSlotState(out ItemSlotState slotState) { slotState = ItemSlotState.Lock; }
-
+        
         public virtual void ChangeSelectState() { }
 
         public virtual void Add(ItemSO item) { }

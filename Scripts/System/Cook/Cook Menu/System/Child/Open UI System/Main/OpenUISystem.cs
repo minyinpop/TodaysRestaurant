@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Cook.Cook_Menu.System.Child.Open_UI_System.Child;
 using System.Cook.Cook_Menu.System.Object;
+using System.Linq;
+using Data.Cook.Select_Food_Type;
 using Data.Food.Food_Category.Base;
 using Data.General.Enum;
 using Data.Item.Base;
@@ -27,6 +29,7 @@ namespace System.Cook.Cook_Menu.System.Child.Open_UI_System.Main
         
         [field: Header("Data")]
         [field: SerializeField] private PlayerSO PlayerData;
+        [field: SerializeField] private SelectFoodTypeSO SelectFoodTypeData;
 
         private FoodType CurrentFoodType = FoodType.Soup; // Default is Soup.
 
@@ -51,7 +54,7 @@ namespace System.Cook.Cook_Menu.System.Child.Open_UI_System.Main
             UnlockFoodPage.Spawn(foodCategory);
             
             // Select Dish Page
-            SelectFoodPage.Spawn(CurrentFoodType);
+            SelectFoodPage.Spawn();
             
             // Food Type Button
             PlayerData.GetUnlockFoods(out var dishCategory);
@@ -79,10 +82,9 @@ namespace System.Cook.Cook_Menu.System.Child.Open_UI_System.Main
                     // Unlock Food Page
                     UnlockFoodPage.Clear();
                     UnlockFoodPage.Spawn(newFoodCategory);
-                    
-                    // Select Food Page
-                    SelectFoodPage.Clear();
-                    SelectFoodPage.Spawn(CurrentFoodType);
+
+                    SelectFoodTypeData.Get(out var itemsData);
+                    foreach (var itemData in itemsData.Where(itemData => itemData is not null)) { UnlockFoodPage.CheckItemDataHasBeenSelect(itemData); }
                 }
             }
         }

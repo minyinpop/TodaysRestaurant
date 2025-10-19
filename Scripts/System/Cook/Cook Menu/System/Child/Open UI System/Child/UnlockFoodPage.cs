@@ -52,15 +52,28 @@ namespace System.Cook.Cook_Menu.System.Child.Open_UI_System.Child
             itemSlot.ChangeSelectState();
             itemSlot.SetAlpha();
         }
-        
-        public void CancelSelect(ItemSO targetItemData)
+
+        public void CheckItemDataHasBeenSelect(ItemSO targetItemData)
         {
             foreach (var slot in UnlockFoodSlots)
             {
                 slot.Get(out var itemData);
                 if (targetItemData != itemData) continue;
+                slot.SetSlotState(ItemSlotState.Select);
+                slot.SetAlpha();
+                return;
+            }
+        }
+
+        public void CancelSelect(ItemSO targetItemData)
+        {
+            foreach (var slot in UnlockFoodSlots)
+            {
+                slot.Get(out var itemData); 
+                if (targetItemData != itemData) continue;
                 slot.ChangeSelectState();
                 slot.SetAlpha();
+                return;
             }
         }
     }

@@ -7,28 +7,21 @@ namespace Data.Cook.Select_Food_Type
     [CreateAssetMenu(menuName = "Minyinpop/Cook/Select Food Type", fileName = "New Data")]
     internal sealed class SelectFoodTypeSO : ScriptableObject
     {
-        public List<ItemSO> ItemsData = new();
+        private readonly List<ItemSO> ItemsData = new();
 
-        public void Init(int dataCount)
+        public void Init(int index)
         {
-            dataCount = Mathf.Abs(dataCount);
-            for (var i = 0; i < dataCount; i++) ItemsData.Add(null);
+            for (var i = 0; i < index; i++) ItemsData.Add(null);
         }
 
-        public void Add(ItemSO itemData)
+        public void Add(int slotIndex, ItemSO itemData)
         {
-            if (itemData is null) return;
-            for (var i = 0; i < ItemsData.Count; i++)
-            {
-                var data = ItemsData[i];
-                if (data is not null) continue;
-                ItemsData[i] = itemData;
-            }
+            ItemsData[slotIndex] = itemData;
         }
-
-        public void Clear()
+        
+        public void Get(out List<ItemSO> itemsData)
         {
-            ItemsData.Clear();
+            itemsData = ItemsData;
         }
     }
 }

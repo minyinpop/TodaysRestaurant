@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Data.Cook.Select_Food_Type;
-using Data.General.Enum;
 using Data.Item.Base;
 using General.Object.Item_Slot.Base;
 using UnityEngine;
@@ -16,91 +15,48 @@ namespace System.Cook.Cook_Menu.System.Child.Open_UI_System.Child
         private readonly List<Action> SelectFoodSlot_Actions = new();
         
         [field: Header("Select Food Type Data")]
-        [field: SerializeField] private SelectFoodTypeSO SelectSoupTypeData;
-        [field: SerializeField] private SelectFoodTypeSO SelectDrinkTypeData;
-        
-        [field: Header("Develop Only")]
-        [field: SerializeField, Range(0, 12)] private int UnlockSoupSlotIndex;
-        [field: SerializeField, Range(0, 12)] private int UnlockDrinkSlotIndex;
+        [field: SerializeField] private SelectFoodTypeSO SelectFoodTypeData;
 
+        // Develop Only
         private const int TotalSlotCount = 12;
-
-        private FoodType CurrentFoodType = FoodType.Soup;
-        private SelectFoodTypeSO CurrentSelectFoodTypeSO;
-
-        public event Action<ItemSlot, ItemSO> OnClick;
+        private const int UnlockSlotCount = 3;
         
+        public event Action<ItemSlot, ItemSO> OnClick;
+
+        private void Awake()
+        {
+            SelectFoodTypeData.Init(TotalSlotCount);
+        }
+
         private void OnDisable()
         {
             foreach (var action in SelectFoodSlot_Actions) action?.Invoke();
             SelectFoodSlot_Actions.Clear();
         }
 
-        public void Spawn(FoodType foodType)
+        public void Spawn()
         {
-            CurrentFoodType = foodType;
-            switch (CurrentFoodType)
+            for (var i = 0; i < TotalSlotCount; i++)
             {
-                case FoodType.Soup:
-                {
-                    CurrentSelectFoodTypeSO = SelectSoupTypeData;
-                    CurrentSelectFoodTypeSO.Clear();
-                    CurrentSelectFoodTypeSO.Init(UnlockSoupSlotIndex);
-                    
-                    for (var i = 0; i < TotalSlotCount; i++)
-                    {
-                        var slot = Instantiate(SelectFoodSlotPrefab, SelectFoodSlotParent);
-                        var slot_ItemSlot = slot.GetComponent<ItemSlot>();
-                        SelectFoodSlots.Add(slot_ItemSlot);
-                        
-                        slot_ItemSlot.OnClick += OnClick;
-                        SelectFoodSlot_Actions.Add(() => slot_ItemSlot.OnClick -= OnClick);
-                        
-                        if (i < UnlockSoupSlotIndex) { slot_ItemSlot.SetSlotState(ItemSlotState.NoItem); }
-                        else if (i >= UnlockSoupSlotIndex) { slot_ItemSlot.SetSlotState(ItemSlotState.Lock); }
-                    }
+                var slot = Instantiate(SelectFoodSlotPrefab, SelectFoodSlotParent);
+                var slot_ItemSlot = slot.GetComponent<ItemSlot>();
+                SelectFoodSlots.Add(slot_ItemSlot);
+                
+                slot_ItemSlot.OnClick += OnClick;
+                SelectFoodSlot_Actions.Add(() => slot_ItemSlot.OnClick -= OnClick);
 
-                    break;
-                }
-                case FoodType.Drink:
-                {
-                    CurrentSelectFoodTypeSO = SelectDrinkTypeData;
-                    CurrentSelectFoodTypeSO.Clear();
-                    CurrentSelectFoodTypeSO.Init(UnlockSoupSlotIndex);
-                    
-                    for (var i = 0; i < TotalSlotCount; i++)
-                    {
-                        var slot = Instantiate(SelectFoodSlotPrefab, SelectFoodSlotParent);
-                        var slot_ItemSlot = slot.GetComponent<ItemSlot>();
-                        SelectFoodSlots.Add(slot_ItemSlot);
-                        
-                        slot_ItemSlot.OnClick += OnClick;
-                        SelectFoodSlot_Actions.Add(() => slot_ItemSlot.OnClick -= OnClick);
-                        
-                        if (i < UnlockDrinkSlotIndex) { slot_ItemSlot.SetSlotState(ItemSlotState.NoItem); }
-                        else if (i >= UnlockDrinkSlotIndex) { slot_ItemSlot.SetSlotState(ItemSlotState.Lock); }
-                    }
-
-                    break;
-                }
+                slot_ItemSlot.SetSlotState(i >= UnlockSlotCount ? ItemSlotState.Lock : ItemSlotState.NoItem);
             }
-        }
-
-        public void Clear()
-        {
-            foreach (var action in SelectFoodSlot_Actions) action?.Invoke();
-            SelectFoodSlot_Actions.Clear();
-            foreach (var slot in SelectFoodSlots) Destroy(slot.gameObject);
-            SelectFoodSlots.Clear();
         }
 
         public void Add(ItemSO targetItemData)
         {
-            foreach (var slot in SelectFoodSlots)
+            for (var i = 0; i < TotalSlotCount; i++)
             {
+                var slot = SelectFoodSlots[i];
                 slot.Add(targetItemData, out var isSuccess);
                 if (!isSuccess) continue;
-                CurrentSelectFoodTypeSO.Add(targetItemData);
+                SelectFoodTypeData.Add(i, targetItemData);
                 return;
             }
         }
