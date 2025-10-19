@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Button = General.Object.Button;
 
-namespace System.Cook.Cookware.System.Child.Cook_Selection.Object
+namespace System.Cook.Child.Cookware.System.Child.Cook_Selection.Object
 {
     [RequireComponent(typeof(Button))]
     internal sealed class StickyNote : MonoBehaviour

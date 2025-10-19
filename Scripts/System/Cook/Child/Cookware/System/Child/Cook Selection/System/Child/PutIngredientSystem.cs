@@ -8,7 +8,7 @@ using General.Object;
 using General.Object.Storage_Slot.Base;
 using UnityEngine;
 
-namespace System.Cook.Cookware.System.Child.Cook_Selection.System.Child
+namespace System.Cook.Child.Cookware.System.Child.Cook_Selection.System.Child
 {
     [RequireComponent(typeof(DoAnimation))]
     internal sealed class PutIngredientSystem : MonoBehaviour

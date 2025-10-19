@@ -1,12 +1,12 @@
 using System.Collections.Generic;
-using System.Cook.Cookware.System.Child.Cook_Game.Object;
-using System.Cook.Cookware.System.Child.Cook_Game.System.Child;
+using System.Cook.Child.Cookware.System.Child.Cook_Game.Object;
+using System.Cook.Child.Cookware.System.Child.Cook_Game.System.Child;
 using System.General;
 using Data.Animation.DOTween.Basic;
 using General.Object;
 using UnityEngine;
 
-namespace System.Cook.Cookware.System.Child.Cook_Game.System.Main
+namespace System.Cook.Child.Cookware.System.Child.Cook_Game.System.Main
 {
     [RequireComponent(typeof(DoAnimation))]
     internal sealed class CookGameSystem : MonoBehaviour

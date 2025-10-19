@@ -1,13 +1,13 @@
 using System.Collections.Generic;
-using System.Cook.Cookware.State_Machine;
-using System.Cook.Cookware.State_Machine.State;
-using System.Cook.Cookware.System.Child.Cook_Bubble;
-using System.Cook.Cookware.System.Child.Cook_Game.System.Main;
+using System.Cook.Child.Cookware.State_Machine;
+using System.Cook.Child.Cookware.State_Machine.State;
+using System.Cook.Child.Cookware.System.Child.Cook_Bubble;
+using System.Cook.Child.Cookware.System.Child.Cook_Game.System.Main;
 using Data.General;
 using Data.General.Enum;
 using UnityEngine;
 
-namespace System.Cook.Cookware.System.Main
+namespace System.Cook.Child.Cookware.System.Main
 {
     internal sealed class CookwareSystem : MonoBehaviour
     {

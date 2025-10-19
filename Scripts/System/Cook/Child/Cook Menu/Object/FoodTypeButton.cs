@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Button = General.Object.Button;
 
-namespace System.Cook.Cook_Menu.System.Object
+namespace System.Cook.Child.Cook_Menu.Object
 {
     [RequireComponent(typeof(Button))]
     internal sealed class FoodTypeButton : MonoBehaviour

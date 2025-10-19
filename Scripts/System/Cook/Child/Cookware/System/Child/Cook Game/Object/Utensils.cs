@@ -2,7 +2,7 @@ using System.Collections;
 using System.Input.Main;
 using UnityEngine;
 
-namespace System.Cook.Cookware.System.Child.Cook_Game.Object
+namespace System.Cook.Child.Cookware.System.Child.Cook_Game.Object
 {
     internal sealed class Utensils : MonoBehaviour
     {

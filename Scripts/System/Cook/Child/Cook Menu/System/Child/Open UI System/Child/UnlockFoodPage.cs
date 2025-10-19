@@ -4,7 +4,7 @@ using Data.Item.Base;
 using General.Object.Item_Slot.Base;
 using UnityEngine;
 
-namespace System.Cook.Cook_Menu.System.Child.Open_UI_System.Child
+namespace System.Cook.Child.Cook_Menu.System.Child.Open_UI_System.Child
 {
     internal sealed class UnlockFoodPage : MonoBehaviour
     {

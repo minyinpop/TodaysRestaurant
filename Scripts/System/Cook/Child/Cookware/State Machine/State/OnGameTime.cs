@@ -1,4 +1,4 @@
-namespace System.Cook.Cookware.State_Machine.State
+namespace System.Cook.Child.Cookware.State_Machine.State
 {
     internal sealed class OnGameTime : IState
     {

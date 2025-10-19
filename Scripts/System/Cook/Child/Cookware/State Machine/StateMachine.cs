@@ -1,4 +1,4 @@
-namespace System.Cook.Cookware.State_Machine
+namespace System.Cook.Child.Cookware.State_Machine
 {
     internal sealed class StateMachine
     {

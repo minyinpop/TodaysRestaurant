@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using General.Object;
 using UnityEngine;
 
-namespace System.Cook.Cook_Menu.System.Child
+namespace System.Cook.Child.Cook_Menu.System.Child
 {
     internal sealed class CloseUISystem : MonoBehaviour
     {
@@ -19,8 +19,12 @@ namespace System.Cook.Cook_Menu.System.Child
         private void OnEnable()
         {
             OpenButton.OnClick += OnOpenButtonClicked;
-            ActiveActions.Add(() => OpenButton.OnClick -= OnOpenButtonClicked);
             OpenButton.SetInteractable(true);
+            ActiveActions.Add(() =>
+            {
+                OpenButton.SetInteractable(false);
+                OpenButton.OnClick -= OnOpenButtonClicked;
+            });
         }
         
         private void OnDisable()
@@ -34,12 +38,12 @@ namespace System.Cook.Cook_Menu.System.Child
             OnClickOpenButton?.Invoke();
         }
         
-        public void Open()
+        public void Show()
         {
             UI.SetActive(true);
         }
 
-        public void Close()
+        public void Hide()
         {
             UI.SetActive(false);
         }

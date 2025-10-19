@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Button = General.Object.Button;
 
-namespace System.Cook.Cookware.System.Child.Cook_Bubble
+namespace System.Cook.Child.Cookware.System.Child.Cook_Bubble
 {
     [RequireComponent(typeof(Button))]
     internal sealed class CookBubble : MonoBehaviour

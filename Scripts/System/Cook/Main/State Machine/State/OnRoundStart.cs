@@ -1,11 +1,11 @@
-namespace System.Cook.Child.Cookware.State_Machine.State
+namespace System.Cook.Main.State_Machine.State
 {
-    internal sealed class OnOvercooked : IState
+    internal class OnRoundStart : IState
     {
         private readonly Action OnEnter;
         private readonly Action OnExit;
-
-        public OnOvercooked(Action onEnter, Action onExit)
+        
+        public OnRoundStart(Action onEnter, Action onExit)
         {
             OnEnter = onEnter;
             OnExit = onExit;

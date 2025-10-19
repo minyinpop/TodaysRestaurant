@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace System.Cook.Cookware.System.Child.Cook_Game.System.Child
+namespace System.Cook.Child.Cookware.System.Child.Cook_Game.System.Child
 {
     internal sealed class DetectSystem : MonoBehaviour
     {

@@ -1,9 +1,11 @@
 using System.Collections.Generic;
-using System.Cook.Cook_Menu.System.Child.Open_UI_System.Child;
-using System.Cook.Cook_Menu.System.Object;
+using System.Cook.Child.Cook_Menu.Object;
+using System.Cook.Child.Cook_Menu.System.Child.Open_UI_System.Child;
 using System.Linq;
+using System.Message.Main;
 using Data.Cook.Select_Food_Type;
 using Data.Food.Food_Category.Base;
+using Data.General;
 using Data.General.Enum;
 using Data.Item.Base;
 using Data.Player.Base;
@@ -11,7 +13,7 @@ using General.Object;
 using General.Object.Item_Slot.Base;
 using UnityEngine;
 
-namespace System.Cook.Cook_Menu.System.Child.Open_UI_System.Main
+namespace System.Cook.Child.Cook_Menu.System.Child.Open_UI_System.Main
 {
     internal sealed class OpenUISystem : MonoBehaviour
     {
@@ -21,6 +23,7 @@ namespace System.Cook.Cook_Menu.System.Child.Open_UI_System.Main
         [field: Header("Child System")]
         [field: SerializeField] private UnlockFoodPage UnlockFoodPage;
         [field: SerializeField] private SelectFoodPage SelectFoodPage;
+        [field: SerializeField] private MessageSystem MessageSystem;
         
         [field: Header("Button")]
         [field: SerializeField] private Button ConfirmButton;
@@ -28,31 +31,39 @@ namespace System.Cook.Cook_Menu.System.Child.Open_UI_System.Main
         [field: Header("Food Type Button")]
         [field: SerializeField] private Transform FoodTypeButtonParent;
         [field: SerializeField] private GameObject FoodTypeButtonPrefab;
-        private readonly List<Action> FoodTypeButton_Actions = new();
         
         [field: Header("Data")]
         [field: SerializeField] private PlayerSO PlayerData;
         [field: SerializeField] private SelectFoodTypeSO SelectFoodTypeData;
 
-        private FoodType CurrentFoodType = FoodType.Soup; // Default is Soup.
+        private readonly List<Action> ActiveActions = new();
+        
+        private FoodType CurrentFoodType = FoodType.Soup;
+
+        public event Action OnClickOpenUIConfirmButton;
 
         private void OnEnable()
         {
             ConfirmButton.OnClick += OnConfirmButtonClicked;
+            ConfirmButton.SetInteractable(true);
+            ActiveActions.Add(() =>
+            {
+                ConfirmButton.SetInteractable(false);
+                ConfirmButton.OnClick -= OnConfirmButtonClicked;
+            });
             UnlockFoodPage.OnClick += OnUnlockFoodSlotClicked;
             SelectFoodPage.OnClick += OnSelectFoodSlotClicked;
         }
         
         private void OnDisable()
         {
-            ConfirmButton.OnClick -= OnConfirmButtonClicked;
+            foreach (var action in ActiveActions) action?.Invoke();
+            ActiveActions.Clear();
             UnlockFoodPage.OnClick -= OnUnlockFoodSlotClicked;
             SelectFoodPage.OnClick -= OnSelectFoodSlotClicked;
-            foreach (var action in FoodTypeButton_Actions) action?.Invoke();
-            FoodTypeButton_Actions.Clear();
         }
 
-        public void Open()
+        public void Show()
         {
             UI.SetActive(true);
             
@@ -72,7 +83,7 @@ namespace System.Cook.Cook_Menu.System.Child.Open_UI_System.Main
                 var button_FoodTypeButton = button.GetComponent<FoodTypeButton>();
                 button_FoodTypeButton.Init(foodTypeData);
                 button_FoodTypeButton.OnClick += OnClicked;
-                FoodTypeButton_Actions.Add(() =>
+                ActiveActions.Add(() =>
                 {
                     button_FoodTypeButton.SetInteractable(false);
                     button_FoodTypeButton.OnClick -= OnClicked;
@@ -94,10 +105,26 @@ namespace System.Cook.Cook_Menu.System.Child.Open_UI_System.Main
                 }
             }
         }
+        
+        public void Hide()
+        {
+            UI.SetActive(false);
+        }
 
         private void OnConfirmButtonClicked()
         {
-            // TODO
+            SelectFoodPage.IsAllSlotsHaveItemData(out var allHave);
+            if (allHave) OnClickOpenUIConfirmButton?.Invoke();
+            else
+            {
+                MessageSystem.ShowSwitchUI(
+                    content: new PopUpUIContent(
+                        message: "還有料理可以選擇\n要直接開始營業嗎？",
+                        confirmButtonTitle: "開始營業",
+                        cancelButtonTitle: "再想一下",
+                        closeButtonTitle: string.Empty),
+                    onConfirm: () => OnClickOpenUIConfirmButton?.Invoke());
+            }
         }
 
         #region On Item Slot Clicked

@@ -1,9 +1,9 @@
 using System.Collections.Generic;
-using System.Cook.Cook_Menu.System.Child;
-using System.Cook.Cook_Menu.System.Child.Open_UI_System.Main;
+using System.Cook.Child.Cook_Menu.System.Child;
+using System.Cook.Child.Cook_Menu.System.Child.Open_UI_System.Main;
 using UnityEngine;
 
-namespace System.Cook.Cook_Menu.System.Main
+namespace System.Cook.Child.Cook_Menu.System.Main
 {
     internal sealed class CookMenuSystem : MonoBehaviour
     {
@@ -12,23 +12,29 @@ namespace System.Cook.Cook_Menu.System.Main
         [field: SerializeField] private CloseUISystem CloseUISystem;
 
         private readonly List<Action> ActiveActions = new();
-        
-        private void OnEnable()
-        {
-            CloseUISystem.OnClickOpenButton += OnOpenButtonClicked;
-            ActiveActions.Add(() => CloseUISystem.OnClickOpenButton -= OnOpenButtonClicked);
-        }
-        
+
+        public event Action OnClickOpenUIConfirmButton;
+
         private void OnDisable()
         {
             foreach (var action in ActiveActions) action?.Invoke();
             ActiveActions.Clear();
         }
 
-        private void OnOpenButtonClicked()
+        public void Show()
         {
-            CloseUISystem.Close();
-            OpenUISystem.Open();
+            CloseUISystem.Show();
+            CloseUISystem.OnClickOpenButton += OnOpenButtonClicked;
+            ActiveActions.Add(() => CloseUISystem.OnClickOpenButton -= OnOpenButtonClicked);
+            return;
+            
+            void OnOpenButtonClicked()
+            {
+                CloseUISystem.Hide();
+                OpenUISystem.Show();
+                OpenUISystem.OnClickOpenUIConfirmButton += OnClickOpenUIConfirmButton;
+                ActiveActions.Add(() => OpenUISystem.OnClickOpenUIConfirmButton -= OnClickOpenUIConfirmButton);
+            }
         }
     }
 }

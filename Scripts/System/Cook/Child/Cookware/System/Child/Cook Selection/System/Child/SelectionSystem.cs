@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using System.Cook.Cookware.System.Child.Cook_Selection.Object;
+using System.Cook.Child.Cookware.System.Child.Cook_Selection.Object;
 using System.General;
 using Data.Animation.DOTween.Basic;
 using Data.General.Enum;
@@ -8,7 +8,7 @@ using Data.Player.Base;
 using General.Object;
 using UnityEngine;
 
-namespace System.Cook.Cookware.System.Child.Cook_Selection.System.Child
+namespace System.Cook.Child.Cookware.System.Child.Cook_Selection.System.Child
 {
     [RequireComponent(typeof(DoAnimation))]
     internal sealed class SelectionSystem : MonoBehaviour

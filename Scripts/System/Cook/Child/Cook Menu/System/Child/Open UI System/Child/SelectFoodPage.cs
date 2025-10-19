@@ -4,7 +4,7 @@ using Data.Item.Base;
 using General.Object.Item_Slot.Base;
 using UnityEngine;
 
-namespace System.Cook.Cook_Menu.System.Child.Open_UI_System.Child
+namespace System.Cook.Child.Cook_Menu.System.Child.Open_UI_System.Child
 {
     internal sealed class SelectFoodPage : MonoBehaviour
     {
@@ -81,6 +81,19 @@ namespace System.Cook.Cook_Menu.System.Child.Open_UI_System.Child
             slot.Get(out var itemData);
             SelectFoodTypeData.Remove(itemData);
             slot.Reset();
+        }
+
+        public void IsAllSlotsHaveItemData(out bool allHave)
+        {
+            foreach (var slot in SelectFoodSlots)
+            {
+                slot.Get(out var itemData);
+                if (itemData is not null) continue;
+                allHave = false;
+                return;
+            }
+
+            allHave = true;
         }
     }
 }
