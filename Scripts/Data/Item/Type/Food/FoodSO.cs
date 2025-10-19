@@ -3,7 +3,7 @@ using Data.General.Enum;
 using Data.Item.Base;
 using UnityEngine;
 
-namespace Data.Item.Type.Dish
+namespace Data.Item.Type.Food
 {
     [CreateAssetMenu(menuName = "Minyinpop/Item/Dish Data", fileName = "New Data")]
     internal sealed class FoodSO : ItemSO

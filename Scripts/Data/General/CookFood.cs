@@ -1,4 +1,4 @@
-using Data.Item.Type.Dish;
+using Data.Item.Type.Food;
 
 namespace Data.General
 {

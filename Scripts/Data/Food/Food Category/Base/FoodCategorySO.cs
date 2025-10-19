@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using Data.Food.Food_Type.Base;
-using Data.Item.Type.Dish;
+using Data.Item.Type.Food;
 using UnityEngine;
 
 namespace Data.Food.Food_Category.Base
