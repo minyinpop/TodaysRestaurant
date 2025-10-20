@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using System.Cook.Child.Cook_Menu.Object;
 using System.Cook.Child.Cook_Menu.System.Child.Open_UI_System.Child;
+using System.General;
 using System.Linq;
 using System.Message.Main;
+using Data.Animation.DOTween.Basic;
 using Data.Cook.Select_Food_Type;
 using Data.Food.Food_Category.Base;
 using Data.General;
@@ -15,10 +17,12 @@ using UnityEngine;
 
 namespace System.Cook.Child.Cook_Menu.System.Child.Open_UI_System.Main
 {
+    [RequireComponent(typeof(DoAnimation))]
     internal sealed class OpenUISystem : MonoBehaviour
     {
         [field: Header("UI")]
         [field: SerializeField] private GameObject UI;
+        [field: SerializeField] private CanvasGroup UI_CanvasGroup;
         
         [field: Header("Child System")]
         [field: SerializeField] private UnlockFoodPage UnlockFoodPage;
@@ -27,6 +31,10 @@ namespace System.Cook.Child.Cook_Menu.System.Child.Open_UI_System.Main
         
         [field: Header("Button")]
         [field: SerializeField] private Button ConfirmButton;
+        
+        [field: Header("Animation")]
+        [field: SerializeField] private DoAnimation DoAnimation;
+        [field: SerializeField] private DoFade_CanvasGroup ShowSettings;
         
         [field: Header("Food Type Button")]
         [field: SerializeField] private Transform FoodTypeButtonParent;
@@ -106,9 +114,17 @@ namespace System.Cook.Child.Cook_Menu.System.Child.Open_UI_System.Main
             }
         }
         
-        public void Hide()
+        public void Hide(Action onComplete)
         {
-            UI.SetActive(false);
+            DoAnimation.DoFade_CanvasGroup(UI_CanvasGroup, ShowSettings,
+                onComplete: OnComplete);
+            return;
+
+            void OnComplete()
+            {
+                UI.SetActive(false);
+                onComplete?.Invoke();
+            }
         }
 
         private void OnConfirmButtonClicked()

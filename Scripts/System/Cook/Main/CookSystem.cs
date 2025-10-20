@@ -49,6 +49,7 @@ namespace System.Cook.Main
                 
                 void OnEnter()
                 {
+                    Debug.Log("Round Start.");
                 }
                 
                 void OnExit()

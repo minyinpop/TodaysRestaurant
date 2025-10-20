@@ -23,17 +23,27 @@ namespace System.Cook.Child.Cook_Menu.System.Main
 
         public void Show()
         {
-            CloseUISystem.Show();
-            CloseUISystem.OnClickOpenButton += OnOpenButtonClicked;
-            ActiveActions.Add(() => CloseUISystem.OnClickOpenButton -= OnOpenButtonClicked);
+            CloseUISystem.Show(onComplete: OnUIShowComplete);
             return;
-            
+
+            void OnUIShowComplete()
+            {
+                CloseUISystem.OnClickOpenButton += OnOpenButtonClicked;
+                ActiveActions.Add(() => CloseUISystem.OnClickOpenButton -= OnOpenButtonClicked);
+            }
+
             void OnOpenButtonClicked()
             {
                 CloseUISystem.Hide();
                 OpenUISystem.Show();
-                OpenUISystem.OnClickOpenUIConfirmButton += OnClickOpenUIConfirmButton;
-                ActiveActions.Add(() => OpenUISystem.OnClickOpenUIConfirmButton -= OnClickOpenUIConfirmButton);
+                OpenUISystem.OnClickOpenUIConfirmButton += OnOpenUIConfirmButtonClicked;
+                ActiveActions.Add(() => OpenUISystem.OnClickOpenUIConfirmButton -= OnOpenUIConfirmButtonClicked);
+                return;
+
+                void OnOpenUIConfirmButtonClicked()
+                {
+                    OpenUISystem.Hide(onComplete: () => OnClickOpenUIConfirmButton?.Invoke());
+                }
             }
         }
     }
