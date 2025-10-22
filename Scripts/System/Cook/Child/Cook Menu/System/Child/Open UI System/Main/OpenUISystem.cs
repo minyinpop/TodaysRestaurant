@@ -2,17 +2,17 @@ using System.Collections.Generic;
 using System.Cook.Child.Cook_Menu.Object;
 using System.Cook.Child.Cook_Menu.System.Child.Open_UI_System.Child;
 using System.General;
+using System.Item_Slot.Base;
 using System.Linq;
-using System.Message.Main;
+using System.Message.System.Main;
 using Data.Animation.DOTween.Basic;
+using Data.Cook;
 using Data.Cook.Select_Food_Type;
 using Data.Food.Food_Category.Base;
 using Data.General;
 using Data.General.Enum;
 using Data.Item.Base;
 using Data.Player.Base;
-using General.Object;
-using General.Object.Item_Slot.Base;
 using UnityEngine;
 
 namespace System.Cook.Child.Cook_Menu.System.Child.Open_UI_System.Main
@@ -129,17 +129,35 @@ namespace System.Cook.Child.Cook_Menu.System.Child.Open_UI_System.Main
 
         private void OnConfirmButtonClicked()
         {
-            SelectFoodPage.IsAllSlotsHaveItemData(out var allHave);
-            if (allHave) OnClickOpenUIConfirmButton?.Invoke();
-            else
+            SelectFoodPage.IsAllSlotsHaveItemData(out var type);
+            switch (type)
             {
-                MessageSystem.ShowSwitchUI(
-                    content: new PopUpUIContent(
-                        message: "還有料理可以選擇\n要直接開始營業嗎？",
-                        confirmButtonTitle: "開始營業",
-                        cancelButtonTitle: "再想一下",
-                        closeButtonTitle: string.Empty),
-                    onConfirm: () => OnClickOpenUIConfirmButton?.Invoke());
+                case SelectItemSlotType.UnSelect:
+                {
+                    MessageSystem.ShowTipUI(
+                        content: new PopUpUIContent(
+                            message: "請選擇料理",
+                            confirmButtonTitle: "確認",
+                            cancelButtonTitle: string.Empty,
+                            closeButtonTitle: string.Empty));
+                    break;
+                }
+                case SelectItemSlotType.UnFull:
+                {
+                    MessageSystem.ShowSwitchUI(
+                        content: new PopUpUIContent(
+                            message: "還有料理可以選擇\n要直接開始營業嗎？",
+                            confirmButtonTitle: "開始營業",
+                            cancelButtonTitle: "再想一下",
+                            closeButtonTitle: string.Empty),
+                        onConfirm: () => OnClickOpenUIConfirmButton?.Invoke());
+                    break;
+                }
+                case SelectItemSlotType.Full:
+                {
+                    OnClickOpenUIConfirmButton?.Invoke();
+                    break;
+                }
             }
         }
 

@@ -1,6 +1,6 @@
 using System.Mouse.Child.Item.Object;
+using System.Storage_Slot.Base;
 using Data.Item.Base;
-using General.Object.Storage_Slot.Base;
 using UnityEngine;
 
 namespace System.Mouse.Child.Item

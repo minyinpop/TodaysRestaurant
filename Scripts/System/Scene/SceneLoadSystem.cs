@@ -1,6 +1,6 @@
 using System.Collections;
 using System.General;
-using System.Title.Main;
+using System.Title;
 using Data.Animation.DOTween.Basic;
 using DG.Tweening;
 using UnityEngine;

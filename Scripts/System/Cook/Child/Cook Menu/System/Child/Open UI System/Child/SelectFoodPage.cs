@@ -1,7 +1,8 @@
 using System.Collections.Generic;
+using System.Item_Slot.Base;
+using Data.Cook;
 using Data.Cook.Select_Food_Type;
 using Data.Item.Base;
-using General.Object.Item_Slot.Base;
 using UnityEngine;
 
 namespace System.Cook.Child.Cook_Menu.System.Child.Open_UI_System.Child
@@ -83,17 +84,23 @@ namespace System.Cook.Child.Cook_Menu.System.Child.Open_UI_System.Child
             slot.Reset();
         }
 
-        public void IsAllSlotsHaveItemData(out bool allHave)
+        public void IsAllSlotsHaveItemData(out SelectItemSlotType type)
         {
+            var isAllSelect = true;
+            type = SelectItemSlotType.UnSelect;
             foreach (var slot in SelectFoodSlots)
             {
                 slot.Get(out var itemData);
-                if (itemData is not null) continue;
-                allHave = false;
-                return;
+                if (itemData is null)
+                {
+                    isAllSelect = false;
+                    continue;
+                }
+
+                type = SelectItemSlotType.UnFull;
             }
 
-            allHave = true;
+            if (isAllSelect) type = SelectItemSlotType.Full;
         }
     }
 }

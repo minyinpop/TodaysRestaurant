@@ -20,10 +20,16 @@ namespace Data.Player.Base
             public void GetCardPrefabs(out List<GameObject> cardPrefabs) { DeckData.Get(out cardPrefabs); }
         #endregion
         
-        #region Unlock Foods
-            [field: Header("Unlock Foods")]
+        #region Unlock Food
+            [field: Header("Unlock Food")]
             [field: SerializeField] private List<FoodCategorySO> UnlockFoods;
             public void GetUnlockFoods(out List<FoodCategorySO> foods) { foods = UnlockFoods; }
+        #endregion
+
+        #region Attribute
+            [field: Header("Attribute")]
+            [field: SerializeField] private float MoveSpeed;
+            public void GetMoveSpeed(out float moveSpeed) { moveSpeed = MoveSpeed; }
         #endregion
     }
 }

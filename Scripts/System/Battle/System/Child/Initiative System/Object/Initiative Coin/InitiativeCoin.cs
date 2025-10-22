@@ -3,7 +3,6 @@ using Data.Animation.DOTween.Basic;
 using Data.Animation.DOTween.Combine;
 using Data.General.Enum;
 using DG.Tweening;
-using General;
 using UnityEngine;
 
 namespace System.Battle.System.Child.Initiative_System.Object.Initiative_Coin

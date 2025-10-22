@@ -1,0 +1,22 @@
+using System.General;
+using Data.Item.Base;
+using UnityEngine;
+
+namespace System.Storage_Slot.Base
+{
+    [RequireComponent(typeof(DoAnimation))]
+    internal abstract class StorageSlot : PointerEvent
+    {
+        protected override void OnPointerEnter() { }
+        protected override void OnPointerExit() { }
+
+        public virtual bool Add(ItemSO item) { return false; }
+        public virtual void Add(ItemSO item, Action onComplete) { onComplete?.Invoke(); }
+        
+        public virtual void Get(out ItemSO item) { item = null; }
+        
+        public virtual bool IsEmpty() { return true; }
+
+        public virtual void SetInteractable(bool interactable) { }
+    }
+}

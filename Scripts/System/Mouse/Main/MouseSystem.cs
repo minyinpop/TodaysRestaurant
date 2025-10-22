@@ -24,12 +24,12 @@ namespace System.Mouse.Main
         
         private void OnEnable()
         {
-            InputSystem.MouseLeftButtonClicked += OnPointerClick;
+            InputSystem.OnClickMouseLeftButton += OnPointerClick;
         }
         
         private void OnDisable()
         {
-            InputSystem.MouseLeftButtonClicked -= OnPointerClick;
+            InputSystem.OnClickMouseLeftButton -= OnPointerClick;
         }
 
         private void OnPointerClick()
