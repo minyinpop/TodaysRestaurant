@@ -1,0 +1,191 @@
+using System.Collections.Generic;
+using System.Cook.Child.Cook_Menu.Object;
+using System.Cook.Child.Cook_Menu.System.Child.Open_UI_System.Child;
+using System.General;
+using System.Linq;
+using System.Message.Main;
+using Data.Animation.DOTween.Basic;
+using Data.Cook.Select_Food_Type;
+using Data.Food.Food_Category.Base;
+using Data.General;
+using Data.General.Enum;
+using Data.Item.Base;
+using Data.Player.Base;
+using General.Object;
+using General.Object.Item_Slot.Base;
+using UnityEngine;
+
+namespace System.Cook.Child.Cook_Menu.System.Child.Open_UI_System.Main
+{
+    [RequireComponent(typeof(DoAnimation))]
+    internal sealed class OpenUISystem : MonoBehaviour
+    {
+        [field: Header("UI")]
+        [field: SerializeField] private GameObject UI;
+        [field: SerializeField] private CanvasGroup UI_CanvasGroup;
+        
+        [field: Header("Child System")]
+        [field: SerializeField] private UnlockFoodPage UnlockFoodPage;
+        [field: SerializeField] private SelectFoodPage SelectFoodPage;
+        [field: SerializeField] private MessageSystem MessageSystem;
+        
+        [field: Header("Button")]
+        [field: SerializeField] private Button ConfirmButton;
+        
+        [field: Header("Animation")]
+        [field: SerializeField] private DoAnimation DoAnimation;
+        [field: SerializeField] private DoFade_CanvasGroup ShowSettings;
+        
+        [field: Header("Food Type Button")]
+        [field: SerializeField] private Transform FoodTypeButtonParent;
+        [field: SerializeField] private GameObject FoodTypeButtonPrefab;
+        
+        [field: Header("Data")]
+        [field: SerializeField] private PlayerSO PlayerData;
+        [field: SerializeField] private SelectFoodTypeSO SelectFoodTypeData;
+
+        private readonly List<Action> ActiveActions = new();
+        
+        private FoodType CurrentFoodType = FoodType.Soup;
+
+        public event Action OnClickOpenUIConfirmButton;
+
+        private void OnEnable()
+        {
+            ConfirmButton.OnClick += OnConfirmButtonClicked;
+            ConfirmButton.SetInteractable(true);
+            ActiveActions.Add(() =>
+            {
+                ConfirmButton.SetInteractable(false);
+                ConfirmButton.OnClick -= OnConfirmButtonClicked;
+            });
+            UnlockFoodPage.OnClick += OnUnlockFoodSlotClicked;
+            SelectFoodPage.OnClick += OnSelectFoodSlotClicked;
+        }
+        
+        private void OnDisable()
+        {
+            foreach (var action in ActiveActions) action?.Invoke();
+            ActiveActions.Clear();
+            UnlockFoodPage.OnClick -= OnUnlockFoodSlotClicked;
+            SelectFoodPage.OnClick -= OnSelectFoodSlotClicked;
+        }
+
+        public void Show()
+        {
+            UI.SetActive(true);
+            
+            // Unlock Food Page
+            FindCategory(CurrentFoodType, out var foodCategory);
+            UnlockFoodPage.Spawn(foodCategory);
+            
+            // Select Dish Page
+            SelectFoodPage.Spawn();
+            
+            // Food Type Button
+            PlayerData.GetUnlockFoods(out var dishCategory);
+            foreach (var category in dishCategory)
+            {
+                category.GetValues(out var foodTypeData, out _);
+                var button = Instantiate(FoodTypeButtonPrefab, FoodTypeButtonParent);
+                var button_FoodTypeButton = button.GetComponent<FoodTypeButton>();
+                button_FoodTypeButton.Init(foodTypeData);
+                button_FoodTypeButton.OnClick += OnClicked;
+                ActiveActions.Add(() =>
+                {
+                    button_FoodTypeButton.SetInteractable(false);
+                    button_FoodTypeButton.OnClick -= OnClicked;
+                });
+                button_FoodTypeButton.SetInteractable(true);
+                continue;
+
+                void OnClicked(FoodType foodType)
+                {
+                    CurrentFoodType = foodType;
+                    FindCategory(CurrentFoodType, out var newFoodCategory);
+                    
+                    // Unlock Food Page
+                    UnlockFoodPage.Clear();
+                    UnlockFoodPage.Spawn(newFoodCategory);
+
+                    SelectFoodTypeData.Get(out var itemsData);
+                    foreach (var itemData in itemsData.Where(itemData => itemData is not null)) { UnlockFoodPage.CheckItemDataHasBeenSelect(itemData); }
+                }
+            }
+        }
+        
+        public void Hide(Action onComplete)
+        {
+            DoAnimation.DoFade_CanvasGroup(UI_CanvasGroup, ShowSettings,
+                onComplete: OnComplete);
+            return;
+
+            void OnComplete()
+            {
+                UI.SetActive(false);
+                onComplete?.Invoke();
+            }
+        }
+
+        private void OnConfirmButtonClicked()
+        {
+            SelectFoodPage.IsAllSlotsHaveItemData(out var allHave);
+            if (allHave) OnClickOpenUIConfirmButton?.Invoke();
+            else
+            {
+                MessageSystem.ShowSwitchUI(
+                    content: new PopUpUIContent(
+                        message: "還有料理可以選擇\n要直接開始營業嗎？",
+                        confirmButtonTitle: "開始營業",
+                        cancelButtonTitle: "再想一下",
+                        closeButtonTitle: string.Empty),
+                    onConfirm: () => OnClickOpenUIConfirmButton?.Invoke());
+            }
+        }
+
+        #region On Item Slot Clicked
+            private void OnUnlockFoodSlotClicked(ItemSlot slot, ItemSO itemData)
+            {
+                slot.GetSlotState(out var slotState);
+                switch (slotState)
+                {
+                    case ItemSlotState.Select:
+                    {
+                        SelectFoodPage.Remove(itemData);
+                        UnlockFoodPage.ChangeSelectState(slot);
+                        break;
+                    }
+                    case ItemSlotState.UnSelect:
+                    {
+                        SelectFoodPage.Add(itemData, out var isSuccess);
+                        if (isSuccess) UnlockFoodPage.ChangeSelectState(slot);
+                        break;
+                    }
+                }
+            }
+
+            private void OnSelectFoodSlotClicked(ItemSlot slot, ItemSO itemData)
+            {
+                SelectFoodPage.CancelSelect(slot);
+                UnlockFoodPage.CancelSelect(itemData);
+            }
+        #endregion
+
+        #region Tools
+            private void FindCategory(FoodType targetFoodType, out FoodCategorySO targetFoodCategory)
+            {
+                PlayerData.GetUnlockFoods(out var foodCategory);
+                foreach (var category in foodCategory)
+                {
+                    category.GetValues(out var foodTypeData, out _);
+                    foodTypeData.GetValues(out var foodType, out _, out _);
+                    if (foodType != targetFoodType) continue;
+                    targetFoodCategory = category;
+                    return;
+                }
+                
+                targetFoodCategory = null;
+            }
+        #endregion
+    }
+}

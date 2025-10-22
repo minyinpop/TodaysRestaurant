@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using Data.Food.Food_Type.Base;
-using Data.Item.Type.Dish;
+using Data.Item.Type.Food;
 using UnityEngine;
 
 namespace Data.Food.Food_Category.Base
@@ -12,9 +12,9 @@ namespace Data.Food.Food_Category.Base
         [field: SerializeField] private FoodTypeSO FoodTypeData;
         
         [field: Header("Food Data")]
-        [field: SerializeField] private List<DishSO> FoodsData;
+        [field: SerializeField] private List<FoodSO> FoodsData;
         
-        public void GetValues(out FoodTypeSO foodTypeData, out List<DishSO> foodsData)
+        public void GetValues(out FoodTypeSO foodTypeData, out List<FoodSO> foodsData)
         {
             foodTypeData = FoodTypeData;
             foodsData = FoodsData;
