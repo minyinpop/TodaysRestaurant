@@ -3,7 +3,6 @@ using System.Cook.Child.Cookware.System.Child.Cook_Game.Object;
 using System.Cook.Child.Cookware.System.Child.Cook_Game.System.Child;
 using System.General;
 using Data.Animation.DOTween.Basic;
-using General.Object;
 using UnityEngine;
 
 namespace System.Cook.Child.Cookware.System.Child.Cook_Game.System.Main

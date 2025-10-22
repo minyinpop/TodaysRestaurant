@@ -1,7 +1,7 @@
 using System.Collections.Generic;
+using System.Item_Slot.Base;
 using Data.Food.Food_Category.Base;
 using Data.Item.Base;
-using General.Object.Item_Slot.Base;
 using UnityEngine;
 
 namespace System.Cook.Child.Cook_Menu.System.Child.Open_UI_System.Child

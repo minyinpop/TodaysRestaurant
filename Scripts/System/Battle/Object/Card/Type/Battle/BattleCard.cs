@@ -8,7 +8,6 @@ using Data.Card.Battle;
 using Data.General;
 using Data.General.Enum;
 using DG.Tweening;
-using General;
 using UnityEngine;
 
 namespace System.Battle.Object.Card.Type.Battle

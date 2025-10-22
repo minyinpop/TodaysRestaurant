@@ -1,0 +1,55 @@
+using System.General;
+using System.Storage_Slot.Base;
+using Data.Animation.DOTween.Basic;
+using Data.Item.Base;
+using UnityEngine;
+using UnityEngine.UI;
+
+namespace System.Storage_Slot.Type
+{
+    internal sealed class StorageGetSlot : StorageSlot
+    {
+        [field: Header("Object")]
+        [field: SerializeField] private RectTransform BackgroundRect;
+        [field: SerializeField] private Image ItemImage;
+        
+        [field: Header("Child System")]
+        [field: SerializeField] private DoAnimation DoAnimation;
+        
+        [field: Header("Animation Settings")]
+        [field: SerializeField] private DoScale ScaleUpSettings;
+        [field: SerializeField] private DoScale ScaleDownSettings;
+
+        private ItemSO ItemData;
+
+        private bool Interactable = true;
+        
+        protected override void OnPointerEnter()
+        {
+            if (!Interactable) return;
+            DoAnimation.DoScale_UI(BackgroundRect, ScaleUpSettings);
+        }
+
+        protected override void OnPointerExit()
+        {
+            if (!Interactable) return;
+            DoAnimation.DoScale_UI(BackgroundRect, ScaleDownSettings);
+        }
+        
+        public override void Add(ItemSO item, Action onComplete)
+        {
+            if (item is null) return;
+            ItemData = item;
+            ItemData.GetItemSprite(out var sprite);
+            ItemImage.sprite = sprite;
+            ItemImage.gameObject.SetActive(true);
+            BackgroundRect.localScale = Vector2.one * 1.25f;
+            DoAnimation.DoScale_UI(BackgroundRect, ScaleDownSettings,
+                onComplete: () =>
+                {
+                    Interactable = true;
+                    onComplete?.Invoke();
+                });
+        }
+    }
+}

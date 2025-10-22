@@ -3,13 +3,12 @@ using System.Battle.Object.Card.Base;
 using System.Battle.System.Child.Selected_Card_System.Child;
 using System.Collections;
 using System.Collections.Generic;
-using System.Message.Main;
+using System.Message.System.Main;
 using Data.Animation.DOTween.Basic;
 using Data.General;
 using Data.Player;
 using Data.Player.Base;
 using DG.Tweening;
-using General.Object;
 using UnityEngine;
 
 namespace System.Battle.System.Child.Selected_Card_System.Main

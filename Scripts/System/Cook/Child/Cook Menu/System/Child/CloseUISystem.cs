@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.General;
 using Data.Animation.DOTween.Basic;
-using General.Object;
 using UnityEngine;
 
 namespace System.Cook.Child.Cook_Menu.System.Child

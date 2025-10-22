@@ -15,6 +15,7 @@ namespace System.Cook.Main
         private void Start()
         {
             OnCookStart();
+            // OnRoundStart();
         }
 
         private void OnDisable()

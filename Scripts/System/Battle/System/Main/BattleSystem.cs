@@ -6,7 +6,7 @@ using System.Battle.System.Main.State_Machine.State;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Message.Main;
+using System.Message.System.Main;
 using Data.General;
 using Data.General.Enum;
 using Data.Player.Base;
