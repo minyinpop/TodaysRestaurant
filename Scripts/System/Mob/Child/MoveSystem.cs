@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace System.Mob.Child.Move_System
+namespace System.Mob.Child
 {
     internal sealed class MoveSystem : MonoBehaviour
     {
