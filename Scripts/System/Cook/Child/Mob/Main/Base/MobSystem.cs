@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace System.Mob.Main.Base
+namespace System.Cook.Child.Mob.Main.Base
 {
     internal abstract class MobSystem : MonoBehaviour
     {

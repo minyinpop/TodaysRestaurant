@@ -10,11 +10,7 @@ namespace Data.General
     {
         #region UseCardType
             [field: SerializeField] private List<CardType> UseCardType;
-            
-            public void GetUseCardType(out List<CardType> cardType)
-            {
-                cardType = UseCardType;
-            }
+            public void GetUseCardType(out List<CardType> cardType) { cardType = UseCardType; }
         #endregion
     }
 }

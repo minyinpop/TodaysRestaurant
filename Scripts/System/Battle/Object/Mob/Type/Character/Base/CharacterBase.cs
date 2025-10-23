@@ -2,7 +2,7 @@ using System.Battle.Object.Card.Base;
 using System.Battle.Object.Mob.Type.Character.System;
 using System.Collections;
 using Data.Animation.Spine;
-using Data.Mob.Character.Base;
+using Data.Mob.Character.Main;
 using UnityEngine;
 
 namespace System.Battle.Object.Mob.Type.Character.Base
@@ -25,7 +25,7 @@ namespace System.Battle.Object.Mob.Type.Character.Base
 
         private void Start()
         {
-            CharacterData.GetHealthValues(out var min, out var max);
+            CharacterData.GetHealth(out var min, out var max);
             HealthBar.Init(min, max);
         }
 

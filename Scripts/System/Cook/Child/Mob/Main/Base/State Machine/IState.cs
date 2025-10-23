@@ -1,4 +1,4 @@
-namespace System.Mob.Main.Base.State_Machine
+namespace System.Cook.Child.Mob.Main.Base.State_Machine
 {
     internal interface IState
     {

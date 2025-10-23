@@ -1,6 +1,6 @@
 using System.Battle.Object.Mob.Type.Enemy.System;
 using Data.General;
-using Data.Mob.Enemy.Base;
+using Data.Mob.Character.Main;
 using UnityEngine;
 
 namespace System.Battle.Object.Mob.Type.Enemy.Base
@@ -15,13 +15,13 @@ namespace System.Battle.Object.Mob.Type.Enemy.Base
         [field: SerializeField] private StatusBar HealthBar;
         
         [field: Header("Data")]
-        [field: SerializeField] private EnemySO EnemyData;
+        [field: SerializeField] private CharacterSO EnemyData;
 
         public static event Action<Damage, Action, Action> OnAttack;
 
         private void Start()
         {
-            EnemyData.GetHealthValues(out var min, out var max);
+            EnemyData.GetHealth(out var min, out var max);
             HealthBar.Init(min, max);
             
             AnimationSystem.Idle();
