@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Cook.Child.Cookware.State_Machine;
 using System.Cook.Child.Cookware.State_Machine.State;
-using System.Cook.Child.Cookware.System.Child.Cook_Bubble;
+using System.Cook.Child.Cookware.System.Child.Cook_Bubble.Main;
 using System.Cook.Child.Cookware.System.Child.Cook_Game.System.Main;
 using Data.General;
 using Data.General.Enum;
@@ -23,7 +23,7 @@ namespace System.Cook.Child.Cookware.System.Main
         [field: SerializeField] private Transform BubbleParent;
         
         private GameObject CurrentBubble;
-        private CookBubble CurrentBubble_CookBubble;
+        private Bubble CurrentBubble_Bubble;
         
         [field: Header("Game")]
         [field: SerializeField] private float GameTimeDuration;
@@ -37,6 +37,7 @@ namespace System.Cook.Child.Cookware.System.Main
         private CookFood CookFood;
 
         private bool IsCookGameComplete;
+        private bool Interactable;
 
         public static event Action<CookType, Action<CookFood>, Action> OnClickEmptyBubble;
 
@@ -51,6 +52,12 @@ namespace System.Cook.Child.Cookware.System.Main
             AllActions.Clear();
         }
 
+        public void SetInteractable(bool interactable)
+        {
+            Interactable = interactable;
+            CurrentBubble_Bubble.SetInteractable(Interactable);
+        }
+
         #region StateMachine
             #region OnEmpty
                 private void OnEmptyState()
@@ -59,10 +66,10 @@ namespace System.Cook.Child.Cookware.System.Main
                         onEnter: () =>
                         {
                             CurrentBubble = Instantiate(EmptyBubblePrefab, BubbleParent);
-                            CurrentBubble_CookBubble = CurrentBubble.GetComponent<CookBubble>();
-                            CurrentBubble_CookBubble.OnClick += OnBubbleClicked;
-                            AllActions.Add(() => CurrentBubble_CookBubble.OnClick -= OnBubbleClicked);
-                            CurrentBubble_CookBubble.SetInteractable(true);
+                            CurrentBubble_Bubble = CurrentBubble.GetComponent<Bubble>();
+                            CurrentBubble_Bubble.OnClick += OnBubbleClicked;
+                            AllActions.Add(() => CurrentBubble_Bubble.OnClick -= OnBubbleClicked);
+                            CurrentBubble_Bubble.SetInteractable(Interactable);
                             return;
 
                             void OnBubbleClicked()
@@ -82,7 +89,7 @@ namespace System.Cook.Child.Cookware.System.Main
                         {
                             Destroy(CurrentBubble);
                             CurrentBubble = null;
-                            CurrentBubble_CookBubble = null;
+                            CurrentBubble_Bubble = null;
                         }));
                 }
             #endregion
@@ -94,9 +101,9 @@ namespace System.Cook.Child.Cookware.System.Main
                         onEnter: () =>
                         {
                             CurrentBubble = Instantiate(CookBubblePrefab, BubbleParent);
-                            CurrentBubble_CookBubble = CurrentBubble.GetComponent<CookBubble>();
+                            CurrentBubble_Bubble = CurrentBubble.GetComponent<Bubble>();
                             CookFood.GetValues(out _, out var cookTime, out _);
-                            CurrentBubble_CookBubble.CoutDown(cookTime / 2,
+                            CurrentBubble_Bubble.CoutDown(cookTime / 2,
                                 onComplete: () =>
                                 {
                                     if (IsCookGameComplete) OnCompleteState();
@@ -107,7 +114,7 @@ namespace System.Cook.Child.Cookware.System.Main
                         {
                             Destroy(CurrentBubble);
                             CurrentBubble = null;
-                            CurrentBubble_CookBubble = null;
+                            CurrentBubble_Bubble = null;
                         }));
                 }
             #endregion
@@ -119,11 +126,11 @@ namespace System.Cook.Child.Cookware.System.Main
                         onEnter: () =>
                         {
                             CurrentBubble = Instantiate(GameTimeBubblePrefab, BubbleParent);
-                            CurrentBubble_CookBubble = CurrentBubble.GetComponent<CookBubble>();
-                            CurrentBubble_CookBubble.OnClick += OnBubbleClicked;
-                            AllActions.Add(() => CurrentBubble_CookBubble.OnClick -= OnBubbleClicked);
-                            CurrentBubble_CookBubble.SetInteractable(true);
-                            CurrentBubble_CookBubble.CoutDown(Mathf.Abs(GameTimeDuration),
+                            CurrentBubble_Bubble = CurrentBubble.GetComponent<Bubble>();
+                            CurrentBubble_Bubble.OnClick += OnBubbleClicked;
+                            AllActions.Add(() => CurrentBubble_Bubble.OnClick -= OnBubbleClicked);
+                            CurrentBubble_Bubble.SetInteractable(Interactable);
+                            CurrentBubble_Bubble.CoutDown(Mathf.Abs(GameTimeDuration),
                                 onComplete: OnOvercookedState);
                             return;
 
@@ -149,7 +156,7 @@ namespace System.Cook.Child.Cookware.System.Main
                         {
                             Destroy(CurrentBubble);
                             CurrentBubble = null;
-                            CurrentBubble_CookBubble = null;
+                            CurrentBubble_Bubble = null;
                         }));
                 }
             #endregion
@@ -161,10 +168,10 @@ namespace System.Cook.Child.Cookware.System.Main
                         onEnter: () =>
                         {
                             CurrentBubble = Instantiate(CompleteBubblePrefab, BubbleParent);
-                            CurrentBubble_CookBubble = CurrentBubble.GetComponent<CookBubble>();
-                            CurrentBubble_CookBubble.OnClick += OnBubbleClicked;
-                            AllActions.Add(() => CurrentBubble_CookBubble.OnClick -= OnBubbleClicked);
-                            CurrentBubble_CookBubble.SetInteractable(true);
+                            CurrentBubble_Bubble = CurrentBubble.GetComponent<Bubble>();
+                            CurrentBubble_Bubble.OnClick += OnBubbleClicked;
+                            AllActions.Add(() => CurrentBubble_Bubble.OnClick -= OnBubbleClicked);
+                            CurrentBubble_Bubble.SetInteractable(Interactable);
                             return;
 
                             void OnBubbleClicked()
@@ -177,7 +184,7 @@ namespace System.Cook.Child.Cookware.System.Main
                         {
                             Destroy(CurrentBubble);
                             CurrentBubble = null;
-                            CurrentBubble_CookBubble = null;
+                            CurrentBubble_Bubble = null;
                         }));
                 }
             #endregion
@@ -189,16 +196,16 @@ namespace System.Cook.Child.Cookware.System.Main
                         onEnter: () =>
                         {
                             CurrentBubble = Instantiate(OvercookedBubblePrefab, BubbleParent);
-                            CurrentBubble_CookBubble = CurrentBubble.GetComponent<CookBubble>();
-                            CurrentBubble_CookBubble.OnClick += OnEmptyState;
-                            AllActions.Add(() => CurrentBubble_CookBubble.OnClick -= OnEmptyState);
-                            CurrentBubble_CookBubble.SetInteractable(true);
+                            CurrentBubble_Bubble = CurrentBubble.GetComponent<Bubble>();
+                            CurrentBubble_Bubble.OnClick += OnEmptyState;
+                            AllActions.Add(() => CurrentBubble_Bubble.OnClick -= OnEmptyState);
+                            CurrentBubble_Bubble.SetInteractable(Interactable);
                         },
                         onExit: () =>
                         {
                             Destroy(CurrentBubble);
                             CurrentBubble = null;
-                            CurrentBubble_CookBubble = null;
+                            CurrentBubble_Bubble = null;
                         }));
                 }
             #endregion

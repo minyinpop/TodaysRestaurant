@@ -88,8 +88,10 @@ namespace System.Cook.Child.Cook_Menu.System.Child.Open_UI_System.Child
         {
             var isAllSelect = true;
             type = SelectItemSlotType.UnSelect;
-            foreach (var slot in SelectFoodSlots)
+            for (var i = 0; i < TotalSlotCount; i++)
             {
+                var slot = SelectFoodSlots[i];
+                if (i >= UnlockSlotCount) continue;
                 slot.Get(out var itemData);
                 if (itemData is null)
                 {
