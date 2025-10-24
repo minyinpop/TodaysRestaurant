@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Cook.Child.Mob.Child;
 using System.Cook.Child.Mob.Main.Base;
 using System.Cook.Child.Mob.Main.Base.State_Machine;
@@ -13,10 +14,18 @@ namespace System.Cook.Child.Mob.Main.Type
         [field: SerializeField] private AnimationSystem AnimationSystem;
         
         private readonly StateMachine StateMachine = new();
+        
+        private readonly List<Action> ActiveActions = new();
 
         private void Start()
         {
             OnSearchingForSeat();
+        }
+
+        private void OnDisable()
+        {
+            foreach (var action in ActiveActions) action?.Invoke();
+            ActiveActions.Clear();
         }
 
         private void OnSearchingForSeat()
@@ -28,6 +37,12 @@ namespace System.Cook.Child.Mob.Main.Type
             {
                 MoveSystem.StartWalk();
                 AnimationSystem.Walk();
+                
+                MoveSystem.WalkLeft += AnimationSystem.TurnsLeft;
+                ActiveActions.Add(() => MoveSystem.WalkLeft -= AnimationSystem.TurnsLeft);
+                
+                MoveSystem.WalkRight += AnimationSystem.TurnsRight;
+                ActiveActions.Add(() => MoveSystem.WalkRight -= AnimationSystem.TurnsRight);
             }
             
             void OnExit()

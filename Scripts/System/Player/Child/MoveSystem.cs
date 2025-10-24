@@ -15,6 +15,11 @@ namespace System.Player.Child
 
         private IEnumerator WalkCor;
 
+        private bool isLeft;
+
+        public event Action WalkLeft;
+        public event Action WalkRight;
+
         private void OnDisable()
         {
             StopWalk();
@@ -37,6 +42,23 @@ namespace System.Player.Child
                         x: direction.x * (speed * Time.fixedDeltaTime),
                         y: Rig.linearVelocity.y,
                         z: direction.y * (speed * Time.fixedDeltaTime));
+                    
+                    switch (Rig.linearVelocity.x)
+                    {
+                        case > 0 when isLeft:
+                        {
+                            isLeft = false;
+                            WalkRight?.Invoke();
+                            break;
+                        }
+                        case < 0 when !isLeft:
+                        {
+                            isLeft = true;
+                            WalkLeft?.Invoke();
+                            break;
+                        }
+                    }
+                    
                     yield return new WaitForFixedUpdate();
                 }
             }

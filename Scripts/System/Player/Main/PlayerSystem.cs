@@ -60,11 +60,11 @@ namespace System.Player.Main
                     InputSystem.OnCancelPlayerWalk += OnIdle;
                     ActiveActions.Add(() => InputSystem.OnCancelPlayerWalk -= OnIdle);
 
-                    InputSystem.OnStartedPlayerWalkLeft += AnimationSystem.TurnsLeft;
-                    ActiveActions.Add(() => InputSystem.OnStartedPlayerWalkLeft -= AnimationSystem.TurnsLeft);
+                    MoveSystem.WalkLeft += AnimationSystem.TurnsLeft;
+                    ActiveActions.Add(() => MoveSystem.WalkLeft -= AnimationSystem.TurnsLeft);
                     
-                    InputSystem.OnStartedPlayerWalkRight += AnimationSystem.TurnsRight;
-                    ActiveActions.Add(() => InputSystem.OnStartedPlayerWalkRight -= AnimationSystem.TurnsRight);
+                    MoveSystem.WalkRight += AnimationSystem.TurnsRight;
+                    ActiveActions.Add(() => MoveSystem.WalkRight -= AnimationSystem.TurnsRight);
 
                     MoveSystem.StartWalk();
                     AnimationSystem.Walk();
@@ -73,8 +73,8 @@ namespace System.Player.Main
                 void OnExit()
                 {
                     InputSystem.OnCancelPlayerWalk -= OnIdle;
-                    InputSystem.OnStartedPlayerWalkLeft -= AnimationSystem.TurnsLeft;
-                    InputSystem.OnStartedPlayerWalkRight -= AnimationSystem.TurnsRight;
+                    MoveSystem.WalkLeft -= AnimationSystem.TurnsLeft;
+                    MoveSystem.WalkRight -= AnimationSystem.TurnsRight;
                     MoveSystem.StopWalk();
                 }
             }
