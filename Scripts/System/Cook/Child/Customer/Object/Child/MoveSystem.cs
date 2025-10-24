@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace System.Cook.Child.Mob.Child
+namespace System.Cook.Child.Customer.Object.Child
 {
     internal sealed class MoveSystem : MonoBehaviour
     {
@@ -11,8 +11,7 @@ namespace System.Cook.Child.Mob.Child
         [field: SerializeField] private Transform Target;
 
         private IEnumerator WalkCor;
-
-
+        
         private bool isLeft;
 
         public event Action WalkLeft;
@@ -28,9 +27,9 @@ namespace System.Cook.Child.Mob.Child
             StopWalk();
         }
 
-        public void StartWalk()
+        public void StartWalk(GameObject target, Action onArrive)
         {
-            Agent.SetDestination(Target.position);
+            Agent.SetDestination(target.transform.position);
             
             WalkCor = WalkCoroutine();
             StartCoroutine(WalkCor);
@@ -41,7 +40,6 @@ namespace System.Cook.Child.Mob.Child
                 while (true)
                 {
                     var moveDir = Agent.velocity.sqrMagnitude > .0001f ? Agent.velocity.normalized : Target.forward;
-                    Debug.Log(moveDir);
                     switch (moveDir.x)
                     {
                         case > 0 when !isLeft:
@@ -58,8 +56,13 @@ namespace System.Cook.Child.Mob.Child
                         }
                     }
                     
+                    if (Agent.pathPending)                         { yield return null; continue; }
+                    if (float.IsInfinity(Agent.remainingDistance)) { yield return null; continue; }
+                    if (Agent.remainingDistance < .0001f)          { yield return null; break; }
                     yield return null;
                 }
+
+                onArrive?.Invoke();
             }
         }
         

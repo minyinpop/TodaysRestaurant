@@ -1,5 +1,8 @@
 using System.Collections.Generic;
 using System.Cook.Child.Cook_Menu.System.Main;
+using System.Cook.Child.Customer.System;
+using System.Cook.Child.Queue.System;
+using System.Cook.Child.Seating.System;
 using System.Cook.Main.State_Machine;
 using System.Cook.Main.State_Machine.State;
 using UnityEngine;
@@ -8,14 +11,17 @@ namespace System.Cook.Main
 {
     internal sealed class CookSystem : MonoBehaviour
     {
+        [field: Header("Child System")]
         [field: SerializeField] private CookMenuSystem CookMenuSystem;
+        [field: SerializeField] private CustomerSystem CustomerSystem;
+        [field: SerializeField] private QueueSystem QueueSystem;
+        [field: SerializeField] private SeatingSystem SeatingSystem;
         
         private readonly List<Action> ActiveActions = new();
         
         private void Start()
         {
             OnCookStart();
-            // OnRoundStart();
         }
 
         private void OnDisable()
@@ -40,6 +46,7 @@ namespace System.Cook.Main
                 
                 void OnExit()
                 {
+                    CookMenuSystem.OnClickOpenUIConfirmButton -= OnRoundStart;
                 }
             }
 
@@ -50,7 +57,7 @@ namespace System.Cook.Main
                 
                 void OnEnter()
                 {
-                    Debug.Log("Round Start.");
+                    // TODO 先從 QueueSystem 裡檢測是否還有排隊的空位，之後再決定要不要生成 Customer
                 }
                 
                 void OnExit()
