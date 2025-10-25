@@ -1,11 +1,11 @@
 namespace System.Cook.Child.Customer.Object.Main.State_Machine.State
 {
-    internal sealed class WalkToDoor : IState
+    internal sealed class WalkToQueuePoint : IState
     {
         private readonly Action OnEnter;
         private readonly Action OnExit;
         
-        public WalkToDoor(Action onEnter, Action onExit)
+        public WalkToQueuePoint(Action onEnter, Action onExit)
         {
             OnEnter = onEnter;
             OnExit = onExit;

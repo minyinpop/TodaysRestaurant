@@ -9,11 +9,11 @@ namespace System.Cook.Child.Customer.System
         [field: SerializeField] private Transform CustomerParent;
         [field: SerializeField] private GameObject CustomerPrefab;
         
-        private readonly List<GameObject> Customers = new();
+        private readonly List<Object.Main.Customer> Customers = new();
 
-        public void Spawn(out GameObject customer)
-        { 
-            customer = Instantiate(CustomerPrefab, SpawnPoint.position, SpawnPoint.rotation, CustomerParent);
+        public void SpawnCustomer(out Object.Main.Customer customer)
+        {
+            customer = Instantiate(CustomerPrefab, SpawnPoint.position, SpawnPoint.rotation, CustomerParent).GetComponent<Object.Main.Customer>();
             Customers.Add(customer);
         }
     }

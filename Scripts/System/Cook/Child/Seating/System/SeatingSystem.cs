@@ -7,14 +7,14 @@ namespace System.Cook.Child.Seating.System
     internal sealed class SeatingSystem : MonoBehaviour
     {
         [field: SerializeField] private Transform SeatParent;
-        private readonly List<Seat> Seats = new();
+        private readonly Queue<Seat> Seats = new();
 
         private void Awake()
         {
             for (var i = 0; i < SeatParent.childCount; i++)
             {
                 var seat = SeatParent.GetChild(i).GetComponent<Seat>();
-                Seats.Add(seat);
+                Seats.Enqueue(seat);
             }
         }
 

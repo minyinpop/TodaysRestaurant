@@ -8,7 +8,6 @@ namespace System.Cook.Child.Customer.Object.Child
     {
         [field: Header("Component")]
         [field: SerializeField] private NavMeshAgent Agent;
-        [field: SerializeField] private Transform Target;
 
         private IEnumerator WalkCor;
         
@@ -27,9 +26,9 @@ namespace System.Cook.Child.Customer.Object.Child
             StopWalk();
         }
 
-        public void StartWalk(GameObject target, Action onArrive)
+        public void StartWalk(Transform target, Action onArrive)
         {
-            Agent.SetDestination(target.transform.position);
+            Agent.SetDestination(target.position);
             
             WalkCor = WalkCoroutine();
             StartCoroutine(WalkCor);
@@ -39,7 +38,7 @@ namespace System.Cook.Child.Customer.Object.Child
             {
                 while (true)
                 {
-                    var moveDir = Agent.velocity.sqrMagnitude > .0001f ? Agent.velocity.normalized : Target.forward;
+                    var moveDir = Agent.velocity.sqrMagnitude > .0001f ? Agent.velocity.normalized : target.forward;
                     switch (moveDir.x)
                     {
                         case > 0 when !isLeft:

@@ -7,10 +7,12 @@ namespace System.Cook.Child.Queue.Object
         [field: Header("Point")]
         [field: SerializeField] private Transform StandPoint;
 
-        private GameObject Customer;
+        private Customer.Object.Main.Customer Customer;
 
-        public void Set(GameObject customer) { Customer = customer; }
+        public void GetStandPoint(out Transform point) => point = StandPoint;
+
+        public void SetCustomer(Customer.Object.Main.Customer customer) => Customer = customer;
         
-        public void Check(out bool isOccupied) { isOccupied = Customer is not null; }
+        public void IsOccupied(out bool isOccupied) => isOccupied = Customer is not null;
     }
 }

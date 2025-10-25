@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Cook.Child.Customer.Object.Child;
 using System.Cook.Child.Customer.Object.Main.State_Machine;
 using System.Cook.Child.Customer.Object.Main.State_Machine.State;
-using System.Cook.Child.Seating.Object;
+using System.Cook.Child.Queue.Object;
 using UnityEngine;
 
 namespace System.Cook.Child.Customer.Object.Main
@@ -14,14 +14,20 @@ namespace System.Cook.Child.Customer.Object.Main
         [field: SerializeField] private FlipSystem FlipSystem;
         [field: SerializeField] private SkinSystem SkinSystem;
 
-        private GameObject QueuePoint;
-        private GameObject Seat;
+        private QueuePoint QueuePoint;
         
         private readonly StateMachine StateMachine = new();
         
         private readonly List<Action> ActiveActions = new();
 
-        public event Func<Seat> FindSeat;
+        private void OnEnable()
+        {
+            MoveSystem.WalkLeft += FlipSystem.TurnsLeft;
+            ActiveActions.Add(() => MoveSystem.WalkLeft -= FlipSystem.TurnsLeft);
+                
+            MoveSystem.WalkRight += FlipSystem.TurnsRight;
+            ActiveActions.Add(() => MoveSystem.WalkRight -= FlipSystem.TurnsRight);
+        }
 
         private void OnDisable()
         {
@@ -29,34 +35,28 @@ namespace System.Cook.Child.Customer.Object.Main
             ActiveActions.Clear();
         }
 
-        public void Init()
-        {
-            SkinSystem.SetRandomSkin();
-            OnWalkToDoor();
-        }
+        public void SetSkin() => SkinSystem.SetRandomSkin();
 
-        private void OnWalkToDoor()
+        public void WalkToQueuePoint(QueuePoint point) { QueuePoint = point; OnWalkToQueuePoint(); }
+
+        private void OnWalkToQueuePoint()
         {
-            StateMachine.ChangeState(new WalkToDoor(OnEnter, OnExit));
+            StateMachine.ChangeState(new WalkToQueuePoint(OnEnter, OnExit));
             return;
 
             void OnEnter()
             {
                 AnimationSystem.Walk();
-                // MoveSystem.StartWalk(, OnArrive);
-                
-                MoveSystem.WalkLeft += FlipSystem.TurnsLeft;
-                ActiveActions.Add(() => MoveSystem.WalkLeft -= FlipSystem.TurnsLeft);
-                
-                MoveSystem.WalkRight += FlipSystem.TurnsRight;
-                ActiveActions.Add(() => MoveSystem.WalkRight -= FlipSystem.TurnsRight);
+
+                QueuePoint.GetStandPoint(out var standPoint);
+                MoveSystem.StartWalk(standPoint, OnArrive);
                 return;
 
                 void OnArrive()
                 {
-                    Debug.Log("Arrived.");
                     AnimationSystem.Idle();
                     MoveSystem.StopWalk();
+                    // TODO 向 CookSystem Func Seat 的資料回來，然後切到 OnWalkToSeat，並且後面排隊的顧客也要往前走
                 }
             }
             
@@ -72,22 +72,6 @@ namespace System.Cook.Child.Customer.Object.Main
 
             void OnEnter()
             {
-                AnimationSystem.Walk();
-                MoveSystem.StartWalk(Seat, OnArrive);
-                
-                MoveSystem.WalkLeft += FlipSystem.TurnsLeft;
-                ActiveActions.Add(() => MoveSystem.WalkLeft -= FlipSystem.TurnsLeft);
-                
-                MoveSystem.WalkRight += FlipSystem.TurnsRight;
-                ActiveActions.Add(() => MoveSystem.WalkRight -= FlipSystem.TurnsRight);
-                return;
-
-                void OnArrive()
-                {
-                    Debug.Log("Arrived.");
-                    AnimationSystem.Idle();
-                    MoveSystem.StopWalk();
-                }
             }
             
             void OnExit()
