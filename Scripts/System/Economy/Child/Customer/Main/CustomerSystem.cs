@@ -17,7 +17,12 @@ namespace System.Economy.Child.Customer.Main
         private readonly StateMachine StateMachine = new();
 
         private readonly List<Action> ActiveActions = new();
-        
+
+        private void Start()
+        {
+            SkinSystem.SetRandomSkin();
+        }
+
         private void OnEnable()
         {
             MoveSystem.ToLeft += FlipSystem.TurnsLeft;
@@ -42,7 +47,6 @@ namespace System.Economy.Child.Customer.Main
 
                     void OnEnter()
                     {
-                        SkinSystem.SetRandomSkin();
                         AnimationSystem.Walk();
                         MoveSystem.StartWalk(standPoint,
                             onArrive: () =>

@@ -25,8 +25,8 @@ namespace System.Economy.Child.Customer.Child
             SkeletonAnimation.AnimationState.SetAnimation(layer, animaName, loop);
         }
         
-        public void Idle(){SetAnimation(Idle_AnimationSettings);}
-        public void Walk(){SetAnimation(Walk_AnimationSettings);}
-        public void Sit(){SetAnimation(Sit_AnimationSettings);}
+        public void Idle() => SetAnimation(Idle_AnimationSettings);
+        public void Walk() => SetAnimation(Walk_AnimationSettings);
+        public void Sit() => SetAnimation(Sit_AnimationSettings);
     }
 }
