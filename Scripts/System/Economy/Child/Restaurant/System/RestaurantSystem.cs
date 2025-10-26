@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using System.Economy.Child.Customer.Main;
 using Data.Economy.Restaurant_System;
 using UnityEngine;
@@ -21,6 +22,7 @@ namespace System.Economy.Child.Restaurant.System
         private int CurrentCustomerAmount;
         
         private IEnumerator QueueCor;
+        private IEnumerator SortQueueCor;
 
         private void Awake()
         {
@@ -31,6 +33,7 @@ namespace System.Economy.Child.Restaurant.System
         private void OnDisable()
         {
             StopQueueCoroutine();
+            StopSortQueueCoroutine();
         }
 
         public void StartSystem()
@@ -63,7 +66,8 @@ namespace System.Economy.Child.Restaurant.System
                             customer.WalkToSeatPoint(standPoint, sitPoint,
                                 onArrive: () => Debug.Log($"{customer.name} 坐在 {seatPoint.name} 上了。"));
                             
-                            // TODO 後面的顧客往前
+                            SortQueueCor = SortQueueCoroutine();
+                            StartCoroutine(SortQueueCor);
                         }
                         else
                         {
@@ -87,18 +91,48 @@ namespace System.Economy.Child.Restaurant.System
                         // ================================================
                         // 沒有空位，生成顧客去排隊，直到隊伍滿人
                         // ================================================
-                        QueuePoints.TryGetEmptyPoint(out var haveEmptyQueuePoint, out var queuePoint);
-                        if (!haveEmptyQueuePoint) { yield return null; continue; }
+                        QueuePoints.GetLastPoint(out var lastQueuePoint);
+                        if (lastQueuePoint.IsOccupied()) { yield return null; continue; }
+                        
+                        QueuePoints.TryGetEmptyPoint(out var haveEmptyPoint, out var firstQueuePoint);
+                        if (!haveEmptyPoint) { yield return null; continue; }
+                        
                         CurrentCustomerAmount += 1;
-                    
                         var newCustomer = Instantiate(CustomerPrefab, CustomerSpawnPoint.position, Quaternion.identity, CustomerParent).GetComponent<CustomerSystem>();
-                        queuePoint.SetCustomer(newCustomer);
-                        queuePoint.GetStandPoint(out var standPoint);
+                        
+                        firstQueuePoint.SetCustomer(newCustomer);
+                        firstQueuePoint.GetStandPoint(out var standPoint);
                     
                         newCustomer.WalkToQueuePoint(standPoint);
                     }
                     
                     yield return new WaitForSeconds(CustomerComeDuration);
+                }
+                yield break;
+                
+                IEnumerator SortQueueCoroutine()
+                {
+                    QueuePoints.GetPoints(out var points);
+                    var remainingCustomers = new Queue<CustomerSystem>();
+                    
+                    foreach (var currentPoint in points)
+                    {
+                        currentPoint.GetCustomer(out var haveCustomer, out var customer);
+                        if (!haveCustomer) continue;
+                        remainingCustomers.Enqueue(customer);
+                    }
+
+                    foreach (var currentPoint in points)
+                    {
+                        var onPoint = false;
+                        var currentCustomer = remainingCustomers.Dequeue();
+                        currentPoint.GetStandPoint(out var standPoint);
+                        
+                        currentPoint.SetCustomer(currentCustomer);
+                        currentCustomer.WalkToQueuePoint(standPoint,
+                            onArrive: () => onPoint = true);
+                        yield return new WaitUntil(() => onPoint);
+                    }
                 }
             }
         }
@@ -108,6 +142,13 @@ namespace System.Economy.Child.Restaurant.System
             if (QueueCor is null) return;
             StopCoroutine(QueueCor);
             QueueCor = null;
+        }
+        
+        private void StopSortQueueCoroutine()
+        {
+            if (SortQueueCor is null) return;
+            StopCoroutine(SortQueueCor);
+            SortQueueCor = null;
         }
     }
 }

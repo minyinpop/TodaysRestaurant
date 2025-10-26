@@ -40,7 +40,7 @@ namespace System.Economy.Child.Customer.Main
         
         #region StateMachine
             #region WalkToQueuePoint
-                public void WalkToQueuePoint(Transform standPoint)
+                public void WalkToQueuePoint(Transform standPoint, Action onArrive = null)
                 {
                     StateMachine.ChangeState(new WalkToQueuePoint(OnEnter, OnExit));
                     return;
@@ -53,6 +53,8 @@ namespace System.Economy.Child.Customer.Main
                             {
                                 AnimationSystem.Idle();
                                 MoveSystem.StopWalk();
+                                
+                                onArrive?.Invoke();
                             });
                     }
                     
