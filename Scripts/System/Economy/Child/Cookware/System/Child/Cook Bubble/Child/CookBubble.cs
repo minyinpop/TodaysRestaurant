@@ -16,13 +16,13 @@ namespace System.Economy.Child.Cookware.System.Child.Cook_Bubble.Child
         }
         
         private IEnumerator CoutDownCor;
-        public override void CoutDown(float time, Action onComplete)
+        public override void CountDown(float time, Action onComplete)
         {
-            CoutDownCor = CoutDownCoroutine();
+            CoutDownCor = CountDownCoroutine();
             StartCoroutine(CoutDownCor);
             return;
 
-            IEnumerator CoutDownCoroutine()
+            IEnumerator CountDownCoroutine()
             {
                 yield return new WaitForSeconds(time);
                 onComplete?.Invoke();

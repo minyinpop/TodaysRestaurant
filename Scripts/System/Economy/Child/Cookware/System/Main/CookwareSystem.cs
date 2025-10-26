@@ -103,7 +103,7 @@ namespace System.Economy.Child.Cookware.System.Main
                             CurrentBubble = Instantiate(CookBubblePrefab, BubbleParent);
                             CurrentBubble_Bubble = CurrentBubble.GetComponent<Bubble>();
                             CookFood.GetValues(out _, out var cookTime, out _);
-                            CurrentBubble_Bubble.CoutDown(cookTime / 2,
+                            CurrentBubble_Bubble.CountDown(cookTime / 2,
                                 onComplete: () =>
                                 {
                                     if (IsCookGameComplete) OnCompleteState();
@@ -130,7 +130,7 @@ namespace System.Economy.Child.Cookware.System.Main
                             CurrentBubble_Bubble.OnClick += OnBubbleClicked;
                             AllActions.Add(() => CurrentBubble_Bubble.OnClick -= OnBubbleClicked);
                             CurrentBubble_Bubble.SetInteractable(Interactable);
-                            CurrentBubble_Bubble.CoutDown(Mathf.Abs(GameTimeDuration),
+                            CurrentBubble_Bubble.CountDown(Mathf.Abs(GameTimeDuration),
                                 onComplete: OnOvercookedState);
                             return;
 

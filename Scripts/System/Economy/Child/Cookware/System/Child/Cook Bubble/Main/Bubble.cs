@@ -10,6 +10,6 @@ namespace System.Economy.Child.Cookware.System.Child.Cook_Bubble.Main
         public event Action OnClick;
         protected void OnClicked() { OnClick?.Invoke(); }
         
-        public virtual void CoutDown(float time, Action onComplete) { }
+        public virtual void CountDown(float time, Action onComplete) { }
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Economy.Child.Cookware.System.Main;
+using System.Economy.Child.Customer.Main;
 using System.Player.Child.Detect_System.Child;
 using UnityEngine;
 
@@ -9,8 +10,9 @@ namespace System.Player.Child.Detect_System.Main
     {
         [field: Header("Detect Area")]
         [field: SerializeField] private DetectArea CookwareDetectArea;
+        [field: SerializeField] private DetectArea CustomerDetectArea;
         
-        private readonly List<Action> ActiveActions = new();
+        private readonly Queue<Action> ActiveActions = new();
         
         private void Start()
         {
@@ -25,10 +27,16 @@ namespace System.Player.Child.Detect_System.Main
         private void StartDetect()
         {
             CookwareDetectArea.OnDetect += CookwareOnDetect;
-            ActiveActions.Add(() => CookwareDetectArea.OnDetect -= CookwareOnDetect);
+            ActiveActions.Enqueue(() => CookwareDetectArea.OnDetect -= CookwareOnDetect);
             
             CookwareDetectArea.OnUnDetect += CookwareOnUnDetect;
-            ActiveActions.Add(() => CookwareDetectArea.OnUnDetect -= CookwareOnUnDetect);
+            ActiveActions.Enqueue(() => CookwareDetectArea.OnUnDetect -= CookwareOnUnDetect);
+
+            CustomerDetectArea.OnDetect += CustomerOnDetect;
+            ActiveActions.Enqueue(() => CustomerDetectArea.OnDetect -= CustomerOnDetect);
+            
+            CustomerDetectArea.OnUnDetect += CustomerOnUnDetect;
+            ActiveActions.Enqueue(() => CustomerDetectArea.OnUnDetect -= CustomerOnUnDetect);
             return;
 
             void CookwareOnDetect(GameObject cookware)
@@ -42,12 +50,27 @@ namespace System.Player.Child.Detect_System.Main
                 var system = cookware.GetComponent<CookwareSystem>();
                 system.SetInteractable(false);
             }
+
+            void CustomerOnDetect(GameObject customer)
+            {
+                var system = customer.GetComponent<CustomerSystem>();
+                system.SetInteractable(true);
+            }
+
+            void CustomerOnUnDetect(GameObject customer)
+            {
+                var system = customer.GetComponent<CustomerSystem>();
+                system.SetInteractable(false);
+            }
         }
 
         private void StopDetect()
         {
-            foreach (var action in ActiveActions) action?.Invoke();
-            ActiveActions.Clear();
+            while (ActiveActions.Count > 0)
+            {
+                var action = ActiveActions.Dequeue();
+                action?.Invoke();
+            }
         }
     }
 }

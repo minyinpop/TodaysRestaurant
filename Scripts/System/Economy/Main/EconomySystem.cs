@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Economy.Child.Cook_Menu.System.Main;
+using System.Economy.Child.Food_Menu.System.Main;
 using System.Economy.Child.Restaurant.System;
 using System.Economy.Main.State_Machine;
 using System.Economy.Main.State_Machine.State;
@@ -11,16 +11,16 @@ namespace System.Economy.Main
     internal sealed class EconomySystem : MonoBehaviour
     {
         [field: Header("Child System")]
-        [field: SerializeField] private CookMenuSystem CookMenuSystem;
+        [field: SerializeField] private FoodMenuSystem FoodMenuSystem;
         [field: SerializeField] private RestaurantSystem RestaurantSystem;
         
-        private readonly List<Action> ActiveActions = new();
+        private readonly Queue<Action> ActiveActions = new();
 
         private IEnumerator RoundStartCor;
         
         private void Start()
         {
-            RoundStart();
+            PlayerChooseFoodOnCookMenu();
         }
 
         private void OnDisable()
@@ -45,14 +45,14 @@ namespace System.Economy.Main
                     
                     void OnEnter()
                     {
-                        CookMenuSystem.Show();
-                        CookMenuSystem.OnClickOpenUIConfirmButton += RoundStart;
-                        ActiveActions.Add(() => CookMenuSystem.OnClickOpenUIConfirmButton -= RoundStart);
+                        FoodMenuSystem.Show();
+                        FoodMenuSystem.OnClickOpenUIConfirmButton += RoundStart;
+                        ActiveActions.Enqueue(() => FoodMenuSystem.OnClickOpenUIConfirmButton -= RoundStart);
                     }
                     
                     void OnExit()
                     {
-                        CookMenuSystem.OnClickOpenUIConfirmButton -= RoundStart;
+                        FoodMenuSystem.OnClickOpenUIConfirmButton -= RoundStart;
                     }
                 }
             #endregion

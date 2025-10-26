@@ -14,7 +14,6 @@ namespace Data.Mob.Character.Main
         #region Attribute
             public virtual void GetHealth(out int min, out int max) { min = 0; max = 1; }
             public virtual void GetDamage(out Damage damage) { damage = null; }
-            public virtual void GetMoveSpeed(out float speed) { speed = 100; }
         #endregion
     }
 }

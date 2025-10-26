@@ -34,10 +34,10 @@ namespace System.Economy.Child.Cookware.System.Child.Cook_Bubble.Child
             foreach (var action in ActiveActions) action?.Invoke();
             ActiveActions.Clear();
             
-            if (CoutDownCor is not null)
+            if (CountDownCor is not null)
             {
-                StopCoroutine(CoutDownCor);
-                CoutDownCor = null;
+                StopCoroutine(CountDownCor);
+                CountDownCor = null;
             }
         }
 
@@ -47,14 +47,14 @@ namespace System.Economy.Child.Cookware.System.Child.Cook_Bubble.Child
             Button.SetInteractable(interactable);
         }
         
-        private IEnumerator CoutDownCor;
-        public override void CoutDown(float time, Action onComplete)
+        private IEnumerator CountDownCor;
+        public override void CountDown(float time, Action onComplete)
         {
-            CoutDownCor = CoutDownCoroutine();
-            StartCoroutine(CoutDownCor);
+            CountDownCor = CountDownCoroutine();
+            StartCoroutine(CountDownCor);
             return;
 
-            IEnumerator CoutDownCoroutine()
+            IEnumerator CountDownCoroutine()
             {
                 if (ProgressBar is null) yield return new WaitForSeconds(time);
                 else

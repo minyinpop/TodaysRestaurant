@@ -9,12 +9,6 @@ namespace Data.Mob.Character.Child.Customer.Base
     [CreateAssetMenu(menuName = "Minyinpop/Mob/Customer", fileName = "New Data")]
     internal sealed class CustomerSO : CharacterSO
     {
-        #region Attribute
-            [field: Header("Attribute")]
-            [field: SerializeField] private float MoveSpeed;
-            public override void GetMoveSpeed(out float moveSpeed) { moveSpeed = MoveSpeed; }
-        #endregion
-
         #region Skin
             [field: Header("Skin")]
             [field: SerializeField] private List<CharacterSkin> SkinTypes;
@@ -28,7 +22,6 @@ namespace Data.Mob.Character.Child.Customer.Base
                     skin.AddSkin(skeletonData.FindSkin(skinName));
                 }
             }
-
-            #endregion
+        #endregion
     }
 }
