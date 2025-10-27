@@ -4,6 +4,7 @@ using System.Economy.Child.Cookware.System.Main;
 using System.Message.System.Main;
 using Data.General;
 using Data.General.Enum;
+using Data.Item.Type.Custom;
 using UnityEngine;
 
 namespace System.Economy.Child.Cookware.System.Child.Cook_Selection.System.Main
@@ -34,7 +35,7 @@ namespace System.Economy.Child.Cookware.System.Child.Cook_Selection.System.Main
             }
         }
 
-        private void OnEmptyBubbleClicked(CookType cookwareType, Action<CookFood> onConfirm, Action onCancel)
+        private void OnEmptyBubbleClicked(CookType cookwareType, Action<CustomItem> onConfirm, Action onCancel)
         {
             SelectionSystem.Show(cookwareType,
                 onSelect: selectedDishData =>
@@ -83,7 +84,7 @@ namespace System.Economy.Child.Cookware.System.Child.Cook_Selection.System.Main
                                     totalPrice += ingredientPrice;
                                 }
 
-                                var cookDish = new CookFood(selectedDishData, totalCookTime, totalPrice);
+                                var cookDish = new CustomItem(selectedDishData, totalCookTime, totalPrice);
                                 
                                 // UI
                                 var isSelectionUIClosed = false;

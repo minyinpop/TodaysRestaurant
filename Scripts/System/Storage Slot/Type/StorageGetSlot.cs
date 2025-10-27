@@ -20,7 +20,7 @@ namespace System.Storage_Slot.Type
         [field: SerializeField] private DoScale ScaleUpSettings;
         [field: SerializeField] private DoScale ScaleDownSettings;
 
-        private ItemSO ItemData;
+        private ITem ItemData;
 
         private bool Interactable = true;
         
@@ -36,7 +36,7 @@ namespace System.Storage_Slot.Type
             DoAnimation.DoScale_UI(BackgroundRect, ScaleDownSettings);
         }
         
-        public override void Add(ItemSO item, Action onComplete)
+        public override void TryAddItem(ITem item, Action onComplete)
         {
             if (item is null) return;
             ItemData = item;

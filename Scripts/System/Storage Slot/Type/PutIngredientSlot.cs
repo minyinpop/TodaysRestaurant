@@ -25,29 +25,29 @@ namespace System.Storage_Slot.Type
         [field: SerializeField] private DoScale ScaleUpSettings;
         [field: SerializeField] private DoScale ScaleDownSettings;
 
-        private ItemSO TargetItemData;
-        private ItemSO ItemData;
+        private ITem TargetItemData;
+        private ITem ItemData;
         
         private bool Interactable;
 
         #region PointerEvent
-        protected override void OnPointerEnter()
-        {
-            if (!Interactable) return;
-            DoAnimation.DoScale_UI(BackgroundRect, ScaleUpSettings);
-        }
+            protected override void OnPointerEnter()
+            {
+                if (!Interactable) return;
+                DoAnimation.DoScale_UI(BackgroundRect, ScaleUpSettings);
+            }
 
-        protected override void OnPointerExit()
-        {
-            if (!Interactable) return;
-            DoAnimation.DoScale_UI(BackgroundRect, ScaleDownSettings);
-        }
+            protected override void OnPointerExit()
+            {
+                if (!Interactable) return;
+                DoAnimation.DoScale_UI(BackgroundRect, ScaleDownSettings);
+            }
         #endregion
 
-        public override bool Add(ItemSO item)
+        public override void TryAddItem(ITem item, out bool isSuccess)
         {
-            if (item is null) return false;
-            if (ItemData is not null) return false;
+            if (item is null) { isSuccess = false; return; }
+            if (ItemData is not null) { isSuccess = false; return; }
             
             if (TargetItemData is null)
             {
@@ -59,18 +59,18 @@ namespace System.Storage_Slot.Type
             {
                 item.GetItemType(out ItemType type01, out int level01);
                 TargetItemData.GetItemType(out ItemType type02, out int level02);
-                if (!Equals(type01, type02)) return false; // TODO 物品類型不同會跳出 Message System
-                if (level01 < level02) return false; // TODO 物品類型相同但等級比 TargetItemData 還低，一樣跳出 Message System
+                if (!Equals(type01, type02)) { isSuccess = false; return; } // TODO 物品類型不同會跳出 Message System
+                if (level01 < level02) { isSuccess = false; return; } // TODO 物品類型相同但等級比 TargetItemData 還低，一樣跳出 Message System
                 ItemData = item;
                 ItemData.GetItemSprite(out var sprite);
                 ItemImage.sprite = sprite;
                 ItemImage.color = HaveItemColor;
             }
 
-            return true;
+            isSuccess = true;
         }
 
-        public override void Get(out ItemSO item)
+        public override void GetItem(out ITem item)
         {
             if (ItemData is null)
             {

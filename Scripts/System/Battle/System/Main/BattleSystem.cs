@@ -9,7 +9,7 @@ using System.Linq;
 using System.Message.System.Main;
 using Data.General;
 using Data.General.Enum;
-using Data.Player.Base;
+using Data.Player.Main;
 using UnityEngine;
 
 namespace System.Battle.System.Main

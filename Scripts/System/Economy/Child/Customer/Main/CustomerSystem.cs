@@ -53,7 +53,7 @@ namespace System.Economy.Child.Customer.Main
 
         private void OnDisable()
         {
-            while (ActiveActions.Count > 0) { var action = ActiveActions.Dequeue(); action?.Invoke(); }
+            while (ActiveActions.Count > 0) ActiveActions.Dequeue()?.Invoke();
             if (MainCor is not null) { StopCoroutine(MainCor); MainCor = null; }
         }
         

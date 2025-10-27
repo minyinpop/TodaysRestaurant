@@ -10,10 +10,10 @@ namespace System.Storage_Slot.Base
         protected override void OnPointerEnter() { }
         protected override void OnPointerExit() { }
 
-        public virtual bool Add(ItemSO item) { return false; }
-        public virtual void Add(ItemSO item, Action onComplete) { onComplete?.Invoke(); }
+        public virtual void TryAddItem(ITem item, out bool isSuccess) { isSuccess = false; }
+        public virtual void TryAddItem(ITem item, Action onComplete) { onComplete?.Invoke(); }
         
-        public virtual void Get(out ItemSO item) { item = null; }
+        public virtual void GetItem(out ITem item) { item = null; }
         
         public virtual bool IsEmpty() { return true; }
 

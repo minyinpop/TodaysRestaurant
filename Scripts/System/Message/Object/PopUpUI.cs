@@ -210,7 +210,7 @@ namespace System.Message.Object
                     var item = items[index];
                     completes.Add(false);
                     ItemSlots.Add(slotScript);
-                    slotScript.Add(item,
+                    slotScript.TryAddItem(item,
                         onComplete: () =>
                         {
                             completes[index] = true;

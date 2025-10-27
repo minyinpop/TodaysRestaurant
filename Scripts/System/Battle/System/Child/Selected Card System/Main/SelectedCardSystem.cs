@@ -7,7 +7,7 @@ using System.Message.System.Main;
 using Data.Animation.DOTween.Basic;
 using Data.General;
 using Data.Player;
-using Data.Player.Base;
+using Data.Player.Main;
 using DG.Tweening;
 using UnityEngine;
 

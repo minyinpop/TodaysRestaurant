@@ -20,8 +20,7 @@ namespace System.Storage_Slot.Type
         [field: SerializeField] private DoScale ScaleUpSettings;
         [field: SerializeField] private DoScale ScaleDownSettings;
         
-        [field: Header("Develop Only")]
-        [field: SerializeField] private ItemSO ItemData;
+        private ITem ItemData;
 
         private bool Interactable = true;
         
@@ -39,17 +38,19 @@ namespace System.Storage_Slot.Type
             }
         #endregion
 
-        public override bool Add(ItemSO item)
+        public override void TryAddItem(ITem item, out bool isSuccess)
         {
-            if (item is null) return false;
+            if (item is null) { isSuccess = false; return; }
+            if (ItemData is not null) { isSuccess = false; return; }
+            
             ItemData = item;
             ItemData.GetItemSprite(out var sprite);
             ItemImage.sprite = sprite;
             ItemImage.gameObject.SetActive(true);
-            return true;
+            isSuccess = true;
         }
 
-        public override void Get(out ItemSO item)
+        public override void GetItem(out ITem item)
         {
             if (ItemData is null) item = null;
             item = ItemData;

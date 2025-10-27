@@ -19,7 +19,7 @@ namespace System.Mouse.Main
         [field: SerializeField] private EventSystem EventSystem;
         
         [field: Header("Tag")]
-        [field: SerializeField] private string ItemSlotTag;
+        [field: SerializeField] private string StorageSlot;
         [field: SerializeField] private string UtensilsTag;
         
         private void OnEnable()
@@ -35,11 +35,7 @@ namespace System.Mouse.Main
         private void OnPointerClick()
         {
             InputSystem.GetMousePosition(out var position);
-            if (!UI())
-            {
-                WorldSpace();
-            }
-            
+            if (!UI()) WorldSpace();
             return;
 
             bool UI()
@@ -48,16 +44,15 @@ namespace System.Mouse.Main
                 {
                     position = position
                 };
+                
                 var results = new List<RaycastResult>();
                 EventSystem.RaycastAll(pointer, results);
-                foreach (var result in results)
+                
+                if (results.Count == 0) return false;
+                if (results[0].gameObject.CompareTag(StorageSlot))
                 {
-                    var obj = result.gameObject;
-                    if (obj.CompareTag(ItemSlotTag))
-                    {
-                        ItemDragSystem.OnClick(obj);
-                        return true;
-                    }
+                    ItemDragSystem.OnClick(results[0].gameObject);
+                    return true;
                 }
 
                 return false;
@@ -67,15 +62,10 @@ namespace System.Mouse.Main
             {
                 var ray = MainCamera.ScreenPointToRay(position);
                 var hit2D = Physics2D.GetRayIntersection(ray);
-                if (hit2D.collider is not null)
-                {
-                    var obj = hit2D.collider.gameObject;
-                    if (obj.CompareTag(UtensilsTag))
-                    {
-                        obj.GetComponent<Utensils>().OnClick(MainCamera);
-                        return;
-                    }
-                }
+                if (hit2D.collider is null) return;
+                
+                var obj = hit2D.collider.gameObject;
+                if (obj.CompareTag(UtensilsTag)) obj.GetComponent<Utensils>().OnClick(MainCamera);
             }
         }
     }

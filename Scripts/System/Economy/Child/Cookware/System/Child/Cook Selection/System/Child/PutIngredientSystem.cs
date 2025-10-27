@@ -56,7 +56,7 @@ namespace System.Economy.Child.Cookware.System.Child.Cook_Selection.System.Child
                 var itemSlot = Instantiate(ItemSlotPrefab, ItemSlotParent);
                 var itemSlot_ItemSlot = itemSlot.GetComponent<StorageSlot>();
                 ItemSlots.Add(itemSlot_ItemSlot);
-                itemSlot_ItemSlot.Add(itemData);
+                itemSlot_ItemSlot.TryAddItem(itemData, out _);
             }
             
             // UI
@@ -93,13 +93,13 @@ namespace System.Economy.Child.Cookware.System.Child.Cook_Selection.System.Child
             return !ItemSlots.Where(itemSlot => itemSlot.IsEmpty()).Any();
         }
 
-        public void GetIngredients(out List<ItemSO> ingredients)
+        public void GetIngredients(out Queue<ITem> ingredients)
         {
-            ingredients = new List<ItemSO>();
+            ingredients = new Queue<ITem>();
             foreach (var itemSlot in ItemSlots)
             {
-                itemSlot.Get(out var item);
-                ingredients.Add(item);
+                itemSlot.GetItem(out var item);
+                ingredients.Enqueue(item);
             }
         }
     }

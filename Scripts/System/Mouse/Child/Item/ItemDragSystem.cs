@@ -14,7 +14,7 @@ namespace System.Mouse.Child.Item
         private GameObject DragUI;
         private ItemDragUI DragUIScript;
         
-        private ItemSO DraggedItemData;
+        private ITem DraggedItemData;
 
         public void OnClick(GameObject itemSlot)
         {
@@ -31,7 +31,7 @@ namespace System.Mouse.Child.Item
             
             void TryToTakeItem()
             {
-                itemSlot.GetComponent<StorageSlot>().Get(out var item);
+                itemSlot.GetComponent<StorageSlot>().GetItem(out var item);
                 if (item is null) return;
                 DraggedItemData = item;
                 DragUI = Instantiate(DragUIPrefab, DragUIParent);
@@ -42,7 +42,8 @@ namespace System.Mouse.Child.Item
 
             void PutItemToEmptySlot(StorageSlot currentStorageSlotScript)
             {
-                if (!currentStorageSlotScript.Add(DraggedItemData)) return;
+                currentStorageSlotScript.TryAddItem(DraggedItemData, out var isSuccess);
+                if (!isSuccess) return;
                 Destroy(DragUI);
                 DragUI = null;
                 DragUIScript = null;
@@ -51,8 +52,8 @@ namespace System.Mouse.Child.Item
 
             void SwitchItem(StorageSlot currentStorageSlotScript)
             {
-                currentStorageSlotScript.Get(out var item);
-                currentStorageSlotScript.Add(DraggedItemData);
+                currentStorageSlotScript.GetItem(out var item);
+                currentStorageSlotScript.TryAddItem(DraggedItemData, out _);
                 DraggedItemData = item;
                 DraggedItemData.GetItemSprite(out var sprite);
                 DragUIScript.SetSprite(sprite);

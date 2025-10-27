@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Economy.Child.Food_Menu.Object;
+using System.Economy.Child.Food_Menu.Object.Item_Slot.Base;
 using System.Economy.Child.Food_Menu.System.Child.Open_UI_System.Child;
 using System.General;
-using System.Item_Slot.Base;
 using System.Linq;
 using System.Message.System.Main;
 using Data.Animation.DOTween.Basic;
@@ -12,7 +12,7 @@ using Data.Food.Food_Category.Base;
 using Data.General;
 using Data.General.Enum;
 using Data.Item.Base;
-using Data.Player.Base;
+using Data.Player.Main;
 using UnityEngine;
 
 namespace System.Economy.Child.Food_Menu.System.Child.Open_UI_System.Main

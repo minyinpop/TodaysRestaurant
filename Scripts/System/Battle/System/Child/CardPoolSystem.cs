@@ -7,8 +7,9 @@ using System.Linq;
 using Data.Animation.DOTween.Basic;
 using Data.General;
 using Data.General.Enum;
-using Data.Player;
-using Data.Player.Base;
+using Data.Player.Child;
+using Data.Player.Child.Deck;
+using Data.Player.Main;
 using DG.Tweening;
 using UnityEngine;
 
@@ -25,7 +26,7 @@ namespace System.Battle.System.Child
         [field: Header("Data")]
         [field: SerializeField] private PlayerSO PlayerData;
 
-        private readonly Deck DeckData = new();
+        private readonly DeckSO DeckData = new();
         
         private IEnumerator SortCor;
         private IEnumerator RefillCor;

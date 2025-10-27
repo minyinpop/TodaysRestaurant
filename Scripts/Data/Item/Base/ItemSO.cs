@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Data.Item.Base
 {
-    internal abstract class ItemSO : ScriptableObject
+    internal abstract class ItemSO : ScriptableObject, ITem
     {
         #region Name
             public virtual void GetItemName(out string itemName)
