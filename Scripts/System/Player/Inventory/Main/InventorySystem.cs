@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Economy.Child.Cookware.System.Main;
 using System.Player.Inventory.Child;
 using Data.Item.Base;
-using Data.Player.Child.Inventory;
 using UnityEngine;
 
 namespace System.Player.Inventory.Main
@@ -12,9 +11,6 @@ namespace System.Player.Inventory.Main
         [field: Header("Child System")]
         [field: SerializeField] private HotbarSystem HotbarSystem;
         [field: SerializeField] private BackpackSystem BackpackSystem;
-        
-        [field: Header("Data")]
-        [field: SerializeField] private InventorySO InventoryData;
         
         private readonly Queue<Action> ActiveActions = new();
 

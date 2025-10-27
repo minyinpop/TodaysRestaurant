@@ -6,8 +6,10 @@ namespace Data.Player.Child.Inventory
     [CreateAssetMenu(menuName = "Minyinpop/Player/Child/Inventory Data", fileName = "New Data")]
     internal sealed class InventorySO : ScriptableObject
     {
-        [field: Header("Item Data")]
-        [field: SerializeField] private ItemSO[] HotbarItemsData;
-        // TODO 背包的資料
+        private ItemSO[] HotbarItemsData = new ItemSO[10];
+
+        public void SetItem()
+        {
+        }
     }
 }

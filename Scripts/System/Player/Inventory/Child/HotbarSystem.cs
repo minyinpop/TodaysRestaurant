@@ -1,11 +1,15 @@
 using System.Storage_Slot.Base;
 using Data.Item.Base;
+using Data.Player.Child.Inventory;
 using UnityEngine;
 
 namespace System.Player.Inventory.Child
 {
     internal sealed class HotbarSystem : MonoBehaviour
     {
+        [field: Header("Data")]
+        [field: SerializeField] private InventorySO InventoryData;
+        
         [field: Header("Storage Slot")]
         [field: SerializeField] private StorageSlot[] StorageSlots;
 
