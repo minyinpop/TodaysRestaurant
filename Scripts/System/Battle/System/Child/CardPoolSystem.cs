@@ -7,7 +7,6 @@ using System.Linq;
 using Data.Animation.DOTween.Basic;
 using Data.General.Enum;
 using Data.Player.Child.Deck;
-using Data.Player.Main;
 using DG.Tweening;
 using UnityEngine;
 
@@ -22,19 +21,12 @@ namespace System.Battle.System.Child
         [field: SerializeField] private CardSlot[] CardSlots;
         
         [field: Header("Data")]
-        [field: SerializeField] private PlayerSO PlayerData;
+        [field: SerializeField] private DeckSO DeckData;
 
-        private readonly DeckSO DeckData = new();
         
         private IEnumerator SortCor;
         private IEnumerator RefillCor;
         private IEnumerator RecycleCor;
-        
-        private void Start()
-        {
-            PlayerData.GetCardPrefabs(out var cardPrefabs);
-            DeckData.Set(cardPrefabs);
-        }
 
         private void OnDisable()
         {
