@@ -1400,12 +1400,12 @@ MonoBehaviour:
   Rect: {fileID: 1028408282}
   TitleTMP: {fileID: 0}
   DoAnimation: {fileID: 1028408283}
-  OnPointerEnterScale:
-    EndValue: {x: 1.2, y: 1.2, z: 0}
+  onPointerEnterScale:
+    EndValue: {x: 1.1, y: 1.1, z: 1}
     Duration: 0.2
     Ease: 18
-  OnPointerExitScale:
-    EndValue: {x: 1, y: 1, z: 0}
+  onPointerExitScale:
+    EndValue: {x: 1, y: 1, z: 1}
     Duration: 0.2
     Ease: 18
 --- !u!114 &1028408285
@@ -2041,11 +2041,11 @@ MonoBehaviour:
   Rect: {fileID: 1732909251}
   TitleTMP: {fileID: 0}
   DoAnimation: {fileID: 1732909252}
-  OnPointerEnterScale:
-    EndValue: {x: 1.2, y: 1.2, z: 1}
+  onPointerEnterScale:
+    EndValue: {x: 1.1, y: 1.1, z: 1}
     Duration: 0.2
     Ease: 18
-  OnPointerExitScale:
+  onPointerExitScale:
     EndValue: {x: 1, y: 1, z: 1}
     Duration: 0.2
     Ease: 18
@@ -2153,12 +2153,12 @@ MonoBehaviour:
   Rect: {fileID: 1748143736}
   TitleTMP: {fileID: 0}
   DoAnimation: {fileID: 1748143737}
-  OnPointerEnterScale:
-    EndValue: {x: 1.2, y: 1.2, z: 0}
+  onPointerEnterScale:
+    EndValue: {x: 1.1, y: 1.1, z: 1}
     Duration: 0.2
     Ease: 18
-  OnPointerExitScale:
-    EndValue: {x: 1, y: 1, z: 0}
+  onPointerExitScale:
+    EndValue: {x: 1, y: 1, z: 1}
     Duration: 0.2
     Ease: 18
 --- !u!114 &1748143739
@@ -2399,6 +2399,26 @@ PrefabInstance:
     - target: {fileID: 1622358650700634452, guid: a6703cf87d79f61489a496054da7801f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1897627277779397485, guid: a6703cf87d79f61489a496054da7801f, type: 3}
+      propertyPath: onPointerEnterScale.Ease
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1897627277779397485, guid: a6703cf87d79f61489a496054da7801f, type: 3}
+      propertyPath: onPointerEnterScale.Duration
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1897627277779397485, guid: a6703cf87d79f61489a496054da7801f, type: 3}
+      propertyPath: onPointerEnterScale.EndValue.x
+      value: 1.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1897627277779397485, guid: a6703cf87d79f61489a496054da7801f, type: 3}
+      propertyPath: onPointerEnterScale.EndValue.y
+      value: 1.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1897627277779397485, guid: a6703cf87d79f61489a496054da7801f, type: 3}
+      propertyPath: onPointerEnterScale.EndValue.z
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5389136867076468944, guid: a6703cf87d79f61489a496054da7801f, type: 3}
       propertyPath: m_Alpha

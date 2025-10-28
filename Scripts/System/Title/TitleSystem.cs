@@ -37,7 +37,7 @@ namespace System.Title
         #region Button
         private void OnStartButtonClicked()
         {
-            OnClickStartGameButton?.Invoke("Cook ( DEV )",
+            OnClickStartGameButton?.Invoke("Dialogue ( Dev )",
                 () =>
                 {
                     // onComplete

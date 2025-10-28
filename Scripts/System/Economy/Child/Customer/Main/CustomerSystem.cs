@@ -99,18 +99,18 @@ namespace System.Economy.Child.Customer.Main
                     {
                         Bubbles.Enqueue(Instantiate(ThinkBubblePrefab, BubbleParent).GetComponent<Bubble>());
 
-                        Bubbles.Peek().CountDown(1,
+                        Bubbles.Peek().CountDown(3,
                             onComplete: () =>
                             {
                                 SelectFoodPageData.GetRandomItemData(out var firstItemData);
                                 OrderItems.Enqueue(firstItemData);
                                 
-                                var chance = UnityEngine.Random.Range(0, 100);
-                                if (chance > 50)
-                                {
-                                    SelectFoodPageData.GetRandomItemData(OrderItems.ToArray(), out var secondItemData);
-                                    if (secondItemData is not null) OrderItems.Enqueue(secondItemData);
-                                }
+                                // var chance = UnityEngine.Random.Range(0, 100);
+                                // if (chance > 50)
+                                // {
+                                //     SelectFoodPageData.GetRandomItemData(OrderItems.ToArray(), out var secondItemData);
+                                //     if (secondItemData is not null) OrderItems.Enqueue(secondItemData);
+                                // }
 
                                 WaitForOrder();
                             });
@@ -136,7 +136,7 @@ namespace System.Economy.Child.Customer.Main
                         Bubbles.Peek().OnClick += ShowOrderItem;
                         ActiveActions.Enqueue(() => Bubbles.Peek().OnClick -= ShowOrderItem);
                         Bubbles.Peek().SetInteractable(Interactable);
-                        Bubbles.Peek().CountDown(12,
+                        Bubbles.Peek().CountDown(15,
                             onComplete: () => Debug.Log($"{name} 等待點餐太久了，已經沒了耐心。"));
                     }
                     
