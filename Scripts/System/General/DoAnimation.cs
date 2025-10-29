@@ -7,6 +7,11 @@ namespace System.General
 {
     internal sealed class DoAnimation : MonoBehaviour
     {
+        private void OnEnable()
+        {
+            DOTween.useSafeMode = true;
+        }
+
         private void OnDisable()
         {
             MoveTween?.Kill();

@@ -43,6 +43,10 @@ namespace System.Battle.System.Main
 
         private bool IsEnd;
 
+        public static event Action ReloadScene;
+        public static event Action<string, Action> ChangeScene;
+        public static event Action<string, int> StartScenario;
+
         private void Start()
         {
             OnBattleStart();
@@ -173,7 +177,7 @@ namespace System.Battle.System.Main
                                 {
                                     PlayerData.GetCharacterNumber(out var number);
                                     number = Mathf.Clamp(number * 2, 1, 8);
-                                    DrawAndShowCard(number, TurnManager);
+                                    DrawAndShowCard(number, OnInitiativeCoin);
                                 });
                         },
                         onExit: () =>
@@ -383,7 +387,12 @@ namespace System.Battle.System.Main
                                     closeButtonTitle: string.Empty),
                                 onConfirm: () =>
                                 {
-                                    Debug.Log("Grab all items.");
+                                    ChangeScene?.Invoke("Dialogue ( Dev )",
+                                        () =>
+                                        {
+                                            // onComplete
+                                            StartScenario?.Invoke("Restaurant", 0);
+                                        });
                                 });
                         },
                         onExit: () =>
@@ -408,12 +417,12 @@ namespace System.Battle.System.Main
                             MessageSystem.ShowDefeatUI(
                                 content: new PopUpUIContent(
                                     message: "被打敗了",
-                                    confirmButtonTitle: "返回餐廳",
+                                    confirmButtonTitle: "再來一次",
                                     cancelButtonTitle: string.Empty,
                                     closeButtonTitle: string.Empty),
                                 onConfirm: () =>
                                 {
-                                    Debug.Log("Return to restaurant.");
+                                    ReloadScene?.Invoke();
                                 });
                         },
                         onExit: () =>

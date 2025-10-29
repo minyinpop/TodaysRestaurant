@@ -39,11 +39,10 @@ namespace System.Dialogue.Utage
         //********描画時の引数適用********//
         public void SetCommandArg(AdvCommand command)
         {
-            var trackIndex = command.ParseCellOptional(AdvColumnName.Arg7, 0);
-            var animationName = command.ParseCellOptional(AdvColumnName.Arg8, "");
-            var loop = command.ParseCellOptional(AdvColumnName.Arg9, false);
+            var animationName = command.ParseCellOptional(AdvColumnName.Arg2, "");
+            var loop = command.ParseCellOptional(AdvColumnName.Arg7, false);
             
-            SkeletonGraphic.AnimationState.SetAnimation(trackIndex, animationName, loop);
+            if (!string.IsNullOrEmpty(animationName)) SkeletonGraphic.AnimationState.SetAnimation(0, animationName, loop);
         }
 
         private const int Version = 0;

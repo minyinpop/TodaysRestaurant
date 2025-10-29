@@ -1,4 +1,6 @@
+using System.Battle.System.Main;
 using System.Collections;
+using System.Dialogue.Utage;
 using System.General;
 using System.Title;
 using Data.Animation.DOTween.Basic;
@@ -44,26 +46,43 @@ namespace System.Scene
         private void OnEnable()
         {
             TitleSystem.OnClickStartGameButton += ChangeScene;
+            UtageReceiveMessageSystem.ChangeScene += ChangeScene;
+            
+            BattleSystem.ReloadScene += ReloadScene;
+            BattleSystem.ChangeScene += ChangeScene;
         }
 
         private void OnDisable()
         {
             TitleSystem.OnClickStartGameButton -= ChangeScene;
-            if (ChangeSceneCor is not null)
-            {
-                StopCoroutine(ChangeSceneCor);
-                ChangeSceneCor = null;
-            }
+            UtageReceiveMessageSystem.ChangeScene -= ChangeScene;
+            
+            BattleSystem.ReloadScene -= ReloadScene;
+            BattleSystem.ChangeScene -= ChangeScene;
+            
+            if (ChangeSceneCor is not null) { StopCoroutine(ChangeSceneCor); ChangeSceneCor = null; }
+        }
+        
+        private void ChangeScene(string sceneName)
+        {
+            ChangeSceneCor = ChangeSceneCoroutine(sceneName);
+            StartCoroutine(ChangeSceneCor);
         }
 
         private void ChangeScene(string sceneName, Action onComplete)
         {
-            ChangeSceneCor = ChangeSceneCoroutine();
+            ChangeSceneCor = ChangeSceneCoroutine(sceneName, onComplete);
             StartCoroutine(ChangeSceneCor);
-            return;
+        }
 
-            IEnumerator ChangeSceneCoroutine()
-            {
+        private void ReloadScene()
+        {
+            ChangeSceneCor = ChangeSceneCoroutine(SceneManager.GetActiveScene().name);
+            StartCoroutine(ChangeSceneCor);
+        }
+
+        private IEnumerator ChangeSceneCoroutine(string sceneName, Action onComplete = null)
+        {
                 var complete = false;
                 UI.SetActive(true);
                 DoAnimation.DoFade_CanvasGroup(
@@ -74,6 +93,7 @@ namespace System.Scene
                         complete = true;
                     });
                 yield return new WaitUntil(() => complete);
+                
                 var operation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
                 operation.allowSceneActivation = false;
                 while (ProgressBar.value < .9f)
@@ -100,6 +120,7 @@ namespace System.Scene
                             });
                     });
                 yield return new WaitUntil(() => complete);
+                
                 operation.allowSceneActivation = true;
                 complete = false;
                 DoAnimation.DoFade_CanvasGroup(
@@ -113,8 +134,8 @@ namespace System.Scene
                         complete = true;
                     });
                 yield return new WaitUntil(predicate: () => complete);
+                
                 onComplete?.Invoke();
-            }
         }
     }
 }

@@ -10,18 +10,18 @@ namespace System.Dialogue.Custom
 {
     internal sealed class ChapterTitleSystem : MonoBehaviour
     {
+        [field: Header("Appearance Settings")]
+        [field: SerializeField] private AppearanceScriptableBase Appearance;
+        [field: SerializeField] private AppearanceScriptableBase Disappearance;
+        
         [field: Header("Title")]
         [field: SerializeField] private TextMeshProUGUI TitleText;
         [field: SerializeField] private TypewriterByWord TitleTypewriter;
-        [field: SerializeField] private AppearanceScriptableBase TitleAppearance;
-        [field: SerializeField] private AppearanceScriptableBase TitleDisappearance;
         
         [field: Header("Subtitle")]
         [field: SerializeField] private TextMeshProUGUI SubtitleText;
         [field: SerializeField] private TypewriterByWord SubtitleTypewriter;
-        [field: SerializeField] private AppearanceScriptableBase SubtitleAppearance;
-        [field: SerializeField] private AppearanceScriptableBase SubtitleDisappearance;
-
+        
         private readonly Queue<Action> ActiveActions = new();
 
         private IEnumerator ShowCor;
@@ -38,7 +38,7 @@ namespace System.Dialogue.Custom
             if (ShowCor is not null) { StopCoroutine(ShowCor); ShowCor = null; }
         }
 
-        private void Show(Action onComplete)
+        private void Show(string title, string subtitle)
         {
             ShowCor = ShowCoroutine();
             StartCoroutine(ShowCor);
@@ -46,19 +46,18 @@ namespace System.Dialogue.Custom
 
             IEnumerator ShowCoroutine()
             {
+                TitleTypewriter.ShowText(title);
+                SubtitleTypewriter.ShowText(subtitle);
+                
                 TitleTypewriter.StartShowingText();
-                yield return new WaitForSeconds(TitleAppearance.baseDuration);
-
+                yield return new WaitForSeconds(Appearance.baseDuration);
                 SubtitleTypewriter.StartShowingText();
-                yield return new WaitForSeconds(SubtitleAppearance.baseDuration + 3);
+                yield return new WaitForSeconds(Appearance.baseDuration + 3);
 
                 SubtitleTypewriter.StartDisappearingText();
-                yield return new WaitForSeconds(SubtitleAppearance.baseDuration);
-
+                yield return new WaitForSeconds(Disappearance.baseDuration);
                 TitleTypewriter.StartDisappearingText();
-                yield return new WaitForSeconds(TitleAppearance.baseDuration + 1);
-
-                onComplete?.Invoke();
+                yield return new WaitForSeconds(Disappearance.baseDuration);
             }
         }
     }

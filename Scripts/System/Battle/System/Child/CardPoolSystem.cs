@@ -23,10 +23,17 @@ namespace System.Battle.System.Child
         [field: Header("Data")]
         [field: SerializeField] private DeckSO DeckData;
 
+        private List<GameObject> CurrentDeck = new();
         
         private IEnumerator SortCor;
         private IEnumerator RefillCor;
         private IEnumerator RecycleCor;
+
+        private void Awake()
+        {
+            DeckData.Get(out var deck);
+            CurrentDeck = deck.ToList();
+        }
 
         private void OnDisable()
         {
@@ -105,13 +112,10 @@ namespace System.Battle.System.Child
                     var index = i;
                     var slot = CardSlots[index];
                     if (!slot.IsEmpty()) continue;
-                    if (!DeckData.GetRandomCard(out var cardPrefab))
-                    {
-                        onComplete?.Invoke();
-                        yield break;
-                    }
-
-                    var card = Instantiate(cardPrefab, SpawnParent);
+                    if (CurrentDeck.Count == 0) { onComplete?.Invoke(); yield break; }
+                    
+                    var randomCardPrefab = CurrentDeck[UnityEngine.Random.Range(0, CurrentDeck.Count)];
+                    var card = Instantiate(randomCardPrefab, SpawnParent);
                     var battleCard = card.GetComponent<BattleCard>();
                     slot.Set(battleCard);
                     battleCard.Move(slot.transform, new DoAnchorPos(Vector3.zero, .5f, true, Ease.OutExpo),
@@ -160,7 +164,14 @@ namespace System.Battle.System.Child
                         card.DestroyCard(
                             onComplete: () =>
                             {
-                                DeckData.Remove(targetType);
+                                for (var i = 0; i < CurrentDeck.Count; i++)
+                                {
+                                    var cardPrefab = CurrentDeck[i];
+                                    cardPrefab.GetComponent<ICard>().GetCardType(out var cardType);
+                                    if (cardType != targetType) continue;
+                                    CurrentDeck.Remove(cardPrefab);
+                                }
+
                                 completes[index] = true;
                             });
                     }
