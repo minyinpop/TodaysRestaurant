@@ -1,6 +1,8 @@
 using System.Battle.System.Main;
 using System.Collections;
+using System.Collections.Generic;
 using System.Dialogue.Utage;
+using System.Economy.Child.Cookware.System.Main;
 using System.General;
 using System.Title;
 using Data.Animation.DOTween.Basic;
@@ -30,6 +32,8 @@ namespace System.Scene
         private IEnumerator ChangeSceneCor;
 
         private static GameObject Instance;
+        
+        private readonly Queue<Action> ActiveActions = new();
 
         private void Awake()
         {
@@ -46,20 +50,24 @@ namespace System.Scene
         private void OnEnable()
         {
             TitleSystem.OnClickStartGameButton += ChangeScene;
+            ActiveActions.Enqueue(() => TitleSystem.OnClickStartGameButton -= ChangeScene);
+            
             UtageReceiveMessageSystem.ChangeScene += ChangeScene;
+            ActiveActions.Enqueue(() => UtageReceiveMessageSystem.ChangeScene -= ChangeScene);
             
             BattleSystem.ReloadScene += ReloadScene;
+            ActiveActions.Enqueue(() => BattleSystem.ReloadScene -= ReloadScene);
+            
             BattleSystem.ChangeScene += ChangeScene;
+            ActiveActions.Enqueue(() => BattleSystem.ChangeScene -= ChangeScene);
+            
+            CookwareSystem.ChangeScene += ChangeScene;
+            ActiveActions.Enqueue(() => CookwareSystem.ChangeScene -= ChangeScene);
         }
 
         private void OnDisable()
         {
-            TitleSystem.OnClickStartGameButton -= ChangeScene;
-            UtageReceiveMessageSystem.ChangeScene -= ChangeScene;
-            
-            BattleSystem.ReloadScene -= ReloadScene;
-            BattleSystem.ChangeScene -= ChangeScene;
-            
+            while (ActiveActions.Count > 0) ActiveActions.Dequeue()?.Invoke();
             if (ChangeSceneCor is not null) { StopCoroutine(ChangeSceneCor); ChangeSceneCor = null; }
         }
         

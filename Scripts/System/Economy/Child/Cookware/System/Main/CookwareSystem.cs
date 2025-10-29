@@ -40,6 +40,10 @@ namespace System.Economy.Child.Cookware.System.Main
 
         public static event Action<CookType, Action<CustomItem>, Action> OnClickEmptyBubble;
         public static event Func<ITem, bool> OnClickCompleteBubble;
+        
+        // TODO 5 審專用
+        public static event Action<string, Action> ChangeScene;
+        public static event Action<string, int> StartScenario;
 
         private void Start()
         {
@@ -174,6 +178,14 @@ namespace System.Economy.Child.Cookware.System.Main
                                     case true:
                                     {
                                         OnEmptyState();
+                                        
+                                        // TODO 5 審專用
+                                        ChangeScene?.Invoke("Dialogue ( Dev )",
+                                            () =>
+                                            {
+                                                // onComplete
+                                                StartScenario?.Invoke("Abnormal", 0);
+                                            });
                                         break;
                                     }
                                     default:

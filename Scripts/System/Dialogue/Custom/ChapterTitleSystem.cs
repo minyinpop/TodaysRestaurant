@@ -38,7 +38,7 @@ namespace System.Dialogue.Custom
             if (ShowCor is not null) { StopCoroutine(ShowCor); ShowCor = null; }
         }
 
-        private void Show(string title, string subtitle)
+        private void Show(string title, string subtitle, float duration)
         {
             ShowCor = ShowCoroutine();
             StartCoroutine(ShowCor);
@@ -52,7 +52,7 @@ namespace System.Dialogue.Custom
                 TitleTypewriter.StartShowingText();
                 yield return new WaitForSeconds(Appearance.baseDuration);
                 SubtitleTypewriter.StartShowingText();
-                yield return new WaitForSeconds(Appearance.baseDuration + 3);
+                yield return new WaitForSeconds(Appearance.baseDuration + duration);
 
                 SubtitleTypewriter.StartDisappearingText();
                 yield return new WaitForSeconds(Disappearance.baseDuration);

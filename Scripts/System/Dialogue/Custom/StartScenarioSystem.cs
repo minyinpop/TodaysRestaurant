@@ -1,5 +1,6 @@
 using System.Battle.System.Main;
 using System.Collections.Generic;
+using System.Economy.Child.Cookware.System.Main;
 using System.Title;
 using UnityEngine;
 using Utage;
@@ -20,6 +21,10 @@ namespace System.Dialogue.Custom
             
             BattleSystem.StartScenario += StartScenario;
             ActiveActions.Enqueue(() => BattleSystem.StartScenario -= StartScenario);
+            
+            // TODO 5 審專用
+            CookwareSystem.StartScenario += StartScenario;
+            ActiveActions.Enqueue(() => CookwareSystem.StartScenario -= StartScenario);
         }
 
         private void OnDisable()

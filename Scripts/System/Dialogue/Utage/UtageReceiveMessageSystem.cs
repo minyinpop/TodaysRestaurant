@@ -5,7 +5,7 @@ namespace System.Dialogue.Utage
 {
     internal sealed class UtageReceiveMessageSystem : MonoBehaviour
     {
-        public static event Action<string, string> ShowChapterTitle;
+        public static event Action<string, string, float> ShowChapterTitle;
         public static event Action<string> ChangeScene;
 
         private void OnDoCommand(AdvCommandSendMessage command)
@@ -16,8 +16,9 @@ namespace System.Dialogue.Utage
                 {
                     var title = command.ParseCellOptional(AdvColumnName.Arg2, "");
                     var subtitle = command.ParseCellOptional(AdvColumnName.Arg3, "");
+                    var duration = command.ParseCellOptional(AdvColumnName.Arg6, 3);
                     
-                    ShowChapterTitle?.Invoke(title, subtitle);
+                    ShowChapterTitle?.Invoke(title, subtitle, duration);
                     break;
                 }
                 case "ChangeScene":
