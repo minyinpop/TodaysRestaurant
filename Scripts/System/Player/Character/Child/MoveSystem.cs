@@ -67,6 +67,7 @@ namespace System.Player.Character.Child
         public void StopWalk()
         {
             if (WalkCor is null) return;
+            Rig.linearVelocity = new Vector3(0, Rig.linearVelocity.y, 0);
             StopCoroutine(WalkCor);
             WalkCor = null;
         }
