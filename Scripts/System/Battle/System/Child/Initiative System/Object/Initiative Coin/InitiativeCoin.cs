@@ -48,7 +48,7 @@ namespace System.Battle.System.Child.Initiative_System.Object.Initiative_Coin
             var finalPos = new Vector2(randomXPos, randomYPos);
 
             // Angle Y
-            var randomYTurns = UnityEngine.Random.Range(24, 32);
+            var randomYTurns = UnityEngine.Random.Range(12, 16);
             var finalYAngle = 180 * randomYTurns;
             
             // Angle Z
@@ -58,7 +58,7 @@ namespace System.Battle.System.Child.Initiative_System.Object.Initiative_Coin
                 
             var finalAngle = new Vector3(Rect.eulerAngles.x, finalYAngle, finalZAngle);
                 
-            const float throwDuration = 3f;
+            const float throwDuration = 1f;
                 
             var anchorPosSettings = new DoAnchorPos(finalPos, throwDuration, true, Ease.Linear);
             var rotateSettings = new DoRotate(finalAngle, throwDuration, RotateMode.FastBeyond360, Ease.Linear);
@@ -79,8 +79,8 @@ namespace System.Battle.System.Child.Initiative_System.Object.Initiative_Coin
         {
             Rect.SetParent(ShowParent);
 
-            var anchorPosSettings = new DoAnchorPos(Vector2.zero, .5f, true, Ease.OutCubic);
-            var scaleSettings = new DoScale(Vector2.one * 2, 1, Ease.InOutBack);
+            var anchorPosSettings = new DoAnchorPos(Vector2.zero, .2f, true, Ease.OutCubic);
+            var scaleSettings = new DoScale(Vector2.one * 2, .5f, Ease.InOutBack);
             
             const float callbackDelay = 1;
 
