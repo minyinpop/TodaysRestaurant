@@ -6,6 +6,7 @@ using System.Storage_Slot.Base;
 using Data.Animation.DOTween.Basic;
 using Data.General;
 using Data.Item.Type.Ingredient;
+using Object;
 using TMPro;
 using UnityEngine;
 

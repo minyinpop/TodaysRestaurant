@@ -1,10 +1,11 @@
+using System;
 using System.General;
 using Data.Animation.DOTween.Basic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace System
+namespace Object
 {
     [RequireComponent(typeof(Image))]
     [RequireComponent(typeof(DoAnimation))]

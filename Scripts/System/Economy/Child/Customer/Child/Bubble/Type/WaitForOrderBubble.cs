@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Button = Object.Button;
 
 namespace System.Economy.Child.Customer.Child.Bubble.Type
 {

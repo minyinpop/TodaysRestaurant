@@ -9,8 +9,7 @@ namespace System.Player.Character.Child.Detect_System.Main
     internal sealed class DetectSystem : MonoBehaviour
     {
         [field: Header("Detect Area")]
-        [field: SerializeField] private DetectArea CookwareDetectArea;
-        [field: SerializeField] private DetectArea CustomerDetectArea;
+        [field: SerializeField] private DetectArea[] DetectAreas;
         
         private readonly Queue<Action> ActiveActions = new();
         
@@ -26,17 +25,17 @@ namespace System.Player.Character.Child.Detect_System.Main
 
         private void StartDetect()
         {
-            CookwareDetectArea.OnDetect += CookwareOnDetect;
-            ActiveActions.Enqueue(() => CookwareDetectArea.OnDetect -= CookwareOnDetect);
-            
-            CookwareDetectArea.OnUnDetect += CookwareOnUnDetect;
-            ActiveActions.Enqueue(() => CookwareDetectArea.OnUnDetect -= CookwareOnUnDetect);
-
-            CustomerDetectArea.OnDetect += CustomerOnDetect;
-            ActiveActions.Enqueue(() => CustomerDetectArea.OnDetect -= CustomerOnDetect);
-            
-            CustomerDetectArea.OnUnDetect += CustomerOnUnDetect;
-            ActiveActions.Enqueue(() => CustomerDetectArea.OnUnDetect -= CustomerOnUnDetect);
+            // CookwareDetectArea.OnDetect += CookwareOnDetect;
+            // ActiveActions.Enqueue(() => CookwareDetectArea.OnDetect -= CookwareOnDetect);
+            //
+            // CookwareDetectArea.OnUnDetect += CookwareOnUnDetect;
+            // ActiveActions.Enqueue(() => CookwareDetectArea.OnUnDetect -= CookwareOnUnDetect);
+            //
+            // CustomerDetectArea.OnDetect += CustomerOnDetect;
+            // ActiveActions.Enqueue(() => CustomerDetectArea.OnDetect -= CustomerOnDetect);
+            //
+            // CustomerDetectArea.OnUnDetect += CustomerOnUnDetect;
+            // ActiveActions.Enqueue(() => CustomerDetectArea.OnUnDetect -= CustomerOnUnDetect);
             return;
 
             void CookwareOnDetect(GameObject cookware)

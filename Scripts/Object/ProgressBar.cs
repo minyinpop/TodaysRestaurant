@@ -1,9 +1,10 @@
+using System;
 using System.General;
 using Data.Animation.DOTween.Basic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace System
+namespace Object
 {
     [RequireComponent(typeof(DoAnimation))]
     internal sealed class ProgressBar : MonoBehaviour

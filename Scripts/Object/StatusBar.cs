@@ -1,8 +1,9 @@
+using System;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace System
+namespace Object
 {
     internal sealed class StatusBar : MonoBehaviour
     {
