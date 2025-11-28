@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using System.Economy.Child.Cookware.System.Main;
-using System.Economy.Child.Customer.Main;
 using System.Player.Character.Child.Detect_System.Child;
+using Interface;
 using UnityEngine;
 
 namespace System.Player.Character.Child.Detect_System.Main
@@ -25,41 +24,23 @@ namespace System.Player.Character.Child.Detect_System.Main
 
         private void StartDetect()
         {
-            // CookwareDetectArea.OnDetect += CookwareOnDetect;
-            // ActiveActions.Enqueue(() => CookwareDetectArea.OnDetect -= CookwareOnDetect);
-            //
-            // CookwareDetectArea.OnUnDetect += CookwareOnUnDetect;
-            // ActiveActions.Enqueue(() => CookwareDetectArea.OnUnDetect -= CookwareOnUnDetect);
-            //
-            // CustomerDetectArea.OnDetect += CustomerOnDetect;
-            // ActiveActions.Enqueue(() => CustomerDetectArea.OnDetect -= CustomerOnDetect);
-            //
-            // CustomerDetectArea.OnUnDetect += CustomerOnUnDetect;
-            // ActiveActions.Enqueue(() => CustomerDetectArea.OnUnDetect -= CustomerOnUnDetect);
+            foreach (var detectArea in DetectAreas)
+            {
+                detectArea.OnEnterDetect += OnEnterDetect;
+                detectArea.OnExitDetect += OnExitDetect;
+                ActiveActions.Enqueue(() => detectArea.OnEnterDetect -= OnEnterDetect);
+                ActiveActions.Enqueue(() => detectArea.OnExitDetect -= OnExitDetect);
+            }
             return;
 
-            void CookwareOnDetect(GameObject cookware)
+            void OnEnterDetect(GameObject detectedObject)
             {
-                var system = cookware.GetComponent<CookwareSystem>();
-                system.SetInteractable(true);
-            }
-            
-            void CookwareOnUnDetect(GameObject cookware)
-            {
-                var system = cookware.GetComponent<CookwareSystem>();
-                system.SetInteractable(false);
+                detectedObject.GetComponent<InteractableObject>().OnEnterDetect();
             }
 
-            void CustomerOnDetect(GameObject customer)
+            void OnExitDetect(GameObject detectedObject)
             {
-                var system = customer.GetComponent<CustomerSystem>();
-                system.SetInteractable(true);
-            }
-
-            void CustomerOnUnDetect(GameObject customer)
-            {
-                var system = customer.GetComponent<CustomerSystem>();
-                system.SetInteractable(false);
+                detectedObject.GetComponent<InteractableObject>().OnExitDetect();
             }
         }
 

@@ -6,11 +6,12 @@ using System.Economy.Child.Customer.Main.State_Machine;
 using System.Economy.Child.Customer.Main.State_Machine.State;
 using Data.Economy.Food_Menu.Select_Food_Page;
 using Data.Item.Base;
+using Interface;
 using UnityEngine;
 
 namespace System.Economy.Child.Customer.Main
 {
-    internal sealed class CustomerSystem : MonoBehaviour
+    internal sealed class CustomerSystem : MonoBehaviour, InteractableObject
     {
         [field: Header("Child System")]
         [field: SerializeField] private MoveSystem MoveSystem;
@@ -56,13 +57,19 @@ namespace System.Economy.Child.Customer.Main
             while (ActiveActions.Count > 0) ActiveActions.Dequeue()?.Invoke();
             if (MainCor is not null) { StopCoroutine(MainCor); MainCor = null; }
         }
-        
-        public void SetInteractable(bool interactable)
-        {
-            Interactable = interactable;
-            foreach (var bubble in Bubbles) bubble.SetInteractable(Interactable);
-        }
-        
+
+        #region InteractableObject
+            public void OnEnterDetect()
+            {
+                foreach (var bubble in Bubbles) bubble.SetInteractable(true);
+            }
+            
+            public void OnExitDetect()
+            {
+                foreach (var bubble in Bubbles) bubble.SetInteractable(false);
+            }
+        #endregion
+
         #region StateMachine
             #region WalkToSeatPoint
                 public void WalkToSeatPoint(Transform standPoint, Transform sitPoint)

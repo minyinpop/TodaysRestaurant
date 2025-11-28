@@ -6,11 +6,12 @@ using System.Economy.Child.Cookware.System.Child.Cook_Game.System.Main;
 using Data.General.Enum;
 using Data.Item.Base;
 using Data.Item.Type.Custom;
+using Interface;
 using UnityEngine;
 
 namespace System.Economy.Child.Cookware.System.Main
 {
-    internal sealed class CookwareSystem : MonoBehaviour
+    internal sealed class CookwareSystem : MonoBehaviour, InteractableObject
     {
         [field: Header("Type")]
         [field: SerializeField] private CookType CookwareType;
@@ -55,11 +56,17 @@ namespace System.Economy.Child.Cookware.System.Main
             while (ActiveActions.Count > 0) ActiveActions.Dequeue()?.Invoke();
         }
 
-        public void SetInteractable(bool interactable)
-        {
-            Interactable = interactable;
-            CurrentBubble?.SetInteractable(Interactable);
-        }
+        #region InteractableObject
+            public void OnEnterDetect()
+            {
+                CurrentBubble?.SetInteractable(true);
+            }
+            
+            public void OnExitDetect()
+            {
+                CurrentBubble?.SetInteractable(false);
+            }
+        #endregion
 
         #region StateMachine
             #region OnEmpty
