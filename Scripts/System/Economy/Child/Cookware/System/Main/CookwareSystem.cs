@@ -6,11 +6,12 @@ using System.Economy.Child.Cookware.System.Child.Cook_Game.System.Main;
 using Data.General.Enum;
 using Data.Item.Base;
 using Data.Item.Type.Custom;
+using Interface;
 using UnityEngine;
 
 namespace System.Economy.Child.Cookware.System.Main
 {
-    internal sealed class CookwareSystem : MonoBehaviour
+    internal sealed class CookwareSystem : MonoBehaviour, InteractableObject
     {
         [field: Header("Type")]
         [field: SerializeField] private CookType CookwareType;
@@ -40,6 +41,10 @@ namespace System.Economy.Child.Cookware.System.Main
 
         public static event Action<CookType, Action<CustomItem>, Action> OnClickEmptyBubble;
         public static event Func<ITem, bool> OnClickCompleteBubble;
+        
+        // TODO 5 審專用
+        public static event Action<string, Action> ChangeScene;
+        public static event Action<string, int> StartScenario;
 
         private void Start()
         {
@@ -51,11 +56,17 @@ namespace System.Economy.Child.Cookware.System.Main
             while (ActiveActions.Count > 0) ActiveActions.Dequeue()?.Invoke();
         }
 
-        public void SetInteractable(bool interactable)
-        {
-            Interactable = interactable;
-            CurrentBubble?.SetInteractable(Interactable);
-        }
+        #region InteractableObject
+            public void OnEnterDetect()
+            {
+                CurrentBubble?.SetInteractable(true);
+            }
+            
+            public void OnExitDetect()
+            {
+                CurrentBubble?.SetInteractable(false);
+            }
+        #endregion
 
         #region StateMachine
             #region OnEmpty
@@ -174,6 +185,14 @@ namespace System.Economy.Child.Cookware.System.Main
                                     case true:
                                     {
                                         OnEmptyState();
+                                        
+                                        // TODO 5 審專用
+                                        ChangeScene?.Invoke("Dialogue ( Dev )",
+                                            () =>
+                                            {
+                                                // onComplete
+                                                StartScenario?.Invoke("Abnormal", 0);
+                                            });
                                         break;
                                     }
                                     default:

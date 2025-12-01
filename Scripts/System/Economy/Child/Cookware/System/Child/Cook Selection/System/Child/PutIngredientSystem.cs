@@ -5,6 +5,7 @@ using System.Storage_Slot.Base;
 using Data.Animation.DOTween.Basic;
 using Data.Item.Base;
 using Data.Item.Type.Food;
+using Object;
 using UnityEngine;
 
 namespace System.Economy.Child.Cookware.System.Child.Cook_Selection.System.Child

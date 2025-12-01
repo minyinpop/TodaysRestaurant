@@ -9,6 +9,7 @@ using Data.General;
 using Data.Player;
 using Data.Player.Main;
 using DG.Tweening;
+using Object;
 using UnityEngine;
 
 namespace System.Battle.System.Child.Selected_Card_System.Main

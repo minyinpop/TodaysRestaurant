@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Economy.Child.Cookware.System.Child.Cook_Bubble.Main;
 using UnityEngine;
 using UnityEngine.UI;
+using Button = Object.Button;
 
 namespace System.Economy.Child.Cookware.System.Child.Cook_Bubble.Child
 {

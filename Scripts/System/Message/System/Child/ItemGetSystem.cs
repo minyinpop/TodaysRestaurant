@@ -14,14 +14,13 @@ namespace System.Message.System.Child
         [field: SerializeField] private PopUpUI PopUpUI;
 
         private IEnumerator ShowCor;
+
+        private readonly Queue<Action> ActiveActions = new();
         
         private void OnDisable()
         {
-            if (ShowCor is not null)
-            {
-                StopCoroutine(ShowCor);
-                ShowCor = null;
-            }
+            while (ActiveActions.Count > 0) ActiveActions.Dequeue()?.Invoke();
+            if (ShowCor is not null) { StopCoroutine(ShowCor); ShowCor = null; }
         }
 
         public void Show(PopUpUIContent content, List<IngredientSO> items, Action onConfirm)
@@ -41,11 +40,14 @@ namespace System.Message.System.Child
                             {
                                 PopUpUI.OnClickConfirmButton += OnConfirmButtonClicked;
                                 PopUpUI.SetButtonInteractable(true);
+                                ActiveActions.Enqueue(() =>
+                                {
+                                    PopUpUI.OnClickCancelButton -= OnConfirmButtonClicked;
+                                    PopUpUI.SetButtonInteractable(false);
+                                });
                             });
                     });
                 yield return new WaitUntil(() => confirm);
-                PopUpUI.OnClickConfirmButton -= OnConfirmButtonClicked;
-                PopUpUI.SetButtonInteractable(false);
                 PopUpUI.Hide(
                     settings: new DoFade_CanvasGroup(0, .2f, Ease.Linear),
                     onComplete: () =>

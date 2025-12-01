@@ -1,3 +1,4 @@
+using Object;
 using UnityEngine;
 
 namespace System.Economy.Child.Cookware.System.Child.Cook_Bubble.Main

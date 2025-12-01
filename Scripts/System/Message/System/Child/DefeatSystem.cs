@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using System.Message.Object;
 using Data.Animation.DOTween.Basic;
 using Data.General;
@@ -13,6 +14,13 @@ namespace System.Message.System.Child
 
         private IEnumerator ShowCor;
 
+        private readonly Queue<Action> ActiveActions = new();
+
+        private void OnDisable()
+        {
+            while (ActiveActions.Count > 0) ActiveActions.Dequeue()?.Invoke();
+        }
+
         public void Show(PopUpUIContent content, Action onConfirm)
         {
             PopUpUI.ShowMask(
@@ -25,12 +33,18 @@ namespace System.Message.System.Child
                     PopUpUI.ShowUI(
                         content: content,
                         settings: new DoFade_CanvasGroup(
-                            endValue: 0,
+                            endValue: 1,
                             duration: 1.5f,
                             ease: Ease.Linear),
                         onComplete: () =>
                         {
                             PopUpUI.SetButtonInteractable(true);
+                            PopUpUI.OnClickConfirmButton += onConfirm;
+                            ActiveActions.Enqueue(() =>
+                            {
+                                PopUpUI.SetButtonInteractable(false);
+                                PopUpUI.OnClickConfirmButton -= onConfirm;
+                            });
                         });
                 });
         }

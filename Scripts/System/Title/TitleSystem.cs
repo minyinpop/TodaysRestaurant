@@ -1,5 +1,6 @@
 using System.Message.System.Main;
 using Data.General;
+using Object;
 using UnityEngine;
 
 namespace System.Title
@@ -15,7 +16,7 @@ namespace System.Title
         [field: SerializeField] private Button QuitButton;
 
         public static event Action<string, Action> OnClickStartGameButton;
-        public static event Action<string, int> PlayDialogue;
+        public static event Action<string, int> StartScenario;
 
         private void OnEnable()
         {
@@ -41,7 +42,7 @@ namespace System.Title
                 () =>
                 {
                     // onComplete
-                    PlayDialogue?.Invoke("Start", 0);
+                    StartScenario?.Invoke("Start", 0);
                 });
         }
 

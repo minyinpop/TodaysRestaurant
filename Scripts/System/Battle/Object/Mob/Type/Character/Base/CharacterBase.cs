@@ -3,6 +3,7 @@ using System.Battle.Object.Mob.Type.Character.System;
 using System.Collections;
 using Data.Animation.Spine;
 using Data.Mob.Character.Main;
+using Object;
 using UnityEngine;
 
 namespace System.Battle.Object.Mob.Type.Character.Base

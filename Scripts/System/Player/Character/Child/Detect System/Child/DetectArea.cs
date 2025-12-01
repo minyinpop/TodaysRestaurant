@@ -7,19 +7,19 @@ namespace System.Player.Character.Child.Detect_System.Child
         [field: Header("Settings")]
         [field: SerializeField] private LayerMask Layer;
         
-        public event Action<GameObject> OnDetect;
-        public event Action<GameObject> OnUnDetect;
+        public event Action<GameObject> OnEnterDetect;
+        public event Action<GameObject> OnExitDetect;
         
         private void OnTriggerEnter(Collider other)
         {
             if (1 << other.gameObject.layer != Layer.value) return;
-            OnDetect?.Invoke(other.gameObject);
+            OnEnterDetect?.Invoke(other.gameObject);
         }
 
         private void OnTriggerExit(Collider other)
         {
             if (1 << other.gameObject.layer != Layer.value) return;
-            OnUnDetect?.Invoke(other.gameObject);
+            OnExitDetect?.Invoke(other.gameObject);
         }
     }
 }

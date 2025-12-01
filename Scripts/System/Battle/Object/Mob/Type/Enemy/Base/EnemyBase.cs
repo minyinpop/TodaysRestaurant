@@ -1,6 +1,7 @@
 using System.Battle.Object.Mob.Type.Enemy.System;
 using Data.General;
 using Data.Mob.Character.Main;
+using Object;
 using UnityEngine;
 
 namespace System.Battle.Object.Mob.Type.Enemy.Base
