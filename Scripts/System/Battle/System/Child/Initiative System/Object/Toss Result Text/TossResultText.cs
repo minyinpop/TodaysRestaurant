@@ -1,7 +1,7 @@
-using System.General;
 using Data.Animation.DOTween.Basic;
 using DG.Tweening;
 using TMPro;
+using Tool;
 using UnityEngine;
 
 namespace System.Battle.System.Child.Initiative_System.Object.Toss_Result_Text

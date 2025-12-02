@@ -1,5 +1,5 @@
-using System.General;
 using Data.Animation.DOTween.Basic;
+using Tool;
 using UnityEngine;
 
 namespace System.Economy.Child.Customer.Child

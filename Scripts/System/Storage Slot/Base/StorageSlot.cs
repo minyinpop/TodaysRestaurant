@@ -1,5 +1,5 @@
-using System.General;
 using Data.Item.Base;
+using Tool;
 using UnityEngine;
 
 namespace System.Storage_Slot.Base

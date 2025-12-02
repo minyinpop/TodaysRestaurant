@@ -1,6 +1,6 @@
 using System;
-using System.General;
 using Data.Animation.DOTween.Basic;
+using Tool;
 using UnityEngine;
 using UnityEngine.UI;
 

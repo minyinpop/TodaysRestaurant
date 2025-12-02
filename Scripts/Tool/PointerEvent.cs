@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace System.General
+namespace Tool
 {
     internal abstract class PointerEvent : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
     {

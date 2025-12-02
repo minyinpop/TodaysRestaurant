@@ -1,7 +1,7 @@
 using System;
-using System.General;
 using Data.Animation.DOTween.Basic;
 using TMPro;
+using Tool;
 using UnityEngine;
 using UnityEngine.UI;
 

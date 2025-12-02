@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using System.General;
 using Data.Animation.DOTween.Basic;
 using Object;
+using Tool;
 using UnityEngine;
 
 namespace System.Economy.Child.Food_Menu.System.Child

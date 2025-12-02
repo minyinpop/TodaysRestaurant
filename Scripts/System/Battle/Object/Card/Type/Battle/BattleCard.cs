@@ -1,6 +1,5 @@
 using System.Battle.Object.Card.Base;
 using System.Collections;
-using System.General;
 using Data.Animation.DOTween.Basic;
 using Data.Animation.DOTween.Combine;
 using Data.Animation.Spine;
@@ -8,6 +7,7 @@ using Data.Card.Battle;
 using Data.General;
 using Data.General.Enum;
 using DG.Tweening;
+using Tool;
 using UnityEngine;
 
 namespace System.Battle.Object.Card.Type.Battle

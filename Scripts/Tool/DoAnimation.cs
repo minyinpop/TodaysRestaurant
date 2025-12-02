@@ -1,9 +1,10 @@
+using System;
 using Data.Animation.DOTween.Basic;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace System.General
+namespace Tool
 {
     internal sealed class DoAnimation : MonoBehaviour
     {
