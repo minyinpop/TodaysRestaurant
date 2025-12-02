@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using System.Economy.Child.Cookware.State_Machine;
 using System.Economy.Child.Cookware.State_Machine.State;
-using System.Economy.Child.Cookware.System.Child.Cook_Bubble.Main;
 using System.Economy.Child.Cookware.System.Child.Cook_Game.System.Main;
 using Data.General.Enum;
 using Data.Item.Base;
 using Data.Item.Type.Custom;
 using Interface;
+using Object.Bubble.Interface;
 using UnityEngine;
 
 namespace System.Economy.Child.Cookware.System.Main
@@ -29,7 +29,8 @@ namespace System.Economy.Child.Cookware.System.Main
         [field: SerializeField] private GameObject CookGamePrefab;
         [field: SerializeField] private Transform GameParent;
 
-        private Bubble CurrentBubble;
+        private GameObject CurrentBubble;
+        private IBubble CurrentBubbleScript;
         private ITem CurrentCookItem;
         
         private readonly StateMachine StateMachine = new();
@@ -59,12 +60,12 @@ namespace System.Economy.Child.Cookware.System.Main
         #region InteractableObject
             public void OnEnterDetect()
             {
-                CurrentBubble?.SetInteractable(true);
+                CurrentBubbleScript?.SetInteractable(true);
             }
             
             public void OnExitDetect()
             {
-                CurrentBubble?.SetInteractable(false);
+                CurrentBubbleScript?.SetInteractable(false);
             }
         #endregion
 
@@ -75,14 +76,17 @@ namespace System.Economy.Child.Cookware.System.Main
                     StateMachine.ChangeState(new OnEmpty(
                         onEnter: () =>
                         {
-                            CurrentBubble = Instantiate(EmptyBubblePrefab, BubbleParent).GetComponent<Bubble>();
-                            CurrentBubble.OnClick += OnBubbleClicked;
-                            ActiveActions.Enqueue(() => CurrentBubble.OnClick -= OnBubbleClicked);
-                            CurrentBubble.SetInteractable(Interactable);
+                            CurrentBubble = Instantiate(EmptyBubblePrefab, BubbleParent);
+                            CurrentBubbleScript = CurrentBubble.GetComponent<IBubble>();
+                            
+                            CurrentBubbleScript.OnClickBubble += OnBubbleClicked;
+                            ActiveActions.Enqueue(() => CurrentBubbleScript.OnClickBubble -= OnBubbleClicked);
+                            
+                            CurrentBubbleScript.SetInteractable(Interactable);
                             return;
 
                             void OnBubbleClicked()
-                            {
+                            {Debug.Log(name+" is being clicked.");
                                 OnClickEmptyBubble?.Invoke(CookwareType,
                                     /* onConfirm */ cookItem =>
                                     {
@@ -108,9 +112,11 @@ namespace System.Economy.Child.Cookware.System.Main
                     StateMachine.ChangeState(new OnCook(
                         onEnter: () =>
                         {
-                            CurrentBubble = Instantiate(CookBubblePrefab, BubbleParent).GetComponent<Bubble>();
-                            CurrentCookItem.GetCookTime(out var cookTime);
-                            CurrentBubble.CountDown(cookTime / 2,
+                            CurrentBubble = Instantiate(CookBubblePrefab, BubbleParent);
+                            CurrentBubbleScript = CurrentBubble.GetComponent<IBubble>();
+                            
+                            CurrentCookItem.GetCookTime(out var cookTime); // TODO 2025.12.03 從這裡繼續做
+                            CurrentBubbleScript.StartCountDown(cookTime / 2,
                                 onComplete: () =>
                                 {
                                     if (IsCookGameComplete) OnCompleteState();
@@ -131,11 +137,14 @@ namespace System.Economy.Child.Cookware.System.Main
                     StateMachine.ChangeState(new OnGameTime(
                         onEnter: () =>
                         {
-                            CurrentBubble = Instantiate(GameTimeBubblePrefab, BubbleParent).GetComponent<Bubble>();
-                            CurrentBubble.OnClick += OnBubbleClicked;
-                            ActiveActions.Enqueue(() => CurrentBubble.OnClick -= OnBubbleClicked);
-                            CurrentBubble.SetInteractable(Interactable);
-                            CurrentBubble.CountDown(Mathf.Abs(GameTimeDuration),
+                            CurrentBubble = Instantiate(GameTimeBubblePrefab, BubbleParent);
+                            CurrentBubbleScript = CurrentBubble.GetComponent<IBubble>();
+                            
+                            CurrentBubbleScript.OnClickBubble += OnBubbleClicked;
+                            ActiveActions.Enqueue(() => CurrentBubbleScript.OnClickBubble -= OnBubbleClicked);
+                            
+                            CurrentBubbleScript.SetInteractable(Interactable);
+                            CurrentBubbleScript.StartCountDown(Mathf.Abs(GameTimeDuration),
                                 onComplete: OnOvercookedState);
                             return;
 
@@ -167,10 +176,13 @@ namespace System.Economy.Child.Cookware.System.Main
                     StateMachine.ChangeState(new OnComplete(
                         onEnter: () =>
                         {
-                            CurrentBubble = Instantiate(CompleteBubblePrefab, BubbleParent).GetComponent<Bubble>();
-                            CurrentBubble.OnClick += OnBubbleClicked;
-                            ActiveActions.Enqueue(() => CurrentBubble.OnClick -= OnBubbleClicked);
-                            CurrentBubble.SetInteractable(Interactable);
+                            CurrentBubble = Instantiate(CompleteBubblePrefab, BubbleParent);
+                            CurrentBubbleScript = CurrentBubble.GetComponent<IBubble>();
+                            
+                            CurrentBubbleScript.OnClickBubble += OnBubbleClicked;
+                            ActiveActions.Enqueue(() => CurrentBubbleScript.OnClickBubble -= OnBubbleClicked);
+                            
+                            CurrentBubbleScript.SetInteractable(Interactable);
                             return;
 
                             void OnBubbleClicked()
@@ -221,10 +233,12 @@ namespace System.Economy.Child.Cookware.System.Main
                     StateMachine.ChangeState(new OnOvercooked(
                         onEnter: () =>
                         {
-                            CurrentBubble = Instantiate(OvercookedBubblePrefab, BubbleParent).GetComponent<Bubble>();
-                            CurrentBubble.OnClick += OnEmptyState;
-                            ActiveActions.Enqueue(() => CurrentBubble.OnClick -= OnEmptyState);
-                            CurrentBubble.SetInteractable(Interactable);
+                            CurrentBubble = Instantiate(OvercookedBubblePrefab, BubbleParent);
+                            CurrentBubbleScript = CurrentBubble.GetComponent<IBubble>();
+                            
+                            CurrentBubbleScript.OnClickBubble += OnEmptyState;
+                            ActiveActions.Enqueue(() => CurrentBubbleScript.OnClickBubble -= OnEmptyState);
+                            CurrentBubbleScript.SetInteractable(Interactable);
                         },
                         onExit: () =>
                         {

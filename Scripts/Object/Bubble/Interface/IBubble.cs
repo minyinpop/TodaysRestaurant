@@ -4,10 +4,10 @@ namespace Object.Bubble.Interface
 {
     internal interface IBubble
     {
-        public event Action OnClick;
+        public event Action OnClickBubble;
         
         public void SetInteractable(bool interactable);
         
-        public void CountDown(float time, Action onComplete);
+        public void StartCountDown(float time, Action onComplete);
     }
 }
