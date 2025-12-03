@@ -30,11 +30,17 @@ namespace Object.Bubble.Object
 
         private void OnEnable()
         {
-            Button.OnClick += OnClick;
-            ActiveActions.Add(() => Button.OnClick -= OnClick);
-            return;
+            if (Button is not null)
+            {
+                Button.OnClick += OnClick;
+                ActiveActions.Add(() => Button.OnClick -= OnClick);
+                return;
 
-            void OnClick() { OnClickBubble?.Invoke(); }
+                void OnClick()
+                {
+                    OnClickBubble?.Invoke();
+                }
+            }
         }
 
         private void OnDisable()
@@ -52,7 +58,7 @@ namespace Object.Bubble.Object
         public void SetInteractable(bool interactable)
         {
             foreach (var image in Images) image.color = new Color(image.color.r, image.color.g, image.color.b, interactable ? CanInteractColor.a : CannotInteractColor.a);
-            Button.SetInteractable(interactable);
+            Button?.SetInteractable(interactable);
         }
         
         public void StartCountDown(float time, Action onComplete)
