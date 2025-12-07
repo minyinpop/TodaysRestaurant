@@ -21,8 +21,8 @@ namespace Object
         [field: SerializeField] private DoAnimation DoAnimation;
         
         [field: Header("Animation Settings")]
-        [field: SerializeField] private DoScale onPointerEnterScale;
-        [field: SerializeField] private DoScale onPointerExitScale;
+        [field: SerializeField] private DoScale OnPointerEnterScale;
+        [field: SerializeField] private DoScale OnPointerExitScale;
         
         private bool Interactable;
 
@@ -32,7 +32,7 @@ namespace Object
         {
             Interactable = interactable;
             if (!interactable)
-                DoAnimation?.DoScale_UI(Rect, onPointerExitScale);
+                DoAnimation?.DoScale_UI(Rect, OnPointerExitScale);
         }
 
         public void SetTitle(string title)
@@ -44,13 +44,13 @@ namespace Object
             protected override void OnPointerEnter()
             {
                 if (Interactable)
-                    DoAnimation?.DoScale_UI(Rect, onPointerEnterScale);
+                    DoAnimation?.DoScale_UI(Rect, OnPointerEnterScale);
             }
             
             protected override void OnPointerExit()
             {
                 if (Interactable)
-                    DoAnimation?.DoScale_UI(Rect, onPointerExitScale);
+                    DoAnimation?.DoScale_UI(Rect, OnPointerExitScale);
             }
 
             protected override void OnPointerClick()

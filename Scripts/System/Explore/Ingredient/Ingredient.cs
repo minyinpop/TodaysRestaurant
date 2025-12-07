@@ -1,12 +1,12 @@
-using System.Economy.Child.Cookware.System.Child.Cook_Bubble.Main;
 using Interface;
+using Object.Clickable_Bubble.Interface;
 using UnityEngine;
 
 namespace System.Explore.Ingredient
 {
     internal class Ingredient : MonoBehaviour, InteractableObject
     {
-        public Bubble Bubble;
+        public IClickableBubble Bubble;
 
         private void Start()
         {
