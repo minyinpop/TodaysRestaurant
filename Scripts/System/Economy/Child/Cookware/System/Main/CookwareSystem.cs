@@ -6,7 +6,7 @@ using Data.General.Enum;
 using Data.Item.Base;
 using Data.Item.Type.Custom;
 using Interface;
-using Object.Bubble.Interface;
+using Object.Clickable_Bubble.Interface;
 using UnityEngine;
 
 namespace System.Economy.Child.Cookware.System.Main
@@ -30,7 +30,7 @@ namespace System.Economy.Child.Cookware.System.Main
         [field: SerializeField] private Transform GameParent;
 
         private GameObject CurrentBubble;
-        private IBubble CurrentBubbleScript;
+        private IClickableBubble CurrentBubbleScript;
         private ITem CurrentCookItem;
         
         private readonly StateMachine StateMachine = new();
@@ -77,7 +77,7 @@ namespace System.Economy.Child.Cookware.System.Main
                         onEnter: () =>
                         {
                             CurrentBubble = Instantiate(EmptyBubblePrefab, BubbleParent);
-                            CurrentBubbleScript = CurrentBubble.GetComponent<IBubble>();
+                            CurrentBubbleScript = CurrentBubble.GetComponent<IClickableBubble>();
                             
                             CurrentBubbleScript.OnClickBubble += OnBubbleClicked;
                             ActiveActions.Enqueue(() => CurrentBubbleScript.OnClickBubble -= OnBubbleClicked);
@@ -113,7 +113,7 @@ namespace System.Economy.Child.Cookware.System.Main
                         onEnter: () =>
                         {
                             CurrentBubble = Instantiate(CookBubblePrefab, BubbleParent);
-                            CurrentBubbleScript = CurrentBubble.GetComponent<IBubble>();
+                            CurrentBubbleScript = CurrentBubble.GetComponent<IClickableBubble>();
                             
                             CurrentCookItem.GetCookTime(out var cookTime); // TODO 2025.12.03 從這裡繼續做
                             CurrentBubbleScript.StartCountDown(cookTime / 2,
@@ -138,7 +138,7 @@ namespace System.Economy.Child.Cookware.System.Main
                         onEnter: () =>
                         {
                             CurrentBubble = Instantiate(GameTimeBubblePrefab, BubbleParent);
-                            CurrentBubbleScript = CurrentBubble.GetComponent<IBubble>();
+                            CurrentBubbleScript = CurrentBubble.GetComponent<IClickableBubble>();
                             
                             CurrentBubbleScript.OnClickBubble += OnBubbleClicked;
                             ActiveActions.Enqueue(() => CurrentBubbleScript.OnClickBubble -= OnBubbleClicked);
@@ -177,7 +177,7 @@ namespace System.Economy.Child.Cookware.System.Main
                         onEnter: () =>
                         {
                             CurrentBubble = Instantiate(CompleteBubblePrefab, BubbleParent);
-                            CurrentBubbleScript = CurrentBubble.GetComponent<IBubble>();
+                            CurrentBubbleScript = CurrentBubble.GetComponent<IClickableBubble>();
                             
                             CurrentBubbleScript.OnClickBubble += OnBubbleClicked;
                             ActiveActions.Enqueue(() => CurrentBubbleScript.OnClickBubble -= OnBubbleClicked);
@@ -234,7 +234,7 @@ namespace System.Economy.Child.Cookware.System.Main
                         onEnter: () =>
                         {
                             CurrentBubble = Instantiate(OvercookedBubblePrefab, BubbleParent);
-                            CurrentBubbleScript = CurrentBubble.GetComponent<IBubble>();
+                            CurrentBubbleScript = CurrentBubble.GetComponent<IClickableBubble>();
                             
                             CurrentBubbleScript.OnClickBubble += OnEmptyState;
                             ActiveActions.Enqueue(() => CurrentBubbleScript.OnClickBubble -= OnEmptyState);

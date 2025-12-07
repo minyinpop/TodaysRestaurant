@@ -161,7 +161,7 @@ GameObject:
   - component: {fileID: 2305654664208141453}
   - component: {fileID: 2894952397178316264}
   - component: {fileID: 2181199041796286105}
-  - component: {fileID: -2346082849692204164}
+  - component: {fileID: 292191562666460352}
   - component: {fileID: 1850391851162815149}
   - component: {fileID: 19019641302317244}
   m_Layer: 0
@@ -230,7 +230,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &-2346082849692204164
+--- !u!114 &292191562666460352
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -239,18 +239,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 7852260040052447994}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 09c085ea738241118c8d7553634452fa, type: 3}
+  m_Script: {fileID: 11500000, guid: d45530d507db4b7db0488de66dbface6, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::System.Economy.Child.Customer.Child.Bubble.Type.WaitForOrderBubble
-  BubbleImage: {fileID: 2181199041796286105}
+  m_EditorClassIdentifier: Assembly-CSharp::Object.Clickable_Bubble.Object.ClickableBubble
   Button: {fileID: 1850391851162815149}
-  ProgressBar: {fileID: 73266492088319603}
-  FullColor: {r: 0, g: 1, b: 0.3137255, a: 1}
-  EmptyColor: {r: 1, g: 0.19607843, b: 0.19607843, a: 1}
-  Images:
+  ColorChangeImages:
+  - {fileID: 73266492088319603}
+  - {fileID: 6260371709613477564}
   - {fileID: 1933594827220083959}
+  ItemImage: {fileID: 0}
+  Interactable: 1
   CanInteractColor: {r: 1, g: 1, b: 1, a: 1}
   CannotInteractColor: {r: 1, g: 1, b: 1, a: 0.5882353}
+  ProgressBar: {fileID: 73266492088319603}
+  FullColor: {r: 0, g: 1, b: 0.098634005, a: 1}
+  EmptyColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &1850391851162815149
 MonoBehaviour:
   m_ObjectHideFlags: 0

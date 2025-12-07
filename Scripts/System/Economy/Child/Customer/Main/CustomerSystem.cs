@@ -1,12 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Economy.Child.Customer.Child;
-using System.Economy.Child.Customer.Child.Bubble;
 using System.Economy.Child.Customer.Main.State_Machine;
 using System.Economy.Child.Customer.Main.State_Machine.State;
 using Data.Economy.Food_Menu.Select_Food_Page;
 using Data.Item.Base;
 using Interface;
+using Object.Clickable_Bubble.Object;
 using UnityEngine;
 
 namespace System.Economy.Child.Customer.Main
@@ -30,7 +30,7 @@ namespace System.Economy.Child.Customer.Main
         
         private readonly StateMachine StateMachine = new();
         
-        private readonly Queue<Bubble> Bubbles = new();
+        private readonly Queue<ClickableBubble> Bubbles = new();
         private readonly Queue<ItemSO> OrderItems = new();
         private readonly Queue<Action> ActiveActions = new();
         
@@ -104,20 +104,20 @@ namespace System.Economy.Child.Customer.Main
 
                     void OnEnter()
                     {
-                        Bubbles.Enqueue(Instantiate(ThinkBubblePrefab, BubbleParent).GetComponent<Bubble>());
+                        Bubbles.Enqueue(Instantiate(ThinkBubblePrefab, BubbleParent).GetComponent<ClickableBubble>());
 
-                        Bubbles.Peek().CountDown(3,
+                        Bubbles.Peek().StartCountDown(3,
                             onComplete: () =>
                             {
                                 SelectFoodPageData.GetRandomItemData(out var firstItemData);
                                 OrderItems.Enqueue(firstItemData);
                                 
-                                // var chance = UnityEngine.Random.Range(0, 100);
-                                // if (chance > 50)
-                                // {
-                                //     SelectFoodPageData.GetRandomItemData(OrderItems.ToArray(), out var secondItemData);
-                                //     if (secondItemData is not null) OrderItems.Enqueue(secondItemData);
-                                // }
+                                var chance = UnityEngine.Random.Range(0, 100);
+                                if (chance > 50)
+                                {
+                                    SelectFoodPageData.GetRandomItemData(OrderItems.ToArray(), out var secondItemData);
+                                    if (secondItemData is not null) OrderItems.Enqueue(secondItemData);
+                                }
 
                                 WaitForOrder();
                             });
@@ -139,11 +139,11 @@ namespace System.Economy.Child.Customer.Main
 
                     void OnEnter()
                     {
-                        Bubbles.Enqueue(Instantiate(WaitForOrderBubblePrefab, BubbleParent).GetComponent<Bubble>());
-                        Bubbles.Peek().OnClick += ShowOrderItem;
-                        ActiveActions.Enqueue(() => Bubbles.Peek().OnClick -= ShowOrderItem);
+                        Bubbles.Enqueue(Instantiate(WaitForOrderBubblePrefab, BubbleParent).GetComponent<ClickableBubble>());
+                        Bubbles.Peek().OnClickBubble += ShowOrderItem;
+                        ActiveActions.Enqueue(() => Bubbles.Peek().OnClickBubble -= ShowOrderItem);
                         Bubbles.Peek().SetInteractable(Interactable);
-                        Bubbles.Peek().CountDown(15,
+                        Bubbles.Peek().StartCountDown(15,
                             onComplete: () => Debug.Log($"{name} 等待點餐太久了，已經沒了耐心。"));
                     }
                     
@@ -174,8 +174,8 @@ namespace System.Economy.Child.Customer.Main
                                 var complete = false;
                                 var orderItem = OrderItems.Dequeue();
 
-                                var bubble = Instantiate(ShowOrderItemBubblePrefab, BubbleParent).GetComponent<Bubble>();
-                                bubble.ShowItem(orderItem, 1, () => complete = true);
+                                var bubble = Instantiate(ShowOrderItemBubblePrefab, BubbleParent).GetComponent<ClickableBubble>();
+                                bubble.StartCountDown(orderItem, 1, () => complete = true);
                                 Bubbles.Enqueue(bubble);
                                 
                                 yield return new WaitUntil(() => complete);
@@ -201,7 +201,7 @@ namespace System.Economy.Child.Customer.Main
                     {
                         foreach (var bubble in Bubbles)
                         {
-                            bubble.CountDown(60,
+                            bubble.StartCountDown(60,
                                 onComplete: () => Debug.Log("沒有及時做餐點給顧客，他被氣走了。"));
                         }
                     }

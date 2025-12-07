@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3438888603056810118}
   - component: {fileID: 9151841533798008041}
   - component: {fileID: 790422533919027162}
-  - component: {fileID: 1200244679105392531}
+  - component: {fileID: 4462480969340664336}
   - component: {fileID: 1318617356879699219}
   - component: {fileID: 4185709950288857585}
   m_Layer: 0
@@ -79,7 +79,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &1200244679105392531
+--- !u!114 &4462480969340664336
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -88,14 +88,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 550562492830469709}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d2e21a9ff3ac4c98b973e02dce3f9e3c, type: 3}
+  m_Script: {fileID: 11500000, guid: d45530d507db4b7db0488de66dbface6, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::System.Cook.Child.Cookware.System.Child.Cook_Bubble.Child.OvercookBubble
-  Button: {fileID: 1318617356879699219}
+  m_EditorClassIdentifier: Assembly-CSharp::Object.Clickable_Bubble.Object.ClickableBubble
   Images:
+  - {fileID: 790422533919027162}
   - {fileID: 7658339986548673112}
+  Interactable: 1
   CanInteractColor: {r: 1, g: 1, b: 1, a: 1}
   CannotInteractColor: {r: 1, g: 1, b: 1, a: 0.5882353}
+  Button: {fileID: 1318617356879699219}
+  ProgressBar: {fileID: 0}
+  FullColor: {r: 0, g: 0, b: 0, a: 0}
+  EmptyColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &1318617356879699219
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -112,7 +117,7 @@ MonoBehaviour:
   TitleTMP: {fileID: 0}
   DoAnimation: {fileID: 4185709950288857585}
   onPointerEnterScale:
-    EndValue: {x: 1.2, y: 1.2, z: 1}
+    EndValue: {x: 1.1, y: 1.1, z: 1}
     Duration: 0.2
     Ease: 18
   onPointerExitScale:
