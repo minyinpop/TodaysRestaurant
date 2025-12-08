@@ -1,5 +1,5 @@
 using System;
-using Data.Item.Base;
+using Data.Item.Abstract;
 
 namespace Object.Clickable_Bubble.Interface
 {

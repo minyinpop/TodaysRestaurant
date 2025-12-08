@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Data.Item.Base;
+using Data.Item.Abstract;
 using Object.Clickable_Bubble.Interface;
 using UnityEngine;
 using UnityEngine.UI;

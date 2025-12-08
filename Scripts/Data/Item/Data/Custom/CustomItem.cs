@@ -1,9 +1,10 @@
 using System.Collections.Generic;
 using Data.General.Enum;
-using Data.Item.Base;
+using Data.Item.Abstract;
+using Data.Item.Interface;
 using UnityEngine;
 
-namespace Data.Item.Type.Custom
+namespace Data.Item.Data.Custom
 {
     internal sealed class CustomItem : ITem
     {

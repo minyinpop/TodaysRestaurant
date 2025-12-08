@@ -1,5 +1,6 @@
 using System.Storage_Slot.Base;
-using Data.Item.Base;
+using Data.Item.Abstract;
+using Data.Item.Interface;
 using Data.Player.Child.Inventory;
 using UnityEngine;
 

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Economy.Child.Cookware.System.Main;
 using System.Player.Inventory.Child;
-using Data.Item.Base;
+using Data.Item.Interface;
 using UnityEngine;
 
 namespace System.Player.Inventory.Main

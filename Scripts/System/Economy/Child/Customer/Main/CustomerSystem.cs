@@ -4,7 +4,7 @@ using System.Economy.Child.Customer.Child;
 using System.Economy.Child.Customer.Main.State_Machine;
 using System.Economy.Child.Customer.Main.State_Machine.State;
 using Data.Economy.Food_Menu.Select_Food_Page;
-using Data.Item.Base;
+using Data.Item.Abstract;
 using Interface;
 using Object.Clickable_Bubble.Object;
 using UnityEngine;
@@ -13,19 +13,19 @@ namespace System.Economy.Child.Customer.Main
 {
     internal sealed class CustomerSystem : MonoBehaviour, InteractableObject
     {
-        [field: Header("Child System")]
+        [field: Header("Component Settings")]
         [field: SerializeField] private MoveSystem MoveSystem;
         [field: SerializeField] private AnimationSystem AnimationSystem;
         [field: SerializeField] private FlipSystem FlipSystem;
         [field: SerializeField] private SkinSystem SkinSystem;
         
-        [field: Header("Bubble")]
+        [field: Header("Clickable Bubble Settings")]
         [field: SerializeField] private Transform BubbleParent;
         [field: SerializeField] private GameObject ThinkBubblePrefab;
         [field: SerializeField] private GameObject WaitForOrderBubblePrefab;
         [field: SerializeField] private GameObject ShowOrderItemBubblePrefab;
         
-        [field: Header("Data")]
+        [field: Header("Data Settings")]
         [field: SerializeField] private SelectFoodPageSO SelectFoodPageData;
         
         private readonly StateMachine StateMachine = new();
@@ -175,7 +175,7 @@ namespace System.Economy.Child.Customer.Main
                                 var orderItem = OrderItems.Dequeue();
 
                                 var bubble = Instantiate(ShowOrderItemBubblePrefab, BubbleParent).GetComponent<ClickableBubble>();
-                                bubble.StartCountDown(orderItem, 1, () => complete = true);
+                                bubble.StartCountDown(orderItem, 30, () => complete = true);
                                 Bubbles.Enqueue(bubble);
                                 
                                 yield return new WaitUntil(() => complete);

@@ -1,5 +1,5 @@
 using System.Linq;
-using Data.Item.Base;
+using Data.Item.Abstract;
 using UnityEngine;
 
 namespace Data.Economy.Food_Menu.Select_Food_Page

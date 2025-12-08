@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Message.Object;
 using Data.Animation.DOTween.Basic;
 using Data.General;
-using Data.Item.Type.Ingredient;
+using Data.Item.Data.Ingredient;
 using DG.Tweening;
 using UnityEngine;
 

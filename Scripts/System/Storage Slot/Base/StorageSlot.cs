@@ -1,4 +1,4 @@
-using Data.Item.Base;
+using Data.Item.Interface;
 using Tool;
 using UnityEngine;
 

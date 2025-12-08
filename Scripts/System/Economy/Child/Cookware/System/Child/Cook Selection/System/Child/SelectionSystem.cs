@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Economy.Child.Cookware.System.Child.Cook_Selection.Object;
 using Data.Animation.DOTween.Basic;
 using Data.General.Enum;
-using Data.Item.Type.Food;
+using Data.Item.Data.Food;
 using Data.Player.Main;
 using Object;
 using Tool;

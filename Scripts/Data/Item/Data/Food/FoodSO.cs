@@ -1,11 +1,12 @@
+using System.Collections.Generic;
 using Data.General.Enum;
-using Data.Item.Base;
+using Data.Item.Abstract;
 using UnityEngine;
 
-namespace Data.Item.Type.Ingredient
+namespace Data.Item.Data.Food
 {
-    [CreateAssetMenu(menuName = "Minyinpop/Item/Ingredient Data", fileName = "New Data")]
-    internal sealed class IngredientSO : ItemSO
+    [CreateAssetMenu(menuName = "Minyinpop/Item/Dish Data", fileName = "New Data")]
+    internal sealed class FoodSO : ItemSO
     {
         #region Name
             [field: Header("Name")]
@@ -24,18 +25,29 @@ namespace Data.Item.Type.Ingredient
                 itemSprite = ItemSprite;
             }
         #endregion
-
+        
         #region Item Type
             [field: Header("Item Type")]
             [field: SerializeField] private ItemType ItemType;
-            [field: SerializeField, Range(1, 3)] private int ItemLevel;
-            public override void GetItemType(out ItemType itemType, out int itemLevel)
+            [field: SerializeField] private CookType CookType;
+            [field: SerializeField] private FoodType FoodType;
+            public override void GetItemType(out ItemType itemType, out CookType cookType, out FoodType foodType)
             {
                 itemType = ItemType;
-                itemLevel = ItemLevel;
+                cookType = CookType;
+                foodType = FoodType;
             }
         #endregion
-
+        
+        #region Recipe Sheet
+            [field: Header("Recipe Sheet")]
+            [field: SerializeField] private List<ItemSO> RecipeSheet;
+            public override void GetRecipeSheet(out List<ItemSO> recipeSheet)
+            {
+                recipeSheet = RecipeSheet;
+            }
+        #endregion
+        
         #region Cook Time
             [field: Header("Cook Time")]
             [field: SerializeField] private float CookTime;

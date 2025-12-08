@@ -1,4 +1,4 @@
-using Data.Item.Base;
+using Data.Item.Abstract;
 using UnityEngine;
 
 namespace Data.Player.Child.Inventory

@@ -1,7 +1,7 @@
 using System.Storage_Slot.Base;
 using Data.Animation.DOTween.Basic;
 using Data.General.Enum;
-using Data.Item.Base;
+using Data.Item.Interface;
 using Tool;
 using UnityEngine;
 using UnityEngine.UI;

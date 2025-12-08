@@ -1,8 +1,9 @@
 using System.Collections.Generic;
 using Data.General.Enum;
+using Data.Item.Interface;
 using UnityEngine;
 
-namespace Data.Item.Base
+namespace Data.Item.Abstract
 {
     internal abstract class ItemSO : ScriptableObject, ITem
     {

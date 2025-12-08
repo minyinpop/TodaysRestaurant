@@ -1,8 +1,9 @@
 using System.Collections.Generic;
 using Data.General.Enum;
+using Data.Item.Abstract;
 using UnityEngine;
 
-namespace Data.Item.Base
+namespace Data.Item.Interface
 {
     internal interface ITem
     {

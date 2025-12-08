@@ -4,7 +4,7 @@ using System.Economy.Child.Cookware.System.Main;
 using System.Message.System.Main;
 using Data.General;
 using Data.General.Enum;
-using Data.Item.Type.Custom;
+using Data.Item.Data.Custom;
 using UnityEngine;
 
 namespace System.Economy.Child.Cookware.System.Child.Cook_Selection.System.Main

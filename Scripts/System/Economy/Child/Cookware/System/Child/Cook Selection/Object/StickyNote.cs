@@ -1,4 +1,4 @@
-using Data.Item.Type.Food;
+using Data.Item.Data.Food;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
