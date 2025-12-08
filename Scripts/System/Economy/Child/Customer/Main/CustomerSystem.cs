@@ -4,7 +4,7 @@ using System.Economy.Child.Customer.Child;
 using System.Economy.Child.Customer.Main.State_Machine;
 using System.Economy.Child.Customer.Main.State_Machine.State;
 using Data.Economy.Food_Menu.Select_Food_Page;
-using Data.Item.Abstract;
+using Data.Item.Interface;
 using Interface;
 using Object.Clickable_Bubble.Object;
 using UnityEngine;
@@ -31,7 +31,7 @@ namespace System.Economy.Child.Customer.Main
         private readonly StateMachine StateMachine = new();
         
         private readonly Queue<ClickableBubble> Bubbles = new();
-        private readonly Queue<ItemSO> OrderItems = new();
+        private readonly Queue<ITem> OrderItems = new();
         private readonly Queue<Action> ActiveActions = new();
         
         private bool Interactable;

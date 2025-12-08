@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Economy.Child.Food_Menu.Object.Item_Slot.Base;
 using Data.Animation.DOTween.Basic;
-using Data.Item.Abstract;
+using Data.Item.Interface;
 using Tool;
 using UnityEngine;
 using UnityEngine.UI;
@@ -26,7 +26,7 @@ namespace System.Economy.Child.Food_Menu.Object.Item_Slot.Type
         [field: SerializeField] private DoScale ScaleUpSettings;
         [field: SerializeField] private DoScale ScaleDownSettings;
 
-        private ItemSO ItemData;
+        private ITem ItemData;
 
         private ItemSlotState SlotState = ItemSlotState.Lock;
         
@@ -68,7 +68,7 @@ namespace System.Economy.Child.Food_Menu.Object.Item_Slot.Type
             };
         }
         
-        public override void Add(ItemSO itemData)
+        public override void Add(ITem itemData)
         {
             if (itemData is null) return;
             ItemData = itemData;
@@ -77,7 +77,7 @@ namespace System.Economy.Child.Food_Menu.Object.Item_Slot.Type
             ItemImage.gameObject.SetActive(true);
         }
 
-        public override void Get(out ItemSO itemData)
+        public override void Get(out ITem itemData)
         {
             itemData = ItemData;
         }

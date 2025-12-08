@@ -1,5 +1,5 @@
 using System;
-using Data.Item.Abstract;
+using Data.Item.Interface;
 
 namespace Object.Clickable_Bubble.Interface
 {
@@ -10,6 +10,6 @@ namespace Object.Clickable_Bubble.Interface
         public void SetInteractable(bool interactable);
         
         public void StartCountDown(float time, Action onComplete);
-        public void StartCountDown(ItemSO item, float time, Action onComplete);
+        public void StartCountDown(ITem item, float time, Action onComplete);
     }
 }

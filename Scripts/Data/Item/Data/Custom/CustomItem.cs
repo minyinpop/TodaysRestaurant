@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Data.General.Enum;
-using Data.Item.Abstract;
 using Data.Item.Interface;
 using UnityEngine;
 
@@ -8,11 +7,11 @@ namespace Data.Item.Data.Custom
 {
     internal sealed class CustomItem : ITem
     {
-        private readonly ItemSO LegacyItemData;
+        private readonly ITem LegacyItemData;
         private readonly float OverrideCookTime;
         private readonly int OverridePrice;
 
-        public CustomItem(ItemSO itemData, float cookTime, int price)
+        public CustomItem(ITem itemData, float cookTime, int price)
         {
             LegacyItemData = itemData;
             OverrideCookTime = cookTime;
@@ -40,7 +39,7 @@ namespace Data.Item.Data.Custom
                 LegacyItemData.GetItemType(out itemType, out itemLevel);
             }
 
-            public void GetRecipeSheet(out List<ItemSO> recipeSheet)
+            public void GetRecipeSheet(out List<ITem> recipeSheet)
             {
                 LegacyItemData.GetRecipeSheet(out recipeSheet);
             }

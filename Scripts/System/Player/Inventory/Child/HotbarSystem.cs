@@ -1,5 +1,4 @@
 using System.Storage_Slot.Base;
-using Data.Item.Abstract;
 using Data.Item.Interface;
 using Data.Player.Child.Inventory;
 using UnityEngine;
@@ -13,14 +12,6 @@ namespace System.Player.Inventory.Child
         
         [field: Header("Storage Slot")]
         [field: SerializeField] private StorageSlot[] StorageSlots;
-
-        [field: Header("Develop Only")]
-        [field: SerializeField] private ItemSO[] DefaultItemsData;
-
-        private void Start()
-        {
-            foreach (var itemData in DefaultItemsData) TryAddItem(itemData, out _);
-        }
 
         public void TryAddItem(ITem itemData, out bool isSuccess)
         {

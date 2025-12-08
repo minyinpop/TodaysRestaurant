@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Data.General.Enum;
-using Data.Item.Abstract;
 using UnityEngine;
 
 namespace Data.Item.Interface
@@ -21,7 +20,7 @@ namespace Data.Item.Interface
         #endregion
         
         #region Recipe Sheet
-            public void GetRecipeSheet(out List<ItemSO> recipeSheet);
+            public void GetRecipeSheet(out List<ITem> recipeSheet);
         #endregion
         
         #region Cook Time

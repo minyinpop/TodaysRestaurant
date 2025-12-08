@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Economy.Child.Food_Menu.Object.Item_Slot.Base;
 using Data.Food.Food_Category.Base;
-using Data.Item.Abstract;
+using Data.Item.Interface;
 using UnityEngine;
 
 namespace System.Economy.Child.Food_Menu.System.Child.Open_UI_System.Child
@@ -14,7 +14,7 @@ namespace System.Economy.Child.Food_Menu.System.Child.Open_UI_System.Child
         private readonly List<ItemSlot> UnlockFoodSlots = new();
         private readonly List<Action> UnlockFoodSlot_Actions = new();
 
-        public event Action<ItemSlot, ItemSO> OnClick;
+        public event Action<ItemSlot, ITem> OnClick;
         
         private void OnDisable()
         {
@@ -53,7 +53,7 @@ namespace System.Economy.Child.Food_Menu.System.Child.Open_UI_System.Child
             itemSlot.SetAlpha();
         }
 
-        public void CheckItemDataHasBeenSelect(ItemSO targetItemData)
+        public void CheckItemDataHasBeenSelect(ITem targetItemData)
         {
             foreach (var slot in UnlockFoodSlots)
             {
@@ -65,7 +65,7 @@ namespace System.Economy.Child.Food_Menu.System.Child.Open_UI_System.Child
             }
         }
 
-        public void CancelSelect(ItemSO targetItemData)
+        public void CancelSelect(ITem targetItemData)
         {
             foreach (var slot in UnlockFoodSlots)
             {

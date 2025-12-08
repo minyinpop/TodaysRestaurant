@@ -10,7 +10,7 @@ using Data.Economy.Food_Menu.Select_Food_Page;
 using Data.Food.Food_Category.Base;
 using Data.General;
 using Data.General.Enum;
-using Data.Item.Abstract;
+using Data.Item.Interface;
 using Data.Player.Main;
 using Object;
 using Tool;
@@ -163,7 +163,7 @@ namespace System.Economy.Child.Food_Menu.System.Child.Open_UI_System.Main
         }
 
         #region On Item Slot Clicked
-            private void OnUnlockFoodSlotClicked(ItemSlot slot, ItemSO itemData)
+            private void OnUnlockFoodSlotClicked(ItemSlot slot, ITem itemData)
             {
                 slot.GetSlotState(out var slotState);
                 switch (slotState)
@@ -183,7 +183,7 @@ namespace System.Economy.Child.Food_Menu.System.Child.Open_UI_System.Main
                 }
             }
 
-            private void OnSelectFoodSlotClicked(ItemSlot slot, ItemSO itemData)
+            private void OnSelectFoodSlotClicked(ItemSlot slot, ITem itemData)
             {
                 SelectFoodPage.CancelSelect(slot);
                 UnlockFoodPage.CancelSelect(itemData);

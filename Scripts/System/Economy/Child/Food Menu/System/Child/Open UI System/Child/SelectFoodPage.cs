@@ -2,7 +2,8 @@ using System.Collections.Generic;
 using System.Economy.Child.Food_Menu.Object.Item_Slot.Base;
 using Data.Economy.Food_Menu;
 using Data.Economy.Food_Menu.Select_Food_Page;
-using Data.Item.Abstract;
+using Data.Item.Data.Food;
+using Data.Item.Interface;
 using UnityEngine;
 
 namespace System.Economy.Child.Food_Menu.System.Child.Open_UI_System.Child
@@ -22,7 +23,7 @@ namespace System.Economy.Child.Food_Menu.System.Child.Open_UI_System.Child
         private const int TotalSlotCount = 12;
         private const int UnlockSlotCount = 3;
         
-        public event Action<ItemSlot, ItemSO> OnClick;
+        public event Action<ItemSlot, ITem> OnClick;
 
         private void Awake()
         {
@@ -50,7 +51,7 @@ namespace System.Economy.Child.Food_Menu.System.Child.Open_UI_System.Child
             }
         }
 
-        public void Add(ItemSO targetItemData, out bool isSuccess)
+        public void Add(ITem targetItemData, out bool isSuccess)
         {
             for (var i = 0; i < TotalSlotCount; i++)
             {
@@ -64,7 +65,7 @@ namespace System.Economy.Child.Food_Menu.System.Child.Open_UI_System.Child
             isSuccess = false;
         }
 
-        public void Remove(ItemSO targetItemData)
+        public void Remove(ITem targetItemData)
         {
             foreach (var slot in SelectFoodSlots)
             {

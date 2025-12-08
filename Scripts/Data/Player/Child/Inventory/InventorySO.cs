@@ -1,4 +1,4 @@
-using Data.Item.Abstract;
+using Data.Item.Interface;
 using UnityEngine;
 
 namespace Data.Player.Child.Inventory
@@ -6,10 +6,6 @@ namespace Data.Player.Child.Inventory
     [CreateAssetMenu(menuName = "Minyinpop/Player/Child/Inventory Data", fileName = "New Data")]
     internal sealed class InventorySO : ScriptableObject
     {
-        private ItemSO[] HotbarItemsData = new ItemSO[10];
-
-        public void SetItem()
-        {
-        }
+        private ITem[] HotbarItemsData = new ITem[10];
     }
 }

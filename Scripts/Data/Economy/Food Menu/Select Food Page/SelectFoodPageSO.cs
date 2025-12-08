@@ -1,5 +1,5 @@
 using System.Linq;
-using Data.Item.Abstract;
+using Data.Item.Interface;
 using UnityEngine;
 
 namespace Data.Economy.Food_Menu.Select_Food_Page
@@ -7,31 +7,31 @@ namespace Data.Economy.Food_Menu.Select_Food_Page
     [CreateAssetMenu(menuName = "Minyinpop/Restaurant/Select Food Page Data", fileName = "New Data")]
     internal sealed class SelectFoodPageSO : ScriptableObject
     {
-        private ItemSO[] ItemsData;
+        private ITem[] ItemsData;
 
         public void Init(int index)
         {
-            ItemsData = new ItemSO[index];
+            ItemsData = new ITem[index];
         }
 
-        public void AddItemData(int slotIndex, ItemSO targetItemData)
+        public void AddItemData(int slotIndex, ITem targetItemData)
         {
             ItemsData[slotIndex] = targetItemData;
         }
         
         #region Get Item Data
-            public void GetAllItemData(out ItemSO[] itemsData)
+            public void GetAllItemData(out ITem[] itemsData)
             {
                 itemsData = ItemsData;
             }
 
-            public void GetRandomItemData(out ItemSO itemData)
+            public void GetRandomItemData(out ITem itemData)
             {
                 var nonNullItemsData = ItemsData.Where(item => item is not null).ToArray();
                 itemData = nonNullItemsData[Random.Range(0, nonNullItemsData.Length)];
             }
             
-            public void GetRandomItemData(ItemSO[] excludeItemsData, out ItemSO itemData)
+            public void GetRandomItemData(ITem[] excludeItemsData, out ITem itemData)
             {
                 var nonNullItemsData = ItemsData.Where(item => item is not null).ToArray();
                 var excludeItemsDataList = excludeItemsData.ToList();
@@ -40,7 +40,7 @@ namespace Data.Economy.Food_Menu.Select_Food_Page
             }
         #endregion
 
-        public void RemoveItemData(ItemSO itemData)
+        public void RemoveItemData(ITem itemData)
         {
             for (var i = 0; i < ItemsData.Length; i++)
             {

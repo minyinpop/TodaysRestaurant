@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Data.Item.Abstract;
+using Data.Item.Interface;
 using Object.Clickable_Bubble.Interface;
 using UnityEngine;
 using UnityEngine.UI;
@@ -92,7 +92,7 @@ namespace Object.Clickable_Bubble.Object
             }
         }
         
-        public void StartCountDown(ItemSO item, float time, Action onComplete)
+        public void StartCountDown(ITem item, float time, Action onComplete)
         {
             CountDownCor = CountDownCoroutine();
             StartCoroutine(CountDownCor);
