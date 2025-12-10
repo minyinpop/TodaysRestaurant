@@ -3,7 +3,7 @@ using Data.General.Enum;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Button = Object.Button;
+using Button = Common.Button;
 
 namespace System.Economy.Child.Food_Menu.Object
 {

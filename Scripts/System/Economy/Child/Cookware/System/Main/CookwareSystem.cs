@@ -2,11 +2,11 @@ using System.Collections.Generic;
 using System.Economy.Child.Cookware.State_Machine;
 using System.Economy.Child.Cookware.State_Machine.State;
 using System.Economy.Child.Cookware.System.Child.Cook_Game.System.Main;
+using Common.Clickable_Bubble.Interface;
 using Data.General.Enum;
 using Data.Item.Data.Custom;
 using Data.Item.Interface;
 using Interface;
-using Object.Clickable_Bubble.Interface;
 using UnityEngine;
 
 namespace System.Economy.Child.Cookware.System.Main

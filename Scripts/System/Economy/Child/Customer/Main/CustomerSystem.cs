@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Economy.Child.Customer.Child;
 using System.Economy.Child.Customer.Main.State_Machine;
 using System.Economy.Child.Customer.Main.State_Machine.State;
-using Data.Economy.Food_Menu.Select_Food_Page;
+using Common.Clickable_Bubble.Object;
+using Data.Economy_System.Food_Menu.Select_Food_Page;
 using Data.Item.Interface;
 using Interface;
-using Object.Clickable_Bubble.Object;
 using UnityEngine;
 
 namespace System.Economy.Child.Customer.Main
@@ -169,6 +169,7 @@ namespace System.Economy.Child.Customer.Main
 
                         IEnumerator ShowOrderItemCoroutine()
                         {
+                            Debug.Log($"{name} ordered {OrderItems.Count} items.");
                             while (OrderItems.Count > 0)
                             {
                                 var complete = false;

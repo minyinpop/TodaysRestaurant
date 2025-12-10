@@ -1,6 +1,6 @@
 namespace Data.General.Enum
 {
-    internal enum FoodType
+    public enum FoodType
     {
         Null,
         Soup,

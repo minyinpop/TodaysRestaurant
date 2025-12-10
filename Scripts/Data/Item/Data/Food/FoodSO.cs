@@ -1,17 +1,17 @@
 using System.Collections.Generic;
 using Data.General.Enum;
-using Data.Item.Interface;
+using Data.Item.Data.Abstract;
 using UnityEngine;
 
 namespace Data.Item.Data.Food
 {
     [CreateAssetMenu(menuName = "Minyinpop/Item/Dish Data", fileName = "New Data")]
-    internal sealed class FoodSO : ScriptableObject, ITem
+    internal sealed class FoodSO : ItemSO
     {
         #region Name
             [field: Header("Name")]
             [field: SerializeField] private string ItemName;
-            public void GetItemName(out string itemName)
+            public override void GetItemName(out string itemName)
             {
                 itemName = ItemName;
             }
@@ -20,7 +20,7 @@ namespace Data.Item.Data.Food
         #region Sprite
             [field: Header("Sprite")]
             [field: SerializeField] private Sprite ItemSprite;
-            public void GetItemSprite(out Sprite itemSprite)
+            public override void GetItemSprite(out Sprite itemSprite)
             {
                 itemSprite = ItemSprite;
             }
@@ -31,13 +31,13 @@ namespace Data.Item.Data.Food
             [field: SerializeField] private ItemType ItemType;
             [field: SerializeField] private CookType CookType;
             [field: SerializeField] private FoodType FoodType;
-            public void GetItemType(out ItemType itemType, out int itemLevel)
+            public override void GetItemType(out ItemType itemType, out int itemLevel)
             {
                 // TODO
                 throw new System.NotImplementedException();
             }
             
-            public void GetItemType(out ItemType itemType, out CookType cookType, out FoodType foodType)
+            public override void GetItemType(out ItemType itemType, out CookType cookType, out FoodType foodType)
             {
                 itemType = ItemType;
                 cookType = CookType;
@@ -47,8 +47,8 @@ namespace Data.Item.Data.Food
         
         #region Recipe Sheet
             [field: Header("Recipe Sheet")]
-            [field: SerializeField] private List<ITem> RecipeSheet;
-            public void GetRecipeSheet(out List<ITem> recipeSheet)
+            [field: SerializeField] private List<ItemSO> RecipeSheet;
+            public override void GetRecipeSheet(out List<ItemSO> recipeSheet)
             {
                 recipeSheet = RecipeSheet;
             }
@@ -57,7 +57,7 @@ namespace Data.Item.Data.Food
         #region Cook Time
             [field: Header("Cook Time")]
             [field: SerializeField] private float CookTime;
-            public void GetCookTime(out float cookTime)
+            public override void GetCookTime(out float cookTime)
             {
                 cookTime = Mathf.Abs(CookTime);
             }
@@ -66,7 +66,7 @@ namespace Data.Item.Data.Food
         #region Price
             [field: Header("Price")]
             [field: SerializeField] private int Price;
-            public void GetPrice(out int price)
+            public override void GetPrice(out int price)
             {
                 price = Mathf.Abs(Price);
             }

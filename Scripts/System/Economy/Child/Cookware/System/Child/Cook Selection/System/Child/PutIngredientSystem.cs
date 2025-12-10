@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Storage_Slot.Base;
+using Common;
 using Data.Animation.DOTween.Basic;
 using Data.Item.Data.Food;
 using Data.Item.Interface;
-using Object;
 using Tool;
 using UnityEngine;
 

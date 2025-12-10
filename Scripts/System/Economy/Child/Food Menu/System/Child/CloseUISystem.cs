@@ -1,6 +1,6 @@
 using System.Collections.Generic;
+using Common;
 using Data.Animation.DOTween.Basic;
-using Object;
 using Tool;
 using UnityEngine;
 

@@ -1,6 +1,6 @@
 namespace Data.General.Enum
 {
-    internal enum CookType
+    public enum CookType
     {
         Null,
         Stockpot,

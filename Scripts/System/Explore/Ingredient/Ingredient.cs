@@ -1,5 +1,5 @@
+using Common.Clickable_Bubble.Interface;
 using Interface;
-using Object.Clickable_Bubble.Interface;
 using UnityEngine;
 
 namespace System.Explore.Ingredient

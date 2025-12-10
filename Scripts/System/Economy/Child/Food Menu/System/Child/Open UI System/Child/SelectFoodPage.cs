@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Economy.Child.Food_Menu.Object.Item_Slot.Base;
-using Data.Economy.Food_Menu;
-using Data.Economy.Food_Menu.Select_Food_Page;
+using Data.Economy_System.Food_Menu;
+using Data.Economy_System.Food_Menu.Select_Food_Page;
 using Data.Item.Data.Food;
 using Data.Item.Interface;
 using UnityEngine;

@@ -1,4 +1,4 @@
-using Data.Battle_System.Creature.Economy.Data.Customer.Base;
+using Data.Economy_System.Creature.Data.Customer.Base;
 using Spine.Unity;
 using UnityEngine;
 
@@ -10,13 +10,13 @@ namespace System.Economy.Child.Customer.Child
         [field: SerializeField] private SkeletonAnimation SkeletonAnimation;
         
         [field: Header("Data")]
-        [field: SerializeField] private CustomerSO CustomerData;
+        [field: SerializeField] private CustomerSO CreatureData;
 
         public void SetRandomSkin()
         {
             var skeleton = SkeletonAnimation.Skeleton;
             var skeletonData = skeleton.Data;
-            CustomerData.GetRandomSkin(skeletonData, out var skin);
+            CreatureData.GetRandomSkin(skeletonData, out var skin);
             skeleton.SetSkin(skin);
             skeleton.SetSlotsToSetupPose();
         }

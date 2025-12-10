@@ -2,7 +2,7 @@ using Data.Item.Data.Food;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Button = Object.Button;
+using Button = Common.Button;
 
 namespace System.Economy.Child.Cookware.System.Child.Cook_Selection.Object
 {

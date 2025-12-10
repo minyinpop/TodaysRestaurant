@@ -1,9 +1,9 @@
 using System.Battle.Object.Card.Base;
 using System.Battle.Object.Mob.Type.Character.System;
 using System.Collections;
+using Common;
 using Data.Animation.Spine;
-using Data.Battle_System.Creature.Battle.Interface;
-using Object;
+using Data.Battle_System.Creature.Interface;
 using UnityEngine;
 
 namespace System.Battle.Object.Mob.Type.Character.Base

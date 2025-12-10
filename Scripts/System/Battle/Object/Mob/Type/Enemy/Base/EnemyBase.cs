@@ -1,7 +1,7 @@
 using System.Battle.Object.Mob.Type.Enemy.System;
-using Data.Battle_System.Creature.Battle.Interface;
+using Common;
+using Data.Battle_System.Creature.Interface;
 using Data.General;
-using Object;
 using UnityEngine;
 
 namespace System.Battle.Object.Mob.Type.Enemy.Base

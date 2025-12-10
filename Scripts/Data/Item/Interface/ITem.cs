@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 using Data.General.Enum;
+using Data.Item.Data.Abstract;
 using UnityEngine;
 
 namespace Data.Item.Interface
 {
-    internal interface ITem
+    public interface ITem
     {
         #region Name
             public void GetItemName(out string itemName);
@@ -20,7 +21,7 @@ namespace Data.Item.Interface
         #endregion
         
         #region Recipe Sheet
-            public void GetRecipeSheet(out List<ITem> recipeSheet);
+            public void GetRecipeSheet(out List<ItemSO> recipeSheet);
         #endregion
         
         #region Cook Time
