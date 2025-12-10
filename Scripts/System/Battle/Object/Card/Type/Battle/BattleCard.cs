@@ -3,7 +3,7 @@ using System.Collections;
 using Data.Animation.DOTween.Basic;
 using Data.Animation.DOTween.Combine;
 using Data.Animation.Spine;
-using Data.Card.Battle;
+using Data.Battle_System.Card;
 using Data.General;
 using Data.General.Enum;
 using DG.Tweening;

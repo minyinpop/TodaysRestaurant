@@ -1,6 +1,6 @@
 using System.Battle.Object.Mob.Type.Enemy.System;
+using Data.Battle_System.Creature.Battle.Interface;
 using Data.General;
-using Data.Mob.Character.Main;
 using Object;
 using UnityEngine;
 
@@ -16,7 +16,7 @@ namespace System.Battle.Object.Mob.Type.Enemy.Base
         [field: SerializeField] private StatusBar HealthBar;
         
         [field: Header("Data")]
-        [field: SerializeField] private CharacterSO EnemyData;
+        [field: SerializeField] private IBattleCreature EnemyData;
 
         public static event Action<Damage, Action, Action> OnAttack;
 

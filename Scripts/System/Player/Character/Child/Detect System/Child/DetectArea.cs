@@ -15,6 +15,12 @@ namespace System.Player.Character.Child.Detect_System.Child
             if (1 << other.gameObject.layer != Layer.value) return;
             OnEnterDetect?.Invoke(other.gameObject);
         }
+        
+        private void OnTriggerStay(Collider other)
+        {
+            if (1 << other.gameObject.layer != Layer.value) return;
+            OnEnterDetect?.Invoke(other.gameObject);
+        }
 
         private void OnTriggerExit(Collider other)
         {

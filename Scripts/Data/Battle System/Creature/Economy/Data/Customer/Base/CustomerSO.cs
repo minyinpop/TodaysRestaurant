@@ -1,13 +1,13 @@
 using System.Collections.Generic;
+using Data.Battle_System.Creature.Economy.Interface;
 using Data.General;
-using Data.Mob.Character.Main;
 using Spine;
 using UnityEngine;
 
-namespace Data.Mob.Character.Child.Customer.Base
+namespace Data.Battle_System.Creature.Economy.Data.Customer.Base
 {
     [CreateAssetMenu(menuName = "Minyinpop/Mob/Customer", fileName = "New Data")]
-    internal sealed class CustomerSO : CharacterSO
+    internal sealed class CustomerSO : ScriptableObject, IEconomyCreature
     {
         #region Skin
             [field: Header("Skin")]

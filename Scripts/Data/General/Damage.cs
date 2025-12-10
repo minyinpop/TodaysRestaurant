@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Data.General
 {
     [Serializable]
-    internal class Damage
+    public class Damage
     {
         [field: Header("Values")]
         [field: SerializeField] private AttackType AttackType;

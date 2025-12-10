@@ -113,7 +113,7 @@ namespace System.Economy.Child.Customer.Main
                                 OrderItems.Enqueue(firstItemData);
                                 
                                 var chance = UnityEngine.Random.Range(0, 100);
-                                if (chance > 50)
+                                if (chance > 0)
                                 {
                                     SelectFoodPageData.GetRandomItemData(OrderItems.ToArray(), out var secondItemData);
                                     if (secondItemData is not null) OrderItems.Enqueue(secondItemData);

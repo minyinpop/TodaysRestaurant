@@ -2,7 +2,7 @@ using System.Battle.Object.Card.Base;
 using System.Battle.Object.Mob.Type.Character.System;
 using System.Collections;
 using Data.Animation.Spine;
-using Data.Mob.Character.Main;
+using Data.Battle_System.Creature.Battle.Interface;
 using Object;
 using UnityEngine;
 
@@ -18,7 +18,7 @@ namespace System.Battle.Object.Mob.Type.Character.Base
         [field: SerializeField] private StatusBar HealthBar;
         
         [field: Header("Data")]
-        [field: SerializeField] private CharacterSO CharacterData;
+        [field: SerializeField] private IBattleCreature BattleCreatureData;
         
         public static event Action<ICard, Action, Action> OnAttack;
 
@@ -26,7 +26,7 @@ namespace System.Battle.Object.Mob.Type.Character.Base
 
         private void Start()
         {
-            CharacterData.GetHealth(out var min, out var max);
+            BattleCreatureData.GetHealth(out var min, out var max);
             HealthBar.Init(min, max);
         }
 
@@ -45,9 +45,9 @@ namespace System.Battle.Object.Mob.Type.Character.Base
         }
 
         #region Data
-            public void GetCharacterData(out CharacterSO data)
+            public void GetCharacterData(out IBattleCreature data)
             {
-                data = CharacterData;
+                data = BattleCreatureData;
             }
         #endregion
 

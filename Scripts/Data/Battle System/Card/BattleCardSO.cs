@@ -4,7 +4,7 @@ using Data.General;
 using Data.General.Enum;
 using UnityEngine;
 
-namespace Data.Card.Battle
+namespace Data.Battle_System.Card
 {
     [CreateAssetMenu(menuName = "Minyinpop/Card/Battle Data", fileName = "New Data")]
     internal sealed class BattleCardSO : ScriptableObject

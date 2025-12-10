@@ -1,6 +1,6 @@
 namespace Data.General.Enum
 {
-    internal enum CardType
+    public enum CardType
     {
         BattleCard_Fork,
         BattleCard_Spoon

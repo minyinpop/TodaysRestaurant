@@ -1,6 +1,6 @@
 namespace Data.General.Enum
 {
-    internal enum AttackType
+    public enum AttackType
     {
         Single,
         All
