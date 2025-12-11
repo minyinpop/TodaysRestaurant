@@ -164,7 +164,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::System.Battle_System.System.Child.EnemyTeamSystem
   AliveEnemies:
-  - {fileID: 454562062}
+  - {fileID: 454562064}
   - {fileID: 284453959}
   - {fileID: 1027227818}
 --- !u!1 &38678280
@@ -1622,7 +1622,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 284453956}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a969b5eaf5e468887169bfc3e20f896, type: 3}
+  m_Script: {fileID: 11500000, guid: 775d99c479f64e928c41ef656e251b4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::System.Battle_System.Object.Character.Type.Enemy.Type.BeerWhiteMushroom
   AnimationSystem: {fileID: 284453958}
@@ -2382,7 +2382,7 @@ GameObject:
   - component: {fileID: 454562060}
   - component: {fileID: 454562059}
   - component: {fileID: 454562058}
-  - component: {fileID: 454562062}
+  - component: {fileID: 454562064}
   - component: {fileID: 454562063}
   m_Layer: 0
   m_Name: Bear Mushroom - Normal
@@ -2505,21 +2505,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 425723104}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &454562062
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 454562057}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a969b5eaf5e468887169bfc3e20f896, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::System.Battle_System.Object.Character.Type.Enemy.Type.BeerWhiteMushroom
-  AnimationSystem: {fileID: 454562063}
-  HealthBar: {fileID: 235081904}
-  EnemyData: {fileID: 11400000, guid: e130e94bd01159840ab08df0457fb2c9, type: 2}
 --- !u!114 &454562063
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2549,6 +2534,21 @@ MonoBehaviour:
     Layer: 0
     AnimationName: Die
     Loop: 0
+--- !u!114 &454562064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 454562057}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 775d99c479f64e928c41ef656e251b4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Battle_System.Object.Creature.Enemy.Enemy
+  AnimationSystem: {fileID: 454562063}
+  HealthBar: {fileID: 235081904}
+  EnemyData: {fileID: 11400000, guid: e130e94bd01159840ab08df0457fb2c9, type: 2}
 --- !u!1 &454709729
 GameObject:
   m_ObjectHideFlags: 0
@@ -6014,7 +6014,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1027227815}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a969b5eaf5e468887169bfc3e20f896, type: 3}
+  m_Script: {fileID: 11500000, guid: 775d99c479f64e928c41ef656e251b4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::System.Battle_System.Object.Character.Type.Enemy.Type.BeerWhiteMushroom
   AnimationSystem: {fileID: 1027227817}
@@ -6648,12 +6648,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1243039380}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 678f186c55e74dac86437c27b2864d8b, type: 3}
+  m_Script: {fileID: 11500000, guid: f4c961c18bf445dba9daa8e45ef3f0b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::System.Battle_System.Object.Character.Type.Friendly.Type.Bernard
   AnimationSystem: {fileID: 1243039385}
   HealthBar: {fileID: 126619727}
-  CharacterData: {fileID: 11400000, guid: 09dfc44ecd70bbb479f6390867e257a7, type: 2}
+  CrewData: {fileID: 11400000, guid: 09dfc44ecd70bbb479f6390867e257a7, type: 2}
 --- !u!1001 &1290673455
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7232,7 +7232,7 @@ MonoBehaviour:
   HandCardSystem: {fileID: 1387491316}
   InitiativeSystem: {fileID: 3104198548672938272, guid: c509b3d71a19bb943abc6716f6228c09, type: 3}
   UseCardSystem: {fileID: 239885601}
-  CharacterTeamSystem: {fileID: 1153366124}
+  CrewTeamSystem: {fileID: 0}
   EnemyTeamSystem: {fileID: 12423715}
   MessageSystem: {fileID: 1341688274}
   PlayerData: {fileID: 11400000, guid: f6faef0ee01b35e478f45e9da0d7e8a1, type: 2}
