@@ -9,22 +9,19 @@ namespace Common.Object
 {
     [RequireComponent(typeof(Image))]
     [RequireComponent(typeof(DoAnimation))]
-    internal sealed class Button : PointerEvent
+    public sealed class Button : PointerEvent
     {
+        [field: Header("State")]
+        [field: SerializeField] private bool Interactable;
+        
         [field: Header("Component")]
         [field: SerializeField] private RectTransform Rect;
-        
-        [field: Header("Object")]
         [field: SerializeField] private TextMeshProUGUI TitleTMP;
         
-        [field: Header("Child System")]
-        [field: SerializeField] private DoAnimation DoAnimation;
-        
         [field: Header("Animation Settings")]
+        [field: SerializeField] private DoAnimation DoAnimation;
         [field: SerializeField] private DoScale OnPointerEnterScale;
         [field: SerializeField] private DoScale OnPointerExitScale;
-        
-        private bool Interactable;
 
         public event Action OnClick;
         

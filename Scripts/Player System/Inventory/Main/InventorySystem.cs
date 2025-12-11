@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Economy_System.Child.Cookware_System.System.Main;
 using Item;
 using Player_System.Inventory.Child;
+using Restaurant_System.Object.Cookware.System;
+using Tool.Item_Giver;
 using UnityEngine;
 
 namespace Player_System.Inventory.Main
@@ -19,6 +20,8 @@ namespace Player_System.Inventory.Main
         {
             CookwareSystem.OnClickCompleteBubble += TryAddItem;
             ActiveActions.Enqueue(() => CookwareSystem.OnClickCompleteBubble -= TryAddItem);
+            ItemGiver.OnClick += TryAddItem;
+            ActiveActions.Enqueue(() => ItemGiver.OnClick -= TryAddItem);
         }
         
         private void OnDisable()
@@ -26,9 +29,15 @@ namespace Player_System.Inventory.Main
             while (ActiveActions.Count > 0) ActiveActions.Dequeue()?.Invoke();
         }
 
-        private bool TryAddItem(ITem itemData)
+        private bool TryAddItem(ITem item)
         {
-            HotbarSystem.TryAddItem(itemData, out var isSuccess);
+            HotbarSystem.TryAddItem(item, out var isSuccess);
+            return isSuccess;
+        }
+        
+        private bool TryAddItem(ItemSO item)
+        {
+            HotbarSystem.TryAddItem(item, out var isSuccess);
             return isSuccess;
         }
     }
