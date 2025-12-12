@@ -6,11 +6,11 @@ using UnityEngine;
 
 namespace Restaurant_System.System.Child.Food_Menu_System.System.Main
 {
-    internal sealed class FoodMenuSystem : MonoBehaviour
+    internal sealed class FoodMenu : MonoBehaviour
     {
         [field: Header("Child System")]
-        [field: SerializeField] private OpenUISystem OpenUISystem;
-        [field: SerializeField] private CloseUISystem CloseUISystem;
+        [field: SerializeField] private OpenPage OpenPage;
+        [field: SerializeField] private ClosePage ClosePage;
 
         private readonly List<Action> ActiveActions = new();
 
@@ -24,26 +24,26 @@ namespace Restaurant_System.System.Child.Food_Menu_System.System.Main
 
         public void Show()
         {
-            CloseUISystem.Show(onComplete: OnUIShowComplete);
+            ClosePage.Show(onComplete: OnUIShowComplete);
             return;
 
             void OnUIShowComplete()
             {
-                CloseUISystem.OnClickOpenButton += OnOpenButtonClicked;
-                ActiveActions.Add(() => CloseUISystem.OnClickOpenButton -= OnOpenButtonClicked);
+                ClosePage.OnClickOpenButton += OnOpenButtonClicked;
+                ActiveActions.Add(() => ClosePage.OnClickOpenButton -= OnOpenButtonClicked);
             }
 
             void OnOpenButtonClicked()
             {
-                CloseUISystem.Hide();
-                OpenUISystem.Show();
-                OpenUISystem.OnClickOpenUIConfirmButton += OnOpenUIConfirmButtonClicked;
-                ActiveActions.Add(() => OpenUISystem.OnClickOpenUIConfirmButton -= OnOpenUIConfirmButtonClicked);
+                ClosePage.Hide();
+                OpenPage.Show();
+                OpenPage.OnClickOpenUIConfirmButton += OnOpenUIConfirmButtonClicked;
+                ActiveActions.Add(() => OpenPage.OnClickOpenUIConfirmButton -= OnOpenUIConfirmButtonClicked);
                 return;
 
                 void OnOpenUIConfirmButtonClicked()
                 {
-                    OpenUISystem.Hide(onComplete: () => OnClickOpenUIConfirmButton?.Invoke());
+                    OpenPage.Hide(onComplete: () => OnClickOpenUIConfirmButton?.Invoke());
                 }
             }
         }

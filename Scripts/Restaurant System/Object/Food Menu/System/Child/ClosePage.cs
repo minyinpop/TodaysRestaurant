@@ -8,7 +8,7 @@ using UnityEngine;
 namespace Restaurant_System.System.Child.Food_Menu_System.System.Child
 {
     [RequireComponent(typeof(DoAnimation))]
-    internal sealed class CloseUISystem : MonoBehaviour
+    internal sealed class ClosePage : MonoBehaviour
     {
         [field: Header("UI")]
         [field: SerializeField] private GameObject UI;

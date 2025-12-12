@@ -11,8 +11,10 @@ namespace Restaurant_System.System.Main
 {
     internal sealed class RestaurantSystem : MonoBehaviour
     {
-        [field: Header("Child System")]
-        [field: SerializeField] private FoodMenuSystem FoodMenuSystem;
+        [field: Header("Object")]
+        [field: SerializeField] private FoodMenu FoodMenu;
+        
+        [field: Header("System")]
         [field: SerializeField] private CustomerManagerSystem CustomerManagerSystem;
         
         private readonly Queue<Action> ActiveActions = new();
@@ -46,14 +48,14 @@ namespace Restaurant_System.System.Main
                     
                     void OnEnter()
                     {
-                        FoodMenuSystem.Show();
-                        FoodMenuSystem.OnClickOpenUIConfirmButton += RoundStart;
-                        ActiveActions.Enqueue(() => FoodMenuSystem.OnClickOpenUIConfirmButton -= RoundStart);
+                        FoodMenu.Show();
+                        FoodMenu.OnClickOpenUIConfirmButton += RoundStart;
+                        ActiveActions.Enqueue(() => FoodMenu.OnClickOpenUIConfirmButton -= RoundStart);
                     }
                     
                     void OnExit()
                     {
-                        FoodMenuSystem.OnClickOpenUIConfirmButton -= RoundStart;
+                        FoodMenu.OnClickOpenUIConfirmButton -= RoundStart;
                     }
                 }
             #endregion

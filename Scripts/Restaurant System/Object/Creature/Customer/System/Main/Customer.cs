@@ -12,7 +12,7 @@ using UnityEngine;
 
 namespace Restaurant_System.Object.Creature.Customer.System.Main
 {
-    internal sealed class CustomerSystem : MonoBehaviour, InteractableObject
+    internal sealed class Customer : MonoBehaviour, InteractableObject
     {
         [field: Header("Component Settings")]
         [field: SerializeField] private MoveSystem MoveSystem;
@@ -25,15 +25,17 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
         [field: SerializeField] private GameObject ThinkBubble;
         [field: SerializeField] private GameObject WaitForOrderBubble;
         [field: SerializeField] private GameObject ShowItemBubble;
+        [field: SerializeField] private GameObject WaitForItemBubble;
         
         [field: Header("Data Settings")]
         [field: SerializeField] private SelectFoodPageSO SelectFoodPageData;
         
         private readonly StateMachine StateMachine = new();
-        
-        private readonly Queue<ClickableBubble> Bubbles = new();
+
         private readonly Queue<ITem> OrderItems = new();
         private readonly Queue<Action> ActiveActions = new();
+        
+        private ClickableBubble CurrentBubble;
         
         private bool Interactable;
 
@@ -60,15 +62,8 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
         }
 
         #region InteractableObject
-            public void OnEnterDetect()
-            {
-                foreach (var bubble in Bubbles) bubble.SetInteractable(true);
-            }
-            
-            public void OnExitDetect()
-            {
-                foreach (var bubble in Bubbles) bubble.SetInteractable(false);
-            }
+            public void OnEnterDetect() => CurrentBubble.SetInteractable(true);
+            public void OnExitDetect() => CurrentBubble.SetInteractable(false);
         #endregion
 
         #region StateMachine
@@ -105,20 +100,20 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
 
                     void OnEnter()
                     {
-                        Bubbles.Enqueue(Instantiate(ThinkBubble, BubbleParent).GetComponent<ClickableBubble>());
-
-                        Bubbles.Peek().StartCountDown(3,
+                        CurrentBubble = Instantiate(ThinkBubble, BubbleParent).GetComponent<ClickableBubble>();
+                        CurrentBubble.StartCountDown(3,
                             onComplete: () =>
                             {
                                 SelectFoodPageData.GetRandomItemData(out var firstItemData);
                                 OrderItems.Enqueue(firstItemData);
                                 
-                                var chance = UnityEngine.Random.Range(0, 100);
-                                if (chance > 0)
-                                {
-                                    SelectFoodPageData.GetRandomItemData(OrderItems.ToArray(), out var secondItemData);
-                                    if (secondItemData is not null) OrderItems.Enqueue(secondItemData);
-                                }
+                                // TODO [2025.12.12] 讓顧客可以點更多餐點的程式碼，尚未更新，預留給未來。
+                                // var chance = UnityEngine.Random.Range(0, 100);
+                                // if (chance > 0)
+                                // {
+                                //     SelectFoodPageData.GetRandomItemData(OrderItems.ToArray(), out var secondItemData);
+                                //     if (secondItemData is not null) OrderItems.Enqueue(secondItemData);
+                                // }
 
                                 WaitForOrder();
                             });
@@ -126,8 +121,8 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
 
                     void OnExit()
                     {
-                        var bubble = Bubbles.Dequeue();
-                        Destroy(bubble.gameObject);
+                        Destroy(CurrentBubble.gameObject);
+                        CurrentBubble = null;
                     }
                 }
             #endregion
@@ -140,18 +135,16 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
 
                     void OnEnter()
                     {
-                        Bubbles.Enqueue(Instantiate(WaitForOrderBubble, BubbleParent).GetComponent<ClickableBubble>());
-                        Bubbles.Peek().OnClickBubble += ShowOrderItem;
-                        ActiveActions.Enqueue(() => Bubbles.Peek().OnClickBubble -= ShowOrderItem);
-                        Bubbles.Peek().SetInteractable(Interactable);
-                        Bubbles.Peek().StartCountDown(15,
-                            onComplete: () => Debug.Log($"{name} 等待點餐太久了，已經沒了耐心。"));
+                        CurrentBubble = Instantiate(WaitForOrderBubble, BubbleParent).GetComponent<ClickableBubble>();
+                        CurrentBubble.OnClick += ShowOrderItem;
+                        CurrentBubble.StartCountDown(15, () => Debug.Log($"{name} 等待點餐太久了，已經沒了耐心。"));
                     }
                     
                     void OnExit()
                     {
-                        var bubble = Bubbles.Dequeue();
-                        Destroy(bubble.gameObject);
+                        CurrentBubble.OnClick -= ShowOrderItem;
+                        Destroy(CurrentBubble.gameObject);
+                        CurrentBubble = null;
                     }
                 }
             #endregion
@@ -173,12 +166,18 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
                             foreach (var item in OrderItems)
                             {
                                 var complete = false;
-                                var bubble = Instantiate(ShowItemBubble, BubbleParent).GetComponent<ClickableBubble>();
-                                bubble.ChangeItemImage(item, 1, () => complete = true);
+                                CurrentBubble = Instantiate(ShowItemBubble, BubbleParent).GetComponent<ClickableBubble>();
+                                CurrentBubble.ChangeItemImage(item, 1,
+                                    onComplete: () =>
+                                    {
+                                        Destroy(CurrentBubble.gameObject);
+                                        CurrentBubble = null;
+                                        complete = true;
+                                    });
                                 yield return new WaitUntil(() => complete);
                             }
                             
-                            WaitForOrderItem();
+                            WaitForItem();
                         }
                     }
 
@@ -188,14 +187,16 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
                 }
             #endregion
             
-            #region WaitForOrderItem
-                private void WaitForOrderItem()
+            #region WaitForItem
+                private void WaitForItem()
                 {
-                    StateMachine.ChangeState(new WaitForOrderItem(OnEnter, OnExit));
+                    StateMachine.ChangeState(new WaitForItem(OnEnter, OnExit));
                     return;
                     
                     void OnEnter()
                     {
+                        CurrentBubble = Instantiate(WaitForItemBubble, BubbleParent).GetComponent<ClickableBubble>();
+                        // CurrentBubble.OnClick +=
                     }
                     
                     void OnExit()

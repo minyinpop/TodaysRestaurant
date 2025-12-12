@@ -28,7 +28,7 @@ namespace Common.Object
         
         private IEnumerator CountDownCor;
         
-        public event Action OnClickBubble;
+        public event Action OnClick;
 
         private void OnEnable()
         {
@@ -39,7 +39,7 @@ namespace Common.Object
 
             void OnClick()
             {
-                OnClickBubble?.Invoke();
+                this.OnClick?.Invoke();
             }
         }
 

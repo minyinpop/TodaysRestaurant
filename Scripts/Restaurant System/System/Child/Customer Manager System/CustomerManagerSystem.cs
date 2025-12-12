@@ -47,7 +47,7 @@ namespace Restaurant_System.System.Child.Customer_Manager_System
                         if (seatPoint.IsOccupied()) continue;
                         
                         CurrentCustomerAmount++;
-                        var newCustomer = Instantiate(CustomerPrefab, CustomerSpawnPoint.position, Quaternion.identity, CustomerParent).GetComponent<CustomerSystem>();
+                        var newCustomer = Instantiate(CustomerPrefab, CustomerSpawnPoint.position, Quaternion.identity, CustomerParent).GetComponent<Customer>();
                         
                         seatPoint.SetCustomer(newCustomer);
                         

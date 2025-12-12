@@ -21,7 +21,7 @@ using UnityEngine;
 namespace Restaurant_System.System.Child.Food_Menu_System.System.Child.Open_UI_System.Main
 {
     [RequireComponent(typeof(DoAnimation))]
-    internal sealed class OpenUISystem : MonoBehaviour
+    internal sealed class OpenPage : MonoBehaviour
     {
         [field: Header("UI")]
         [field: SerializeField] private GameObject UI;

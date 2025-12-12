@@ -9,15 +9,15 @@ namespace Restaurant_System.System.Child.Customer_Manager_System.Object
         [field: SerializeField] private Transform StandPoint;
         [field: SerializeField] private Transform SitPoint;
 
-        private CustomerSystem Customer;
+        private Customer Customer;
         
         #region Status
-            public void SetCustomer(CustomerSystem customer)
+            public void SetCustomer(Customer customer)
             {
                 Customer = customer;
             }
                 
-            public void GetCustomer(out bool haveCustomer, out CustomerSystem customer)
+            public void GetCustomer(out bool haveCustomer, out Customer customer)
             {
                 haveCustomer = IsOccupied();
                 customer = IsOccupied() ? Customer : null;
