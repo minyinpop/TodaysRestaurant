@@ -1,34 +1,65 @@
 using System;
 using System.Collections.Generic;
 using Input_System.Main;
+using Item;
 using Player_System.Character.Child;
 using Player_System.Character.Child.Detect_System.Main;
+using Player_System.Character.Child.Inventory.Main;
 using Player_System.Character.Main.State_Machine;
 using Player_System.Character.Main.State_Machine.State;
+using Restaurant_System.Object.Cookware.System;
+using Tool.Item_Giver;
 using UnityEngine;
 
 namespace Player_System.Character.Main
 {
-    internal sealed class PlayerSystem : MonoBehaviour
+    public sealed class PlayerSystem : MonoBehaviour
     {
         [field: Header("Child System")]
         [field: SerializeField] private MoveSystem MoveSystem;
         [field: SerializeField] private AnimationSystem AnimationSystem;
         [field: SerializeField] private DetectSystem DetectSystem;
+        [field: SerializeField] private InventorySystem InventorySystem;
 
         private readonly StateMachine StateMachine = new();
         
-        private readonly List<Action> ActiveActions = new();
+        private readonly Queue<Action> ActiveActions = new();
 
         private void Start()
         {
             OnIdle();
         }
 
+        private void OnEnable()
+        {
+            #region InventorySystem
+                InputSystem.OnPerformedHotbar += OnPerformedHotbar;
+                ActiveActions.Enqueue(() => InputSystem.OnPerformedHotbar -= OnPerformedHotbar);
+                
+                CookwareSystem.OnClickCompleteBubble += TryAddItem;
+                ActiveActions.Enqueue(() => CookwareSystem.OnClickCompleteBubble -= TryAddItem);
+                
+                // Develop Only
+                ItemGiver.OnClick += TryAddItem;
+                ActiveActions.Enqueue(() => ItemGiver.OnClick -= TryAddItem);
+                // ==================
+            #endregion
+        }
+
         private void OnDisable()
         {
-            foreach (var action in ActiveActions) action?.Invoke();
-            ActiveActions.Clear();
+            while (ActiveActions.Count > 0) ActiveActions.Dequeue()?.Invoke();
+        }
+
+        private void OnPerformedHotbar(int hotbarIndex)
+        {
+            InventorySystem.OnPerformedHotbar(hotbarIndex);
+        }
+        
+        private bool TryAddItem(ItemSO item)
+        {
+            var result = InventorySystem.TryAddItem(item);
+            return result;
         }
 
         #region StateMachine
@@ -40,7 +71,7 @@ namespace Player_System.Character.Main
                 void OnEnter()
                 {
                     InputSystem.OnStartedPlayerWalk += OnWalk;
-                    ActiveActions.Add(() => InputSystem.OnStartedPlayerWalk -= OnWalk);
+                    ActiveActions.Enqueue(() => InputSystem.OnStartedPlayerWalk -= OnWalk);
                     
                     AnimationSystem.Idle();
                 }
@@ -59,13 +90,13 @@ namespace Player_System.Character.Main
                 void OnEnter()
                 {
                     InputSystem.OnCancelPlayerWalk += OnIdle;
-                    ActiveActions.Add(() => InputSystem.OnCancelPlayerWalk -= OnIdle);
+                    ActiveActions.Enqueue(() => InputSystem.OnCancelPlayerWalk -= OnIdle);
 
                     MoveSystem.WalkLeft += AnimationSystem.TurnsLeft;
-                    ActiveActions.Add(() => MoveSystem.WalkLeft -= AnimationSystem.TurnsLeft);
+                    ActiveActions.Enqueue(() => MoveSystem.WalkLeft -= AnimationSystem.TurnsLeft);
                     
                     MoveSystem.WalkRight += AnimationSystem.TurnsRight;
-                    ActiveActions.Add(() => MoveSystem.WalkRight -= AnimationSystem.TurnsRight);
+                    ActiveActions.Enqueue(() => MoveSystem.WalkRight -= AnimationSystem.TurnsRight);
 
                     MoveSystem.StartWalk();
                     AnimationSystem.Walk();

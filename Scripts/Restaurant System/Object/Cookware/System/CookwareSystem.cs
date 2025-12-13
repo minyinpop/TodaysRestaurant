@@ -32,7 +32,7 @@ namespace Restaurant_System.Object.Cookware.System
 
         private GameObject CurrentBubble;
         private ClickableBubble CurrentBubbleScript;
-        private ITem CurrentCookItem;
+        private ItemSO CurrentCookItem;
         
         private readonly StateMachine StateMachine = new();
 
@@ -42,7 +42,7 @@ namespace Restaurant_System.Object.Cookware.System
         private bool Interactable;
 
         public static event Action<CookType, Action<CustomItem>, Action> OnClickEmptyBubble;
-        public static event Func<ITem, bool> OnClickCompleteBubble;
+        public static event Func<ItemSO, bool> OnClickCompleteBubble;
         
         // TODO 5 審專用
         public static event Action<string, Action> ChangeScene;

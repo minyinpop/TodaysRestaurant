@@ -10,15 +10,15 @@ using Item;
 using Item.Data.Food.Data.Food_Category;
 using Message_System.System.Main;
 using Player_System.Data.Main;
-using Restaurant_System.System.Child.Food_Menu_System.Object;
-using Restaurant_System.System.Child.Food_Menu_System.Object.Item_Slot.Base;
-using Restaurant_System.System.Child.Food_Menu_System.Object.Item_Slot.Type.Select_Food_Slot;
-using Restaurant_System.System.Child.Food_Menu_System.System.Child.Open_UI_System.Child;
-using Restaurant_System.System.Child.Food_Menu_System.System.Child.Open_UI_System.Child.Select_Food_Page;
-using Restaurant_System.System.Child.Food_Menu_System.System.Child.Open_UI_System.Child.Select_Food_Page.Data;
+using Restaurant_System.Object.Food_Menu.Object;
+using Restaurant_System.Object.Food_Menu.Object.Item_Slot.Base;
+using Restaurant_System.Object.Food_Menu.Object.Item_Slot.Type.Select_Food_Slot;
+using Restaurant_System.Object.Food_Menu.System.Child.Open_Page.Child;
+using Restaurant_System.Object.Food_Menu.System.Child.Open_Page.Child.Select_Food_Page;
+using Restaurant_System.Object.Food_Menu.System.Child.Open_Page.Child.Select_Food_Page.Data;
 using UnityEngine;
 
-namespace Restaurant_System.System.Child.Food_Menu_System.System.Child.Open_UI_System.Main
+namespace Restaurant_System.Object.Food_Menu.System.Child.Open_Page.Main
 {
     [RequireComponent(typeof(DoAnimation))]
     internal sealed class OpenPage : MonoBehaviour

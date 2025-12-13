@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Item.Data.Custom
 {
-    internal sealed class CustomItem : ITem
+    internal sealed class CustomItem : ItemSO
     {
         private readonly ITem LegacyItemData;
         private readonly float OverrideCookTime;
@@ -16,28 +16,43 @@ namespace Item.Data.Custom
             OverrideCookTime = cookTime;
             OverridePrice = price;
         }
-
-        #region ITem
-            public void GetItemName(out string itemName) =>
+        
+        #region Name
+            public override void GetItemName(out string itemName) =>
                 LegacyItemData.GetItemName(out itemName);
-            
-            public void GetItemSprite(out Sprite itemSprite) =>
+        #endregion
+        
+        #region Sprite
+            public override void GetItemSprite(out Sprite itemSprite) =>
                 LegacyItemData.GetItemSprite(out itemSprite);
+        #endregion
 
-            public void GetItemType(out ItemType itemType, out CookType cookType, out FoodType foodType) =>
+        #region Item Type
+            public override void GetItemType(out ItemType itemType, out CookType cookType, out FoodType foodType) =>
                 LegacyItemData.GetItemType(out itemType, out cookType, out foodType);
-
-            public void GetItemType(out ItemType itemType, out int itemLevel) =>
+            public override void GetItemType(out ItemType itemType, out int itemLevel) =>
                 LegacyItemData.GetItemType(out itemType, out itemLevel);
+        #endregion
 
-            public void GetRecipeSheet(out List<ItemSO> recipeSheet) =>
+        #region Recipe Sheet
+            public override void GetRecipeSheet(out List<ItemSO> recipeSheet) =>
                 LegacyItemData.GetRecipeSheet(out recipeSheet);
+        #endregion
 
-            public void GetCookTime(out float cookTime) =>
+        #region Cook Time
+            public override void GetCookTime(out float cookTime) =>
                 cookTime = OverrideCookTime;
+        #endregion
 
-            public void GetPrice(out int price) =>
-                price = OverridePrice;
+        #region Price
+        public override void GetPrice(out int price) =>
+            price = OverridePrice;
+        #endregion
+
+        #region Interaction
+            public override void OnSelected() { }
+            public override void OnAttack() { }
+            public override void OnUse() { }
         #endregion
     }
 }

@@ -52,5 +52,11 @@ namespace Item.Data.Ingredient
                 price = Mathf.Abs(Price);
             }
         #endregion
+        
+        #region Interaction
+            public override void OnSelected() { }
+            public override void OnAttack() { }
+            public override void OnUse() { }
+        #endregion
     }
 }

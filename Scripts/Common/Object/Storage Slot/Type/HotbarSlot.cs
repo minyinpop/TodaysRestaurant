@@ -7,22 +7,21 @@ using UnityEngine.UI;
 
 namespace Common.Object.Storage_Slot.Type
 {
-    internal sealed class InventorySlot : StorageSlot
+    internal sealed class HotbarSlot : StorageSlot
     {
         [field: Header("Object")]
         [field: SerializeField] private RectTransform BackgroundRect;
         [field: SerializeField] private Image ItemImage;
         
-        [field: Header("Child System")]
-        [field: SerializeField] private DoAnimation DoAnimation;
+        [field: Header("State")]
+        [field: SerializeField] private bool Interactable = true;
         
         [field: Header("Animation Settings")]
+        [field: SerializeField] private DoAnimation DoAnimation;
         [field: SerializeField] private DoScale ScaleUpSettings;
         [field: SerializeField] private DoScale ScaleDownSettings;
         
         private ITem ItemData;
-
-        private bool Interactable = true;
         
         #region PointerEvent
             protected override void OnPointerEnter()
@@ -37,6 +36,12 @@ namespace Common.Object.Storage_Slot.Type
                 DoAnimation.DoScale_UI(BackgroundRect, ScaleDownSettings);
             }
         #endregion
+
+        public override void OnSelected()
+        {
+            if (ItemData is null) return;
+            ItemData.OnSelected();
+        }
 
         public override void TryAddItem(ITem item, out bool isSuccess)
         {

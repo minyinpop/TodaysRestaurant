@@ -5,7 +5,7 @@ using Animation_System.DOTween.Basic;
 using Common.Object;
 using UnityEngine;
 
-namespace Restaurant_System.System.Child.Food_Menu_System.System.Child
+namespace Restaurant_System.Object.Food_Menu.System.Child
 {
     [RequireComponent(typeof(DoAnimation))]
     internal sealed class ClosePage : MonoBehaviour

@@ -2,7 +2,7 @@ using System.Linq;
 using Item;
 using UnityEngine;
 
-namespace Restaurant_System.System.Child.Food_Menu_System.System.Child.Open_UI_System.Child.Select_Food_Page.Data
+namespace Restaurant_System.Object.Food_Menu.System.Child.Open_Page.Child.Select_Food_Page.Data
 {
     [CreateAssetMenu(menuName = "Minyinpop/Restaurant/Select Food Page Data", fileName = "New Data")]
     internal sealed class SelectFoodPageSO : ScriptableObject

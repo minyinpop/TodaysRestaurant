@@ -7,7 +7,7 @@ using Item;
 using Restaurant_System.Object.Creature.Customer.System.Child;
 using Restaurant_System.Object.Creature.Customer.System.Main.State_Machine;
 using Restaurant_System.Object.Creature.Customer.System.Main.State_Machine.State;
-using Restaurant_System.System.Child.Food_Menu_System.System.Child.Open_UI_System.Child.Select_Food_Page.Data;
+using Restaurant_System.Object.Food_Menu.System.Child.Open_Page.Child.Select_Food_Page.Data;
 using UnityEngine;
 
 namespace Restaurant_System.Object.Creature.Customer.System.Main
@@ -62,8 +62,8 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
         }
 
         #region InteractableObject
-            public void OnEnterDetect() => CurrentBubble.SetInteractable(true);
-            public void OnExitDetect() => CurrentBubble.SetInteractable(false);
+            public void OnEnterDetect() => CurrentBubble?.SetInteractable(true);
+            public void OnExitDetect() => CurrentBubble?.SetInteractable(false);
         #endregion
 
         #region StateMachine

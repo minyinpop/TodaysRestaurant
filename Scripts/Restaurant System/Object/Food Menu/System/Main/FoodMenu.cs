@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
-using Restaurant_System.System.Child.Food_Menu_System.System.Child;
-using Restaurant_System.System.Child.Food_Menu_System.System.Child.Open_UI_System.Main;
+using Restaurant_System.Object.Food_Menu.System.Child;
+using Restaurant_System.Object.Food_Menu.System.Child.Open_Page.Main;
 using UnityEngine;
 
-namespace Restaurant_System.System.Child.Food_Menu_System.System.Main
+namespace Restaurant_System.Object.Food_Menu.System.Main
 {
     internal sealed class FoodMenu : MonoBehaviour
     {

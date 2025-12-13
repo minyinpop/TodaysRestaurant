@@ -30,5 +30,11 @@ namespace Item
         #region Price
             public void GetPrice(out int price);
         #endregion
+        
+        #region Interaction
+            public void OnSelected();
+            public void OnAttack();
+            public void OnUse();
+        #endregion
     }
 }
