@@ -3,18 +3,20 @@ using System.Collections.Generic;
 using Common.Value.Type;
 using UnityEngine;
 
-namespace Item
+namespace Item.Data
 {
-    public abstract class ItemSO : ScriptableObject, ITem
+    public abstract class ItemSO : ScriptableObject
     {
         #region Name
-            public virtual void GetItemName(out string itemName) =>
-                throw new NotImplementedException();
+            [field: Header("Item Name")]
+            [field: SerializeField] private string itemName;
+            public string ItemName => itemName;
         #endregion
         
         #region Sprite
-            public virtual void GetItemSprite(out Sprite itemSprite) =>
-                throw new NotImplementedException();
+            [field: Header("Item Sprite")]
+            [field: SerializeField] private Sprite itemSprite;
+            public Sprite ItemSprite => itemSprite;
         #endregion
         
         #region Item Type
@@ -40,9 +42,9 @@ namespace Item
         #endregion
         
         #region Interaction
-            public abstract void OnSelected();
-            public abstract void OnAttack();
-            public abstract void OnUse();
+            public abstract void Selected();
+            public abstract void UnSelected();
+            public abstract void Use();
         #endregion
     }
 }

@@ -5,7 +5,7 @@ using System.Linq;
 using Animation_System.DOTween;
 using Animation_System.DOTween.Basic;
 using Common.Object;
-using Common.Object.Storage_Slot.Base;
+using Common.Object.Storage_Slot;
 using Common.Value;
 using Item.Data.Ingredient;
 using TMPro;

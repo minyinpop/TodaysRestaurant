@@ -1,5 +1,5 @@
 using Common.Object.Storage_Slot.Type;
-using Item;
+using Item.Data;
 using Player_System.Data.Child.Inventory;
 using UnityEngine;
 
@@ -13,10 +13,9 @@ namespace Player_System.Character.Child.Inventory.Child
         [field: Header("Storage Slot")]
         [field: SerializeField] private HotbarSlot[] HotbarSlots;
         
-        [field: SerializeField] private HotbarSlot SelectedHotbarSlot; // TODO Develop Only
-        // private HotbarSlot SelectedHotbarSlot;
+        private HotbarSlot SelectedHotbarSlot;
 
-        public void TryAddItem(ITem itemData, out bool isSuccess)
+        public void TryAddItem(ItemSO itemData, out bool isSuccess)
         {
             foreach (var hotbarSlot in HotbarSlots)
             {
@@ -29,8 +28,22 @@ namespace Player_System.Character.Child.Inventory.Child
 
         public void OnPerformedHotbar(int hotbarIndex)
         {
-            SelectedHotbarSlot = HotbarSlots[hotbarIndex];
-            SelectedHotbarSlot.OnSelected();
+            ChangeSelectedHotbarSlot(HotbarSlots[hotbarIndex]);
         }
+
+        public void OnClickedMouseLeftButton()
+        {
+            SelectedHotbarSlot?.Use();
+        }
+
+        #region Utility
+            private void ChangeSelectedHotbarSlot(HotbarSlot newSlot)
+            {
+                SelectedHotbarSlot?.UnSelected();
+                SelectedHotbarSlot = null;
+                SelectedHotbarSlot = newSlot;
+                SelectedHotbarSlot?.Selected();
+            }
+        #endregion
     }
 }

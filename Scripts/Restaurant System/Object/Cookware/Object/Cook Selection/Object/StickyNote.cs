@@ -34,10 +34,8 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.Object
         public void Init(FoodSO foodData)
         {
             FoodData = foodData;
-            foodData.GetItemSprite(out var dishSprite);
-            Image.sprite = dishSprite;
-            foodData.GetItemName(out var dishName);
-            TMPro.text = dishName;
+            Image.sprite = foodData.ItemSprite;
+            TMPro.text = foodData.ItemName;
         }
 
         public void SetInteractable(bool interactable)

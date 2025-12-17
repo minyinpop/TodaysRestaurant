@@ -4,8 +4,9 @@ using System.Linq;
 using Animation_System.DOTween;
 using Animation_System.DOTween.Basic;
 using Common.Object;
-using Common.Object.Storage_Slot.Base;
+using Common.Object.Storage_Slot;
 using Item;
+using Item.Data;
 using Item.Data.Food;
 using UnityEngine;
 
@@ -95,9 +96,9 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Child
             return !ItemSlots.Where(itemSlot => itemSlot.IsEmpty()).Any();
         }
 
-        public void GetIngredients(out Queue<ITem> ingredients)
+        public void GetIngredients(out Queue<ItemSO> ingredients)
         {
-            ingredients = new Queue<ITem>();
+            ingredients = new Queue<ItemSO>();
             foreach (var itemSlot in ItemSlots)
             {
                 itemSlot.GetItem(out var item);

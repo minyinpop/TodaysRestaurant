@@ -7,24 +7,6 @@ namespace Item.Data.Food
     [CreateAssetMenu(menuName = "Minyinpop/Item/Dish Data", fileName = "New Data")]
     internal sealed class FoodSO : ItemSO
     {
-        #region Name
-            [field: Header("Name")]
-            [field: SerializeField] private string ItemName;
-            public override void GetItemName(out string itemName)
-            {
-                itemName = ItemName;
-            }
-        #endregion
-        
-        #region Sprite
-            [field: Header("Sprite")]
-            [field: SerializeField] private Sprite ItemSprite;
-            public override void GetItemSprite(out Sprite itemSprite)
-            {
-                itemSprite = ItemSprite;
-            }
-        #endregion
-        
         #region Item Type
             [field: Header("Item Type")]
             [field: SerializeField] private ItemType ItemType;
@@ -72,9 +54,9 @@ namespace Item.Data.Food
         #endregion
         
         #region Interaction
-            public override void OnSelected() { }
-            public override void OnAttack() { }
-            public override void OnUse() { }
+            public override void Selected() { }
+            public override void UnSelected() { }
+            public override void Use() { }
         #endregion
     }
 }

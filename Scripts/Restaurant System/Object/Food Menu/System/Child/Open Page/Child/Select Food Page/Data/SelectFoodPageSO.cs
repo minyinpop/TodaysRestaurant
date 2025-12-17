@@ -1,5 +1,6 @@
 using System.Linq;
 using Item;
+using Item.Data;
 using UnityEngine;
 
 namespace Restaurant_System.Object.Food_Menu.System.Child.Open_Page.Child.Select_Food_Page.Data
@@ -7,31 +8,31 @@ namespace Restaurant_System.Object.Food_Menu.System.Child.Open_Page.Child.Select
     [CreateAssetMenu(menuName = "Minyinpop/Restaurant/Select Food Page Data", fileName = "New Data")]
     internal sealed class SelectFoodPageSO : ScriptableObject
     {
-        private ITem[] ItemsData;
+        private ItemSO[] ItemsData;
 
         public void Init(int index)
         {
-            ItemsData = new ITem[index];
+            ItemsData = new ItemSO[index];
         }
 
-        public void AddItemData(int slotIndex, ITem targetItemData)
+        public void AddItemData(int slotIndex, ItemSO targetItemData)
         {
             ItemsData[slotIndex] = targetItemData;
         }
         
         #region Get Item Data
-            public void GetAllItemData(out ITem[] itemsData)
+            public void GetAllItemData(out ItemSO[] itemsData)
             {
                 itemsData = ItemsData;
             }
 
-            public void GetRandomItemData(out ITem itemData)
+            public void GetRandomItemData(out ItemSO itemData)
             {
                 var nonNullItemsData = ItemsData.Where(item => item is not null).ToArray();
                 itemData = nonNullItemsData[Random.Range(0, nonNullItemsData.Length)];
             }
             
-            public void GetRandomItemData(ITem[] excludeItemsData, out ITem itemData)
+            public void GetRandomItemData(ItemSO[] excludeItemsData, out ItemSO itemData)
             {
                 var nonNullItemsData = ItemsData.Where(item => item is not null).ToArray();
                 var excludeItemsDataList = excludeItemsData.ToList();
@@ -40,7 +41,7 @@ namespace Restaurant_System.Object.Food_Menu.System.Child.Open_Page.Child.Select
             }
         #endregion
 
-        public void RemoveItemData(ITem itemData)
+        public void RemoveItemData(ItemSO itemData)
         {
             for (var i = 0; i < ItemsData.Length; i++)
             {

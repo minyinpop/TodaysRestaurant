@@ -24,15 +24,15 @@ namespace Mouse_System.Main
         
         private void OnEnable()
         {
-            InputSystem.OnClickMouseLeftButton += OnPointerClick;
+            InputSystem.OnClickedMouseLeftButton += OnPointerClicked;
         }
         
         private void OnDisable()
         {
-            InputSystem.OnClickMouseLeftButton -= OnPointerClick;
+            InputSystem.OnClickedMouseLeftButton -= OnPointerClicked;
         }
 
-        private void OnPointerClick()
+        private void OnPointerClicked()
         {
             InputSystem.GetMousePosition(out var position);
             if (!UI()) WorldSpace();

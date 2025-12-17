@@ -1,32 +1,22 @@
 using System.Collections.Generic;
 using Common.Value.Type;
-using UnityEngine;
+using UI_System;
 
 namespace Item.Data.Custom
 {
     internal sealed class CustomItem : ItemSO
     {
-        private readonly ITem LegacyItemData;
+        private readonly ItemSO LegacyItemData;
         private readonly float OverrideCookTime;
         private readonly int OverridePrice;
 
-        public CustomItem(ITem itemData, float cookTime, int price)
+        public CustomItem(ItemSO itemData, float cookTime, int price)
         {
             LegacyItemData = itemData;
             OverrideCookTime = cookTime;
             OverridePrice = price;
         }
         
-        #region Name
-            public override void GetItemName(out string itemName) =>
-                LegacyItemData.GetItemName(out itemName);
-        #endregion
-        
-        #region Sprite
-            public override void GetItemSprite(out Sprite itemSprite) =>
-                LegacyItemData.GetItemSprite(out itemSprite);
-        #endregion
-
         #region Item Type
             public override void GetItemType(out ItemType itemType, out CookType cookType, out FoodType foodType) =>
                 LegacyItemData.GetItemType(out itemType, out cookType, out foodType);
@@ -50,9 +40,9 @@ namespace Item.Data.Custom
         #endregion
 
         #region Interaction
-            public override void OnSelected() { }
-            public override void OnAttack() { }
-            public override void OnUse() { }
+            public override void Selected() { }
+            public override void UnSelected() { }
+            public override void Use() { }
         #endregion
     }
 }

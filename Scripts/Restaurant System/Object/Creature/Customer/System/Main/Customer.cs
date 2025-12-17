@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Common;
 using Common.Object;
 using Item;
+using Item.Data;
 using Restaurant_System.Object.Creature.Customer.System.Child;
 using Restaurant_System.Object.Creature.Customer.System.Main.State_Machine;
 using Restaurant_System.Object.Creature.Customer.System.Main.State_Machine.State;
@@ -32,7 +33,7 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
         
         private readonly StateMachine StateMachine = new();
 
-        private readonly Queue<ITem> OrderItems = new();
+        private readonly Queue<ItemSO> OrderItems = new();
         private readonly Queue<Action> ActiveActions = new();
         
         private ClickableBubble CurrentBubble;

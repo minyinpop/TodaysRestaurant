@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Item;
+using Item.Data;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -92,7 +92,7 @@ namespace Common.Object
             }
         }
         
-        public void ChangeItemImage(ITem item, float duration, Action onComplete)
+        public void ChangeItemImage(ItemSO item, float duration, Action onComplete)
         {
             CountDownCor = CountDownCoroutine();
             StartCoroutine(CountDownCor);
@@ -101,8 +101,7 @@ namespace Common.Object
             IEnumerator CountDownCoroutine()
             {
                 if (item is null) throw new ArgumentNullException(nameof(item));
-                item.GetItemSprite(out var itemSprite);
-                ItemImage.sprite = itemSprite;
+                ItemImage.sprite = item.ItemSprite;
                 ItemImage.gameObject.SetActive(true);
                 yield return new WaitForSeconds(duration);
                 onComplete?.Invoke();

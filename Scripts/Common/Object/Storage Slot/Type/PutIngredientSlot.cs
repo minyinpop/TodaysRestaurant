@@ -1,8 +1,7 @@
 using Animation_System.DOTween;
 using Animation_System.DOTween.Basic;
-using Common.Object.Storage_Slot.Base;
 using Common.Value.Type;
-using Item;
+using Item.Data;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -25,8 +24,8 @@ namespace Common.Object.Storage_Slot.Type
         [field: SerializeField] private DoScale ScaleUpSettings;
         [field: SerializeField] private DoScale ScaleDownSettings;
 
-        private ITem TargetItemData;
-        private ITem ItemData;
+        private ItemSO TargetItemData;
+        private ItemSO ItemData;
         
         private bool Interactable;
 
@@ -44,7 +43,7 @@ namespace Common.Object.Storage_Slot.Type
             }
         #endregion
 
-        public override void TryAddItem(ITem item, out bool isSuccess)
+        public override void TryAddItem(ItemSO item, out bool isSuccess)
         {
             if (item is null) { isSuccess = false; return; }
             if (ItemData is not null) { isSuccess = false; return; }
@@ -52,8 +51,7 @@ namespace Common.Object.Storage_Slot.Type
             if (TargetItemData is null)
             {
                 TargetItemData = item;
-                TargetItemData.GetItemSprite(out var sprite);
-                ItemImage.sprite = sprite;
+                ItemImage.sprite = item.ItemSprite;
             }
             else
             {
@@ -62,15 +60,14 @@ namespace Common.Object.Storage_Slot.Type
                 if (!Equals(type01, type02)) { isSuccess = false; return; } // TODO 物品類型不同會跳出 Message System
                 if (level01 < level02) { isSuccess = false; return; } // TODO 物品類型相同但等級比 TargetItemData 還低，一樣跳出 Message System
                 ItemData = item;
-                ItemData.GetItemSprite(out var sprite);
-                ItemImage.sprite = sprite;
+                ItemImage.sprite = item.ItemSprite;
                 ItemImage.color = HaveItemColor;
             }
 
             isSuccess = true;
         }
 
-        public override void GetItem(out ITem item)
+        public override void GetItem(out ItemSO item)
         {
             if (ItemData is null)
             {
@@ -80,8 +77,7 @@ namespace Common.Object.Storage_Slot.Type
 
             item = ItemData;
             ItemData = null;
-            TargetItemData.GetItemSprite(out var sprite);
-            ItemImage.sprite = sprite;
+            ItemImage.sprite = item.ItemSprite;
             ItemImage.color = NoItemColor;
         }
         

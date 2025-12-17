@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Input_System.Main;
-using Item;
+using Item.Data;
 using Player_System.Character.Child;
 using Player_System.Character.Child.Detect_System.Main;
 using Player_System.Character.Child.Inventory.Main;
@@ -36,6 +36,9 @@ namespace Player_System.Character.Main
                 InputSystem.OnPerformedHotbar += OnPerformedHotbar;
                 ActiveActions.Enqueue(() => InputSystem.OnPerformedHotbar -= OnPerformedHotbar);
                 
+                InputSystem.OnClickedMouseLeftButton += OnClickedMouseLeftButton;
+                ActiveActions.Enqueue(() => InputSystem.OnClickedMouseLeftButton -= OnClickedMouseLeftButton);
+                
                 CookwareSystem.OnClickCompleteBubble += TryAddItem;
                 ActiveActions.Enqueue(() => CookwareSystem.OnClickCompleteBubble -= TryAddItem);
                 
@@ -55,7 +58,12 @@ namespace Player_System.Character.Main
         {
             InventorySystem.OnPerformedHotbar(hotbarIndex);
         }
-        
+
+        private void OnClickedMouseLeftButton()
+        {
+            InventorySystem.OnClickedMouseLeftButton();
+        }
+
         private bool TryAddItem(ItemSO item)
         {
             var result = InventorySystem.TryAddItem(item);

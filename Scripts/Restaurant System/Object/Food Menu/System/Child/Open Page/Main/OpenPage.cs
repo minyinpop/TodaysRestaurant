@@ -7,6 +7,7 @@ using Common.Object;
 using Common.Value;
 using Common.Value.Type;
 using Item;
+using Item.Data;
 using Item.Data.Food.Data.Food_Category;
 using Message_System.System.Main;
 using Player_System.Data.Main;
@@ -165,7 +166,7 @@ namespace Restaurant_System.Object.Food_Menu.System.Child.Open_Page.Main
         }
 
         #region On Item Slot Clicked
-            private void OnUnlockFoodSlotClicked(ItemSlot slot, ITem itemData)
+            private void OnUnlockFoodSlotClicked(ItemSlot slot, ItemSO itemData)
             {
                 slot.GetSlotState(out var slotState);
                 switch (slotState)
@@ -185,7 +186,7 @@ namespace Restaurant_System.Object.Food_Menu.System.Child.Open_Page.Main
                 }
             }
 
-            private void OnSelectFoodSlotClicked(ItemSlot slot, ITem itemData)
+            private void OnSelectFoodSlotClicked(ItemSlot slot, ItemSO itemData)
             {
                 SelectFoodPage.CancelSelect(slot);
                 UnlockFoodPage.CancelSelect(itemData);

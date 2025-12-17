@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Animation_System.DOTween;
 using Animation_System.DOTween.Basic;
-using Item;
+using Item.Data;
 using Restaurant_System.Object.Food_Menu.Object.Item_Slot.Base;
 using UnityEngine;
 using UnityEngine.UI;
@@ -26,7 +26,7 @@ namespace Restaurant_System.Object.Food_Menu.Object.Item_Slot.Type
         [field: SerializeField] private DoScale ScaleUpSettings;
         [field: SerializeField] private DoScale ScaleDownSettings;
 
-        private ITem ItemData;
+        private ItemSO ItemData;
 
         private ItemSlotState SlotState = ItemSlotState.Lock;
         
@@ -68,16 +68,15 @@ namespace Restaurant_System.Object.Food_Menu.Object.Item_Slot.Type
             };
         }
         
-        public override void Add(ITem itemData)
+        public override void Add(ItemSO itemData)
         {
             if (itemData is null) return;
             ItemData = itemData;
-            ItemData.GetItemSprite(out var sprite);
-            ItemImage.sprite = sprite;
+            ItemImage.sprite = ItemData.ItemSprite;
             ItemImage.gameObject.SetActive(true);
         }
 
-        public override void Get(out ITem itemData)
+        public override void Get(out ItemSO itemData)
         {
             itemData = ItemData;
         }

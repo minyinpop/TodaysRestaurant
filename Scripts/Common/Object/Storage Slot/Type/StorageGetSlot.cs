@@ -1,8 +1,7 @@
 using System;
 using Animation_System.DOTween;
 using Animation_System.DOTween.Basic;
-using Common.Object.Storage_Slot.Base;
-using Item;
+using Item.Data;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,7 +20,7 @@ namespace Common.Object.Storage_Slot.Type
         [field: SerializeField] private DoScale ScaleUpSettings;
         [field: SerializeField] private DoScale ScaleDownSettings;
 
-        private ITem ItemData;
+        private ItemSO ItemData;
 
         private bool Interactable = true;
         
@@ -37,12 +36,11 @@ namespace Common.Object.Storage_Slot.Type
             DoAnimation.DoScale_UI(BackgroundRect, ScaleDownSettings);
         }
         
-        public override void TryAddItem(ITem item, Action onComplete)
+        public override void TryAddItem(ItemSO item, Action onComplete)
         {
             if (item is null) return;
             ItemData = item;
-            ItemData.GetItemSprite(out var sprite);
-            ItemImage.sprite = sprite;
+            ItemImage.sprite = item.ItemSprite;
             ItemImage.gameObject.SetActive(true);
             BackgroundRect.localScale = Vector2.one * 1.25f;
             DoAnimation.DoScale_UI(BackgroundRect, ScaleDownSettings,

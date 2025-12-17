@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Common;
 using Common.Object;
 using Common.Value.Type;
-using Item;
+using Item.Data;
 using Item.Data.Custom;
 using Restaurant_System.Object.Cookware.Object.Cook_Game.System.Main;
 using Restaurant_System.Object.Cookware.System.State_Machine;
@@ -87,7 +87,7 @@ namespace Restaurant_System.Object.Cookware.System
                             return;
 
                             void OnBubbleClicked()
-                            {Debug.Log(name+" is being clicked.");
+                            {
                                 OnClickEmptyBubble?.Invoke(CookwareType,
                                     /* onConfirm */ cookItem =>
                                     {
@@ -210,8 +210,7 @@ namespace Restaurant_System.Object.Cookware.System
                                     }
                                     default:
                                     {
-                                        CurrentCookItem.GetItemName(out var itemName);
-                                        Debug.Log($"無法添加 {itemName} 至玩家背包。");
+                                        Debug.Log($"無法添加 {CurrentCookItem.ItemName} 至玩家背包。");
                                         break;
                                     }
                                 }

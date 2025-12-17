@@ -5,7 +5,7 @@ using UnityEngine.InputSystem.Controls;
 
 namespace Input_System.Main
 {
-    internal sealed class InputSystem : MonoBehaviour
+    public sealed class InputSystem : MonoBehaviour
     {
         private static GameObject Instance;
 
@@ -90,8 +90,8 @@ namespace Input_System.Main
         #endregion
         
         #region Mouse
-            public static event Action OnClickMouseLeftButton;
-            private void OnMouseLeftButtonClicked(InputAction.CallbackContext context) => OnClickMouseLeftButton?.Invoke();
+            public static event Action OnClickedMouseLeftButton;
+            private static void OnMouseLeftButtonClicked(InputAction.CallbackContext context) => OnClickedMouseLeftButton?.Invoke();
             public static void GetMousePosition(out Vector2 position) => position = InputManager.Mouse.MousePosition.ReadValue<Vector2>();
         #endregion
     }

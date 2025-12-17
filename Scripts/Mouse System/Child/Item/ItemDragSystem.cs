@@ -1,5 +1,5 @@
-using Common.Object.Storage_Slot.Base;
-using Item;
+using Common.Object.Storage_Slot;
+using Item.Data;
 using Mouse_System.Child.Item.Object;
 using UnityEngine;
 
@@ -14,7 +14,7 @@ namespace Mouse_System.Child.Item
         private GameObject DragUI;
         private ItemDragUI DragUIScript;
         
-        private ITem DraggedItemData;
+        private ItemSO DraggedItemData;
 
         public void OnClick(GameObject itemSlot)
         {
@@ -36,8 +36,7 @@ namespace Mouse_System.Child.Item
                 DraggedItemData = item;
                 DragUI = Instantiate(DragUIPrefab, DragUIParent);
                 DragUIScript = DragUI.GetComponent<ItemDragUI>();
-                DraggedItemData.GetItemSprite(out var sprite);
-                DragUIScript.SetSprite(sprite);
+                DragUIScript.SetSprite(item.ItemSprite);
             }
 
             void PutItemToEmptySlot(StorageSlot currentStorageSlotScript)
@@ -55,8 +54,7 @@ namespace Mouse_System.Child.Item
                 currentStorageSlotScript.GetItem(out var item);
                 currentStorageSlotScript.TryAddItem(DraggedItemData, out _);
                 DraggedItemData = item;
-                DraggedItemData.GetItemSprite(out var sprite);
-                DragUIScript.SetSprite(sprite);
+                DragUIScript.SetSprite(item.ItemSprite);
             }
         }
     }

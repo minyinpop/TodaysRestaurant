@@ -1,6 +1,6 @@
 using Animation_System.DOTween;
 using Animation_System.DOTween.Basic;
-using Item;
+using Item.Data;
 using Restaurant_System.Object.Food_Menu.Object.Item_Slot.Base;
 using TMPro;
 using UnityEngine;
@@ -28,7 +28,7 @@ namespace Restaurant_System.Object.Food_Menu.Object.Item_Slot.Type.Select_Food_S
         [field: SerializeField] private DoScale ScaleUpSettings;
         [field: SerializeField] private DoScale ScaleDownSettings;
 
-        private ITem ItemData;
+        private ItemSO ItemData;
         
         private ItemSlotState SlotState = ItemSlotState.Lock;
         
@@ -105,7 +105,7 @@ namespace Restaurant_System.Object.Food_Menu.Object.Item_Slot.Type.Select_Food_S
             }
         #endregion
 
-        public override void Add(ITem item)
+        public override void Add(ItemSO item)
         {
             if (SlotState is ItemSlotState.Lock or ItemSlotState.HaveItem) return;
             SlotState = ItemSlotState.HaveItem;
@@ -114,7 +114,7 @@ namespace Restaurant_System.Object.Food_Menu.Object.Item_Slot.Type.Select_Food_S
             ShowFoodInfo();
         }
 
-        public override void Add(ITem item, out bool isSuccess)
+        public override void Add(ItemSO item, out bool isSuccess)
         {
             if (SlotState is ItemSlotState.Lock or ItemSlotState.HaveItem)
             {
@@ -129,7 +129,7 @@ namespace Restaurant_System.Object.Food_Menu.Object.Item_Slot.Type.Select_Food_S
             isSuccess = true;
         }
 
-        public override void Get(out ITem itemData)
+        public override void Get(out ItemSO itemData)
         {
             itemData = ItemData;
         }
@@ -146,11 +146,9 @@ namespace Restaurant_System.Object.Food_Menu.Object.Item_Slot.Type.Select_Food_S
         #region Info
             private void ShowFoodInfo()
             {
-                ItemData.GetItemSprite(out var sprite);
-                FoodImage.sprite = sprite;
+                FoodImage.sprite = ItemData.ItemSprite;
                 FoodImage.gameObject.SetActive(true);
-                ItemData.GetItemName(out var itemName);
-                FoodNameTMP.text = itemName;
+                FoodNameTMP.text = ItemData.ItemName;
                 FoodNameTMP.gameObject.SetActive(true);
             }
 

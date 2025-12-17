@@ -1,13 +1,14 @@
 using System;
 using Common;
 using Item;
+using Item.Data;
 
 namespace Restaurant_System.Object.Food_Menu.Object.Item_Slot.Base
 {
     internal abstract class ItemSlot : PointerEvent
     {
-        public event Action<ItemSlot, ITem> OnClick;
-        protected void OnClicked(ITem itemData) { OnClick?.Invoke(this, itemData); }
+        public event Action<ItemSlot, ItemSO> OnClick;
+        protected void OnClicked(ItemSO itemData) { OnClick?.Invoke(this, itemData); }
 
         protected override void OnPointerEnter() { }
         protected override void OnPointerExit() { }
@@ -18,10 +19,10 @@ namespace Restaurant_System.Object.Food_Menu.Object.Item_Slot.Base
         
         public virtual void ChangeSelectState() { }
 
-        public virtual void Add(ITem item) { }
-        public virtual void Add(ITem item, out bool isSuccess) { isSuccess = false; }
+        public virtual void Add(ItemSO item) { }
+        public virtual void Add(ItemSO item, out bool isSuccess) { isSuccess = false; }
         
-        public virtual void Get(out ITem itemData) { itemData = null; }
+        public virtual void Get(out ItemSO itemData) { itemData = null; }
         
         public virtual void SetAlpha() { }
 

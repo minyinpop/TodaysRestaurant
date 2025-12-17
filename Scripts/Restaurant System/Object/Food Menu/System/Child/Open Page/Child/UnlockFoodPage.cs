@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Item;
+using Item.Data;
 using Item.Data.Food.Data.Food_Category;
 using Restaurant_System.Object.Food_Menu.Object.Item_Slot.Base;
 using UnityEngine;
@@ -15,7 +16,7 @@ namespace Restaurant_System.Object.Food_Menu.System.Child.Open_Page.Child
         private readonly List<ItemSlot> UnlockFoodSlots = new();
         private readonly List<Action> UnlockFoodSlot_Actions = new();
 
-        public event Action<ItemSlot, ITem> OnClick;
+        public event Action<ItemSlot, ItemSO> OnClick;
         
         private void OnDisable()
         {
@@ -54,7 +55,7 @@ namespace Restaurant_System.Object.Food_Menu.System.Child.Open_Page.Child
             itemSlot.SetAlpha();
         }
 
-        public void CheckItemDataHasBeenSelect(ITem targetItemData)
+        public void CheckItemDataHasBeenSelect(ItemSO targetItemData)
         {
             foreach (var slot in UnlockFoodSlots)
             {
@@ -66,7 +67,7 @@ namespace Restaurant_System.Object.Food_Menu.System.Child.Open_Page.Child
             }
         }
 
-        public void CancelSelect(ITem targetItemData)
+        public void CancelSelect(ItemSO targetItemData)
         {
             foreach (var slot in UnlockFoodSlots)
             {

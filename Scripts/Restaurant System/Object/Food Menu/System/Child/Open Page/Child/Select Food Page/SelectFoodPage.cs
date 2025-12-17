@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Item;
+using Item.Data;
 using Restaurant_System.Object.Food_Menu.Object.Item_Slot.Base;
 using Restaurant_System.Object.Food_Menu.Object.Item_Slot.Type.Select_Food_Slot;
 using Restaurant_System.Object.Food_Menu.System.Child.Open_Page.Child.Select_Food_Page.Data;
@@ -23,7 +24,7 @@ namespace Restaurant_System.Object.Food_Menu.System.Child.Open_Page.Child.Select
         private const int TotalSlotCount = 12;
         private const int UnlockSlotCount = 3;
         
-        public event Action<ItemSlot, ITem> OnClick;
+        public event Action<ItemSlot, ItemSO> OnClick;
 
         private void Awake()
         {
@@ -51,7 +52,7 @@ namespace Restaurant_System.Object.Food_Menu.System.Child.Open_Page.Child.Select
             }
         }
 
-        public void Add(ITem targetItemData, out bool isSuccess)
+        public void Add(ItemSO targetItemData, out bool isSuccess)
         {
             for (var i = 0; i < TotalSlotCount; i++)
             {
@@ -65,7 +66,7 @@ namespace Restaurant_System.Object.Food_Menu.System.Child.Open_Page.Child.Select
             isSuccess = false;
         }
 
-        public void Remove(ITem targetItemData)
+        public void Remove(ItemSO targetItemData)
         {
             foreach (var slot in SelectFoodSlots)
             {
