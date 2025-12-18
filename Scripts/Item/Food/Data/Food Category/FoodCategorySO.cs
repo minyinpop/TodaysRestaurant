@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using Item.Data.Food.Data.Food_Type;
+using Item.Food.Data.Food_Type;
 using UnityEngine;
 
-namespace Item.Data.Food.Data.Food_Category
+namespace Item.Food.Data.Food_Category
 {
     [CreateAssetMenu(menuName = "Minyinpop/Food/Food Category", fileName = "New Data")]
     internal sealed class FoodCategorySO : ScriptableObject

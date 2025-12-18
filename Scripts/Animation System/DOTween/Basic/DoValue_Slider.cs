@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Animation_System.DOTween.Basic
 {
     [Serializable]
-    internal sealed class DoValue_Slider
+    public sealed class DoValue_Slider
     {
         [field: Header("Values")]
         [field: SerializeField] private float EndValue;

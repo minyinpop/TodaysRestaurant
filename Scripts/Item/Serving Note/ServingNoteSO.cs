@@ -1,7 +1,8 @@
 using System;
+using Item.Data;
 using UnityEngine;
 
-namespace Item.Data.Serving_Note
+namespace Item.Serving_Note
 {
     [CreateAssetMenu(menuName = "Minyinpop/Item/Serving Note", fileName = "New Data")]
     internal sealed class ServingNoteSO : ItemSO

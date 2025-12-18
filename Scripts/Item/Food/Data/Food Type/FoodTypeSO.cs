@@ -1,7 +1,7 @@
 using Common.Value.Type;
 using UnityEngine;
 
-namespace Item.Data.Food.Data.Food_Type
+namespace Item.Food.Data.Food_Type
 {
     [CreateAssetMenu(menuName = "Minyinpop/Food/Food Type", fileName = "New Data")]
     internal sealed class FoodTypeSO : ScriptableObject

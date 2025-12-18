@@ -4,7 +4,7 @@ using Animation_System.DOTween;
 using Animation_System.DOTween.Basic;
 using Common.Object;
 using Common.Value.Type;
-using Item.Data.Food;
+using Item.Food;
 using Player_System.Data.Main;
 using Restaurant_System.Object.Cookware.Object.Cook_Selection.Object;
 using UnityEngine;

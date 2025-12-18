@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Animation_System.DOTween.Basic;
 using Common.Value;
 using DG.Tweening;
-using Item.Data.Ingredient;
+using Item.Ingredient;
 using Message_System.Object;
 using UnityEngine;
 

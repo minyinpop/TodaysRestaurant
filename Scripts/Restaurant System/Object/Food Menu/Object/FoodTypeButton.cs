@@ -1,6 +1,6 @@
 using System;
 using Common.Value.Type;
-using Item.Data.Food.Data.Food_Type;
+using Item.Food.Data.Food_Type;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

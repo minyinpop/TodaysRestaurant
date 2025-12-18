@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Common.Value;
-using Item.Data.Ingredient;
+using Item.Ingredient;
 using Message_System.System.Child;
 using UnityEngine;
 

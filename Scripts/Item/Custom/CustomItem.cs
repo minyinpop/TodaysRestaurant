@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using Common.Value.Type;
-using UI_System;
+using Item.Data;
 
-namespace Item.Data.Custom
+namespace Item.Custom
 {
     internal sealed class CustomItem : ItemSO
     {

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace Animation_System.DOTween
 {
-    internal sealed class DoAnimation : MonoBehaviour
+    public sealed class DoAnimation : MonoBehaviour
     {
         private void OnEnable()
         {

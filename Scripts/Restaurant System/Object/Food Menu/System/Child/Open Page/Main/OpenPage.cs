@@ -8,7 +8,7 @@ using Common.Value;
 using Common.Value.Type;
 using Item;
 using Item.Data;
-using Item.Data.Food.Data.Food_Category;
+using Item.Food.Data.Food_Category;
 using Message_System.System.Main;
 using Player_System.Data.Main;
 using Restaurant_System.Object.Food_Menu.Object;

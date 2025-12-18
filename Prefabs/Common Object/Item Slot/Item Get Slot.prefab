@@ -90,8 +90,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22e73a8681fd4f91b56f08a22763dc03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::General.Object.Item_Slot.Type.ItemGetSlot
-  BackgroundRect: {fileID: 5710194468911876270}
+  SlotRect: {fileID: 264325939416065817}
+  SlotImage: {fileID: 0}
+  SelectedColor: {r: 0, g: 0, b: 0, a: 0}
+  UnSelectedColor: {r: 0, g: 0, b: 0, a: 0}
+  ItemRect: {fileID: 0}
   ItemImage: {fileID: 1793524457923033734}
+  HaveItemColor: {r: 0, g: 0, b: 0, a: 0}
+  NoItemColor: {r: 0, g: 0, b: 0, a: 0}
   DoAnimation: {fileID: 4754010815345393634}
   ScaleUpSettings:
     EndValue: {x: 1.1, y: 1.1, z: 1}
@@ -101,6 +107,7 @@ MonoBehaviour:
     EndValue: {x: 1, y: 1, z: 1}
     Duration: 0.2
     Ease: 18
+  Interactable: 1
 --- !u!114 &4754010815345393634
 MonoBehaviour:
   m_ObjectHideFlags: 0

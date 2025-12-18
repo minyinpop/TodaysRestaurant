@@ -7,7 +7,7 @@ using Common.Object;
 using Common.Object.Storage_Slot;
 using Item;
 using Item.Data;
-using Item.Data.Food;
+using Item.Food;
 using UnityEngine;
 
 namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Child

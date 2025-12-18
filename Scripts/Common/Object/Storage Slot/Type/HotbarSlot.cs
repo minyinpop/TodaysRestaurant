@@ -1,57 +1,37 @@
-using Animation_System.DOTween;
-using Animation_System.DOTween.Basic;
 using Item.Data;
-using UnityEngine;
-using UnityEngine.UI;
 
 namespace Common.Object.Storage_Slot.Type
 {
-    internal sealed class HotbarSlot : StorageSlot
+    public sealed class HotbarSlot : StorageSlot
     {
-        [field: Header("Object")]
-        [field: SerializeField] private RectTransform BackgroundRect;
-        [field: SerializeField] private Image ItemImage;
-        
-        [field: Header("State")]
-        [field: SerializeField] private bool Interactable = true;
-        private bool IsSelected;
-        
-        [field: Header("Selection Colors")]
-        [field: SerializeField] private Image BackgroundImage;
-        [field: SerializeField] private Color SelectedColor;
-        [field: SerializeField] private Color UnSelectedColor;
-        [Space(6)]
-        [field: SerializeField] private DoAnimation DoAnimation;
-        [field: SerializeField] private DoScale SelectedAnimation;
-        [field: SerializeField] private DoScale UnSelectedAnimation;
-        
         private ItemSO ItemData;
+        private bool IsSelected;
         
         #region Storage Slot
             #region PointerEvent
                 protected override void OnPointerEnter()
                 {
                     if (!Interactable) return;
-                    DoAnimation.DoScale_UI(BackgroundRect, SelectedAnimation);
+                    DoAnimation.DoScale_UI(SlotRect, ScaleUpSettings);
                 }
 
                 protected override void OnPointerExit()
                 {
                     if (!Interactable) return;
-                    DoAnimation.DoScale_UI(BackgroundRect, UnSelectedAnimation);
+                    DoAnimation.DoScale_UI(SlotRect, ScaleDownSettings);
                 }
             #endregion
 
             #region Interaction
                 public override void Selected()
                 {
-                    BackgroundImage.color = SelectedColor;
+                    SlotImage.color = SelectedColor;
                     ItemData?.Selected();
                 }
 
                 public override void UnSelected()
                 {
-                    BackgroundImage.color = UnSelectedColor;
+                    SlotImage.color = UnSelectedColor;
                     ItemData?.UnSelected();
                 }
 

@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Animation_System.DOTween.Basic
 {
     [Serializable]
-    internal sealed class DoFade_CanvasGroup
+    public sealed class DoFade_CanvasGroup
     {
         [field: Header("Values")]
         [field: SerializeField, Range(0, 1)] private float EndValue;

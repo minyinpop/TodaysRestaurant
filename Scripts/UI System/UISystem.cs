@@ -1,4 +1,4 @@
-using Item.Data.Serving_Note;
+using Item.Serving_Note;
 using UnityEngine;
 
 namespace UI_System

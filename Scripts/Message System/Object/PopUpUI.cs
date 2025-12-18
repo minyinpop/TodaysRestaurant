@@ -7,7 +7,7 @@ using Animation_System.DOTween.Basic;
 using Common.Object;
 using Common.Object.Storage_Slot;
 using Common.Value;
-using Item.Data.Ingredient;
+using Item.Ingredient;
 using TMPro;
 using UnityEngine;
 

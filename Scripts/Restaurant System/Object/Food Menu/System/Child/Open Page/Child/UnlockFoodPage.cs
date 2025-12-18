@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Item;
 using Item.Data;
-using Item.Data.Food.Data.Food_Category;
+using Item.Food.Data.Food_Category;
 using Restaurant_System.Object.Food_Menu.Object.Item_Slot.Base;
 using UnityEngine;
 
