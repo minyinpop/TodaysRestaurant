@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Restaurant_System.Object.Food_Menu.System.Main;
-using Restaurant_System.System.Child.Customer_Manager_System;
+using Restaurant_System.System.Child;
 using Restaurant_System.System.Main.State_Machine;
 using Restaurant_System.System.Main.State_Machine.State;
 using UnityEngine;

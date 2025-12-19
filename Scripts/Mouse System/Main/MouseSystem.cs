@@ -34,39 +34,45 @@ namespace Mouse_System.Main
 
         private void OnPointerClicked()
         {
-            InputSystem.GetMousePosition(out var position);
-            if (!UI()) WorldSpace();
-            return;
+            #region Main
+                InputSystem.GetMousePosition(out var position);
+                if (!UI()) WorldSpace();
+                return;
+            #endregion
 
-            bool UI()
-            {
-                var pointer = new PointerEventData(EventSystem)
+            #region UI
+                bool UI()
                 {
-                    position = position
-                };
-                
-                var results = new List<RaycastResult>();
-                EventSystem.RaycastAll(pointer, results);
-                
-                if (results.Count == 0) return false;
-                if (results[0].gameObject.CompareTag(StorageSlot))
-                {
-                    ItemDragSystem.OnClick(results[0].gameObject);
-                    return true;
+                    var pointer = new PointerEventData(EventSystem)
+                    {
+                        position = position
+                    };
+                    
+                    var results = new List<RaycastResult>();
+                    EventSystem.RaycastAll(pointer, results);
+                    
+                    if (results.Count == 0) return false;
+                    if (results[0].gameObject.CompareTag(StorageSlot))
+                    {
+                        ItemDragSystem.OnClick(results[0].gameObject);
+                        return true;
+                    }
+
+                    return false;
                 }
+            #endregion
 
-                return false;
-            }
-
-            void WorldSpace()
-            {
-                var ray = MainCamera.ScreenPointToRay(position);
-                var hit2D = Physics2D.GetRayIntersection(ray);
-                if (hit2D.collider is null) return;
-                
-                var obj = hit2D.collider.gameObject;
-                if (obj.CompareTag(UtensilsTag)) obj.GetComponent<Utensils>().OnClick(MainCamera);
-            }
+            #region WorldSpace
+                void WorldSpace()
+                {
+                    var ray = MainCamera.ScreenPointToRay(position);
+                    var hit2D = Physics2D.GetRayIntersection(ray);
+                    if (hit2D.collider is null) return;
+                    
+                    var obj = hit2D.collider.gameObject;
+                    if (obj.CompareTag(UtensilsTag)) obj.GetComponent<Utensils>().OnClick(MainCamera);
+                }
+            #endregion
         }
     }
 }

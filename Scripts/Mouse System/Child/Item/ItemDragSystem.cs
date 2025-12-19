@@ -7,54 +7,68 @@ namespace Mouse_System.Child.Item
 {
     internal sealed class ItemDragSystem : MonoBehaviour
     {
-        [field: Header("Drag UI")]
-        [field: SerializeField] private GameObject DragUIPrefab;
-        [field: SerializeField] private Transform DragUIParent;
+        [field: Header("Drag UI Settings")]
+        [field: SerializeField] private GameObject dragUIPrefab;
+        [field: SerializeField] private Transform dragUIParent;
+        private GameObject dragUI;
+        private ItemDragUI dragUI_ItemDragUI;
         
-        private GameObject DragUI;
-        private ItemDragUI DragUIScript;
+        // Storage
+        public StorageSlot sourceSlot; // TODO public to private
+        public StorageSlot destinationSlot; // TODO public to private
         
-        private ItemSO DraggedItemData;
+        // Item
+        private ItemSO draggedItem;
 
         public void OnClick(GameObject itemSlot)
         {
             if (itemSlot is null) return;
-            if (DraggedItemData is null) TryToTakeItem();
+            if (draggedItem is null) TryToTakeItem();
             else
             {
-                var currentItemSlotScript = itemSlot.GetComponent<StorageSlot>();
-                if (currentItemSlotScript.IsEmpty()) PutItemToEmptySlot(currentItemSlotScript);
-                else SwitchItem(currentItemSlotScript);
+                destinationSlot = itemSlot.GetComponent<StorageSlot>();
+                if (destinationSlot.IsEmpty()) PutItemToEmptySlot();
+                else SwitchItem();
             }
 
             return;
             
             void TryToTakeItem()
             {
-                itemSlot.GetComponent<StorageSlot>().GetItem(out var item);
-                if (item is null) return;
-                DraggedItemData = item;
-                DragUI = Instantiate(DragUIPrefab, DragUIParent);
-                DragUIScript = DragUI.GetComponent<ItemDragUI>();
-                DragUIScript.SetSprite(item.ItemSprite);
+                sourceSlot = itemSlot.GetComponent<StorageSlot>();
+                sourceSlot.GetItem(out var item);
+                if (item is null)
+                {
+                    sourceSlot = null;
+                    return;
+                }
+
+                draggedItem = item;
+                dragUI = Instantiate(dragUIPrefab, dragUIParent);
+                dragUI_ItemDragUI = dragUI.GetComponent<ItemDragUI>();
+                dragUI_ItemDragUI.SetSprite(item.ItemSprite);
             }
 
-            void PutItemToEmptySlot(StorageSlot currentStorageSlotScript)
+            void PutItemToEmptySlot()
             {
-                currentStorageSlotScript.TryAddItem(DraggedItemData, out var isSuccess);
+                destinationSlot.TryAddItem(draggedItem, out var isSuccess);
                 if (!isSuccess) return;
-                Destroy(DragUI);
-                DragUI = null;
-                DragUIScript = null;
-                DraggedItemData = null;
+                Destroy(dragUI);
+                dragUI = null;
+                dragUI_ItemDragUI = null;
+                sourceSlot = null;
+                destinationSlot = null;
+                draggedItem = null;
             }
 
-            void SwitchItem(StorageSlot currentStorageSlotScript)
+            void SwitchItem()
             {
-                currentStorageSlotScript.GetItem(out var item);
-                currentStorageSlotScript.TryAddItem(DraggedItemData, out _);
-                DraggedItemData = item;
-                DragUIScript.SetSprite(item.ItemSprite);
+                destinationSlot.GetItem(out var item);
+                destinationSlot.TryAddItem(draggedItem, out _);
+                draggedItem = item;
+                dragUI_ItemDragUI.SetSprite(item.ItemSprite);
+                destinationSlot = null;
+                draggedItem = null;
             }
         }
     }
