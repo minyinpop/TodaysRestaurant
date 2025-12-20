@@ -1,10 +1,9 @@
-using Item.Data;
+using Item;
 
 namespace Common.Object.Storage_Slot.Type
 {
     public sealed class HotbarSlot : StorageSlot
     {
-        private ItemSO ItemData;
         private bool IsSelected;
         
         #region Storage Slot
@@ -42,31 +41,24 @@ namespace Common.Object.Storage_Slot.Type
             #endregion
 
             #region Item
-                public override void TryAddItem(ItemSO item, out bool isSuccess)
+                public override bool TryAddItem(ItemSO item)
                 {
-                    if (item is null) { isSuccess = false; return; }
-                    if (ItemData is not null) { isSuccess = false; return; }
+                    if (item is null) return false;
+                    if (ItemData is not null) return false;
                     
                     ItemData = item;
                     ItemImage.sprite = item.ItemSprite;
                     ItemImage.gameObject.SetActive(true);
-                    isSuccess = true;
+                    return true;
                 }
 
-                public override void GetItem(out ItemSO item)
+                public override void TryGetItem(out ItemSO item)
                 {
                     if (ItemData is null) item = null;
                     item = ItemData;
                     ItemData = null;
                     ItemImage.gameObject.SetActive(false);
                     ItemImage.sprite = null;
-                }
-            #endregion
-
-            #region Status
-                public override bool IsEmpty()
-                {
-                    return ItemData is null;
                 }
             #endregion
         #endregion

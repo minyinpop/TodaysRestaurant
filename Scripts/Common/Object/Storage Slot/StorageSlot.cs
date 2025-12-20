@@ -1,7 +1,7 @@
 using System;
 using Animation_System.DOTween;
 using Animation_System.DOTween.Basic;
-using Item.Data;
+using Item;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -29,30 +29,32 @@ namespace Common.Object.Storage_Slot
 
         [field: Header("Status Settings")]
         [field: SerializeField] protected bool Interactable;
+
+        protected ItemSO ItemData;
         
         #region Interaction
-            public virtual void Selected() =>
-                throw new NotImplementedException();
-            public virtual void UnSelected() =>
-                throw new NotImplementedException();
-            public virtual void Use() =>
-                throw new NotImplementedException();
+            public virtual void Selected() { }
+            public virtual void UnSelected() { }
+            public virtual void Use() { }
         #endregion
         
         #region Item
-            public virtual void TryAddItem(ItemSO item, out bool isSuccess) =>
-                throw new NotImplementedException();
-            public virtual void TryAddItem(ItemSO item, Action onComplete) =>
-                throw new NotImplementedException();
-            public virtual void GetItem(out ItemSO item) =>
-                throw new NotImplementedException();
+            public virtual bool TryAddItem(ItemSO item) => false;
+            public virtual void TryAddItem(ItemSO item, Action onComplete) { }
+            public virtual void TryGetItem(out ItemSO item) => item = ItemData;
         #endregion
         
         #region Status
-            public virtual bool IsEmpty() =>
-                throw new NotImplementedException();
-            public virtual void SetInteractable(bool interactable) =>
-                throw new NotImplementedException();
+            public bool IsEmpty()
+            {
+                return ItemData is null;
+            }
+            
+            public void SetInteractable(bool interactable)
+            {
+                Interactable = interactable;
+                if (!interactable) DoAnimation?.DoScale_UI(SlotRect, ScaleDownSettings);
+            }
         #endregion
     }
 }

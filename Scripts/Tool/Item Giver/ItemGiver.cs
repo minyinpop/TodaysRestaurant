@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Item;
-using Item.Data;
 using UnityEngine;
 
 namespace Tool.Item_Giver

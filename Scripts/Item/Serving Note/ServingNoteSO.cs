@@ -1,11 +1,11 @@
 using System;
-using Item.Data;
+using UI_System;
 using UnityEngine;
 
 namespace Item.Serving_Note
 {
     [CreateAssetMenu(menuName = "Minyinpop/Item/Serving Note", fileName = "New Data")]
-    internal sealed class ServingNoteSO : ItemSO
+    internal sealed class ServingNoteSO : ItemSO, IUIHandler
     {
         [field: SerializeField] private GameObject UIObject;
         
@@ -13,8 +13,8 @@ namespace Item.Serving_Note
             public override void Selected() { }
             public override void UnSelected() { }
             
-            public static event Action<GameObject> OnUseItem;
-            public override void Use() => OnUseItem?.Invoke(UIObject);
+            public static event Action<IUIHandler, GameObject> OnUseItem;
+            public override void Use() => OnUseItem?.Invoke(this, UIObject);
         #endregion
     }
 }

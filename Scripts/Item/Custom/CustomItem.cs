@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Common.Value.Type;
-using Item.Data;
 
 namespace Item.Custom
 {

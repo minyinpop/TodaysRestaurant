@@ -30,7 +30,7 @@ namespace Input_System.Main
             InputManager.Enable();
             
             #region Mouse
-                InputManager.Mouse.LeftButton.performed += OnMouseLeftButtonClicked;
+                InputManager.Mouse.LeftButton.performed += OnLeftButtonClicked;
             #endregion
             
             #region Player
@@ -43,7 +43,7 @@ namespace Input_System.Main
         private void OnDisable()
         {
             #region Mouse
-                InputManager.Mouse.LeftButton.performed -= OnMouseLeftButtonClicked;
+                InputManager.Mouse.LeftButton.performed -= OnLeftButtonClicked;
             #endregion
             
             #region Player
@@ -90,8 +90,8 @@ namespace Input_System.Main
         #endregion
         
         #region Mouse
-            public static event Action OnClickedMouseLeftButton;
-            private static void OnMouseLeftButtonClicked(InputAction.CallbackContext context) => OnClickedMouseLeftButton?.Invoke();
+            public static event Action OnClickedLeftButton;
+            private static void OnLeftButtonClicked(InputAction.CallbackContext context) => OnClickedLeftButton?.Invoke();
             public static void GetMousePosition(out Vector2 position) => position = InputManager.Mouse.MousePosition.ReadValue<Vector2>();
         #endregion
     }

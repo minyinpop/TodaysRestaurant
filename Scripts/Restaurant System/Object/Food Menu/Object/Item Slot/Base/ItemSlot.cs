@@ -1,7 +1,6 @@
 using System;
 using Common;
 using Item;
-using Item.Data;
 
 namespace Restaurant_System.Object.Food_Menu.Object.Item_Slot.Base
 {

@@ -1,5 +1,5 @@
 using Common.Object.Storage_Slot;
-using Item.Data;
+using Item;
 using Mouse_System.Child.Item.Object;
 using UnityEngine;
 
@@ -36,7 +36,7 @@ namespace Mouse_System.Child.Item
             void TryToTakeItem()
             {
                 sourceSlot = itemSlot.GetComponent<StorageSlot>();
-                sourceSlot.GetItem(out var item);
+                sourceSlot.TryGetItem(out var item);
                 if (item is null)
                 {
                     sourceSlot = null;
@@ -51,8 +51,7 @@ namespace Mouse_System.Child.Item
 
             void PutItemToEmptySlot()
             {
-                destinationSlot.TryAddItem(draggedItem, out var isSuccess);
-                if (!isSuccess) return;
+                if (!destinationSlot.TryAddItem(draggedItem)) return;
                 Destroy(dragUI);
                 dragUI = null;
                 dragUI_ItemDragUI = null;
@@ -63,8 +62,8 @@ namespace Mouse_System.Child.Item
 
             void SwitchItem()
             {
-                destinationSlot.GetItem(out var item);
-                destinationSlot.TryAddItem(draggedItem, out _);
+                destinationSlot.TryGetItem(out var item);
+                if (!destinationSlot.TryAddItem(draggedItem)) return;
                 draggedItem = item;
                 dragUI_ItemDragUI.SetSprite(item.ItemSprite);
                 destinationSlot = null;

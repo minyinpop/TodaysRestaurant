@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Common.Value.Type;
 using UnityEngine;
 
-namespace Item.Data
+namespace Item
 {
     public abstract class ItemSO : ScriptableObject
     {

@@ -1,4 +1,4 @@
-using Item.Data;
+using Item;
 using Player_System.System.Child.Inventory.Child;
 using UnityEngine;
 
@@ -15,15 +15,14 @@ namespace Player_System.System.Child.Inventory.Main
             Hotbar.OnPerformedHotbar(hotbarIndex);
         }
 
-        public void OnClickedMouseLeftButton()
+        public void OnClickedLeftButton()
         {
-            Hotbar.OnClickedMouseLeftButton();
+            Hotbar.OnClickedLeftButton();
         }
 
         public bool TryAddItem(ItemSO item)
         {
-            Hotbar.TryAddItem(item, out var isSuccess);
-            return isSuccess;
+            return Hotbar.TryAddItem(item);
         }
     }
 }

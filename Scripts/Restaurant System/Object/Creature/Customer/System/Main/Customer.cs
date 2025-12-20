@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using Common;
 using Common.Object;
 using Item;
-using Item.Data;
 using Restaurant_System.Object.Creature.Customer.System.Child;
 using Restaurant_System.Object.Creature.Customer.System.Main.State_Machine;
 using Restaurant_System.Object.Creature.Customer.System.Main.State_Machine.State;

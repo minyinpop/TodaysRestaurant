@@ -1,5 +1,6 @@
+using System.Linq;
 using Common.Object.Storage_Slot.Type;
-using Item.Data;
+using Item;
 using Player_System.Data.Child.Inventory;
 using UnityEngine;
 
@@ -15,15 +16,14 @@ namespace Player_System.System.Child.Inventory.Child
         
         private HotbarSlot SelectedHotbarSlot;
 
-        public void TryAddItem(ItemSO itemData, out bool isSuccess)
+        public bool TryAddItem(ItemSO itemData)
         {
-            foreach (var hotbarSlot in HotbarSlots)
+            if (HotbarSlots.Any(hotbarSlot => hotbarSlot.TryAddItem(itemData)))
             {
-                hotbarSlot.TryAddItem(itemData, out isSuccess);
-                if (isSuccess) return;
+                return true;
             }
-            
-            isSuccess = false;
+
+            return false;
         }
 
         public void OnPerformedHotbar(int hotbarIndex)
@@ -31,7 +31,7 @@ namespace Player_System.System.Child.Inventory.Child
             ChangeSelectedHotbarSlot(HotbarSlots[hotbarIndex]);
         }
 
-        public void OnClickedMouseLeftButton()
+        public void OnClickedLeftButton()
         {
             SelectedHotbarSlot?.Use();
         }

@@ -6,7 +6,6 @@ using Animation_System.DOTween.Basic;
 using Common.Object;
 using Common.Object.Storage_Slot;
 using Item;
-using Item.Data;
 using Item.Food;
 using UnityEngine;
 
@@ -59,7 +58,7 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Child
                 var itemSlot = Instantiate(ItemSlotPrefab, ItemSlotParent);
                 var itemSlot_ItemSlot = itemSlot.GetComponent<StorageSlot>();
                 ItemSlots.Add(itemSlot_ItemSlot);
-                itemSlot_ItemSlot.TryAddItem(itemData, out _);
+                itemSlot_ItemSlot.TryAddItem(itemData);
             }
             
             // UI
@@ -101,7 +100,7 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Child
             ingredients = new Queue<ItemSO>();
             foreach (var itemSlot in ItemSlots)
             {
-                itemSlot.GetItem(out var item);
+                itemSlot.TryGetItem(out var item);
                 ingredients.Enqueue(item);
             }
         }
