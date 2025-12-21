@@ -4,7 +4,7 @@ using Item;
 using Player_System.Data.Child.Inventory;
 using UnityEngine;
 
-namespace Player_System.System.Child.Inventory.Child
+namespace Player_System.System.Child.Inventory_System.Child
 {
     internal sealed class Hotbar : MonoBehaviour
     {

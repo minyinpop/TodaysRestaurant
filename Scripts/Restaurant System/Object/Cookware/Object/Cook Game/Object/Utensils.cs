@@ -50,7 +50,7 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Game.Object
             {
                 MainCamera = mainCamera;
 
-                InputSystem.GetMousePosition(out var screenPos);
+                var screenPos = InputSystem.MousePosition();
                 
                 var ray = MainCamera.ScreenPointToRay(screenPos);
                 var isNormal = - MainCamera.transform.forward;
@@ -73,7 +73,7 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Game.Object
             {
                 while (IsPicked)
                 {
-                    InputSystem.GetMousePosition(out var screenPos);
+                    var screenPos = InputSystem.MousePosition();
                     var ray = MainCamera.ScreenPointToRay(screenPos);
 
                     if (DragPlane.Raycast(ray, out var enter))

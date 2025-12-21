@@ -4,7 +4,8 @@ using Input_System.Main;
 using Item;
 using Player_System.System.Child;
 using Player_System.System.Child.Detect_System.Main;
-using Player_System.System.Child.Inventory.Main;
+using Player_System.System.Child.Inventory_System.Main;
+using Player_System.System.Child.Mouse_System.Main;
 using Player_System.System.Main.State_Machine;
 using Player_System.System.Main.State_Machine.State;
 using Restaurant_System.Object.Cookware.System;
@@ -15,12 +16,15 @@ namespace Player_System.System.Main
 {
     public sealed class PlayerSystem : MonoBehaviour
     {
-        [field: Header("Child System")]
+        [field: Header("System Components")]
+        [field: SerializeField] private MouseSystem MouseSystem;
+        [field: SerializeField] private InventorySystem InventorySystem;
+        
+        [field: Header("Character Components")]
         [field: SerializeField] private MoveSystem MoveSystem;
         [field: SerializeField] private AnimationSystem AnimationSystem;
         [field: SerializeField] private DetectSystem DetectSystem;
-        [field: SerializeField] private InventorySystem InventorySystem;
-
+        
         private readonly StateMachine StateMachine = new();
         
         private readonly Queue<Action> ActiveActions = new();
@@ -32,12 +36,15 @@ namespace Player_System.System.Main
 
         private void OnEnable()
         {
+            InputSystem.OnClickedLeftButton += OnClickedLeftButton;
+            ActiveActions.Enqueue(() => InputSystem.OnClickedLeftButton -= OnClickedLeftButton);
+            
+            InputSystem.OnClickedRightButton += OnClickedRightButton;
+            ActiveActions.Enqueue(() => InputSystem.OnClickedRightButton -= OnClickedRightButton);
+            
             #region InventorySystem
                 InputSystem.OnPerformedHotbar += OnPerformedHotbar;
                 ActiveActions.Enqueue(() => InputSystem.OnPerformedHotbar -= OnPerformedHotbar);
-                
-                InputSystem.OnClickedLeftButton += OnClickedLeftButton;
-                ActiveActions.Enqueue(() => InputSystem.OnClickedLeftButton -= OnClickedLeftButton);
                 
                 CookwareSystem.OnClickCompleteBubble += TryAddItem;
                 ActiveActions.Enqueue(() => CookwareSystem.OnClickCompleteBubble -= TryAddItem);
@@ -60,6 +67,11 @@ namespace Player_System.System.Main
         }
 
         private void OnClickedLeftButton()
+        {
+            MouseSystem.OnClickedLeftButton();
+        }
+
+        private void OnClickedRightButton()
         {
             InventorySystem.OnClickedLeftButton();
         }

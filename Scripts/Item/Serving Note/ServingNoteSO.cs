@@ -5,16 +5,17 @@ using UnityEngine;
 namespace Item.Serving_Note
 {
     [CreateAssetMenu(menuName = "Minyinpop/Item/Serving Note", fileName = "New Data")]
-    internal sealed class ServingNoteSO : ItemSO, IUIHandler
+    public sealed class ServingNoteSO : ItemSO
     {
-        [field: SerializeField] private GameObject UIObject;
+        [field: Header("Components")]
+        [field: SerializeField] private GameObject servingNotePrefab;
         
         #region Interaction
             public override void Selected() { }
             public override void UnSelected() { }
             
-            public static event Action<IUIHandler, GameObject> OnUseItem;
-            public override void Use() => OnUseItem?.Invoke(this, UIObject);
+            public static event Action<ServingNoteSO, GameObject> RequiresUI;
+            public override void Use() => RequiresUI?.Invoke(this, servingNotePrefab);
         #endregion
     }
 }

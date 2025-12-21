@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
@@ -10,6 +11,8 @@ namespace Input_System.Main
         private static GameObject Instance;
 
         private static InputManager InputManager;
+        
+        private readonly Queue<Action> ActiveActions = new();
 
         private void Awake()
         {
@@ -31,27 +34,27 @@ namespace Input_System.Main
             
             #region Mouse
                 InputManager.Mouse.LeftButton.performed += OnLeftButtonClicked;
+                ActiveActions.Enqueue(() => InputManager.Mouse.LeftButton.performed -= OnLeftButtonClicked);
+                
+                InputManager.Mouse.RightButtom.performed += OnRightButtonClicked;
+                ActiveActions.Enqueue(() => InputManager.Mouse.RightButtom.performed -= OnRightButtonClicked);
             #endregion
             
             #region Player
                 InputManager.Player.Walk.started += OnPlayerWalkStarted;
+                ActiveActions.Enqueue(() => InputManager.Player.Walk.started -= OnPlayerWalkStarted);
+                
                 InputManager.Player.Walk.canceled += OnPlayerWalkCanceled;
+                ActiveActions.Enqueue(() => InputManager.Player.Walk.canceled -= OnPlayerWalkCanceled);
+                
                 InputManager.Player.Hotbar.performed += OnHotbarPerformed;
+                ActiveActions.Enqueue(() => InputManager.Player.Hotbar.performed -= OnHotbarPerformed);
             #endregion
         }
 
         private void OnDisable()
         {
-            #region Mouse
-                InputManager.Mouse.LeftButton.performed -= OnLeftButtonClicked;
-            #endregion
-            
-            #region Player
-                InputManager.Player.Walk.started -= OnPlayerWalkStarted;
-                InputManager.Player.Walk.canceled -= OnPlayerWalkCanceled;
-                InputManager.Player.Hotbar.performed -= OnHotbarPerformed;
-            #endregion
-            
+            while (ActiveActions.Count > 0) ActiveActions.Dequeue()?.Invoke();
             InputManager.Disable();
         }
         
@@ -59,6 +62,7 @@ namespace Input_System.Main
             #region Walk
                 public static event Action OnStartedPlayerWalk;
                 private static void OnPlayerWalkStarted(InputAction.CallbackContext context) => OnStartedPlayerWalk?.Invoke();
+                
                 public static event Action OnCancelPlayerWalk;
                 private static void OnPlayerWalkCanceled(InputAction.CallbackContext context) => OnCancelPlayerWalk?.Invoke();
                 
@@ -92,7 +96,11 @@ namespace Input_System.Main
         #region Mouse
             public static event Action OnClickedLeftButton;
             private static void OnLeftButtonClicked(InputAction.CallbackContext context) => OnClickedLeftButton?.Invoke();
-            public static void GetMousePosition(out Vector2 position) => position = InputManager.Mouse.MousePosition.ReadValue<Vector2>();
+            
+            public static event Action OnClickedRightButton;
+            private static void OnRightButtonClicked(InputAction.CallbackContext context) => OnClickedRightButton?.Invoke();
+            
+            public static Vector2 MousePosition() => InputManager.Mouse.MousePosition.ReadValue<Vector2>();
         #endregion
     }
 }

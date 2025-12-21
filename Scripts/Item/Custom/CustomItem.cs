@@ -3,7 +3,7 @@ using Common.Value.Type;
 
 namespace Item.Custom
 {
-    internal sealed class CustomItem : ItemSO
+    public sealed class CustomItem : ItemSO
     {
         private readonly ItemSO LegacyItemData;
         private readonly float OverrideCookTime;

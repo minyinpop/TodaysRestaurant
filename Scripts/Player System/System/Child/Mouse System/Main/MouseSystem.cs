@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using Input_System.Main;
-using Mouse_System.Child.Item;
+using Player_System.System.Child.Mouse_System.Child;
 using Restaurant_System.Object.Cookware.Object.Cook_Game.Object;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace Mouse_System.Main
+namespace Player_System.System.Child.Mouse_System.Main
 {
     internal sealed class MouseSystem : MonoBehaviour
     {
@@ -21,21 +21,11 @@ namespace Mouse_System.Main
         [field: Header("Tag")]
         [field: SerializeField] private string StorageSlot;
         [field: SerializeField] private string UtensilsTag;
-        
-        private void OnEnable()
-        {
-            InputSystem.OnClickedLeftButton += OnPointerClicked;
-        }
-        
-        private void OnDisable()
-        {
-            InputSystem.OnClickedLeftButton -= OnPointerClicked;
-        }
 
-        private void OnPointerClicked()
+        public void OnClickedLeftButton()
         {
             #region Main
-                InputSystem.GetMousePosition(out var position);
+            var position = InputSystem.MousePosition();
                 if (!UI()) WorldSpace();
                 return;
             #endregion

@@ -23,7 +23,7 @@ namespace Restaurant_System.System.Main
         
         private void Start()
         {
-            PlayerChooseFoodOnCookMenu();
+            // PlayerChooseFoodOnCookMenu();
         }
 
         private void OnDisable()

@@ -348,6 +348,15 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""Right Buttom"",
+                    ""type"": ""Button"",
+                    ""id"": ""490f6526-8432-4e4b-8ee5-2954ca2030f6"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""Mouse Position"",
                     ""type"": ""Value"",
                     ""id"": ""e067a65c-82c7-4d66-a4be-eb2ccae5ae7c"",
@@ -377,6 +386,17 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
                     ""action"": ""Left Button"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d742449e-ca48-4a97-b689-c1cf92eeb037"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Right Buttom"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -453,6 +473,7 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
         // Mouse
         m_Mouse = asset.FindActionMap("Mouse", throwIfNotFound: true);
         m_Mouse_LeftButton = m_Mouse.FindAction("Left Button", throwIfNotFound: true);
+        m_Mouse_RightButtom = m_Mouse.FindAction("Right Buttom", throwIfNotFound: true);
         m_Mouse_MousePosition = m_Mouse.FindAction("Mouse Position", throwIfNotFound: true);
     }
 
@@ -643,6 +664,7 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Mouse;
     private List<IMouseActions> m_MouseActionsCallbackInterfaces = new List<IMouseActions>();
     private readonly InputAction m_Mouse_LeftButton;
+    private readonly InputAction m_Mouse_RightButtom;
     private readonly InputAction m_Mouse_MousePosition;
     /// <summary>
     /// Provides access to input actions defined in input action map "Mouse".
@@ -659,6 +681,10 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Mouse/LeftButton".
         /// </summary>
         public InputAction @LeftButton => m_Wrapper.m_Mouse_LeftButton;
+        /// <summary>
+        /// Provides access to the underlying input action "Mouse/RightButtom".
+        /// </summary>
+        public InputAction @RightButtom => m_Wrapper.m_Mouse_RightButtom;
         /// <summary>
         /// Provides access to the underlying input action "Mouse/MousePosition".
         /// </summary>
@@ -692,6 +718,9 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
             @LeftButton.started += instance.OnLeftButton;
             @LeftButton.performed += instance.OnLeftButton;
             @LeftButton.canceled += instance.OnLeftButton;
+            @RightButtom.started += instance.OnRightButtom;
+            @RightButtom.performed += instance.OnRightButtom;
+            @RightButtom.canceled += instance.OnRightButtom;
             @MousePosition.started += instance.OnMousePosition;
             @MousePosition.performed += instance.OnMousePosition;
             @MousePosition.canceled += instance.OnMousePosition;
@@ -709,6 +738,9 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
             @LeftButton.started -= instance.OnLeftButton;
             @LeftButton.performed -= instance.OnLeftButton;
             @LeftButton.canceled -= instance.OnLeftButton;
+            @RightButtom.started -= instance.OnRightButtom;
+            @RightButtom.performed -= instance.OnRightButtom;
+            @RightButtom.canceled -= instance.OnRightButtom;
             @MousePosition.started -= instance.OnMousePosition;
             @MousePosition.performed -= instance.OnMousePosition;
             @MousePosition.canceled -= instance.OnMousePosition;
@@ -846,6 +878,13 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnLeftButton(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Right Buttom" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnRightButtom(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "Mouse Position" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>

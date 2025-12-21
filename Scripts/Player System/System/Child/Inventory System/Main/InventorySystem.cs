@@ -1,8 +1,8 @@
 using Item;
-using Player_System.System.Child.Inventory.Child;
+using Player_System.System.Child.Inventory_System.Child;
 using UnityEngine;
 
-namespace Player_System.System.Child.Inventory.Main
+namespace Player_System.System.Child.Inventory_System.Main
 {
     internal sealed class InventorySystem : MonoBehaviour
     {

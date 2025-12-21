@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Item.Food
 {
     [CreateAssetMenu(menuName = "Minyinpop/Item/Dish Data", fileName = "New Data")]
-    internal sealed class FoodSO : ItemSO
+    public sealed class FoodSO : ItemSO
     {
         #region Item Type
             [field: Header("Item Type")]
