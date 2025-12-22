@@ -14,8 +14,8 @@ namespace Item.Serving_Note
             public override void Selected() { }
             public override void UnSelected() { }
             
-            public static event Action<ServingNoteSO, GameObject> RequiresUI;
-            public override void Use() => RequiresUI?.Invoke(this, servingNotePrefab);
+            public static event Action<ServingNoteSO, GameObject> ServingNoteUIRequired;
+            public override void Use() => ServingNoteUIRequired?.Invoke(this, servingNotePrefab);
         #endregion
     }
 }

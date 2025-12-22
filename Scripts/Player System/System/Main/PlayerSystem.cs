@@ -4,7 +4,6 @@ using Input_System.Main;
 using Item;
 using Player_System.System.Child;
 using Player_System.System.Child.Detect_System.Main;
-using Player_System.System.Child.Inventory_System.Main;
 using Player_System.System.Child.Mouse_System.Main;
 using Player_System.System.Main.State_Machine;
 using Player_System.System.Main.State_Machine.State;
@@ -17,18 +16,20 @@ namespace Player_System.System.Main
     public sealed class PlayerSystem : MonoBehaviour
     {
         [field: Header("System Components")]
-        [field: SerializeField] private MouseSystem MouseSystem;
-        [field: SerializeField] private InventorySystem InventorySystem;
+        [field: SerializeField] private MouseSystem mouseSystem;
+        [field: SerializeField] private InventorySystem inventorySystem;
         
         [field: Header("Character Components")]
-        [field: SerializeField] private MoveSystem MoveSystem;
-        [field: SerializeField] private AnimationSystem AnimationSystem;
-        [field: SerializeField] private DetectSystem DetectSystem;
+        [field: SerializeField] private MoveSystem moveSystem;
+        [field: SerializeField] private AnimationSystem animationSystem;
+        [field: SerializeField] private DetectSystem detectSystem;
         
         private readonly StateMachine StateMachine = new();
         
         private readonly Queue<Action> ActiveActions = new();
-
+        
+        public static event Action RightButtonClicked;
+        
         private void Start()
         {
             OnIdle();
@@ -36,15 +37,15 @@ namespace Player_System.System.Main
 
         private void OnEnable()
         {
-            InputSystem.OnClickedLeftButton += OnClickedLeftButton;
-            ActiveActions.Enqueue(() => InputSystem.OnClickedLeftButton -= OnClickedLeftButton);
+            InputSystem.OnClickedLeftButton += ClickLeftButton;
+            ActiveActions.Enqueue(() => InputSystem.OnClickedLeftButton -= ClickLeftButton);
             
-            InputSystem.OnClickedRightButton += OnClickedRightButton;
-            ActiveActions.Enqueue(() => InputSystem.OnClickedRightButton -= OnClickedRightButton);
+            InputSystem.OnClickedRightButton += ClickRightButton;
+            ActiveActions.Enqueue(() => InputSystem.OnClickedRightButton -= ClickRightButton);
             
             #region InventorySystem
-                InputSystem.OnPerformedHotbar += OnPerformedHotbar;
-                ActiveActions.Enqueue(() => InputSystem.OnPerformedHotbar -= OnPerformedHotbar);
+                InputSystem.OnPerformedHotbar += PerformHotbar;
+                ActiveActions.Enqueue(() => InputSystem.OnPerformedHotbar -= PerformHotbar);
                 
                 CookwareSystem.OnClickCompleteBubble += TryAddItem;
                 ActiveActions.Enqueue(() => CookwareSystem.OnClickCompleteBubble -= TryAddItem);
@@ -60,76 +61,84 @@ namespace Player_System.System.Main
         {
             while (ActiveActions.Count > 0) ActiveActions.Dequeue()?.Invoke();
         }
+        
+        #region InputSystem
+            private void ClickLeftButton()
+            {
+                mouseSystem.OnClickedLeftButton();
+            }
 
-        private void OnPerformedHotbar(int hotbarIndex)
-        {
-            InventorySystem.OnPerformedHotbar(hotbarIndex);
-        }
+            private void ClickRightButton()
+            {
+                RightButtonClicked?.Invoke();
+            }
+        #endregion
+        
+        #region InventorySystem
+            private void PerformHotbar(int hotbarIndex)
+            {
+                inventorySystem.PerformHotbar(hotbarIndex);
+            }
 
-        private void OnClickedLeftButton()
-        {
-            MouseSystem.OnClickedLeftButton();
-        }
-
-        private void OnClickedRightButton()
-        {
-            InventorySystem.OnClickedLeftButton();
-        }
-
-        private bool TryAddItem(ItemSO item)
-        {
-            var result = InventorySystem.TryAddItem(item);
-            return result;
-        }
+            private bool TryAddItem(ItemSO item)
+            {
+                var result = inventorySystem.TryAddItem(item);
+                return result;
+            }
+        #endregion
 
         #region StateMachine
-            private void OnIdle()
-            {
-                StateMachine.ChangeState(new OnIdle(OnEnter, OnExit));
-                return;
-
-                void OnEnter()
+            #region OnIdle
+                private void OnIdle()
                 {
-                    InputSystem.OnStartedPlayerWalk += OnWalk;
-                    ActiveActions.Enqueue(() => InputSystem.OnStartedPlayerWalk -= OnWalk);
+                    StateMachine.ChangeState(new OnIdle(OnEnter, OnExit));
+                    return;
+
+                    void OnEnter()
+                    {
+                        InputSystem.OnStartedPlayerWalk += OnWalk;
+                        ActiveActions.Enqueue(() => InputSystem.OnStartedPlayerWalk -= OnWalk);
+                        
+                        animationSystem.Idle();
+                    }
                     
-                    AnimationSystem.Idle();
+                    void OnExit()
+                    {
+                        InputSystem.OnStartedPlayerWalk -= OnWalk;
+                    }
                 }
-                
-                void OnExit()
+            #endregion
+
+            #region OnWalk
+                private void OnWalk()
                 {
-                    InputSystem.OnStartedPlayerWalk -= OnWalk;
-                }
-            }
+                    StateMachine.ChangeState(new OnWalk(OnEnter, OnExit));
+                    return;
 
-            private void OnWalk()
-            {
-                StateMachine.ChangeState(new OnWalk(OnEnter, OnExit));
-                return;
+                    void OnEnter()
+                    {
+                        InputSystem.OnCancelPlayerWalk += OnIdle;
+                        ActiveActions.Enqueue(() => InputSystem.OnCancelPlayerWalk -= OnIdle);
 
-                void OnEnter()
-                {
-                    InputSystem.OnCancelPlayerWalk += OnIdle;
-                    ActiveActions.Enqueue(() => InputSystem.OnCancelPlayerWalk -= OnIdle);
+                        moveSystem.WalkLeft += animationSystem.TurnsLeft;
+                        ActiveActions.Enqueue(() => moveSystem.WalkLeft -= animationSystem.TurnsLeft);
+                        
+                        moveSystem.WalkRight += animationSystem.TurnsRight;
+                        ActiveActions.Enqueue(() => moveSystem.WalkRight -= animationSystem.TurnsRight);
 
-                    MoveSystem.WalkLeft += AnimationSystem.TurnsLeft;
-                    ActiveActions.Enqueue(() => MoveSystem.WalkLeft -= AnimationSystem.TurnsLeft);
+                        moveSystem.StartWalk();
+                        animationSystem.Walk();
+                    }
                     
-                    MoveSystem.WalkRight += AnimationSystem.TurnsRight;
-                    ActiveActions.Enqueue(() => MoveSystem.WalkRight -= AnimationSystem.TurnsRight);
-
-                    MoveSystem.StartWalk();
-                    AnimationSystem.Walk();
+                    void OnExit()
+                    {
+                        InputSystem.OnCancelPlayerWalk -= OnIdle;
+                        moveSystem.WalkLeft -= animationSystem.TurnsLeft;
+                        moveSystem.WalkRight -= animationSystem.TurnsRight;
+                        moveSystem.StopWalk();
+                    }
                 }
-                
-                void OnExit()
-                {
-                    InputSystem.OnCancelPlayerWalk -= OnIdle;
-                    MoveSystem.WalkLeft -= AnimationSystem.TurnsLeft;
-                    MoveSystem.WalkRight -= AnimationSystem.TurnsRight;
-                    MoveSystem.StopWalk();
-                }
-            }
+            #endregion
         #endregion
     }
 }

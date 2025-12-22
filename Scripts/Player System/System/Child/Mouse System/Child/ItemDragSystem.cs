@@ -12,7 +12,7 @@ namespace Player_System.System.Child.Mouse_System.Child
         
         private ItemSO _draggedItem;
         
-        public static event Action<bool, ItemSO> RequiresUI;
+        public static event Action<bool, ItemSO> ItemDragUIRequired;
 
         public void OnClick(GameObject itemSlot)
         {
@@ -38,13 +38,13 @@ namespace Player_System.System.Child.Mouse_System.Child
                 }
 
                 _draggedItem = item;
-                RequiresUI?.Invoke(true, _draggedItem);
+                ItemDragUIRequired?.Invoke(true, _draggedItem);
             }
 
             void PutItemToEmptySlot()
             {
                 if (!_destinationSlot.TryAddItem(_draggedItem)) return;
-                RequiresUI?.Invoke(false, null);
+                ItemDragUIRequired?.Invoke(false, null);
                 
                 _sourceSlot = null;
                 _destinationSlot = null;
@@ -56,7 +56,7 @@ namespace Player_System.System.Child.Mouse_System.Child
                 _destinationSlot.TryGetItem(out var item);
                 if (!_destinationSlot.TryAddItem(_draggedItem)) return;
                 _draggedItem = item;
-                RequiresUI?.Invoke(true, _draggedItem);
+                ItemDragUIRequired?.Invoke(true, _draggedItem);
                 
                 _sourceSlot = _destinationSlot;
                 _destinationSlot = null;
