@@ -11,9 +11,6 @@ namespace Common.Object
     [RequireComponent(typeof(DoAnimation))]
     public sealed class Button : PointerEvent
     {
-        [field: Header("State")]
-        [field: SerializeField] private bool Interactable;
-        
         [field: Header("Component")]
         [field: SerializeField] private RectTransform Rect;
         [field: SerializeField] private TextMeshProUGUI TitleTMP;
@@ -22,14 +19,15 @@ namespace Common.Object
         [field: SerializeField] private DoAnimation DoAnimation;
         [field: SerializeField] private DoScale OnPointerEnterScale;
         [field: SerializeField] private DoScale OnPointerExitScale;
+        
+        private bool Interactable;
 
-        public event Action OnClick;
+        public event Action onClick;
         
         public void SetInteractable(bool interactable)
         {
             Interactable = interactable;
-            if (!interactable)
-                DoAnimation?.DoScale_UI(Rect, OnPointerExitScale);
+            if (!interactable) DoAnimation?.DoScale_UI(Rect, OnPointerExitScale);
         }
 
         public void SetTitle(string title)
@@ -40,20 +38,17 @@ namespace Common.Object
         #region PointerEvent
             protected override void OnPointerEnter()
             {
-                if (Interactable)
-                    DoAnimation?.DoScale_UI(Rect, OnPointerEnterScale);
+                if (Interactable) DoAnimation?.DoScale_UI(Rect, OnPointerEnterScale);
             }
             
             protected override void OnPointerExit()
             {
-                if (Interactable)
-                    DoAnimation?.DoScale_UI(Rect, OnPointerExitScale);
+                if (Interactable) DoAnimation?.DoScale_UI(Rect, OnPointerExitScale);
             }
 
             protected override void OnPointerClick()
             {
-                if (Interactable)
-                    OnClick?.Invoke();
+                if (Interactable) onClick?.Invoke();
             }
         #endregion
     }

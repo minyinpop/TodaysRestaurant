@@ -4,28 +4,32 @@ using UnityEngine;
 
 namespace Restaurant_System.Object
 {
-    internal sealed class SeatPoint : MonoBehaviour
+    public sealed class SeatPoint : MonoBehaviour
     {
-        #region Customer
-            private Customer currentCustomer;
-            public void SetCustomer(Customer customer) => currentCustomer = customer;
-        #endregion
+        [field: Header("Seat Point")]
+        [field: SerializeField] private Transform standPoint;
+        [field: SerializeField] private Transform sitPoint;
+        
+        [field: Header("Serving Note")]
+        [field: SerializeField] private ServingNoteSO servingNoteData;
+
+        private Customer currentCustomer;
         
         #region Position
-            [field: Header("Point")]
-            [field: SerializeField] private Transform standPoint;
-            [field: SerializeField] private Transform sitPoint;
             public Transform StandPoint() => standPoint;
             public Transform SitPoint() => sitPoint;
         #endregion
         
-        #region Status
-            public bool IsOccupied() => currentCustomer is not null;
+        #region Serving Note
+            public ServingNoteSO ServingNote() => servingNoteData;
         #endregion
         
-        #region Data
-            [field: Header("Data")]
-            [field: SerializeField] private ServingNoteSO servingNoteData;
+        #region Customer
+            public void SetCustomer(Customer customer) => currentCustomer = customer;
+        #endregion
+        
+        #region Status
+            public bool IsOccupied() => currentCustomer is not null;
         #endregion
     }
 }

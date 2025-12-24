@@ -24,33 +24,27 @@ namespace Common.Object
         [field: SerializeField] private Color FullColor;
         [field: SerializeField] private Color EmptyColor;
         
-        private readonly List<Action> ActiveActions = new();
+        private readonly List<Action> _cleanUpActions = new();
         
-        private IEnumerator CountDownCor;
+        private IEnumerator countDownCor;
         
-        public event Action OnClick;
+        public event Action onClick;
 
         private void OnEnable()
         {
             if (Button is null) return;
-            Button.OnClick += OnClick;
-            ActiveActions.Add(() => Button.OnClick -= OnClick);
-            return;
-
-            void OnClick()
-            {
-                this.OnClick?.Invoke();
-            }
+            Button.onClick += onClick;
+            _cleanUpActions.Add(() => Button.onClick -= onClick);
         }
 
         private void OnDisable()
         {
-            foreach (var action in ActiveActions) action();
-            ActiveActions.Clear();
+            foreach (var action in _cleanUpActions) action();
+            _cleanUpActions.Clear();
 
-            if (CountDownCor is null) return;
-            StopCoroutine(CountDownCor);
-            CountDownCor = null;
+            if (countDownCor is null) return;
+            StopCoroutine(countDownCor);
+            countDownCor = null;
         }
         
         public void SetInteractable(bool interactable)
@@ -67,8 +61,8 @@ namespace Common.Object
         
         public void StartCountDown(float time, Action onComplete)
         {
-            CountDownCor = CountDownCoroutine();
-            StartCoroutine(CountDownCor);
+            countDownCor = CountDownCoroutine();
+            StartCoroutine(countDownCor);
             return;
 
             IEnumerator CountDownCoroutine()
@@ -94,8 +88,8 @@ namespace Common.Object
         
         public void ChangeItemImage(ItemSO item, float duration, Action onComplete)
         {
-            CountDownCor = CountDownCoroutine();
-            StartCoroutine(CountDownCor);
+            countDownCor = CountDownCoroutine();
+            StartCoroutine(countDownCor);
             return;
 
             IEnumerator CountDownCoroutine()

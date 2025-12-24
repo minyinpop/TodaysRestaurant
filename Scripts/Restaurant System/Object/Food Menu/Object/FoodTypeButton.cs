@@ -20,12 +20,12 @@ namespace Restaurant_System.Object.Food_Menu.Object
 
         private void OnEnable()
         {
-            Button.OnClick += OnClicked;
+            Button.onClick += OnClicked;
         }
         
         private void OnDisable()
         {
-            Button.OnClick -= OnClicked;
+            Button.onClick -= OnClicked;
         }
 
         public event Action<FoodType> OnClick;

@@ -27,12 +27,12 @@ namespace Restaurant_System.Object.Food_Menu.System.Child
 
         private void OnEnable()
         {
-            OpenButton.OnClick += OnOpenButtonClicked;
+            OpenButton.onClick += OnOpenButtonClicked;
             OpenButton.SetInteractable(true);
             ActiveActions.Add(() =>
             {
                 OpenButton.SetInteractable(false);
-                OpenButton.OnClick -= OnOpenButtonClicked;
+                OpenButton.onClick -= OnOpenButtonClicked;
             });
         }
         

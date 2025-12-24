@@ -46,10 +46,10 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Child
             if (PutIngredientUI.activeSelf) return;
             
             // Button
-            ConfirmButton.OnClick += onConfirm;
-            CloseAction.Add(() => ConfirmButton.OnClick -= onConfirm);
-            CloseButton.OnClick += onCancel;
-            CloseAction.Add(() => CloseButton.OnClick -= onCancel);
+            ConfirmButton.onClick += onConfirm;
+            CloseAction.Add(() => ConfirmButton.onClick -= onConfirm);
+            CloseButton.onClick += onCancel;
+            CloseAction.Add(() => CloseButton.onClick -= onCancel);
             
             // Item Slot
             selectedFoodData.GetRecipeSheet(out var recipeSheet);

@@ -23,12 +23,12 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.Object
 
         private void OnEnable()
         {
-            Button.OnClick += OnStickyNoteClicked;
+            Button.onClick += OnStickyNoteClicked;
         }
         
         private void OnDisable()
         {
-            Button.OnClick -= OnStickyNoteClicked;
+            Button.onClick -= OnStickyNoteClicked;
         }
 
         public void Init(FoodSO foodData)

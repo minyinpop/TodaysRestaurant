@@ -19,20 +19,20 @@ namespace Message_System.Object
         private void OnEnable()
         {
             if (ConfirmButton is not null)
-                ConfirmButton.OnClick += OnConfirmButtonClicked;
+                ConfirmButton.onClick += OnConfirmButtonClicked;
             if (CancelButton is not null)
-                CancelButton.OnClick += OnCancelButtonClicked;
+                CancelButton.onClick += OnCancelButtonClicked;
             if (CloseButton is not null)
-                CloseButton.OnClick += OnCloseButtonClicked;
+                CloseButton.onClick += OnCloseButtonClicked;
         }
         private void OnDisable()
         {
             if (ConfirmButton is not null)
-                ConfirmButton.OnClick -= OnConfirmButtonClicked;
+                ConfirmButton.onClick -= OnConfirmButtonClicked;
             if (CancelButton is not null)
-                CancelButton.OnClick -= OnCancelButtonClicked;
+                CancelButton.onClick -= OnCancelButtonClicked;
             if (CloseButton is not null)
-                CloseButton.OnClick -= OnCloseButtonClicked;
+                CloseButton.onClick -= OnCloseButtonClicked;
             if (ShowItemCor is not null)
             {
                 StopCoroutine(ShowItemCor);

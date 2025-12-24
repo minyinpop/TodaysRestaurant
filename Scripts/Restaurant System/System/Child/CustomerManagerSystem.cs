@@ -50,6 +50,7 @@ namespace Restaurant_System.System.Child
                         var newCustomer = Instantiate(CustomerPrefab, CustomerSpawnPoint.position, Quaternion.identity, CustomerParent).GetComponent<Customer>();
                         
                         seatPoint.SetCustomer(newCustomer);
+                        newCustomer.GiveServingNote(seatPoint.ServingNote());
                         newCustomer.WalkToSeatPoint(seatPoint.StandPoint(), seatPoint.SitPoint());
                         
                         yield return new WaitForSeconds(CustomerComeDuration);

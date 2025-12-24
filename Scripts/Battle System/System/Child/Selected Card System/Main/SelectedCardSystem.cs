@@ -57,13 +57,13 @@ namespace Battle_System.System.Child.Selected_Card_System.Main
 
         private void OnEnable()
         {
-            ConfirmButton.OnClick += OnConfirmButtonClick;
+            ConfirmButton.onClick += OnConfirmButtonClick;
             HandCardSystem.TryAddCardToSelected += TryAdd;
         }
         
         private void OnDisable()
         {
-            ConfirmButton.OnClick -= OnConfirmButtonClick;
+            ConfirmButton.onClick -= OnConfirmButtonClick;
             HandCardSystem.TryAddCardToSelected -= TryAdd;
             if (OnClickConfirmButtonCor is not null)
             {

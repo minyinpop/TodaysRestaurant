@@ -41,19 +41,19 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Game.System.Main
                     ProgressBar.OnMaxValue += OnProgressComplete;
                     AllActions.Add(() => ProgressBar.OnMaxValue -= OnProgressComplete);
                     
-                    ResetButton.OnClick += OnResetButtonClicked;
+                    ResetButton.onClick += OnResetButtonClicked;
                     ResetButton.SetInteractable(true);
                     AllActions.Add(() =>
                     {
-                        ResetButton.OnClick -= OnResetButtonClicked;
+                        ResetButton.onClick -= OnResetButtonClicked;
                         ResetButton.SetInteractable(false);
                     });
                     
-                    CloseButton.OnClick += OnCloseButtonClicked;
+                    CloseButton.onClick += OnCloseButtonClicked;
                     CloseButton.SetInteractable(true);
                     AllActions.Add(() =>
                     {
-                        CloseButton.OnClick -= OnCloseButtonClicked;
+                        CloseButton.onClick -= OnCloseButtonClicked;
                         CloseButton.SetInteractable(false);
                     });
                 });

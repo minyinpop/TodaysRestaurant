@@ -55,12 +55,12 @@ namespace Restaurant_System.Object.Food_Menu.System.Child.Open_Page.Main
 
         private void OnEnable()
         {
-            ConfirmButton.OnClick += OnConfirmButtonClicked;
+            ConfirmButton.onClick += OnConfirmButtonClicked;
             ConfirmButton.SetInteractable(true);
             ActiveActions.Add(() =>
             {
                 ConfirmButton.SetInteractable(false);
-                ConfirmButton.OnClick -= OnConfirmButtonClicked;
+                ConfirmButton.onClick -= OnConfirmButtonClicked;
             });
             UnlockFoodPage.OnClick += OnUnlockFoodSlotClicked;
             SelectFoodPage.OnClick += OnSelectFoodSlotClicked;

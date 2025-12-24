@@ -21,19 +21,19 @@ namespace Title_System
 
         private void OnEnable()
         {
-            StartButton.OnClick += OnStartButtonClicked;
+            StartButton.onClick += OnStartButtonClicked;
             StartButton.SetInteractable(true);
-            OptionButton.OnClick += OnOptionButtonClicked;
+            OptionButton.onClick += OnOptionButtonClicked;
             OptionButton.SetInteractable(true);
-            QuitButton.OnClick += OnQuitButtonClicked;
+            QuitButton.onClick += OnQuitButtonClicked;
             QuitButton.SetInteractable(true);
         }
 
         private void OnDisable()
         {
-            StartButton.OnClick -= OnStartButtonClicked;
-            OptionButton.OnClick -= OnOptionButtonClicked;
-            QuitButton.OnClick -= OnQuitButtonClicked;
+            StartButton.onClick -= OnStartButtonClicked;
+            OptionButton.onClick -= OnOptionButtonClicked;
+            QuitButton.onClick -= OnQuitButtonClicked;
         }
 
         #region Button
