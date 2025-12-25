@@ -1,82 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &327359853485116790
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8447348966924116130}
-  - component: {fileID: 3899705101558058394}
-  - component: {fileID: 7908064598343921231}
-  m_Layer: 0
-  m_Name: Content
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &8447348966924116130
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 327359853485116790}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 6097133703981101172}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0}
-  m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0}
---- !u!114 &3899705101558058394
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 327359853485116790}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.VerticalLayoutGroup
-  m_Padding:
-    m_Left: 0
-    m_Right: 0
-    m_Top: 0
-    m_Bottom: 0
-  m_ChildAlignment: 0
-  m_Spacing: 0
-  m_ChildForceExpandWidth: 1
-  m_ChildForceExpandHeight: 1
-  m_ChildControlWidth: 0
-  m_ChildControlHeight: 0
-  m_ChildScaleWidth: 0
-  m_ChildScaleHeight: 0
-  m_ReverseArrangement: 0
---- !u!114 &7908064598343921231
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 327359853485116790}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.ContentSizeFitter
-  m_HorizontalFit: 2
-  m_VerticalFit: 2
 --- !u!1 &2548248491560983547
 GameObject:
   m_ObjectHideFlags: 0
@@ -245,8 +168,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 8447348966924116130}
+  m_Children: []
   m_Father: {fileID: 2171278123917660922}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -745,13 +667,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a1e50e142ff44f4ae43409340293fc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::System.Cook.Child.Mob.Main.Type.Customer
-  MoveSystem: {fileID: 5465309595383097031}
-  AnimationSystem: {fileID: 6759175359168796524}
-  FlipSystem: {fileID: 3507098733650136037}
-  SkinSystem: {fileID: 154055321687464483}
-  BubbleParent: {fileID: 8447348966924116130}
-  ThinkBubble: {fileID: 4629397611317286650, guid: da5c26640e2ee6e498367e8f66574735, type: 3}
-  WaitForOrderBubble: {fileID: 7852260040052447994, guid: 1a43018b2478fb240882034db0135764, type: 3}
-  ShowItemBubble: {fileID: 7852260040052447994, guid: 93fe4e97862f37d489943543760121a1, type: 3}
-  WaitForItemBubble: {fileID: 7852260040052447994, guid: c9a8911dedcc22447983837ccd944add, type: 3}
-  SelectFoodPageData: {fileID: 11400000, guid: 5cb293368c6d3cf4a8a881c7efd4c452, type: 2}
+  moveSystem: {fileID: 5465309595383097031}
+  animationSystem: {fileID: 6759175359168796524}
+  flipSystem: {fileID: 3507098733650136037}
+  skinSystem: {fileID: 154055321687464483}
+  bubbleParent: {fileID: 0}
+  thinkBubble: {fileID: 0}
+  waitForOrderBubble: {fileID: 0}
+  showItemBubble: {fileID: 0}
+  waitForItemBubble: {fileID: 0}
+  selectFoodPageData: {fileID: 0}
