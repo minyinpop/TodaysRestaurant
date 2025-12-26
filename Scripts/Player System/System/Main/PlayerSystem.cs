@@ -8,6 +8,7 @@ using Player_System.System.Child.Mouse_System.Main;
 using Player_System.System.Main.State_Machine;
 using Player_System.System.Main.State_Machine.State;
 using Restaurant_System.Object.Cookware.System;
+using Restaurant_System.Object.Creature.Customer.System.Main;
 using Tool.Item_Giver;
 using UnityEngine;
 
@@ -24,9 +25,9 @@ namespace Player_System.System.Main
         [field: SerializeField] private AnimationSystem animationSystem;
         [field: SerializeField] private DetectSystem detectSystem;
         
-        private readonly StateMachine StateMachine = new();
+        private readonly StateMachine _stateMachine = new();
         
-        private readonly Queue<Action> ActiveActions = new();
+        private readonly Queue<Action> _cleanUpActions = new();
         
         public static event Action RightButtonClicked;
         
@@ -38,28 +39,33 @@ namespace Player_System.System.Main
         private void OnEnable()
         {
             InputSystem.OnClickedLeftButton += ClickLeftButton;
-            ActiveActions.Enqueue(() => InputSystem.OnClickedLeftButton -= ClickLeftButton);
+            _cleanUpActions.Enqueue(() => InputSystem.OnClickedLeftButton -= ClickLeftButton);
             
             InputSystem.OnClickedRightButton += ClickRightButton;
-            ActiveActions.Enqueue(() => InputSystem.OnClickedRightButton -= ClickRightButton);
+            _cleanUpActions.Enqueue(() => InputSystem.OnClickedRightButton -= ClickRightButton);
             
             #region InventorySystem
                 InputSystem.OnPerformedHotbar += PerformHotbar;
-                ActiveActions.Enqueue(() => InputSystem.OnPerformedHotbar -= PerformHotbar);
+                _cleanUpActions.Enqueue(() => InputSystem.OnPerformedHotbar -= PerformHotbar);
                 
                 CookwareSystem.OnClickCompleteBubble += TryAddItem;
-                ActiveActions.Enqueue(() => CookwareSystem.OnClickCompleteBubble -= TryAddItem);
+                _cleanUpActions.Enqueue(() => CookwareSystem.OnClickCompleteBubble -= TryAddItem);
                 
                 // Develop Only
                 ItemGiver.OnClick += TryAddItem;
-                ActiveActions.Enqueue(() => ItemGiver.OnClick -= TryAddItem);
+                _cleanUpActions.Enqueue(() => ItemGiver.OnClick -= TryAddItem);
                 // ==================
+            #endregion
+            
+            #region Customer
+                Customer.GivingSeringNote += TryAddItem;
+                _cleanUpActions.Enqueue(() => Customer.GivingSeringNote -= TryAddItem);
             #endregion
         }
 
         private void OnDisable()
         {
-            while (ActiveActions.Count > 0) ActiveActions.Dequeue()?.Invoke();
+            while (_cleanUpActions.Count > 0) _cleanUpActions.Dequeue()?.Invoke();
         }
         
         #region InputSystem
@@ -91,13 +97,13 @@ namespace Player_System.System.Main
             #region OnIdle
                 private void OnIdle()
                 {
-                    StateMachine.ChangeState(new OnIdle(OnEnter, OnExit));
+                    _stateMachine.ChangeState(new OnIdle(OnEnter, OnExit));
                     return;
 
                     void OnEnter()
                     {
                         InputSystem.OnStartedPlayerWalk += OnWalk;
-                        ActiveActions.Enqueue(() => InputSystem.OnStartedPlayerWalk -= OnWalk);
+                        _cleanUpActions.Enqueue(() => InputSystem.OnStartedPlayerWalk -= OnWalk);
                         
                         animationSystem.Idle();
                     }
@@ -112,19 +118,19 @@ namespace Player_System.System.Main
             #region OnWalk
                 private void OnWalk()
                 {
-                    StateMachine.ChangeState(new OnWalk(OnEnter, OnExit));
+                    _stateMachine.ChangeState(new OnWalk(OnEnter, OnExit));
                     return;
 
                     void OnEnter()
                     {
                         InputSystem.OnCancelPlayerWalk += OnIdle;
-                        ActiveActions.Enqueue(() => InputSystem.OnCancelPlayerWalk -= OnIdle);
+                        _cleanUpActions.Enqueue(() => InputSystem.OnCancelPlayerWalk -= OnIdle);
 
                         moveSystem.WalkLeft += animationSystem.TurnsLeft;
-                        ActiveActions.Enqueue(() => moveSystem.WalkLeft -= animationSystem.TurnsLeft);
+                        _cleanUpActions.Enqueue(() => moveSystem.WalkLeft -= animationSystem.TurnsLeft);
                         
                         moveSystem.WalkRight += animationSystem.TurnsRight;
-                        ActiveActions.Enqueue(() => moveSystem.WalkRight -= animationSystem.TurnsRight);
+                        _cleanUpActions.Enqueue(() => moveSystem.WalkRight -= animationSystem.TurnsRight);
 
                         moveSystem.StartWalk();
                         animationSystem.Walk();

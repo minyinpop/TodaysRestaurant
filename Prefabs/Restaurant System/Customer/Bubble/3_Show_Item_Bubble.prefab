@@ -1,80 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &2703235213148120869
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4379795632977213009}
-  - component: {fileID: 8629440888687723350}
-  - component: {fileID: 73266492088319603}
-  m_Layer: 0
-  m_Name: Progress Bar
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &4379795632977213009
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2703235213148120869}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2305654664208141453}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0.12399999, y: 0.12399999}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &8629440888687723350
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2703235213148120869}
-  m_CullTransparentMesh: 1
---- !u!114 &73266492088319603
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2703235213148120869}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
-  m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 1, b: 0, a: 1}
-  m_RaycastTarget: 0
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 9648faeeef411b94a9713a8c4ee9f65d, type: 3}
-  m_Type: 3
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &4272034499350415071
 GameObject:
   m_ObjectHideFlags: 0
@@ -87,12 +12,12 @@ GameObject:
   - component: {fileID: 7379473376729288156}
   - component: {fileID: 1933594827220083959}
   m_Layer: 0
-  m_Name: Icon
+  m_Name: Item Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2401363578345249044
 RectTransform:
   m_ObjectHideFlags: 0
@@ -109,8 +34,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0.035}
-  m_SizeDelta: {x: 0.3196, y: 0.4125}
+  m_AnchoredPosition: {x: 0, y: 0.0275}
+  m_SizeDelta: {x: 0.4125, y: 0.4125}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7379473376729288156
 CanvasRenderer:
@@ -140,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: a4ec032c89004264299e905f978b1749, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -161,11 +86,9 @@ GameObject:
   - component: {fileID: 2305654664208141453}
   - component: {fileID: 2894952397178316264}
   - component: {fileID: 2181199041796286105}
-  - component: {fileID: 292191562666460352}
-  - component: {fileID: 1850391851162815149}
-  - component: {fileID: 19019641302317244}
+  - component: {fileID: 7658796631966092093}
   m_Layer: 0
-  m_Name: 2_Wait_For_Order_Bubble
+  m_Name: 3_Show_Item_Bubble
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -183,7 +106,6 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 4379795632977213009}
   - {fileID: 1282159769737588392}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -230,7 +152,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &292191562666460352
+--- !u!114 &7658796631966092093
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -241,52 +163,16 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d45530d507db4b7db0488de66dbface6, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Object.Clickable_Bubble.Object.ClickableBubble
-  button: {fileID: 1850391851162815149}
-  colorChangeImages:
-  - {fileID: 1933594827220083959}
-  itemImage: {fileID: 0}
-  interactable: 1
-  canInteractColor: {r: 1, g: 1, b: 1, a: 1}
-  cannotInteractColor: {r: 1, g: 1, b: 1, a: 0.5019608}
-  progressBar: {fileID: 73266492088319603}
-  fullColor: {r: 0.5019608, g: 1, b: 0.5019608, a: 1}
-  emptyColor: {r: 1, g: 0.5019608, b: 0.5019608, a: 1}
---- !u!114 &1850391851162815149
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7852260040052447994}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b98354d339b7416e91546b8df61e8b79, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::General.Object.Button
-  Rect: {fileID: 2305654664208141453}
-  TitleTMP: {fileID: 0}
-  DoAnimation: {fileID: 19019641302317244}
-  OnPointerEnterScale:
-    EndValue: {x: 1.1, y: 1.1, z: 1}
-    Duration: 0.2
-    Ease: 19
-  OnPointerExitScale:
-    EndValue: {x: 1, y: 1, z: 1}
-    Duration: 0.2
-    Ease: 18
---- !u!114 &19019641302317244
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7852260040052447994}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a817bf6649934d0e8fef10e3075e14a7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::System.General.DoAnimation
+  m_EditorClassIdentifier: Assembly-CSharp::Common.Object.ClickableBubble
+  button: {fileID: 0}
+  colorChangeImages: []
+  itemImage: {fileID: 1933594827220083959}
+  interactable: 0
+  canInteractColor: {r: 0, g: 0, b: 0, a: 0}
+  cannotInteractColor: {r: 0, g: 0, b: 0, a: 0}
+  progressBar: {fileID: 0}
+  fullColor: {r: 0, g: 0, b: 0, a: 0}
+  emptyColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &8832569469478356757
 GameObject:
   m_ObjectHideFlags: 0

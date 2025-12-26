@@ -26,7 +26,8 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
         [field: SerializeField] private GameObject thinkBubble;
         [field: SerializeField] private GameObject waitForOrderBubble;
         [field: SerializeField] private GameObject showItemBubble;
-        [field: SerializeField] private GameObject waitForItemBubble;
+        [field: SerializeField] private GameObject giveNoteBubble;
+        [field: SerializeField] private GameObject returnNoteBubble;
         
         [field: Header("Data Settings")]
         [field: SerializeField] private SelectFoodPageSO selectFoodPageData;
@@ -40,8 +41,9 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
         
         private IEnumerator _mainCor;
 
+        public static event Func<ItemSO, bool> GivingSeringNote;
         private ServingNoteSO _servingNoteData;
-
+        
         private void Start()
         {
             skinSystem.SetRandomSkin();
@@ -121,6 +123,7 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
                                 //     if (secondItemData is not null) OrderItems.Enqueue(secondItemData);
                                 // }
 
+                                _servingNoteData.AddOrderedItem(firstItemData);
                                 WaitForOrder();
                             });
                     }
@@ -143,6 +146,7 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
                     {
                         _currentBubble = Instantiate(waitForOrderBubble, bubbleParent).GetComponent<ClickableBubble>();
                         _currentBubble.onClick += ShowOrderItem;
+                        _currentBubble.SetInteractable(true);
                         _currentBubble.StartCountDown(15, () =>
                         {
                             // TODO 等待點餐太久
@@ -161,6 +165,7 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
             #region ShowOrderItem
                 private void ShowOrderItem()
                 {
+                    Debug.Log("Continue.");
                     _stateMachine.ChangeState(new ShowOrderItem(OnEnter, OnExit));
                     return;
 
@@ -204,27 +209,38 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
                     
                     void OnEnter()
                     {
-                        _currentBubble = Instantiate(waitForItemBubble, bubbleParent).GetComponent<ClickableBubble>();
-                        _currentBubble.ChangeItemImage(_servingNoteData, 3, rename);
+                        _currentBubble = Instantiate(giveNoteBubble, bubbleParent).GetComponent<ClickableBubble>();
+                        _currentBubble.ChangeItemImage(_servingNoteData, 3, WaitForeReturnServingNote);
                         _currentBubble.StartCountDown(60, () =>
                         {
                             // TODO 等待餐點送達太久
                         });
-                        _currentBubble.onClick += rename;
+                        _currentBubble.onClick += WaitForeReturnServingNote;
                     }
                     
                     void OnExit()
                     {
-                        _currentBubble.onClick -= rename;
+                        _currentBubble.onClick -= WaitForeReturnServingNote;
                         Destroy(_currentBubble.gameObject);
                         _currentBubble = null;
                     }
                 }
             #endregion
             
-            #region Rename
-                private void rename()
+            #region WaitForReturnServingNote
+                private void WaitForeReturnServingNote()
                 {
+                    _stateMachine.ChangeState(new WaitForReturnServingNote(OnEnter, OnExit));
+                    return;
+
+                    void OnEnter()
+                    {
+                        GivingSeringNote?.Invoke(_servingNoteData);
+                    }
+                    
+                    void OnExit()
+                    {
+                    }
                 }
             #endregion
         #endregion

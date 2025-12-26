@@ -10,31 +10,31 @@ namespace Common.Object
     internal sealed class ClickableBubble : MonoBehaviour
     {
         [field: Header("Component Settings")]
-        [field: SerializeField] private Button Button;
-        [field: SerializeField] private List<Image> ColorChangeImages;
-        [field: SerializeField] private Image ItemImage;
+        [field: SerializeField] private Button button;
+        [field: SerializeField] private List<Image> colorChangeImages;
+        [field: SerializeField] private Image itemImage;
         
         [field: Header("Interaction Settings")]
-        [field: SerializeField] private bool Interactable;
-        [field: SerializeField] private Color CanInteractColor;
-        [field: SerializeField] private Color CannotInteractColor;
+        [field: SerializeField] private bool interactable;
+        [field: SerializeField] private Color canInteractColor;
+        [field: SerializeField] private Color cannotInteractColor;
         
         [field: Header("Progress Bar Settings")]
-        [field: SerializeField] private Image ProgressBar;
-        [field: SerializeField] private Color FullColor;
-        [field: SerializeField] private Color EmptyColor;
+        [field: SerializeField] private Image progressBar;
+        [field: SerializeField] private Color fullColor;
+        [field: SerializeField] private Color emptyColor;
         
         private readonly List<Action> _cleanUpActions = new();
         
-        private IEnumerator countDownCor;
+        private IEnumerator _countDownCor;
         
         public event Action onClick;
 
         private void OnEnable()
         {
-            if (Button is null) return;
-            Button.onClick += onClick;
-            _cleanUpActions.Add(() => Button.onClick -= onClick);
+            if (button is null) return;
+            button.onClick += HandleButtonClick;
+            _cleanUpActions.Add(() => button.onClick -= HandleButtonClick);
         }
 
         private void OnDisable()
@@ -42,41 +42,48 @@ namespace Common.Object
             foreach (var action in _cleanUpActions) action();
             _cleanUpActions.Clear();
 
-            if (countDownCor is null) return;
-            StopCoroutine(countDownCor);
-            countDownCor = null;
+            if (_countDownCor is null) return;
+            StopCoroutine(_countDownCor);
+            _countDownCor = null;
         }
-        
+
+        private void HandleButtonClick()
+        {
+            onClick?.Invoke();
+        }
+
         public void SetInteractable(bool interactable)
         {
-            if (!Interactable)
+            if (!this.interactable)
             {
-                Button?.SetInteractable(false);
+                button?.SetInteractable(false);
                 return;
             }
 
-            foreach (var image in ColorChangeImages)image.color = new Color(image.color.r, image.color.g, image.color.b, interactable ? CanInteractColor.a : CannotInteractColor.a);
-            Button?.SetInteractable(interactable);
+            foreach (var image in colorChangeImages)
+                image.color = new Color(image.color.r, image.color.g, image.color.b, interactable ? canInteractColor.a : cannotInteractColor.a);
+            
+            button?.SetInteractable(interactable);
         }
         
         public void StartCountDown(float time, Action onComplete)
         {
-            countDownCor = CountDownCoroutine();
-            StartCoroutine(countDownCor);
+            _countDownCor = CountDownCoroutine();
+            StartCoroutine(_countDownCor);
             return;
 
             IEnumerator CountDownCoroutine()
             {
-                if (ProgressBar is null) yield return new WaitForSeconds(time);
+                if (progressBar is null) yield return new WaitForSeconds(time);
                 else
                 {
-                    ProgressBar.gameObject.SetActive(true);
-                    var value = ProgressBar.fillAmount;
+                    progressBar.gameObject.SetActive(true);
+                    var value = progressBar.fillAmount;
                     while (true)
                     {
                         var newValue = Mathf.Clamp01(value -= Time.deltaTime / time);
-                        ProgressBar.fillAmount = newValue;
-                        ProgressBar.color = Color.Lerp(EmptyColor, FullColor, newValue);
+                        progressBar.fillAmount = newValue;
+                        progressBar.color = Color.Lerp(emptyColor, fullColor, newValue);
                         if (Mathf.Approximately(newValue, 0f)) break;
                         yield return null;
                     }
@@ -88,15 +95,15 @@ namespace Common.Object
         
         public void ChangeItemImage(ItemSO item, float duration, Action onComplete)
         {
-            countDownCor = CountDownCoroutine();
-            StartCoroutine(countDownCor);
+            _countDownCor = CountDownCoroutine();
+            StartCoroutine(_countDownCor);
             return;
 
             IEnumerator CountDownCoroutine()
             {
                 if (item is null) throw new ArgumentNullException(nameof(item));
-                ItemImage.sprite = item.ItemSprite;
-                ItemImage.gameObject.SetActive(true);
+                itemImage.sprite = item.ItemSprite;
+                itemImage.gameObject.SetActive(true);
                 yield return new WaitForSeconds(duration);
                 onComplete?.Invoke();
             }

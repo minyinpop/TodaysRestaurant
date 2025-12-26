@@ -1,5 +1,5 @@
 using System;
-using UI_System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Item.Serving_Note
@@ -9,6 +9,8 @@ namespace Item.Serving_Note
     {
         [field: Header("Components")]
         [field: SerializeField] private GameObject servingNotePrefab;
+
+        private readonly Queue<ItemSO> _orderedItems = new();
         
         #region Interaction
             public override void Selected() { }
@@ -16,6 +18,18 @@ namespace Item.Serving_Note
             
             public static event Action<ServingNoteSO, GameObject> ServingNoteUIRequired;
             public override void Use() => ServingNoteUIRequired?.Invoke(this, servingNotePrefab);
+        #endregion
+        
+        #region
+            public void AddOrderedItem(ItemSO item)
+            {
+                _orderedItems.Enqueue(item);
+            }
+
+            public void GetOrderedItem(out Queue<ItemSO> orderedItems)
+            {
+                orderedItems = _orderedItems;
+            }
         #endregion
     }
 }

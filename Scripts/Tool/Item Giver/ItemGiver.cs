@@ -10,8 +10,8 @@ namespace Tool.Item_Giver
         [field: SerializeField] private ItemGiverButton[] Buttons;
         
         internal static event Func<ItemSO, bool> OnClick;
-        
-        private readonly Queue<Action> ActiveActions = new Queue<Action>();
+
+        private readonly Queue<Action> ActiveActions = new();
 
         private void OnEnable()
         {
@@ -19,6 +19,7 @@ namespace Tool.Item_Giver
             {
                 button.OnClick += OnButtonClicked;
                 ActiveActions.Enqueue(() => button.OnClick -= OnButtonClicked);
+                button.SetInteractable(true);
             }
         }
         
