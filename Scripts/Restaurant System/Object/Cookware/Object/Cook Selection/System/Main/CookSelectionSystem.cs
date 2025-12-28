@@ -3,7 +3,6 @@ using System.Collections;
 using Common.Value;
 using Common.Value.Type;
 using Item.Custom;
-using Message_System.System.Main;
 using Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Child;
 using Restaurant_System.Object.Cookware.System;
 using UI_System.System.Main;
@@ -14,13 +13,10 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Main
     internal sealed class CookSelectionSystem : MonoBehaviour
     {
         [field: Header("Child System")]
-        [field: SerializeField] private SelectionSystem SelectionSystem;
-        [field: SerializeField] private PutIngredientSystem PutIngredientSystem;
-        
-        [field: Header("Other System")]
-        [field: SerializeField] private MessageSystem MessageSystem;
+        [field: SerializeField] private SelectionSystem selectionSystem;
+        [field: SerializeField] private PutIngredientSystem putIngredientSystem;
 
-        private IEnumerator CloseUICor;
+        private IEnumerator _closeUICor;
 
         private void OnEnable()
         {
@@ -30,27 +26,27 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Main
         private void OnDisable()
         {
             CookwareSystem.OnClickEmptyBubble -= OnEmptyBubbleClicked;
-            if (CloseUICor is not null)
+            if (_closeUICor is not null)
             {
-                StopCoroutine(CloseUICor);
-                CloseUICor = null;
+                StopCoroutine(_closeUICor);
+                _closeUICor = null;
             }
         }
 
         private void OnEmptyBubbleClicked(CookType cookwareType, Action<CustomItem> onConfirm, Action onCancel)
         {
-            SelectionSystem.Show(cookwareType,
+            selectionSystem.Show(cookwareType,
                 onSelect: selectedDishData =>
                 {
-                    SelectionSystem.SetInteractable(false);
-                    PutIngredientSystem.Show(selectedDishData,
+                    selectionSystem.SetInteractable(false);
+                    putIngredientSystem.Show(selectedDishData,
                         onConfirm: () =>
                         {
-                            PutIngredientSystem.SetInteractable(false);
-                            if (PutIngredientSystem.CheckRecipeIsCorrect())
+                            putIngredientSystem.SetInteractable(false);
+                            if (putIngredientSystem.CheckRecipeIsCorrect())
                             {
-                                CloseUICor = CloseUICoroutine();
-                                StartCoroutine(CloseUICor);
+                                _closeUICor = CloseUICoroutine();
+                                StartCoroutine(_closeUICor);
                             }
                             else
                             {
@@ -60,7 +56,7 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Main
                                         confirmButtonTitle: "確認",
                                         cancelButtonTitle: string.Empty,
                                         closeButtonTitle: string.Empty),
-                                    onConfirm: () => PutIngredientSystem.SetInteractable(true));
+                                    onConfirm: () => putIngredientSystem.SetInteractable(true));
                             }
 
                             return;
@@ -77,7 +73,7 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Main
                                 totalPrice += dishPrice;
                 
                                 // Ingredient
-                                PutIngredientSystem.GetIngredients(out var ingredients);
+                                putIngredientSystem.GetIngredients(out var ingredients);
                                 foreach (var ingredient in ingredients)
                                 {
                                     ingredient.GetCookTime(out var ingredientCookTime);
@@ -92,9 +88,9 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Main
                                 // UI
                                 var isSelectionUIClosed = false;
                                 var isPutIngredientUIClosed = false;
-                                SelectionSystem.Hide(
+                                selectionSystem.Hide(
                                     onComplete: () => isSelectionUIClosed = true);
-                                PutIngredientSystem.Hide(
+                                putIngredientSystem.Hide(
                                     onComplete: () => isPutIngredientUIClosed = true);
                                 yield return new WaitUntil(() => isSelectionUIClosed && isPutIngredientUIClosed);
                                 onConfirm?.Invoke(cookDish);
@@ -102,16 +98,16 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Main
                         },
                         onCancel: () =>
                         {
-                            PutIngredientSystem.Hide(
+                            putIngredientSystem.Hide(
                                 onComplete: () =>
                                 {
-                                    SelectionSystem.SetInteractable(true);
+                                    selectionSystem.SetInteractable(true);
                                 });
                         });
                 },
                 onClose: () =>
                 {
-                    SelectionSystem.Hide(
+                    selectionSystem.Hide(
                         onComplete: () =>
                         {
                             // TODO

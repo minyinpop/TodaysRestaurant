@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Common.Value.Type;
-using UnityEditor.Rendering;
 using UnityEngine;
 
 namespace Item.Custom
@@ -45,8 +44,13 @@ namespace Item.Custom
         #endregion
 
         #region Price
-        public override void GetPrice(out int price) =>
-            price = OverridePrice;
+            public override void GetPrice(out int price) =>
+                price = OverridePrice;
+        #endregion
+        
+        #region Overcook
+            public override void GetOvercookedItem(out ItemSO overcookedItem) =>
+                LegacyItemData.GetOvercookedItem(out overcookedItem);
         #endregion
 
         #region Interaction

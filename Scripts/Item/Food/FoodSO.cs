@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Item.Food
 {
-    [CreateAssetMenu(menuName = "Minyinpop/Item/Dish Data", fileName = "New Data")]
+    [CreateAssetMenu(menuName = "Minyinpop/Item/Food Data", fileName = "New Data")]
     public sealed class FoodSO : ItemSO
     {
         #region Item Type
@@ -50,6 +50,15 @@ namespace Item.Food
             public override void GetPrice(out int price)
             {
                 price = Mathf.Abs(Price);
+            }
+        #endregion
+        
+        #region Overcook
+            [field: Header("Overcook")]
+            [field: SerializeField] private ItemSO OvercookedItem;
+            public override void GetOvercookedItem(out ItemSO overcookedItem)
+            {
+                overcookedItem = OvercookedItem;
             }
         #endregion
         

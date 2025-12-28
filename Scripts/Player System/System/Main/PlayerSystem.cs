@@ -49,8 +49,8 @@ namespace Player_System.System.Main
             #endregion
             
             #region TryAddItem
-                CookwareSystem.OnClickCompleteBubble += TryAddItem;
-                _cleanUpActions.Enqueue(() => CookwareSystem.OnClickCompleteBubble -= TryAddItem);
+                CookwareSystem.TryAddItem += TryAddItem;
+                _cleanUpActions.Enqueue(() => CookwareSystem.TryAddItem -= TryAddItem);
                 
                 Customer.GivingServingNote += TryAddItem;
                 _cleanUpActions.Enqueue(() => Customer.GivingServingNote -= TryAddItem);
