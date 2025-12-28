@@ -1,20 +1,31 @@
 using System.Collections.Generic;
 using Common.Value.Type;
+using UnityEditor.Rendering;
+using UnityEngine;
 
 namespace Item.Custom
 {
     public sealed class CustomItem : ItemSO
     {
-        private readonly ItemSO LegacyItemData;
-        private readonly float OverrideCookTime;
-        private readonly int OverridePrice;
+        private ItemSO LegacyItemData;
+        private float OverrideCookTime;
+        private int OverridePrice;
 
-        public CustomItem(ItemSO itemData, float cookTime, int price)
+        public void Initialize(ItemSO itemData, float cookTime, int price)
         {
+            if (LegacyItemData is not null) return;
             LegacyItemData = itemData;
             OverrideCookTime = cookTime;
             OverridePrice = price;
         }
+        
+        #region Name
+            public override string ItemName => LegacyItemData.ItemName;
+        #endregion
+        
+        #region Sprite
+            public override Sprite ItemSprite => LegacyItemData.ItemSprite;
+        #endregion
         
         #region Item Type
             public override void GetItemType(out ItemType itemType, out CookType cookType, out FoodType foodType) =>

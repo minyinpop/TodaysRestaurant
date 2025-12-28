@@ -6,6 +6,7 @@ using Item.Custom;
 using Message_System.System.Main;
 using Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Child;
 using Restaurant_System.Object.Cookware.System;
+using UI_System.System.Main;
 using UnityEngine;
 
 namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Main
@@ -53,7 +54,7 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Main
                             }
                             else
                             {
-                                MessageSystem.ShowTipUI(
+                                UISystem.ShowTipUI(
                                     content: new PopUpUIContent(
                                         message: "必須放置所有食材",
                                         confirmButtonTitle: "確認",
@@ -85,7 +86,8 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Main
                                     totalPrice += ingredientPrice;
                                 }
 
-                                var cookDish = new CustomItem(selectedDishData, totalCookTime, totalPrice);
+                                var cookDish = ScriptableObject.CreateInstance<CustomItem>();
+                                cookDish.Initialize(selectedDishData, totalCookTime, totalPrice);
                                 
                                 // UI
                                 var isSelectionUIClosed = false;

@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using UI_System.System.Main;
 using UnityEngine;
 
 namespace Item.Serving_Note
@@ -16,8 +16,7 @@ namespace Item.Serving_Note
             public override void Selected() { }
             public override void UnSelected() { }
             
-            public static event Action<ServingNoteSO, GameObject> ServingNoteUIRequired;
-            public override void Use() => ServingNoteUIRequired?.Invoke(this, servingNotePrefab);
+            public override void Use() => UISystem.RequireServingNoteUI(this, servingNotePrefab);
         #endregion
         
         #region

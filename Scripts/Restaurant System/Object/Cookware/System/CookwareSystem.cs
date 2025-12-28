@@ -43,10 +43,6 @@ namespace Restaurant_System.Object.Cookware.System
 
         public static event Action<CookType, Action<CustomItem>, Action> OnClickEmptyBubble;
         public static event Func<ItemSO, bool> OnClickCompleteBubble;
-        
-        // TODO 5 審專用
-        public static event Action<string, Action> ChangeScene;
-        public static event Action<string, int> StartScenario;
 
         private void Start()
         {
@@ -188,31 +184,14 @@ namespace Restaurant_System.Object.Cookware.System
 
                             void OnBubbleClicked()
                             {
-                                var isAddItemToPlayerInventoryComplete = OnClickCompleteBubble?.Invoke(CurrentCookItem);
-                                switch (isAddItemToPlayerInventoryComplete)
+                                var isAddItemToPlayerInventoryComplete = OnClickCompleteBubble?.Invoke(CurrentCookItem) ?? false;
+                                if (isAddItemToPlayerInventoryComplete)
                                 {
-                                    case null:
-                                    {
-                                        throw new Exception();
-                                    }
-                                    case true:
-                                    {
-                                        OnEmptyState();
-                                        
-                                        // TODO 5 審專用
-                                        ChangeScene?.Invoke("Dialogue ( Dev )",
-                                            () =>
-                                            {
-                                                // onComplete
-                                                StartScenario?.Invoke("Abnormal", 0);
-                                            });
-                                        break;
-                                    }
-                                    default:
-                                    {
-                                        Debug.Log($"無法添加 {CurrentCookItem.ItemName} 至玩家背包。");
-                                        break;
-                                    }
+                                    OnEmptyState();
+                                }
+                                else
+                                {
+                                    Debug.Log($"無法添加 {CurrentCookItem.ItemName} 至玩家背包。");
                                 }
                             }
                         },

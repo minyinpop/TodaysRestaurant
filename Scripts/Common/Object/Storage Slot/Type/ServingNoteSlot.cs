@@ -35,18 +35,22 @@ namespace Common.Object.Storage_Slot.Type
                 
                 _currentItemData = item;
                 ItemImage.sprite = item.ItemSprite;
-                ItemImage.gameObject.SetActive(true);
+                ItemImage.color = HaveItemColor;
                 return true;
             }
 
             public override void TryGetItem(out ItemSO item)
             {
-                if (_currentItemData is null) item = null;
+                if (_currentItemData is null)
+                {
+                    item = null;
+                    return;
+                }
                 
                 item = _currentItemData;
                 _currentItemData = null;
-                ItemImage.gameObject.SetActive(false);
-                ItemImage.sprite = null;
+                ItemImage.sprite = _targetItemData.ItemSprite;
+                ItemImage.color = NoItemColor;
             }
         #endregion
     }

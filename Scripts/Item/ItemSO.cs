@@ -10,13 +10,13 @@ namespace Item
         #region Name
             [field: Header("Item Name")]
             [field: SerializeField] private string itemName;
-            public string ItemName => itemName;
+            public virtual string ItemName => itemName;
         #endregion
         
         #region Sprite
             [field: Header("Item Sprite")]
             [field: SerializeField] private Sprite itemSprite;
-            public Sprite ItemSprite => itemSprite;
+            public virtual Sprite ItemSprite => itemSprite;
         #endregion
         
         #region Item Type

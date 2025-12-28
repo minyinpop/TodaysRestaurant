@@ -1,23 +1,16 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using Restaurant_System.Object.Food_Menu.System.Main;
 using Restaurant_System.System.Child;
 using Restaurant_System.System.Main.State_Machine;
 using Restaurant_System.System.Main.State_Machine.State;
+using UI_System.System.Main;
 using UnityEngine;
 
 namespace Restaurant_System.System.Main
 {
     internal sealed class RestaurantSystem : MonoBehaviour
     {
-        [field: Header("Object")]
-        [field: SerializeField] private FoodMenu FoodMenu;
-        
         [field: Header("System")]
         [field: SerializeField] private CustomerManagerSystem CustomerManagerSystem;
-        
-        private readonly Queue<Action> ActiveActions = new();
 
         private IEnumerator RoundStartCor;
         
@@ -28,9 +21,6 @@ namespace Restaurant_System.System.Main
 
         private void OnDisable()
         {
-            foreach (var action in ActiveActions) action?.Invoke();
-            ActiveActions.Clear();
-
             if (RoundStartCor is not null)
             {
                 StopCoroutine(RoundStartCor);
@@ -48,14 +38,11 @@ namespace Restaurant_System.System.Main
                     
                     void OnEnter()
                     {
-                        FoodMenu.Show();
-                        FoodMenu.OnClickOpenUIConfirmButton += RoundStart;
-                        ActiveActions.Enqueue(() => FoodMenu.OnClickOpenUIConfirmButton -= RoundStart);
+                        UISystem.ShowFoodMenu(RoundStart);
                     }
                     
                     void OnExit()
                     {
-                        FoodMenu.OnClickOpenUIConfirmButton -= RoundStart;
                     }
                 }
             #endregion

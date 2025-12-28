@@ -61,9 +61,6 @@ namespace Scene_Transition_System
             
             BattleSystem.ChangeScene += ChangeScene;
             ActiveActions.Enqueue(() => BattleSystem.ChangeScene -= ChangeScene);
-            
-            CookwareSystem.ChangeScene += ChangeScene;
-            ActiveActions.Enqueue(() => CookwareSystem.ChangeScene -= ChangeScene);
         }
 
         private void OnDisable()

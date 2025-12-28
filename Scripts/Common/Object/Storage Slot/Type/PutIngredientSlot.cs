@@ -4,7 +4,7 @@ namespace Common.Object.Storage_Slot.Type
 {
     public sealed class PutIngredientSlot : StorageSlot
     {
-        private ItemSO TargetItemData;
+        private ItemSO _targetItemData;
         
         #region PointerEvent
             protected override void OnPointerEnter()
@@ -26,15 +26,15 @@ namespace Common.Object.Storage_Slot.Type
                 if (item is null) return false;
                 if (_currentItemData is not null) return false;
                 
-                if (TargetItemData is null)
+                if (_targetItemData is null)
                 {
-                    TargetItemData = item;
+                    _targetItemData = item;
                     ItemImage.sprite = item.ItemSprite;
                 }
                 else
                 {
                     item.GetItemType(out var type01, out var level01);
-                    TargetItemData.GetItemType(out var type02, out var level02);
+                    _targetItemData.GetItemType(out var type02, out var level02);
                     if (!Equals(type01, type02)) return false; // TODO 物品類型不同會跳出 Message System
                     if (level01 < level02) return false; // TODO 物品類型相同但等級比 TargetItemData 還低，一樣跳出 Message System
                     _currentItemData = item;
@@ -55,7 +55,7 @@ namespace Common.Object.Storage_Slot.Type
 
                 item = _currentItemData;
                 _currentItemData = null;
-                ItemImage.sprite = item.ItemSprite;
+                ItemImage.sprite = _targetItemData.ItemSprite;
                 ItemImage.color = NoItemColor;
             }
         #endregion

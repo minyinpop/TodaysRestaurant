@@ -1,33 +1,30 @@
 using System;
 using Item;
+using UI_System.System.Main;
 using UnityEngine;
 
 namespace Player_System.System.Child
 {
     internal sealed class InventorySystem : MonoBehaviour
     {
-        public static event Action<bool> HotbarUIRequired;
-        public static event Action<int> HotbarPerformed;
-        public static event Func<ItemSO, bool> TryItemAdded;
-
         private void OnEnable()
         {
-            HotbarUIRequired?.Invoke(true);
+            UISystem.RequireHotbarUI();
         }
 
         private void OnDisable()
         {
-            HotbarUIRequired?.Invoke(false);
+            UISystem.RequireHotbarUI();
         }
 
         public void PerformHotbar(int hotbarIndex)
         {
-            HotbarPerformed?.Invoke(hotbarIndex);
+            UISystem.PerformHotbar(hotbarIndex);
         }
 
         public bool TryAddItem(ItemSO item)
         {
-            return TryItemAdded?.Invoke(item) ?? false;
+            return UISystem.TryAddItem(item);
         }
     }
 }

@@ -1,6 +1,6 @@
-using System;
 using Common.Object.Storage_Slot;
 using Item;
+using UI_System.System.Main;
 using UnityEngine;
 
 namespace Player_System.System.Child.Mouse_System.Child
@@ -12,8 +12,6 @@ namespace Player_System.System.Child.Mouse_System.Child
         
         private ItemSO _draggedItem;
         
-        public static event Action<bool, ItemSO> ItemDragUIRequired;
-
         public void OnClick(GameObject itemSlot)
         {
             if (itemSlot is null) return;
@@ -38,13 +36,13 @@ namespace Player_System.System.Child.Mouse_System.Child
                 }
 
                 _draggedItem = item;
-                ItemDragUIRequired?.Invoke(true, _draggedItem);
+                UISystem.RequireItemDragUI(true, _draggedItem);
             }
 
             void PutItemToEmptySlot()
             {
                 if (!_destinationSlot.TryAddItem(_draggedItem)) return;
-                ItemDragUIRequired?.Invoke(false, null);
+                UISystem.RequireItemDragUI(false, null);
                 
                 _sourceSlot = null;
                 _destinationSlot = null;
@@ -56,7 +54,7 @@ namespace Player_System.System.Child.Mouse_System.Child
                 _destinationSlot.TryGetItem(out var item);
                 if (!_destinationSlot.TryAddItem(_draggedItem)) return;
                 _draggedItem = item;
-                ItemDragUIRequired?.Invoke(true, _draggedItem);
+                UISystem.RequireItemDragUI(true, _draggedItem);
                 
                 _sourceSlot = _destinationSlot;
                 _destinationSlot = null;

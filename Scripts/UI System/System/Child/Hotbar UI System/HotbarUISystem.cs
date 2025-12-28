@@ -12,7 +12,7 @@ namespace UI_System.System.Child.Hotbar_UI_System
         private GameObject _ui;
         private HotbarUI _ui_HotbarUI;
         
-        public void RequiresUI(bool show)
+        public void RequiresUI()
         {
             if (_ui is null)
             {

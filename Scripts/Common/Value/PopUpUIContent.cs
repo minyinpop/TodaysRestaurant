@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Common.Value
 {
     [Serializable]
-    internal sealed class PopUpUIContent
+    public sealed class PopUpUIContent
     {
         [field: SerializeField] private string Message;
         [field: SerializeField] private string ConfirmButtonTitle;

@@ -8,7 +8,6 @@ using Common.Value;
 using Common.Value.Type;
 using Item;
 using Item.Food.Data.Food_Category;
-using Message_System.System.Main;
 using Player_System.Data.Main;
 using Restaurant_System.Object.Food_Menu.Object;
 using Restaurant_System.Object.Food_Menu.Object.Item_Slot.Base;
@@ -16,6 +15,7 @@ using Restaurant_System.Object.Food_Menu.Object.Item_Slot.Type.Select_Food_Slot;
 using Restaurant_System.Object.Food_Menu.System.Child.Open_Page.Child;
 using Restaurant_System.Object.Food_Menu.System.Child.Open_Page.Child.Select_Food_Page;
 using Restaurant_System.Object.Food_Menu.System.Child.Open_Page.Child.Select_Food_Page.Data;
+using UI_System.System.Main;
 using UnityEngine;
 
 namespace Restaurant_System.Object.Food_Menu.System.Child.Open_Page.Main
@@ -30,7 +30,6 @@ namespace Restaurant_System.Object.Food_Menu.System.Child.Open_Page.Main
         [field: Header("Child System")]
         [field: SerializeField] private UnlockFoodPage UnlockFoodPage;
         [field: SerializeField] private SelectFoodPage SelectFoodPage;
-        [field: SerializeField] private MessageSystem MessageSystem;
         
         [field: Header("Button")]
         [field: SerializeField] private Button ConfirmButton;
@@ -47,9 +46,9 @@ namespace Restaurant_System.Object.Food_Menu.System.Child.Open_Page.Main
         [field: SerializeField] private PlayerSO PlayerData;
         [field: SerializeField] private SelectFoodPageSO SelectFoodPageData;
 
-        private readonly List<Action> ActiveActions = new();
+        private readonly List<Action> _cleanUpActions = new();
         
-        private FoodType CurrentFoodType = FoodType.Soup;
+        private FoodType _currentFoodType = FoodType.Soup;
 
         public event Action OnClickOpenUIConfirmButton;
 
@@ -57,7 +56,7 @@ namespace Restaurant_System.Object.Food_Menu.System.Child.Open_Page.Main
         {
             ConfirmButton.onClick += OnConfirmButtonClicked;
             ConfirmButton.SetInteractable(true);
-            ActiveActions.Add(() =>
+            _cleanUpActions.Add(() =>
             {
                 ConfirmButton.SetInteractable(false);
                 ConfirmButton.onClick -= OnConfirmButtonClicked;
@@ -68,8 +67,8 @@ namespace Restaurant_System.Object.Food_Menu.System.Child.Open_Page.Main
         
         private void OnDisable()
         {
-            foreach (var action in ActiveActions) action?.Invoke();
-            ActiveActions.Clear();
+            foreach (var action in _cleanUpActions) action?.Invoke();
+            _cleanUpActions.Clear();
             UnlockFoodPage.OnClick -= OnUnlockFoodSlotClicked;
             SelectFoodPage.OnClick -= OnSelectFoodSlotClicked;
         }
@@ -79,7 +78,7 @@ namespace Restaurant_System.Object.Food_Menu.System.Child.Open_Page.Main
             UI.SetActive(true);
             
             // Unlock Food Page
-            FindCategory(CurrentFoodType, out var foodCategory);
+            FindCategory(_currentFoodType, out var foodCategory);
             UnlockFoodPage.Spawn(foodCategory);
             
             // Select Dish Page
@@ -94,7 +93,7 @@ namespace Restaurant_System.Object.Food_Menu.System.Child.Open_Page.Main
                 var button_FoodTypeButton = button.GetComponent<FoodTypeButton>();
                 button_FoodTypeButton.Init(foodTypeData);
                 button_FoodTypeButton.OnClick += OnClicked;
-                ActiveActions.Add(() =>
+                _cleanUpActions.Add(() =>
                 {
                     button_FoodTypeButton.SetInteractable(false);
                     button_FoodTypeButton.OnClick -= OnClicked;
@@ -104,8 +103,8 @@ namespace Restaurant_System.Object.Food_Menu.System.Child.Open_Page.Main
 
                 void OnClicked(FoodType foodType)
                 {
-                    CurrentFoodType = foodType;
-                    FindCategory(CurrentFoodType, out var newFoodCategory);
+                    _currentFoodType = foodType;
+                    FindCategory(_currentFoodType, out var newFoodCategory);
                     
                     // Unlock Food Page
                     UnlockFoodPage.Clear();
@@ -137,23 +136,24 @@ namespace Restaurant_System.Object.Food_Menu.System.Child.Open_Page.Main
             {
                 case SelectFoodSlotType.UnSelect:
                 {
-                    MessageSystem.ShowTipUI(
-                        content: new PopUpUIContent(
-                            message: "請選擇料理",
-                            confirmButtonTitle: "確認",
-                            cancelButtonTitle: string.Empty,
-                            closeButtonTitle: string.Empty));
+                    var content = new PopUpUIContent(
+                        message: "請選擇料理",
+                        confirmButtonTitle: "確認",
+                        cancelButtonTitle: string.Empty,
+                        closeButtonTitle: string.Empty);
+                    UISystem.ShowTipUI(content);
                     break;
                 }
                 case SelectFoodSlotType.UnFull:
                 {
-                    MessageSystem.ShowSwitchUI(
-                        content: new PopUpUIContent(
-                            message: "還有料理可以選擇\n要直接開始營業嗎？",
-                            confirmButtonTitle: "開始營業",
-                            cancelButtonTitle: "再想一下",
-                            closeButtonTitle: string.Empty),
-                        onConfirm: () => OnClickOpenUIConfirmButton?.Invoke());
+                    var content = new PopUpUIContent(
+                        message: "還有料理可以選擇\n要直接開始營業嗎？",
+                        confirmButtonTitle: "開始營業",
+                        cancelButtonTitle: "再想一下",
+                        closeButtonTitle: string.Empty);
+                    UISystem.ShowSwitchUI(
+                        content: content,
+                        onConfirm: OnClickOpenUIConfirmButton);
                     break;
                 }
                 case SelectFoodSlotType.Full:

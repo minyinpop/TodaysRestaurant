@@ -32,7 +32,6 @@ namespace Tool.Item_Giver
         {
             var isSuccess = OnClick?.Invoke(Item);
             if (isSuccess is null) return;
-            Debug.Log(isSuccess.Value ? $"成功添加 {Item.name}" : $"無法添加 {Item.name}");
         }
     }
 }

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Battle_System.System.Main;
-using Restaurant_System.Object.Cookware.System;
 using Title_System;
 using UnityEngine;
 using Utage;
@@ -22,10 +21,6 @@ namespace Dialogue_System.Custom
             
             BattleSystem.StartScenario += StartScenario;
             ActiveActions.Enqueue(() => BattleSystem.StartScenario -= StartScenario);
-            
-            // TODO 5 審專用
-            CookwareSystem.StartScenario += StartScenario;
-            ActiveActions.Enqueue(() => CookwareSystem.StartScenario -= StartScenario);
         }
 
         private void OnDisable()

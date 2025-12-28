@@ -30,7 +30,10 @@ namespace UI_System.System.Child.Hotbar_UI_System
         
         public bool TryAddItem(ItemSO itemData)
         {
-            return _hotbarSlots.Any(slot => slot.TryAddItem(itemData));
+            Debug.Log(itemData.GetType().Name);
+            var result = _hotbarSlots.Any(slot => slot.TryAddItem(itemData));
+            Debug.Log($"| 嘗試添加 {itemData.ItemName} | 添加 {(result ? "成功" : "失敗")} |");
+            return result;
         }
         
         public void PerformHotbar(int hotbarIndex)

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Common;
 using Common.Object;
+using Common.Value;
 using Item;
 using Item.Serving_Note;
 using Restaurant_System.Object.Creature.Customer.System.Child;
@@ -36,6 +37,7 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
         private readonly Queue<Action> _cleanUpActions = new();
 
         public static event Func<ItemSO, bool> GivingServingNote;
+        public static event Func<PopUpUIContent, bool> ReturnServingNote;
         private ServingNoteSO _servingNoteData;
         
         private void Start()
@@ -182,23 +184,29 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
                     {
                         _currentBubble = Instantiate(servingNoteBubble, bubbleParent).GetComponent<ClickableBubble>();
                         _currentBubble.ShowItem(_servingNoteData);
-                        _currentBubble.StartCountDown(15, () =>
+                        _currentBubble.StartCountDown(60, () =>
                         {
                             // TODO 顧客等待玩家收取點餐紙條太久
                         });
-                        _currentBubble.onClick += Rename;
+                        _currentBubble.onClick += OnClick;
                     }
                     
                     void OnExit()
                     {
-                        _currentBubble.onClick -= Rename;
+                        _currentBubble.onClick -= OnClick;
                         Destroy(_currentBubble.gameObject);
                         _currentBubble = null;
                     }
 
-                    void Rename()
+                    void OnClick()
                     {
                         // TODO 返還菜單
+                        var content = new PopUpUIContent(
+                            message: "確定要把料理給予顧客嗎？",
+                            confirmButtonTitle: "確定",
+                            cancelButtonTitle: "返回",
+                            closeButtonTitle: string.Empty);
+                        var result = ReturnServingNote?.Invoke(content) ?? false;
                     }
                 }
             #endregion

@@ -1,11 +1,10 @@
 using System;
-using System.Collections.Generic;
+using Common.Value;
 using Item;
 using Item.Serving_Note;
-using Player_System.System.Child;
-using Player_System.System.Child.Mouse_System.Child;
-using Player_System.System.Main;
+using Message_System.System.Child;
 using UI_System.System.Child;
+using UI_System.System.Child.Food_Menu_UI_System;
 using UI_System.System.Child.Hotbar_UI_System;
 using UnityEngine;
 
@@ -13,82 +12,77 @@ namespace UI_System.System.Main
 {
     public sealed class UISystem : MonoBehaviour
     {
-        [field: Header("Components")]
-        [field: SerializeField] private ItemDragUISystem itemDragUISystem;
-        [field: SerializeField] private ServingNoteUISystem servingNoteUISystem;
-        [field: SerializeField] private HotbarUISystem hotbarUISystem;
+        [field: Header("Item Drag")]
+        [field: SerializeField] private Transform itemDragUISystemParent;
+        private static ItemDragUISystem _itemDragUISystem;
         
-        private readonly Queue<Action> _activeActions = new();
+        [field: Header("Serving Note")]
+        [field: SerializeField] private Transform servingNoteUISystemParent;
+        private static ServingNoteUISystem _servingNoteUISystem;
+        
+        [field: Header("Hotbar")]
+        [field: SerializeField] private Transform hotbarUISystemParent;
+        private static HotbarUISystem _hotbarUISystem;
+        
+        [field: Header("Food Menu")]
+        [field: SerializeField] private Transform foodMenuUISystemParent;
+        private static FoodMenuUISystem _foodMenuUISystem;
+        
+        [field: Header("Message UI")]
+        [field: SerializeField] private Transform tipSystemParent;
+        private static TipSystem _tipSystem;
+        [field: SerializeField] private Transform switchSystemParent;
+        private static SwitchSystem _switchSystem;
 
-        private void OnEnable()
+        private void Awake()
         {
-            #region PlayerSystem
-                PlayerSystem.RightButtonClicked += ClickRightButton;
-                _activeActions.Enqueue(() => PlayerSystem.RightButtonClicked -= ClickRightButton);
-            #endregion
+            _itemDragUISystem = itemDragUISystemParent.GetComponent<ItemDragUISystem>();
+        
+            _servingNoteUISystem = servingNoteUISystemParent.GetComponent<ServingNoteUISystem>();
+        
+            _hotbarUISystem = hotbarUISystemParent.GetComponent<HotbarUISystem>();
+        
+            _foodMenuUISystem = foodMenuUISystemParent.GetComponent<FoodMenuUISystem>();
             
-            #region ItemDragSystem
-                ItemDragSystem.ItemDragUIRequired += RequireItemDragUI;
-                _activeActions.Enqueue(() => ItemDragSystem.ItemDragUIRequired -= RequireItemDragUI);
-            #endregion
-            
-            #region ServingNoteSO
-                ServingNoteSO.ServingNoteUIRequired += RequireServingNoteUI;
-                _activeActions.Enqueue(() => ServingNoteSO.ServingNoteUIRequired -= RequireServingNoteUI);
-            #endregion
-            
-            #region HotbarUIRequired
-                InventorySystem.HotbarUIRequired += RequireHotbarUI;
-                _activeActions.Enqueue(() => InventorySystem.HotbarUIRequired -= RequireHotbarUI);
-                
-                InventorySystem.HotbarPerformed += PerformHotbar;
-                _activeActions.Enqueue(() => InventorySystem.HotbarPerformed -= PerformHotbar);
-
-                InventorySystem.TryItemAdded += TryAddItem;
-                _activeActions.Enqueue(() => InventorySystem.TryItemAdded -= TryAddItem);
-            #endregion
+            _tipSystem = tipSystemParent.GetComponent<TipSystem>();
+            _switchSystem = switchSystemParent.GetComponent<SwitchSystem>();
         }
         
-        private void OnDisable()
-        {
-            while (_activeActions.Count > 0) _activeActions.Dequeue()?.Invoke();
-        }
-        
-        #region PlayerSystem
-            private void ClickRightButton()
-            {
-                hotbarUISystem.ClickRightButton();
-            }
+        #region Player
+            public static void ClickRightButton() =>
+                _hotbarUISystem?.ClickRightButton();
         #endregion
 
-        #region ItemDragSystem
-            private void RequireItemDragUI(bool isDragging, ItemSO item)
-            {
-                itemDragUISystem.RequiresUI(isDragging, item);
-            }
+        #region Inventory
+            public static void RequireHotbarUI() =>
+                _hotbarUISystem.RequiresUI();
+            public static void PerformHotbar(int hotbarIndex) =>
+                _hotbarUISystem.PerformHotbar(hotbarIndex);
+            public static bool TryAddItem(ItemSO item) =>
+                _hotbarUISystem.TryAddItem(item);
         #endregion
         
-        #region ServingNoteSO
-            private void RequireServingNoteUI(ServingNoteSO servingNoteSO, GameObject prefab)
-            {
-                servingNoteUISystem.RequiresUI(servingNoteSO, prefab);
-            }
+        #region ItemDrag
+            public static void RequireItemDragUI(bool isDragging, ItemSO item) =>
+                _itemDragUISystem.RequiresUI(isDragging, item);
         #endregion
         
-        #region HotbarUIRequired
-            private void RequireHotbarUI(bool show)
-            {
-                hotbarUISystem.RequiresUI(show);
-            }
+        #region ServingNote
+            public static void RequireServingNoteUI(ServingNoteSO servingNoteSO, GameObject prefab) =>
+                _servingNoteUISystem.RequiresUI(servingNoteSO, prefab);
+        #endregion
 
-            private void PerformHotbar(int hotbarIndex)
+        #region Message UI
+            public static void ShowTipUI(PopUpUIContent content, Action onConfirm = null) =>
+                _tipSystem?.Show(content, onConfirm);
+            public static void ShowSwitchUI(PopUpUIContent content, Action onShow = null, Action onConfirm = null, Action onCancel = null, Action onClose = null) =>
+                _switchSystem?.Show(content, onShow, onConfirm, onCancel, onClose);
+        #endregion
+
+        #region Food Menu
+            public static void ShowFoodMenu(Action onComplete)
             {
-                hotbarUISystem.PerformHotbar(hotbarIndex);
-            }
-            
-            private bool TryAddItem(ItemSO item)
-            {
-                return hotbarUISystem.TryAddItem(item);
+                _foodMenuUISystem.RequiresUI(onComplete);
             }
         #endregion
     }

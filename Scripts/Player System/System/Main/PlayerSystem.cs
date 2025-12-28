@@ -10,6 +10,7 @@ using Player_System.System.Main.State_Machine.State;
 using Restaurant_System.Object.Cookware.System;
 using Restaurant_System.Object.Creature.Customer.System.Main;
 using Tool.Item_Giver;
+using UI_System.System.Main;
 using UnityEngine;
 
 namespace Player_System.System.Main
@@ -29,8 +30,6 @@ namespace Player_System.System.Main
         
         private readonly Queue<Action> _cleanUpActions = new();
         
-        public static event Action RightButtonClicked;
-        
         private void Start()
         {
             OnIdle();
@@ -38,28 +37,28 @@ namespace Player_System.System.Main
 
         private void OnEnable()
         {
-            InputSystem.OnClickedLeftButton += ClickLeftButton;
-            _cleanUpActions.Enqueue(() => InputSystem.OnClickedLeftButton -= ClickLeftButton);
-            
-            InputSystem.OnClickedRightButton += ClickRightButton;
-            _cleanUpActions.Enqueue(() => InputSystem.OnClickedRightButton -= ClickRightButton);
-            
-            #region InventorySystem
+            #region Input
+                InputSystem.OnClickedLeftButton += ClickLeftButton;
+                _cleanUpActions.Enqueue(() => InputSystem.OnClickedLeftButton -= ClickLeftButton);
+                
+                InputSystem.OnClickedRightButton += ClickRightButton;
+                _cleanUpActions.Enqueue(() => InputSystem.OnClickedRightButton -= ClickRightButton);
+                
                 InputSystem.OnPerformedHotbar += PerformHotbar;
                 _cleanUpActions.Enqueue(() => InputSystem.OnPerformedHotbar -= PerformHotbar);
-                
+            #endregion
+            
+            #region TryAddItem
                 CookwareSystem.OnClickCompleteBubble += TryAddItem;
                 _cleanUpActions.Enqueue(() => CookwareSystem.OnClickCompleteBubble -= TryAddItem);
                 
+                Customer.GivingServingNote += TryAddItem;
+                _cleanUpActions.Enqueue(() => Customer.GivingServingNote -= TryAddItem);
+            
                 // Develop Only
                 ItemGiver.OnClick += TryAddItem;
                 _cleanUpActions.Enqueue(() => ItemGiver.OnClick -= TryAddItem);
                 // ==================
-            #endregion
-            
-            #region Customer
-                Customer.GivingServingNote += TryAddItem;
-                _cleanUpActions.Enqueue(() => Customer.GivingServingNote -= TryAddItem);
             #endregion
         }
 
@@ -76,7 +75,7 @@ namespace Player_System.System.Main
 
             private void ClickRightButton()
             {
-                RightButtonClicked?.Invoke();
+                UISystem.ClickRightButton();
             }
         #endregion
         
