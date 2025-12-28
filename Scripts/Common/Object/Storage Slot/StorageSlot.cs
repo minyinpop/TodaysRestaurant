@@ -15,7 +15,7 @@ namespace Common.Object.Storage_Slot
         [field: SerializeField] protected Image SlotImage;
         [field: SerializeField] protected Color SelectedColor;
         [field: SerializeField] protected Color UnSelectedColor;
-        
+
         [field: Header("Item Settings")]
         [field: SerializeField] protected RectTransform ItemRect;
         [field: SerializeField] protected Image ItemImage;
@@ -30,7 +30,7 @@ namespace Common.Object.Storage_Slot
         [field: Header("Status Settings")]
         [field: SerializeField] protected bool Interactable;
 
-        protected ItemSO ItemData;
+        protected ItemSO _currentItemData;
         
         #region Interaction
             public virtual void Selected() { }
@@ -41,19 +41,13 @@ namespace Common.Object.Storage_Slot
         #region Item
             public virtual bool TryAddItem(ItemSO item) => false;
             public virtual void TryAddItem(ItemSO item, Action onComplete) { }
-            public virtual void TryGetItem(out ItemSO item) => item = ItemData;
+            public virtual void TryGetItem(out ItemSO item) => item = _currentItemData;
         #endregion
         
         #region Status
             public bool IsEmpty()
             {
-                return ItemData is null;
-            }
-            
-            public void SetInteractable(bool interactable)
-            {
-                Interactable = interactable;
-                if (!interactable) DoAnimation?.DoScale_UI(SlotRect, ScaleDownSettings);
+                return _currentItemData is null;
             }
         #endregion
     }

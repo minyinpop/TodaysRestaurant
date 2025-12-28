@@ -9,19 +9,20 @@ namespace UI_System.System.Child
         [field: Header("Components")]
         [field: SerializeField] private RectTransform parent;
         
-        private readonly Dictionary<ServingNoteSO, GameObject> _tempUIs = new();
+        private readonly Dictionary<ServingNoteSO, ServingNote> _tempUIs = new();
 
-        public void RequiresUI(ServingNoteSO servingNoteSO, GameObject prefab)
+        public void RequiresUI(ServingNoteSO servingNoteData, GameObject prefab)
         {
-            if (_tempUIs.TryGetValue(servingNoteSO, out var ui))
+            if (_tempUIs.TryGetValue(servingNoteData, out var ui))
             {
-                ui.SetActive(!ui.activeSelf);
+                ui.gameObject.SetActive(!ui.gameObject.activeSelf);
             }
             else
             {
-                var newUI = Instantiate(prefab, parent);
-                newUI.SetActive(true);
-                _tempUIs.Add(servingNoteSO, newUI);
+                var newUI = Instantiate(prefab, parent).GetComponent<ServingNote>();
+                newUI.Initialize(servingNoteData);
+                newUI.gameObject.SetActive(true);
+                _tempUIs.Add(servingNoteData, newUI);
             }
         }
     }

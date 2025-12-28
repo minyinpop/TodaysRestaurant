@@ -10,7 +10,7 @@ namespace Item.Serving_Note
         [field: Header("Components")]
         [field: SerializeField] private GameObject servingNotePrefab;
 
-        private readonly Queue<ItemSO> _orderedItems = new();
+        private Queue<ItemSO> _orderedItems = new();
         
         #region Interaction
             public override void Selected() { }
@@ -21,12 +21,12 @@ namespace Item.Serving_Note
         #endregion
         
         #region
-            public void AddOrderedItem(ItemSO item)
+            public void SetOrderedItems(Queue<ItemSO> orderedItems)
             {
-                _orderedItems.Enqueue(item);
+                _orderedItems = new Queue<ItemSO>(orderedItems);
             }
 
-            public void GetOrderedItem(out Queue<ItemSO> orderedItems)
+            public void GetOrderedItems(out Queue<ItemSO> orderedItems)
             {
                 orderedItems = _orderedItems;
             }

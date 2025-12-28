@@ -87,7 +87,6 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Child
         {
             ConfirmButton.SetInteractable(interactable);
             CloseButton.SetInteractable(interactable);
-            foreach (var itemSlot in ItemSlots) itemSlot.SetInteractable(interactable);
         }
         
         public bool CheckRecipeIsCorrect()

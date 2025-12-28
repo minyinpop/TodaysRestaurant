@@ -24,24 +24,18 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
         [field: Header("Clickable Bubble Settings")]
         [field: SerializeField] private Transform bubbleParent;
         [field: SerializeField] private GameObject thinkBubble;
-        [field: SerializeField] private GameObject waitForOrderBubble;
-        [field: SerializeField] private GameObject showItemBubble;
-        [field: SerializeField] private GameObject giveNoteBubble;
-        [field: SerializeField] private GameObject returnNoteBubble;
+        [field: SerializeField] private GameObject orderBubble;
+        [field: SerializeField] private GameObject servingNoteBubble;
+        private ClickableBubble _currentBubble;
         
         [field: Header("Data Settings")]
         [field: SerializeField] private SelectFoodPageSO selectFoodPageData;
         
         private readonly StateMachine _stateMachine = new();
-
-        private readonly Queue<ItemSO> _orderedItems = new();
-        private readonly Queue<Action> _cleanUpActions = new();
-        
-        private ClickableBubble _currentBubble;
-        
         private IEnumerator _mainCor;
+        private readonly Queue<Action> _cleanUpActions = new();
 
-        public static event Func<ItemSO, bool> GivingSeringNote;
+        public static event Func<ItemSO, bool> GivingServingNote;
         private ServingNoteSO _servingNoteData;
         
         private void Start()
@@ -112,8 +106,10 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
                         _currentBubble.StartCountDown(3,
                             onComplete: () =>
                             {
+                                var orderedItems = new Queue<ItemSO>();
+                                
                                 selectFoodPageData.GetRandomItemData(out var firstItemData);
-                                _orderedItems.Enqueue(firstItemData);
+                                orderedItems.Enqueue(firstItemData);
                                 
                                 // TODO [2025.12.12] 讓顧客可以點更多餐點的程式碼，尚未更新，預留給未來。
                                 // var chance = UnityEngine.Random.Range(0, 100);
@@ -123,7 +119,7 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
                                 //     if (secondItemData is not null) OrderItems.Enqueue(secondItemData);
                                 // }
 
-                                _servingNoteData.AddOrderedItem(firstItemData);
+                                _servingNoteData.SetOrderedItems(orderedItems);
                                 WaitForOrder();
                             });
                     }
@@ -144,102 +140,65 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
 
                     void OnEnter()
                     {
-                        _currentBubble = Instantiate(waitForOrderBubble, bubbleParent).GetComponent<ClickableBubble>();
-                        _currentBubble.onClick += ShowOrderItem;
+                        _currentBubble = Instantiate(orderBubble, bubbleParent).GetComponent<ClickableBubble>();
+                        _currentBubble.onClick += Rename;
                         _currentBubble.SetInteractable(true);
                         _currentBubble.StartCountDown(15, () =>
                         {
-                            // TODO 等待點餐太久
+                            // TODO 顧客等待玩家點餐太久
                         });
                     }
                     
                     void OnExit()
                     {
-                        _currentBubble.onClick -= ShowOrderItem;
+                        _currentBubble.onClick -= Rename;
                         Destroy(_currentBubble.gameObject);
                         _currentBubble = null;
                     }
-                }
-            #endregion
-            
-            #region ShowOrderItem
-                private void ShowOrderItem()
-                {
-                    Debug.Log("Continue.");
-                    _stateMachine.ChangeState(new ShowOrderItem(OnEnter, OnExit));
-                    return;
 
-                    void OnEnter()
+                    void Rename()
                     {
-                        _mainCor = ShowOrderItemCoroutine();
-                        StartCoroutine(_mainCor);
-                        return;
-
-                        IEnumerator ShowOrderItemCoroutine()
+                        var isGivingServingNoteSuccess = GivingServingNote?.Invoke(_servingNoteData) ?? false;
+                        if (isGivingServingNoteSuccess)
                         {
-                            foreach (var item in _orderedItems)
-                            {
-                                var complete = false;
-                                _currentBubble = Instantiate(showItemBubble, bubbleParent).GetComponent<ClickableBubble>();
-                                _currentBubble.ChangeItemImage(item, 1,
-                                    onComplete: () =>
-                                    {
-                                        Destroy(_currentBubble.gameObject);
-                                        _currentBubble = null;
-                                        complete = true;
-                                    });
-                                yield return new WaitUntil(() => complete);
-                            }
-                            
-                            WaitToGiveServingNote();
+                            WaitForReturnServingNote();
                         }
-                    }
-
-                    void OnExit()
-                    {
-                    }
-                }
-            #endregion
-            
-            #region WaitToGiveServingNote
-                private void WaitToGiveServingNote()
-                {
-                    _stateMachine.ChangeState(new WaitToGiveServingNote(OnEnter, OnExit));
-                    return;
-                    
-                    void OnEnter()
-                    {
-                        _currentBubble = Instantiate(giveNoteBubble, bubbleParent).GetComponent<ClickableBubble>();
-                        _currentBubble.ChangeItemImage(_servingNoteData, 3, WaitForeReturnServingNote);
-                        _currentBubble.StartCountDown(60, () =>
+                        else
                         {
-                            // TODO 等待餐點送達太久
-                        });
-                        _currentBubble.onClick += WaitForeReturnServingNote;
-                    }
-                    
-                    void OnExit()
-                    {
-                        _currentBubble.onClick -= WaitForeReturnServingNote;
-                        Destroy(_currentBubble.gameObject);
-                        _currentBubble = null;
+                            Debug.Log("顧客無法給予玩家點餐的紙條");
+                            // TODO 顧客無法給予玩家點餐的紙條
+                        }
                     }
                 }
             #endregion
             
             #region WaitForReturnServingNote
-                private void WaitForeReturnServingNote()
+                private void WaitForReturnServingNote()
                 {
                     _stateMachine.ChangeState(new WaitForReturnServingNote(OnEnter, OnExit));
                     return;
 
                     void OnEnter()
                     {
-                        GivingSeringNote?.Invoke(_servingNoteData);
+                        _currentBubble = Instantiate(servingNoteBubble, bubbleParent).GetComponent<ClickableBubble>();
+                        _currentBubble.ShowItem(_servingNoteData);
+                        _currentBubble.StartCountDown(15, () =>
+                        {
+                            // TODO 顧客等待玩家收取點餐紙條太久
+                        });
+                        _currentBubble.onClick += Rename;
                     }
                     
                     void OnExit()
                     {
+                        _currentBubble.onClick -= Rename;
+                        Destroy(_currentBubble.gameObject);
+                        _currentBubble = null;
+                    }
+
+                    void Rename()
+                    {
+                        // TODO 返還菜單
                     }
                 }
             #endregion

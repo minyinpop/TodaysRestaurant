@@ -92,21 +92,30 @@ namespace Common.Object
                 onComplete?.Invoke();
             }
         }
-        
-        public void ChangeItemImage(ItemSO item, float duration, Action onComplete)
-        {
-            _countDownCor = CountDownCoroutine();
-            StartCoroutine(_countDownCor);
-            return;
 
-            IEnumerator CountDownCoroutine()
+        #region ShowItem
+            public void ShowItem(ItemSO item)
             {
                 if (item is null) throw new ArgumentNullException(nameof(item));
                 itemImage.sprite = item.ItemSprite;
                 itemImage.gameObject.SetActive(true);
-                yield return new WaitForSeconds(duration);
-                onComplete?.Invoke();
             }
-        }
+
+            public void ShowItem(ItemSO item, float duration, Action onComplete)
+            {
+                _countDownCor = CountDownCoroutine();
+                StartCoroutine(_countDownCor);
+                return;
+
+                IEnumerator CountDownCoroutine()
+                {
+                    if (item is null) throw new ArgumentNullException(nameof(item));
+                    itemImage.sprite = item.ItemSprite;
+                    itemImage.gameObject.SetActive(true);
+                    yield return new WaitForSeconds(duration);
+                    onComplete?.Invoke();
+                }
+            }
+        #endregion
     }
 }

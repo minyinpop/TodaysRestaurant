@@ -58,8 +58,8 @@ namespace Player_System.System.Main
             #endregion
             
             #region Customer
-                Customer.GivingSeringNote += TryAddItem;
-                _cleanUpActions.Enqueue(() => Customer.GivingSeringNote -= TryAddItem);
+                Customer.GivingServingNote += TryAddItem;
+                _cleanUpActions.Enqueue(() => Customer.GivingServingNote -= TryAddItem);
             #endregion
         }
 

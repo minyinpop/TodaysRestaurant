@@ -23,7 +23,7 @@ namespace Common.Object.Storage_Slot.Type
         #region Item
             public override void TryAddItem(ItemSO item, Action onComplete)
             {
-                ItemData = item ?? throw new NotImplementedException();
+                _currentItemData = item ?? throw new NotImplementedException();
                 ItemImage.sprite = item.ItemSprite;
                 ItemImage.gameObject.SetActive(true);
                 SlotRect.localScale = Vector2.one * 1.25f;
