@@ -15,8 +15,11 @@ namespace Item.Serving_Note
         #region Interaction
             public override void Selected() { }
             public override void UnSelected() { }
-            
-            public override void Use() => UISystem.RequireServingNoteUI(this, servingNotePrefab);
+            public override void Use()
+            {
+                if (!UISystem.TryInitializeServingNoteUI(this, servingNotePrefab))
+                    UISystem.ToggleServingNoteUI(this);
+            }
         #endregion
         
         #region

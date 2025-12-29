@@ -9,7 +9,8 @@ using Item.Serving_Note;
 using Restaurant_System.Object.Creature.Customer.System.Child;
 using Restaurant_System.Object.Creature.Customer.System.Main.State_Machine;
 using Restaurant_System.Object.Creature.Customer.System.Main.State_Machine.State;
-using Restaurant_System.Object.Food_Menu.System.Child.Open_Page.Child.Select_Food_Page.Data;
+using UI_System.System.Child.Food_Menu_UI_System.Food_Menu_UI.System.Child.Open_Page.Child.Select_Food_Page.Data;
+using UI_System.System.Main;
 using UnityEngine;
 
 namespace Restaurant_System.Object.Creature.Customer.System.Main
@@ -37,7 +38,6 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
         private readonly Queue<Action> _cleanUpActions = new();
 
         public static event Func<ItemSO, bool> GivingServingNote;
-        public static event Func<PopUpUIContent, bool> ReturnServingNote;
         private ServingNoteSO _servingNoteData;
         
         private void Start()
@@ -114,12 +114,11 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
                                 orderedItems.Enqueue(firstItemData);
                                 
                                 // TODO [2025.12.12] 讓顧客可以點更多餐點的程式碼，尚未更新，預留給未來。
-                                // var chance = UnityEngine.Random.Range(0, 100);
-                                // if (chance > 0)
-                                // {
-                                //     SelectFoodPageData.GetRandomItemData(OrderItems.ToArray(), out var secondItemData);
-                                //     if (secondItemData is not null) OrderItems.Enqueue(secondItemData);
-                                // }
+                                if (UnityEngine.Random.Range(0, 100) > 80)
+                                {
+                                    selectFoodPageData.GetRandomItemData(out var secondItemData);
+                                    orderedItems.Enqueue(secondItemData);
+                                }
 
                                 _servingNoteData.SetOrderedItems(orderedItems);
                                 WaitForOrder();
@@ -200,13 +199,23 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
 
                     void OnClick()
                     {
-                        // TODO 返還菜單
-                        var content = new PopUpUIContent(
-                            message: "確定要把料理給予顧客嗎？",
-                            confirmButtonTitle: "確定",
-                            cancelButtonTitle: "返回",
-                            closeButtonTitle: string.Empty);
-                        var result = ReturnServingNote?.Invoke(content) ?? false;
+                        UISystem.ShowSwitchUI(
+                            content: new PopUpUIContent(
+                                message: "確定要把料理給予顧客嗎？",
+                                confirmButtonTitle: "確定",
+                                cancelButtonTitle: "返回",
+                                closeButtonTitle: string.Empty),
+                            onConfirm: () =>
+                            {
+                                var num = 0;
+                                UISystem.GetServingNoteItems(_servingNoteData, out var servingNoteItems);
+                                foreach (var servingNoteItem in servingNoteItems)
+                                {
+                                    if (servingNoteItem is null) continue;
+                                    num++;
+                                }
+                                Debug.Log(num);
+                            });
                     }
                 }
             #endregion

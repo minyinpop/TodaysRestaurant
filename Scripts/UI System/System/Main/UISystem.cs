@@ -1,11 +1,13 @@
 using System;
+using System.Collections.Generic;
 using Common.Value;
 using Item;
 using Item.Serving_Note;
-using Message_System.System.Child;
 using UI_System.System.Child;
 using UI_System.System.Child.Food_Menu_UI_System;
 using UI_System.System.Child.Hotbar_UI_System;
+using UI_System.System.Child.Message_UI_System;
+using UI_System.System.Child.Serving_Note_UI_System;
 using UnityEngine;
 
 namespace UI_System.System.Main
@@ -30,9 +32,9 @@ namespace UI_System.System.Main
         
         [field: Header("Message UI")]
         [field: SerializeField] private Transform tipSystemParent;
-        private static TipSystem _tipSystem;
+        private static TipUISystem _tipUISystem;
         [field: SerializeField] private Transform switchSystemParent;
-        private static SwitchSystem _switchSystem;
+        private static SwitchUISystem _switchUISystem;
 
         private void Awake()
         {
@@ -44,8 +46,8 @@ namespace UI_System.System.Main
         
             _foodMenuUISystem = foodMenuUISystemParent.GetComponent<FoodMenuUISystem>();
             
-            _tipSystem = tipSystemParent.GetComponent<TipSystem>();
-            _switchSystem = switchSystemParent.GetComponent<SwitchSystem>();
+            _tipUISystem = tipSystemParent.GetComponent<TipUISystem>();
+            _switchUISystem = switchSystemParent.GetComponent<SwitchUISystem>();
         }
         
         #region Player
@@ -54,8 +56,8 @@ namespace UI_System.System.Main
         #endregion
 
         #region Inventory
-            public static void RequireHotbarUI() =>
-                _hotbarUISystem.RequiresUI();
+            public static void InitializeHotbarUI() =>
+                _hotbarUISystem.Initialize();
             public static void PerformHotbar(int hotbarIndex) =>
                 _hotbarUISystem.PerformHotbar(hotbarIndex);
             public static bool TryAddItem(ItemSO item) =>
@@ -68,15 +70,19 @@ namespace UI_System.System.Main
         #endregion
         
         #region ServingNote
-            public static void RequireServingNoteUI(ServingNoteSO servingNoteSO, GameObject prefab) =>
-                _servingNoteUISystem.RequiresUI(servingNoteSO, prefab);
+            public static bool TryInitializeServingNoteUI(ServingNoteSO servingNoteData, GameObject prefab) =>
+                _servingNoteUISystem.TryInitialize(servingNoteData, prefab);
+            public static void ToggleServingNoteUI(ServingNoteSO servingNoteData) =>
+                _servingNoteUISystem.ToggleUI(servingNoteData);
+            public static void GetServingNoteItems(ServingNoteSO servingNoteData, out Queue<ItemSO> servingNoteItems) =>
+                _servingNoteUISystem.GetServingNoteItems(servingNoteData, out servingNoteItems);
         #endregion
 
         #region Message UI
             public static void ShowTipUI(PopUpUIContent content, Action onConfirm = null) =>
-                _tipSystem?.Show(content, onConfirm);
+                _tipUISystem?.Show(content, onConfirm);
             public static void ShowSwitchUI(PopUpUIContent content, Action onShow = null, Action onConfirm = null, Action onCancel = null, Action onClose = null) =>
-                _switchSystem?.Show(content, onShow, onConfirm, onCancel, onClose);
+                _switchUISystem?.Show(content, onShow, onConfirm, onCancel, onClose);
         #endregion
 
         #region Food Menu

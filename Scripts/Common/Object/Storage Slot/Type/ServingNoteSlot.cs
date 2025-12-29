@@ -28,30 +28,40 @@ namespace Common.Object.Storage_Slot.Type
         #endregion
         
         #region Item
-            public override bool TryAddItem(ItemSO item)
+            public override bool TryAddItem(ItemSO itemData)
             {
-                if (item is null) return false;
+                if (itemData is null) return false;
                 if (_currentItemData is not null) return false;
                 
-                _currentItemData = item;
-                ItemImage.sprite = item.ItemSprite;
+                _currentItemData = itemData;
+                ItemImage.sprite = itemData.ItemSprite;
                 ItemImage.color = HaveItemColor;
                 return true;
             }
 
-            public override void TryGetItem(out ItemSO item)
+            public override void TryGetItem(out ItemSO itemData)
             {
                 if (_currentItemData is null)
                 {
-                    item = null;
+                    itemData = null;
                     return;
                 }
                 
-                item = _currentItemData;
+                itemData = _currentItemData;
                 _currentItemData = null;
                 ItemImage.sprite = _targetItemData.ItemSprite;
                 ItemImage.color = NoItemColor;
             }
+
+            public override void TryPeekItem(out ItemSO itemData)
+            {
+                itemData = _currentItemData;
+            }
         #endregion
+
+        public override bool IsEmpty()
+        {
+            return _currentItemData is null;
+        }
     }
 }

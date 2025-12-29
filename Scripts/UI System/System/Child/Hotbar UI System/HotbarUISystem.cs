@@ -11,19 +11,18 @@ namespace UI_System.System.Child.Hotbar_UI_System
         
         private GameObject _ui;
         private HotbarUI _ui_HotbarUI;
-        
-        public void RequiresUI()
+
+        public void Initialize()
         {
-            if (_ui is null)
-            {
-                _ui = Instantiate(uiPrefab, uiParent);
-                _ui_HotbarUI = _ui.GetComponent<HotbarUI>();
-                _ui.SetActive(true);
-            }
-            else
-            {
-                _ui.SetActive(_ui.activeSelf);
-            }
+            if (_ui is not null) return;
+            _ui = Instantiate(uiPrefab, uiParent);
+            _ui_HotbarUI = _ui.GetComponent<HotbarUI>();
+            _ui.SetActive(true);
+        }
+
+        public void ToggleUI()
+        {
+            _ui?.SetActive(!_ui.activeSelf);
         }
         
         public bool TryAddItem(ItemSO itemData)

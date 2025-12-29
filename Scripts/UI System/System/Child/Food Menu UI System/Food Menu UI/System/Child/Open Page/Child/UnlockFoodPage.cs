@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using Item;
 using Item.Food.Data.Food_Category;
-using Restaurant_System.Object.Food_Menu.Object.Item_Slot.Base;
+using UI_System.System.Child.Food_Menu_UI_System.Food_Menu_UI.Object.Item_Slot.Base;
 using UnityEngine;
 
-namespace Restaurant_System.Object.Food_Menu.System.Child.Open_Page.Child
+namespace UI_System.System.Child.Food_Menu_UI_System.Food_Menu_UI.System.Child.Open_Page.Child
 {
     internal sealed class UnlockFoodPage : MonoBehaviour
     {

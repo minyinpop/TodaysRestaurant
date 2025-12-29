@@ -6,6 +6,12 @@ namespace Item
 {
     public abstract class ItemSO : ScriptableObject
     {
+        #region ID
+            [field: Header("Item ID")]
+            [field: SerializeField] private int itemId;
+            public virtual int ItemID => itemId;
+        #endregion
+        
         #region Name
             [field: Header("Item Name")]
             [field: SerializeField] private string itemName;

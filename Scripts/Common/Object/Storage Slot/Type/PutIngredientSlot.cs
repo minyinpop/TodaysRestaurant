@@ -21,39 +21,39 @@ namespace Common.Object.Storage_Slot.Type
         #endregion
 
         #region Item
-            public override bool TryAddItem(ItemSO item)
+            public override bool TryAddItem(ItemSO itemData)
             {
-                if (item is null) return false;
+                if (itemData is null) return false;
                 if (_currentItemData is not null) return false;
                 
                 if (_targetItemData is null)
                 {
-                    _targetItemData = item;
-                    ItemImage.sprite = item.ItemSprite;
+                    _targetItemData = itemData;
+                    ItemImage.sprite = itemData.ItemSprite;
                 }
                 else
                 {
-                    item.GetItemType(out var type01, out var level01);
+                    itemData.GetItemType(out var type01, out var level01);
                     _targetItemData.GetItemType(out var type02, out var level02);
                     if (!Equals(type01, type02)) return false; // TODO 物品類型不同會跳出 Message System
                     if (level01 < level02) return false; // TODO 物品類型相同但等級比 TargetItemData 還低，一樣跳出 Message System
-                    _currentItemData = item;
-                    ItemImage.sprite = item.ItemSprite;
+                    _currentItemData = itemData;
+                    ItemImage.sprite = itemData.ItemSprite;
                     ItemImage.color = HaveItemColor;
                 }
 
                 return true;
             }
 
-            public override void TryGetItem(out ItemSO item)
+            public override void TryGetItem(out ItemSO itemData)
             {
                 if (_currentItemData is null)
                 {
-                    item = null;
+                    itemData = null;
                     return;
                 }
 
-                item = _currentItemData;
+                itemData = _currentItemData;
                 _currentItemData = null;
                 ItemImage.sprite = _targetItemData.ItemSprite;
                 ItemImage.color = NoItemColor;

@@ -41,21 +41,21 @@ namespace Common.Object.Storage_Slot.Type
             #endregion
 
             #region Item
-                public override bool TryAddItem(ItemSO item)
+                public override bool TryAddItem(ItemSO itemData)
                 {
-                    if (item is null) return false;
+                    if (itemData is null) return false;
                     if (_currentItemData is not null) return false;
                     
-                    _currentItemData = item;
-                    ItemImage.sprite = item.ItemSprite;
+                    _currentItemData = itemData;
+                    ItemImage.sprite = itemData.ItemSprite;
                     ItemImage.gameObject.SetActive(true);
                     return true;
                 }
 
-                public override void TryGetItem(out ItemSO item)
+                public override void TryGetItem(out ItemSO itemData)
                 {
-                    if (_currentItemData is null) item = null;
-                    item = _currentItemData;
+                    if (_currentItemData is null) itemData = null;
+                    itemData = _currentItemData;
                     _currentItemData = null;
                     ItemImage.gameObject.SetActive(false);
                     ItemImage.sprite = null;

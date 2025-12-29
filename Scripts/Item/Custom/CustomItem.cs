@@ -18,6 +18,10 @@ namespace Item.Custom
             OverridePrice = price;
         }
         
+        #region ID
+            public override int ItemID => LegacyItemData.ItemID;
+        #endregion
+        
         #region Name
             public override string ItemName => LegacyItemData.ItemName;
         #endregion

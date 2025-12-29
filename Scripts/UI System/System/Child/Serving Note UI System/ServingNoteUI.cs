@@ -1,16 +1,18 @@
 using System.Collections.Generic;
 using Common.Object.Storage_Slot.Type;
+using Item;
+using Item.Serving_Note;
 using UnityEngine;
 
-namespace Item.Serving_Note
+namespace UI_System.System.Child.Serving_Note_UI_System
 {
-    public sealed class ServingNote : MonoBehaviour
+    public sealed class ServingNoteUI : MonoBehaviour
     {
         [field: Header("Components")]
         [field: SerializeField] private RectTransform slotParent;
         [field: SerializeField] private GameObject slotPrefab;
 
-        private readonly Queue<ServingNoteSlot> _servingNoteSlots = new();
+        private readonly List<ServingNoteSlot> _servingNoteSlots = new();
         private ServingNoteSO _servingNoteData;
 
         public void Initialize(ServingNoteSO servingNoteData)
@@ -23,7 +25,18 @@ namespace Item.Serving_Note
             {
                 var newSlot = Instantiate(slotPrefab, slotParent).GetComponent<ServingNoteSlot>();
                 newSlot.Initialize(orderedItem);
-                _servingNoteSlots.Enqueue(newSlot);
+                _servingNoteSlots.Add(newSlot);
+            }
+        }
+
+        public void GetServingNoteSlotItems(out Queue<ItemSO> orderedItems)
+        {
+            orderedItems = new Queue<ItemSO>();
+            
+            foreach (var slot in _servingNoteSlots)
+            {
+                slot.TryPeekItem(out var slotItemData);
+                orderedItems.Enqueue(slotItemData);
             }
         }
     }

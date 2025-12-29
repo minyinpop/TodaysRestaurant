@@ -7,14 +7,9 @@ namespace Player_System.System.Child
 {
     internal sealed class InventorySystem : MonoBehaviour
     {
-        private void OnEnable()
+        private void Start()
         {
-            UISystem.RequireHotbarUI();
-        }
-
-        private void OnDisable()
-        {
-            UISystem.RequireHotbarUI();
+            UISystem.InitializeHotbarUI();
         }
 
         public void PerformHotbar(int hotbarIndex)

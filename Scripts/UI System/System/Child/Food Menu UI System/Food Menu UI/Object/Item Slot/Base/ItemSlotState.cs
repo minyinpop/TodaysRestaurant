@@ -1,4 +1,4 @@
-namespace Restaurant_System.Object.Food_Menu.Object.Item_Slot.Base
+namespace UI_System.System.Child.Food_Menu_UI_System.Food_Menu_UI.Object.Item_Slot.Base
 {
     internal enum ItemSlotState
     {

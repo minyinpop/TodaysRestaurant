@@ -9,16 +9,16 @@ using Common.Value.Type;
 using Item;
 using Item.Food.Data.Food_Category;
 using Player_System.Data.Main;
-using Restaurant_System.Object.Food_Menu.Object;
-using Restaurant_System.Object.Food_Menu.Object.Item_Slot.Base;
-using Restaurant_System.Object.Food_Menu.Object.Item_Slot.Type.Select_Food_Slot;
-using Restaurant_System.Object.Food_Menu.System.Child.Open_Page.Child;
-using Restaurant_System.Object.Food_Menu.System.Child.Open_Page.Child.Select_Food_Page;
-using Restaurant_System.Object.Food_Menu.System.Child.Open_Page.Child.Select_Food_Page.Data;
+using UI_System.System.Child.Food_Menu_UI_System.Food_Menu_UI.Object;
+using UI_System.System.Child.Food_Menu_UI_System.Food_Menu_UI.Object.Item_Slot.Base;
+using UI_System.System.Child.Food_Menu_UI_System.Food_Menu_UI.Object.Item_Slot.Type.Select_Food_Slot;
+using UI_System.System.Child.Food_Menu_UI_System.Food_Menu_UI.System.Child.Open_Page.Child;
+using UI_System.System.Child.Food_Menu_UI_System.Food_Menu_UI.System.Child.Open_Page.Child.Select_Food_Page;
+using UI_System.System.Child.Food_Menu_UI_System.Food_Menu_UI.System.Child.Open_Page.Child.Select_Food_Page.Data;
 using UI_System.System.Main;
 using UnityEngine;
 
-namespace Restaurant_System.Object.Food_Menu.System.Child.Open_Page.Main
+namespace UI_System.System.Child.Food_Menu_UI_System.Food_Menu_UI.System.Child.Open_Page.Main
 {
     [RequireComponent(typeof(DoAnimation))]
     internal sealed class OpenPage : MonoBehaviour

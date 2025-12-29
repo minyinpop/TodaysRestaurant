@@ -21,10 +21,10 @@ namespace Common.Object.Storage_Slot.Type
         #endregion
         
         #region Item
-            public override void TryAddItem(ItemSO item, Action onComplete)
+            public override void TryAddItem(ItemSO itemData, Action onComplete)
             {
-                _currentItemData = item ?? throw new NotImplementedException();
-                ItemImage.sprite = item.ItemSprite;
+                _currentItemData = itemData ?? throw new NotImplementedException();
+                ItemImage.sprite = itemData.ItemSprite;
                 ItemImage.gameObject.SetActive(true);
                 SlotRect.localScale = Vector2.one * 1.25f;
                 DoAnimation.DoScale_UI(SlotRect, ScaleDownSettings,

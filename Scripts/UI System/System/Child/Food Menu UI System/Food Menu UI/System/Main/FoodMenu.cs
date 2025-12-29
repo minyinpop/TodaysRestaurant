@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Restaurant_System.Object.Food_Menu.System.Child;
-using Restaurant_System.Object.Food_Menu.System.Child.Open_Page.Main;
+using UI_System.System.Child.Food_Menu_UI_System.Food_Menu_UI.System.Child;
+using UI_System.System.Child.Food_Menu_UI_System.Food_Menu_UI.System.Child.Open_Page.Main;
 using UnityEngine;
 
 namespace UI_System.System.Child.Food_Menu_UI_System.Food_Menu_UI.System.Main

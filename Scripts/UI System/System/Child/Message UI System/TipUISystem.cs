@@ -6,9 +6,9 @@ using DG.Tweening;
 using Message_System.Object;
 using UnityEngine;
 
-namespace Message_System.System.Child
+namespace UI_System.System.Child.Message_UI_System
 {
-    internal sealed class SwitchSystem : MonoBehaviour
+    internal sealed class TipUISystem : MonoBehaviour
     {
         [field: SerializeField] private PopUpUI PopUpUI;
 
@@ -23,7 +23,7 @@ namespace Message_System.System.Child
             }
         }
 
-        public void Show(PopUpUIContent content, Action onShow, Action onConfirm, Action onCancel, Action onClose)
+        public void Show(PopUpUIContent content, Action onConfirm)
         {
             ShowCor = ShowCoroutine();
             StartCoroutine(ShowCor);
@@ -31,42 +31,36 @@ namespace Message_System.System.Child
 
             IEnumerator ShowCoroutine()
             {
-                var complete = false;
                 var confirm = false;
-                var cancel = false;
-                onShow?.Invoke();
-                PopUpUI.Show(content, new DoFade_CanvasGroup(1, .2f, Ease.Linear),
+                PopUpUI.Show(
+                    content: content,
+                    settings: new DoFade_CanvasGroup(
+                        endValue: 1,
+                        duration: .2f,
+                        ease: Ease.Linear),
                     onComplete: () =>
                     {
                         PopUpUI.OnClickConfirmButton += OnConfirmButtonClicked;
-                        PopUpUI.OnClickCancelButton += OnCancelButtonClicked;
                         PopUpUI.SetButtonInteractable(true);
-                        complete = true;
                     });
-                yield return new WaitUntil(() => complete && (confirm || cancel));
+                yield return new WaitUntil(() => confirm);
                 PopUpUI.OnClickConfirmButton -= OnConfirmButtonClicked;
-                PopUpUI.OnClickCancelButton -= OnCancelButtonClicked;
                 PopUpUI.SetButtonInteractable(false);
-                if (confirm)
-                    onConfirm?.Invoke();
-                else if (cancel)
-                    onCancel?.Invoke();
                 PopUpUI.Hide(
-                    settings: new DoFade_CanvasGroup(0, .2f, Ease.Linear),
+                    settings: new DoFade_CanvasGroup(
+                        endValue: 0,
+                        duration: .2f,
+                        ease: Ease.Linear),
                     onComplete: () =>
                     {
-                        onClose?.Invoke();
+                        onConfirm?.Invoke();
+                        ShowCor = null;
                     });
                 yield break;
-                
+
                 void OnConfirmButtonClicked()
                 {
                     confirm = true;
-                }
-                
-                void OnCancelButtonClicked()
-                {
-                    cancel = true;
                 }
             }
         }

@@ -39,13 +39,14 @@ namespace Common.Object.Storage_Slot
         #endregion
         
         #region Item
-            public virtual bool TryAddItem(ItemSO item) => false;
-            public virtual void TryAddItem(ItemSO item, Action onComplete) { }
-            public virtual void TryGetItem(out ItemSO item) => item = _currentItemData;
+            public virtual bool TryAddItem(ItemSO itemData) => false;
+            public virtual void TryAddItem(ItemSO itemData, Action onComplete) => onComplete?.Invoke();
+            public virtual void TryGetItem(out ItemSO itemData) => itemData = _currentItemData;
+            public virtual void TryPeekItem(out ItemSO itemData) => itemData = _currentItemData;
         #endregion
         
         #region Status
-            public bool IsEmpty()
+            public virtual bool IsEmpty()
             {
                 return _currentItemData is null;
             }

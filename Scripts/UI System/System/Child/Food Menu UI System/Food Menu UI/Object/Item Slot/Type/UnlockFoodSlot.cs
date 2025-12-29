@@ -2,11 +2,11 @@ using System.Collections.Generic;
 using Animation_System.DOTween;
 using Animation_System.DOTween.Basic;
 using Item;
-using Restaurant_System.Object.Food_Menu.Object.Item_Slot.Base;
+using UI_System.System.Child.Food_Menu_UI_System.Food_Menu_UI.Object.Item_Slot.Base;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Restaurant_System.Object.Food_Menu.Object.Item_Slot.Type
+namespace UI_System.System.Child.Food_Menu_UI_System.Food_Menu_UI.Object.Item_Slot.Type
 {
     internal sealed class UnlockFoodSlot : ItemSlot
     {
