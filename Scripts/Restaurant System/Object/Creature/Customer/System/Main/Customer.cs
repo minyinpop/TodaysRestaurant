@@ -30,6 +30,7 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
         [field: SerializeField] private GameObject servingNoteBubble;
         [field: SerializeField] private GameObject happyBubble;
         [field: SerializeField] private GameObject angryBubble;
+        [field: SerializeField] private GameObject checkoutBubble;
         private ClickableBubble _currentBubble;
         
         [field: Header("Data Settings")]
@@ -42,8 +43,11 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
         private ServingNoteSO _servingNoteData;
         
         public static event Func<ItemSO, bool> GivingServingNote;
+        public event Action PrepareToLeave;
         
         private readonly Queue<Action> _cleanUpActions = new();
+
+        private bool isHappy;
         
         private void Start()
         {
@@ -54,7 +58,7 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
         {
             moveSystem.ToLeft += flipSystem.TurnsLeft;
             _cleanUpActions.Enqueue(() => moveSystem.ToLeft -= flipSystem.TurnsLeft);
-                
+            
             moveSystem.ToRight += flipSystem.TurnsRight;
             _cleanUpActions.Enqueue(() => moveSystem.ToRight -= flipSystem.TurnsRight);
         }
@@ -146,8 +150,7 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
                     void OnEnter()
                     {
                         _currentBubble = Instantiate(orderBubble, bubbleParent).GetComponent<ClickableBubble>();
-                        _currentBubble.onClick += Rename;
-                        _currentBubble.SetInteractable(true);
+                        _currentBubble.OnClick += OnClick;
                         _currentBubble.StartCountDown(15, () =>
                         {
                             // TODO 顧客等待玩家點餐太久
@@ -156,12 +159,12 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
                     
                     void OnExit()
                     {
-                        _currentBubble.onClick -= Rename;
+                        _currentBubble.OnClick -= OnClick;
                         Destroy(_currentBubble.gameObject);
                         _currentBubble = null;
                     }
 
-                    void Rename()
+                    void OnClick()
                     {
                         var isGivingServingNoteSuccess = GivingServingNote?.Invoke(_servingNoteData) ?? false;
                         if (isGivingServingNoteSuccess)
@@ -191,12 +194,12 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
                         {
                             // TODO 顧客等待玩家收取點餐紙條太久
                         });
-                        _currentBubble.onClick += OnClick;
+                        _currentBubble.OnClick += OnClick;
                     }
                     
                     void OnExit()
                     {
-                        _currentBubble.onClick -= OnClick;
+                        _currentBubble.OnClick -= OnClick;
                         Destroy(_currentBubble.gameObject);
                         _currentBubble = null;
                     }
@@ -237,15 +240,39 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
                                     servingNoteItems.RemoveAt(i);
                                 }
                                 
-                                if (correctNumber == 0)
-                                {
-                                    Happy();
-                                }
-                                else
-                                {
-                                    Angry();
-                                }
+                                isHappy = correctNumber == 0;
+                                ThinksServingNoteItems();
                             });
+                    }
+                }
+            #endregion
+            
+            #region ThinksServingNoteItems
+                private void ThinksServingNoteItems()
+                {
+                    _stateMachine.ChangeState(new ThinksServingNoteItems(OnEnter, OnExit));
+                    return;
+                    
+                    void OnEnter()
+                    {
+                        // TODO [2025.12.30] 更改思考辭兼
+                        var thinkDuration = 3f;
+                        _currentBubble = Instantiate(thinkBubble, bubbleParent).GetComponent<ClickableBubble>();
+                        
+                        if (isHappy)
+                        {
+                            _currentBubble.StartCountDown(thinkDuration, Happy);
+                        }
+                        else
+                        {
+                            _currentBubble.StartCountDown(thinkDuration, Angry);
+                        }
+                    }
+                    
+                    void OnExit()
+                    {
+                        Destroy(_currentBubble.gameObject);
+                        _currentBubble = null;
                     }
                 }
             #endregion
@@ -259,7 +286,7 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
                     void OnEnter()
                     {
                         _currentBubble = Instantiate(happyBubble, bubbleParent).GetComponent<ClickableBubble>();
-                        _currentBubble.StartCountDown(3, WalkToEntrance);
+                        _currentBubble.StartCountDown(3, WaitForCheckout);
                     }
                     
                     void OnExit()
@@ -279,7 +306,7 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
                     void OnEnter()
                     {
                         _currentBubble = Instantiate(angryBubble, bubbleParent).GetComponent<ClickableBubble>();
-                        _currentBubble.StartCountDown(3, WalkToEntrance);
+                        _currentBubble.StartCountDown(3, PrepareToLeave);
                     }
                     
                     void OnExit()
@@ -290,18 +317,44 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
                 }
             #endregion
             
+            #region WaitForCheckout
+                private void WaitForCheckout()
+                {
+                    _stateMachine.ChangeState(new WaitForCheckout(OnEnter, OnExit));
+                    return;
+
+                    void OnEnter()
+                    {
+                        _currentBubble = Instantiate(checkoutBubble, bubbleParent).GetComponent<ClickableBubble>();
+                        _currentBubble.OnClick += PrepareToLeave;
+                    }
+                    
+                    void OnExit()
+                    {
+                        _currentBubble.OnClick -= PrepareToLeave;
+                        Destroy(_currentBubble.gameObject);
+                        _currentBubble = null;
+                    }
+                }
+            #endregion
+            
             #region WalkToEntrance
-                private void WalkToEntrance()
+                public void WalkToEntrance(Transform standPoint, Transform spawnPoint, Action onArrive = null)
                 {
                     _stateMachine.ChangeState(new WalkToEntrance(OnEnter, OnExit));
                     return;
 
                     void OnEnter()
                     {
+                        animationSystem.Walk();
+                        moveSystem.StandUp(standPoint);
+                        moveSystem.StartWalk(spawnPoint, onArrive);
                     }
                     
                     void OnExit()
                     {
+                        Destroy(_currentBubble.gameObject);
+                        _currentBubble = null;
                     }
                 }
             #endregion

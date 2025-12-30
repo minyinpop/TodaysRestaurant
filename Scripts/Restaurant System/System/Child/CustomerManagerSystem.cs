@@ -1,11 +1,13 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using Restaurant_System.Object;
 using Restaurant_System.Object.Creature.Customer.System.Main;
 using UnityEngine;
 
 namespace Restaurant_System.System.Child
 {
-    internal sealed class CustomerManagerSystem : MonoBehaviour
+    public sealed class CustomerManagerSystem : MonoBehaviour
     {
         [field: Header("Customer")]
         [field: SerializeField] private Transform CustomerSpawnPoint;
@@ -20,25 +22,47 @@ namespace Restaurant_System.System.Child
         private int CurrentCustomerAmount;
         
         private IEnumerator MainCor;
-
+        
+        private readonly Dictionary<Customer, SeatPoint> _customers = new();
+        private readonly Queue<Action> _cleanUpActions = new();
+        
         private void Awake()
         {
             CustomerAmountPerRound = Mathf.Abs(CustomerAmountPerRound);
             CustomerComeDuration = Mathf.Abs(CustomerComeDuration);
         }
-
+        
         private void OnDisable()
         {
-            StopMainCoroutine();
+            EndSystem();
         }
 
-        public void StartSystem()
-        {
-            MainCor = MainCoroutine();
-            StartCoroutine(MainCor);
-            return;
-            
-            IEnumerator MainCoroutine()
+        #region System
+            public void StartSystem()
+            {
+                SpawnCustomer();
+            }
+
+            private void EndSystem()
+            {
+                while (_cleanUpActions.Count > 0) _cleanUpActions.Dequeue()?.Invoke();
+                
+                if (MainCor is not null)
+                {
+                    StopCoroutine(MainCor);
+                    MainCor = null;
+                }
+            }
+        #endregion
+
+        #region Customer
+            private void SpawnCustomer()
+            {
+                MainCor = SpawnCustomerProcess();
+                StartCoroutine(MainCor);
+            }
+
+            private IEnumerator SpawnCustomerProcess()
             {
                 while (CurrentCustomerAmount < CustomerAmountPerRound)
                 {
@@ -49,23 +73,28 @@ namespace Restaurant_System.System.Child
                         CurrentCustomerAmount++;
                         var newCustomer = Instantiate(CustomerPrefab, CustomerSpawnPoint.position, Quaternion.identity, CustomerParent).GetComponent<Customer>();
                         
+                        _customers.Add(newCustomer, seatPoint);
+                        
                         seatPoint.SetCustomer(newCustomer);
                         newCustomer.GiveServingNote(seatPoint.ServingNote());
                         newCustomer.WalkToSeatPoint(seatPoint.StandPoint(), seatPoint.SitPoint());
                         
+                        newCustomer.PrepareToLeave += Leave;
+                        _cleanUpActions.Enqueue(() => newCustomer.PrepareToLeave -= Leave);
+                        
                         yield return new WaitForSeconds(CustomerComeDuration);
+                        continue;
+                        
+                        void Leave()
+                        {
+                            seatPoint.Reset();
+                            newCustomer.WalkToEntrance(seatPoint.StandPoint(), CustomerSpawnPoint, () => Destroy(newCustomer.gameObject));
+                        }
                     }
 
                     yield return null;
                 }
             }
-        }
-
-        private void StopMainCoroutine()
-        {
-            if (MainCor is null) return;
-            StopCoroutine(MainCor);
-            MainCor = null;
-        }
+        #endregion
     }
 }

@@ -8,22 +8,22 @@ namespace Restaurant_System.Object.Creature.Customer.System.Child
     internal sealed class MoveSystem : MonoBehaviour
     {
         [field: Header("Component")]
-        [field: SerializeField] private NavMeshAgent Agent;
+        [field: SerializeField] private NavMeshAgent agent;
         
         [field: Header("Point")]
-        [field: SerializeField] private Transform Root;
-        [field: SerializeField] private Transform Hip;
+        [field: SerializeField] private Transform root;
+        [field: SerializeField] private Transform hip;
 
-        private IEnumerator WalkCor;
+        private IEnumerator _walkCor;
         
-        private bool isLeft;
+        private bool _isLeft;
 
         public event Action ToLeft;
         public event Action ToRight;
 
         private void Awake()
         {
-            Agent.updateRotation = false;
+            agent.updateRotation = false;
         }
 
         private void OnDisable()
@@ -31,61 +31,81 @@ namespace Restaurant_System.Object.Creature.Customer.System.Child
             StopWalk();
         }
 
-        public void StartWalk(Transform target, Action onArrive = null)
-        {
-            Agent.enabled = true;
-            Agent.SetDestination(target.position);
-            
-            WalkCor = WalkCoroutine();
-            StartCoroutine(WalkCor);
-            return;
-
-            IEnumerator WalkCoroutine()
+        #region Walk
+            public void StartWalk(Transform target, Action onArrive = null)
             {
-                while (true)
+                agent.enabled = true;
+                agent.SetDestination(target.position);
+                
+                _walkCor = WalkCoroutine();
+                StartCoroutine(_walkCor);
+                return;
+
+                IEnumerator WalkCoroutine()
                 {
-                    var moveDir = Agent.velocity.sqrMagnitude > .0001f ? Agent.velocity.normalized : target.forward;
-                    switch (moveDir.x)
+                    while (true)
                     {
-                        case > 0 when !isLeft:
+                        var moveDir = agent.velocity.sqrMagnitude > .0001f ? agent.velocity.normalized : target.forward;
+                        switch (moveDir.x)
                         {
-                            isLeft = true;
-                            ToRight?.Invoke();
-                            break;
+                            case > 0 when !_isLeft:
+                            {
+                                _isLeft = true;
+                                ToRight?.Invoke();
+                                break;
+                            }
+                            case < 0 when _isLeft:
+                            {
+                                _isLeft = false;
+                                ToLeft?.Invoke();
+                                break;
+                            }
                         }
-                        case < 0 when isLeft:
-                        {
-                            isLeft = false;
-                            ToLeft?.Invoke();
-                            break;
-                        }
+                        
+                        if (agent.pathPending)                                    { yield return null; continue; }
+                        if (float.IsInfinity(agent.remainingDistance))            { yield return null; continue; }
+                        if (agent.remainingDistance >= .05f)                      { yield return null; continue; }
+                        if (!agent.hasPath || agent.velocity.sqrMagnitude < .01f) { yield return null; break; }
+                        yield return null;
                     }
-                    
-                    if (Agent.pathPending)                                    { yield return null; continue; }
-                    if (float.IsInfinity(Agent.remainingDistance))            { yield return null; continue; }
-                    if (Agent.remainingDistance >= .05f)                      { yield return null; continue; }
-                    if (!Agent.hasPath || Agent.velocity.sqrMagnitude < .01f) { yield return null; break; }
-                    yield return null;
+
+                    onArrive?.Invoke();
                 }
-
-                onArrive?.Invoke();
             }
-        }
-        
-        public void StopWalk()
-        {
-            if (WalkCor is null) return;
-            StopCoroutine(WalkCor);
-            WalkCor = null;
-        }
+            
+            public void StopWalk()
+            {
+                if (_walkCor is null) return;
+                StopCoroutine(_walkCor);
+                _walkCor = null;
+            }
+        #endregion
 
-        public void SitDown(Transform sitPoint)
-        {
-            var direction = sitPoint.position - Hip.position;
-            Root.transform.position += direction;
+        #region Chair
+            public void SitDown(Transform sitPoint)
+            {
+                var direction = sitPoint.position - hip.position;
+                root.transform.position += direction;
+                
+                if (agent is null) return;
+                if (!agent.isActiveAndEnabled) return;
+                if (!agent.isOnNavMesh) return;
 
-            Agent.ResetPath();
-            Agent.enabled = false;
-        }
+                agent.ResetPath();
+                agent.enabled = false;
+            }
+
+            public void StandUp(Transform standPoint)
+            {
+                root.transform.position = standPoint.position;
+
+                if (agent is null) return;
+                if (!agent.isActiveAndEnabled) return;
+                if (!agent.isOnNavMesh) return;
+                
+                agent.ResetPath();
+                agent.enabled = true;
+            }
+        #endregion
     }
 }

@@ -76,8 +76,8 @@ namespace Restaurant_System.Object.Cookware.System
                             _currentBubble = Instantiate(EmptyBubblePrefab, BubbleParent);
                             _currentBubbleScript = _currentBubble.GetComponent<ClickableBubble>();
                             
-                            _currentBubbleScript.onClick += OnBubbleClicked;
-                            _cleanUpActions.Enqueue(() => _currentBubbleScript.onClick -= OnBubbleClicked);
+                            _currentBubbleScript.OnClick += OnBubbleClicked;
+                            _cleanUpActions.Enqueue(() => _currentBubbleScript.OnClick -= OnBubbleClicked);
                             
                             _currentBubbleScript.SetInteractable(_interactable);
                             return;
@@ -137,8 +137,8 @@ namespace Restaurant_System.Object.Cookware.System
                             _currentBubble = Instantiate(GameTimeBubblePrefab, BubbleParent);
                             _currentBubbleScript = _currentBubble.GetComponent<ClickableBubble>();
                             
-                            _currentBubbleScript.onClick += OnBubbleClicked;
-                            _cleanUpActions.Enqueue(() => _currentBubbleScript.onClick -= OnBubbleClicked);
+                            _currentBubbleScript.OnClick += OnBubbleClicked;
+                            _cleanUpActions.Enqueue(() => _currentBubbleScript.OnClick -= OnBubbleClicked);
                             
                             _currentBubbleScript.SetInteractable(_interactable);
                             _currentBubbleScript.StartCountDown(Mathf.Abs(GameTimeDuration),
@@ -176,8 +176,8 @@ namespace Restaurant_System.Object.Cookware.System
                             _currentBubble = Instantiate(CompleteBubblePrefab, BubbleParent);
                             _currentBubbleScript = _currentBubble.GetComponent<ClickableBubble>();
                             
-                            _currentBubbleScript.onClick += OnBubbleClicked;
-                            _cleanUpActions.Enqueue(() => _currentBubbleScript.onClick -= OnBubbleClicked);
+                            _currentBubbleScript.OnClick += OnBubbleClicked;
+                            _cleanUpActions.Enqueue(() => _currentBubbleScript.OnClick -= OnBubbleClicked);
                             
                             _currentBubbleScript.SetInteractable(_interactable);
                             return;
@@ -208,8 +208,8 @@ namespace Restaurant_System.Object.Cookware.System
                             _currentBubble = Instantiate(OvercookedBubblePrefab, BubbleParent);
                             _currentBubbleScript = _currentBubble.GetComponent<ClickableBubble>();
                             
-                            _currentBubbleScript.onClick += OnClick;
-                            _cleanUpActions.Enqueue(() => _currentBubbleScript.onClick -= OnClick);
+                            _currentBubbleScript.OnClick += OnClick;
+                            _cleanUpActions.Enqueue(() => _currentBubbleScript.OnClick -= OnClick);
                             _currentBubbleScript.SetInteractable(_interactable);
                             return;
 

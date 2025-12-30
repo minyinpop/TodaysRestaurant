@@ -36,7 +36,7 @@ namespace Item.Serving_Note
             }
         #endregion
 
-        #region
+        #region States
             public void Reset()
             {
                 _orderedItems.Clear();

@@ -13,7 +13,7 @@ namespace Restaurant_System.Object
         [field: Header("Serving Note")]
         [field: SerializeField] private ServingNoteSO servingNoteData;
 
-        private Customer currentCustomer;
+        private Customer _currentCustomer;
         
         #region Position
             public Transform StandPoint() => standPoint;
@@ -25,11 +25,17 @@ namespace Restaurant_System.Object
         #endregion
         
         #region Customer
-            public void SetCustomer(Customer customer) => currentCustomer = customer;
+            public void SetCustomer(Customer customer) => _currentCustomer = customer;
         #endregion
         
         #region Status
-            public bool IsOccupied() => currentCustomer is not null;
+            public bool IsOccupied() => _currentCustomer is not null;
         #endregion
+
+        public void Reset()
+        {
+            servingNoteData.Reset();
+            _currentCustomer = null;
+        }
     }
 }

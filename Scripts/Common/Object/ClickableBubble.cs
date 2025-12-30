@@ -28,7 +28,7 @@ namespace Common.Object
         
         private IEnumerator _countDownCor;
         
-        public event Action onClick;
+        public event Action OnClick;
 
         private void OnEnable()
         {
@@ -49,7 +49,7 @@ namespace Common.Object
 
         private void HandleButtonClick()
         {
-            onClick?.Invoke();
+            OnClick?.Invoke();
         }
 
         public void SetInteractable(bool interactable)
