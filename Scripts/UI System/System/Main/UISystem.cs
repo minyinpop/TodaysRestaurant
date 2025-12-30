@@ -74,7 +74,7 @@ namespace UI_System.System.Main
                 _servingNoteUISystem.TryInitialize(servingNoteData, prefab);
             public static void ToggleServingNoteUI(ServingNoteSO servingNoteData) =>
                 _servingNoteUISystem.ToggleUI(servingNoteData);
-            public static void GetServingNoteItems(ServingNoteSO servingNoteData, out Queue<ItemSO> servingNoteItems) =>
+            public static void GetServingNoteItems(ServingNoteSO servingNoteData, out List<ItemSO> servingNoteItems) =>
                 _servingNoteUISystem.GetServingNoteItems(servingNoteData, out servingNoteItems);
         #endregion
 

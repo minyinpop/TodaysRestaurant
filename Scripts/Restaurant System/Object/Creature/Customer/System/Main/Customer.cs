@@ -28,17 +28,22 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
         [field: SerializeField] private GameObject thinkBubble;
         [field: SerializeField] private GameObject orderBubble;
         [field: SerializeField] private GameObject servingNoteBubble;
+        [field: SerializeField] private GameObject happyBubble;
+        [field: SerializeField] private GameObject angryBubble;
         private ClickableBubble _currentBubble;
         
         [field: Header("Data Settings")]
         [field: SerializeField] private SelectFoodPageSO selectFoodPageData;
         
         private readonly StateMachine _stateMachine = new();
+        
         private IEnumerator _mainCor;
-        private readonly Queue<Action> _cleanUpActions = new();
-
-        public static event Func<ItemSO, bool> GivingServingNote;
+        
         private ServingNoteSO _servingNoteData;
+        
+        public static event Func<ItemSO, bool> GivingServingNote;
+        
+        private readonly Queue<Action> _cleanUpActions = new();
         
         private void Start()
         {
@@ -108,16 +113,15 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
                         _currentBubble.StartCountDown(3,
                             onComplete: () =>
                             {
-                                var orderedItems = new Queue<ItemSO>();
+                                var orderedItems = new List<ItemSO>();
                                 
                                 selectFoodPageData.GetRandomItemData(out var firstItemData);
-                                orderedItems.Enqueue(firstItemData);
+                                orderedItems.Add(firstItemData);
                                 
-                                // TODO [2025.12.12] 讓顧客可以點更多餐點的程式碼，尚未更新，預留給未來。
                                 if (UnityEngine.Random.Range(0, 100) > 80)
                                 {
                                     selectFoodPageData.GetRandomItemData(out var secondItemData);
-                                    orderedItems.Enqueue(secondItemData);
+                                    orderedItems.Add(secondItemData);
                                 }
 
                                 _servingNoteData.SetOrderedItems(orderedItems);
@@ -207,15 +211,97 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
                                 closeButtonTitle: string.Empty),
                             onConfirm: () =>
                             {
-                                var num = 0;
                                 UISystem.GetServingNoteItems(_servingNoteData, out var servingNoteItems);
-                                foreach (var servingNoteItem in servingNoteItems)
+                                _servingNoteData.GetOrderedItems(out var orderedItems);
+                                
+                                var correctNumber = orderedItems.Count;
+                                
+                                for (var i = servingNoteItems.Count - 1; i >= 0; i--)
                                 {
-                                    if (servingNoteItem is null) continue;
-                                    num++;
+                                    var servingNoteItem = servingNoteItems[i];
+                                    
+                                    if (servingNoteItem is null)
+                                    {
+                                        servingNoteItems.RemoveAt(i);
+                                        continue;
+                                    }
+                                    
+                                    foreach (var orderedItem in orderedItems)
+                                    {
+                                        if (servingNoteItem.ItemID == orderedItem.ItemID)
+                                        {
+                                            correctNumber--;
+                                        }
+                                    }
+                                    
+                                    servingNoteItems.RemoveAt(i);
                                 }
-                                Debug.Log(num);
+                                
+                                if (correctNumber == 0)
+                                {
+                                    Happy();
+                                }
+                                else
+                                {
+                                    Angry();
+                                }
                             });
+                    }
+                }
+            #endregion
+            
+            #region Happy
+                private void Happy()
+                {
+                    _stateMachine.ChangeState(new Happy(OnEnter, OnExit));
+                    return;
+
+                    void OnEnter()
+                    {
+                        _currentBubble = Instantiate(happyBubble, bubbleParent).GetComponent<ClickableBubble>();
+                        _currentBubble.StartCountDown(3, WalkToEntrance);
+                    }
+                    
+                    void OnExit()
+                    {
+                        Destroy(_currentBubble.gameObject);
+                        _currentBubble = null;
+                    }
+                }
+            #endregion
+            
+            #region Angry
+                private void Angry()
+                {
+                    _stateMachine.ChangeState(new Angry(OnEnter, OnExit));
+                    return;
+
+                    void OnEnter()
+                    {
+                        _currentBubble = Instantiate(angryBubble, bubbleParent).GetComponent<ClickableBubble>();
+                        _currentBubble.StartCountDown(3, WalkToEntrance);
+                    }
+                    
+                    void OnExit()
+                    {
+                        Destroy(_currentBubble.gameObject);
+                        _currentBubble = null;
+                    }
+                }
+            #endregion
+            
+            #region WalkToEntrance
+                private void WalkToEntrance()
+                {
+                    _stateMachine.ChangeState(new WalkToEntrance(OnEnter, OnExit));
+                    return;
+
+                    void OnEnter()
+                    {
+                    }
+                    
+                    void OnExit()
+                    {
                     }
                 }
             #endregion

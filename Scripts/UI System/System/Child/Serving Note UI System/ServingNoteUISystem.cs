@@ -28,14 +28,14 @@ namespace UI_System.System.Child.Serving_Note_UI_System
                 ui.gameObject.SetActive(!ui.gameObject.activeSelf);
         }
 
-        public void GetServingNoteItems(ServingNoteSO servingNoteData, out Queue<ItemSO> servingNoteItems)
+        public void GetServingNoteItems(ServingNoteSO servingNoteData, out List<ItemSO> servingNoteItems)
         {
             _servingNoteUIs.TryGetValue(servingNoteData, out var servingNote);
             
             if (servingNote is null)
                 throw new KeyNotFoundException($"Serving note UI not found for {servingNoteData.name}");
             
-            servingNote.GetServingNoteSlotItems(out servingNoteItems);
+            servingNote.GetSlotItems(out servingNoteItems);
         }
     }
 }

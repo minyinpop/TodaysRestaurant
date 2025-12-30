@@ -29,14 +29,14 @@ namespace UI_System.System.Child.Serving_Note_UI_System
             }
         }
 
-        public void GetServingNoteSlotItems(out Queue<ItemSO> orderedItems)
+        public void GetSlotItems(out List<ItemSO> orderedItems)
         {
-            orderedItems = new Queue<ItemSO>();
+            orderedItems = new List<ItemSO>();
             
             foreach (var slot in _servingNoteSlots)
             {
                 slot.TryPeekItem(out var slotItemData);
-                orderedItems.Enqueue(slotItemData);
+                orderedItems.Add(slotItemData);
             }
         }
     }
