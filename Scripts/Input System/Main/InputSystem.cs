@@ -32,14 +32,6 @@ namespace Input_System.Main
         {
             InputManager.Enable();
             
-            #region Mouse
-                InputManager.Mouse.LeftButton.performed += OnLeftButtonClicked;
-                ActiveActions.Enqueue(() => InputManager.Mouse.LeftButton.performed -= OnLeftButtonClicked);
-                
-                InputManager.Mouse.RightButtom.performed += OnRightButtonClicked;
-                ActiveActions.Enqueue(() => InputManager.Mouse.RightButtom.performed -= OnRightButtonClicked);
-            #endregion
-            
             #region Player
                 InputManager.Player.Walk.started += OnPlayerWalkStarted;
                 ActiveActions.Enqueue(() => InputManager.Player.Walk.started -= OnPlayerWalkStarted);
@@ -49,6 +41,17 @@ namespace Input_System.Main
                 
                 InputManager.Player.Hotbar.performed += OnHotbarPerformed;
                 ActiveActions.Enqueue(() => InputManager.Player.Hotbar.performed -= OnHotbarPerformed);
+
+                InputManager.Player.Backpack.performed += OnBackpackPerformed;
+                ActiveActions.Enqueue(() => InputManager.Player.Backpack.performed -= OnBackpackPerformed);
+            #endregion
+            
+            #region Mouse
+                InputManager.Mouse.LeftButton.performed += OnLeftButtonClicked;
+                ActiveActions.Enqueue(() => InputManager.Mouse.LeftButton.performed -= OnLeftButtonClicked);
+                
+                InputManager.Mouse.RightButtom.performed += OnRightButtonClicked;
+                ActiveActions.Enqueue(() => InputManager.Mouse.RightButtom.performed -= OnRightButtonClicked);
             #endregion
         }
 
@@ -90,6 +93,11 @@ namespace Input_System.Main
                     };
                     OnPerformedHotbar?.Invoke(index);
                 }
+            #endregion
+
+            #region Backpack
+                public static event Action OnPerformedBackpack;
+                private static void OnBackpackPerformed(InputAction.CallbackContext context) => OnPerformedBackpack?.Invoke();
             #endregion
         #endregion
         

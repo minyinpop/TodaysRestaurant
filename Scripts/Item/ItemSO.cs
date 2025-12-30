@@ -71,6 +71,7 @@ namespace Item
             public abstract void Selected();
             public abstract void UnSelected();
             public abstract void Use();
+            public abstract void Remove();
         #endregion
     }
 }

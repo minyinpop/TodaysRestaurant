@@ -27,11 +27,18 @@ namespace Common.Object.Storage_Slot.Type
             }
         #endregion
         
+        #region Interaction
+            public override void Selected() { }
+            public override void UnSelected() { }
+            public override void Use() { }
+        #endregion
+        
         #region Item
             public override bool TryAddItem(ItemSO itemData)
             {
                 if (itemData is null) return false;
                 if (_currentItemData is not null) return false;
+                if (itemData.ItemID != _targetItemData.ItemID) return false;
                 
                 _currentItemData = itemData;
                 ItemImage.sprite = itemData.ItemSprite;

@@ -45,28 +45,29 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Game.Object
             if (IsPicked) Pick();
             else UnPick();
             return;
-
+            
             void Pick()
             {
                 MainCamera = mainCamera;
 
                 var screenPos = InputSystem.MousePosition();
-                
                 var ray = MainCamera.ScreenPointToRay(screenPos);
-                var isNormal = - MainCamera.transform.forward;
-                var isPoint = Physics2D.GetRayIntersection(ray);
 
-                DragPlane = new Plane(isNormal, isPoint.point);
-                DragPlane.Raycast(ray, out var enter0);
+                // 修改點：直接以湯匙目前的 Z 軸位置建立一個面向相機的平面
+                // 這樣無論相機在哪，平面都會精準對齊湯匙的深度
+                DragPlane = new Plane(-MainCamera.transform.forward, transform.position);
 
-                var worldOnPlane = ray.GetPoint(enter0);
-                DragOffset = transform.position - worldOnPlane;
+                if (DragPlane.Raycast(ray, out var enter0))
+                {
+                    var worldOnPlane = ray.GetPoint(enter0);
+                    DragOffset = transform.position - worldOnPlane;
+                        
+                    OriginalGravity = Rig2D.gravityScale;
+                    Rig2D.gravityScale = 0;
 
-                OriginalGravity = Rig2D.gravityScale;
-                Rig2D.gravityScale = 0;
-
-                MoveCor = MoveCoroutine();
-                StartCoroutine(MoveCor);
+                    MoveCor = MoveCoroutine();
+                    StartCoroutine(MoveCor);
+                }
             }
 
             IEnumerator MoveCoroutine()

@@ -6,12 +6,12 @@ using UnityEngine;
 
 namespace Player_System.System.Child.Detect_System.Main
 {
-    internal sealed class DetectSystem : MonoBehaviour
+    public sealed class DetectSystem : MonoBehaviour
     {
         [field: Header("Detect Area")]
         [field: SerializeField] private DetectArea[] DetectAreas;
         
-        private readonly Queue<Action> ActiveActions = new();
+        private readonly Queue<Action> _activeActions = new();
         
         private void Start()
         {
@@ -29,8 +29,8 @@ namespace Player_System.System.Child.Detect_System.Main
             {
                 detectArea.OnEnterDetect += OnEnterDetect;
                 detectArea.OnExitDetect += OnExitDetect;
-                ActiveActions.Enqueue(() => detectArea.OnEnterDetect -= OnEnterDetect);
-                ActiveActions.Enqueue(() => detectArea.OnExitDetect -= OnExitDetect);
+                _activeActions.Enqueue(() => detectArea.OnEnterDetect -= OnEnterDetect);
+                _activeActions.Enqueue(() => detectArea.OnExitDetect -= OnExitDetect);
             }
             return;
 
@@ -47,9 +47,9 @@ namespace Player_System.System.Child.Detect_System.Main
 
         private void StopDetect()
         {
-            while (ActiveActions.Count > 0)
+            while (_activeActions.Count > 0)
             {
-                var action = ActiveActions.Dequeue();
+                var action = _activeActions.Dequeue();
                 action?.Invoke();
             }
         }

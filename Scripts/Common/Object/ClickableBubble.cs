@@ -10,7 +10,8 @@ namespace Common.Object
     internal sealed class ClickableBubble : MonoBehaviour
     {
         [field: Header("Component Settings")]
-        [field: SerializeField] private Button button;
+        [field: SerializeField] private Image bubbleImage;
+        [field: SerializeField] private Button bubbleButton;
         [field: SerializeField] private List<Image> colorChangeImages;
         [field: SerializeField] private Image itemImage;
         
@@ -32,9 +33,9 @@ namespace Common.Object
 
         private void OnEnable()
         {
-            if (button is null) return;
-            button.onClick += HandleButtonClick;
-            _cleanUpActions.Add(() => button.onClick -= HandleButtonClick);
+            if (bubbleButton is null) return;
+            bubbleButton.onClick += HandleButtonClick;
+            _cleanUpActions.Add(() => bubbleButton.onClick -= HandleButtonClick);
         }
 
         private void OnDisable()
@@ -52,19 +53,26 @@ namespace Common.Object
             OnClick?.Invoke();
         }
 
-        public void SetInteractable(bool interactable)
-        {
-            if (!this.interactable)
+        #region Interaction
+            public void SetRaycastTarget(bool toggle)
             {
-                button?.SetInteractable(false);
-                return;
+                bubbleImage.raycastTarget = toggle;
             }
-
-            foreach (var image in colorChangeImages)
-                image.color = new Color(image.color.r, image.color.g, image.color.b, interactable ? canInteractColor.a : cannotInteractColor.a);
             
-            button?.SetInteractable(interactable);
-        }
+            public void SetInteractable(bool toggle)
+            {
+                if (!interactable)
+                {
+                    bubbleButton?.SetInteractable(false);
+                    return;
+                }
+
+                foreach (var image in colorChangeImages)
+                    image.color = new Color(image.color.r, image.color.g, image.color.b, toggle ? canInteractColor.a : cannotInteractColor.a);
+                
+                bubbleButton?.SetInteractable(toggle);
+            }
+        #endregion
         
         public void StartCountDown(float time, Action onComplete)
         {

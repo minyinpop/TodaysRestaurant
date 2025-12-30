@@ -1,4 +1,3 @@
-using System;
 using Item;
 using UI_System.System.Main;
 using UnityEngine;
@@ -11,15 +10,25 @@ namespace Player_System.System.Child
         {
             UISystem.InitializeHotbarUI();
         }
-
+        
         public void PerformHotbar(int hotbarIndex)
         {
             UISystem.PerformHotbar(hotbarIndex);
         }
 
-        public bool TryAddItem(ItemSO item)
+        public void PerformBackpack()
         {
-            return UISystem.TryAddItem(item);
+            UISystem.PerformBackpack();
+        }
+
+        public bool TryAddItem(ItemSO itemData)
+        {
+            return UISystem.TryAddItem(itemData);
+        }
+
+        public bool TryRemoveItem(ItemSO itemData)
+        {
+            return UISystem.TryRemoveItem(itemData);
         }
     }
 }

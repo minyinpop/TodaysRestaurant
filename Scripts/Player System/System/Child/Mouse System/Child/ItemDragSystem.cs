@@ -20,7 +20,7 @@ namespace Player_System.System.Child.Mouse_System.Child
             {
                 _destinationSlot = itemSlot.GetComponent<StorageSlot>();
                 if (_destinationSlot.IsEmpty()) PutItemToEmptySlot();
-                else SwitchItem();
+                // else SwitchItem(); // TODO [2025.12.31] 暫時禁止物品交互功能
             }
 
             return;

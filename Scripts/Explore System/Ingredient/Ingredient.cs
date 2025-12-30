@@ -1,10 +1,11 @@
+using System;
 using Common;
 using Common.Object;
 using UnityEngine;
 
 namespace Explore_System.Ingredient
 {
-    internal class Ingredient : MonoBehaviour, InteractableObject
+    internal class Ingredient : MonoBehaviour/*, InteractableObject*/
     {
         public ClickableBubble Bubble;
 

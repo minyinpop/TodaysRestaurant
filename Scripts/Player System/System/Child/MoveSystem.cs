@@ -16,7 +16,7 @@ namespace Player_System.System.Child
 
         private IEnumerator WalkCor;
 
-        private bool isLeft;
+        private bool isLeft = true;
 
         public event Action WalkLeft;
         public event Action WalkRight;

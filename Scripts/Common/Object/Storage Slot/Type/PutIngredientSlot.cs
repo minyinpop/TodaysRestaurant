@@ -19,6 +19,12 @@ namespace Common.Object.Storage_Slot.Type
                 DoAnimation.DoScale_UI(SlotRect, ScaleDownSettings);
             }
         #endregion
+        
+        #region Interaction
+            public override void Selected() { }
+            public override void UnSelected() { }
+            public override void Use() { }
+        #endregion
 
         #region Item
             public override bool TryAddItem(ItemSO itemData)

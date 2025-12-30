@@ -67,7 +67,7 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Child
                 onComplete: () => SetInteractable(true));
         }
 
-        public void Hide(Action onComplete)
+        public void Hide(Action onComplete = null)
         {
             SetInteractable(false);
             foreach (var action in CloseAction) action?.Invoke();

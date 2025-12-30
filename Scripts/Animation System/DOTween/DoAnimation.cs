@@ -24,7 +24,26 @@ namespace Animation_System.DOTween
 
         #region Move
             private Tween MoveTween;
-            
+
+            public void DoMove(Transform tran, DoMove settings, Action onComplete = null)
+            {
+                MoveTween?.Kill();
+                settings.GetValues(out var endValue, out var duration, out var snapping, out var ease);
+                MoveTween = tran
+                    .DOMove(endValue, duration, snapping)
+                    .SetEase(ease)
+                    .OnComplete(
+                        () =>
+                        {
+                            onComplete?.Invoke();
+                        })
+                    .OnKill(
+                        () =>
+                        {
+                            MoveTween = null;
+                        });
+            }
+
             public void DoAnchorPos(RectTransform rect, DoAnchorPos settings, Action onComplete = null)
             {
                 MoveTween?.Kill();

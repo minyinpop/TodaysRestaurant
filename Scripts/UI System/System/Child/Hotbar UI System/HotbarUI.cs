@@ -27,23 +27,37 @@ namespace UI_System.System.Child.Hotbar_UI_System
                 currentSlot.gameObject.SetActive(true);
             }
         }
-        
-        public bool TryAddItem(ItemSO itemData)
+
+        private void Start()
         {
-            var result = _hotbarSlots.Any(slot => slot.TryAddItem(itemData));
-            return result;
-        }
-        
-        public void PerformHotbar(int hotbarIndex)
-        {
-            ChangeSelectedHotbarSlot(_hotbarSlots[hotbarIndex]);
+            PerformHotbar(0);
         }
 
-        public void ClickRightButton()
-        {
-            _selectedHotbarSlot?.Use();
-        }
+        #region Input
+            public void ClickRightButton()
+            {
+                _selectedHotbarSlot?.Use();
+            }
+            
+            public void PerformHotbar(int hotbarIndex)
+            {
+                ChangeSelectedHotbarSlot(_hotbarSlots[hotbarIndex]);
+            }
+        #endregion
+        
+        #region Item
+            public bool TryAddItem(ItemSO itemData)
+            {
+                var result = _hotbarSlots.Any(slot => slot.TryAddItem(itemData));
+                return result;
+            }
 
+            public bool TryRemoveItem(ItemSO itemData)
+            {
+                return _hotbarSlots.Any(hotbarSlot => hotbarSlot.TryRemoveItem(itemData));
+            }
+        #endregion
+        
         #region Utility
             private void ChangeSelectedHotbarSlot(HotbarSlot newSlot)
             {

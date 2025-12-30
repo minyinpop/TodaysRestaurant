@@ -6,6 +6,7 @@ using Common.Object;
 using Common.Value;
 using Item;
 using Item.Serving_Note;
+using Player_System.System.Main;
 using Restaurant_System.Object.Creature.Customer.System.Child;
 using Restaurant_System.Object.Creature.Customer.System.Main.State_Machine;
 using Restaurant_System.Object.Creature.Customer.System.Main.State_Machine.State;
@@ -151,9 +152,10 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
                     {
                         _currentBubble = Instantiate(orderBubble, bubbleParent).GetComponent<ClickableBubble>();
                         _currentBubble.OnClick += OnClick;
-                        _currentBubble.StartCountDown(15, () =>
+                        _currentBubble.StartCountDown(16, () =>
                         {
-                            // TODO 顧客等待玩家點餐太久
+                            PlayerSystem.TryRemoveItem(_servingNoteData);
+                            Angry();
                         });
                     }
                     
@@ -173,7 +175,6 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
                         }
                         else
                         {
-                            Debug.Log("顧客無法給予玩家點餐的紙條");
                             // TODO 顧客無法給予玩家點餐的紙條
                         }
                     }
@@ -190,10 +191,7 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
                     {
                         _currentBubble = Instantiate(servingNoteBubble, bubbleParent).GetComponent<ClickableBubble>();
                         _currentBubble.ShowItem(_servingNoteData);
-                        _currentBubble.StartCountDown(60, () =>
-                        {
-                            // TODO 顧客等待玩家收取點餐紙條太久
-                        });
+                        _currentBubble.StartCountDown(60, Angry);
                         _currentBubble.OnClick += OnClick;
                     }
                     
@@ -202,6 +200,8 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
                         _currentBubble.OnClick -= OnClick;
                         Destroy(_currentBubble.gameObject);
                         _currentBubble = null;
+                        
+                        PlayerSystem.TryRemoveItem(_servingNoteData);
                     }
 
                     void OnClick()
@@ -256,7 +256,7 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
                     void OnEnter()
                     {
                         // TODO [2025.12.30] 更改思考辭兼
-                        var thinkDuration = 3f;
+                        const float thinkDuration = 3f;
                         _currentBubble = Instantiate(thinkBubble, bubbleParent).GetComponent<ClickableBubble>();
                         
                         if (isHappy)

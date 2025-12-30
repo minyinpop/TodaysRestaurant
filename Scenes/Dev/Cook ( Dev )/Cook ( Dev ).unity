@@ -1879,7 +1879,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 369552011}
-  - component: {fileID: 369552012}
   m_Layer: 0
   m_Name: Message System
   m_TagString: Untagged
@@ -1908,22 +1907,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &369552012
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 369552010}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5bb736260b1447a7a56ff734841d788d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Message_System.System.Main.MessageSystem
-  ItemGetSystem: {fileID: 0}
-  TempItems: []
-  DefeatSystem: {fileID: 0}
-  OptionSystem: {fileID: 0}
 --- !u!1 &410223415
 GameObject:
   m_ObjectHideFlags: 0
@@ -3290,6 +3273,7 @@ MonoBehaviour:
   itemDragUISystemParent: {fileID: 1141738540}
   servingNoteUISystemParent: {fileID: 829262843}
   hotbarUISystemParent: {fileID: 5304598883963511797}
+  backpackUISystemParent: {fileID: 1275436112}
   foodMenuUISystemParent: {fileID: 1797214890}
   tipSystemParent: {fileID: 1949131392}
   switchSystemParent: {fileID: 2073645165}
@@ -4034,7 +4018,7 @@ MonoBehaviour:
   OvercookedBubblePrefab: {fileID: 550562492830469709, guid: 5a00ba58dc9f7fb4a84abe3de6c79417, type: 3}
   BubbleParent: {fileID: 1256046351}
   GameTimeDuration: 16
-  CookGamePrefab: {fileID: 5709886616096664502, guid: d27c2ed33b4f74341a2a011257094aa8, type: 3}
+  CookGamePrefab: {fileID: 4507327093942934865, guid: d27c2ed33b4f74341a2a011257094aa8, type: 3}
   GameParent: {fileID: 1990075634}
 --- !u!1 &820429201
 GameObject:
@@ -5322,7 +5306,7 @@ MonoBehaviour:
   CustomerParent: {fileID: 206181389}
   CustomerPrefab: {fileID: 8565997940086599081, guid: 5583907cf68eb8a40b757409c1f89c72, type: 3}
   CustomerAmountPerRound: 32
-  CustomerComeDuration: 1
+  CustomerComeDuration: 3
   SeatPoints:
   - {fileID: 1836156698}
   - {fileID: 442394294}
@@ -6018,6 +6002,7 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1275436112}
   - {fileID: 5304598883963511797}
   - {fileID: 829262843}
   - {fileID: 1797214890}
@@ -6088,7 +6073,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 10
@@ -6416,6 +6401,58 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1258246164}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1275436111
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1275436112}
+  - component: {fileID: 1275436113}
+  m_Layer: 0
+  m_Name: Backpack UI System
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1275436112
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1275436111}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1823635497}
+  m_Father: {fileID: 1191780972}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1275436113
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1275436111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2dd3388fa9e9447ab79c7eab5f12a7c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI_System.System.Child.Backpack_UI_System.BackpackUISystem
+  mask: {fileID: 1823635496}
+  uiPrefab: {fileID: 230500884388643424, guid: 6fa0370c910366243b5701ce8bfdbd07, type: 3}
+  uiParent: {fileID: 1275436112}
 --- !u!1 &1298850736
 GameObject:
   m_ObjectHideFlags: 0
@@ -6883,8 +6920,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: addf63cf15a24ef098d7b54a07d59374, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::System.PlayerSystem
-  mouseSystem: {fileID: 1987907823}
-  inventorySystem: {fileID: 601978044040317647}
+  mouseSystemParent: {fileID: 1987907824}
+  inventorySystemParent: {fileID: 7752251068012015689}
   moveSystem: {fileID: 5190494277223930013}
   animationSystem: {fileID: 6766224741972130473}
   detectSystem: {fileID: 7618608284584564546}
@@ -7758,6 +7795,81 @@ Transform:
   m_Children: []
   m_Father: {fileID: 442394293}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1823635496
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1823635497}
+  - component: {fileID: 1823635499}
+  - component: {fileID: 1823635498}
+  m_Layer: 0
+  m_Name: Mask
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &1823635497
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1823635496}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1275436112}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1823635498
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1823635496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.3137255, g: 0.3137255, b: 0.3137255, a: 0.7058824}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1823635499
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1823635496}
+  m_CullTransparentMesh: 1
 --- !u!1 &1836156692
 GameObject:
   m_ObjectHideFlags: 0
@@ -8008,7 +8120,7 @@ MonoBehaviour:
   OvercookedBubblePrefab: {fileID: 550562492830469709, guid: 5a00ba58dc9f7fb4a84abe3de6c79417, type: 3}
   BubbleParent: {fileID: 456637291}
   GameTimeDuration: 16
-  CookGamePrefab: {fileID: 5709886616096664502, guid: d27c2ed33b4f74341a2a011257094aa8, type: 3}
+  CookGamePrefab: {fileID: 4507327093942934865, guid: d27c2ed33b4f74341a2a011257094aa8, type: 3}
   GameParent: {fileID: 1071874455}
 --- !u!65 &1869278645
 BoxCollider:

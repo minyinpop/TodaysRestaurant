@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Player_System.System.Child.Detect_System.Child
 {
-    internal sealed class DetectArea : MonoBehaviour
+    public sealed class DetectArea : MonoBehaviour
     {
         [field: Header("Settings")]
         [field: SerializeField] private LayerMask Layer;

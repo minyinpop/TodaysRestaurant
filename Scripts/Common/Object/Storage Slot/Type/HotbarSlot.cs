@@ -60,6 +60,19 @@ namespace Common.Object.Storage_Slot.Type
                     ItemImage.gameObject.SetActive(false);
                     ItemImage.sprite = null;
                 }
+
+                public override bool TryRemoveItem(ItemSO itemData)
+                {
+                    if (_currentItemData is null) return false;
+                    if (_currentItemData != itemData) return false;
+                    
+                    ItemImage.gameObject.SetActive(false);
+                    ItemImage.sprite = null;
+                    
+                    itemData.Remove();
+                    _currentItemData = null;
+                    return true;
+                }
             #endregion
         #endregion
     }

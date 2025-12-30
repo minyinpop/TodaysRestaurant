@@ -1,43 +1,44 @@
 using Item;
+using UI_System.System.Main;
 using UnityEngine;
 
 namespace UI_System.System.Child.Hotbar_UI_System
 {
-    public sealed class HotbarUISystem : MonoBehaviour
+    public sealed class HotbarUISystem : MonoBehaviour, IUISystem
     {
         [field: Header("Components")]
         [field: SerializeField] private GameObject uiPrefab;
         [field: SerializeField] private RectTransform uiParent;
         
-        private GameObject _ui;
-        private HotbarUI _ui_HotbarUI;
-
+        private HotbarUI _ui;
+        
         public void Initialize()
         {
             if (_ui is not null) return;
-            _ui = Instantiate(uiPrefab, uiParent);
-            _ui_HotbarUI = _ui.GetComponent<HotbarUI>();
-            _ui.SetActive(true);
+            _ui = Instantiate(uiPrefab, uiParent).GetComponent<HotbarUI>();
+            _ui.gameObject.SetActive(true);
         }
-
-        public void ToggleUI()
-        {
-            _ui?.SetActive(!_ui.activeSelf);
-        }
+        
+        #region Input
+            public void ClickRightButton()
+            {
+                _ui.ClickRightButton();
+            }
+            
+            public void PerformHotbar(int hotbarIndex)
+            {
+                _ui.PerformHotbar(hotbarIndex);
+            }
+        #endregion
         
         public bool TryAddItem(ItemSO itemData)
         {
-            return _ui_HotbarUI.TryAddItem(itemData);
+            return _ui.TryAddItem(itemData);
         }
 
-        public void PerformHotbar(int hotbarIndex)
+        public bool TryRemoveItem(ItemSO itemData)
         {
-            _ui_HotbarUI.PerformHotbar(hotbarIndex);
-        }
-
-        public void ClickRightButton()
-        {
-            _ui_HotbarUI.ClickRightButton();
+            return _ui.TryRemoveItem(itemData);
         }
     }
 }

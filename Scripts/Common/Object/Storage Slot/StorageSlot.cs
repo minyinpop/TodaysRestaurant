@@ -19,6 +19,8 @@ namespace Common.Object.Storage_Slot
         [field: Header("Item Settings")]
         [field: SerializeField] protected RectTransform ItemRect;
         [field: SerializeField] protected Image ItemImage;
+        [field: SerializeField] protected Sprite PointerEnterSprite;
+        [field: SerializeField] protected Sprite PointerExitSprite;
         [field: SerializeField] protected Color HaveItemColor;
         [field: SerializeField] protected Color NoItemColor;
         
@@ -33,9 +35,9 @@ namespace Common.Object.Storage_Slot
         protected ItemSO _currentItemData;
         
         #region Interaction
-            public virtual void Selected() { }
-            public virtual void UnSelected() { }
-            public virtual void Use() { }
+            public abstract void Selected();
+            public abstract void UnSelected();
+            public abstract void Use();
         #endregion
         
         #region Item
@@ -43,6 +45,7 @@ namespace Common.Object.Storage_Slot
             public virtual void TryAddItem(ItemSO itemData, Action onComplete) => onComplete?.Invoke();
             public virtual void TryGetItem(out ItemSO itemData) => itemData = _currentItemData;
             public virtual void TryPeekItem(out ItemSO itemData) => itemData = _currentItemData;
+            public virtual bool TryRemoveItem(ItemSO itemData) => false;
         #endregion
         
         #region Status

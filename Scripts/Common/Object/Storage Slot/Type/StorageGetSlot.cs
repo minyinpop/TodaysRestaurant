@@ -20,6 +20,12 @@ namespace Common.Object.Storage_Slot.Type
             }
         #endregion
         
+        #region Interaction
+            public override void Selected() { }
+            public override void UnSelected() { }
+            public override void Use() { }
+        #endregion
+        
         #region Item
             public override void TryAddItem(ItemSO itemData, Action onComplete)
             {

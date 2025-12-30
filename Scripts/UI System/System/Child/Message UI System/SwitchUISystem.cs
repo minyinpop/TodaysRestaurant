@@ -4,11 +4,12 @@ using Animation_System.DOTween.Basic;
 using Common.Value;
 using DG.Tweening;
 using Message_System.Object;
+using UI_System.System.Main;
 using UnityEngine;
 
 namespace UI_System.System.Child.Message_UI_System
 {
-    internal sealed class SwitchUISystem : MonoBehaviour
+    internal sealed class SwitchUISystem : MonoBehaviour, IUISystem
     {
         [field: SerializeField] private PopUpUI PopUpUI;
 

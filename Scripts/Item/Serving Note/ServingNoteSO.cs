@@ -20,6 +20,10 @@ namespace Item.Serving_Note
                 if (!UISystem.TryInitializeServingNoteUI(this, servingNotePrefab))
                     UISystem.ToggleServingNoteUI(this);
             }
+            public override void Remove()
+            {
+                UISystem.RemoveServingNoteUI(this);
+            }
         #endregion
         
         #region Ordered Items

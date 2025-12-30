@@ -18,8 +18,10 @@ namespace Player_System.System.Main
     public sealed class PlayerSystem : MonoBehaviour
     {
         [field: Header("System Components")]
-        [field: SerializeField] private MouseSystem mouseSystem;
-        [field: SerializeField] private InventorySystem inventorySystem;
+        [field: SerializeField] private Transform mouseSystemParent;
+                                private static MouseSystem _mouseSystem;
+        [field: SerializeField] private Transform inventorySystemParent;
+                                private static InventorySystem _inventorySystem;
         
         [field: Header("Character Components")]
         [field: SerializeField] private MoveSystem moveSystem;
@@ -29,7 +31,13 @@ namespace Player_System.System.Main
         private readonly StateMachine _stateMachine = new();
         
         private readonly Queue<Action> _cleanUpActions = new();
-        
+
+        private void Awake()
+        {
+            _mouseSystem = mouseSystemParent.GetComponent<MouseSystem>();
+            _inventorySystem = inventorySystemParent.GetComponent<InventorySystem>();
+        }
+
         private void Start()
         {
             OnIdle();
@@ -46,6 +54,9 @@ namespace Player_System.System.Main
                 
                 InputSystem.OnPerformedHotbar += PerformHotbar;
                 _cleanUpActions.Enqueue(() => InputSystem.OnPerformedHotbar -= PerformHotbar);
+
+                InputSystem.OnPerformedBackpack += PerformBackpack;
+                _cleanUpActions.Enqueue(() => InputSystem.OnPerformedBackpack -= PerformBackpack);
             #endregion
             
             #region TryAddItem
@@ -70,7 +81,7 @@ namespace Player_System.System.Main
         #region InputSystem
             private void ClickLeftButton()
             {
-                mouseSystem.OnClickedLeftButton();
+                _mouseSystem.OnClickedLeftButton();
             }
 
             private void ClickRightButton()
@@ -82,13 +93,22 @@ namespace Player_System.System.Main
         #region InventorySystem
             private void PerformHotbar(int hotbarIndex)
             {
-                inventorySystem.PerformHotbar(hotbarIndex);
+                _inventorySystem.PerformHotbar(hotbarIndex);
+            }
+
+            private void PerformBackpack()
+            {
+                _inventorySystem.PerformBackpack();
             }
 
             private bool TryAddItem(ItemSO item)
             {
-                var result = inventorySystem.TryAddItem(item);
-                return result;
+                return _inventorySystem.TryAddItem(item);
+            }
+
+            public static bool TryRemoveItem(ItemSO itemData)
+            {
+                return _inventorySystem.TryRemoveItem(itemData);
             }
         #endregion
 

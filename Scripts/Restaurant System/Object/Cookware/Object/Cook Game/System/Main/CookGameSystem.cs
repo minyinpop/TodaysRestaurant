@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Animation_System.DOTween;
 using Animation_System.DOTween.Basic;
+using Camera_System;
 using Common.Object;
 using Restaurant_System.Object.Cookware.Object.Cook_Game.Object;
 using Restaurant_System.Object.Cookware.Object.Cook_Game.System.Child;
@@ -19,31 +20,37 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Game.System.Main
         [field: SerializeField] private DoScale ZoomIn;
         [field: SerializeField] private DoScale ZoomOut;
         
-        private readonly List<Action> AllActions = new();
+        private readonly Queue<Action> _cleanUpActions = new();
 
         public event Action OnComplete;
+        public event Action OnCancel;
 
         private void Start()
         {
+            CameraSystem.MoveTo(
+                target: gameObject.transform,
+                followOffset: new Vector3(0, 0, -4.5f),
+                lookAtOffset: Vector3.zero);
+            
             DoAnimation.DoScale_WorldSpace(gameObject.transform, ZoomIn,
                 onComplete: () =>
                 {
                     DetectSystem.UtensilsDetected += UtensilsDetected;
-                    AllActions.Add(() => DetectSystem.UtensilsDetected -= UtensilsDetected);
+                    _cleanUpActions.Enqueue(() => DetectSystem.UtensilsDetected -= UtensilsDetected);
                     
                     Utensils.OnPick += OnUtensilsPicked;
-                    AllActions.Add(() =>
+                    _cleanUpActions.Enqueue(() =>
                     {
                         Utensils.Disable();
                         Utensils.OnPick -= OnUtensilsPicked;
                     });
                     
                     ProgressBar.OnMaxValue += OnProgressComplete;
-                    AllActions.Add(() => ProgressBar.OnMaxValue -= OnProgressComplete);
+                    _cleanUpActions.Enqueue(() => ProgressBar.OnMaxValue -= OnProgressComplete);
                     
                     ResetButton.onClick += OnResetButtonClicked;
                     ResetButton.SetInteractable(true);
-                    AllActions.Add(() =>
+                    _cleanUpActions.Enqueue(() =>
                     {
                         ResetButton.onClick -= OnResetButtonClicked;
                         ResetButton.SetInteractable(false);
@@ -51,7 +58,7 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Game.System.Main
                     
                     CloseButton.onClick += OnCloseButtonClicked;
                     CloseButton.SetInteractable(true);
-                    AllActions.Add(() =>
+                    _cleanUpActions.Enqueue(() =>
                     {
                         CloseButton.onClick -= OnCloseButtonClicked;
                         CloseButton.SetInteractable(false);
@@ -97,12 +104,7 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Game.System.Main
             private void OnProgressComplete()
             {
                 ClearAllActions();
-                DoAnimation.DoScale_WorldSpace(gameObject.transform, ZoomOut,
-                    onComplete: () =>
-                    {
-                        OnComplete?.Invoke();
-                        Destroy(gameObject);
-                    });
+                DoAnimation.DoScale_WorldSpace(gameObject.transform, ZoomOut, () => OnComplete?.Invoke());
             }
         #endregion
 
@@ -120,16 +122,14 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Game.System.Main
             private void OnCloseButtonClicked()
             {
                 ClearAllActions();
-                DoAnimation.DoScale_WorldSpace(gameObject.transform, ZoomOut,
-                    onComplete: () => Destroy(gameObject));
+                DoAnimation.DoScale_WorldSpace(gameObject.transform, ZoomOut, () => OnCancel?.Invoke());
             }
         #endregion
 
         private void ClearAllActions()
         {
-            if (AllActions.Count == 0) return;
-            foreach (var action in AllActions) action();
-            AllActions.Clear();
+            while (_cleanUpActions.Count > 0) _cleanUpActions.Dequeue()?.Invoke();
+            CameraSystem.MoveBack();
         }
     }
 }

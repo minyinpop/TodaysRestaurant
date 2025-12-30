@@ -61,6 +61,7 @@ namespace Item.Custom
             public override void Selected() { }
             public override void UnSelected() { }
             public override void Use() { }
+            public override void Remove() { }
         #endregion
     }
 }

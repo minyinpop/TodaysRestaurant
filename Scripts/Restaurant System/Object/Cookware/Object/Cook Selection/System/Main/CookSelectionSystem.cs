@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Common.Value;
 using Common.Value.Type;
 using Item.Custom;
@@ -10,7 +11,7 @@ using UnityEngine;
 
 namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Main
 {
-    internal sealed class CookSelectionSystem : MonoBehaviour
+    public sealed class CookSelectionSystem : MonoBehaviour
     {
         [field: Header("Child System")]
         [field: SerializeField] private SelectionSystem selectionSystem;
@@ -18,14 +19,21 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Main
 
         private IEnumerator _closeUICor;
 
+        private readonly Queue<Action> _cleansUpActions = new();
+
         private void OnEnable()
         {
-            CookwareSystem.OnClickEmptyBubble += OnEmptyBubbleClicked;
+            CookwareSystem.OpenCookSelectionUI += Open;
+            _cleansUpActions.Enqueue(() => CookwareSystem.OpenCookSelectionUI -= Open);
+            
+            CookwareSystem.CloseCookSelectionUI += Close;
+            _cleansUpActions.Enqueue(() => CookwareSystem.CloseCookSelectionUI -= Close);
         }
         
         private void OnDisable()
         {
-            CookwareSystem.OnClickEmptyBubble -= OnEmptyBubbleClicked;
+            while (_cleansUpActions.Count > 0) _cleansUpActions.Dequeue()?.Invoke();
+            
             if (_closeUICor is not null)
             {
                 StopCoroutine(_closeUICor);
@@ -33,7 +41,7 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Main
             }
         }
 
-        private void OnEmptyBubbleClicked(CookType cookwareType, Action<CustomItem> onConfirm, Action onCancel)
+        private void Open(CookType cookwareType, Action<CustomItem> onConfirm, Action onCancel)
         {
             selectionSystem.Show(cookwareType,
                 onSelect: selectedDishData =>
@@ -113,6 +121,12 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Main
                             // TODO
                         });
                 });
+        }
+
+        public void Close()
+        {
+            putIngredientSystem.Hide();
+            selectionSystem.Hide();
         }
     }
 }

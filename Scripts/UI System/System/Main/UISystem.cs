@@ -4,6 +4,7 @@ using Common.Value;
 using Item;
 using Item.Serving_Note;
 using UI_System.System.Child;
+using UI_System.System.Child.Backpack_UI_System;
 using UI_System.System.Child.Food_Menu_UI_System;
 using UI_System.System.Child.Hotbar_UI_System;
 using UI_System.System.Child.Message_UI_System;
@@ -26,6 +27,10 @@ namespace UI_System.System.Main
         [field: SerializeField] private Transform hotbarUISystemParent;
         private static HotbarUISystem _hotbarUISystem;
         
+        [field: Header("Backpack")]
+        [field: SerializeField] private Transform backpackUISystemParent;
+        private static BackpackUISystem _backpackUISystem;
+        
         [field: Header("Food Menu")]
         [field: SerializeField] private Transform foodMenuUISystemParent;
         private static FoodMenuUISystem _foodMenuUISystem;
@@ -36,6 +41,8 @@ namespace UI_System.System.Main
         [field: SerializeField] private Transform switchSystemParent;
         private static SwitchUISystem _switchUISystem;
 
+        private readonly List<IUISystem> _activeUISystems = new List<IUISystem>();
+
         private void Awake()
         {
             _itemDragUISystem = itemDragUISystemParent.GetComponent<ItemDragUISystem>();
@@ -43,6 +50,8 @@ namespace UI_System.System.Main
             _servingNoteUISystem = servingNoteUISystemParent.GetComponent<ServingNoteUISystem>();
         
             _hotbarUISystem = hotbarUISystemParent.GetComponent<HotbarUISystem>();
+            
+            _backpackUISystem = backpackUISystemParent.GetComponent<BackpackUISystem>();
         
             _foodMenuUISystem = foodMenuUISystemParent.GetComponent<FoodMenuUISystem>();
             
@@ -60,8 +69,12 @@ namespace UI_System.System.Main
                 _hotbarUISystem.Initialize();
             public static void PerformHotbar(int hotbarIndex) =>
                 _hotbarUISystem.PerformHotbar(hotbarIndex);
-            public static bool TryAddItem(ItemSO item) =>
-                _hotbarUISystem.TryAddItem(item);
+            public static void PerformBackpack() =>
+                _backpackUISystem.PerformBackpack();
+            public static bool TryAddItem(ItemSO itemData) =>
+                _hotbarUISystem.TryAddItem(itemData);
+            public static bool TryRemoveItem(ItemSO itemData) =>
+                _hotbarUISystem.TryRemoveItem(itemData);
         #endregion
         
         #region ItemDrag
@@ -76,6 +89,8 @@ namespace UI_System.System.Main
                 _servingNoteUISystem.ToggleUI(servingNoteData);
             public static void GetServingNoteItems(ServingNoteSO servingNoteData, out List<ItemSO> servingNoteItems) =>
                 _servingNoteUISystem.GetServingNoteItems(servingNoteData, out servingNoteItems);
+            public static void RemoveServingNoteUI(ServingNoteSO servingNoteData) =>
+                _servingNoteUISystem.RemoveServingNoteUI(servingNoteData);
         #endregion
 
         #region Message UI
