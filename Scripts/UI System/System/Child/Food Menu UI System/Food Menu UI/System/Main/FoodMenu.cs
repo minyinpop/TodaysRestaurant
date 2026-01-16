@@ -19,7 +19,7 @@ namespace UI_System.System.Child.Food_Menu_UI_System.Food_Menu_UI.System.Main
             while (_activeActions.Count > 0) _activeActions.Dequeue()?.Invoke();
         }
 
-        public void Show(Action onComplete)
+        public void Initialize(Action onClose)
         {
             ClosePage.Show(onComplete: OnUIShowComplete);
             return;
@@ -40,7 +40,7 @@ namespace UI_System.System.Child.Food_Menu_UI_System.Food_Menu_UI.System.Main
 
                 void OnOpenUIConfirmButtonClicked()
                 {
-                    OpenPage.Hide(onComplete);
+                    OpenPage.Hide(onClose);
                 }
             }
         }

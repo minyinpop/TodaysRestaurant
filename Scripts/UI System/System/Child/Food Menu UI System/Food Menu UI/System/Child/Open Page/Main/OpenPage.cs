@@ -118,14 +118,19 @@ namespace UI_System.System.Child.Food_Menu_UI_System.Food_Menu_UI.System.Child.O
         
         public void Hide(Action onComplete)
         {
-            DoAnimation.DoFade_CanvasGroup(UI_CanvasGroup, ShowSettings,
-                onComplete: OnComplete);
+            if (onComplete == null)
+            {
+                Debug.LogError("OpenPage > Close > OnComplete > onComplete cannot be null.");
+                return;
+            }
+
+            DoAnimation.DoFade_CanvasGroup(UI_CanvasGroup, ShowSettings, OnComplete);
             return;
 
             void OnComplete()
             {
                 UI.SetActive(false);
-                onComplete?.Invoke();
+                onComplete.Invoke();
             }
         }
 

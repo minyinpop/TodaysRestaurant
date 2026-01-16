@@ -8,11 +8,6 @@ namespace Animation_System.DOTween
 {
     public sealed class DoAnimation : MonoBehaviour
     {
-        private void OnEnable()
-        {
-            DG.Tweening.DOTween.useSafeMode = true;
-        }
-
         private void OnDisable()
         {
             MoveTween?.Kill();

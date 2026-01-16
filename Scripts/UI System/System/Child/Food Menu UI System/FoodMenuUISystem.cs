@@ -1,4 +1,5 @@
 using System;
+using Input_System.Main;
 using UI_System.System.Child.Food_Menu_UI_System.Food_Menu_UI.System.Main;
 using UI_System.System.Main;
 using UnityEngine;
@@ -13,10 +14,16 @@ namespace UI_System.System.Child.Food_Menu_UI_System
         
         private GameObject _ui;
 
-        public void RequiresUI(Action onComplete)
+        public void SpawnUI(Action onClose)
         {
             _ui = Instantiate(uiPrefab, uiParent);
-            _ui.GetComponent<FoodMenu>().Show(onComplete);
+            _ui.GetComponent<FoodMenu>().Initialize(onClose);
+        }
+
+        public void DestroyUI()
+        {
+            Destroy(_ui);
+            _ui = null;
         }
     }
 }

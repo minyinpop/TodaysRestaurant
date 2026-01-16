@@ -41,7 +41,8 @@ namespace UI_System.System.Main
         [field: SerializeField] private Transform switchSystemParent;
         private static SwitchUISystem _switchUISystem;
 
-        private readonly List<IUISystem> _activeUISystems = new List<IUISystem>();
+        private readonly List<IUISystem> _primaryUIs = new List<IUISystem>();
+        private readonly List<IUISystem> _secondaryUIs = new List<IUISystem>();
 
         private void Awake()
         {
@@ -93,18 +94,18 @@ namespace UI_System.System.Main
                 _servingNoteUISystem.RemoveServingNoteUI(servingNoteData);
         #endregion
 
+        #region Food Menu
+            public static void SpawnFoodMenu(Action onClose = null) =>
+                _foodMenuUISystem.SpawnUI(onClose);
+            public static void DestroyFoodMenu() =>
+                _foodMenuUISystem.DestroyUI();
+        #endregion
+        
         #region Message UI
             public static void ShowTipUI(PopUpUIContent content, Action onConfirm = null) =>
                 _tipUISystem?.Show(content, onConfirm);
             public static void ShowSwitchUI(PopUpUIContent content, Action onShow = null, Action onConfirm = null, Action onCancel = null, Action onClose = null) =>
                 _switchUISystem?.Show(content, onShow, onConfirm, onCancel, onClose);
-        #endregion
-
-        #region Food Menu
-            public static void ShowFoodMenu(Action onComplete)
-            {
-                _foodMenuUISystem.RequiresUI(onComplete);
-            }
         #endregion
     }
 }

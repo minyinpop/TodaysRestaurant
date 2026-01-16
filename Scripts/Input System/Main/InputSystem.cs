@@ -30,7 +30,7 @@ namespace Input_System.Main
 
         private void OnEnable()
         {
-            InputManager.Enable();
+            Enable();
             
             #region Player
                 InputManager.Player.Walk.started += OnPlayerWalkStarted;
@@ -58,8 +58,20 @@ namespace Input_System.Main
         private void OnDisable()
         {
             while (ActiveActions.Count > 0) ActiveActions.Dequeue()?.Invoke();
-            InputManager.Disable();
+            Disable();
         }
+
+        #region // TODO Rename 主控
+            public static void Enable()
+            {
+                InputManager.Enable();
+            }
+
+            public static void Disable()
+            {
+                InputManager.Disable();
+            }
+        #endregion
         
         #region Player
             #region Walk

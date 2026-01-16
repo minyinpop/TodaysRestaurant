@@ -1,4 +1,5 @@
 using System.Collections;
+using Input_System.Main;
 using Restaurant_System.System.Child;
 using Restaurant_System.System.Main.State_Machine;
 using Restaurant_System.System.Main.State_Machine.State;
@@ -38,11 +39,17 @@ namespace Restaurant_System.System.Main
                     
                     void OnEnter()
                     {
-                        UISystem.ShowFoodMenu(RoundStart);
+                        InputSystem.Disable();
+                        UISystem.SpawnFoodMenu(() =>
+                        {
+                            UISystem.DestroyFoodMenu();
+                            RoundStart();
+                        });
                     }
                     
                     void OnExit()
                     {
+                        InputSystem.Enable();
                     }
                 }
             #endregion
