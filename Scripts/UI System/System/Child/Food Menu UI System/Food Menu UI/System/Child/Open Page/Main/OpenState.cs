@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Animation_System.DOTween;
-using Animation_System.DOTween.Basic;
 using Common.Object;
 using Common.Value;
 using Common.Value.Type;
@@ -20,12 +18,10 @@ using UnityEngine;
 
 namespace UI_System.System.Child.Food_Menu_UI_System.Food_Menu_UI.System.Child.Open_Page.Main
 {
-    [RequireComponent(typeof(DoAnimation))]
-    internal sealed class OpenPage : MonoBehaviour
+    internal sealed class OpenState : MonoBehaviour
     {
         [field: Header("UI")]
         [field: SerializeField] private GameObject UI;
-        [field: SerializeField] private CanvasGroup UI_CanvasGroup;
         
         [field: Header("Child System")]
         [field: SerializeField] private UnlockFoodPage UnlockFoodPage;
@@ -33,10 +29,6 @@ namespace UI_System.System.Child.Food_Menu_UI_System.Food_Menu_UI.System.Child.O
         
         [field: Header("Button")]
         [field: SerializeField] private Button ConfirmButton;
-        
-        [field: Header("Animation")]
-        [field: SerializeField] private DoAnimation DoAnimation;
-        [field: SerializeField] private DoFade_CanvasGroup ShowSettings;
         
         [field: Header("Food Type Button")]
         [field: SerializeField] private Transform FoodTypeButtonParent;
@@ -123,15 +115,8 @@ namespace UI_System.System.Child.Food_Menu_UI_System.Food_Menu_UI.System.Child.O
                 Debug.LogError("OpenPage > Close > OnComplete > onComplete cannot be null.");
                 return;
             }
-
-            DoAnimation.DoFade_CanvasGroup(UI_CanvasGroup, ShowSettings, OnComplete);
-            return;
-
-            void OnComplete()
-            {
-                UI.SetActive(false);
-                onComplete.Invoke();
-            }
+            
+            onComplete.Invoke();
         }
 
         private void OnConfirmButtonClicked()

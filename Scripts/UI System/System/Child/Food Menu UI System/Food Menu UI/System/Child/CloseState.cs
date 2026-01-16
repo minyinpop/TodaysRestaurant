@@ -1,25 +1,17 @@
 using System;
 using System.Collections.Generic;
-using Animation_System.DOTween;
-using Animation_System.DOTween.Basic;
 using Common.Object;
 using UnityEngine;
 
 namespace UI_System.System.Child.Food_Menu_UI_System.Food_Menu_UI.System.Child
 {
-    [RequireComponent(typeof(DoAnimation))]
-    internal sealed class ClosePage : MonoBehaviour
+    internal sealed class CloseState : MonoBehaviour
     {
         [field: Header("UI")]
         [field: SerializeField] private GameObject UI;
-        [field: SerializeField] private CanvasGroup UI_CanvasGroup;
         
         [field: Header("Button")]
         [field: SerializeField] private Button OpenButton;
-        
-        [field: Header("Animation")]
-        [field: SerializeField] private DoAnimation DoAnimation;
-        [field: SerializeField] private DoFade_CanvasGroup ShowSettings;
         
         public event Action OnClickOpenButton;
 
@@ -45,13 +37,6 @@ namespace UI_System.System.Child.Food_Menu_UI_System.Food_Menu_UI.System.Child
         private void OnOpenButtonClicked()
         {
             OnClickOpenButton?.Invoke();
-        }
-        
-        public void Show(Action onComplete)
-        {
-            UI.SetActive(true);
-            DoAnimation.DoFade_CanvasGroup(UI_CanvasGroup, ShowSettings,
-                onComplete: () => onComplete?.Invoke());
         }
 
         public void Hide()
