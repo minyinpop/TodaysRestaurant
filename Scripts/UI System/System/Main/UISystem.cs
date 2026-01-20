@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Common.Value;
 using Item;
+using Item.Ingredient;
 using Item.Serving_Note;
 using UI_System.System.Child;
 using UI_System.System.Child.Backpack_UI_System;
@@ -40,6 +41,12 @@ namespace UI_System.System.Main
         private static TipUISystem _tipUISystem;
         [field: SerializeField] private Transform switchSystemParent;
         private static SwitchUISystem _switchUISystem;
+        [field: SerializeField] private Transform defeatSystemParent;
+        private static DefeatUISystem _defeatUISystem;
+        [field: SerializeField] private Transform itemGetUISystemParent;
+        private static ItemGetUISystem _itemGetUISystem;
+        [field: SerializeField] private Transform optionUISystemParent;
+        private static OptionUISystem _optionUISystem;
 
         private readonly List<IUISystem> _primaryUIs = new List<IUISystem>();
         private readonly List<IUISystem> _secondaryUIs = new List<IUISystem>();
@@ -58,6 +65,9 @@ namespace UI_System.System.Main
             
             _tipUISystem = tipSystemParent.GetComponent<TipUISystem>();
             _switchUISystem = switchSystemParent.GetComponent<SwitchUISystem>();
+            _defeatUISystem = defeatSystemParent.GetComponent<DefeatUISystem>();
+            _itemGetUISystem = itemGetUISystemParent.GetComponent<ItemGetUISystem>();
+            _optionUISystem = optionUISystemParent.GetComponent<OptionUISystem>();
         }
         
         #region Player
@@ -103,9 +113,13 @@ namespace UI_System.System.Main
         
         #region Message UI
             public static void ShowTipUI(PopUpUIContent content, Action onConfirm = null) =>
-                _tipUISystem?.Show(content, onConfirm);
-            public static void ShowSwitchUI(PopUpUIContent content, Action onShow = null, Action onConfirm = null, Action onCancel = null, Action onClose = null) =>
-                _switchUISystem?.Show(content, onShow, onConfirm, onCancel, onClose);
+                _tipUISystem?.SpawnUI(content, onConfirm);
+            public static void ShowSwitchUI(PopUpUIContent content, Action onConfirm = null, Action onCancel = null) =>
+                _switchUISystem?.SpawnUI(content, onConfirm, onCancel);
+            public static void ShowDefeatUI(PopUpUIContent content, Action onConfirm) =>
+                _defeatUISystem?.SpawnUI(content, onConfirm);
+            public static void ShowItemGetUI(PopUpUIContent content, List<IngredientSO> items, Action onConfirm) =>
+                _itemGetUISystem?.SpawnUI(content, items, onConfirm);
         #endregion
     }
 }

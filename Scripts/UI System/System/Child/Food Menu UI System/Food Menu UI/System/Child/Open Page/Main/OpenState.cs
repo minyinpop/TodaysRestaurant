@@ -44,6 +44,15 @@ namespace UI_System.System.Child.Food_Menu_UI_System.Food_Menu_UI.System.Child.O
 
         public event Action OnClickOpenUIConfirmButton;
 
+        private void Awake()
+        {
+            if (OnClickOpenUIConfirmButton == null)
+            {
+                Debug.LogError("FoodMenu > OpenState > OnClickOpenUIConfirmButton cannot be null.");
+                gameObject.SetActive(false);
+            }
+        }
+
         private void OnEnable()
         {
             ConfirmButton.onClick += OnConfirmButtonClicked;

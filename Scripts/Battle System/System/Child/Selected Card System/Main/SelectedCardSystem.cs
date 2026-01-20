@@ -214,10 +214,6 @@ namespace Battle_System.System.Child.Selected_Card_System.Main
                                 slot.Set(card);
                                 card.SetInteractable(true);
                             }
-                        },
-                        onClose: () =>
-                        {
-                            onClose = true;
                         });
                 }
 
