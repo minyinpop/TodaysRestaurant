@@ -15,7 +15,7 @@ namespace UI_System.System.Child.Food_Menu_UI_System.Food_Menu_UI.System.Child.O
         private readonly List<ItemSlot> UnlockFoodSlots = new();
         private readonly List<Action> UnlockFoodSlot_Actions = new();
 
-        public event Action<ItemSlot, ItemSO> OnClick;
+        public event Action<ItemSlot, ItemSO> OnClicked;
         
         private void OnDisable()
         {
@@ -33,8 +33,8 @@ namespace UI_System.System.Child.Food_Menu_UI_System.Food_Menu_UI.System.Child.O
                 UnlockFoodSlots.Add(slot_ItemSlot);
                 slot_ItemSlot.Add(dishData);
                 
-                slot_ItemSlot.OnClick += OnClick;
-                UnlockFoodSlot_Actions.Add(() => slot_ItemSlot.OnClick -= OnClick);
+                slot_ItemSlot.OnClick += OnClicked;
+                UnlockFoodSlot_Actions.Add(() => slot_ItemSlot.OnClick -= OnClicked);
                 
                 slot_ItemSlot.SetSlotState(ItemSlotState.UnSelect);
             }

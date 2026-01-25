@@ -1,9 +1,8 @@
-using Common.Value;
-using Message_System.Object;
+using UI_System.System.Child.Message_UI_System.Object;
 using UI_System.System.Main;
 using UnityEngine;
 
-namespace UI_System.System.Child.Message_UI_System
+namespace UI_System.System.Child.Message_UI_System.System
 {
     internal sealed class OptionUISystem : MonoBehaviour, IUISystem
     {
@@ -13,10 +12,9 @@ namespace UI_System.System.Child.Message_UI_System
         
         private PopUpUI _popUpUI;
 
-        public void SpawnUI(PopUpUIContent content)
+        public void SpawnUI()
         {
             _popUpUI = Instantiate(popUpUIPrefab, popUpUIParent).GetComponent<PopUpUI>();
-            _popUpUI.Initialize(content);
             
             _popUpUI.OnClickConfirmButton += OnConfirmButtonClicked;
             _popUpUI.SetButtonInteractable(true);

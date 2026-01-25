@@ -9,8 +9,8 @@ using Battle_System.System.Main.State_Machine;
 using Battle_System.System.Main.State_Machine.State;
 using Common.Value;
 using Common.Value.Type;
-using Message_System.System.Main;
 using Player_System.Data.Main;
+using UI_System.System.Main;
 using UnityEngine;
 
 namespace Battle_System.System.Main
@@ -26,7 +26,6 @@ namespace Battle_System.System.Main
         [field: SerializeField] private UseCardSystem UseCardSystem;
         [field: SerializeField] private CrewTeamSystem CrewTeamSystem;
         [field: SerializeField] private EnemyTeamSystem EnemyTeamSystem;
-        [field: SerializeField] private MessageSystem MessageSystem;
         
         [field: Header("Data")]
         [field: SerializeField] private PlayerSO PlayerData;
@@ -43,7 +42,7 @@ namespace Battle_System.System.Main
         private IEnumerator DrawCardAndShowCardCor;
 
         private bool IsEnd;
-
+        
         public static event Action ReloadScene;
         public static event Action<string, Action> ChangeScene;
         public static event Action<string, int> StartScenario;
@@ -380,21 +379,14 @@ namespace Battle_System.System.Main
                         onEnter: () =>
                         {
                             IsEnd = true;
-                            MessageSystem.ShowItemGetUI(
+                            UISystem.ShowItemGetUI(
                                 content: new PopUpUIContent(
                                     message: string.Empty,
                                     confirmButtonTitle: "拿取物品",
                                     cancelButtonTitle: string.Empty,
                                     closeButtonTitle: string.Empty),
-                                onConfirm: () =>
-                                {
-                                    ChangeScene?.Invoke("Dialogue ( Dev )",
-                                        () =>
-                                        {
-                                            // onComplete
-                                            StartScenario?.Invoke("Restaurant", 0);
-                                        });
-                                });
+                                items: null, // TODO 怪物掉落物
+                                onConfirm: () => Debug.Log("Confirm player win."));
                         },
                         onExit: () =>
                         {
@@ -415,7 +407,7 @@ namespace Battle_System.System.Main
                         onEnter: () =>
                         {
                             IsEnd = true;
-                            MessageSystem.ShowDefeatUI(
+                            UISystem.ShowDefeatUI(
                                 content: new PopUpUIContent(
                                     message: "被打敗了",
                                     confirmButtonTitle: "再來一次",
@@ -423,7 +415,7 @@ namespace Battle_System.System.Main
                                     closeButtonTitle: string.Empty),
                                 onConfirm: () =>
                                 {
-                                    ReloadScene?.Invoke();
+                                    Debug.Log("確認玩家戰敗畫面");
                                 });
                         },
                         onExit: () =>

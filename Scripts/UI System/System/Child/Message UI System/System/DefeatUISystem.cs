@@ -1,10 +1,10 @@
 using System;
 using Common.Value;
-using Message_System.Object;
+using UI_System.System.Child.Message_UI_System.Object;
 using UI_System.System.Main;
 using UnityEngine;
 
-namespace UI_System.System.Child.Message_UI_System
+namespace UI_System.System.Child.Message_UI_System.System
 {
     internal sealed class DefeatUISystem : MonoBehaviour, IUISystem
     {

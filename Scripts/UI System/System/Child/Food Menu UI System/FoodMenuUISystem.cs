@@ -15,13 +15,22 @@ namespace UI_System.System.Child.Food_Menu_UI_System
         [field: SerializeField] private GameObject maskImage;
         
         private GameObject _ui;
+        private FoodMenu _foodMenu;
 
-        public void SpawnUI(Action onClose)
+        private event Action _foodMenuCleanupAction;
+
+        public void SpawnUI(Action onConfirm)
         {
             maskImage.SetActive(true);
             
             _ui = Instantiate(uiPrefab, uiParent);
-            _ui.GetComponent<FoodMenu>().Initialize(onClose);
+            _foodMenu = _ui.GetComponent<FoodMenu>();
+
+            _foodMenu.OnConfirm += onConfirm;
+            _foodMenuCleanupAction = () =>
+            {
+                _foodMenu.OnConfirm -= onConfirm;
+            };
         }
 
         public void DestroyUI()
@@ -30,6 +39,8 @@ namespace UI_System.System.Child.Food_Menu_UI_System
             _ui = null;
             
             maskImage.SetActive(false);
+
+            _foodMenuCleanupAction?.Invoke();
         }
     }
 }

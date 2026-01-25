@@ -1,10 +1,10 @@
 using System;
 using Common.Value;
-using Message_System.Object;
+using UI_System.System.Child.Message_UI_System.Object;
 using UI_System.System.Main;
 using UnityEngine;
 
-namespace UI_System.System.Child.Message_UI_System
+namespace UI_System.System.Child.Switch_UI_System
 {
     public sealed class SwitchUISystem : MonoBehaviour, IUISystem
     {
@@ -12,12 +12,16 @@ namespace UI_System.System.Child.Message_UI_System
         [field: SerializeField] private RectTransform popUpUIParent;
         [field: SerializeField] private GameObject popUpUIPrefab;
         
-        private PopUpUI _popUpUI;
+        private PopUpUI_Switch _popUpUI;
 
-        public void SpawnUI(PopUpUIContent content, Action onConfirm = null, Action onCancel = null)
+        public void SpawnUI(PopUpUIContent content, Action onConfirm, Action onCancel = null)
         {
-            _popUpUI = Instantiate(popUpUIPrefab, popUpUIParent).GetComponent<PopUpUI>();
-            _popUpUI.Initialize(content);
+            if (onConfirm == null)
+            {
+            }
+
+            _popUpUI = Instantiate(popUpUIPrefab, popUpUIParent).GetComponent<PopUpUI_Switch>();
+            _popUpUI.Initialize(content, onConfirm, onCancel);
             
             _popUpUI.OnClickConfirmButton += OnConfirmButtonClicked;
             _popUpUI.OnClickCancelButton += OnCancelButtonClicked;
@@ -27,13 +31,13 @@ namespace UI_System.System.Child.Message_UI_System
             void OnConfirmButtonClicked()
             {
                 Cleanup();
-                onConfirm.Invoke();
+                onConfirm?.Invoke();
             }
             
             void OnCancelButtonClicked()
             {
                 Cleanup();
-                onCancel.Invoke();
+                onCancel?.Invoke();
             }
 
             void Cleanup()

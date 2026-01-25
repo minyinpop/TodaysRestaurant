@@ -16,8 +16,8 @@ namespace Tool.Item_Giver
         
         internal event Action<ItemSO> OnClick;
         
-        private void OnEnable() => Button.onClick += OnButtonClicked;
-        private void OnDisable() => Button.onClick -= OnButtonClicked;
+        private void OnEnable() => Button.OnClicked += OnButtonClicked;
+        private void OnDisable() => Button.OnClicked -= OnButtonClicked;
         private void OnButtonClicked() => OnClick?.Invoke(Item);
         public void SetInteractable(bool interactable) => Button.SetInteractable(interactable);
     }

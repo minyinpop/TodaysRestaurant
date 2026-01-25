@@ -20,12 +20,12 @@ namespace UI_System.System.Child.Food_Menu_UI_System.Food_Menu_UI.Object
 
         private void OnEnable()
         {
-            Button.onClick += OnClicked;
+            Button.OnClicked += OnClicked;
         }
         
         private void OnDisable()
         {
-            Button.onClick -= OnClicked;
+            Button.OnClicked -= OnClicked;
         }
 
         public event Action<FoodType> OnClick;

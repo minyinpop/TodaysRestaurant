@@ -20,10 +20,11 @@ namespace Common.Object
         [field: SerializeField] private DoScale OnPointerEnterScale;
         [field: SerializeField] private DoScale OnPointerExitScale;
         
-        private bool Interactable;
+        [field: Header("Status Settings")]
+        [field: SerializeField] private bool Interactable;
 
-        public event Action onClick;
-        
+        public event Action OnClicked;
+
         public void SetInteractable(bool interactable)
         {
             Interactable = interactable;
@@ -48,7 +49,15 @@ namespace Common.Object
 
             protected override void OnPointerClick()
             {
-                if (Interactable) onClick?.Invoke();
+                if (!Interactable) return;
+                if (OnClicked == null)
+                {
+                    Debug.LogWarning($"{gameObject.name} > Button > OnClicked cannot be null.");
+                    gameObject.SetActive(false);
+                    return;
+                }
+
+                OnClicked.Invoke();
             }
         #endregion
     }

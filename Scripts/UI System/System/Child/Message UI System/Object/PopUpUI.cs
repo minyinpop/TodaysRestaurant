@@ -9,27 +9,27 @@ using Item.Ingredient;
 using TMPro;
 using UnityEngine;
 
-namespace Message_System.Object
+namespace UI_System.System.Child.Message_UI_System.Object
 {
     internal sealed class PopUpUI : MonoBehaviour
     {
         private void OnEnable()
         {
             if (ConfirmButton is not null)
-                ConfirmButton.onClick += OnConfirmButtonClicked;
+                ConfirmButton.OnClicked += OnConfirmButtonClicked;
             if (CancelButton is not null)
-                CancelButton.onClick += OnCancelButtonClicked;
+                CancelButton.OnClicked += OnCancelButtonClicked;
             if (CloseButton is not null)
-                CloseButton.onClick += OnCloseButtonClicked;
+                CloseButton.OnClicked += OnCloseButtonClicked;
         }
         private void OnDisable()
         {
             if (ConfirmButton is not null)
-                ConfirmButton.onClick -= OnConfirmButtonClicked;
+                ConfirmButton.OnClicked -= OnConfirmButtonClicked;
             if (CancelButton is not null)
-                CancelButton.onClick -= OnCancelButtonClicked;
+                CancelButton.OnClicked -= OnCancelButtonClicked;
             if (CloseButton is not null)
-                CloseButton.onClick -= OnCloseButtonClicked;
+                CloseButton.OnClicked -= OnCloseButtonClicked;
             if (ShowItemCor is not null)
             {
                 StopCoroutine(ShowItemCor);

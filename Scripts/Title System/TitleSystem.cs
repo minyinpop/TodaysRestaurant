@@ -1,16 +1,12 @@
 using System;
 using Common.Object;
-using Common.Value;
-using Message_System.System.Main;
+using UI_System.System.Main;
 using UnityEngine;
 
 namespace Title_System
 {
     internal sealed class TitleSystem : MonoBehaviour
     {
-        [field: Header("Child System")]
-        [field: SerializeField] private MessageSystem MessageSystem;
-        
         [field: Header("Button")]
         [field: SerializeField] private Button StartButton;
         [field: SerializeField] private Button OptionButton;
@@ -21,19 +17,19 @@ namespace Title_System
 
         private void OnEnable()
         {
-            StartButton.onClick += OnStartButtonClicked;
+            StartButton.OnClicked += OnStartButtonClicked;
             StartButton.SetInteractable(true);
-            OptionButton.onClick += OnOptionButtonClicked;
+            OptionButton.OnClicked += OnOptionButtonClicked;
             OptionButton.SetInteractable(true);
-            QuitButton.onClick += OnQuitButtonClicked;
+            QuitButton.OnClicked += OnQuitButtonClicked;
             QuitButton.SetInteractable(true);
         }
 
         private void OnDisable()
         {
-            StartButton.onClick -= OnStartButtonClicked;
-            OptionButton.onClick -= OnOptionButtonClicked;
-            QuitButton.onClick -= OnQuitButtonClicked;
+            StartButton.OnClicked -= OnStartButtonClicked;
+            OptionButton.OnClicked -= OnOptionButtonClicked;
+            QuitButton.OnClicked -= OnQuitButtonClicked;
         }
 
         #region Button
@@ -49,16 +45,7 @@ namespace Title_System
 
         private void OnOptionButtonClicked()
         {
-            MessageSystem.ShowOptionUI(
-                content: new PopUpUIContent(
-                    message: string.Empty,
-                    confirmButtonTitle: string.Empty,
-                    cancelButtonTitle: string.Empty,
-                    closeButtonTitle: string.Empty),
-                onClose: () =>
-                {
-                    // TODO
-                });
+            UISystem.ShowOptionUI();
         }
         
         private void OnQuitButtonClicked()

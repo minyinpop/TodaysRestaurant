@@ -23,7 +23,7 @@ namespace UI_System.System.Child.Food_Menu_UI_System.Food_Menu_UI.System.Child.O
         private const int TotalSlotCount = 12;
         private const int UnlockSlotCount = 3;
         
-        public event Action<ItemSlot, ItemSO> OnClick;
+        public event Action<ItemSlot, ItemSO> OnClicked;
 
         private void Awake()
         {
@@ -44,8 +44,8 @@ namespace UI_System.System.Child.Food_Menu_UI_System.Food_Menu_UI.System.Child.O
                 var slot_ItemSlot = slot.GetComponent<ItemSlot>();
                 SelectFoodSlots.Add(slot_ItemSlot);
                 
-                slot_ItemSlot.OnClick += OnClick;
-                SelectFoodSlot_Actions.Add(() => slot_ItemSlot.OnClick -= OnClick);
+                slot_ItemSlot.OnClick += OnClicked;
+                SelectFoodSlot_Actions.Add(() => slot_ItemSlot.OnClick -= OnClicked);
 
                 slot_ItemSlot.SetSlotState(i >= UnlockSlotCount ? ItemSlotState.Lock : ItemSlotState.NoItem);
             }

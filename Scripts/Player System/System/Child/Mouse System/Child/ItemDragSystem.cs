@@ -49,6 +49,7 @@ namespace Player_System.System.Child.Mouse_System.Child
                 _draggedItem = null;
             }
 
+            /*
             void SwitchItem()
             {
                 _destinationSlot.TryGetItem(out var item);
@@ -59,6 +60,7 @@ namespace Player_System.System.Child.Mouse_System.Child
                 _sourceSlot = _destinationSlot;
                 _destinationSlot = null;
             }
+            */
         }
     }
 }

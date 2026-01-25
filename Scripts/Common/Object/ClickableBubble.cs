@@ -34,8 +34,8 @@ namespace Common.Object
         private void OnEnable()
         {
             if (bubbleButton is null) return;
-            bubbleButton.onClick += HandleButtonClick;
-            _cleanUpActions.Add(() => bubbleButton.onClick -= HandleButtonClick);
+            bubbleButton.OnClicked += HandleButtonClicked;
+            _cleanUpActions.Add(() => bubbleButton.OnClicked -= HandleButtonClicked);
         }
 
         private void OnDisable()
@@ -48,7 +48,7 @@ namespace Common.Object
             _countDownCor = null;
         }
 
-        private void HandleButtonClick()
+        private void HandleButtonClicked()
         {
             OnClick?.Invoke();
         }

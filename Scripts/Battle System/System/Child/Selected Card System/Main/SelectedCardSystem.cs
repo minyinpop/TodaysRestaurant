@@ -8,7 +8,6 @@ using Battle_System.System.Child.Selected_Card_System.Child;
 using Common.Object;
 using Common.Value;
 using DG.Tweening;
-using Message_System.System.Main;
 using Player_System.Data.Main;
 using UI_System.System.Main;
 using UnityEngine;
@@ -31,7 +30,6 @@ namespace Battle_System.System.Child.Selected_Card_System.Main
         [field: Header("Object")]
         [field: SerializeField] private CanvasGroup UICanvasGroup;
         [field: SerializeField] private Button ConfirmButton;
-        [field: SerializeField] private MessageSystem MessageSystem;
         
         [field: Header("Data")]
         [field: SerializeField] private PlayerSO PlayerData;
@@ -58,13 +56,13 @@ namespace Battle_System.System.Child.Selected_Card_System.Main
 
         private void OnEnable()
         {
-            ConfirmButton.onClick += OnConfirmButtonClick;
+            ConfirmButton.OnClicked += OnConfirmButtonClicked;
             HandCardSystem.TryAddCardToSelected += TryAdd;
         }
         
         private void OnDisable()
         {
-            ConfirmButton.onClick -= OnConfirmButtonClick;
+            ConfirmButton.OnClicked -= OnConfirmButtonClicked;
             HandCardSystem.TryAddCardToSelected -= TryAdd;
             if (OnClickConfirmButtonCor is not null)
             {
@@ -145,7 +143,7 @@ namespace Battle_System.System.Child.Selected_Card_System.Main
             }
         }
         
-        private void OnConfirmButtonClick()
+        private void OnConfirmButtonClicked()
         {
             OnClickConfirmButtonCor = OnConfirmButtonClickCoroutine();
             StartCoroutine(OnClickConfirmButtonCor);
@@ -188,17 +186,15 @@ namespace Battle_System.System.Child.Selected_Card_System.Main
                 }
                 else
                 {
+                    foreach (var card in selectedCards)
+                        card.SetInteractable(false);
+                    
                     UISystem.ShowSwitchUI(
                         content: new PopUpUIContent(
                             message: "還可以選擇卡片\n確定要直接開始戰鬥嗎？",
                             confirmButtonTitle: "確定",
                             cancelButtonTitle: "返回",
                             closeButtonTitle: string.Empty),
-                        onShow: () =>
-                        {
-                            foreach (var card in selectedCards)
-                                card.SetInteractable(false);
-                        },
                         onConfirm: () =>
                         {
                             foreach (var card in selectedCards)
