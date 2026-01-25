@@ -4,7 +4,7 @@ using Common.Value;
 using TMPro;
 using UnityEngine;
 
-namespace UI_System.System.Child.Switch_UI_System
+namespace UI_System.System.Child.Switch_UI_System.Object
 {
     public sealed class PopUpUI_Switch : MonoBehaviour
     {

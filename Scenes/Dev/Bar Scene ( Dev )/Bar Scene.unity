@@ -469,6 +469,7 @@ MonoBehaviour:
     EndValue: {x: 1, y: 1, z: 1}
     Duration: 0.2
     Ease: 18
+  Interactable: 0
 --- !u!114 &124177381
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1119,6 +1120,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 260502526}
+  - component: {fileID: 260502527}
   m_Layer: 0
   m_Name: Option UI System
   m_TagString: Untagged
@@ -1133,19 +1135,33 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 260502525}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2050348942}
-  m_Father: {fileID: 369552011}
+  m_Father: {fileID: 1191780972}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &260502527
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 260502525}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8930467f8d9e4eb68dae37119fbc561d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI_System.System.Child.Message_UI_System.System.OptionUISystem
+  popUpUIParent: {fileID: 260502526}
+  popUpUIPrefab: {fileID: 8197270190447908908, guid: a6703cf87d79f61489a496054da7801f, type: 3}
 --- !u!1 &273811144 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -7690615931618742013, guid: 23a219ba04690ee43ad642486dbd1d6e, type: 3}
@@ -1740,46 +1756,6 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 1}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &369552010
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 369552011}
-  m_Layer: 0
-  m_Name: Message UI System
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &369552011
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 369552010}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1949131392}
-  - {fileID: 2073645165}
-  - {fileID: 1008751450}
-  - {fileID: 1239991186}
-  - {fileID: 260502526}
-  m_Father: {fileID: 1191780972}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &410087039
@@ -3238,7 +3214,7 @@ MonoBehaviour:
   switchSystemParent: {fileID: 2073645165}
   defeatSystemParent: {fileID: 1008751450}
   itemGetUISystemParent: {fileID: 1239991186}
-  optionUISystemParent: {fileID: 0}
+  optionUISystemParent: {fileID: 260502526}
 --- !u!1 &723669570
 GameObject:
   m_ObjectHideFlags: 0
@@ -5535,13 +5511,13 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1008751449}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 429542218}
-  m_Father: {fileID: 369552011}
+  m_Father: {fileID: 1191780972}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -5560,8 +5536,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8554460eb8d342d79e7c350b3c77dbc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UI_System.System.Child.Message_UI_System.DefeatUISystem
-  popUpUIParent: {fileID: 0}
-  popUpUIPrefab: {fileID: 0}
+  popUpUIParent: {fileID: 1008751450}
+  popUpUIPrefab: {fileID: 8368273867094221560, guid: b7b8cc268532bc24e99f7d9e43129c9b, type: 3}
 --- !u!1001 &1011997801
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6209,7 +6185,11 @@ RectTransform:
   - {fileID: 5304598883963511797}
   - {fileID: 829262843}
   - {fileID: 1797214890}
-  - {fileID: 369552011}
+  - {fileID: 1949131392}
+  - {fileID: 2073645165}
+  - {fileID: 1008751450}
+  - {fileID: 1239991186}
+  - {fileID: 260502526}
   - {fileID: 1141738540}
   m_Father: {fileID: 676886824}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6523,13 +6503,13 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1239991185}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 189835565}
-  m_Father: {fileID: 369552011}
+  m_Father: {fileID: 1191780972}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -6548,8 +6528,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87f778e641f140428fc7dc20dc700e0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UI_System.System.Child.Message_UI_System.ItemGetUISystem
-  popUpUIParent: {fileID: 0}
-  popUpUIPrefab: {fileID: 0}
+  popUpUIParent: {fileID: 1239991186}
+  popUpUIPrefab: {fileID: 8368273867094221560, guid: 0cfff99dcf0e07043b89de544661cfe4, type: 3}
 --- !u!1 &1259393063
 GameObject:
   m_ObjectHideFlags: 0
@@ -9683,6 +9663,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::System.Message.Child.TipSystem
   popUpUIParent: {fileID: 1949131392}
   popUpUIPrefab: {fileID: 8368273867094221560, guid: 7f60b4da3754995489e820fcc3ef6b25, type: 3}
+  mask: {fileID: 1936138008}
 --- !u!224 &1949131392
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9696,7 +9677,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1936138009}
-  m_Father: {fileID: 369552011}
+  m_Father: {fileID: 1191780972}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -10102,7 +10083,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1596327453}
-  m_Father: {fileID: 369552011}
+  m_Father: {fileID: 1191780972}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -10121,8 +10102,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bbadead27904e69b8f7953cc91546bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::System.Message.Child.SwitchSystem
-  popUpUIParent: {fileID: 0}
-  popUpUIPrefab: {fileID: 0}
+  popUpUIParent: {fileID: 2073645165}
+  popUpUIPrefab: {fileID: 8368273867094221560, guid: 4200785a895ae034c8d097ce66aa6e9d, type: 3}
+  mask: {fileID: 1596327452}
 --- !u!1 &2083927479
 GameObject:
   m_ObjectHideFlags: 0

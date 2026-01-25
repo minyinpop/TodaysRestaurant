@@ -8,11 +8,10 @@ using UI_System.System.Child;
 using UI_System.System.Child.Backpack_UI_System;
 using UI_System.System.Child.Food_Menu_UI_System;
 using UI_System.System.Child.Hotbar_UI_System;
-using UI_System.System.Child.Message_UI_System;
 using UI_System.System.Child.Message_UI_System.System;
 using UI_System.System.Child.Serving_Note_UI_System;
-using UI_System.System.Child.Switch_UI_System;
-using UI_System.System.Child.Tip_UI_System;
+using UI_System.System.Child.Switch_UI_System.System;
+using UI_System.System.Child.Tip_UI_System.System;
 using UnityEngine;
 
 namespace UI_System.System.Main
@@ -117,7 +116,7 @@ namespace UI_System.System.Main
         #region Message UI
             public static void ShowTipUI(PopUpUIContent content, Action onConfirm = null) =>
                 _tipUISystem.SpawnUI(content, onConfirm);
-            public static void ShowSwitchUI(PopUpUIContent content, Action onConfirm = null, Action onCancel = null) =>
+            public static void ShowSwitchUI(PopUpUIContent content, Action onConfirm, Action onCancel = null) =>
                 _switchUISystem.SpawnUI(content, onConfirm, onCancel);
             public static void ShowDefeatUI(PopUpUIContent content, Action onConfirm) =>
                 _defeatUISystem.SpawnUI(content, onConfirm);

@@ -1,10 +1,10 @@
 using System;
 using Common.Value;
-using UI_System.System.Child.Message_UI_System.Object;
+using UI_System.System.Child.Switch_UI_System.Object;
 using UI_System.System.Main;
 using UnityEngine;
 
-namespace UI_System.System.Child.Switch_UI_System
+namespace UI_System.System.Child.Switch_UI_System.System
 {
     public sealed class SwitchUISystem : MonoBehaviour, IUISystem
     {
@@ -12,26 +12,29 @@ namespace UI_System.System.Child.Switch_UI_System
         [field: SerializeField] private RectTransform popUpUIParent;
         [field: SerializeField] private GameObject popUpUIPrefab;
         
+        [field: Header("Mask")]
+        [field: SerializeField] private GameObject mask;
+        
         private PopUpUI_Switch _popUpUI;
 
         public void SpawnUI(PopUpUIContent content, Action onConfirm, Action onCancel = null)
         {
             if (onConfirm == null)
             {
+                Debug.LogError("SwitchUISystem > SpawnUI > onConfirm callback cannot be null.");
+                return;
             }
+            
+            mask.SetActive(true);
 
             _popUpUI = Instantiate(popUpUIPrefab, popUpUIParent).GetComponent<PopUpUI_Switch>();
-            _popUpUI.Initialize(content, onConfirm, onCancel);
-            
-            _popUpUI.OnClickConfirmButton += OnConfirmButtonClicked;
-            _popUpUI.OnClickCancelButton += OnCancelButtonClicked;
-            _popUpUI.SetButtonInteractable(true);
+            _popUpUI.Initialize(content, OnConfirmButtonClicked, OnCancelButtonClicked);
             return;
             
             void OnConfirmButtonClicked()
             {
                 Cleanup();
-                onConfirm?.Invoke();
+                onConfirm.Invoke();
             }
             
             void OnCancelButtonClicked()
@@ -42,9 +45,7 @@ namespace UI_System.System.Child.Switch_UI_System
 
             void Cleanup()
             {
-                _popUpUI.SetButtonInteractable(false);
-                _popUpUI.OnClickConfirmButton -= OnConfirmButtonClicked;
-                _popUpUI.OnClickCancelButton -= OnCancelButtonClicked;
+                mask.SetActive(false);
                 
                 Destroy(_popUpUI.gameObject);
                 _popUpUI = null;
