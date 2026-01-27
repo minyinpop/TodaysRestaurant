@@ -6,7 +6,7 @@ using Common.Value;
 using Common.Value.Type;
 using Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Child;
 using Restaurant_System.Object.Cookware.System;
-using UI_System.System.Main;
+using UI_System.Main;
 using UnityEngine;
 
 namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Main

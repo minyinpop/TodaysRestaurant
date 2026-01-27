@@ -1,6 +1,6 @@
 using System;
 using Common.Object;
-using UI_System.System.Main;
+using UI_System.Main;
 using UnityEngine;
 
 namespace Title_System

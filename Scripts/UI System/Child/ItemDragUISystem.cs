@@ -3,7 +3,7 @@ using Input_System.Main;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI_System.System.Child
+namespace UI_System.Child
 {
     public sealed class ItemDragUISystem : MonoBehaviour
     {

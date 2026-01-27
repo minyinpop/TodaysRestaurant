@@ -4,17 +4,17 @@ using Common.Item;
 using Common.Item.Ingredient;
 using Common.Item.Serving_Note;
 using Common.Value;
-using UI_System.System.Child;
-using UI_System.System.Child.Backpack_UI_System;
-using UI_System.System.Child.Food_Menu_UI_System;
-using UI_System.System.Child.Hotbar_UI_System;
-using UI_System.System.Child.Message_UI_System.System;
-using UI_System.System.Child.Serving_Note_UI_System;
-using UI_System.System.Child.Switch_UI_System.System;
-using UI_System.System.Child.Tip_UI_System.System;
+using UI_System.Child;
+using UI_System.Child.Backpack_UI_System;
+using UI_System.Child.Food_Menu_UI_System;
+using UI_System.Child.Hotbar_UI_System;
+using UI_System.Child.Message_UI_System.System;
+using UI_System.Child.Serving_Note_UI_System;
+using UI_System.Child.Switch_UI_System.System;
+using UI_System.Child.Tip_UI_System.System;
 using UnityEngine;
 
-namespace UI_System.System.Main
+namespace UI_System.Main
 {
     public sealed class UISystem : MonoBehaviour
     {

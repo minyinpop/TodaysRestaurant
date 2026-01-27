@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using Common.Item;
-using UI_System.System.Child.Food_Menu_UI_System.Food_Menu_UI.Object.Item_Slot.Base;
-using UI_System.System.Child.Food_Menu_UI_System.Food_Menu_UI.Object.Item_Slot.Type.Select_Food_Slot;
-using UI_System.System.Child.Food_Menu_UI_System.Food_Menu_UI.System.Child.Open_Page.Child.Select_Food_Page.Data;
+using UI_System.Child.Food_Menu_UI_System.Food_Menu_UI.Object.Item_Slot.Base;
+using UI_System.Child.Food_Menu_UI_System.Food_Menu_UI.Object.Item_Slot.Type.Select_Food_Slot;
+using UI_System.Child.Food_Menu_UI_System.Food_Menu_UI.System.Child.Open_Page.Child.Select_Food_Page.Data;
 using UnityEngine;
 
-namespace UI_System.System.Child.Food_Menu_UI_System.Food_Menu_UI.System.Child.Open_Page.Child.Select_Food_Page
+namespace UI_System.Child.Food_Menu_UI_System.Food_Menu_UI.System.Child.Open_Page.Child.Select_Food_Page
 {
     internal sealed class SelectFoodPage : MonoBehaviour
     {

@@ -1,10 +1,9 @@
 using System;
 using Common.Value;
-using UI_System.System.Child.Tip_UI_System.Object;
-using UI_System.System.Main;
+using UI_System.Child.Tip_UI_System.Object;
 using UnityEngine;
 
-namespace UI_System.System.Child.Tip_UI_System.System
+namespace UI_System.Child.Tip_UI_System.System
 {
     public sealed class TipUISystem : MonoBehaviour
     {

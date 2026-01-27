@@ -10,7 +10,7 @@ using Player_System.System.Main.State_Machine;
 using Player_System.System.Main.State_Machine.State;
 using Restaurant_System.Object.Cookware.System;
 using Restaurant_System.Object.Creature.Customer.System.Main;
-using UI_System.System.Main;
+using UI_System.Main;
 using UnityEngine;
 
 namespace Player_System.System.Main

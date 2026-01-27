@@ -1,6 +1,6 @@
 using Common.Item;
 using Common.Object.Storage_Slot;
-using UI_System.System.Main;
+using UI_System.Main;
 using UnityEngine;
 
 namespace Player_System.System.Child.Mouse_System.Child

@@ -4,7 +4,7 @@ using Common.Value;
 using TMPro;
 using UnityEngine;
 
-namespace UI_System.System.Child.Tip_UI_System.Object
+namespace UI_System.Child.Tip_UI_System.Object
 {
     public sealed class PopUpUI_Tip : MonoBehaviour
     {

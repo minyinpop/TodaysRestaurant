@@ -10,8 +10,8 @@ using Player_System.System.Main;
 using Restaurant_System.Object.Creature.Customer.System.Child;
 using Restaurant_System.Object.Creature.Customer.System.Main.State_Machine;
 using Restaurant_System.Object.Creature.Customer.System.Main.State_Machine.State;
-using UI_System.System.Child.Food_Menu_UI_System.Food_Menu_UI.System.Child.Open_Page.Child.Select_Food_Page.Data;
-using UI_System.System.Main;
+using UI_System.Child.Food_Menu_UI_System.Food_Menu_UI.System.Child.Open_Page.Child.Select_Food_Page.Data;
+using UI_System.Main;
 using UnityEngine;
 
 namespace Restaurant_System.Object.Creature.Customer.System.Main

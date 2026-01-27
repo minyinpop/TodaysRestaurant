@@ -5,7 +5,7 @@ using Common.Object.Storage_Slot.Type;
 using Player_System.Data.Child.Inventory;
 using UnityEngine;
 
-namespace UI_System.System.Child.Hotbar_UI_System
+namespace UI_System.Child.Hotbar_UI_System
 {
     public sealed class HotbarUI : MonoBehaviour
     {

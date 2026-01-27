@@ -7,16 +7,16 @@ using Common.Object;
 using Common.Value;
 using Common.Value.Type;
 using Player_System.Data.Main;
-using UI_System.System.Child.Food_Menu_UI_System.Food_Menu_UI.Object;
-using UI_System.System.Child.Food_Menu_UI_System.Food_Menu_UI.Object.Item_Slot.Base;
-using UI_System.System.Child.Food_Menu_UI_System.Food_Menu_UI.Object.Item_Slot.Type.Select_Food_Slot;
-using UI_System.System.Child.Food_Menu_UI_System.Food_Menu_UI.System.Child.Open_Page.Child;
-using UI_System.System.Child.Food_Menu_UI_System.Food_Menu_UI.System.Child.Open_Page.Child.Select_Food_Page;
-using UI_System.System.Child.Food_Menu_UI_System.Food_Menu_UI.System.Child.Open_Page.Child.Select_Food_Page.Data;
-using UI_System.System.Main;
+using UI_System.Child.Food_Menu_UI_System.Food_Menu_UI.Object;
+using UI_System.Child.Food_Menu_UI_System.Food_Menu_UI.Object.Item_Slot.Base;
+using UI_System.Child.Food_Menu_UI_System.Food_Menu_UI.Object.Item_Slot.Type.Select_Food_Slot;
+using UI_System.Child.Food_Menu_UI_System.Food_Menu_UI.System.Child.Open_Page.Child;
+using UI_System.Child.Food_Menu_UI_System.Food_Menu_UI.System.Child.Open_Page.Child.Select_Food_Page;
+using UI_System.Child.Food_Menu_UI_System.Food_Menu_UI.System.Child.Open_Page.Child.Select_Food_Page.Data;
+using UI_System.Main;
 using UnityEngine;
 
-namespace UI_System.System.Child.Food_Menu_UI_System.Food_Menu_UI.System.Child.Open_Page.Main
+namespace UI_System.Child.Food_Menu_UI_System.Food_Menu_UI.System.Child.Open_Page.Main
 {
     internal sealed class OpenState : MonoBehaviour
     {

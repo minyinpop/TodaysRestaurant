@@ -2,7 +2,7 @@ using System;
 using Common.Object;
 using UnityEngine;
 
-namespace UI_System.System.Child.Food_Menu_UI_System.Food_Menu_UI.System.Child
+namespace UI_System.Child.Food_Menu_UI_System.Food_Menu_UI.System.Child
 {
     internal sealed class CloseState : MonoBehaviour
     {

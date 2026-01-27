@@ -4,7 +4,7 @@ using Common.Item.Serving_Note;
 using Common.Object.Storage_Slot.Type;
 using UnityEngine;
 
-namespace UI_System.System.Child.Serving_Note_UI_System
+namespace UI_System.Child.Serving_Note_UI_System
 {
     public sealed class ServingNoteUI : MonoBehaviour
     {

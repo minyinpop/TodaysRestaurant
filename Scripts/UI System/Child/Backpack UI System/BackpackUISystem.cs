@@ -1,7 +1,6 @@
-using UI_System.System.Main;
 using UnityEngine;
 
-namespace UI_System.System.Child.Backpack_UI_System
+namespace UI_System.Child.Backpack_UI_System
 {
     public sealed class BackpackUISystem : MonoBehaviour
     {

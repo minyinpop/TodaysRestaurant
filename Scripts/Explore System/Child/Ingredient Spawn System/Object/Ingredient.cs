@@ -2,7 +2,7 @@ using Common;
 using Common.Object;
 using UnityEngine;
 
-namespace Explore_System.Ingredient
+namespace Explore_System.Child.Ingredient_Spawn_System.Object
 {
     public sealed class Ingredient : MonoBehaviour, InteractableObject
     {

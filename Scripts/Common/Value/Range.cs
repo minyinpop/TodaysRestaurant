@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Common.Value
 {
     [Serializable]
-    internal sealed class Range
+    public sealed class Range
     {
         [field: SerializeField] private int Min;
         [field: SerializeField] private int Max;

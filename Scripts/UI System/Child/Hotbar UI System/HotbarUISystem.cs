@@ -1,8 +1,7 @@
 using Common.Item;
-using UI_System.System.Main;
 using UnityEngine;
 
-namespace UI_System.System.Child.Hotbar_UI_System
+namespace UI_System.Child.Hotbar_UI_System
 {
     public sealed class HotbarUISystem : MonoBehaviour
     {

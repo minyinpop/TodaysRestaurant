@@ -10,7 +10,7 @@ using Battle_System.System.Main.State_Machine.State;
 using Common.Value;
 using Common.Value.Type;
 using Player_System.Data.Main;
-using UI_System.System.Main;
+using UI_System.Main;
 using UnityEngine;
 
 namespace Battle_System.System.Main

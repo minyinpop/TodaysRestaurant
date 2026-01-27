@@ -1,5 +1,5 @@
 using Common.Item;
-using UI_System.System.Main;
+using UI_System.Main;
 using UnityEngine;
 
 namespace Player_System.System.Child

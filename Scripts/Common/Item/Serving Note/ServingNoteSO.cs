@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using UI_System.System.Main;
+using UI_System.Main;
 using UnityEngine;
 
 namespace Common.Item.Serving_Note

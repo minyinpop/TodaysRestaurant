@@ -2,11 +2,11 @@ using Animation_System.DOTween;
 using Animation_System.DOTween.Basic;
 using Common.Item;
 using TMPro;
-using UI_System.System.Child.Food_Menu_UI_System.Food_Menu_UI.Object.Item_Slot.Base;
+using UI_System.Child.Food_Menu_UI_System.Food_Menu_UI.Object.Item_Slot.Base;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI_System.System.Child.Food_Menu_UI_System.Food_Menu_UI.Object.Item_Slot.Type.Select_Food_Slot
+namespace UI_System.Child.Food_Menu_UI_System.Food_Menu_UI.Object.Item_Slot.Type.Select_Food_Slot
 {
     internal sealed class SelectFoodSlot : ItemSlot
     {

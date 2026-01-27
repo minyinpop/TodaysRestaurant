@@ -9,7 +9,7 @@ using Common.Value;
 using TMPro;
 using UnityEngine;
 
-namespace UI_System.System.Child.Message_UI_System.Object
+namespace UI_System.Child.Message_UI_System.Object
 {
     internal sealed class PopUpUI : MonoBehaviour
     {
