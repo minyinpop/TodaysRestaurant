@@ -1,5 +1,5 @@
+using Common.Item;
 using Common.Object.Storage_Slot;
-using Item;
 using UI_System.System.Main;
 using UnityEngine;
 

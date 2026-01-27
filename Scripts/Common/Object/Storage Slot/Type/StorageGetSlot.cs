@@ -1,5 +1,5 @@
 using System;
-using Item;
+using Common.Item;
 using UnityEngine;
 
 namespace Common.Object.Storage_Slot.Type

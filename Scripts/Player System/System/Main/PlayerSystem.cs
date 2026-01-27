@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
+using Common.Item;
+using Common.Tool.Item_Giver;
 using Input_System.Main;
-using Item;
 using Player_System.System.Child;
 using Player_System.System.Child.Detect_System.Main;
 using Player_System.System.Child.Mouse_System.Main;
@@ -9,7 +10,6 @@ using Player_System.System.Main.State_Machine;
 using Player_System.System.Main.State_Machine.State;
 using Restaurant_System.Object.Cookware.System;
 using Restaurant_System.Object.Creature.Customer.System.Main;
-using Tool.Item_Giver;
 using UI_System.System.Main;
 using UnityEngine;
 

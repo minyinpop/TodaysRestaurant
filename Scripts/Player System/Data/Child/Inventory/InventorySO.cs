@@ -1,4 +1,4 @@
-using Item;
+using Common.Item;
 using UnityEngine;
 
 namespace Player_System.Data.Child.Inventory

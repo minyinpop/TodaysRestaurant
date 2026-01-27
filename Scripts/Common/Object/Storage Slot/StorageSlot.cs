@@ -1,7 +1,7 @@
 using System;
 using Animation_System.DOTween;
 using Animation_System.DOTween.Basic;
-using Item;
+using Common.Item;
 using UnityEngine;
 using UnityEngine.UI;
 

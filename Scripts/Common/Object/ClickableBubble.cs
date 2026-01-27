@@ -1,13 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Item;
+using Common.Item;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Common.Object
 {
-    internal sealed class ClickableBubble : MonoBehaviour
+    public sealed class ClickableBubble : MonoBehaviour
     {
         [field: Header("Component Settings")]
         [field: SerializeField] private Image bubbleImage;

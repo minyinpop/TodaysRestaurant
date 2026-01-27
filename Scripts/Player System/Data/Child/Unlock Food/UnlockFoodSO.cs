@@ -1,4 +1,4 @@
-using Item.Food.Data.Food_Category;
+using Common.Item.Food.Data.Food_Category;
 using UnityEngine;
 
 namespace Player_System.Data.Child.Unlock_Food
