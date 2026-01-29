@@ -6,7 +6,7 @@ using Common.Value;
 using Common.Value.Type;
 using Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Child;
 using Restaurant_System.Object.Cookware.System;
-using UI_System.Main;
+using UI_System.Message_UI_System.Main;
 using UnityEngine;
 
 namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Main
@@ -58,7 +58,7 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Main
                             }
                             else
                             {
-                                UISystem.ShowTipUI(
+                                MessageUISystem.ShowTipUI(
                                     content: new PopUpUIContent(
                                         message: "必須放置所有食材",
                                         confirmButtonTitle: "確認",

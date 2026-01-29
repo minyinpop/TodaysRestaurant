@@ -9,7 +9,7 @@ using Common.Object;
 using Common.Value;
 using DG.Tweening;
 using Player_System.Data.Main;
-using UI_System.Main;
+using UI_System.Message_UI_System.Main;
 using UnityEngine;
 
 namespace Battle_System.System.Child.Selected_Card_System.Main
@@ -173,7 +173,7 @@ namespace Battle_System.System.Child.Selected_Card_System.Main
                 if (selectedCards.Count == 0)
                 {
                     ConfirmButton.SetInteractable(false);
-                    UISystem.ShowTipUI(
+                    MessageUISystem.ShowTipUI(
                         content: new PopUpUIContent(
                             message:"請選擇至少一張卡牌",
                             confirmButtonTitle: "確定",
@@ -189,7 +189,7 @@ namespace Battle_System.System.Child.Selected_Card_System.Main
                     foreach (var card in selectedCards)
                         card.SetInteractable(false);
                     
-                    UISystem.ShowSwitchUI(
+                    MessageUISystem.ShowSwitchUI(
                         content: new PopUpUIContent(
                             message: "還可以選擇卡片\n確定要直接開始戰鬥嗎？",
                             confirmButtonTitle: "確定",

@@ -10,7 +10,6 @@ using Battle_System.System.Main.State_Machine.State;
 using Common.Value;
 using Common.Value.Type;
 using Player_System.Data.Main;
-using UI_System.Main;
 using UnityEngine;
 
 namespace Battle_System.System.Main
@@ -379,14 +378,15 @@ namespace Battle_System.System.Main
                         onEnter: () =>
                         {
                             IsEnd = true;
-                            UISystem.ShowItemGetUI(
-                                content: new PopUpUIContent(
-                                    message: string.Empty,
-                                    confirmButtonTitle: "拿取物品",
-                                    cancelButtonTitle: string.Empty,
-                                    closeButtonTitle: string.Empty),
-                                items: null, // TODO 怪物掉落物
-                                onConfirm: () => Debug.Log("Confirm player win."));
+                            // TODO
+                            // UISystem.ShowItemGetUI(
+                            //     content: new PopUpUIContent(
+                            //         message: string.Empty,
+                            //         confirmButtonTitle: "拿取物品",
+                            //         cancelButtonTitle: string.Empty,
+                            //         closeButtonTitle: string.Empty),
+                            //     items: null, // TODO 怪物掉落物
+                            //     onConfirm: () => Debug.Log("Confirm player win."));
                         },
                         onExit: () =>
                         {
@@ -407,16 +407,17 @@ namespace Battle_System.System.Main
                         onEnter: () =>
                         {
                             IsEnd = true;
-                            UISystem.ShowDefeatUI(
-                                content: new PopUpUIContent(
-                                    message: "被打敗了",
-                                    confirmButtonTitle: "再來一次",
-                                    cancelButtonTitle: string.Empty,
-                                    closeButtonTitle: string.Empty),
-                                onConfirm: () =>
-                                {
-                                    Debug.Log("確認玩家戰敗畫面");
-                                });
+                            // TODO
+                            // UISystem.ShowDefeatUI(
+                            //     content: new PopUpUIContent(
+                            //         message: "被打敗了",
+                            //         confirmButtonTitle: "再來一次",
+                            //         cancelButtonTitle: string.Empty,
+                            //         closeButtonTitle: string.Empty),
+                            //     onConfirm: () =>
+                            //     {
+                            //         Debug.Log("確認玩家戰敗畫面");
+                            //     });
                         },
                         onExit: () =>
                         {

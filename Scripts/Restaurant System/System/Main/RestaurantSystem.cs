@@ -3,7 +3,7 @@ using Input_System.Main;
 using Restaurant_System.System.Child;
 using Restaurant_System.System.Main.State_Machine;
 using Restaurant_System.System.Main.State_Machine.State;
-using UI_System.Main;
+using UI_System.Restaurant_UI_System.Main;
 using UnityEngine;
 
 namespace Restaurant_System.System.Main
@@ -40,9 +40,9 @@ namespace Restaurant_System.System.Main
                     void OnEnter()
                     {
                         InputSystem.Disable();
-                        UISystem.SpawnFoodMenu(() =>
+                        RestaurantUISystem.OpenFoodMenu(() =>
                         {
-                            UISystem.DestroyFoodMenu();
+                            RestaurantUISystem.CloseFoodMenu();
                             RoundStart();
                         });
                     }

@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using UI_System.Main;
+using UI_System.Restaurant_UI_System.Main;
 using UnityEngine;
 
 namespace Common.Item.Serving_Note
@@ -17,12 +17,12 @@ namespace Common.Item.Serving_Note
             public override void UnSelected() { }
             public override void Use()
             {
-                if (!UISystem.TryInitializeServingNoteUI(this, servingNotePrefab))
-                    UISystem.ToggleServingNoteUI(this);
+                if (!RestaurantUISystem.TryInitializeServingNoteUI(this, servingNotePrefab))
+                    RestaurantUISystem.ToggleServingNoteUI(this);
             }
             public override void Remove()
             {
-                UISystem.RemoveServingNoteUI(this);
+                RestaurantUISystem.RemoveServingNoteUI(this);
             }
         #endregion
         

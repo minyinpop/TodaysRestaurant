@@ -10,8 +10,9 @@ using Player_System.System.Main;
 using Restaurant_System.Object.Creature.Customer.System.Child;
 using Restaurant_System.Object.Creature.Customer.System.Main.State_Machine;
 using Restaurant_System.Object.Creature.Customer.System.Main.State_Machine.State;
-using UI_System.Child.Food_Menu_UI_System.Food_Menu_UI.System.Child.Open_Page.Child.Select_Food_Page.Data;
-using UI_System.Main;
+using UI_System.Message_UI_System.Main;
+using UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_Menu_UI.System.Child.Open_Page.Child.Select_Food_Page.Data;
+using UI_System.Restaurant_UI_System.Main;
 using UnityEngine;
 
 namespace Restaurant_System.Object.Creature.Customer.System.Main
@@ -206,7 +207,7 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
 
                     void OnClick()
                     {
-                        UISystem.ShowSwitchUI(
+                        MessageUISystem.ShowSwitchUI(
                             content: new PopUpUIContent(
                                 message: "確定要把料理給予顧客嗎？",
                                 confirmButtonTitle: "確定",
@@ -214,7 +215,7 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
                                 closeButtonTitle: string.Empty),
                             onConfirm: () =>
                             {
-                                UISystem.GetServingNoteItems(_servingNoteData, out var servingNoteItems);
+                                RestaurantUISystem.GetServingNoteItems(_servingNoteData, out var servingNoteItems);
                                 _servingNoteData.GetOrderedItems(out var orderedItems);
                                 
                                 var correctNumber = orderedItems.Count;

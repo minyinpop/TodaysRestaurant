@@ -1,7 +1,8 @@
 using System;
+using System.Collections;
 using Common.Object;
-using UI_System.Main;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Title_System
 {
@@ -45,7 +46,9 @@ namespace Title_System
 
         private void OnOptionButtonClicked()
         {
-            UISystem.ShowOptionUI();
+            // TODO
+            Debug.Log("TODO Option UI System");
+            // UISystem.ShowOptionUI();
         }
         
         private void OnQuitButtonClicked()

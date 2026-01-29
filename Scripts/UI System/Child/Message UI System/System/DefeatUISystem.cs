@@ -1,6 +1,6 @@
 using System;
 using Common.Value;
-using UI_System.Child.Message_UI_System.Object;
+using UI_System.Message_UI_System.Child.Item_Get_UI_System.Object;
 using UnityEngine;
 
 namespace UI_System.Child.Message_UI_System.System
@@ -11,7 +11,7 @@ namespace UI_System.Child.Message_UI_System.System
         [field: SerializeField] private RectTransform popUpUIParent;
         [field: SerializeField] private GameObject popUpUIPrefab;
         
-        private PopUpUI _popUpUI;
+        private ItemGetUI _itemGetUI;
 
         public void SpawnUI(PopUpUIContent content, Action onConfirm)
         {
@@ -21,20 +21,20 @@ namespace UI_System.Child.Message_UI_System.System
                 return;
             }
 
-            _popUpUI = Instantiate(popUpUIPrefab, popUpUIParent).GetComponent<PopUpUI>();
-            _popUpUI.Initialize(content);
+            _itemGetUI = Instantiate(popUpUIPrefab, popUpUIParent).GetComponent<ItemGetUI>();
+            _itemGetUI.ShowUI(content);
             
-            _popUpUI.OnClickConfirmButton += OnConfirmButtonClicked;
-            _popUpUI.SetButtonInteractable(true);
+            _itemGetUI.OnClickConfirmButton += OnConfirmButtonClicked;
+            _itemGetUI.SetButtonInteractable(true);
             return;
 
             void OnConfirmButtonClicked()
             {
-                _popUpUI.OnClickConfirmButton -= OnConfirmButtonClicked;
-                _popUpUI.SetButtonInteractable(false);
+                _itemGetUI.OnClickConfirmButton -= OnConfirmButtonClicked;
+                _itemGetUI.SetButtonInteractable(false);
                 
-                Destroy(_popUpUI.gameObject);
-                _popUpUI = null;
+                Destroy(_itemGetUI.gameObject);
+                _itemGetUI = null;
                 
                 onConfirm.Invoke();
             }
