@@ -1,9 +1,6 @@
 using Common.Item;
-using UI_System.Player_UI_System.Child.Backpack_UI_System;
 using UI_System.Player_UI_System.Child.Backpack_UI_System.System;
-using UI_System.Player_UI_System.Child.Hotbar_UI_System;
 using UI_System.Player_UI_System.Child.Hotbar_UI_System.System;
-using UI_System.Player_UI_System.Child.Item_Drag_UI_System;
 using UI_System.Player_UI_System.Child.Item_Drag_UI_System.System;
 using UnityEngine;
 
@@ -12,38 +9,45 @@ namespace UI_System.Player_UI_System.Main
     public sealed class PlayerUISystem : MonoBehaviour
     {
         [field: Header("Objects")]
-        [field: SerializeField] private Transform hotbarUISystemParent;
+        [field: SerializeField] private HotbarUISystem hotbarUISystem;
                                 private static HotbarUISystem _hotbarUISystem;
-        [field: SerializeField] private Transform backpackUISystemParent;
+        [field: SerializeField] private BackpackUISystem backpackUISystem;
                                 private static BackpackUISystem _backpackUISystem;
-        [field: SerializeField] private Transform itemDragUISystemParent;
+        [field: SerializeField] private ItemDragUISystem itemDragUISystem;
                                 private static ItemDragUISystem _itemDragUISystem;
 
         private void Awake()
         {
-            if (hotbarUISystemParent == null)
+            if (hotbarUISystem == null)
             {
-                Debug.Log($"{nameof(PlayerUISystem)} > {nameof(hotbarUISystemParent)} cannot be null.");
+                Debug.Log($"{nameof(PlayerUISystem)} > {nameof(hotbarUISystem)} cannot be null.");
                 return;
+            }
+            else
+            {
+                _hotbarUISystem = hotbarUISystem;
             }
             
-            if (backpackUISystemParent == null)
+            if (backpackUISystem == null)
             {
-                Debug.Log($"{nameof(PlayerUISystem)} > {nameof(backpackUISystemParent)} cannot be null.");
+                Debug.Log($"{nameof(PlayerUISystem)} > {nameof(backpackUISystem)} cannot be null.");
                 return;
+            }
+            else
+            {
+                _backpackUISystem = backpackUISystem;
             }
             
-            if (itemDragUISystemParent == null)
+            if (itemDragUISystem == null)
             {
-                Debug.Log($"{nameof(PlayerUISystem)} > {nameof(itemDragUISystemParent)} cannot be null.");
-                return;
+                Debug.Log($"{nameof(PlayerUISystem)} > {nameof(itemDragUISystem)} cannot be null.");
             }
-
-            _hotbarUISystem = hotbarUISystemParent.GetComponent<HotbarUISystem>();
-            _backpackUISystem = backpackUISystemParent.GetComponent<BackpackUISystem>();
-            _itemDragUISystem = itemDragUISystemParent.GetComponent<ItemDragUISystem>();
+            else
+            {
+                _itemDragUISystem = itemDragUISystem;
+            }
         }
-        
+
         #region Player
             public static void ClickRightButton()
             {
@@ -57,9 +61,9 @@ namespace UI_System.Player_UI_System.Main
                 _hotbarUISystem.PerformHotbar(hotbarIndex);
             }
             
-            public static void PerformBackpack()
+            public static void RequireBackpackUI()
             {
-                _backpackUISystem.PerformBackpack();
+                _backpackUISystem.RequireBackpackUI();
             }
             
             public static bool TryAddItem(ItemSO itemData)

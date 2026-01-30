@@ -17,7 +17,7 @@ namespace UI_System.Player_UI_System.Child.Backpack_UI_System.System
             }
         }
 
-        public void PerformBackpack()
+        public void RequireBackpackUI()
         {
             backpackUI.gameObject.SetActive(!backpackUI.gameObject.activeSelf);
             mask.SetActive(backpackUI.gameObject.activeSelf);

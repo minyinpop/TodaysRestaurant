@@ -55,8 +55,8 @@ namespace Player_System.System.Main
                 InputSystem.OnPerformedHotbar += PerformHotbar;
                 _cleanUpActions.Enqueue(() => InputSystem.OnPerformedHotbar -= PerformHotbar);
 
-                InputSystem.OnPerformedBackpack += PerformBackpack;
-                _cleanUpActions.Enqueue(() => InputSystem.OnPerformedBackpack -= PerformBackpack);
+                InputSystem.OnPerformedBackpack += RequireBackpackUI;
+                _cleanUpActions.Enqueue(() => InputSystem.OnPerformedBackpack -= RequireBackpackUI);
             #endregion
             
             #region TryAddItem
@@ -96,9 +96,9 @@ namespace Player_System.System.Main
                 _inventorySystem.PerformHotbar(hotbarIndex);
             }
 
-            private void PerformBackpack()
+            private void RequireBackpackUI()
             {
-                _inventorySystem.PerformBackpack();
+                _inventorySystem.RequireBackpackUI();
             }
 
             private bool TryAddItem(ItemSO item)

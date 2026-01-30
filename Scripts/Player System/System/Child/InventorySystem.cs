@@ -11,9 +11,9 @@ namespace Player_System.System.Child
             PlayerUISystem.PerformHotbar(hotbarIndex);
         }
 
-        public void PerformBackpack()
+        public void RequireBackpackUI()
         {
-            PlayerUISystem.PerformBackpack();
+            PlayerUISystem.RequireBackpackUI();
         }
 
         public bool TryAddItem(ItemSO itemData)
