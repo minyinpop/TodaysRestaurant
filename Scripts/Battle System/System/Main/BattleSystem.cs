@@ -10,6 +10,7 @@ using Battle_System.System.Main.State_Machine.State;
 using Common.Value;
 using Common.Value.Type;
 using Player_System.Data.Main;
+using UI_System.Message_UI_System.Child.Item_Get_UI_System.System;
 using UnityEngine;
 
 namespace Battle_System.System.Main
@@ -378,8 +379,7 @@ namespace Battle_System.System.Main
                         onEnter: () =>
                         {
                             IsEnd = true;
-                            // TODO
-                            // UISystem.ShowItemGetUI(
+                            // ItemGetUISystem.ShowUI(
                             //     content: new PopUpUIContent(
                             //         message: string.Empty,
                             //         confirmButtonTitle: "拿取物品",

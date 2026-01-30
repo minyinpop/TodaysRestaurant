@@ -1,10 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using Common.Item.Ingredient;
 using Common.Object;
-using Common.Object.Storage_Slot;
 using Common.Value;
 using TMPro;
 using UnityEngine;
@@ -13,125 +8,43 @@ namespace UI_System.Message_UI_System.Child.Item_Get_UI_System.Object
 {
     internal sealed class ItemGetUI : MonoBehaviour
     {
-        private void OnEnable()
+        [field: Header("Components")]
+        [field: SerializeField] private TextMeshProUGUI messageTMP;
+        [field: SerializeField] private Button confirmButton;
+
+        private Action _onConfirmButtonCleanupAction;
+
+        private void OnDestroy()
         {
-            if (ConfirmButton is not null)
-                ConfirmButton.OnClicked += OnConfirmButtonClicked;
-            if (CancelButton is not null)
-                CancelButton.OnClicked += OnCancelButtonClicked;
-            if (CloseButton is not null)
-                CloseButton.OnClicked += OnCloseButtonClicked;
-        }
-        private void OnDisable()
-        {
-            if (ConfirmButton is not null)
-                ConfirmButton.OnClicked -= OnConfirmButtonClicked;
-            if (CancelButton is not null)
-                CancelButton.OnClicked -= OnCancelButtonClicked;
-            if (CloseButton is not null)
-                CloseButton.OnClicked -= OnCloseButtonClicked;
-            if (ShowItemCor is not null)
-            {
-                StopCoroutine(ShowItemCor);
-                ShowItemCor = null;
-            }
+            _onConfirmButtonCleanupAction?.Invoke();
         }
         
-        #region General
-            public void ShowUI(PopUpUIContent content)
+        public void ShowMessage(PopUpUIContent content, Action onConfirm)
+        {
+            if (onConfirm == null)
             {
-                SetContent(content);
-            }
-
-            private void SetContent(PopUpUIContent content)
-            {
-                content.GetValues(out var message, out var confirm, out var cancel, out var close);
-                MessageTMP?.SetText(message);
-                ConfirmButton?.SetTitle(confirm);
-                CancelButton?.SetTitle(cancel);
-                CloseButton?.SetTitle(close);
-            }
-        #endregion
-        
-        #region Message
-            [field: Header("Message")]
-            [field: SerializeField] private TextMeshProUGUI MessageTMP;
-            #endregion
-            
-            #region Item Slot
-            [field: Header("Item Slot")]
-            [field: SerializeField] private Transform SpawnParent;
-            [field: SerializeField] private GameObject SlotPrefab;
-
-            private List<StorageSlot> ItemSlots = new();
-            
-            private IEnumerator ShowItemCor;
-
-            public void ShowItem(List<IngredientSO> items, Action onComplete)
-            {
-                if (onComplete == null)
-                {
-                    Debug.LogError("PopUpUI > ShowItem > onComplete cannot be null.");
-                    return;
-                }
-                
-                ShowItemCor = ShowItemCoroutine();
-                StartCoroutine(ShowItemCor);
+                Debug.Log($"{nameof(ItemGetUI)} > {nameof(ShowMessage)} > {nameof(onConfirm)} callback cannot be null.");
                 return;
-
-                IEnumerator ShowItemCoroutine()
-                {
-                    var completes = new List<bool>();
-                    for (var i = 0; i < items.Count; i++)
-                    {
-                        var index = i;
-                        var slot = Instantiate(SlotPrefab, SpawnParent);
-                        var slotScript = slot.GetComponent<StorageSlot>();
-                        var item = items[index];
-                        completes.Add(false);
-                        ItemSlots.Add(slotScript);
-                        slotScript.TryAddItem(item,
-                            onComplete: () =>
-                            {
-                                completes[index] = true;
-                            });
-                        yield return new WaitForSeconds(.1f);
-                    }
-                    
-                    yield return new WaitUntil(() => completes.All(c => c));
-                    onComplete.Invoke();
-                    ShowItemCor = null;
-                }
-            }
-        #endregion
-        
-        #region Button
-            [field: Header("Button")]
-            [field: SerializeField] private Button ConfirmButton;
-            
-            public event Action OnClickConfirmButton;
-
-            public void SetButtonInteractable(bool interactable)
-            {
-                ConfirmButton?.SetInteractable(interactable);
-                CancelButton?.SetInteractable(interactable);
-                CloseButton?.SetInteractable(interactable);
             }
 
-            private void OnConfirmButtonClicked()
+            content.GetValues(out var message, out var confirmButtonTitle, out _, out _);
+            messageTMP.SetText(message);
+            confirmButton.SetTitle(confirmButtonTitle);
+
+            confirmButton.OnClicked += onConfirm;
+            _onConfirmButtonCleanupAction = () =>
             {
-                OnClickConfirmButton?.Invoke();
-            }
+                confirmButton.OnClicked -= onConfirm;
+                _onConfirmButtonCleanupAction = null;
+            };
+        }
+
+        public void ClearMessage()
+        {
+            messageTMP.SetText(string.Empty);
+            confirmButton.SetTitle(string.Empty);
             
-            private void OnCancelButtonClicked()
-            {
-                OnClickCancelButton?.Invoke();
-            }
-            
-            private void OnCloseButtonClicked()
-            {
-                OnClickCloseButton?.Invoke();
-            }
-        #endregion
+            _onConfirmButtonCleanupAction?.Invoke();
+        }
     }
 }
