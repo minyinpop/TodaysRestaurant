@@ -44,6 +44,9 @@ namespace Input_System.Main
 
                 InputManager.Player.Backpack.performed += OnBackpackPerformed;
                 ActiveActions.Enqueue(() => InputManager.Player.Backpack.performed -= OnBackpackPerformed);
+
+                InputManager.Player.Map.performed += OnMapPerformed;
+                ActiveActions.Enqueue(() => InputManager.Player.Map.performed -= OnMapPerformed);
             #endregion
             
             #region Mouse
@@ -110,6 +113,11 @@ namespace Input_System.Main
             #region Backpack
                 public static event Action OnPerformedBackpack;
                 private static void OnBackpackPerformed(InputAction.CallbackContext context) => OnPerformedBackpack?.Invoke();
+            #endregion
+            
+            #region Map
+                public static event Action OnPerformedMap;
+                private static void OnMapPerformed(InputAction.CallbackContext context) => OnPerformedMap?.Invoke();
             #endregion
         #endregion
         

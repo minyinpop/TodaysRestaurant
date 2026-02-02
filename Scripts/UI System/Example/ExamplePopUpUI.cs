@@ -9,7 +9,7 @@ using Common.Value;
 using TMPro;
 using UnityEngine;
 
-namespace UI_System
+namespace UI_System.Example
 {
     internal sealed class ExamplePopUpUI : MonoBehaviour
     {

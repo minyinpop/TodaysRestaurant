@@ -1,9 +1,6 @@
-using System;
-using Common.Value;
-using UI_System.Message_UI_System.Child.Item_Get_UI_System.Object;
 using UnityEngine;
 
-namespace UI_System.Child.Message_UI_System.System
+namespace UI_System.Example
 {
     internal sealed class DefeatUISystem : MonoBehaviour
     {
