@@ -1,29 +1,28 @@
-using UI_System.Lobby_UI_System.Child.Map_UI_System.System;
+using UI_System.Lobby_UI_System.Child.Level_Select_UI_System.System;
 using UnityEngine;
 
 namespace UI_System.Lobby_UI_System.Main
 {
     public sealed class LobbyUISystem : MonoBehaviour
     {
-        [field: Header("Objects")]
-        [field: SerializeField] private MapUISystem mapUISystem;
-                                private static MapUISystem _mapUISystem;
-
+        [field: Header("Systems")]
+        [field: SerializeField] private LevelSelectUISystem levelSelectUISystem;
+                                private static LevelSelectUISystem _levelSelectUISystem;
+        
         private void Awake()
         {
-            if (mapUISystem == null)
+            if (levelSelectUISystem == null)
             {
-                Debug.Log($"{nameof(LobbyUISystem)} > {nameof(mapUISystem)} cannot be null.");
+                Debug.Log($"{nameof(LobbyUISystem)} > {nameof(levelSelectUISystem)} cannot be null.");
             }
             else
             {
-                _mapUISystem = mapUISystem;
+                _levelSelectUISystem = levelSelectUISystem;
             }
         }
 
-        public static void RequireMapUI()
+        public static void TriggerLevelSelectUI()
         {
-            _mapUISystem.RequireUI();
         }
     }
 }

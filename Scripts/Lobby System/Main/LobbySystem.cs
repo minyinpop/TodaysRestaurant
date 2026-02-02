@@ -7,19 +7,19 @@ namespace Lobby_System.Main
 {
     public sealed class LobbySystem : MonoBehaviour
     {
-        [field: Header("Objects")]
-        [field: SerializeField] private MapSystem mapSystem;
+        [field: Header("Systems")]
+        [field: SerializeField] private LevelSelectSystem levelSelectSystem;
         
         private Action _onPerformedMapCleanupAction;
         
         private void Awake()
         {
-            if (mapSystem == null)
+            if (levelSelectSystem == null)
             {
-                Debug.Log($"{nameof(LobbySystem)} > {nameof(mapSystem)} cannot be null.");
+                Debug.Log($"{nameof(LobbySystem)} > {nameof(levelSelectSystem)} cannot be null.");
                 return;
             }
-
+            
             InputSystem.OnPerformedMap += OnPerformedMap;
             _onPerformedMapCleanupAction = () =>
             {
@@ -35,7 +35,7 @@ namespace Lobby_System.Main
 
         private void OnPerformedMap()
         {
-            mapSystem.RequireMapUI();
+            levelSelectSystem.TriggerLevelSelectUI();
         }
     }
 }
