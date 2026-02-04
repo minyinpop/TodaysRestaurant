@@ -5,23 +5,32 @@ namespace Lobby_System.Child
 {
     public sealed class LevelSelectSystem : MonoBehaviour
     {
-        [field: SerializeField] private Camera developCamera; // TODO 暫時名字
+        [field: SerializeField] private Camera levelSelectCamera; // TODO 暫時名字
         
         private void Awake()
         {
-            if (developCamera == null)
+            if (levelSelectCamera == null)
             {
-                Debug.Log($"{nameof(LevelSelectSystem)} > {nameof(developCamera)} cannot be null.");
+                Debug.Log($"{nameof(LevelSelectSystem)} > {nameof(levelSelectCamera)} cannot be null.");
             }
             else
             {
-                developCamera.gameObject.SetActive(false);
+                levelSelectCamera.gameObject.SetActive(false);
             }
         }
 
-        public void TriggerLevelSelectUI()
+        public void ShowLevelSelectUI()
         {
-            LobbyUISystem.TriggerLevelSelectUI();
+            levelSelectCamera.gameObject.SetActive(true);
+            
+            LobbyUISystem.ShowLevelSelectUI();
+        }
+        
+        public void HideLevelSelectUI()
+        {
+            levelSelectCamera.gameObject.SetActive(false);
+            
+            LobbyUISystem.HideLevelSelectUI();
         }
     }
 }

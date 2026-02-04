@@ -1,6 +1,8 @@
 using System;
+using Input_System;
 using Input_System.Main;
 using Lobby_System.Child;
+using UI_System.Lobby_UI_System.Main;
 using UnityEngine;
 
 namespace Lobby_System.Main
@@ -10,7 +12,10 @@ namespace Lobby_System.Main
         [field: Header("Systems")]
         [field: SerializeField] private LevelSelectSystem levelSelectSystem;
         
-        private Action _onPerformedMapCleanupAction;
+        private bool _isLevelSelectUIOpen;
+
+        private Action _onLobbyLevelSelectUIPerformedCleanupAction;
+        private Action _onClickLevelSelectButtonCleanupAction;
         
         private void Awake()
         {
@@ -20,22 +25,39 @@ namespace Lobby_System.Main
                 return;
             }
             
-            InputSystem.OnPerformedMap += OnPerformedMap;
-            _onPerformedMapCleanupAction = () =>
+            LobbyInputSystem.OnLobbyLevelSelectUIPerformedAction += OnPerformedMap;
+            _onLobbyLevelSelectUIPerformedCleanupAction = () =>
             {
-                InputSystem.OnPerformedMap -= OnPerformedMap;
-                _onPerformedMapCleanupAction = null;
+                LobbyInputSystem.OnLobbyLevelSelectUIPerformedAction -= OnPerformedMap;
+                _onLobbyLevelSelectUIPerformedCleanupAction = null;
+            };
+
+            LobbyUISystem.OnClickLevelSelectButtonEvent += OnPerformedMap;
+            _onClickLevelSelectButtonCleanupAction = () =>
+            {
+                LobbyUISystem.OnClickLevelSelectButtonEvent -= OnPerformedMap;
+                _onClickLevelSelectButtonCleanupAction = null;
             };
         }
         
         private void OnDestroy()
         {
-            _onPerformedMapCleanupAction?.Invoke();
+            _onLobbyLevelSelectUIPerformedCleanupAction?.Invoke();
+            _onClickLevelSelectButtonCleanupAction?.Invoke();
         }
 
         private void OnPerformedMap()
         {
-            levelSelectSystem.TriggerLevelSelectUI();
+            _isLevelSelectUIOpen = !_isLevelSelectUIOpen;
+            
+            if (_isLevelSelectUIOpen)
+            {
+                levelSelectSystem.HideLevelSelectUI();
+            }
+            else
+            {
+                levelSelectSystem.ShowLevelSelectUI();
+            }
         }
     }
 }

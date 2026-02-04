@@ -1,5 +1,6 @@
 using System;
 using Common.Object;
+using UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object;
 using UnityEngine;
 
 namespace UI_System.Lobby_UI_System.Child.Level_Select_UI_System.System
@@ -7,33 +8,29 @@ namespace UI_System.Lobby_UI_System.Child.Level_Select_UI_System.System
     public sealed class LevelSelectUISystem : MonoBehaviour
     {
         [field: Header("Objects")]
-        [field: SerializeField] private Button levelSelectButton;
-                                private Action _levelSelectButtonCleanupAction;
+        [field: SerializeField] private LevelSelectUI levelSelectUI;
 
         private void Awake()
         {
-            if (levelSelectButton == null)
+            if (levelSelectUI == null)
             {
-                Debug.Log($"{nameof(LevelSelectUISystem)} > {nameof(levelSelectButton)} cannot be null.");
+                Debug.Log($"{nameof(LevelSelectUISystem)} > {nameof(levelSelectUI)} cannot be null.");
+                return;
             }
             else
             {
-                levelSelectButton.OnClicked += TriggerLevelSelectUI;
-                _levelSelectButtonCleanupAction = () =>
-                {
-                    levelSelectButton.OnClicked -= TriggerLevelSelectUI;
-                    _levelSelectButtonCleanupAction = null;
-                };
+                levelSelectUI.gameObject.SetActive(false);
             }
         }
-        
-        private void OnDestroy()
-        {
-            _levelSelectButtonCleanupAction?.Invoke();
-        }
 
-        public void TriggerLevelSelectUI()
+        public void ShowLevelSelectUI()
         {
+            levelSelectUI.gameObject.SetActive(true);
+        }
+        
+        public void HideLevelSelectUI()
+        {
+            levelSelectUI.gameObject.SetActive(false);
         }
     }
 }
