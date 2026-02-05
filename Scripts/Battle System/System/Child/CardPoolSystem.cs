@@ -6,9 +6,9 @@ using Animation_System.DOTween.Basic;
 using Battle_System.Object.Card_Slot;
 using Battle_System.Object.Card;
 using Battle_System.Object.Card.Battle;
+using Common.Player.Child.Player_Deck;
 using Common.Value.Type;
 using DG.Tweening;
-using Player_System.Data.Child.Deck;
 using UnityEngine;
 
 namespace Battle_System.System.Child
@@ -22,7 +22,7 @@ namespace Battle_System.System.Child
         [field: SerializeField] private CardSlot[] CardSlots;
         
         [field: Header("Data")]
-        [field: SerializeField] private DeckSO DeckData;
+        [field: SerializeField] private PlayerDeckSO playerDeckData;
 
         private List<GameObject> CurrentDeck = new();
         
@@ -32,7 +32,7 @@ namespace Battle_System.System.Child
 
         private void Awake()
         {
-            DeckData.Get(out var deck);
+            playerDeckData.Get(out var deck);
             CurrentDeck = deck.ToList();
         }
 

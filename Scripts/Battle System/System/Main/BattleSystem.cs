@@ -7,10 +7,9 @@ using Battle_System.System.Child.Initiative_System.System.Main;
 using Battle_System.System.Child.Selected_Card_System.Main;
 using Battle_System.System.Main.State_Machine;
 using Battle_System.System.Main.State_Machine.State;
+using Common.Player.Child.Player_Team;
 using Common.Value;
 using Common.Value.Type;
-using Player_System.Data.Main;
-using UI_System.Message_UI_System.Child.Item_Get_UI_System.System;
 using UnityEngine;
 
 namespace Battle_System.System.Main
@@ -28,7 +27,7 @@ namespace Battle_System.System.Main
         [field: SerializeField] private EnemyTeamSystem EnemyTeamSystem;
         
         [field: Header("Data")]
-        [field: SerializeField] private PlayerSO PlayerData;
+        [field: SerializeField] private PlayerTeamSO playerTeamData;
         
         private readonly StateMachine StateMachine = new();
         
@@ -43,9 +42,9 @@ namespace Battle_System.System.Main
 
         private bool IsEnd;
         
-        public static event Action ReloadScene;
-        public static event Action<string, Action> ChangeScene;
-        public static event Action<string, int> StartScenario;
+        // public static event Action ReloadScene;
+        // public static event Action<string, Action> ChangeScene;
+        // public static event Action<string, int> StartScenario;
 
         private void Start()
         {
@@ -175,7 +174,7 @@ namespace Battle_System.System.Main
                             CardPoolSystem.Refill(
                                 onComplete:() =>
                                 {
-                                    PlayerData.GetCharacterNumber(out var number);
+                                    playerTeamData.GetCharacterNumber(out var number);
                                     number = Mathf.Clamp(number * 2, 1, 8);
                                     DrawAndShowCard(number, OnInitiativeCoin);
                                 });
@@ -280,7 +279,7 @@ namespace Battle_System.System.Main
                         }
                         
                         yield return new WaitUntil(() => playerTurnEnd && enemyTurnEnd);
-                        PlayerData.GetCharacterNumber(out var number);
+                        playerTeamData.GetCharacterNumber(out var number);
                         DrawAndShowCard(number, () => drawAndShowEnd = true);
                         yield return new WaitUntil(() => drawAndShowEnd);
                     }

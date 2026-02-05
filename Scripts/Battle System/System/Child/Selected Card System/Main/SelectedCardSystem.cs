@@ -6,9 +6,9 @@ using Battle_System.Object.Card_Slot;
 using Battle_System.Object.Card;
 using Battle_System.System.Child.Selected_Card_System.Child;
 using Common.Object;
+using Common.Player.Child.Player_Team;
 using Common.Value;
 using DG.Tweening;
-using Player_System.Data.Main;
 using UI_System.Message_UI_System.Main;
 using UnityEngine;
 
@@ -32,7 +32,7 @@ namespace Battle_System.System.Child.Selected_Card_System.Main
         [field: SerializeField] private Button ConfirmButton;
         
         [field: Header("Data")]
-        [field: SerializeField] private PlayerSO PlayerData;
+        [field: SerializeField] private PlayerTeamSO playerTeamSO;
 
         private readonly List<CardSlot> CardSlots = new();
         private readonly List<ICard> SelectedCards = new();
@@ -45,7 +45,7 @@ namespace Battle_System.System.Child.Selected_Card_System.Main
 
         private void Start()
         {
-            PlayerData.GetCharacterNumber(out var number);
+            playerTeamSO.GetCharacterNumber(out var number);
             for (var i = 0; i < number; i++)
             {
                 var slot = Instantiate(SlotPrefab, SpawnParent);

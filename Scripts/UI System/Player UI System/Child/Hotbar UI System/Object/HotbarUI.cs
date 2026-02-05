@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Common.Item;
 using Common.Object.Storage_Slot.Type;
-using Player_System.Data.Child.Inventory;
+using Common.Player.Child.Player_Inventory;
 using UnityEngine;
 
 namespace UI_System.Player_UI_System.Child.Hotbar_UI_System.Object
@@ -10,7 +10,7 @@ namespace UI_System.Player_UI_System.Child.Hotbar_UI_System.Object
     public sealed class HotbarUI : MonoBehaviour
     {
         [field: Header("Data")]
-        [field: SerializeField] private InventorySO inventoryData;
+        [field: SerializeField] private PlayerInventorySO playerInventoryData;
         
         [field: Header("Components")]
         [field: SerializeField] private RectTransform hotbarSlotParent;
