@@ -5,6 +5,7 @@ using System.Linq;
 using Common.Item.Ingredient;
 using Common.Object;
 using Common.Object.Storage_Slot;
+using Common.Object.Storage_Slot.Main;
 using Common.Value;
 using TMPro;
 using UnityEngine;
@@ -16,20 +17,20 @@ namespace UI_System.Example
         private void OnEnable()
         {
             if (ConfirmButton is not null)
-                ConfirmButton.OnClicked += OnConfirmButtonClicked;
+                ConfirmButton.OnClick += OnConfirmButtonClicked;
             if (CancelButton is not null)
-                CancelButton.OnClicked += OnCancelButtonClicked;
+                CancelButton.OnClick += OnCancelButtonClicked;
             if (CloseButton is not null)
-                CloseButton.OnClicked += OnCloseButtonClicked;
+                CloseButton.OnClick += OnCloseButtonClicked;
         }
         private void OnDisable()
         {
             if (ConfirmButton is not null)
-                ConfirmButton.OnClicked -= OnConfirmButtonClicked;
+                ConfirmButton.OnClick -= OnConfirmButtonClicked;
             if (CancelButton is not null)
-                CancelButton.OnClicked -= OnCancelButtonClicked;
+                CancelButton.OnClick -= OnCancelButtonClicked;
             if (CloseButton is not null)
-                CloseButton.OnClicked -= OnCloseButtonClicked;
+                CloseButton.OnClick -= OnCloseButtonClicked;
             if (ShowItemCor is not null)
             {
                 StopCoroutine(ShowItemCor);

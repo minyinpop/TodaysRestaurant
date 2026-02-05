@@ -14,7 +14,7 @@ namespace UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_M
 
         private void Awake()
         {
-            openButton.OnClicked += OnConfirm;
+            openButton.OnClick += OnConfirm;
         }
 
         private void Start()
@@ -34,7 +34,7 @@ namespace UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_M
 
         private void OnDestroy()
         {
-            openButton.OnClicked -= OnConfirm;
+            openButton.OnClick -= OnConfirm;
         }
 
         public void Hide()

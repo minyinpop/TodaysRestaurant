@@ -12,11 +12,11 @@ namespace Common.Level.Main
                                 public string LevelName => levelName;
     
         [field: Header("Level Possible Items")]
-        [field: SerializeField] private LevelPossibleItems levelPossibleItems;
-                                public LevelPossibleItems LevelPossibleItems => levelPossibleItems;
+        [field: SerializeField] private LevelIngredient levelIngredient;
+                                public LevelIngredient LevelIngredient => levelIngredient;
                                 
         [field: Header("Level Possible Enemies")]
-        [field: SerializeField] private LevelPossibleEnemies levelPossibleEnemies;
-                                public LevelPossibleEnemies LevelPossibleEnemies => levelPossibleEnemies;
+        [field: SerializeField] private LevelEnemy levelEnemy;
+                                public LevelEnemy LevelEnemy => levelEnemy;
     }
 }

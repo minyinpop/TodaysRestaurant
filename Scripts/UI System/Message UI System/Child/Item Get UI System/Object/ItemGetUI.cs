@@ -31,10 +31,10 @@ namespace UI_System.Message_UI_System.Child.Item_Get_UI_System.Object
             messageTMP.SetText(message);
             confirmButton.SetTitle(confirmButtonTitle);
 
-            confirmButton.OnClicked += onConfirm;
+            confirmButton.OnClick += onConfirm;
             _onConfirmButtonCleanupAction = () =>
             {
-                confirmButton.OnClicked -= onConfirm;
+                confirmButton.OnClick -= onConfirm;
                 _onConfirmButtonCleanupAction = null;
             };
         }

@@ -49,8 +49,8 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Child
             if (SelectionUI.activeSelf) return;
             
             // CloseButton
-            CloseButton.OnClicked += onClose;
-            CloseAction.Add(() => CloseButton.OnClicked -= onClose);
+            CloseButton.OnClick += onClose;
+            CloseAction.Add(() => CloseButton.OnClick -= onClose);
             
             // StickyNote
             playerUnlockFoodData.GetUnlockFoods(out var unlockedDishesData);

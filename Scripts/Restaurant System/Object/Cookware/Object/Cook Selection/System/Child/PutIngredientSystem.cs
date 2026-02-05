@@ -7,6 +7,7 @@ using Common.Item;
 using Common.Item.Food;
 using Common.Object;
 using Common.Object.Storage_Slot;
+using Common.Object.Storage_Slot.Main;
 using UnityEngine;
 
 namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Child
@@ -46,10 +47,10 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Child
             if (PutIngredientUI.activeSelf) return;
             
             // Button
-            ConfirmButton.OnClicked += onConfirm;
-            CloseAction.Add(() => ConfirmButton.OnClicked -= onConfirm);
-            CloseButton.OnClicked += onCancel;
-            CloseAction.Add(() => CloseButton.OnClicked -= onCancel);
+            ConfirmButton.OnClick += onConfirm;
+            CloseAction.Add(() => ConfirmButton.OnClick -= onConfirm);
+            CloseButton.OnClick += onCancel;
+            CloseAction.Add(() => CloseButton.OnClick -= onCancel);
             
             // Item Slot
             selectedFoodData.GetRecipeSheet(out var recipeSheet);

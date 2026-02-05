@@ -41,17 +41,17 @@ namespace UI_System.Message_UI_System.Child.Switch_UI_System.Object
             confirmButton.SetTitle(confirmButtonTitle);
             cancelButton.SetTitle(cancelButtonTitle);
 
-            confirmButton.OnClicked += onConfirm;
+            confirmButton.OnClick += onConfirm;
             _confirmButtonCleanupAction = () =>
             {
-                confirmButton.OnClicked -= onConfirm;
+                confirmButton.OnClick -= onConfirm;
                 _confirmButtonCleanupAction = null;
             };
             
-            cancelButton.OnClicked += onCancel;
+            cancelButton.OnClick += onCancel;
             _cancelButtonCleanupAction = () =>
             {
-                cancelButton.OnClicked -= onCancel;
+                cancelButton.OnClick -= onCancel;
                 _cancelButtonCleanupAction = null;
             };
         }

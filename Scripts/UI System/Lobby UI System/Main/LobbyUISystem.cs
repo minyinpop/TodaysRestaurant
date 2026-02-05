@@ -34,10 +34,10 @@ namespace UI_System.Lobby_UI_System.Main
             }
             else
             {
-                levelSelectButton.OnClicked += OnClickLevelSelectButton;
+                levelSelectButton.OnClick += OnClickLevelSelectButton;
                 _levelSelectButtonCleanupAction = () =>
                 {
-                    levelSelectButton.OnClicked -= OnClickLevelSelectButton;
+                    levelSelectButton.OnClick -= OnClickLevelSelectButton;
                     _levelSelectButtonCleanupAction = null;
                 };
             }

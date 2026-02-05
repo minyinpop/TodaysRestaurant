@@ -47,7 +47,7 @@ namespace UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_M
         private void Awake()
         {
             // Book
-            confirmButton.OnClicked += OnClickConfirmButton;
+            confirmButton.OnClick += OnClickConfirmButton;
             
             // Page
             unlockFoodPage.OnClicked += OnUnlockFoodSlotClicked;
@@ -69,7 +69,7 @@ namespace UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_M
             while (_foodTypeButtonCleanupActions.Count > 0) _foodTypeButtonCleanupActions.Dequeue()?.Invoke();
             
             // Book
-            confirmButton.OnClicked -= OnClickConfirmButton;
+            confirmButton.OnClick -= OnClickConfirmButton;
             
             // Page
             unlockFoodPage.OnClicked -= OnUnlockFoodSlotClicked;

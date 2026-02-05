@@ -19,10 +19,10 @@ namespace UI_System.Player_UI_System.Child
             }
             else
             {
-                backpackFastUIButton.OnClicked += PlayerUISystem.RequireBackpackUI;
+                backpackFastUIButton.OnClick += PlayerUISystem.RequireBackpackUI;
                 _backpackFastUIButtonCleanupAction = () =>
                 {
-                    backpackFastUIButton.OnClicked -= PlayerUISystem.RequireBackpackUI;
+                    backpackFastUIButton.OnClick -= PlayerUISystem.RequireBackpackUI;
                     _backpackFastUIButtonCleanupAction = null;
                 };
             }

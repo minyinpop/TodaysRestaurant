@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Common.Item;
-using Common.Object.Storage_Slot.Type;
+using Common.Object.Storage_Slot.Child;
 using Common.Player.Child.Player_Inventory;
 using UnityEngine;
 
