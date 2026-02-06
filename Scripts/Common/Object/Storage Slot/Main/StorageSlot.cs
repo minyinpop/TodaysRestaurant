@@ -17,7 +17,6 @@ namespace Common.Object.Storage_Slot.Main
         [field: SerializeField] protected Color UnSelectedColor;
 
         [field: Header("Item Settings")]
-        [field: SerializeField] protected RectTransform ItemRect;
         [field: SerializeField] protected Image ItemImage;
         [field: SerializeField] protected Sprite PointerEnterSprite;
         [field: SerializeField] protected Sprite PointerExitSprite;
@@ -35,15 +34,26 @@ namespace Common.Object.Storage_Slot.Main
         protected ItemSO _currentItemData;
         
         #region Interaction
-            public abstract void Selected();
-            public abstract void UnSelected();
-            public abstract void Use();
+            public virtual void Selected() { }
+            public virtual void UnSelected() { }
+            public virtual void Use() { }
         #endregion
         
         #region Item
-            public virtual bool TryAddItem(ItemSO itemData) => false;
-            public virtual void TryAddItem(ItemSO itemData, Action onComplete) => onComplete?.Invoke();
+            public virtual bool TryAddItem(ItemSO itemData)
+            {
+                Debug.Log($"{gameObject.name} > {GetType().Name} > {nameof(TryAddItem)} > is not implemented, but you try to use it.");
+                return false;
+            }
+            
+            public virtual void TryAddItem(ItemSO itemData, Action onComplete)
+            {
+                Debug.Log($"{gameObject.name} > {GetType().Name} > {nameof(TryAddItem)} > is not implemented, but you try to use it.");
+                onComplete?.Invoke();
+            }
+            
             public virtual void TryGetItem(out ItemSO itemData) => itemData = _currentItemData;
+            
             public virtual void TryPeekItem(out ItemSO itemData) => itemData = _currentItemData;
             public virtual bool TryRemoveItem(ItemSO itemData) => false;
         #endregion

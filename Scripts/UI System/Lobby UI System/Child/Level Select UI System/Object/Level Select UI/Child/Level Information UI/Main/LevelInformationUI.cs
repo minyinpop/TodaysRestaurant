@@ -1,3 +1,4 @@
+using System.Collections;
 using Common.Level.Main;
 using Common.Object.Storage_Slot.Child;
 using UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Select_UI.Child.Level_Information_UI.Child;
@@ -14,6 +15,8 @@ namespace UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Se
         [field: SerializeField] private LevelInformationSlot slotPrefab;
 
         private bool _initialized;
+
+        private IEnumerator _initializeCoroutine;
 
         private void Awake()
         {
@@ -35,39 +38,60 @@ namespace UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Se
             }
         }
 
+        private void OnDestroy()
+        {
+            if (_initializeCoroutine != null)
+            {
+                StopCoroutine(_initializeCoroutine);
+                _initializeCoroutine = null;
+            }
+        }
+
         public void Initialize(LevelSO levelData)
         {
             if (_initialized)
             {
-                Debug.Log($"{nameof(LevelInformationUI)} > {nameof(Initialize)} is already initialized.)");
+                Debug.Log($"{nameof(LevelInformationUI)} > {nameof(Initialize)} > {nameof(InitializeCoroutine)} is already initialized.)");
             }
             else
             {
                 _initialized = true;
+                
+                _initializeCoroutine = InitializeCoroutine();
+                StartCoroutine(_initializeCoroutine);
+            }
+            
+            return;
 
-                const int maxSlotsPerRow = 4;
-                var currentSlotsAmount = 0;
-                
-                var currentContainer = Instantiate(slotContainerPrefab, ingredientSlotContainerParent);
-                
-                // Ingredient TODO 更改成每行有 4 個
-                foreach (var ingredientData in levelData.LevelIngredient.ingredientsData)
-                {
-                    if (currentSlotsAmount < maxSlotsPerRow)
+            IEnumerator InitializeCoroutine()
+            {
+                #region Ingredient
+                    var newContainer = Instantiate(slotContainerPrefab, ingredientSlotContainerParent);
+
+                    foreach (var ingredient in levelData.LevelIngredient.ingredientsData)
                     {
-                        var newSlot = Instantiate(slotPrefab, currentContainer.transform);
+                        if (!newContainer.CanAddSlot())
+                        {
+                            newContainer = Instantiate(slotContainerPrefab, ingredientSlotContainerParent);
+                        }
                         
-                        currentSlotsAmount++;
+                        var newSlot = Instantiate(slotPrefab);
+                        newSlot.Initialize(ingredient);
+                        
+                        newContainer.TryAddSlot(newSlot);
                     }
-                    else
+
+                    while (true)
                     {
-                        currentContainer = Instantiate(slotContainerPrefab, ingredientSlotContainerParent);
-                        
-                        var newSlot = Instantiate(slotPrefab, currentContainer.transform);
-                        
-                        currentSlotsAmount = 1;
+                        if (newContainer.CanAddSlot())
+                        {
+                            var newSlot = Instantiate(slotPrefab);
+                            newContainer.TryAddSlot(newSlot);
+                        }
+
+                        yield return null;
                     }
-                }
+                #endregion
             }
         }
     }

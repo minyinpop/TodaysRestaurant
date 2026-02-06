@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3070833469142157599
 RectTransform:
   m_ObjectHideFlags: 0
@@ -58,7 +58,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -165,26 +165,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b04f5f9982a04c5e81c2b1b99af1c537, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Common.Object.Storage_Slot.Child.LevelInformationSlot
-  SlotRect: {fileID: 4668576229497345517}
-  SlotImage: {fileID: 0}
-  SelectedColor: {r: 0, g: 0, b: 0, a: 0}
-  UnSelectedColor: {r: 0, g: 0, b: 0, a: 0}
-  ItemRect: {fileID: 0}
-  ItemImage: {fileID: 1066287746076491242}
-  PointerEnterSprite: {fileID: 0}
-  PointerExitSprite: {fileID: 0}
-  HaveItemColor: {r: 0, g: 0, b: 0, a: 0}
-  NoItemColor: {r: 0, g: 0, b: 0, a: 0}
-  DoAnimation: {fileID: 0}
-  ScaleUpSettings:
-    EndValue: {x: 0, y: 0, z: 0}
-    Duration: 0
-    Ease: 0
-  ScaleDownSettings:
-    EndValue: {x: 0, y: 0, z: 0}
-    Duration: 0
-    Ease: 0
-  Interactable: 0
+  animation: {fileID: -378162102967640388}
+  slotRect: {fileID: 4668576229497345517}
+  pointerEnterScale:
+    EndValue: {x: 1.1, y: 1.1, z: 1}
+    Duration: 0.1
+    Ease: 18
+  pointerExitScale:
+    EndValue: {x: 1, y: 1, z: 1}
+    Duration: 0.1
+    Ease: 18
+  itemImage: {fileID: 1066287746076491242}
+  itemLockColor: {r: 0, g: 0, b: 0, a: 1}
+  itemUnlockColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &-378162102967640388
 MonoBehaviour:
   m_ObjectHideFlags: 0
