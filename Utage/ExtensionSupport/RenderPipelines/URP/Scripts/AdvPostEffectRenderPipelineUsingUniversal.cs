@@ -77,7 +77,8 @@ namespace Utage.RenderPipeline.Urp
 				    out ColorFadeVolumeController colorFadeVolumeController))
 			{
 				colorFadeVolumeController.SetColor(command.Color);
-				colorFadeVolumeController.SetActive(true);
+				//指定のエフェクトのみアクティブにする
+				fadeVolume.SetActiveVolume(colorFadeVolumeController.VolumeComponent);
 			}
 			else
 			{
@@ -110,7 +111,8 @@ namespace Utage.RenderPipeline.Urp
 				ruleFade.SetRuleTexture(Engine.EffectManager.FindRuleTexture(command.RuleImage));
 				ruleFade.SetVague(command.Vague);
 				ruleFade.SetColor(command.Color);
-				ruleFade.SetActive(true);
+				//指定のエフェクトのみアクティブにする
+				fadeVolume.SetActiveVolume(ruleFade.VolumeComponent);
 			}
 			else
 			{

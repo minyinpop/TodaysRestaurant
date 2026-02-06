@@ -4,8 +4,9 @@ using Animation_System.DOTween;
 using Animation_System.DOTween.Basic;
 using Common.Item.Food;
 using Common.Object;
+using Common.Player.Child.Player_Unlock_Food;
+using Common.Player.Main;
 using Common.Value.Type;
-using Player_System.Data.Main;
 using Restaurant_System.Object.Cookware.Object.Cook_Selection.Object;
 using UnityEngine;
 
@@ -31,7 +32,7 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Child
         [field: SerializeField] private Transform StickyNoteParent;
         
         [field: Header("Data")]
-        [field: SerializeField] private PlayerSO PlayerData;
+        [field: SerializeField] private PlayerUnlockFoodSO playerUnlockFoodData;
         
         private readonly List<StickyNote> StickyNotes = new();
         
@@ -48,11 +49,11 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Child
             if (SelectionUI.activeSelf) return;
             
             // CloseButton
-            CloseButton.OnClicked += onClose;
-            CloseAction.Add(() => CloseButton.OnClicked -= onClose);
+            CloseButton.OnClick += onClose;
+            CloseAction.Add(() => CloseButton.OnClick -= onClose);
             
             // StickyNote
-            PlayerData.GetUnlockFoods(out var unlockedDishesData);
+            playerUnlockFoodData.GetUnlockFoods(out var unlockedDishesData);
             foreach (var category in unlockedDishesData)
             {
                 category.GetValues(out _, out var dishesData);

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Common.Item.Ingredient
 {
-    [CreateAssetMenu(menuName = "Minyinpop/Item/Ingredient Data", fileName = "New Data")]
+    [CreateAssetMenu(menuName = "Minyinpop/Item/Ingredient", fileName = "New Data")]
     public sealed class IngredientSO : ItemSO
     {
         #region Item Type

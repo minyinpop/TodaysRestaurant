@@ -4,9 +4,10 @@ using System.Linq;
 using Common.Item;
 using Common.Item.Food.Data.Food_Category;
 using Common.Object;
+using Common.Player.Child.Player_Unlock_Food;
+using Common.Player.Main;
 using Common.Value;
 using Common.Value.Type;
-using Player_System.Data.Main;
 using UI_System.Message_UI_System.Main;
 using UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_Menu_UI.Object;
 using UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_Menu_UI.Object.Item_Slot.Base;
@@ -35,7 +36,7 @@ namespace UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_M
         [field: SerializeField] private GameObject foodTypeButtonPrefab;
         
         [field: Header("Data")]
-        [field: SerializeField] private PlayerSO playerData;
+        [field: SerializeField] private PlayerUnlockFoodSO playerUnlockFoodData;
         [field: SerializeField] private SelectFoodPageSO selectFoodPageData;
         
         private FoodType _currentFoodType = FoodType.Soup;
@@ -46,7 +47,7 @@ namespace UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_M
         private void Awake()
         {
             // Book
-            confirmButton.OnClicked += OnClickConfirmButton;
+            confirmButton.OnClick += OnClickConfirmButton;
             
             // Page
             unlockFoodPage.OnClicked += OnUnlockFoodSlotClicked;
@@ -68,7 +69,7 @@ namespace UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_M
             while (_foodTypeButtonCleanupActions.Count > 0) _foodTypeButtonCleanupActions.Dequeue()?.Invoke();
             
             // Book
-            confirmButton.OnClicked -= OnClickConfirmButton;
+            confirmButton.OnClick -= OnClickConfirmButton;
             
             // Page
             unlockFoodPage.OnClicked -= OnUnlockFoodSlotClicked;
@@ -87,7 +88,7 @@ namespace UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_M
             selectFoodPage.Spawn();
             
             // Food Type Button
-            playerData.GetUnlockFoods(out var dishCategory);
+            playerUnlockFoodData.GetUnlockFoods(out var dishCategory);
             foreach (var category in dishCategory)
             {
                 category.GetValues(out var foodTypeData, out _);
@@ -193,7 +194,7 @@ namespace UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_M
         #region Tools
             private void FindCategory(FoodType targetFoodType, out FoodCategorySO targetFoodCategory)
             {
-                playerData.GetUnlockFoods(out var foodCategory);
+                playerUnlockFoodData.GetUnlockFoods(out var foodCategory);
                 foreach (var category in foodCategory)
                 {
                     category.GetValues(out var foodTypeData, out _);

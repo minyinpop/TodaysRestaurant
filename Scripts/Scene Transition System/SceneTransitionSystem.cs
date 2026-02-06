@@ -56,11 +56,11 @@ namespace Scene_Transition_System
             UtageReceiveMessageSystem.ChangeScene += ChangeScene;
             ActiveActions.Enqueue(() => UtageReceiveMessageSystem.ChangeScene -= ChangeScene);
             
-            BattleSystem.ReloadScene += ReloadScene;
-            ActiveActions.Enqueue(() => BattleSystem.ReloadScene -= ReloadScene);
+            // BattleSystem.ReloadScene += ReloadScene;
+            // ActiveActions.Enqueue(() => BattleSystem.ReloadScene -= ReloadScene);
             
-            BattleSystem.ChangeScene += ChangeScene;
-            ActiveActions.Enqueue(() => BattleSystem.ChangeScene -= ChangeScene);
+            // BattleSystem.ChangeScene += ChangeScene;
+            // ActiveActions.Enqueue(() => BattleSystem.ChangeScene -= ChangeScene);
         }
 
         private void OnDisable()

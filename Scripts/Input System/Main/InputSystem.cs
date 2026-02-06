@@ -8,23 +8,12 @@ namespace Input_System.Main
 {
     public sealed class InputSystem : MonoBehaviour
     {
-        private static GameObject Instance;
-
         private static InputManager InputManager;
         
         private readonly Queue<Action> ActiveActions = new();
 
         private void Awake()
         {
-            if (Instance is not null)
-            {
-                Destroy(gameObject);
-                return;
-            }
-
-            Instance = gameObject;
-            DontDestroyOnLoad(gameObject);
-            
             InputManager = new InputManager();
         }
 

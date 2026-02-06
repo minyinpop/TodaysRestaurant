@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Common.Item.Overcooked
 {
-    [CreateAssetMenu(menuName = "Minyinpop/Item/Overcooked Item Data", fileName = "New Data")]
+    [CreateAssetMenu(menuName = "Minyinpop/Item/Overcooked Item", fileName = "New Data")]
     public sealed class OvercookedItemSO : ItemSO
     {
         #region Interaction

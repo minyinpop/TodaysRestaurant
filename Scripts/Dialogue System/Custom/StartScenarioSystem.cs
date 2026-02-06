@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Battle_System.System.Main;
 using Title_System;
 using UnityEngine;
 using Utage;
@@ -19,8 +18,8 @@ namespace Dialogue_System.Custom
             TitleSystem.StartScenario += StartScenario;
             ActiveActions.Enqueue(() => TitleSystem.StartScenario -= StartScenario);
             
-            BattleSystem.StartScenario += StartScenario;
-            ActiveActions.Enqueue(() => BattleSystem.StartScenario -= StartScenario);
+            // BattleSystem.StartScenario += StartScenario;
+            // ActiveActions.Enqueue(() => BattleSystem.StartScenario -= StartScenario);
         }
 
         private void OnDisable()

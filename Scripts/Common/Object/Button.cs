@@ -23,7 +23,7 @@ namespace Common.Object
         [field: Header("Status Settings")]
         [field: SerializeField] private bool Interactable;
 
-        public event Action OnClicked;
+        public event Action OnClick;
 
         public void SetInteractable(bool interactable)
         {
@@ -50,14 +50,13 @@ namespace Common.Object
             protected override void OnPointerClick()
             {
                 if (!Interactable) return;
-                if (OnClicked == null)
+                if (OnClick == null)
                 {
                     Debug.LogWarning($"{gameObject.name} > Button > OnClicked cannot be null.");
-                    gameObject.SetActive(false);
                     return;
                 }
 
-                OnClicked.Invoke();
+                OnClick.Invoke();
             }
         #endregion
     }

@@ -1,0 +1,169 @@
+using System;
+using System.Collections.Generic;
+using Common.Item;
+using Common.Tool.Item_Giver;
+using Input_System.Main;
+using Player_System.Child;
+using Player_System.Child.Detect_System.Main;
+using Player_System.Child.Mouse_System.Main;
+using Player_System.Main.State_Machine;
+using Player_System.Main.State_Machine.State;
+using Restaurant_System.Object.Cookware.System;
+using Restaurant_System.Object.Creature.Customer.System.Main;
+using UI_System.Player_UI_System.Main;
+using UnityEngine;
+
+namespace Player_System.Main
+{
+    public sealed class PlayerSystem : MonoBehaviour
+    {
+        [field: Header("System Components")]
+        [field: SerializeField] private Transform mouseSystemParent;
+                                private static MouseSystem _mouseSystem;
+        [field: SerializeField] private Transform inventorySystemParent;
+                                private static InventorySystem _inventorySystem;
+        
+        [field: Header("Character Components")]
+        [field: SerializeField] private MoveSystem moveSystem;
+        [field: SerializeField] private AnimationSystem animationSystem;
+        [field: SerializeField] private DetectSystem detectSystem;
+        
+        private readonly StateMachine _stateMachine = new();
+        
+        private readonly Queue<Action> _cleanUpActions = new();
+
+        private void Awake()
+        {
+            _mouseSystem = mouseSystemParent.GetComponent<MouseSystem>();
+            _inventorySystem = inventorySystemParent.GetComponent<InventorySystem>();
+        }
+
+        private void Start()
+        {
+            OnIdle();
+        }
+
+        private void OnEnable()
+        {
+            #region Input
+                InputSystem.OnClickedLeftButton += ClickLeftButton;
+                _cleanUpActions.Enqueue(() => InputSystem.OnClickedLeftButton -= ClickLeftButton);
+                
+                InputSystem.OnClickedRightButton += ClickRightButton;
+                _cleanUpActions.Enqueue(() => InputSystem.OnClickedRightButton -= ClickRightButton);
+                
+                InputSystem.OnPerformedHotbar += PerformHotbar;
+                _cleanUpActions.Enqueue(() => InputSystem.OnPerformedHotbar -= PerformHotbar);
+
+                InputSystem.OnPerformedBackpack += RequireBackpackUI;
+                _cleanUpActions.Enqueue(() => InputSystem.OnPerformedBackpack -= RequireBackpackUI);
+            #endregion
+            
+            #region TryAddItem
+                CookwareSystem.TryAddItem += TryAddItem;
+                _cleanUpActions.Enqueue(() => CookwareSystem.TryAddItem -= TryAddItem);
+                
+                Customer.GivingServingNote += TryAddItem;
+                _cleanUpActions.Enqueue(() => Customer.GivingServingNote -= TryAddItem);
+            
+                // Develop Only
+                ItemGiver.OnClick += TryAddItem;
+                _cleanUpActions.Enqueue(() => ItemGiver.OnClick -= TryAddItem);
+                // ==================
+            #endregion
+        }
+
+        private void OnDisable()
+        {
+            while (_cleanUpActions.Count > 0) _cleanUpActions.Dequeue()?.Invoke();
+        }
+        
+        #region InputSystem
+            private void ClickLeftButton()
+            {
+                _mouseSystem.OnClickedLeftButton();
+            }
+
+            private void ClickRightButton()
+            {
+                PlayerUISystem.ClickRightButton();
+            }
+        #endregion
+        
+        #region InventorySystem
+            private void PerformHotbar(int hotbarIndex)
+            {
+                _inventorySystem.PerformHotbar(hotbarIndex);
+            }
+
+            private void RequireBackpackUI()
+            {
+                _inventorySystem.RequireBackpackUI();
+            }
+
+            private bool TryAddItem(ItemSO item)
+            {
+                return _inventorySystem.TryAddItem(item);
+            }
+
+            public static bool TryRemoveItem(ItemSO itemData)
+            {
+                return _inventorySystem.TryRemoveItem(itemData);
+            }
+        #endregion
+
+        #region StateMachine
+            #region OnIdle
+                private void OnIdle()
+                {
+                    _stateMachine.ChangeState(new OnIdle(OnEnter, OnExit));
+                    return;
+
+                    void OnEnter()
+                    {
+                        InputSystem.OnStartedPlayerWalk += OnWalk;
+                        _cleanUpActions.Enqueue(() => InputSystem.OnStartedPlayerWalk -= OnWalk);
+                        
+                        animationSystem.Idle();
+                    }
+                    
+                    void OnExit()
+                    {
+                        InputSystem.OnStartedPlayerWalk -= OnWalk;
+                    }
+                }
+            #endregion
+
+            #region OnWalk
+                private void OnWalk()
+                {
+                    _stateMachine.ChangeState(new OnWalk(OnEnter, OnExit));
+                    return;
+
+                    void OnEnter()
+                    {
+                        InputSystem.OnCancelPlayerWalk += OnIdle;
+                        _cleanUpActions.Enqueue(() => InputSystem.OnCancelPlayerWalk -= OnIdle);
+
+                        moveSystem.WalkLeft += animationSystem.TurnsLeft;
+                        _cleanUpActions.Enqueue(() => moveSystem.WalkLeft -= animationSystem.TurnsLeft);
+                        
+                        moveSystem.WalkRight += animationSystem.TurnsRight;
+                        _cleanUpActions.Enqueue(() => moveSystem.WalkRight -= animationSystem.TurnsRight);
+
+                        moveSystem.StartWalk();
+                        animationSystem.Walk();
+                    }
+                    
+                    void OnExit()
+                    {
+                        InputSystem.OnCancelPlayerWalk -= OnIdle;
+                        moveSystem.WalkLeft -= animationSystem.TurnsLeft;
+                        moveSystem.WalkRight -= animationSystem.TurnsRight;
+                        moveSystem.StopWalk();
+                    }
+                }
+            #endregion
+        #endregion
+    }
+}
