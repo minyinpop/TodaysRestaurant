@@ -39,26 +39,33 @@ namespace UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Se
             }
         }
 
-        public void Initialize()
+        public void Initialize(out Queue<LevelPickButton> levelPickButtons)
         {
             if (_initialized)
             {
                 Debug.Log($"{nameof(LevelPickUI)} > {nameof(Initialize)} is already initialized.");
+                levelPickButtons = null;
             }
             else
             {
                 _initialized = true;
                 
+                levelPickButtons = new Queue<LevelPickButton>();
+                
                 foreach (var levelData in levelsData)
                 {
-                    // Container
-                    var newContainer = Instantiate(buttonContainerPrefab, buttonContainerParent);
-                    _buttonContainers.Enqueue(newContainer);
+                    #region Container
+                        var newContainer = Instantiate(buttonContainerPrefab, buttonContainerParent);
+                        _buttonContainers.Enqueue(newContainer);
+                    #endregion
                     
-                    // Button
-                    var newButton = Instantiate(buttonPrefab.gameObject, newContainer.transform);
-                    var newPickButton = newButton.GetComponent<LevelPickButton>();
-                    newPickButton.SetTitle(levelData.LevelName);
+                    #region Button
+                        var newButton = Instantiate(buttonPrefab.gameObject, newContainer.transform);
+                        var newButton_LevelPickButton = newButton.GetComponent<LevelPickButton>();
+                        
+                        newButton_LevelPickButton.Initialize(levelData);
+                        levelPickButtons.Enqueue(newButton_LevelPickButton);
+                    #endregion
                 }
             }
         }

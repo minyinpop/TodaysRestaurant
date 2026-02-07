@@ -1,6 +1,6 @@
 using System;
+using Common.Data.Level.Main;
 using Common.Object;
-using TMPro;
 using UnityEngine;
 
 namespace UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Select_UI.Child.Level_Pick_UI.Child
@@ -11,21 +11,51 @@ namespace UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Se
         [field: Header("Objects")]
         [field: SerializeField] private Button button;
 
-        public event Action OnClick;
+        private LevelSO _levelData;
+        public LevelSO LevelData => _levelData;
+
+        private bool _initialized;
+
+        public event Action<LevelSO> OnClick;
 
         private void Awake()
         {
-            button.OnClick += OnClick;
+            button.OnClick += OnClickEvent;
         }
 
         private void OnDestroy()
         {
-            button.OnClick -= OnClick;
+            button.OnClick -= OnClickEvent;
         }
 
-        public void SetTitle(string title)
+        public void Initialize(LevelSO levelData)
         {
-            button.SetTitle(title);
+            if (!_initialized)
+            {
+                _initialized = true;
+                
+                if (levelData == null)
+                {
+                    Debug.Log($"{gameObject.name} > {GetType().Name} > {nameof(levelData)} cannot be null.");
+                }
+                else
+                {
+                    _levelData = levelData;
+                    button.SetTitle(_levelData.LevelName);
+                }
+            }
+        }
+
+        private void OnClickEvent()
+        {
+            if (OnClick == null)
+            {
+                Debug.Log($"{gameObject.name} > {GetType().Name} > {nameof(OnClick)} cannot be null.");
+            }
+            else
+            {
+                OnClick.Invoke(_levelData);
+            }
         }
     }
 }
