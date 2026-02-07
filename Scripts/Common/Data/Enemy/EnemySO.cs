@@ -9,7 +9,7 @@ namespace Common.Data.Enemy
         #region Information
             [field: Header("Information")]
             [field: SerializeField] private Sprite enemyImage;
-                                    private Sprite EnemyImage => enemyImage;
+                                    public Sprite EnemyImage => enemyImage;
         #endregion
         
         #region Attribute

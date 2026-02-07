@@ -1,6 +1,5 @@
 using System.Collections;
 using Common.Data.Level.Main;
-using Common.Object.Storage_Slot.Child;
 using UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Select_UI.Child.Level_Information_UI.Child;
 using UnityEngine;
 
@@ -87,9 +86,13 @@ namespace UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Se
                         {
                             var newSlot = Instantiate(slotPrefab);
                             newContainer.TryAddSlot(newSlot);
+                            
+                            yield return null;
                         }
-
-                        yield return null;
+                        else
+                        {
+                            break;
+                        }
                     }
                 #endregion
                 
@@ -102,9 +105,26 @@ namespace UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Se
                         {
                             newContainer = Instantiate(slotContainerPrefab, enemySlotContainerParent);
                         }
-
+                            
                         var newSlot = Instantiate(slotPrefab);
                         newSlot.Initialize(enemy);
+                            
+                        newContainer.TryAddSlot(newSlot);
+                    }
+
+                    while (true)
+                    {
+                        if (newContainer.CanAddSlot())
+                        {
+                            var newSlot = Instantiate(slotPrefab);
+                            newContainer.TryAddSlot(newSlot);
+                            
+                            yield return null;
+                        }
+                        else
+                        {
+                            break;
+                        }
                     }
                 #endregion
             }

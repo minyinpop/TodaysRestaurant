@@ -74,8 +74,10 @@ namespace UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Se
             if (_initialized) return;
 
             _initialized = true;
-            
-            // itemImage.sprite = enemy.enemysprite
+
+            itemImage.sprite = enemy.EnemyImage;
+            itemImage.color = itemLockColor; // TODO 判斷玩家的資料
+            itemImage.gameObject.SetActive(true);
         }
     }
 }
