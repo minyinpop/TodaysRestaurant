@@ -1,4 +1,4 @@
-using Common.Item;
+using Common.Data.Item;
 using UI_System.Player_UI_System.Main;
 using UnityEngine;
 

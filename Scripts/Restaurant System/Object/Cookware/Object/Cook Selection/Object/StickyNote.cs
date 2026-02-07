@@ -1,5 +1,5 @@
 using System;
-using Common.Item.Food;
+using Common.Data.Item.Food;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

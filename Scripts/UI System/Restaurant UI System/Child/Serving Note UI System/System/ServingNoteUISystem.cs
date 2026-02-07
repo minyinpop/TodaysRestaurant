@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using Common.Item;
-using Common.Item.Serving_Note;
+using Common.Data.Item;
+using Common.Data.Item.Serving_Note;
 using UI_System.Restaurant_UI_System.Child.Serving_Note_UI_System.Object;
 using UnityEngine;
 

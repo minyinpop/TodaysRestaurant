@@ -1,5 +1,5 @@
 using System.Collections;
-using Common.Level.Main;
+using Common.Data.Level.Main;
 using Common.Object.Storage_Slot.Child;
 using UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Select_UI.Child.Level_Information_UI.Child;
 using UnityEngine;
@@ -68,7 +68,7 @@ namespace UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Se
                 #region Ingredient
                     var newContainer = Instantiate(slotContainerPrefab, ingredientSlotContainerParent);
 
-                    foreach (var ingredient in levelData.LevelIngredient.ingredientsData)
+                    foreach (var ingredient in levelData.LevelIngredient.IngredientsData)
                     {
                         if (!newContainer.CanAddSlot())
                         {
@@ -90,6 +90,21 @@ namespace UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Se
                         }
 
                         yield return null;
+                    }
+                #endregion
+                
+                #region Enemy
+                    newContainer = Instantiate(slotContainerPrefab, enemySlotContainerParent);
+
+                    foreach (var enemy in levelData.LevelEnemy.EnemiesData)
+                    {
+                        if (!newContainer.CanAddSlot())
+                        {
+                            newContainer = Instantiate(slotContainerPrefab, enemySlotContainerParent);
+                        }
+
+                        var newSlot = Instantiate(slotPrefab);
+                        newSlot.Initialize(enemy);
                     }
                 #endregion
             }

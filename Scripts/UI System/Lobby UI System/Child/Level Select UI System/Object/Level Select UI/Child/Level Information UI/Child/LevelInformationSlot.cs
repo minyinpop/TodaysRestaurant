@@ -1,7 +1,8 @@
 using Animation_System.DOTween;
 using Animation_System.DOTween.Basic;
 using Common;
-using Common.Item;
+using Common.Data.Enemy;
+using Common.Data.Item;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -66,6 +67,15 @@ namespace UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Se
             itemImage.sprite = item.ItemSprite;
             itemImage.color = itemLockColor; // TODO 判斷玩家的資料
             itemImage.gameObject.SetActive(true);
+        }
+
+        public void Initialize(EnemySO enemy)
+        {
+            if (_initialized) return;
+
+            _initialized = true;
+            
+            // itemImage.sprite = enemy.enemysprite
         }
     }
 }

@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Common.Item.Ingredient;
+using Common.Data.Item.Ingredient;
 using Common.Object;
 using Common.Object.Storage_Slot;
 using Common.Object.Storage_Slot.Main;

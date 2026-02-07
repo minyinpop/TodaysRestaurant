@@ -1,5 +1,5 @@
 using System;
-using Battle_System.Object.Creature.Enemy.Data;
+using Common.Data.Enemy;
 using Common.Object;
 using Common.Value;
 using UnityEngine;
@@ -16,14 +16,13 @@ namespace Battle_System.Object.Creature.Enemy
         [field: SerializeField] private StatusBar HealthBar;
         
         [field: Header("Data")]
-        [field: SerializeField] private EnemySO EnemyData;
+        [field: SerializeField] private EnemySO enemyData;
 
         public static event Action<Damage, Action, Action> OnAttack;
 
         private void Start()
         {
-            EnemyData.GetHealth(out var min, out var max);
-            HealthBar.Init(min, max);
+            HealthBar.Init(enemyData.Health.Min, enemyData.Health.Max);
             
             AnimationSystem.Idle();
         }
@@ -34,8 +33,7 @@ namespace Battle_System.Object.Creature.Enemy
                 AnimationSystem.Attack(
                     onAttackPoint: () =>
                     {
-                        EnemyData.GetDamage(out var damage);
-                        OnAttack?.Invoke(damage,
+                        OnAttack?.Invoke(enemyData.Damage,
                             () =>
                             {
                                 // haveCharacterAlive

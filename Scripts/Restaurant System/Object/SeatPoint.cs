@@ -1,4 +1,4 @@
-using Common.Item.Serving_Note;
+using Common.Data.Item.Serving_Note;
 using Restaurant_System.Object.Creature.Customer.System.Main;
 using UnityEngine;
 

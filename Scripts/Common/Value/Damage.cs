@@ -1,20 +1,15 @@
-using System;
 using Common.Value.Type;
 using UnityEngine;
 
 namespace Common.Value
 {
-    [Serializable]
+    [System.Serializable]
     public class Damage
     {
         [field: Header("Values")]
-        [field: SerializeField] private AttackType AttackType;
-        [field: SerializeField] private int BasicDamage;
-
-        public void GetValues(out AttackType attackType, out int basicDamage)
-        {
-            attackType = AttackType;
-            basicDamage = BasicDamage;
-        }
+        [field: SerializeField] private AttackType attackType;
+                                public AttackType AttackType => attackType;
+        [field: SerializeField] private int basicDamage;
+                                public int BasicDamage => basicDamage;
     }
 }

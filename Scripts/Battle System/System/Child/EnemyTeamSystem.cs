@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Battle_System.Object.Card;
-using Battle_System.Object.Creature.Crew;
+using Battle_System.Object.Creature.Character;
 using Battle_System.Object.Creature.Enemy;
 using Common.Value.Type;
 using UnityEngine;
@@ -19,12 +19,12 @@ namespace Battle_System.System.Child
         
         private void OnEnable()
         {
-            Crew.OnAttack += Hurt;
+            Character.OnAttack += Hurt;
         }
 
         private void OnDisable()
         {
-            Crew.OnAttack -= Hurt;
+            Character.OnAttack -= Hurt;
             if (CurrentCor is not null)
             {
                 StopCoroutine(CurrentCor);
@@ -92,13 +92,13 @@ namespace Battle_System.System.Child
             private IEnumerator HurtCoroutine(ICard card, Action haveEnemyAlive, Action enemyAllDead)
             {
                 card.GetDamage(out var damage);
-                damage.GetValues(out var attackType, out var basicDamage);
-                switch (attackType)
+                
+                switch (damage.AttackType)
                 {
                     case AttackType.Single:
                     {
                         var enemy = AliveEnemies[0];
-                        enemy.Hurt(basicDamage,
+                        enemy.Hurt(damage.BasicDamage,
                             isAlive: () =>
                             {
                                 haveEnemyAlive?.Invoke();
@@ -122,7 +122,7 @@ namespace Battle_System.System.Child
                             var index = i;
                             var enemy = AliveEnemies[index];
                             completes.Add(false);
-                            enemy.Hurt(basicDamage,
+                            enemy.Hurt(damage.BasicDamage,
                                 isAlive: () =>
                                 {
                                     isAnyEnemyAlive = true;

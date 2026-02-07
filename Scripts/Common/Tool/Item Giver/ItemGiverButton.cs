@@ -1,5 +1,5 @@
 using System;
-using Common.Item;
+using Common.Data.Item;
 using Common.Object;
 using UnityEngine;
 
