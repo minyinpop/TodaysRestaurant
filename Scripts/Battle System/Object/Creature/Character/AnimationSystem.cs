@@ -7,7 +7,7 @@ using UnityEngine;
 using Event = Spine.Event;
 using SpineAnimation = Animation_System.Spine.SpineAnimation;
 
-namespace Battle_System.Object.Creature.Crew
+namespace Battle_System.Object.Creature.Character
 {
     internal sealed class AnimationSystem : MonoBehaviour
     {

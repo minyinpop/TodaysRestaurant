@@ -23,5 +23,14 @@ namespace UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Se
             slot.transform.SetParent(transform);
             _slots.Enqueue(slot);
         }
+
+        public void FullSlot(LevelInformationSlot slotPrefab)
+        {
+            for (var i = _slots.Count; i < maxSlotPerRow; i++)
+            {
+                var newSlot = Instantiate(slotPrefab, transform);
+                _slots.Enqueue(newSlot);
+            }
+        }
     }
 }

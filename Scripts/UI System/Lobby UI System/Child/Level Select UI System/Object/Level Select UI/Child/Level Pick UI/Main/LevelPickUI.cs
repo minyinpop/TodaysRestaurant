@@ -17,8 +17,6 @@ namespace UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Se
 
         private bool _initialized;
 
-        private Queue<GameObject> _buttonContainers = new();
-
         private void Awake()
         {
             if (buttonContainerParent is null)
@@ -56,7 +54,6 @@ namespace UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Se
                 {
                     #region Container
                         var newContainer = Instantiate(buttonContainerPrefab, buttonContainerParent);
-                        _buttonContainers.Enqueue(newContainer);
                     #endregion
                     
                     #region Button

@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using Animation_System.Spine;
 using Battle_System.Object.Card;
-using Battle_System.Object.Creature.Crew;
 using Common.Data.Character;
 using Common.Object;
 using UnityEngine;

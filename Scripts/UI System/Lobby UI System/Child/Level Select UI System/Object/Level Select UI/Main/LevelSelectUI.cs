@@ -60,7 +60,7 @@ namespace UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Se
 
             void OnClickLevelPickButton(LevelSO levelData)
             {
-                Debug.Log($"{levelData.name}");
+                levelInformationUI.Refresh(levelData);
             }
         }
 
