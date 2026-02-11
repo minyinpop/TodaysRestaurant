@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Battle_System.Object.Creature
 {
-    public abstract class Creature : MonoBehaviour, ICreature
+    public abstract class Creature : MonoBehaviour
     {
         #region Battle
             public virtual void GetUseCardType(out List<CardType> cardType) =>

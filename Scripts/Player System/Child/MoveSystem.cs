@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
-using Common.Player.Child.Player_Attribute;
-using Common.Player.Main;
+using Common.Data.Player.Child.Player_Attribute;
 using Input_System.Main;
 using UnityEngine;
 

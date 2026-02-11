@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Common.Item;
-using Common.Item.Food.Data.Food_Category;
+using Common.Data.Item;
+using Common.Data.Item.Food.Data.Food_Category;
 using UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_Menu_UI.Object.Item_Slot.Base;
 using UnityEngine;
 

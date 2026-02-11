@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using Common.Item;
+using Common.Data.Item;
+using Common.Data.Player.Child.Player_Inventory;
 using Common.Object.Storage_Slot.Child;
-using Common.Player.Child.Player_Inventory;
 using UnityEngine;
 
 namespace UI_System.Player_UI_System.Child.Hotbar_UI_System.Object

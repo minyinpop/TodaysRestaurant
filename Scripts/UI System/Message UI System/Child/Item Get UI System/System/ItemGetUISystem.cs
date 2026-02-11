@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Common.Item.Ingredient;
+using Common.Data.Item.Ingredient;
 using Common.Value;
 using UI_System.Message_UI_System.Child.Item_Get_UI_System.Object;
 using UnityEngine;

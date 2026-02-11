@@ -7,7 +7,7 @@ using Battle_System.System.Child.Initiative_System.System.Main;
 using Battle_System.System.Child.Selected_Card_System.Main;
 using Battle_System.System.Main.State_Machine;
 using Battle_System.System.Main.State_Machine.State;
-using Common.Player.Child.Player_Team;
+using Common.Data.Player.Child.Player_Team;
 using Common.Value;
 using Common.Value.Type;
 using UnityEngine;
@@ -16,15 +16,15 @@ namespace Battle_System.System.Main
 {
     internal sealed class BattleSystem : MonoBehaviour
     {
-        [field: Header("Child System")]
-        [field: SerializeField] private SelectedCardSystem SelectedCardSystem;
-        [field: SerializeField] private CardPoolSystem CardPoolSystem;
-        [field: SerializeField] private ShowCardSystem ShowCardSystem;
-        [field: SerializeField] private HandCardSystem HandCardSystem;
-        [field: SerializeField] private InitiativeSystem InitiativeSystem;
-        [field: SerializeField] private UseCardSystem UseCardSystem;
-        [field: SerializeField] private CrewTeamSystem CrewTeamSystem;
-        [field: SerializeField] private EnemyTeamSystem EnemyTeamSystem;
+        [field: Header("Systems")]
+        [field: SerializeField] private SelectedCardSystem selectedCardSystem;
+        [field: SerializeField] private CardPoolSystem cardPoolSystem;
+        [field: SerializeField] private ShowCardSystem showCardSystem;
+        [field: SerializeField] private HandCardSystem handCardSystem;
+        [field: SerializeField] private InitiativeSystem initiativeSystem;
+        [field: SerializeField] private UseCardSystem useCardSystem;
+        [field: SerializeField] private PlayerTeamSystem playerTeamSystem;
+        [field: SerializeField] private EnemyTeamSystem enemyTeamSystem;
         
         [field: Header("Data")]
         [field: SerializeField] private PlayerTeamSO playerTeamData;
@@ -53,12 +53,12 @@ namespace Battle_System.System.Main
 
         private void OnEnable()
         {
-            CrewTeamSystem.RecycleCard += OnRecycleCard;
+            PlayerTeamSystem.RecycleCard += OnRecycleCard;
         }
 
         private void OnDisable()
         {
-            CrewTeamSystem.RecycleCard -= OnRecycleCard;
+            PlayerTeamSystem.RecycleCard -= OnRecycleCard;
             if (TurnCor is not null)
             {
                 StopCoroutine(TurnCor);
@@ -88,16 +88,16 @@ namespace Battle_System.System.Main
             {
                 var cardPoolRefillComplete = false;
                 var AddCardToHandComplete = false;
-                CardPoolSystem.DrawCard(drawNumber, out var cards);
-                ShowCardSystem.ShowCard(cards, () =>
+                cardPoolSystem.DrawCard(drawNumber, out var cards);
+                showCardSystem.ShowCard(cards, () =>
                 {
-                    CardPoolSystem.Refill(
+                    cardPoolSystem.Refill(
                         onComplete: () =>
                         {
                             cardPoolRefillComplete = true;
                         });
-                    ShowCardSystem.GetShowCards(out var showCards);
-                    HandCardSystem.Add(showCards,
+                    showCardSystem.GetShowCards(out var showCards);
+                    handCardSystem.Add(showCards,
                         onComplete: () =>
                         {
                             AddCardToHandComplete = true;
@@ -109,7 +109,7 @@ namespace Battle_System.System.Main
             }
         }
 
-        private void OnRecycleCard(List<CardType> cardTypes, Action onComplete)
+        private void OnRecycleCard(CardType[] cardTypes, Action onComplete)
         {
             CharacterDeathCor = RecycleCardCoroutine();
             StartCoroutine(CharacterDeathCor);
@@ -118,7 +118,7 @@ namespace Battle_System.System.Main
             IEnumerator RecycleCardCoroutine()
             {
                 var completes = new List<bool>();
-                for (var i = 0; i < cardTypes.Count; i++)
+                for (var i = 0; i < cardTypes.Length; i++)
                 {
                     var index = i;
                     var type = cardTypes[index];
@@ -128,19 +128,19 @@ namespace Battle_System.System.Main
                     var HandCardRecycleComplete = false;
                     var UseCardRecycleComplete = false;
                     
-                    CardPoolSystem.RecycleCard(type, 
+                    cardPoolSystem.RecycleCard(type, 
                         onComplete:() =>
                         {
                             CardPoolRecycleComplete = true;
                         });
                     
-                    HandCardSystem.RecycleCard(type,
+                    handCardSystem.RecycleCard(type,
                         onComplete: () =>
                         {
                             HandCardRecycleComplete = true;
                         });
                     
-                    UseCardSystem.RecycleCard(type,
+                    useCardSystem.RecycleCard(type,
                         onComplete: () =>
                         {
                             UseCardRecycleComplete = true;
@@ -153,7 +153,7 @@ namespace Battle_System.System.Main
                 yield return new WaitUntil(() => completes.All(c => c));
                 var CardPoolRefillComplete = false;
                 
-                CardPoolSystem.Refill(
+                cardPoolSystem.Refill(
                     onComplete: () =>
                     {
                         CardPoolRefillComplete = true;
@@ -171,7 +171,7 @@ namespace Battle_System.System.Main
                     StateMachine.ChangeState(new OnBattleStart(
                         onEnter: () =>
                         {
-                            CardPoolSystem.Refill(
+                            cardPoolSystem.Refill(
                                 onComplete:() =>
                                 {
                                     playerTeamData.GetCharacterNumber(out var number);
@@ -192,7 +192,7 @@ namespace Battle_System.System.Main
                     StateMachine.ChangeState(new OnInitiativeCoin(
                         onEnter: () =>
                         {
-                            InitiativeSystemObject = Instantiate(InitiativeSystem.gameObject);
+                            InitiativeSystemObject = Instantiate(initiativeSystem.gameObject);
                             InitiativeSystemObject.GetComponent<InitiativeSystem>().OnShowResultComplete += result =>
                             {
                                 TossResult = result;
@@ -292,14 +292,14 @@ namespace Battle_System.System.Main
                     StateMachine.ChangeState(new OnPlayerTurn(
                         onEnter: () =>
                         {
-                            SelectedCardSystem.OpenUI(
+                            selectedCardSystem.OpenUI(
                                 onUIOpen: () =>
                                 {
-                                    HandCardSystem.SetCardsInteractable(true);
+                                    handCardSystem.SetCardsInteractable(true);
                                 }, 
                                 onUIClose: () =>
                                 {
-                                    HandCardSystem.SetCardsInteractable(false);
+                                    handCardSystem.SetCardsInteractable(false);
                                     AttackCor = UseCardCoroutine();
                                     StartCoroutine(AttackCor);
                                     return;
@@ -311,7 +311,7 @@ namespace Battle_System.System.Main
                                         while (canContinue)
                                         {
                                             var onUseComplete = false;
-                                            UseCardSystem.Use(
+                                            useCardSystem.Use(
                                                 haveEnemyAlive: hasCards =>
                                                 {
                                                     canContinue = hasCards;
@@ -348,7 +348,7 @@ namespace Battle_System.System.Main
                     StateMachine.ChangeState(new OnEnemyTurn(
                         onEnter: () =>
                         {
-                            EnemyTeamSystem.Attack(
+                            enemyTeamSystem.Attack(
                                 haveCharacterAlive: () =>
                                 {
                                     haveCharacterAlive?.Invoke();

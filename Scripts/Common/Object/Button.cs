@@ -52,7 +52,7 @@ namespace Common.Object
                 if (!Interactable) return;
                 if (OnClick == null)
                 {
-                    Debug.LogWarning($"{gameObject.name} > Button > OnClicked cannot be null.");
+                    Debug.LogWarning($"{gameObject.name} > {GetType().Name} > {nameof(OnClick)} cannot be null.");
                     return;
                 }
 

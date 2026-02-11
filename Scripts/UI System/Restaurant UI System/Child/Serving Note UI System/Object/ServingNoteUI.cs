@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using Common.Item;
-using Common.Item.Serving_Note;
+using Common.Data.Item;
+using Common.Data.Item.Serving_Note;
 using Common.Object.Storage_Slot.Child;
 using UnityEngine;
 

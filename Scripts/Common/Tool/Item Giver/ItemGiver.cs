@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Common.Item;
+using Common.Data.Item;
 using UnityEngine;
 
 namespace Common.Tool.Item_Giver

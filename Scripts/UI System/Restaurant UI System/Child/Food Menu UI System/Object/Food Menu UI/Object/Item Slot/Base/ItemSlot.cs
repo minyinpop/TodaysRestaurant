@@ -1,6 +1,6 @@
 using System;
 using Common;
-using Common.Item;
+using Common.Data.Item;
 
 namespace UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_Menu_UI.Object.Item_Slot.Base
 {
