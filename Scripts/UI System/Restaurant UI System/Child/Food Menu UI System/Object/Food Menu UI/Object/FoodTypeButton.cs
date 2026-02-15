@@ -1,10 +1,10 @@
 using System;
-using Common.Data.Item.Food.Data.Food_Type;
+using Common.Item.Data.Food.Data.Food_Type;
 using Common.Value.Type;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Button = Common.Object.Button;
+using Button = Common.Button.Button;
 
 namespace UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_Menu_UI.Object
 {

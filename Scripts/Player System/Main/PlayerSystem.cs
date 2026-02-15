@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Common.Data.Item;
-using Common.Tool.Item_Giver;
+using Common.Item.Data;
 using Input_System.Main;
 using Player_System.Child;
 using Player_System.Child.Detect_System.Main;
@@ -65,11 +64,6 @@ namespace Player_System.Main
                 
                 Customer.GivingServingNote += TryAddItem;
                 _cleanUpActions.Enqueue(() => Customer.GivingServingNote -= TryAddItem);
-            
-                // Develop Only
-                ItemGiver.OnClick += TryAddItem;
-                _cleanUpActions.Enqueue(() => ItemGiver.OnClick -= TryAddItem);
-                // ==================
             #endregion
         }
 
@@ -101,7 +95,7 @@ namespace Player_System.Main
                 _inventorySystem.RequireBackpackUI();
             }
 
-            private bool TryAddItem(ItemSO item)
+            private bool TryAddItem(IItem item)
             {
                 return _inventorySystem.TryAddItem(item);
             }

@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Common;
-using Common.Data.Item;
-using Common.Data.Item.Custom;
-using Common.Object;
+using Common.Clickable_Bubble;
+using Common.Interactable_Object;
+using Common.Item.Data.Food;
+using Common.Item.Data.Food.Custom_Food;
 using Common.Value.Type;
 using Restaurant_System.Object.Cookware.Object.Cook_Game.System.Main;
 using Restaurant_System.Object.Cookware.System.State_Machine;
@@ -33,7 +33,7 @@ namespace Restaurant_System.Object.Cookware.System
         private ClickableBubble _currentBubble;
         private CookGameSystem _currentCookGame;
         
-        private ItemSO _currentCookItem;
+        private IFood _currentCookItem;
         
         private readonly StateMachine _stateMachine = new();
 
@@ -42,9 +42,9 @@ namespace Restaurant_System.Object.Cookware.System
         private bool _isCookGameComplete;
         private bool _interactable;
 
-        public static event Action<CookType, Action<CustomItem>, Action> OpenCookSelectionUI;
+        public static event Action<CookType, Action<CustomFoodItem>, Action> OpenCookSelectionUI;
         public static event Action CloseCookSelectionUI;
-        public static event Func<ItemSO, bool> TryAddItem;
+        public static event Func<IFood, bool> TryAddItem;
 
         private void Start()
         {
@@ -112,9 +112,9 @@ namespace Restaurant_System.Object.Cookware.System
                         onEnter: () =>
                         {
                             _currentBubble = Instantiate(CookBubblePrefab, BubbleParent).GetComponent<ClickableBubble>();
-                            
-                            _currentCookItem.GetCookTime(out var cookTime); // TODO 2025.12.03 從這裡繼續做
-                            _currentBubble.StartCountDown(cookTime / 2,
+
+                            // TODO 2025.12.03 從這裡繼續做
+                            _currentBubble.StartCountDown(_currentCookItem.CookTime / 2,
                                 onComplete: () =>
                                 {
                                     if (_isCookGameComplete) OnCompleteState();
@@ -238,10 +238,7 @@ namespace Restaurant_System.Object.Cookware.System
 
                             void OnClick()
                             {
-                                Debug.Log(_currentCookItem);
-                                _currentCookItem.GetOvercookedItem(out var overcookedItem);
-                                Debug.Log(overcookedItem);
-                                var result = TryAddItem?.Invoke(overcookedItem) ?? false;
+                                var result = TryAddItem?.Invoke(_currentCookItem) ?? false;
                                 
                                 if (result)
                                 {

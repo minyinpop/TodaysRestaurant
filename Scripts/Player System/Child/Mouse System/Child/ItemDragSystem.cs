@@ -1,6 +1,5 @@
-using Common.Data.Item;
-using Common.Object.Storage_Slot;
-using Common.Object.Storage_Slot.Main;
+using Common.Item.Data;
+using Common.Storage_Slot.Main;
 using UI_System.Player_UI_System.Main;
 using UnityEngine;
 
@@ -11,7 +10,7 @@ namespace Player_System.Child.Mouse_System.Child
         private StorageSlot _sourceSlot;
         private StorageSlot _destinationSlot;
         
-        private ItemSO _draggedItem;
+        private IItem _draggedItem;
         
         public void OnClick(GameObject itemSlot)
         {

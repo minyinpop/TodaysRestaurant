@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Common;
+using Common.Interactable_Object;
 using Player_System.Child.Detect_System.Child;
 using UnityEngine;
 

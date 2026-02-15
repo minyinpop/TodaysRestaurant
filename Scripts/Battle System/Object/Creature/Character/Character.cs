@@ -2,8 +2,8 @@ using System;
 using System.Collections;
 using Animation_System.Spine;
 using Battle_System.Object.Card;
-using Common.Data.Character;
-using Common.Object;
+using Common.Character;
+using Common.Status_Bar;
 using UnityEngine;
 
 namespace Battle_System.Object.Creature.Character

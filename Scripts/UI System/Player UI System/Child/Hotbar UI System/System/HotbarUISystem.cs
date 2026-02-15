@@ -1,4 +1,4 @@
-using Common.Data.Item;
+using Common.Item.Data;
 using UI_System.Player_UI_System.Child.Hotbar_UI_System.Object;
 using UnityEngine;
 
@@ -29,7 +29,7 @@ namespace UI_System.Player_UI_System.Child.Hotbar_UI_System.System
             }
         #endregion
         
-        public bool TryAddItem(ItemSO itemData)
+        public bool TryAddItem(IItem itemData)
         {
             return hotbarUI.TryAddItem(itemData);
         }

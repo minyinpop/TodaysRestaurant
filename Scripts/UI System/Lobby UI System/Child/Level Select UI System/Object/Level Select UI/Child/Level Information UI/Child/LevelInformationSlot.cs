@@ -1,8 +1,9 @@
 using Animation_System.DOTween;
 using Animation_System.DOTween.Basic;
 using Common;
-using Common.Data.Enemy;
-using Common.Data.Item;
+using Common.Enemy;
+using Common.Item.Data;
+using Common.Pointer_Event;
 using UnityEngine;
 using UnityEngine.UI;
 

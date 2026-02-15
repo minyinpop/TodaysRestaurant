@@ -1,4 +1,4 @@
-using Common.Data.Item;
+using Common.Item.Data;
 using UI_System.Player_UI_System.Main;
 using UnityEngine;
 
@@ -16,7 +16,7 @@ namespace Player_System.Child
             PlayerUISystem.RequireBackpackUI();
         }
 
-        public bool TryAddItem(ItemSO itemData)
+        public bool TryAddItem(IItem itemData)
         {
             return PlayerUISystem.TryAddItem(itemData);
         }

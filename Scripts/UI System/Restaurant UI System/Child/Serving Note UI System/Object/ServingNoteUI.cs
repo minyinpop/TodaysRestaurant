@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using Common.Data.Item;
-using Common.Data.Item.Serving_Note;
-using Common.Object.Storage_Slot.Child;
+using Common.Item.Data;
+using Common.Item.Data.Serving_Note;
+using Common.Storage_Slot.Child;
 using UnityEngine;
 
 namespace UI_System.Restaurant_UI_System.Child.Serving_Note_UI_System.Object
@@ -29,9 +29,9 @@ namespace UI_System.Restaurant_UI_System.Child.Serving_Note_UI_System.Object
             }
         }
 
-        public void GetSlotItems(out List<ItemSO> orderedItems)
+        public void GetSlotItems(out List<IItem> orderedItems)
         {
-            orderedItems = new List<ItemSO>();
+            orderedItems = new List<IItem>();
             
             foreach (var slot in _servingNoteSlots)
             {

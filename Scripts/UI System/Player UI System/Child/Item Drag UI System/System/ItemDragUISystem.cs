@@ -1,4 +1,4 @@
-using Common.Data.Item;
+using Common.Item.Data;
 using Input_System.Main;
 using UI_System.Player_UI_System.Child.Item_Drag_UI_System.Object;
 using UnityEngine;
@@ -35,7 +35,7 @@ namespace UI_System.Player_UI_System.Child.Item_Drag_UI_System.System
             }
         }
 
-        public void RequiresUI(bool isDragging, ItemSO item)
+        public void RequiresUI(bool isDragging, IItem item)
         {
             _isDragging = isDragging;
             

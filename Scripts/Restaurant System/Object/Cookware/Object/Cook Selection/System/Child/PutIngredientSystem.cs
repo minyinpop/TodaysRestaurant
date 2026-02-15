@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Animation_System.DOTween;
 using Animation_System.DOTween.Basic;
-using Common.Data.Item;
-using Common.Data.Item.Food;
-using Common.Object;
-using Common.Object.Storage_Slot;
-using Common.Object.Storage_Slot.Main;
+using Common.Button;
+using Common.Item.Data.Food;
+using Common.Item.Data.Ingredient;
+using Common.Storage_Slot.Child;
 using UnityEngine;
 
 namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Child
@@ -32,7 +31,7 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Child
         [field: SerializeField] private GameObject ItemSlotPrefab;
         [field: SerializeField] private Transform ItemSlotParent;
         
-        private readonly List<StorageSlot> ItemSlots = new();
+        private readonly List<PutIngredientSlot> slots = new();
         
         private readonly List<Action> CloseAction = new();
 
@@ -57,8 +56,8 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Child
             foreach (var itemData in recipeSheet)
             {
                 var itemSlot = Instantiate(ItemSlotPrefab, ItemSlotParent);
-                var itemSlot_ItemSlot = itemSlot.GetComponent<StorageSlot>();
-                ItemSlots.Add(itemSlot_ItemSlot);
+                var itemSlot_ItemSlot = itemSlot.GetComponent<PutIngredientSlot>();
+                slots.Add(itemSlot_ItemSlot);
                 itemSlot_ItemSlot.TryAddItem(itemData);
             }
             
@@ -78,8 +77,8 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Child
                 onComplete: () =>
                 {
                     PutIngredientUI.SetActive(false);
-                    foreach (var itemSlot in ItemSlots) Destroy(itemSlot.gameObject);
-                    ItemSlots.Clear();
+                    foreach (var itemSlot in slots) Destroy(itemSlot.gameObject);
+                    slots.Clear();
                     onComplete?.Invoke();
                 });
         }
@@ -92,13 +91,13 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Child
         
         public bool CheckRecipeIsCorrect()
         {
-            return !ItemSlots.Where(itemSlot => itemSlot.IsEmpty()).Any();
+            return !slots.Where(itemSlot => itemSlot.IsEmpty()).Any();
         }
 
-        public void GetIngredients(out Queue<ItemSO> ingredients)
+        public void GetIngredients(out Queue<IIngredient> ingredients)
         {
-            ingredients = new Queue<ItemSO>();
-            foreach (var itemSlot in ItemSlots)
+            ingredients = new Queue<IIngredient>();
+            foreach (var itemSlot in slots)
             {
                 itemSlot.TryGetItem(out var item);
                 ingredients.Enqueue(item);

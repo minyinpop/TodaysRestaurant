@@ -1,6 +1,6 @@
 using Animation_System.DOTween;
 using Animation_System.DOTween.Basic;
-using Common.Data.Item;
+using Common.Item.Data;
 using TMPro;
 using UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_Menu_UI.Object.Item_Slot.Base;
 using UnityEngine;
