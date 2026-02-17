@@ -1,13 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Common;
 using Common.Clickable_Bubble;
 using Common.Interactable_Object;
 using Common.Item.Data;
 using Common.Item.Data.Serving_Note;
 using Common.Value;
-using Player_System.Main;
+using Player_System;
+using Player_System.System;
 using Restaurant_System.Object.Creature.Customer.System.Child;
 using Restaurant_System.Object.Creature.Customer.System.Main.State_Machine;
 using Restaurant_System.Object.Creature.Customer.System.Main.State_Machine.State;

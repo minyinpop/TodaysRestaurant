@@ -1,5 +1,5 @@
 using Common.Item.Data;
-using Input_System.Main;
+using Input_System;
 using UI_System.Player_UI_System.Child.Item_Drag_UI_System.Object;
 using UnityEngine;
 
@@ -31,7 +31,7 @@ namespace UI_System.Player_UI_System.Child.Item_Drag_UI_System.System
         {
             if (_isDragging)
             {
-                itemDragUIRect.anchoredPosition = InputSystem.MousePosition();
+                itemDragUIRect.anchoredPosition = InputSystem.MousePosition;
             }
         }
 
@@ -42,7 +42,7 @@ namespace UI_System.Player_UI_System.Child.Item_Drag_UI_System.System
             if (_isDragging)
             {
                 itemDragUI.SetItemImage(item.ItemSprite);
-                itemDragUIRect.anchoredPosition = InputSystem.MousePosition();
+                itemDragUIRect.anchoredPosition = InputSystem.MousePosition;
                 itemDragUI.gameObject.SetActive(true);
             }
             else

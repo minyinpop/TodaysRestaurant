@@ -1,4 +1,4 @@
-using Explore_System.Child.Resource_Spawn_System.Main;
+using Explore_System.Child.Resource_Spawn_System.System.Main;
 using UnityEngine;
 
 namespace Explore_System.Main
@@ -23,7 +23,7 @@ namespace Explore_System.Main
 
         public static void StartSystem()
         {
-            // TODO
+            _resourceSpawnSystem.Initialize();
         }
 
         public static void EndSystem()

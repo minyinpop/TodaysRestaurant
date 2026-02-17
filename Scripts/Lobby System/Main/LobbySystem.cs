@@ -24,10 +24,10 @@ namespace Lobby_System.Main
                 return;
             }
             
-            LobbyInputSystem.OnLobbyLevelSelectUIPerformedAction += OnPerformedMap;
+            InputSystem.OnPerformedMap += OnPerformedMap;
             _onLobbyLevelSelectUIPerformedCleanupAction = () =>
             {
-                LobbyInputSystem.OnLobbyLevelSelectUIPerformedAction -= OnPerformedMap;
+                InputSystem.OnPerformedMap -= OnPerformedMap;
                 _onLobbyLevelSelectUIPerformedCleanupAction = null;
             };
 

@@ -6,8 +6,7 @@ using UnityEngine;
 
 namespace UI_System.Player_UI_System.Main
 {
-    public sealed class 
-        PlayerUISystem : MonoBehaviour
+    public sealed class PlayerUISystem : MonoBehaviour
     {
         [field: Header("Objects")]
         [field: SerializeField] private HotbarUISystem hotbarUISystem;

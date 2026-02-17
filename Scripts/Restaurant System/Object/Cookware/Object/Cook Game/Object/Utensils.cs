@@ -1,6 +1,6 @@
 using System;
 using System.Collections;
-using Input_System.Main;
+using Input_System;
 using UnityEngine;
 
 namespace Restaurant_System.Object.Cookware.Object.Cook_Game.Object
@@ -50,7 +50,7 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Game.Object
             {
                 MainCamera = mainCamera;
 
-                var screenPos = InputSystem.MousePosition();
+                var screenPos = InputSystem.MousePosition;
                 var ray = MainCamera.ScreenPointToRay(screenPos);
 
                 // 修改點：直接以湯匙目前的 Z 軸位置建立一個面向相機的平面
@@ -74,7 +74,7 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Game.Object
             {
                 while (IsPicked)
                 {
-                    var screenPos = InputSystem.MousePosition();
+                    var screenPos = InputSystem.MousePosition;
                     var ray = MainCamera.ScreenPointToRay(screenPos);
 
                     if (DragPlane.Raycast(ray, out var enter))
