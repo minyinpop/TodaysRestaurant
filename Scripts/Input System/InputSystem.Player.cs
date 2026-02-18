@@ -11,13 +11,13 @@ namespace Input_System
             public static Vector2 WalkDirection => _inputManager.Player.Walk.ReadValue<Vector2>();
             
             public static event Action OnStartedPlayerWalk;
-            private static void OnPlayerWalkStarted(InputAction.CallbackContext context)
+            private static void OnPlayerWalkStarted(InputAction.CallbackContext _)
             {
                 OnStartedPlayerWalk?.Invoke();
             }
             
             public static event Action OnCancelPlayerWalk;
-            private static void OnPlayerWalkCanceled(InputAction.CallbackContext context)
+            private static void OnPlayerWalkCanceled(InputAction.CallbackContext _)
             {
                 OnCancelPlayerWalk?.Invoke();
             }
@@ -48,7 +48,7 @@ namespace Input_System
 
         #region Backpack
             public static event Action OnPerformedBackpack;
-            private static void OnBackpackPerformed(InputAction.CallbackContext context)
+            private static void OnBackpackPerformed(InputAction.CallbackContext _)
             {
                 OnPerformedBackpack?.Invoke();
             }
@@ -56,9 +56,17 @@ namespace Input_System
         
         #region Map
             public static event Action OnPerformedMap;
-            private void OnMapPerformed(InputAction.CallbackContext context)
+            private void OnMapPerformed(InputAction.CallbackContext _)
             {
                 OnPerformedMap?.Invoke();
+            }
+        #endregion
+        
+        #region Interact
+            public static event Action OnPerformedInteract;
+            private static void OnInteractPerformed(InputAction.CallbackContext _)
+            {
+                OnPerformedInteract?.Invoke();
             }
         #endregion
     }

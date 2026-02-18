@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Input_System;
 using Player_System.Object.Character.State_Machine;
 using Player_System.Object.Character.State_Machine.State;
@@ -10,84 +9,80 @@ namespace Player_System.Object.Character
     public partial class PlayerCharacter : MonoBehaviour
     {
         private readonly StateMachine _stateMachine = new();
+
+        private IState _idleState;
+        private IState _walkState;
         
-        private readonly Queue<Action> _cleanUpActions = new();
-        
+        private Action OnPerformInteractCleanupAction;
+
+        private void Awake()
+        {
+            _idleState = new OnIdle(
+                onEnter: () =>
+                {
+                    PlayIdleAnimation();
+                },
+                onExit: () =>
+                {
+                });
+
+            _walkState = new OnWalk(
+                onEnter: () =>
+                {
+                    PlayWalkAnimation();
+                },
+                onExit: () =>
+                {
+                });
+        }
+
         private void Start()
         {
-            InputSystem.OnCancelPlayerWalk += OnIdle;
-            _cleanUpActions.Enqueue(() => InputSystem.OnCancelPlayerWalk -= OnIdle);
-                
-            WalkLeft += TurnsLeft;
-            _cleanUpActions.Enqueue(() => WalkLeft -= TurnsLeft);
-                            
-            WalkRight += TurnsRight;
-            _cleanUpActions.Enqueue(() => WalkRight -= TurnsRight);
+            InputSystem.OnPerformedInteract += OnPerformInteract;
+            OnPerformInteractCleanupAction = () => InputSystem.OnPerformedInteract -= OnPerformInteract;
             
-            StartDetect();
+            StartDetectInteractableObject();
+
+            InitializeState();
         }
-        
+
+        private void FixedUpdate()
+        {
+            DetectMove();
+        }
+
+        private void Update()
+        {
+            DetectFlip();
+        }
+
         private void OnDestroy()
         {
-            StopDetect();
+            StopDetectInteractableObject();
             
-            WalkLeft -= TurnsLeft;
-            WalkRight -= TurnsRight;
-            
-            while (_cleanUpActions.Count > 0)
-            {
-                _cleanUpActions.Dequeue()?.Invoke();
-            }
+            OnPerformInteractCleanupAction?.Invoke();
         }
         
         #region StateMachine
-            #region OnIdle
-                private Action OnStartedPlayerWalkCleanupAction;
+            private void InitializeState()
+            {
+                IdleState();
+            }
             
-                private void OnIdle()
-                {
-                    _stateMachine.ChangeState(new OnIdle(OnEnter, OnExit));
-                    return;
-
-                    void OnEnter()
-                    {
-                        InputSystem.OnStartedPlayerWalk += OnWalk;
-                        OnStartedPlayerWalkCleanupAction = () =>
-                        {
-                            InputSystem.OnStartedPlayerWalk -= OnWalk;
-                        };
-                        
-                        Idle();
-                    }
-                    
-                    void OnExit()
-                    {
-                        OnStartedPlayerWalkCleanupAction?.Invoke();
-                        OnStartedPlayerWalkCleanupAction = null;
-                    }
-                }
-            #endregion
-
-            #region OnWalk
-                private Action OnCancelPlayerWalkCleanupAction;
-                
-                private void OnWalk()
-                {
-                    _stateMachine.ChangeState(new OnWalk(OnEnter, OnExit));
-                    return;
-
-                    void OnEnter()
-                    {
-                        StartWalk();
-                        Walk();
-                    }
-                    
-                    void OnExit()
-                    {
-                        StopWalk();
-                    }
-                }
-            #endregion
+            private void IdleState()
+            {
+                _stateMachine.ChangeState(_idleState);
+            }
+            
+            private void WalkState()
+            {
+                _stateMachine.ChangeState(_walkState);
+            }
         #endregion
+
+        private void OnPerformInteract()
+        {
+            InteractWithObject();
+        }
     }
 }

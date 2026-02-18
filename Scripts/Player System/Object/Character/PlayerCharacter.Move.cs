@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using Common.Player.Child.Player_Attribute;
 using Input_System;
 using UnityEngine;
@@ -12,63 +10,40 @@ namespace Player_System.Object.Character
         [field: SerializeField] private Rigidbody rig;
         [field: SerializeField] private PlayerAttributeSO attributeSO;
 
-        private IEnumerator _walkCoroutine;
-
-        private bool _isLeft = true;
-
-        public event Action WalkLeft;
-        public event Action WalkRight;
-
-        private void OnDisable()
+        private bool _isWalking;
+        
+        private void DetectMove()
         {
-            StopWalk();
-        }
-
-        public void StartWalk()
-        {
-            _walkCoroutine = WalkCoroutine();
-            StartCoroutine(_walkCoroutine);
-            return;
-
-            IEnumerator WalkCoroutine()
+            if (rig.linearVelocity == Vector3.zero && _isWalking)
             {
-                while (true)
-                {
-                    var direction = InputSystem.WalkDirection;
-                    attributeSO.GetMoveSpeed(out var speed);
-                    
-                    rig.linearVelocity = new Vector3(
-                        x: direction.x * (speed * Time.fixedDeltaTime),
-                        y: rig.linearVelocity.y,
-                        z: direction.y * (speed * Time.fixedDeltaTime));
-                    
-                    switch (rig.linearVelocity.x)
-                    {
-                        case > 0 when _isLeft:
-                        {
-                            _isLeft = false;
-                            WalkRight?.Invoke();
-                            break;
-                        }
-                        case < 0 when !_isLeft:
-                        {
-                            _isLeft = true;
-                            WalkLeft?.Invoke();
-                            break;
-                        }
-                    }
-                    
-                    yield return new WaitForFixedUpdate();
-                }
+                _isWalking = false;
+                IdleState();
             }
+            else if (rig.linearVelocity != Vector3.zero && !_isWalking)
+            {
+                _isWalking = true;
+                WalkState();
+            }
+            
+            var direction = InputSystem.WalkDirection;
+            attributeSO.GetMoveSpeed(out var speed);
+            
+            rig.linearVelocity = new Vector3(
+                x: direction.x * (speed * Time.fixedDeltaTime),
+                y: rig.linearVelocity.y,
+                z: direction.y * (speed * Time.fixedDeltaTime));
         }
 
-        public void StopWalk()
+        private void DetectFlip()
         {
-            if (_walkCoroutine is null) return;
-            rig.linearVelocity = new Vector3(0, rig.linearVelocity.y, 0);
-            StopCoroutine(_walkCoroutine);
-            _walkCoroutine = null;
+            if (rig.linearVelocity.x > 0)
+            {
+                TurnsRight();
+            }
+            else if (rig.linearVelocity.x < 0)
+            {
+                TurnsLeft();
+            }
         }
     }
 }

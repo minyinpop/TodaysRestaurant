@@ -20,13 +20,11 @@ namespace Common.Item.Object
         public void OnEnterDetect()
         {
             // TODO
-            Debug.Log($"{gameObject.name} in detect.");
         }
 
         public void OnExitDetect()
         {
             // TODO
-            Debug.Log($"{gameObject.name} out detect.");
         }
     }
 }

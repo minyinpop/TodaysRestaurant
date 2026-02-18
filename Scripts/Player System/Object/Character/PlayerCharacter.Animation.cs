@@ -24,12 +24,12 @@ namespace Player_System.Object.Character
             skeletonAnimation.AnimationState.SetAnimation(layer, animaName, loop);
         }
 
-        private void Idle()
+        private void PlayIdleAnimation()
         {
             SetAnimation(idle);
         }
         
-        private void Walk()
+        private void PlayWalkAnimation()
         {
             SetAnimation(walk);
         }

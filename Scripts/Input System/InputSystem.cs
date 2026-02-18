@@ -18,26 +18,33 @@ namespace Input_System
         {
             _inputManager.Enable();
             
-            _inputManager.Player.Walk.started += OnPlayerWalkStarted;
-            _cleanupActions.Enqueue(() => _inputManager.Player.Walk.started -= OnPlayerWalkStarted);
-                
-            _inputManager.Player.Walk.canceled += OnPlayerWalkCanceled;
-            _cleanupActions.Enqueue(() => _inputManager.Player.Walk.canceled -= OnPlayerWalkCanceled);
-                
-            _inputManager.Player.Hotbar.performed += OnHotbarPerformed;
-            _cleanupActions.Enqueue(() => _inputManager.Player.Hotbar.performed -= OnHotbarPerformed);
+            #region Player
+                _inputManager.Player.Walk.started += OnPlayerWalkStarted;
+                _cleanupActions.Enqueue(() => _inputManager.Player.Walk.started -= OnPlayerWalkStarted);
+                    
+                _inputManager.Player.Walk.canceled += OnPlayerWalkCanceled;
+                _cleanupActions.Enqueue(() => _inputManager.Player.Walk.canceled -= OnPlayerWalkCanceled);
+                    
+                _inputManager.Player.Hotbar.performed += OnHotbarPerformed;
+                _cleanupActions.Enqueue(() => _inputManager.Player.Hotbar.performed -= OnHotbarPerformed);
 
-            _inputManager.Player.Backpack.performed += OnBackpackPerformed;
-            _cleanupActions.Enqueue(() => _inputManager.Player.Backpack.performed -= OnBackpackPerformed);
-            
-            _inputManager.Player.Map.performed += OnMapPerformed;
-            _cleanupActions.Enqueue(() => _inputManager.Player.Map.performed -= OnMapPerformed);
-            
-            _inputManager.Mouse.LeftButton.performed += OnLeftButtonClicked;
-            _cleanupActions.Enqueue(() => _inputManager.Mouse.LeftButton.performed -= OnLeftButtonClicked);
+                _inputManager.Player.Backpack.performed += OnBackpackPerformed;
+                _cleanupActions.Enqueue(() => _inputManager.Player.Backpack.performed -= OnBackpackPerformed);
                 
-            _inputManager.Mouse.RightButtom.performed += OnRightButtonClicked;
-            _cleanupActions.Enqueue(() => _inputManager.Mouse.RightButtom.performed -= OnRightButtonClicked);
+                _inputManager.Player.Map.performed += OnMapPerformed;
+                _cleanupActions.Enqueue(() => _inputManager.Player.Map.performed -= OnMapPerformed);
+
+                _inputManager.Player.Interact.performed += OnInteractPerformed;
+                _cleanupActions.Enqueue(() => _inputManager.Player.Interact.performed -= OnInteractPerformed);
+            #endregion
+            
+            #region Mouse
+                _inputManager.Mouse.LeftButton.performed += OnLeftButtonClicked;
+                _cleanupActions.Enqueue(() => _inputManager.Mouse.LeftButton.performed -= OnLeftButtonClicked);
+                    
+                _inputManager.Mouse.RightButtom.performed += OnRightButtonClicked;
+                _cleanupActions.Enqueue(() => _inputManager.Mouse.RightButtom.performed -= OnRightButtonClicked);
+            #endregion
         }
         
         private void OnDestroy()
