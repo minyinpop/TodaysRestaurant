@@ -2,12 +2,16 @@ using System;
 using Input_System;
 using Player_System.Object.Character.State_Machine;
 using Player_System.Object.Character.State_Machine.State;
+using Player_System.System;
 using UnityEngine;
 
 namespace Player_System.Object.Character
 {
     public partial class PlayerCharacter : MonoBehaviour
     {
+        [field: Header("Player System")]
+        [field: SerializeField] private PlayerSystem playerSystem;
+        
         private readonly StateMachine _stateMachine = new();
 
         private IState _idleState;
@@ -17,6 +21,40 @@ namespace Player_System.Object.Character
 
         private void Awake()
         {
+            #region PlayerSystem
+                if (playerSystem == null)
+                {
+                    Debug.Log($"{gameObject.name} > {GetType().Name} > {nameof(playerSystem)} cannot be null.");
+                    gameObject.SetActive(false);
+                    return;
+                }
+            #endregion
+            
+            #region PlayerSystem.Interact
+                if (detectArea == null)
+                {
+                    Debug.Log($"{gameObject.name} > {GetType().Name} > {nameof(detectArea)} cannot be null.");
+                    gameObject.SetActive(false);
+                    return;
+                }
+            #endregion
+            
+            #region PlayerSystem.Move
+                if (rig == null)
+                {
+                    Debug.Log($"{gameObject.name} > {GetType().Name} > {nameof(rig)} cannot be null.");
+                    gameObject.SetActive(false);
+                    return;
+                }
+                
+                if (attributeSO == null)
+                {
+                    Debug.Log($"{gameObject.name} > {GetType().Name} > {nameof(attributeSO)} cannot be null.");
+                    gameObject.SetActive(false);
+                    return;
+                }
+            #endregion
+
             _idleState = new OnIdle(
                 onEnter: () =>
                 {

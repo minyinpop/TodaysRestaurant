@@ -78,8 +78,20 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
         }
 
         #region InteractableObject
-            public void OnEnterDetect() => _currentBubble?.SetInteractable(true);
-            public void OnExitDetect() => _currentBubble?.SetInteractable(false);
+            public void OnEnterDetect()
+            {
+                _currentBubble?.SetInteractable(true);
+            }
+            
+            public void OnExitDetect()
+            {
+                _currentBubble?.SetInteractable(false);
+            }
+
+            public bool OnInteract(PlayerSystem playerSystem)
+            {
+                return false;
+            }
         #endregion
 
         #region StateMachine

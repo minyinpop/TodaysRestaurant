@@ -1,5 +1,6 @@
 using Common.Interactable_Object;
 using Common.Item.Data;
+using Player_System.System;
 using UnityEngine;
 
 namespace Common.Item.Object
@@ -25,6 +26,19 @@ namespace Common.Item.Object
         public void OnExitDetect()
         {
             // TODO
+        }
+
+        public bool OnInteract(PlayerSystem playerSystem)
+        {
+            if (playerSystem.TryAddItem(itemData))
+            {
+                Destroy(gameObject);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

@@ -15,7 +15,7 @@ namespace Player_System.System
             PlayerUISystem.RequireBackpackUI();
         }
 
-        private bool TryAddItem(IItem itemData)
+        public bool TryAddItem(IItem itemData)
         {
             return PlayerUISystem.TryAddItem(itemData);
         }

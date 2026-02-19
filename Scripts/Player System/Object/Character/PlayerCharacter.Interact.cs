@@ -38,7 +38,7 @@ namespace Player_System.Object.Character
                 if (!detectObj.TryGetComponent<InteractableObject>(out var detectObjectScript)) return;
                 
                 _interactableObjects.Remove(detectObjectScript);
-                detectObjectScript.OnEnterDetect();
+                detectObjectScript.OnExitDetect();
             }
         }
 
@@ -60,9 +60,15 @@ namespace Player_System.Object.Character
                 Debug.Log($"{gameObject.name} > {GetType().Name} > {nameof(_interactableObjects)} the first object data is be null.");
                 return;
             }
-            
-            // TODO 這裡呼叫 _interactableObjects.First() 裡的 Interact() <--- 還沒實作
-            Debug.Log(_interactableObjects.First().GetType().Name);
+
+            if (_interactableObjects.First().OnInteract(playerSystem))
+            {
+                Debug.Log("拿得起來這物品");
+            }
+            else
+            {
+                Debug.Log("拿不起來這物品");
+            }
         }
     }
 }
