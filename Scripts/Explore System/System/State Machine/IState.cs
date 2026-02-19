@@ -1,4 +1,4 @@
-namespace Explore_System.Main.State_Machine
+namespace Explore_System.System.State_Machine
 {
     internal interface IState
     {

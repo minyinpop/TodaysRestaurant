@@ -1,8 +1,0 @@
-using UnityEngine;
-
-namespace Explore_System.Child.Resource_Spawn_System.System.Child
-{
-    public sealed class IngredientSpawnSystem : MonoBehaviour
-    {
-    }
-}

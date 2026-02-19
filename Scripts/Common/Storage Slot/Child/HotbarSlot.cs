@@ -25,13 +25,13 @@ namespace Common.Storage_Slot.Child
             #region Interaction
                 public override void Selected()
                 {
-                    slotImage.color = focusColor;
+                    slotImage.color = focusSlotColor;
                     _currentItem?.Selected();
                 }
 
                 public override void UnSelected()
                 {
-                    slotImage.color = unFocusColor;
+                    slotImage.color = normalSlotColor;
                     _currentItem?.UnSelected();
                 }
 

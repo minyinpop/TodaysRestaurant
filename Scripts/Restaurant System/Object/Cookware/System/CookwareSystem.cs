@@ -45,7 +45,6 @@ namespace Restaurant_System.Object.Cookware.System
 
         public static event Action<CookType, Action<CustomFoodItem>, Action> OpenCookSelectionUI;
         public static event Action CloseCookSelectionUI;
-        // public static event Func<IFood, bool> TryAddItem;
 
         private PlayerSystem _interactingPlayer;
 

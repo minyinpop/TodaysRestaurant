@@ -15,8 +15,8 @@ namespace Common.Storage_Slot.Main
         [field: Header("Slot Settings")]
         [field: SerializeField] protected RectTransform slotRect;
         [field: SerializeField] protected Image slotImage;
-        [field: SerializeField] protected Color focusColor;
-        [field: SerializeField] protected Color unFocusColor;
+        [field: SerializeField] protected Color focusSlotColor;
+        [field: SerializeField] protected Color normalSlotColor;
 
         [field: Header("Item Settings")]
         [field: SerializeField] protected Image itemImage;
