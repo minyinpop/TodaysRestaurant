@@ -18,5 +18,18 @@ namespace Common.Level.Main
         [field: Header("Level Possible Enemies")]
         [field: SerializeField] private LevelEnemy levelEnemy;
                                 public LevelEnemy LevelEnemy => levelEnemy;
+
+        private void OnValidate()
+        {
+            if (levelIngredient == null)
+            {
+                Debug.Log($"{GetType().Name} > {nameof(levelIngredient)} cannot be null.");
+            }
+
+            if (levelEnemy == null)
+            {
+                Debug.Log($"{GetType().Name} > {nameof(levelEnemy)} cannot be null.");
+            }
+        }
     }
 }

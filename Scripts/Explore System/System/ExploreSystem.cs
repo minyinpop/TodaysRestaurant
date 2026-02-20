@@ -7,11 +7,20 @@ namespace Explore_System.System
     {
         [field: Header("Develop Only")]
         [field: SerializeField] private LevelSO levelData;
-        
-        private void Awake()
-        {
-        }
 
+        private void OnValidate()
+        {
+            if (levelData == null)
+            {
+                Debug.Log($"{gameObject.name} > {GetType().Name} > {nameof(levelData)} cannot be null.");
+            }
+
+            if (resourceSpawnPoints.Length <= 0)
+            {
+                Debug.Log($"{gameObject.name} > {GetType().Name} > {nameof(resourceSpawnPoints)} cannot be empty.");
+            }
+        }
+        
         private void Start()
         {
             // TODO 因為開發中，所以寫在 Start 裡，之後就交給過場系統

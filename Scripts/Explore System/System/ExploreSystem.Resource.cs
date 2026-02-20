@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using Explore_System.Object;
 using UnityEngine;
 
@@ -9,20 +8,22 @@ namespace Explore_System.System
     {
         [field: SerializeField] private ResourceSpawnPoint[] resourceSpawnPoints;
         
-        private readonly List<ResourceSpawnPoint> _remainingAvailableResourceSpawnPoints = new();
+        private readonly List<ResourceSpawnPoint> _remainingSpawnPoints = new();
         
         private void InitializeResource()
         {
-            _remainingAvailableResourceSpawnPoints.AddRange(resourceSpawnPoints);
+            _remainingSpawnPoints.AddRange(resourceSpawnPoints);
 
-            var rename = levelData.LevelIngredient.IngredientsData.ToList();
-
-            for (var i = rename.Count - 1; i >= 0; i--)
+            foreach (var entry in levelData.LevelIngredient.LevelIngredientEntries)
             {
-                var ingredientData = rename[Random.Range(0, rename.Count)];
-                Debug.Log(ingredientData.ItemName);
-                rename.Remove(ingredientData);
-                // TODO 要做一個 SO 專門讀取這個 IngredientData 可以生成多少個，min to max range
+                var spawnAmount = Random.Range(entry.SpawnAmount.Min, entry.SpawnAmount.Max);
+
+                if (spawnAmount <= 0)
+                {
+                    continue;
+                }
+                
+                // 決定 entry 裡的 IngredientData 要在哪幾個 _remainingSpawnPoints 生成
             }
         }
     }
