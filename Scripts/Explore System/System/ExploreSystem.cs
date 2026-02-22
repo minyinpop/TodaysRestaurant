@@ -15,9 +15,9 @@ namespace Explore_System.System
                 Debug.Log($"{gameObject.name} > {GetType().Name} > {nameof(levelData)} cannot be null.");
             }
 
-            if (resourceSpawnPoints.Length <= 0)
+            if (ingredientSpawnPoints.Length <= 0)
             {
-                Debug.Log($"{gameObject.name} > {GetType().Name} > {nameof(resourceSpawnPoints)} cannot be empty.");
+                Debug.Log($"{gameObject.name} > {GetType().Name} > {nameof(ingredientSpawnPoints)} cannot be empty.");
             }
         }
         

@@ -5,27 +5,37 @@ using UnityEngine;
 
 namespace Common.Item.Object
 {
-    public sealed class Item : MonoBehaviour, InteractableObject
+    public sealed class ItemObject : MonoBehaviour, InteractableObject
     {
+        [field: Header("Components")]
+        [field: SerializeField] private Transform root;
+                                public Transform Root => root;
+        
         [field: Header("Data")]
         [field: SerializeField] private ItemSO itemData;
 
         private void Awake()
         {
+            if (root == null)
+            {
+                Debug.Log($"{gameObject.name} > {GetType().Name} > {nameof(root)} cannot be null.");
+                Destroy(gameObject);
+                return;
+            }
+
             if (itemData == null)
             {
                 Debug.Log($"{gameObject.name} > {GetType().Name} > {nameof(itemData)} cannot be null.");
+                Destroy(gameObject);
             }
         }
 
         public void OnEnterDetect()
         {
-            // TODO
         }
 
         public void OnExitDetect()
         {
-            // TODO
         }
 
         public bool OnInteract(PlayerSystem playerSystem)
