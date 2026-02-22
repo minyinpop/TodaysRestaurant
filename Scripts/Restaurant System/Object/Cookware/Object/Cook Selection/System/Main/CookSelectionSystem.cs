@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Common.Data.Item.Custom;
+using Common.Item.Data.Food.Custom_Food;
 using Common.Value;
 using Common.Value.Type;
 using Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Child;
@@ -41,7 +41,7 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Main
             }
         }
 
-        private void Open(CookType cookwareType, Action<CustomItem> onConfirm, Action onCancel)
+        private void Open(CookType cookwareType, Action<CustomFoodItem> onConfirm, Action onCancel)
         {
             selectionSystem.Show(cookwareType,
                 onSelect: selectedDishData =>
@@ -84,13 +84,14 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Main
                                 putIngredientSystem.GetIngredients(out var ingredients);
                                 foreach (var ingredient in ingredients)
                                 {
-                                    ingredient.GetCookTime(out var ingredientCookTime);
-                                    ingredient.GetPrice(out var ingredientPrice);
-                                    totalCookTime += ingredientCookTime;
-                                    totalPrice += ingredientPrice;
+                                    // ingredient.GetCookTime(out var ingredientCookTime);
+                                    // ingredient.GetPrice(out var ingredientPrice);
+                                    totalCookTime += ingredient.CookTime;
+                                    totalPrice += ingredient.Price;
                                 }
 
-                                var cookDish = ScriptableObject.CreateInstance<CustomItem>();
+                                // var cookDish = ScriptableObject.CreateInstance<CustomFoodItem>();
+                                var cookDish = new CustomFoodItem();
                                 cookDish.Initialize(selectedDishData, totalCookTime, totalPrice);
                                 
                                 // UI

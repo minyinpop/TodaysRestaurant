@@ -4,5 +4,7 @@ namespace Restaurant_System.Object.Cookware.System.State_Machine
     {
         public void Enter();
         public void Exit();
+        
+        public void Interact();
     }
 }

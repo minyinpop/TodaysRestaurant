@@ -1,18 +1,13 @@
-using System;
 using UnityEngine;
 
 namespace Common.Value
 {
-    [Serializable]
+    [System.Serializable]
     public sealed class Range
     {
-        [field: SerializeField] private int Min;
-        [field: SerializeField] private int Max;
-
-        public void GetValues(out int min, out int max)
-        {
-            min = Min;
-            max = Max;
-        }
+        [field: SerializeField] private int min;
+                                public int Min => min;
+        [field: SerializeField] private int max;
+                                public int Max => max;
     }
 }

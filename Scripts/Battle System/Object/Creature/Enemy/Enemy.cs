@@ -1,6 +1,6 @@
 using System;
-using Common.Data.Enemy;
-using Common.Object;
+using Common.Enemy;
+using Common.Status_Bar;
 using Common.Value;
 using UnityEngine;
 

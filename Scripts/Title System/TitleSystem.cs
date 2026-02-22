@@ -1,6 +1,6 @@
 using System;
 using System.Collections;
-using Common.Object;
+using Common.Button;
 using UnityEngine;
 using Random = UnityEngine.Random;
 

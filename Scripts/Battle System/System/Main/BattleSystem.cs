@@ -7,7 +7,7 @@ using Battle_System.System.Child.Initiative_System.System.Main;
 using Battle_System.System.Child.Selected_Card_System.Main;
 using Battle_System.System.Main.State_Machine;
 using Battle_System.System.Main.State_Machine.State;
-using Common.Data.Player.Child.Player_Team;
+using Common.Player.Child.Player_Team;
 using Common.Value;
 using Common.Value.Type;
 using UnityEngine;

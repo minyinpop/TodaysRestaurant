@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using Common.Data.Item;
-using Common.Data.Item.Serving_Note;
+using Common.Item.Data;
+using Common.Item.Data.Serving_Note;
 using UI_System.Restaurant_UI_System.Child.Serving_Note_UI_System.Object;
 using UnityEngine;
 
@@ -37,7 +37,7 @@ namespace UI_System.Restaurant_UI_System.Child.Serving_Note_UI_System.System
                 ui.gameObject.SetActive(!ui.gameObject.activeSelf);
         }
 
-        public void GetServingNoteItems(ServingNoteSO servingNoteData, out List<ItemSO> servingNoteItems)
+        public void GetServingNoteItems(ServingNoteSO servingNoteData, out List<IItem> servingNoteItems)
         {
             _servingNoteUIs.TryGetValue(servingNoteData, out var servingNote);
             servingNote.GetSlotItems(out servingNoteItems);

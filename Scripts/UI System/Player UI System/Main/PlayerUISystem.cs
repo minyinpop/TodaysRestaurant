@@ -1,4 +1,4 @@
-using Common.Data.Item;
+using Common.Item.Data;
 using UI_System.Player_UI_System.Child.Backpack_UI_System.System;
 using UI_System.Player_UI_System.Child.Hotbar_UI_System.System;
 using UI_System.Player_UI_System.Child.Item_Drag_UI_System.System;
@@ -6,8 +6,7 @@ using UnityEngine;
 
 namespace UI_System.Player_UI_System.Main
 {
-    public sealed class 
-        PlayerUISystem : MonoBehaviour
+    public sealed class PlayerUISystem : MonoBehaviour
     {
         [field: Header("Objects")]
         [field: SerializeField] private HotbarUISystem hotbarUISystem;
@@ -67,7 +66,7 @@ namespace UI_System.Player_UI_System.Main
                 _backpackUISystem.RequireBackpackUI();
             }
             
-            public static bool TryAddItem(ItemSO itemData)
+            public static bool TryAddItem(IItem itemData)
             {
                 return _hotbarUISystem.TryAddItem(itemData);
             }
@@ -79,7 +78,7 @@ namespace UI_System.Player_UI_System.Main
         #endregion
         
         #region ItemDrag
-            public static void RequireItemDragUI(bool isDragging, ItemSO item)
+            public static void RequireItemDragUI(bool isDragging, IItem item)
             {
                 _itemDragUISystem.RequiresUI(isDragging, item);
             }

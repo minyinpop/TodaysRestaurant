@@ -2,10 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Common.Data.Item.Ingredient;
-using Common.Object;
-using Common.Object.Storage_Slot;
-using Common.Object.Storage_Slot.Main;
+using Common.Button;
+using Common.Item.Data.Ingredient;
+using Common.Storage_Slot.Main;
 using Common.Value;
 using TMPro;
 using UnityEngine;
@@ -59,7 +58,7 @@ namespace UI_System.Example
             [field: SerializeField] private TextMeshProUGUI MessageTMP;
             #endregion
             
-            #region Item Slot
+        #region Item Slot
             [field: Header("Item Slot")]
             [field: SerializeField] private Transform SpawnParent;
             [field: SerializeField] private GameObject SlotPrefab;

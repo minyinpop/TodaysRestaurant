@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Common.Data.Level.Main;
+using Common.Button;
+using Common.Level.Main;
 using UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Select_UI.Child.Level_Information_UI.Main;
 using UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Select_UI.Child.Level_Pick_UI.Main;
 using UnityEngine;
@@ -12,6 +13,7 @@ namespace UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Se
         [field: Header("Objects")]
         [field: SerializeField] private LevelPickUI levelPickUI;
         [field: SerializeField] private LevelInformationUI levelInformationUI;
+        [field: SerializeField] private Button levelStartButton;
         
         [field: Header("Data")]
         [field: SerializeField] private LevelSO defaultLevel;
@@ -19,48 +21,61 @@ namespace UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Se
         private LevelSO _currentFocusLevel;
 
         private readonly Queue<Action> _levelPickButtonCleanupActions = new();
+        private Action _levelStartButtonCleanupAction;
 
         private void Awake()
         {
             if (levelPickUI == null)
             {
                 Debug.Log($"{nameof(LevelSelectUI)} > {nameof(levelPickUI)} cannot be null.");
-                return;
             }
-            
-            if (levelInformationUI == null)
+            else if (levelInformationUI == null)
             {
                 Debug.Log($"{nameof(LevelSelectUI)} > {nameof(levelInformationUI)} cannot be null.");
-                return;
             }
-
-            if (defaultLevel == null)
+            else if (levelStartButton == null)
+            {
+                Debug.Log($"{gameObject.name} > {GetType().Name} > {nameof(levelStartButton)} cannot be null.");
+            }
+            else if (defaultLevel == null)
             {
                 Debug.Log($"{nameof(LevelSelectUI)} > {nameof(defaultLevel)} cannot be null.");
-                return;
             }
+            else
+            {
+                _currentFocusLevel = defaultLevel;
 
-            _currentFocusLevel = defaultLevel;
+                #region Level Pick UI
+                    levelPickUI.Initialize(out var levelPickButtons);
 
-            #region Level Pick UI
-                levelPickUI.Initialize(out var levelPickButtons);
-
-                foreach (var levelPickButton in levelPickButtons)
-                {
-                    levelPickButton.OnClick += OnClickLevelPickButton;
-                    _levelPickButtonCleanupActions.Enqueue(() => levelPickButton.OnClick -= OnClickLevelPickButton);
-                }
-            #endregion
-            
-            #region Level Information UI
-                levelInformationUI.Initialize(_currentFocusLevel);
-            #endregion
+                    foreach (var levelPickButton in levelPickButtons)
+                    {
+                        levelPickButton.OnClick += OnClickLevelPickButton;
+                        _levelPickButtonCleanupActions.Enqueue(() => levelPickButton.OnClick -= OnClickLevelPickButton);
+                    }
+                #endregion
+                
+                #region Level Information UI
+                    levelInformationUI.Initialize(_currentFocusLevel);
+                #endregion
+                
+                #region Level Start Button
+                    levelStartButton.OnClick += OnClickLevelStartButton;
+                    _levelStartButtonCleanupAction = () => levelStartButton.OnClick -= OnClickLevelStartButton;
+                #endregion
+            }
 
             return;
 
             void OnClickLevelPickButton(LevelSO levelData)
             {
-                levelInformationUI.Refresh(levelData);
+                _currentFocusLevel = levelData;
+                levelInformationUI.Refresh(_currentFocusLevel);
+            }
+            
+            void OnClickLevelStartButton()
+            {
+                // TODO Go to Explore Scene.
             }
         }
 
@@ -70,6 +85,8 @@ namespace UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Se
             {
                 _levelPickButtonCleanupActions.Dequeue()?.Invoke();
             }
+            
+            _levelStartButtonCleanupAction?.Invoke();
         }
     }
 }

@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
-using Common;
-using Common.Data.Item;
-using Common.Data.Item.Custom;
-using Common.Object;
+using Common.Clickable_Bubble;
+using Common.Interactable_Object;
+using Common.Item.Data.Food;
+using Common.Item.Data.Food.Custom_Food;
 using Common.Value.Type;
+using Player_System.System;
 using Restaurant_System.Object.Cookware.Object.Cook_Game.System.Main;
 using Restaurant_System.Object.Cookware.System.State_Machine;
 using Restaurant_System.Object.Cookware.System.State_Machine.State;
@@ -33,7 +34,7 @@ namespace Restaurant_System.Object.Cookware.System
         private ClickableBubble _currentBubble;
         private CookGameSystem _currentCookGame;
         
-        private ItemSO _currentCookItem;
+        private IFood _currentCookItem;
         
         private readonly StateMachine _stateMachine = new();
 
@@ -42,9 +43,10 @@ namespace Restaurant_System.Object.Cookware.System
         private bool _isCookGameComplete;
         private bool _interactable;
 
-        public static event Action<CookType, Action<CustomItem>, Action> OpenCookSelectionUI;
+        public static event Action<CookType, Action<CustomFoodItem>, Action> OpenCookSelectionUI;
         public static event Action CloseCookSelectionUI;
-        public static event Func<ItemSO, bool> TryAddItem;
+
+        private PlayerSystem _interactingPlayer;
 
         private void Start()
         {
@@ -67,6 +69,13 @@ namespace Restaurant_System.Object.Cookware.System
                 _currentBubble?.SetInteractable(false);
                 CloseCookSelectionUI?.Invoke();
             }
+
+            public bool OnInteract(PlayerSystem playerSystem)
+            {
+                _interactingPlayer = playerSystem;
+                _stateMachine.InteractState();
+                return false;
+            }
         #endregion
 
         #region StateMachine
@@ -78,24 +87,22 @@ namespace Restaurant_System.Object.Cookware.System
                         {
                             _currentBubble = Instantiate(EmptyBubblePrefab, BubbleParent).GetComponent<ClickableBubble>();
                             
-                            _currentBubble.OnClick += OnBubbleClicked;
-                            _cleanUpActions.Enqueue(() => _currentBubble.OnClick -= OnBubbleClicked);
+                            _currentBubble.OnClick += _stateMachine.InteractState;
+                            _cleanUpActions.Enqueue(() => _currentBubble.OnClick -= _stateMachine.InteractState);
                             
                             _currentBubble.SetInteractable(_interactable);
-                            return;
-
-                            void OnBubbleClicked()
-                            {
-                                OpenCookSelectionUI?.Invoke(CookwareType,
-                                    /* onConfirm */ cookItem =>
-                                    {
-                                        _currentCookItem = cookItem;
-                                        OnCookState();
-                                    },
-                                    /* onCancel: */ () =>
-                                    {
-                                    });
-                            }
+                        },
+                        onInteract: () =>
+                        {
+                            OpenCookSelectionUI?.Invoke(CookwareType,
+                                /* onConfirm */ cookItem =>
+                                {
+                                    _currentCookItem = cookItem;
+                                    OnCookState();
+                                },
+                                /* onCancel: */ () =>
+                                {
+                                });
                         },
                         onExit: () =>
                         {
@@ -112,14 +119,18 @@ namespace Restaurant_System.Object.Cookware.System
                         onEnter: () =>
                         {
                             _currentBubble = Instantiate(CookBubblePrefab, BubbleParent).GetComponent<ClickableBubble>();
-                            
-                            _currentCookItem.GetCookTime(out var cookTime); // TODO 2025.12.03 從這裡繼續做
-                            _currentBubble.StartCountDown(cookTime / 2,
+
+                            // TODO 2025.12.03 從這裡繼續做
+                            _currentBubble.StartCountDown(_currentCookItem.CookTime / 2,
                                 onComplete: () =>
                                 {
                                     if (_isCookGameComplete) OnCompleteState();
                                     else OnGameTimeState();
                                 });
+                        },
+                        onInteract: () =>
+                        {
+                            // TODO
                         },
                         onExit: () =>
                         {
@@ -178,6 +189,10 @@ namespace Restaurant_System.Object.Cookware.System
                                 }
                             }
                         },
+                        onInteract: () =>
+                        {
+                            // TODO
+                        },
                         onExit: () =>
                         {
                             if (_currentCookGame is not null)
@@ -208,8 +223,7 @@ namespace Restaurant_System.Object.Cookware.System
 
                             void OnBubbleClicked()
                             {
-                                var isAddItemToPlayerInventoryComplete = TryAddItem?.Invoke(_currentCookItem) ?? false;
-                                if (isAddItemToPlayerInventoryComplete)
+                                if (_interactingPlayer.TryAddItem(_currentCookItem))
                                 {
                                     OnEmptyState();
                                 }
@@ -218,6 +232,10 @@ namespace Restaurant_System.Object.Cookware.System
                                     Debug.Log($"無法添加 {_currentCookItem.ItemName} 至玩家背包。");
                                 }
                             }
+                        },
+                        onInteract: () =>
+                        {
+                            // TODO
                         },
                         onExit: Reset));
                 }
@@ -238,20 +256,19 @@ namespace Restaurant_System.Object.Cookware.System
 
                             void OnClick()
                             {
-                                Debug.Log(_currentCookItem);
-                                _currentCookItem.GetOvercookedItem(out var overcookedItem);
-                                Debug.Log(overcookedItem);
-                                var result = TryAddItem?.Invoke(overcookedItem) ?? false;
-                                
-                                if (result)
+                                if (_interactingPlayer.TryAddItem(_currentCookItem))
                                 {
                                     OnEmptyState();
                                 }
                                 else
                                 {
-                                    // TODO 煮過頭的料理無法添加進玩家的背包
+                                    Debug.Log($"無法添加 {_currentCookItem.ItemName} 至玩家背包。");
                                 }
                             }
+                        },
+                        onInteract: () =>
+                        {
+                            // TODO
                         },
                         onExit: Reset));
                 }

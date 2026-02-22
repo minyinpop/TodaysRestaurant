@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Common.Data.Item;
-using Common.Data.Item.Serving_Note;
+using Common.Item.Data;
+using Common.Item.Data.Serving_Note;
 using UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.System;
 using UI_System.Restaurant_UI_System.Child.Serving_Note_UI_System.System;
 using UnityEngine;
@@ -61,7 +61,7 @@ namespace UI_System.Restaurant_UI_System.Main
                 _servingNoteUISystem.ToggleUI(servingNoteData);
             }
             
-            public static void GetServingNoteItems(ServingNoteSO servingNoteData, out List<ItemSO> servingNoteItems)
+            public static void GetServingNoteItems(ServingNoteSO servingNoteData, out List<IItem> servingNoteItems)
             {
                 _servingNoteUISystem.GetServingNoteItems(servingNoteData, out servingNoteItems);
             }

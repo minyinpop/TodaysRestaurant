@@ -1,5 +1,5 @@
 using System.Collections;
-using Input_System.Main;
+using Input_System;
 using Restaurant_System.System.Child;
 using Restaurant_System.System.Main.State_Machine;
 using Restaurant_System.System.Main.State_Machine.State;
