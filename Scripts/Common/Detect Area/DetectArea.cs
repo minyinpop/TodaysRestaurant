@@ -17,11 +17,11 @@ namespace Common.Detect_Area
             OnEnterDetect?.Invoke(other.gameObject);
         }
         
-        private void OnTriggerStay(Collider other)
-        {
-            if (1 << other.gameObject.layer != Layer.value) return;
-            OnEnterDetect?.Invoke(other.gameObject);
-        }
+        // private void OnTriggerStay(Collider other)
+        // {
+        //     if (1 << other.gameObject.layer != Layer.value) return;
+        //     OnEnterDetect?.Invoke(other.gameObject);
+        // }
 
         private void OnTriggerExit(Collider other)
         {

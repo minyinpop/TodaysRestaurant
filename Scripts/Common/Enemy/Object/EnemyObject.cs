@@ -13,6 +13,7 @@ namespace Common.Enemy.Object
         private readonly StateMachine _stateMachine = new();
 
         private IState _idleState;
+        private IState _moveState;
         
         private void Awake()
         {
@@ -39,6 +40,20 @@ namespace Common.Enemy.Object
                     Destroy(gameObject);
                     return;
                 }
+                
+                detectArea.OnEnterDetect += OnObjectEnterDetect;
+                _onEnterDetectCleanupAction = () =>
+                {
+                    detectArea.OnEnterDetect -= OnObjectEnterDetect;
+                    _onEnterDetectCleanupAction = null;
+                };
+                
+                detectArea.OnExitDetect += OnObjectExitDetect;
+                _onExitDetectCleanupAction = () =>
+                {
+                    detectArea.OnExitDetect -= OnObjectExitDetect;
+                    _onExitDetectCleanupAction = null;
+                };
             #endregion
 
             _idleState = new OnIdle(
@@ -49,11 +64,43 @@ namespace Common.Enemy.Object
                 onExit: () =>
                 {
                 });
+
+            _moveState = new OnMove(
+                onEnter: () =>
+                {
+                    PlayMoveAnimation();
+                },
+                onExit: () =>
+                {
+                });
         }
 
         private void Start()
         {
-            _stateMachine.InitializeState(_idleState);
+            InitializeState();
         }
+
+        private void OnDestroy()
+        {
+            _onEnterDetectCleanupAction.Invoke();
+            _onExitDetectCleanupAction.Invoke();
+        }
+        
+        #region StateMachine
+            private void InitializeState()
+            {
+                _stateMachine.InitializeState(_idleState);
+            }
+
+            private void IdleState()
+            {
+                _stateMachine.ChangeState(_idleState);
+            }
+            
+            private void MoveState()
+            {
+                _stateMachine.ChangeState(_moveState);
+            }
+        #endregion
     }
 }
