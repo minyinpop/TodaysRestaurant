@@ -14,7 +14,7 @@ namespace Explore_System.System
             var _remainingIngredientEntry = levelData.LevelIngredient.LevelIngredientEntries.ToList();
             var _remainingSpawnPoints = ingredientSpawnPoints.ToList();
 
-            for (var i = 0; i < _remainingIngredientEntry.Count; i++)
+            for (var i = 0; i <= _remainingIngredientEntry.Count; i++)
             {
                 var entry = _remainingIngredientEntry[Random.Range(0, _remainingIngredientEntry.Count)];
                             _remainingIngredientEntry.Remove(entry);
