@@ -1,0 +1,8 @@
+using UnityEngine;
+
+namespace Explore_System.Object
+{
+    public sealed class EnemySpawnPoint : MonoBehaviour
+    {
+    }
+}

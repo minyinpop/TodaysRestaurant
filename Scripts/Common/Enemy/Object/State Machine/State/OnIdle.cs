@@ -1,6 +1,6 @@
 using System;
 
-namespace Player_System.Object.Character.State_Machine.State
+namespace Common.Enemy.Object.State_Machine.State
 {
     public sealed class OnIdle : IState
     {

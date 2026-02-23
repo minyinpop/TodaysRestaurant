@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Input_System;
-using Restaurant_System.Object.Cookware.System;
 using Restaurant_System.Object.Creature.Customer.System.Main;
 using UnityEngine;
 

@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Animation_System.Spine
 {
     [Serializable]
-    internal sealed class SpineAnimation
+    public sealed class SpineAnimation
     {
         [field: SerializeField] private int Layer;
         [field: SerializeField] private string AnimationName;
@@ -17,10 +17,10 @@ namespace Animation_System.Spine
             Loop = loop;
         }
 
-        public void GetValues(out int layer, out string animation, out bool loop)
+        public void GetValues(out int layer, out string animationName, out bool loop)
         {
             layer = Layer;
-            animation = AnimationName;
+            animationName = AnimationName;
             loop = Loop;
         }
     }

@@ -21,13 +21,13 @@ namespace Common.Item.Data.Ingredient
         {
             if (cookTime < 0)
             {
-                Debug.Log($"{ItemName} > {GetType().Name} > {nameof(cookTime)} cannot be negative.");
+                Debug.Log($"{name} > {GetType().Name} > {nameof(cookTime)} cannot be negative.");
                 return;
             }
 
             if (price < 0)
             {
-                Debug.Log($"{ItemName} > {GetType().Name} > {nameof(price)} cannot be negative.");
+                Debug.Log($"{name} > {GetType().Name} > {nameof(price)} cannot be negative.");
             }
         }
 

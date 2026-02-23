@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Common.Detect_Area;
 using Common.Interactable_Object;
 using UnityEngine;
 
@@ -60,14 +61,12 @@ namespace Player_System.Object.Character
                 Debug.Log($"{gameObject.name} > {GetType().Name} > {nameof(_interactableObjects)} the first object data is be null.");
                 return;
             }
+            
+            var interactableObject = _interactableObjects.First();
 
-            if (_interactableObjects.First().OnInteract(playerSystem))
+            if (interactableObject.OnInteract(playerSystem))
             {
-                Debug.Log("拿得起來這物品");
-            }
-            else
-            {
-                Debug.Log("拿不起來這物品");
+                _interactableObjects.Remove(interactableObject);
             }
         }
     }

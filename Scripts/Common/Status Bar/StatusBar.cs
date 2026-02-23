@@ -12,25 +12,24 @@ namespace Common.Status_Bar
         [field: SerializeField] private Slider OuterFill;
 
         private float MaxValue = 1;
-        private float MinValue;
         
         private float CurrentValue;
 
         private Tween CurrentTween;
 
-        public void Init(float minValue, float maxValue)
+        public void Initialize(float maxValue)
         {
             MaxValue = maxValue;
-            MinValue = minValue;
+            
             InitValue(InnerFill);
             InitValue(OuterFill);
+            
             CurrentValue = MaxValue;
             return;
             
             void InitValue(Slider slider)
             {
                 slider.maxValue = MaxValue;
-                slider.minValue = MinValue;
                 slider.value = MaxValue;
             }
         }
@@ -42,8 +41,8 @@ namespace Common.Status_Bar
         
         public void Subtract(float value, Action isAlive, Action isDeath)
         {
-            CurrentValue = Mathf.Clamp(CurrentValue -= value, MinValue, MaxValue);
-            if (Mathf.Approximately(CurrentValue, MinValue))
+            CurrentValue = Mathf.Clamp(CurrentValue -= value, 0, MaxValue);
+            if (Mathf.Approximately(CurrentValue, 0))
                 isDeath?.Invoke();
             else
                 isAlive?.Invoke();

@@ -9,8 +9,8 @@ namespace Common.Character
     {
         #region Attribute
             [field: Header("Attribute")]
-            [field: SerializeField] private Health health;
-                                    public Health Health => health;
+            [field: SerializeField] private int health;
+                                    public int Health => health;
             [field: SerializeField] private Damage damage;
                                     public Damage Damage => damage;
         #endregion

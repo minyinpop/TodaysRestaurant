@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Player_System.Object
+namespace Common.Detect_Area
 {
     public sealed class DetectArea : MonoBehaviour
     {

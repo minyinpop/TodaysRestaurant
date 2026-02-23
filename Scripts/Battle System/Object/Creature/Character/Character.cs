@@ -26,7 +26,7 @@ namespace Battle_System.Object.Creature.Character
 
         private void Start()
         {
-            healthBar.Init(characterData.Health.Min, characterData.Health.Max);
+            healthBar.Initialize(characterData.Health);
         }
 
         private void OnEnable()
