@@ -32,6 +32,8 @@ namespace Common.Enemy.Enemy_Object
                     Destroy(gameObject);
                     return;
                 }
+                
+                animation.AnimationState.Event += OnSpineEvent;
             #endregion
 
             #region Detect
@@ -60,16 +62,25 @@ namespace Common.Enemy.Enemy_Object
             _idleState = new OnIdle(
                 onEnter: () =>
                 {
+                    Debug.Log($"{name} > Idle");
                     PlayIdleAnimation();
                 },
                 onExit: () =>
                 {
                 });
 
-            _moveState = new OnMove(
+            _moveState = new OnChase(
                 onEnter: () =>
                 {
-                    PlayMoveAnimation();
+                    Debug.Log($"{name} > Move");
+                    
+                    #region Animation
+                        PlayMoveAnimation();
+                    #endregion
+
+                    #region Move
+                        ChasingTarget();
+                    #endregion
                 },
                 onExit: () =>
                 {
@@ -78,11 +89,15 @@ namespace Common.Enemy.Enemy_Object
             _alertState = new OnAlert(
                 onEnter: () =>
                 {
-                    DisplayAlert();
+                    Debug.Log($"{name} > Alert");
+                    DisplayAlert(
+                        onDisplayEnd: () =>
+                        {
+                            MoveState();
+                        });
                 },
                 onExit: () =>
                 {
-                    Debug.Log("玩家離開警戒範圍");
                 });
         }
 
@@ -93,8 +108,14 @@ namespace Common.Enemy.Enemy_Object
 
         private void OnDestroy()
         {
-            _onEnterDetectCleanupAction.Invoke();
-            _onExitDetectCleanupAction.Invoke();
+            #region Animation
+                animation.AnimationState.Event -= OnSpineEvent;
+            #endregion
+            
+            #region Detect
+                _onEnterDetectCleanupAction.Invoke();
+                _onExitDetectCleanupAction.Invoke();
+            #endregion
         }
         
         #region StateMachine

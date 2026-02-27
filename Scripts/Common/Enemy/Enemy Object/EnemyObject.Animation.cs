@@ -1,5 +1,7 @@
+using Spine;
 using Spine.Unity;
 using UnityEngine;
+using Event = Spine.Event;
 using SpineAnimation = Animation_System.Spine.SpineAnimation;
 
 namespace Common.Enemy.Enemy_Object
@@ -21,6 +23,18 @@ namespace Common.Enemy.Enemy_Object
         {
             moveAnimation.GetValues(out var layer, out var animationName, out var loop);
             animation.AnimationState.SetAnimation(layer, animationName, loop);
+        }
+        
+        private void OnSpineEvent(TrackEntry trackEntry, Event e)
+        {
+            switch (e.Data.Name)
+            {
+                case "Jump":
+                {
+                    Debug.Log("Jump");
+                    break;
+                }
+            }
         }
     }
 }

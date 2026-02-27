@@ -1,3 +1,4 @@
+using System;
 using Common.Enemy.Enemy_Alert_Display_Object;
 using UnityEngine;
 
@@ -10,12 +11,20 @@ namespace Common.Enemy.Enemy_Object
         [field: SerializeField] private EnemyAlertDisplayObject alertDisplayPrefab;
                                 private EnemyAlertDisplayObject _alertDisplayObject;
         
-        private void DisplayAlert()
+        private void DisplayAlert(Action onDisplayEnd)
         {
             if (_alertDisplayObject == null)
             {
                 _alertDisplayObject = Instantiate(alertDisplayPrefab, statusDisplayParent);
-                _alertDisplayObject.Initialize(1, () => Debug.Log("開始移動"));
+                _alertDisplayObject.Initialize(
+                    countDownTime: 1,
+                    onCountDownEnd: () =>
+                    {
+                        Destroy(_alertDisplayObject.gameObject);
+                        _alertDisplayObject = null;
+                        
+                        onDisplayEnd.Invoke();
+                    });
             }
             else
             {

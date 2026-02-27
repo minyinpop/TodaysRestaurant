@@ -890,6 +890,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 786137613}
+  - component: {fileID: 786137615}
   - component: {fileID: 786137614}
   m_Layer: 0
   m_Name: Enemy Object
@@ -935,14 +936,36 @@ MonoBehaviour:
     Loop: 1
   moveAnimation:
     Layer: 0
-    AnimationName: 
-    Loop: 0
+    AnimationName: Walk
+    Loop: 1
   enemyData: {fileID: 11400000, guid: 87d5dcab9f2e1a4488405b42044a4d84, type: 2}
   detectArea: {fileID: 204842432}
   detectTag: Player
-  navMesh: {fileID: 1964929655}
+  navMeshAgent: {fileID: 786137615}
   statusDisplayParent: {fileID: 659507015}
   alertDisplayPrefab: {fileID: 7279308398975109049, guid: 2fc96570586944247951e9063b657dab, type: 3}
+--- !u!195 &786137615
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 786137612}
+  m_Enabled: 1
+  m_AgentTypeID: -334000983
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1001 &960935143
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2603,7 +2626,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshSurface
   m_SerializedVersion: 0
-  m_AgentTypeID: 0
+  m_AgentTypeID: -334000983
   m_CollectObjects: 0
   m_Size: {x: 10, y: 10, z: 10}
   m_Center: {x: 0, y: 2, z: 0}
@@ -2618,7 +2641,7 @@ MonoBehaviour:
   m_OverrideTileSize: 0
   m_TileSize: 256
   m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.16666667
+  m_VoxelSize: 0.28333333
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: cf3aeb05e339c204eb17351fd5bdc142, type: 2}
   m_BuildHeightMesh: 0

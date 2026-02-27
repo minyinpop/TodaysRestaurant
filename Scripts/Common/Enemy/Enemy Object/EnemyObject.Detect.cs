@@ -13,10 +13,14 @@ namespace Common.Enemy.Enemy_Object
         private Action _onEnterDetectCleanupAction;
         private Action _onExitDetectCleanupAction;
 
+        private GameObject _chasingTarget;
+
         private void OnObjectEnterDetect(GameObject obj)
         {
             if (obj.CompareTag(detectTag))
             {
+                _chasingTarget = obj;
+                
                 AlertState();
             }
         }
@@ -25,6 +29,8 @@ namespace Common.Enemy.Enemy_Object
         {
             if (obj.CompareTag(detectTag))
             {
+                _chasingTarget = null;
+                
                 IdleState();
             }
         }
