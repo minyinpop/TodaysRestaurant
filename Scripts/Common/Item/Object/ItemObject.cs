@@ -1,6 +1,7 @@
 using Common.Interactable_Object;
 using Common.Item.Data;
 using Player_System.System;
+using Player_System.System.Player_System;
 using UnityEngine;
 
 namespace Common.Item.Object
