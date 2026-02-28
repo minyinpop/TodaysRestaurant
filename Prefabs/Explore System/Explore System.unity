@@ -704,65 +704,6 @@ MonoBehaviour:
   Layer:
     serializedVersion: 2
     m_Bits: 8
---- !u!1 &659507014
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 659507015}
-  - component: {fileID: 659507018}
-  m_Layer: 0
-  m_Name: Status Display
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &659507015
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 659507014}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 786137613}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 2}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!223 &659507018
-Canvas:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 659507014}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_RenderMode: 2
-  m_Camera: {fileID: 159495422}
-  m_PlaneDistance: 100
-  m_PixelPerfect: 0
-  m_ReceivesEvents: 1
-  m_OverrideSorting: 0
-  m_OverridePixelPerfect: 0
-  m_SortingBucketNormalizedSize: 0
-  m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 0
-  m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
-  m_TargetDisplay: 0
 --- !u!114 &691776221 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6831328170423059663, guid: 63125b0b586a0c2418701c5c46657bb3, type: 3}
@@ -914,7 +855,6 @@ Transform:
   m_Children:
   - {fileID: 1672216448}
   - {fileID: 204842430}
-  - {fileID: 659507015}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &786137614
@@ -938,12 +878,13 @@ MonoBehaviour:
     Layer: 0
     AnimationName: Walk
     Loop: 1
+  attackDetectArea: {fileID: 0}
+  attackDetectTag: 
   enemyData: {fileID: 11400000, guid: 87d5dcab9f2e1a4488405b42044a4d84, type: 2}
-  detectArea: {fileID: 204842432}
-  detectTag: Player
+  chaseDetectArea: {fileID: 0}
+  chaseDetectTag: 
   navMeshAgent: {fileID: 786137615}
-  statusDisplayParent: {fileID: 659507015}
-  alertDisplayPrefab: {fileID: 7279308398975109049, guid: 2fc96570586944247951e9063b657dab, type: 3}
+  moveSpeed: 1
 --- !u!195 &786137615
 NavMeshAgent:
   m_ObjectHideFlags: 0

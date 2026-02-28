@@ -2,13 +2,13 @@ using System;
 
 namespace Common.Enemy.Enemy_Object.State_Machine.State
 {
-    public sealed class OnChase : IState
+    public class OnAttack : IState
     {
         private readonly Action _onEnter;
         private readonly Action _onUpdate;
         private readonly Action _onExit;
         
-        public OnChase(Action onEnter, Action onUpdate, Action onExit)
+        public OnAttack(Action onEnter, Action onUpdate, Action onExit)
         {
             _onEnter = onEnter;
             _onUpdate = onUpdate;

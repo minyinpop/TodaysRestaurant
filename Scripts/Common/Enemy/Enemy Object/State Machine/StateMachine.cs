@@ -46,5 +46,22 @@ namespace Common.Enemy.Enemy_Object.State_Machine
             _currentState = state;
             _currentState.Enter();
         }
+
+        public void UpdateState()
+        {
+            if (_currentState == null)
+            {
+                Debug.Log($"{nameof(UpdateState)} > {nameof(_currentState)} cannot be null.");
+                return;
+            }
+            
+            if (!_initialized)
+            {
+                Debug.Log($"{nameof(StateMachine)} need to be initialized first.");
+                return;
+            }
+
+            _currentState.Update();
+        }
     }
 }
