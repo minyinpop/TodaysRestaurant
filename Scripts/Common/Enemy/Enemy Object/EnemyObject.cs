@@ -13,8 +13,8 @@ namespace Common.Enemy.Enemy_Object
         private readonly StateMachine _stateMachine = new();
 
         private IState _idleState;
-        private IState _moveState;
-        private IState _alertState;
+        private IState _chaseState;
+        private IState _attackState;
         
         private void Awake()
         {
@@ -37,64 +37,70 @@ namespace Common.Enemy.Enemy_Object
             #endregion
 
             #region Detect
-                if (detectArea == null)
+                if (chaseDetectArea == null)
                 {
-                    Debug.Log($"{name} > {GetType().Name} > {nameof(detectArea)} cannot be null.");
+                    Debug.Log($"{name} > {GetType().Name} > {nameof(chaseDetectArea)} cannot be null.");
                     Destroy(gameObject);
                     return;
                 }
                 
-                detectArea.OnEnterDetect += OnObjectEnterDetect;
-                _onEnterDetectCleanupAction = () =>
+                chaseDetectArea.OnEnterDetect += OnObjectEnterChaseDetectArea;
+                _onEnterChaseDetectCleanupAction = () =>
                 {
-                    detectArea.OnEnterDetect -= OnObjectEnterDetect;
-                    _onEnterDetectCleanupAction = null;
+                    chaseDetectArea.OnEnterDetect -= OnObjectEnterChaseDetectArea;
+                    _onEnterChaseDetectCleanupAction = null;
                 };
                 
-                detectArea.OnExitDetect += OnObjectExitDetect;
-                _onExitDetectCleanupAction = () =>
+                chaseDetectArea.OnExitDetect += OnObjectExitChaseDetectArea;
+                _onExitChaseDetectCleanupAction = () =>
                 {
-                    detectArea.OnExitDetect -= OnObjectExitDetect;
-                    _onExitDetectCleanupAction = null;
+                    chaseDetectArea.OnExitDetect -= OnObjectExitChaseDetectArea;
+                    _onExitChaseDetectCleanupAction = null;
                 };
             #endregion
 
             _idleState = new OnIdle(
                 onEnter: () =>
                 {
-                    Debug.Log($"{name} > Idle");
-                    PlayIdleAnimation();
+                    #region Animation
+                        PlayIdleAnimation();
+                    #endregion
+                },
+                onUpdate: () =>
+                {
                 },
                 onExit: () =>
                 {
                 });
 
-            _moveState = new OnChase(
+            _chaseState = new OnChase(
                 onEnter: () =>
                 {
-                    Debug.Log($"{name} > Move");
-                    
                     #region Animation
                         PlayMoveAnimation();
                     #endregion
 
                     #region Move
-                        ChasingTarget();
+                        StartMove();
+                    #endregion
+                },
+                onUpdate: () =>
+                {
+                    #region Move
+                        KeepMoving();
                     #endregion
                 },
                 onExit: () =>
                 {
+                    StopMove();
                 });
 
-            _alertState = new OnAlert(
+            _attackState = new OnAttack(
                 onEnter: () =>
                 {
-                    Debug.Log($"{name} > Alert");
-                    DisplayAlert(
-                        onDisplayEnd: () =>
-                        {
-                            MoveState();
-                        });
+                },
+                onUpdate: () =>
+                {
                 },
                 onExit: () =>
                 {
@@ -106,6 +112,11 @@ namespace Common.Enemy.Enemy_Object
             InitializeState();
         }
 
+        private void Update()
+        {
+            _stateMachine.UpdateState();
+        }
+
         private void OnDestroy()
         {
             #region Animation
@@ -113,8 +124,8 @@ namespace Common.Enemy.Enemy_Object
             #endregion
             
             #region Detect
-                _onEnterDetectCleanupAction.Invoke();
-                _onExitDetectCleanupAction.Invoke();
+                _onEnterChaseDetectCleanupAction.Invoke();
+                _onExitChaseDetectCleanupAction.Invoke();
             #endregion
         }
         
@@ -123,20 +134,15 @@ namespace Common.Enemy.Enemy_Object
             {
                 _stateMachine.InitializeState(_idleState);
             }
-
-            private void IdleState()
+            
+            private void StartChaseState()
             {
-                _stateMachine.ChangeState(_idleState);
+                _stateMachine.ChangeState(_chaseState);
             }
             
-            private void MoveState()
+            private void StopChaseState()
             {
-                _stateMachine.ChangeState(_moveState);
-            }
-
-            private void AlertState()
-            {
-                _stateMachine.ChangeState(_alertState);
+                _stateMachine.ChangeState(_idleState);
             }
         #endregion
     }
