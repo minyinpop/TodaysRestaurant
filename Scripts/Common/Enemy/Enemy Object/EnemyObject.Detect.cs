@@ -1,4 +1,3 @@
-using System;
 using Common.Detect_Area;
 using UnityEngine;
 
@@ -8,30 +7,25 @@ namespace Common.Enemy.Enemy_Object
     {
         [field: Header("Detect Settings")]
         [field: SerializeField] private DetectArea chaseDetectArea;
-        [field: SerializeField] private string chaseDetectTag;
+        [field: SerializeField] private string chaseTargetTag;
         
-        private Action _onEnterChaseDetectCleanupAction;
-        private Action _onExitChaseDetectCleanupAction;
-
-        private GameObject _chasingTarget;
+        private GameObject _chaseTarget;
+        private Vector3 _lastChaseTargetPosition;
 
         private void OnObjectEnterChaseDetectArea(GameObject obj)
         {
-            if (obj.CompareTag(chaseDetectTag))
+            if (obj.CompareTag(chaseTargetTag))
             {
-                _chasingTarget = obj;
-                
-                StartChaseState();
+                _chaseTarget = obj;
+                _lastChaseTargetPosition = obj.transform.position;
             }
         }
 
         private void OnObjectExitChaseDetectArea(GameObject obj)
         {
-            if (obj.CompareTag(chaseDetectTag))
+            if (obj.CompareTag(chaseTargetTag))
             {
-                _chasingTarget = null;
-                
-                StopChaseState();
+                _chaseTarget = null;
             }
         }
     }

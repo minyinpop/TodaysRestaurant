@@ -647,7 +647,7 @@ GameObject:
   - component: {fileID: 204842431}
   - component: {fileID: 204842432}
   m_Layer: 0
-  m_Name: Detect Area
+  m_Name: Chase Detect Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -687,7 +687,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 8, y: 5, z: 5}
+  m_Size: {x: 10, y: 2, z: 10}
   m_Center: {x: 0, y: 1, z: 0}
 --- !u!114 &204842432
 MonoBehaviour:
@@ -704,6 +704,75 @@ MonoBehaviour:
   Layer:
     serializedVersion: 2
     m_Bits: 8
+--- !u!1 &477744023
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 477744026}
+  - component: {fileID: 477744025}
+  - component: {fileID: 477744024}
+  m_Layer: 0
+  m_Name: Attack Detect Area
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &477744024
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 477744023}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19b02033e01247f5b0f279d20768544d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Common.Detect_Area.DetectArea
+  Layer:
+    serializedVersion: 2
+    m_Bits: 8
+--- !u!65 &477744025
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 477744023}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 3.5, y: 2, z: 3.5}
+  m_Center: {x: 0, y: 1, z: 0}
+--- !u!4 &477744026
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 477744023}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 786137613}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &691776221 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6831328170423059663, guid: 63125b0b586a0c2418701c5c46657bb3, type: 3}
@@ -855,6 +924,7 @@ Transform:
   m_Children:
   - {fileID: 1672216448}
   - {fileID: 204842430}
+  - {fileID: 477744026}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &786137614
@@ -877,14 +947,18 @@ MonoBehaviour:
   moveAnimation:
     Layer: 0
     AnimationName: Walk
-    Loop: 1
-  attackDetectArea: {fileID: 0}
-  attackDetectTag: 
+    Loop: 0
+  attackAnimation:
+    Layer: 0
+    AnimationName: Attack
+    Loop: 0
+  attackDetectArea: {fileID: 477744024}
+  attackTargetTag: Player
   enemyData: {fileID: 11400000, guid: 87d5dcab9f2e1a4488405b42044a4d84, type: 2}
-  chaseDetectArea: {fileID: 0}
-  chaseDetectTag: 
+  chaseDetectArea: {fileID: 204842432}
+  chaseTargetTag: Player
   navMeshAgent: {fileID: 786137615}
-  moveSpeed: 1
+  moveSpeed: 2
 --- !u!195 &786137615
 NavMeshAgent:
   m_ObjectHideFlags: 0

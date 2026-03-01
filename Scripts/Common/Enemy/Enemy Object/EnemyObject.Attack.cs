@@ -1,4 +1,3 @@
-using System;
 using Common.Detect_Area;
 using UnityEngine;
 
@@ -8,22 +7,23 @@ namespace Common.Enemy.Enemy_Object
     {
         [field: Header("Attack Settings")]
         [field: SerializeField] private DetectArea attackDetectArea;
-        [field: SerializeField] private string attackDetectTag;
+        [field: SerializeField] private string attackTargetTag;
 
-        private Action _onEnterAttackDetectCleanupAction;
-        private Action _onExitAttackDetectCleanupAction;
+        private GameObject _attackTarget;
 
         private void OnObjectEnterAttackDetectArea(GameObject obj)
         {
-            if (obj.CompareTag(attackDetectTag))
+            if (obj.CompareTag(attackTargetTag))
             {
+                _attackTarget = obj;
             }
         }
         
         private void OnObjectExitAttackDetectArea(GameObject obj)
         {
-            if (obj.CompareTag(attackDetectTag))
+            if (obj.CompareTag(attackTargetTag))
             {
+                _attackTarget = null;
             }
         }
     }

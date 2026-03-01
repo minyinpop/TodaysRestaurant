@@ -10,7 +10,7 @@ namespace Common.Enemy.Enemy_Object.State_Machine
 
         public void InitializeState(IState state)
         {
-            if (state == null)
+            if (state is null)
             {
                 Debug.Log($"{nameof(InitializeState)} > {nameof(state)} cannot be null.");
                 return;
@@ -30,7 +30,7 @@ namespace Common.Enemy.Enemy_Object.State_Machine
 
         public void ChangeState(IState state)
         {
-            if (state == null)
+            if (state is null)
             {
                 Debug.Log($"{nameof(ChangeState)} > {nameof(state)} cannot be null.");
                 return;
@@ -49,7 +49,7 @@ namespace Common.Enemy.Enemy_Object.State_Machine
 
         public void UpdateState()
         {
-            if (_currentState == null)
+            if (_currentState is null)
             {
                 Debug.Log($"{nameof(UpdateState)} > {nameof(_currentState)} cannot be null.");
                 return;
