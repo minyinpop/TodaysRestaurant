@@ -1,5 +1,6 @@
 using System;
 using Common.Enemy;
+using Common.Enemy.Data;
 using Common.Status_Bar;
 using Common.Value;
 using UnityEngine;
@@ -22,7 +23,7 @@ namespace Battle_System.Object.Creature.Enemy
 
         private void Start()
         {
-            HealthBar.Init(enemyData.Health.Min, enemyData.Health.Max);
+            HealthBar.Initialize(enemyData.Health);
             
             AnimationSystem.Idle();
         }

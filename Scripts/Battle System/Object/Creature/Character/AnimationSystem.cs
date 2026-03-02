@@ -9,7 +9,7 @@ using SpineAnimation = Animation_System.Spine.SpineAnimation;
 
 namespace Battle_System.Object.Creature.Character
 {
-    internal sealed class AnimationSystem : MonoBehaviour
+    public sealed class AnimationSystem : MonoBehaviour
     {
         [field: Header("Component")]
         [field: SerializeField] private SkeletonAnimation SkeletonAnimation;

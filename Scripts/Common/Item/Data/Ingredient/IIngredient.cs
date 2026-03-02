@@ -1,3 +1,4 @@
+using Common.Item.Object;
 using Common.Value;
 
 namespace Common.Item.Data.Ingredient
@@ -9,5 +10,7 @@ namespace Common.Item.Data.Ingredient
         public float CookTime { get; }
         
         public int Price { get; }
+        
+        public ItemObject ItemObject { get; }
     }
 }

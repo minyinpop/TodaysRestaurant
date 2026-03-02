@@ -1,4 +1,5 @@
 using Common.Enemy;
+using Common.Enemy.Data;
 using Common.Item.Data;
 using UnityEngine;
 

@@ -1,4 +1,5 @@
 using Common.Enemy;
+using Common.Enemy.Data;
 using UnityEngine;
 
 namespace Common.Level.Child.Level_Possible_Enemies

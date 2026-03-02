@@ -13,10 +13,6 @@ namespace Common.Item.Data
                                 public string ItemName => itemName;
         [field: SerializeField] private Sprite itemSprite;
                                 public Sprite ItemSprite => itemSprite;
-                                
-        // [field: Header("")]
-        // [field: SerializeField] private Object.Item itemPrefab;
-        //                         public Object.Item ItemPrefab => itemPrefab;
         
         #region Item Type
             public virtual void GetItemType(out ItemType itemType, out CookType cookType, out FoodType foodType)

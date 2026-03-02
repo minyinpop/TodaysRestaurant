@@ -1,6 +1,6 @@
 {
 "skeleton": {
-	"hash": "ATmsqwLVaho",
+	"hash": "OzzIj29W8z8",
 	"spine": "4.2.43",
 	"x": -88.18,
 	"y": -0.36,
@@ -78,7 +78,9 @@
 	}
 ],
 "events": {
-	"Attack": {}
+	"Attack": {},
+	"Ground": {},
+	"Jump": {}
 },
 "animations": {
 	"Attack": {
@@ -681,7 +683,11 @@
 					{ "time": 2 }
 				]
 			}
-		}
+		},
+		"events": [
+			{ "time": 0.1667, "name": "Jump" },
+			{ "time": 1.1667, "name": "Ground" }
+		]
 	}
 }
 }

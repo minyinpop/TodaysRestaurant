@@ -1,3 +1,4 @@
+using Common.Item.Object;
 using Common.Value;
 using UnityEngine;
 
@@ -13,7 +14,23 @@ namespace Common.Item.Data.Ingredient
                                 public float CookTime => cookTime;
         [field: SerializeField] private int price;
                                 public int Price => price;
-        
+        [field: SerializeField] private ItemObject itemObject;
+                                public ItemObject ItemObject => itemObject;
+
+        private void OnValidate()
+        {
+            if (cookTime < 0)
+            {
+                Debug.Log($"{name} > {GetType().Name} > {nameof(cookTime)} cannot be negative.");
+                return;
+            }
+
+            if (price < 0)
+            {
+                Debug.Log($"{name} > {GetType().Name} > {nameof(price)} cannot be negative.");
+            }
+        }
+
         #region Interaction
             public override void Selected() { }
             public override void UnSelected() { }
