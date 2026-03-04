@@ -1,8 +1,6 @@
 using System;
-using System.Collections;
 using Common.Button;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace Title_System
 {
@@ -16,17 +14,14 @@ namespace Title_System
         public static event Action<string, Action> OnClickStartGameButton;
         public static event Action<string, int> StartScenario;
 
-        private void OnEnable()
+        private void Awake()
         {
             StartButton.OnClick += OnStartButtonClicked;
-            StartButton.SetInteractable(true);
             OptionButton.OnClick += OnOptionButtonClicked;
-            OptionButton.SetInteractable(true);
             QuitButton.OnClick += OnQuitButtonClicked;
-            QuitButton.SetInteractable(true);
         }
 
-        private void OnDisable()
+        private void OnDestroy()
         {
             StartButton.OnClick -= OnStartButtonClicked;
             OptionButton.OnClick -= OnOptionButtonClicked;
@@ -34,27 +29,27 @@ namespace Title_System
         }
 
         #region Button
-        private void OnStartButtonClicked()
-        {
-            OnClickStartGameButton?.Invoke("Dialogue ( Dev )",
-                () =>
-                {
-                    // onComplete
-                    StartScenario?.Invoke("Start", 0);
-                });
-        }
+            private void OnStartButtonClicked()
+            {
+                OnClickStartGameButton?.Invoke("Dialogue ( Dev )",
+                    () =>
+                    {
+                        // onComplete
+                        StartScenario?.Invoke("Start", 0);
+                    });
+            }
 
-        private void OnOptionButtonClicked()
-        {
-            // TODO
-            Debug.Log("TODO Option UI System");
-            // UISystem.ShowOptionUI();
-        }
-        
-        private void OnQuitButtonClicked()
-        {
-            Application.Quit();
-        }
+            private void OnOptionButtonClicked()
+            {
+                // TODO
+                Debug.Log("TODO Option UI System");
+                // UISystem.ShowOptionUI();
+            }
+            
+            private void OnQuitButtonClicked()
+            {
+                Application.Quit();
+            }
         #endregion
     }
 }

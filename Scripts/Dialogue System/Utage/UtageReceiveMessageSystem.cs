@@ -15,23 +15,33 @@ namespace Dialogue_System.Utage
             {
                 case "Title":
                 {
+                    if (ShowChapterTitle is null)
+                    {
+                        Debug.Log($"{name} > {GetType().Name} > {nameof(ShowChapterTitle)} cannot be null.");
+                        Destroy(gameObject);
+                        return;
+                    }
+
                     var title = command.ParseCellOptional(AdvColumnName.Arg2, "");
                     var subtitle = command.ParseCellOptional(AdvColumnName.Arg3, "");
                     var duration = command.ParseCellOptional(AdvColumnName.Arg6, 3);
                     
-                    ShowChapterTitle?.Invoke(title, subtitle, duration);
+                    ShowChapterTitle.Invoke(title, subtitle, duration);
                     break;
                 }
                 case "ChangeScene":
                 {
+                    if (ChangeScene is null)
+                    {
+                        Debug.Log($"{name} > {GetType().Name} > {nameof(ChangeScene)} cannot be null.");
+                        Destroy(gameObject);
+                        return;
+                    }
+                    
                     var label = command.ParseCellOptional(AdvColumnName.Arg2, "");
                     
-                    ChangeScene?.Invoke(label);
+                    ChangeScene.Invoke(label);
                     break;
-                }
-                default:
-                {
-                    throw new Exception("未知指令");
                 }
             }
         }

@@ -864,13 +864,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 802cdcf9988a4e1ebed8c35c282e4412, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::System.Singleton.SceneLoadSystem
-  DoAnimation: {fileID: 637459041}
-  UI: {fileID: 1213545547}
-  UICanvasGroup: {fileID: 1213545552}
-  ProgressBar: {fileID: 934452654}
-  HandlerRect: {fileID: 456788491}
-  LoadingImage: {fileID: 579325989}
-  CompleteImage: {fileID: 135857658}
+  animation: {fileID: 637459041}
+  canvas: {fileID: 1213545551}
+  canvasGroup: {fileID: 1213545552}
+  progressBar: {fileID: 934452654}
+  handlerRect: {fileID: 456788491}
+  loadingImage: {fileID: 579325991}
+  completeImage: {fileID: 135857660}
 --- !u!1 &647091448
 GameObject:
   m_ObjectHideFlags: 0
@@ -1293,7 +1293,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6300b76e8bc49ddbb87c88ad7dbc0ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::System.Title.Main.TitleSystem
-  MessageSystem: {fileID: 1602382687}
   StartButton: {fileID: 1748143738}
   OptionButton: {fileID: 1028408284}
   QuitButton: {fileID: 1732909253}
@@ -1400,14 +1399,15 @@ MonoBehaviour:
   Rect: {fileID: 1028408282}
   TitleTMP: {fileID: 0}
   DoAnimation: {fileID: 1028408283}
-  onPointerEnterScale:
+  OnPointerEnterScale:
     EndValue: {x: 1.1, y: 1.1, z: 1}
-    Duration: 0.2
+    Duration: 0.1
     Ease: 18
-  onPointerExitScale:
+  OnPointerExitScale:
     EndValue: {x: 1, y: 1, z: 1}
-    Duration: 0.2
+    Duration: 0.1
     Ease: 18
+  Interactable: 1
 --- !u!114 &1028408285
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1490,7 +1490,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1051050590}
-  - component: {fileID: 1051050591}
   m_Layer: 0
   m_Name: Option System
   m_TagString: Untagged
@@ -1518,19 +1517,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1051050591
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1051050589}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8930467f8d9e4eb68dae37119fbc561d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::System.Message.Child.OptionSystem
-  PopUpUI: {fileID: 1954989852215440139}
 --- !u!1 &1194379206
 GameObject:
   m_ObjectHideFlags: 0
@@ -1722,7 +1708,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1602382688}
-  - component: {fileID: 1602382687}
   m_Layer: 0
   m_Name: Message System
   m_TagString: Untagged
@@ -1730,24 +1715,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1602382687
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1602382686}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5bb736260b1447a7a56ff734841d788d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::System.Message.Main.MessageSystem
-  TipSystem: {fileID: 0}
-  SwitchSystem: {fileID: 0}
-  ItemGetSystem: {fileID: 0}
-  TempItems: []
-  DefeatSystem: {fileID: 0}
-  OptionSystem: {fileID: 1051050591}
 --- !u!4 &1602382688
 Transform:
   m_ObjectHideFlags: 0
@@ -1859,6 +1826,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -2041,14 +2009,15 @@ MonoBehaviour:
   Rect: {fileID: 1732909251}
   TitleTMP: {fileID: 0}
   DoAnimation: {fileID: 1732909252}
-  onPointerEnterScale:
+  OnPointerEnterScale:
     EndValue: {x: 1.1, y: 1.1, z: 1}
-    Duration: 0.2
+    Duration: 0.1
     Ease: 18
-  onPointerExitScale:
+  OnPointerExitScale:
     EndValue: {x: 1, y: 1, z: 1}
-    Duration: 0.2
+    Duration: 0.1
     Ease: 18
+  Interactable: 1
 --- !u!114 &1732909254
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2153,14 +2122,15 @@ MonoBehaviour:
   Rect: {fileID: 1748143736}
   TitleTMP: {fileID: 0}
   DoAnimation: {fileID: 1748143737}
-  onPointerEnterScale:
+  OnPointerEnterScale:
     EndValue: {x: 1.1, y: 1.1, z: 1}
-    Duration: 0.2
+    Duration: 0.1
     Ease: 18
-  onPointerExitScale:
+  OnPointerExitScale:
     EndValue: {x: 1, y: 1, z: 1}
-    Duration: 0.2
+    Duration: 0.1
     Ease: 18
+  Interactable: 1
 --- !u!114 &1748143739
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2301,17 +2271,6 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 1
   m_TargetDisplay: 0
---- !u!114 &1954989852215440139 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 288886024379278938, guid: a6703cf87d79f61489a496054da7801f, type: 3}
-  m_PrefabInstance: {fileID: 2860508366255161966}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f003f9bdf6424510818d3321efea89bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::General.Object.PopUpUI
 --- !u!1001 &2860508366255161966
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -6,7 +6,7 @@ namespace Explore_System.System
 {
     public partial class ExploreSystem
     {
-        [Header("Ingredient Settings")]
+        [field: Header("Ingredient Settings")]
         [field: SerializeField] private IngredientSpawnPoint[] ingredientSpawnPoints;
 
         private void InitializeResource()

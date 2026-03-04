@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using Title_System;
 using UnityEngine;
 using Utage;
@@ -11,20 +9,17 @@ namespace Dialogue_System.Custom
         [field: Header("Utage")]
         [field: SerializeField] private AdvEngine AdvEngine;
         
-        private readonly Queue<Action> ActiveActions = new();
-
-        private void OnEnable()
+        private void Awake()
         {
             TitleSystem.StartScenario += StartScenario;
-            ActiveActions.Enqueue(() => TitleSystem.StartScenario -= StartScenario);
             
             // BattleSystem.StartScenario += StartScenario;
             // ActiveActions.Enqueue(() => BattleSystem.StartScenario -= StartScenario);
         }
 
-        private void OnDisable()
+        private void OnDestroy()
         {
-            while (ActiveActions.Count > 0) ActiveActions.Dequeue()?.Invoke();
+            TitleSystem.StartScenario -= StartScenario;
         }
 
         private void StartScenario(string label, int page)

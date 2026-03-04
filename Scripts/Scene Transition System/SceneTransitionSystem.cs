@@ -1,12 +1,9 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using Animation_System.DOTween;
 using Animation_System.DOTween.Basic;
-using Battle_System.System.Main;
 using DG.Tweening;
 using Dialogue_System.Utage;
-using Restaurant_System.Object.Cookware.System;
 using Title_System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -18,81 +15,78 @@ namespace Scene_Transition_System
     internal sealed class SceneTransitionSystem : MonoBehaviour
     {
         [field: Header("Child System")]
-        [field: SerializeField] private DoAnimation DoAnimation;
+        [field: SerializeField] private new DoAnimation animation;
         
         [field: Header("Loading UI")]
-        [field: SerializeField] private GameObject UI;
-        [field: SerializeField] private CanvasGroup UICanvasGroup;
-        [field: SerializeField] private Slider ProgressBar;
+        [field: SerializeField] private Canvas canvas;
+        [field: SerializeField] private CanvasGroup canvasGroup;
+        [field: SerializeField] private Slider progressBar;
         
         [field: Header("Progress Bar Handler")]
-        [field: SerializeField] private RectTransform HandlerRect;
-        [field: SerializeField] private GameObject LoadingImage;
-        [field: SerializeField] private GameObject CompleteImage;
+        [field: SerializeField] private RectTransform handlerRect;
+        [field: SerializeField] private Image loadingImage;
+        [field: SerializeField] private Image completeImage;
         
-        private IEnumerator ChangeSceneCor;
+        private IEnumerator _changeSceneCor;
 
-        private static GameObject Instance;
-        
-        private readonly Queue<Action> ActiveActions = new();
+        private static GameObject _instance;
 
         private void Awake()
         {
-            if (Instance is not null)
-            {
-                Destroy(gameObject);
-                return;
-            }
+            #region Singleton
+                if (_instance is not null)
+                {
+                    Destroy(gameObject);
+                    return;
+                }
 
-            Instance = gameObject;
-            DontDestroyOnLoad(gameObject);
-        }
-
-        private void OnEnable()
-        {
+                _instance = gameObject;
+                DontDestroyOnLoad(gameObject);
+            #endregion
+            
             TitleSystem.OnClickStartGameButton += ChangeScene;
-            ActiveActions.Enqueue(() => TitleSystem.OnClickStartGameButton -= ChangeScene);
-            
             UtageReceiveMessageSystem.ChangeScene += ChangeScene;
-            ActiveActions.Enqueue(() => UtageReceiveMessageSystem.ChangeScene -= ChangeScene);
-            
-            // BattleSystem.ReloadScene += ReloadScene;
-            // ActiveActions.Enqueue(() => BattleSystem.ReloadScene -= ReloadScene);
-            
-            // BattleSystem.ChangeScene += ChangeScene;
-            // ActiveActions.Enqueue(() => BattleSystem.ChangeScene -= ChangeScene);
         }
 
         private void OnDisable()
         {
-            while (ActiveActions.Count > 0) ActiveActions.Dequeue()?.Invoke();
-            if (ChangeSceneCor is not null) { StopCoroutine(ChangeSceneCor); ChangeSceneCor = null; }
+            if (_changeSceneCor is not null)
+            {
+                StopCoroutine(_changeSceneCor);
+                _changeSceneCor = null;
+            }
+        }
+
+        private void OnDestroy()
+        {
+            TitleSystem.OnClickStartGameButton -= ChangeScene;
+            UtageReceiveMessageSystem.ChangeScene -= ChangeScene;
         }
         
         private void ChangeScene(string sceneName)
         {
-            ChangeSceneCor = ChangeSceneCoroutine(sceneName);
-            StartCoroutine(ChangeSceneCor);
+            _changeSceneCor = ChangeSceneCoroutine(sceneName);
+            StartCoroutine(_changeSceneCor);
         }
 
         private void ChangeScene(string sceneName, Action onComplete)
         {
-            ChangeSceneCor = ChangeSceneCoroutine(sceneName, onComplete);
-            StartCoroutine(ChangeSceneCor);
+            _changeSceneCor = ChangeSceneCoroutine(sceneName, onComplete);
+            StartCoroutine(_changeSceneCor);
         }
 
-        private void ReloadScene()
-        {
-            ChangeSceneCor = ChangeSceneCoroutine(SceneManager.GetActiveScene().name);
-            StartCoroutine(ChangeSceneCor);
-        }
+        // private void ReloadScene()
+        // {
+        //     _changeSceneCor = ChangeSceneCoroutine(SceneManager.GetActiveScene().name);
+        //     StartCoroutine(_changeSceneCor);
+        // }
 
         private IEnumerator ChangeSceneCoroutine(string sceneName, Action onComplete = null)
         {
                 var complete = false;
-                UI.SetActive(true);
-                DoAnimation.DoFade_CanvasGroup(
-                    canvasGroup: UICanvasGroup,
+                canvas.gameObject.SetActive(true);
+                animation.DoFade_CanvasGroup(
+                    canvasGroup: canvasGroup,
                     settings: new DoFade_CanvasGroup(1, 1, Ease.Linear),
                     onComplete: () =>
                     {
@@ -102,23 +96,23 @@ namespace Scene_Transition_System
                 
                 var operation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
                 operation.allowSceneActivation = false;
-                while (ProgressBar.value < .9f)
+                while (progressBar.value < .9f)
                 {
                     var progress = Mathf.Clamp01(operation.progress / .9f);
-                    ProgressBar.SetValueWithoutNotify(progress);
+                    progressBar.SetValueWithoutNotify(progress);
                     yield return null;
                 }
                 
                 complete = false;
-                DoAnimation.DoScale_UI(
-                    rect: HandlerRect,
+                animation.DoScale_UI(
+                    rect: handlerRect,
                     settings: new DoScale(Vector2.zero, .5f, Ease.OutBounce),
                     onComplete: () =>
                     {
-                        LoadingImage.SetActive(false);
-                        CompleteImage.SetActive(true);
-                        DoAnimation.DoScale_UI(
-                            rect: HandlerRect,
+                        loadingImage.gameObject.SetActive(false);
+                        completeImage.gameObject.SetActive(true);
+                        animation.DoScale_UI(
+                            rect: handlerRect,
                             settings: new DoScale(Vector2.one, .5f, Ease.OutBounce),
                             onComplete: () =>
                             {
@@ -129,18 +123,19 @@ namespace Scene_Transition_System
                 
                 operation.allowSceneActivation = true;
                 complete = false;
-                DoAnimation.DoFade_CanvasGroup(
-                    canvasGroup: UICanvasGroup,
+                animation.DoFade_CanvasGroup(
+                    canvasGroup: canvasGroup,
                     settings: new DoFade_CanvasGroup(0, 1, Ease.Linear),
                     onComplete: () =>
                     {
-                        LoadingImage.SetActive(true);
-                        CompleteImage.SetActive(false);
-                        UI.SetActive(false);
+                        loadingImage.gameObject.SetActive(true);
+                        completeImage.gameObject.SetActive(false);
+                        canvas.gameObject.SetActive(false);
                         complete = true;
                     });
                 yield return new WaitUntil(predicate: () => complete);
                 
+                progressBar.SetValueWithoutNotify(0);
                 onComplete?.Invoke();
         }
     }
