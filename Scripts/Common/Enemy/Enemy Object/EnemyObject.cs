@@ -7,6 +7,10 @@ namespace Common.Enemy.Enemy_Object
 {
     public partial class EnemyObject : MonoBehaviour
     {
+        [field: Header("Components")]
+        [field: SerializeField] private Transform root;
+                                public Transform Root => root;
+        
         [field: Header("Data")]
         [field: SerializeField] private EnemySO enemyData;
         

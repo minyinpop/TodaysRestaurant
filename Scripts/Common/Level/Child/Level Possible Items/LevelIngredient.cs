@@ -15,7 +15,7 @@ namespace Common.Level.Child.Level_Possible_Items
         {
             foreach (var entry in levelIngredientEntries)
             {
-                if (entry.IngredientData == null)
+                if (entry.IngredientData is null)
                 {
                     Debug.Log($"{GetType().Name} > {nameof(entry.IngredientData)} cannot be null.");
                 }
@@ -28,6 +28,11 @@ namespace Common.Level.Child.Level_Possible_Items
                 if (entry.SpawnAmount.Max < 0)
                 {
                     Debug.Log($"{GetType().Name} > {nameof(entry.SpawnAmount.Max)} cannot be negative.");
+                }
+
+                if (entry.SpawnAmount.Max < entry.SpawnAmount.Min)
+                {
+                    Debug.Log($"{nameof(entry.SpawnAmount.Max)} cannot be less than {nameof(entry.SpawnAmount.Min)}.");
                 }
             }
         }

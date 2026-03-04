@@ -1,3 +1,4 @@
+using Common.Enemy.Enemy_Object;
 using Common.Value;
 using UnityEngine;
 
@@ -10,6 +11,8 @@ namespace Common.Enemy.Data
             [field: Header("Information")]
             [field: SerializeField] private Sprite enemyImage;
                                     public Sprite EnemyImage => enemyImage;
+            [field: SerializeField] private EnemyObject enemyObject;
+                                    public EnemyObject EnemyObject => enemyObject;
         #endregion
         
         #region Attribute
@@ -24,28 +27,38 @@ namespace Common.Enemy.Data
 
         private void OnValidate()
         {
-            if (enemyImage == null)
-            {
-                Debug.Log($"{name} > {GetType().Name} > {nameof(enemyImage)} cannot be null.");
-                return;
-            }
+            #region Information
+                if (enemyImage == null)
+                {
+                    Debug.Log($"{name} > {GetType().Name} > {nameof(enemyImage)} cannot be null.");
+                    return;
+                }
 
-            if (health < 0)
-            {
-                Debug.Log($"{name} > {GetType().Name} > {nameof(health)} cannot be negative.");
-                return;
-            }
+                if (EnemyObject == null)
+                {
+                    Debug.Log($"{name} > {GetType().Name} > {nameof(enemyObject)} cannot be null.");
+                    return;
+                }
+            #endregion
 
-            if (damage.BasicDamage < 0)
-            {
-                Debug.Log($"{name} > {GetType().Name} > {nameof(damage.BasicDamage)} cannot be negative.");
-                return;
-            }
-            
-            if (moveSpeed < 0)
-            {
-                Debug.Log($"{name} > {GetType().Name} > {nameof(moveSpeed)} cannot be negative.");
-            }
+            #region Attribute
+                if (health < 0)
+                {
+                    Debug.Log($"{name} > {GetType().Name} > {nameof(health)} cannot be negative.");
+                    return;
+                }
+
+                if (damage.BasicDamage < 0)
+                {
+                    Debug.Log($"{name} > {GetType().Name} > {nameof(damage.BasicDamage)} cannot be negative.");
+                    return;
+                }
+                
+                if (moveSpeed < 0)
+                {
+                    Debug.Log($"{name} > {GetType().Name} > {nameof(moveSpeed)} cannot be negative.");
+                }
+            #endregion
         }
     }
 }

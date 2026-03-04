@@ -93,7 +93,7 @@ namespace UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Se
             #region Enemy
                 InstantiateContainer(enemySlotContainerParent, out container);
 
-                foreach (var enemy in levelData.LevelEnemy.EnemiesData)
+                foreach (var entry in levelData.LevelEnemy.LevelEnemyEntries)
                 {
                     if (!container.CanAddSlot())
                     {
@@ -101,7 +101,7 @@ namespace UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Se
                     }
                         
                     var newSlot = Instantiate(slotPrefab);
-                    newSlot.Initialize(enemy);
+                    newSlot.Initialize(entry.EnemyData);
                         
                     container.TryAddSlot(newSlot);
                 }
