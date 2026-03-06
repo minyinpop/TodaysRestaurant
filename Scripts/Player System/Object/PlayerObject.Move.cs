@@ -17,12 +17,12 @@ namespace Player_System.Object
             if (rig.linearVelocity == Vector3.zero && _isWalking)
             {
                 _isWalking = false;
-                IdleState();
+                _stateMachine.ChangeState(_idleState);
             }
             else if (rig.linearVelocity != Vector3.zero && !_isWalking)
             {
                 _isWalking = true;
-                WalkState();
+                _stateMachine.ChangeState(_moveState);
             }
             
             var direction = InputSystem.WalkDirection;

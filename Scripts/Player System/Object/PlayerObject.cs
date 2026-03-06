@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Player_System.Object
 {
-    public partial class PlayerObject : MonoBehaviour
+    public partial class PlayerObject : MonoBehaviour, IAttackable
     {
         [field: Header("Player System")]
         [field: SerializeField] private PlayerSystem playerSystem;
@@ -15,7 +15,8 @@ namespace Player_System.Object
         private readonly StateMachine _stateMachine = new();
 
         private IState _idleState;
-        private IState _walkState;
+        private IState _moveState;
+        private IState _hurtState;
         
         private Action OnPerformInteractCleanupAction;
 
@@ -64,10 +65,19 @@ namespace Player_System.Object
                 {
                 });
 
-            _walkState = new OnWalk(
+            _moveState = new OnWalk(
                 onEnter: () =>
                 {
                     PlayWalkAnimation();
+                },
+                onExit: () =>
+                {
+                });
+
+            _hurtState = new OnHurt(
+                onEnter: () =>
+                {
+                    Debug.Log("A");
                 },
                 onExit: () =>
                 {
@@ -81,7 +91,7 @@ namespace Player_System.Object
             
             StartDetectInteractableObject();
 
-            InitializeState();
+            _stateMachine.InitializeState(_idleState);
         }
 
         private void FixedUpdate()
@@ -100,27 +110,15 @@ namespace Player_System.Object
             
             OnPerformInteractCleanupAction?.Invoke();
         }
-        
-        #region StateMachine
-            private void InitializeState()
-            {
-                IdleState();
-            }
-            
-            private void IdleState()
-            {
-                _stateMachine.ChangeState(_idleState);
-            }
-            
-            private void WalkState()
-            {
-                _stateMachine.ChangeState(_walkState);
-            }
-        #endregion
 
         private void OnPerformInteract()
         {
             InteractWithObject();
+        }
+
+        public void TakeDamage(int damage)
+        {
+            _stateMachine.ChangeState(_hurtState);
         }
     }
 }

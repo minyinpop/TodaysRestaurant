@@ -37,9 +37,9 @@ namespace Dialogue_System.Utage
                         Destroy(gameObject);
                         return;
                     }
-                    
+
                     var label = command.ParseCellOptional(AdvColumnName.Arg2, "");
-                    
+                    Debug.Log(label);
                     ChangeScene.Invoke(label);
                     break;
                 }

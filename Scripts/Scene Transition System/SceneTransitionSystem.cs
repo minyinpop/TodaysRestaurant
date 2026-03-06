@@ -83,6 +83,8 @@ namespace Scene_Transition_System
 
         private IEnumerator ChangeSceneCoroutine(string sceneName, Action onComplete = null)
         {
+            Debug.Log(sceneName);
+            
                 var complete = false;
                 canvas.gameObject.SetActive(true);
                 animation.DoFade_CanvasGroup(

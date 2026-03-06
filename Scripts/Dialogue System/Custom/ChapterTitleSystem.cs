@@ -6,11 +6,15 @@ using Febucci.UI;
 using Febucci.UI.Effects;
 using TMPro;
 using UnityEngine;
+using Utage;
 
 namespace Dialogue_System.Custom
 {
     internal sealed class ChapterTitleSystem : MonoBehaviour
     {
+        [field: Header("Components")]
+        [field: SerializeField] private AdvEngine advEngine;
+        
         [field: Header("Appearance Settings")]
         [field: SerializeField] private AppearanceScriptableBase Appearance;
         [field: SerializeField] private AppearanceScriptableBase Disappearance;
@@ -23,20 +27,31 @@ namespace Dialogue_System.Custom
         [field: SerializeField] private TextMeshProUGUI SubtitleText;
         [field: SerializeField] private TypewriterByWord SubtitleTypewriter;
         
-        private readonly Queue<Action> ActiveActions = new();
-
         private IEnumerator ShowCor;
         
-        private void OnEnable()
+        private void Awake()
         {
+            if (advEngine is null)
+            {
+                Debug.Log($"{nameof(ChapterTitleSystem)} > {nameof(advEngine)} cannot be null.)");
+                Destroy(gameObject);
+                return;
+            }
+
             UtageReceiveMessageSystem.ShowChapterTitle += Show;
-            ActiveActions.Enqueue(() => UtageReceiveMessageSystem.ShowChapterTitle -= Show);
         }
 
         private void OnDisable()
         {
-            while (ActiveActions.Count > 0) ActiveActions.Dequeue()?.Invoke();
-            if (ShowCor is not null) { StopCoroutine(ShowCor); ShowCor = null; }
+            if (ShowCor is not null)
+            {
+                StopCoroutine(ShowCor); ShowCor = null;
+            }
+        }
+
+        private void OnDestroy()
+        {
+            UtageReceiveMessageSystem.ShowChapterTitle -= Show;
         }
 
         private void Show(string title, string subtitle, float duration)
@@ -47,6 +62,8 @@ namespace Dialogue_System.Custom
 
             IEnumerator ShowCoroutine()
             {
+                advEngine.Config.NoSkip = true;
+                
                 TitleTypewriter.ShowText(title);
                 SubtitleTypewriter.ShowText(subtitle);
                 
@@ -59,6 +76,8 @@ namespace Dialogue_System.Custom
                 yield return new WaitForSeconds(Disappearance.baseDuration);
                 TitleTypewriter.StartDisappearingText();
                 yield return new WaitForSeconds(Disappearance.baseDuration);
+                
+                advEngine.Config.NoSkip = false;
             }
         }
     }

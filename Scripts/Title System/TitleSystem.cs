@@ -11,7 +11,8 @@ namespace Title_System
         [field: SerializeField] private Button OptionButton;
         [field: SerializeField] private Button QuitButton;
 
-        public static event Action<string, Action> OnClickStartGameButton;
+        // public static event Action<string, Action> OnClickStartGameButton;
+        public static event Action<string> OnClickStartGameButton;
         public static event Action<string, int> StartScenario;
 
         private void Awake()
@@ -31,12 +32,21 @@ namespace Title_System
         #region Button
             private void OnStartButtonClicked()
             {
-                OnClickStartGameButton?.Invoke("Dialogue ( Dev )",
-                    () =>
-                    {
-                        // onComplete
-                        StartScenario?.Invoke("Start", 0);
-                    });
+                // OnClickStartGameButton?.Invoke("Dialogue ( Dev )",
+                //     () =>
+                //     {
+                //         // onComplete
+                //         StartScenario?.Invoke("Start", 0);
+                //     });
+                
+                if (OnClickStartGameButton is null)
+                {
+                    Debug.Log($"{name} > {GetType().Name} > {nameof(OnClickStartGameButton)} cannot be null.)");
+                    Destroy(gameObject);
+                    return;
+                }
+
+                OnClickStartGameButton.Invoke("Lobby System");
             }
 
             private void OnOptionButtonClicked()

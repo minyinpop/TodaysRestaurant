@@ -704,6 +704,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -1173,6 +1174,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 1
   m_lineSpacingMax: 0
@@ -1657,6 +1659,12 @@ MonoBehaviour:
   onEndLoadSaveData:
     m_PersistentCalls:
       m_Calls: []
+  onBeforeLoadSaveData:
+    m_PersistentCalls:
+      m_Calls: []
+  onAfterLoadSaveData:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &456724007
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1983,6 +1991,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18c2466e9b2471641a3dc88890f20b44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  engine: {fileID: 0}
   fadeVolume: {fileID: 613978473}
   imageEffectVolume: {fileID: 1182504621}
 --- !u!1 &546995296
@@ -2165,7 +2174,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1824147697}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &575286818
 MonoBehaviour:
@@ -2550,6 +2559,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -2794,6 +2804,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18c2466e9b2471641a3dc88890f20b44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  engine: {fileID: 0}
   fadeVolume: {fileID: 2124818971}
   imageEffectVolume: {fileID: 1685206440}
 --- !u!1 &669243363
@@ -3191,6 +3202,7 @@ MonoBehaviour:
   m_VerticalAlignment: 4096
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 1
   m_lineSpacingMax: 0
@@ -3820,6 +3832,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 1
   m_lineSpacingMax: 0
@@ -4087,12 +4100,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 957308024}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1824147697}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &957308026
 MonoBehaviour:
@@ -4797,7 +4810,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2000369953}
-  m_Father: {fileID: 1824147697}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1196288178
 MonoBehaviour:
@@ -4811,6 +4824,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a5869e989c34de6a58b76d06bdc9f96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::System.Dialogue.Custom.ChapterTitleSystem
+  advEngine: {fileID: 456724002}
   Appearance: {fileID: 11400000, guid: cdfaa0da8cb1f3c4faa9810bdffd51ff, type: 2}
   Disappearance: {fileID: 11400000, guid: cdfaa0da8cb1f3c4faa9810bdffd51ff, type: 2}
   TitleText: {fileID: 1424369601}
@@ -5374,6 +5388,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 1
   m_lineSpacingMax: 0
@@ -5510,6 +5525,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 1
   m_lineSpacingMax: 0
@@ -5873,6 +5889,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 1
   m_lineSpacingMax: 0
@@ -6096,6 +6113,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 12
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -6423,6 +6441,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -6781,6 +6800,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 4
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 36
   m_lineSpacingMax: 0
@@ -7916,6 +7936,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 1
   m_lineSpacingMax: 0
@@ -8069,6 +8090,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 1
   m_lineSpacingMax: 0
@@ -8491,10 +8513,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 575286817}
-  - {fileID: 957308025}
-  - {fileID: 1196288177}
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1830932798
@@ -9167,6 +9186,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 1
   m_lineSpacingMax: 0
@@ -9217,3 +9237,6 @@ SceneRoots:
   - {fileID: 669243365}
   - {fileID: 1484478248}
   - {fileID: 1824147697}
+  - {fileID: 575286817}
+  - {fileID: 957308025}
+  - {fileID: 1196288177}
