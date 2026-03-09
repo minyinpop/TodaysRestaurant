@@ -2,9 +2,11 @@ using System;
 using System.Collections;
 using Animation_System.DOTween;
 using Animation_System.DOTween.Basic;
+using Common.Level.Main;
 using DG.Tweening;
-using Dialogue_System.Utage;
+using Explore_System.System;
 using Title_System;
+using UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Select_UI.Main;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -14,7 +16,7 @@ namespace Scene_Transition_System
     [RequireComponent(typeof(DoAnimation))]
     internal sealed class SceneTransitionSystem : MonoBehaviour
     {
-        [field: Header("Child System")]
+        [field: Header("Components")]
         [field: SerializeField] private new DoAnimation animation;
         
         [field: Header("Loading UI")]
@@ -27,9 +29,15 @@ namespace Scene_Transition_System
         [field: SerializeField] private Image loadingImage;
         [field: SerializeField] private Image completeImage;
         
+        [field: Header("Scene Name")]
+        [field: SerializeField] private string sceneNameForDialogue;
+        [field: SerializeField] private string sceneNameForExplore;
+        
         private IEnumerator _changeSceneCor;
 
         private static GameObject _instance;
+
+        private LevelSO _pendingLevelData;
 
         private void Awake()
         {
@@ -44,8 +52,12 @@ namespace Scene_Transition_System
                 DontDestroyOnLoad(gameObject);
             #endregion
             
-            TitleSystem.OnClickStartGameButton += ChangeScene;
-            UtageReceiveMessageSystem.ChangeScene += ChangeScene;
+            SceneManager.sceneLoaded += OnSceneLoaded;
+            
+            TitleSystem.OnClickStartGameButton += GoToDialogue;
+            LevelSelectUI.OnClickLevelStartButton += GoToExplore;
+            
+            // UtageReceiveMessageSystem.ChangeScene += GoToDialogue;
         }
 
         private void OnDisable()
@@ -59,20 +71,44 @@ namespace Scene_Transition_System
 
         private void OnDestroy()
         {
-            TitleSystem.OnClickStartGameButton -= ChangeScene;
-            UtageReceiveMessageSystem.ChangeScene -= ChangeScene;
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+            
+            TitleSystem.OnClickStartGameButton -= GoToDialogue;
+            LevelSelectUI.OnClickLevelStartButton -= GoToExplore;
+            
+            // UtageReceiveMessageSystem.ChangeScene -= GoToDialogue;
         }
         
-        private void ChangeScene(string sceneName)
+        // private void ChangeScene(string sceneName, Action onComplete)
+        // {
+        //     _changeSceneCor = ChangeSceneCoroutine(sceneName, onComplete);
+        //     StartCoroutine(_changeSceneCor);
+        // }
+        
+        private void GoToDialogue(string sceneName)
         {
             _changeSceneCor = ChangeSceneCoroutine(sceneName);
             StartCoroutine(_changeSceneCor);
         }
 
-        private void ChangeScene(string sceneName, Action onComplete)
+        private void GoToExplore(LevelSO levelData)
         {
-            _changeSceneCor = ChangeSceneCoroutine(sceneName, onComplete);
+            _pendingLevelData = levelData;
+            
+            _changeSceneCor = ChangeSceneCoroutine(sceneNameForExplore);
             StartCoroutine(_changeSceneCor);
+        }
+
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            if (scene.name == sceneNameForDialogue)
+            {
+            }
+            else if (scene.name == sceneNameForExplore)
+            {
+                var exploreSystem = FindFirstObjectByType<ExploreSystem>();
+                exploreSystem.StartSystem(_pendingLevelData);
+            }
         }
 
         // private void ReloadScene()
@@ -96,49 +132,57 @@ namespace Scene_Transition_System
                     });
                 yield return new WaitUntil(() => complete);
                 
-                var operation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
-                operation.allowSceneActivation = false;
-                while (progressBar.value < .9f)
+                var targetScene = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
+                if (targetScene is null)
                 {
-                    var progress = Mathf.Clamp01(operation.progress / .9f);
-                    progressBar.SetValueWithoutNotify(progress);
-                    yield return null;
+                    Debug.Log($"{name} > {GetType().Name} > {nameof(targetScene)} cannot find the new scene.");
+                    Destroy(gameObject);
                 }
-                
-                complete = false;
-                animation.DoScale_UI(
-                    rect: handlerRect,
-                    settings: new DoScale(Vector2.zero, .5f, Ease.OutBounce),
-                    onComplete: () =>
+                else
+                {
+                    targetScene.allowSceneActivation = false;
+                    while (progressBar.value < .9f)
                     {
-                        loadingImage.gameObject.SetActive(false);
-                        completeImage.gameObject.SetActive(true);
-                        animation.DoScale_UI(
-                            rect: handlerRect,
-                            settings: new DoScale(Vector2.one, .5f, Ease.OutBounce),
-                            onComplete: () =>
-                            {
-                                complete = true;
-                            });
-                    });
-                yield return new WaitUntil(() => complete);
-                
-                operation.allowSceneActivation = true;
-                complete = false;
-                animation.DoFade_CanvasGroup(
-                    canvasGroup: canvasGroup,
-                    settings: new DoFade_CanvasGroup(0, 1, Ease.Linear),
-                    onComplete: () =>
-                    {
-                        loadingImage.gameObject.SetActive(true);
-                        completeImage.gameObject.SetActive(false);
-                        canvas.gameObject.SetActive(false);
-                        complete = true;
-                    });
-                yield return new WaitUntil(predicate: () => complete);
-                
-                progressBar.SetValueWithoutNotify(0);
-                onComplete?.Invoke();
+                        var progress = Mathf.Clamp01(targetScene.progress / .9f);
+                        progressBar.SetValueWithoutNotify(progress);
+                        yield return null;
+                    }
+                    
+                    complete = false;
+                    animation.DoScale_UI(
+                        rect: handlerRect,
+                        settings: new DoScale(Vector2.zero, .5f, Ease.OutBounce),
+                        onComplete: () =>
+                        {
+                            loadingImage.gameObject.SetActive(false);
+                            completeImage.gameObject.SetActive(true);
+                            animation.DoScale_UI(
+                                rect: handlerRect,
+                                settings: new DoScale(Vector2.one, .5f, Ease.OutBounce),
+                                onComplete: () =>
+                                {
+                                    complete = true;
+                                });
+                        });
+                    yield return new WaitUntil(() => complete);
+                    
+                    targetScene.allowSceneActivation = true;
+                    complete = false;
+                    animation.DoFade_CanvasGroup(
+                        canvasGroup: canvasGroup,
+                        settings: new DoFade_CanvasGroup(0, 1, Ease.Linear),
+                        onComplete: () =>
+                        {
+                            loadingImage.gameObject.SetActive(true);
+                            completeImage.gameObject.SetActive(false);
+                            canvas.gameObject.SetActive(false);
+                            complete = true;
+                        });
+                    yield return new WaitUntil(predicate: () => complete);
+                    
+                    progressBar.SetValueWithoutNotify(0);
+                    onComplete?.Invoke();
+                }
         }
     }
 }

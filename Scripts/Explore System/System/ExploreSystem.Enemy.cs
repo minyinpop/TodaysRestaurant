@@ -11,7 +11,7 @@ namespace Explore_System.System
 
         private void InitializeEnemy()
         {
-            var _remainingEnemyEntry = levelData.LevelEnemy.LevelEnemyEntries.ToList();
+            var _remainingEnemyEntry = _levelData.LevelEnemy.LevelEnemyEntries.ToList();
             var _remainingSpawnPoints = enemySpawnPoints.ToList();
 
             while (_remainingEnemyEntry.Count > 0 && _remainingSpawnPoints.Count > 0)

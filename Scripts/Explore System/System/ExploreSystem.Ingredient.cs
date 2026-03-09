@@ -11,7 +11,7 @@ namespace Explore_System.System
 
         private void InitializeIngredient()
         {
-            var _remainingIngredientEntry = levelData.LevelIngredient.LevelIngredientEntries.ToList();
+            var _remainingIngredientEntry = _levelData.LevelIngredient.LevelIngredientEntries.ToList();
             var _remainingSpawnPoints = ingredientSpawnPoints.ToList();
 
             while (_remainingIngredientEntry.Count > 0 && _remainingSpawnPoints.Count > 0)

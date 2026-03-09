@@ -17,11 +17,12 @@ namespace UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Se
         
         [field: Header("Data")]
         [field: SerializeField] private LevelSO defaultLevel;
-
-        private LevelSO _currentFocusLevel;
-
+                                private LevelSO _currentFocusLevel;
+                                
         private readonly Queue<Action> _levelPickButtonCleanupActions = new();
         private Action _levelStartButtonCleanupAction;
+        
+        public static event Action<LevelSO> OnClickLevelStartButton;
 
         private void Awake()
         {
@@ -50,8 +51,8 @@ namespace UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Se
 
                     foreach (var levelPickButton in levelPickButtons)
                     {
-                        levelPickButton.OnClick += OnClickLevelPickButton;
-                        _levelPickButtonCleanupActions.Enqueue(() => levelPickButton.OnClick -= OnClickLevelPickButton);
+                        levelPickButton.OnClick += OnLevelPickButtonClicked;
+                        _levelPickButtonCleanupActions.Enqueue(() => levelPickButton.OnClick -= OnLevelPickButtonClicked);
                     }
                 #endregion
                 
@@ -60,22 +61,29 @@ namespace UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Se
                 #endregion
                 
                 #region Level Start Button
-                    levelStartButton.OnClick += OnClickLevelStartButton;
-                    _levelStartButtonCleanupAction = () => levelStartButton.OnClick -= OnClickLevelStartButton;
+                    levelStartButton.OnClick += OnLevelStartButtonClicked;
+                    _levelStartButtonCleanupAction = () => levelStartButton.OnClick -= OnLevelStartButtonClicked;
                 #endregion
             }
 
             return;
 
-            void OnClickLevelPickButton(LevelSO levelData)
+            void OnLevelPickButtonClicked(LevelSO levelData)
             {
                 _currentFocusLevel = levelData;
                 levelInformationUI.Refresh(_currentFocusLevel);
             }
             
-            void OnClickLevelStartButton()
+            void OnLevelStartButtonClicked()
             {
-                // TODO Go to Explore Scene.
+                if (OnClickLevelStartButton == null)
+                {
+                    Debug.Log($"{name} > {GetType().Name} > {nameof(OnClickLevelStartButton)} cannot be null.");
+                    Destroy(gameObject);
+                    return;
+                }
+                
+                OnClickLevelStartButton.Invoke(_currentFocusLevel);
             }
         }
 
