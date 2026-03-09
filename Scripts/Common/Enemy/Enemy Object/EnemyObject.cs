@@ -178,7 +178,7 @@ namespace Common.Enemy.Enemy_Object
 
         private void OnAttack()
         {
-            _attackTarget.GetComponent<IAttackable>().TakeDamage(0);
+            _attackTarget?.GetComponent<IAttackable>().TakeDamage(0);
         }
     }
 }

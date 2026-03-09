@@ -35,7 +35,7 @@ namespace Explore_System.System
 
         public void StartSystem()
         {
-            InitializeResource();
+            InitializeIngredient();
             InitializeEnemy();
         }
 

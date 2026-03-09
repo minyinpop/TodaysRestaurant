@@ -15,7 +15,7 @@ namespace Explore_System.Object
             if (spawnPoint == null)
             {
                 Debug.Log($"{gameObject.name} > {GetType().Name} > {nameof(spawnPoint)} cannot be null.");
-                gameObject.SetActive(false);
+                Destroy(gameObject);
             }
         }
 
@@ -32,12 +32,12 @@ namespace Explore_System.Object
                 Debug.Log($"{gameObject.name} is already occupied.");
                 return;
             }
-
-            var prefab = itemObject.gameObject;
-            var position = new Vector3(transform.position.x, transform.position.y + (transform.position.y - itemObject.Root.position.y), transform.position.z);
-            var rotation = itemObject.transform.rotation;
-            var parent = transform;
             
+            var prefab = itemObject.gameObject;
+            var position = transform.position;
+            var rotation = new Quaternion(itemObject.gameObject.transform.rotation.x, Random.Range(0, 360), itemObject.gameObject.transform.rotation.z, itemObject.gameObject.transform.rotation.w);
+            var parent = transform;
+
             _currentItemObject = Instantiate(prefab, position, rotation, parent).GetComponent<ItemObject>();
         }
     }

@@ -49,7 +49,7 @@ namespace Common.Storage_Slot.Child
                 return true;
             }
 
-            public new void TryGetItem(out IIngredient itemData)
+            public void TryGetItem(out IIngredient itemData)
             {
                 if (_currentIngredient == null)
                 {

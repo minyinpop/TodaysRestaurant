@@ -12,11 +12,6 @@ namespace Common.Item.Data.Food
             [field: SerializeField] private ItemType ItemType;
             [field: SerializeField] private CookType CookType;
             [field: SerializeField] private FoodType FoodType;
-            public void GetItemType(out ItemType itemType, out int itemLevel)
-            {
-                // TODO
-                throw new System.NotImplementedException();
-            }
             
             public override  void GetItemType(out ItemType itemType, out CookType cookType, out FoodType foodType)
             {
