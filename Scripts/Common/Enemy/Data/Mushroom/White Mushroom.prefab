@@ -78,7 +78,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 312803545943280896}
-  - component: {fileID: 5856753845578940995}
+  - component: {fileID: 2769095345844698862}
   - component: {fileID: 2928170577004883257}
   m_Layer: 0
   m_Name: White Mushroom
@@ -106,7 +106,7 @@ Transform:
   - {fileID: 1368782274384102209}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!195 &5856753845578940995
+--- !u!195 &2769095345844698862
 NavMeshAgent:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -155,11 +155,10 @@ MonoBehaviour:
     Loop: 0
   attackDetectArea: {fileID: 4625402832252118546}
   attackTargetTag: Player
-  root: {fileID: 8667330316453439637}
+  _agent: {fileID: 2769095345844698862}
   enemyData: {fileID: 11400000, guid: 87d5dcab9f2e1a4488405b42044a4d84, type: 2}
   chaseDetectArea: {fileID: 18224364580082269}
   chaseTargetTag: Player
-  navMeshAgent: {fileID: 5856753845578940995}
   moveSpeed: 2
 --- !u!1 &5185962920651546538
 GameObject:

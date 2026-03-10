@@ -11,7 +11,7 @@ namespace Dialogue_System.Custom
         
         private void Awake()
         {
-            TitleSystem.StartScenario += StartScenario;
+            // TitleSystem.StartScenario += StartScenario;
             
             // BattleSystem.StartScenario += StartScenario;
             // ActiveActions.Enqueue(() => BattleSystem.StartScenario -= StartScenario);
@@ -19,7 +19,7 @@ namespace Dialogue_System.Custom
 
         private void OnDestroy()
         {
-            TitleSystem.StartScenario -= StartScenario;
+            // TitleSystem.StartScenario -= StartScenario;
         }
 
         private void StartScenario(string label, int page)

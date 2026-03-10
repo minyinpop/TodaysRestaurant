@@ -23,35 +23,35 @@ namespace Player_System.Object
         private void Awake()
         {
             #region PlayerSystem
-                if (playerSystem == null)
+                if (playerSystem is null)
                 {
                     Debug.Log($"{gameObject.name} > {GetType().Name} > {nameof(playerSystem)} cannot be null.");
-                    gameObject.SetActive(false);
+                    Destroy(gameObject);
                     return;
                 }
             #endregion
             
             #region PlayerSystem.Interact
-                if (detectArea == null)
+                if (detectArea is null)
                 {
                     Debug.Log($"{gameObject.name} > {GetType().Name} > {nameof(detectArea)} cannot be null.");
-                    gameObject.SetActive(false);
+                    Destroy(gameObject);
                     return;
                 }
             #endregion
             
             #region PlayerSystem.Move
-                if (rig == null)
+                if (rig is null)
                 {
                     Debug.Log($"{gameObject.name} > {GetType().Name} > {nameof(rig)} cannot be null.");
-                    gameObject.SetActive(false);
+                    Destroy(gameObject);
                     return;
                 }
                 
-                if (attributeSO == null)
+                if (attributeSO is null)
                 {
                     Debug.Log($"{gameObject.name} > {GetType().Name} > {nameof(attributeSO)} cannot be null.");
-                    gameObject.SetActive(false);
+                    Destroy(gameObject);
                     return;
                 }
             #endregion

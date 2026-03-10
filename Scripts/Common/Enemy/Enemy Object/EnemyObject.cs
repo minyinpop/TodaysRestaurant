@@ -2,17 +2,19 @@ using Common.Enemy.Data;
 using Common.Enemy.Enemy_Object.State_Machine;
 using Common.Enemy.Enemy_Object.State_Machine.State;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace Common.Enemy.Enemy_Object
 {
     public partial class EnemyObject : MonoBehaviour
     {
         [field: Header("Components")]
-        [field: SerializeField] private Transform root;
-                                public Transform Root => root;
+        [field: SerializeField] private NavMeshAgent _agent;
         
         [field: Header("Data")]
         [field: SerializeField] private EnemySO enemyData;
+
+        private bool _initialized;
         
         private readonly StateMachine _stateMachine = new();
 
@@ -22,6 +24,13 @@ namespace Common.Enemy.Enemy_Object
         
         private void Awake()
         {
+            if (_agent is null)
+            {
+                Debug.Log($"{name} > {GetType().Name} > {nameof(_agent)} cannot be null.");
+                Destroy(gameObject);
+                return;
+            }
+
             if (enemyData is null)
             {
                 Debug.Log($"{name} > {GetType().Name} > {nameof(enemyData)} cannot be null.");
@@ -139,11 +148,6 @@ namespace Common.Enemy.Enemy_Object
                 });
         }
 
-        private void Start()
-        {
-            _stateMachine.InitializeState(_idleState);
-        }
-
         private void Update()
         {
             _stateMachine.UpdateState();
@@ -168,17 +172,44 @@ namespace Common.Enemy.Enemy_Object
 
         private void OnJump()
         {
+            if (_agent is null)
+            {
+                Debug.Log($"{name} > {GetType().Name} > {nameof(_agent)} is null, but you try to use {nameof(OnJump)}");
+                return;
+            }
+
             StartMove();
         }
 
         private void OnGround()
         {
+            if (_agent is null)
+            {
+                Debug.Log($"{name} > {GetType().Name} > {nameof(_agent)} is null, but you try to use {nameof(OnGround)}");
+                return;
+            }
+
             StopMove();
         }
 
         private void OnAttack()
         {
             _attackTarget?.GetComponent<IAttackable>().TakeDamage(0);
+        }
+
+        public void Initialize(Vector3 position)
+        {
+            if (_initialized)
+            {
+                Debug.Log($"{name} > {GetType().Name} > {nameof(Initialize)} > {nameof(_initialized)} is already initialize.");
+                return;
+            }
+
+            _initialized = true;
+
+            _agent.Warp(position);
+            
+            _stateMachine.InitializeState(_idleState);
         }
     }
 }

@@ -6,7 +6,7 @@ namespace Explore_System.System
     public partial class ExploreSystem : MonoBehaviour
     {
         private LevelSO _levelData;
-        
+
         public void StartSystem(LevelSO levelData)
         {
             _levelData = levelData;

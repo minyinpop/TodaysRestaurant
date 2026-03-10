@@ -13,7 +13,7 @@ namespace Title_System
 
         // public static event Action<string, Action> OnClickStartGameButton;
         public static event Action<string> OnClickStartGameButton;
-        public static event Action<string, int> StartScenario;
+        // public static event Action<string, int> StartScenario;
 
         private void Awake()
         {
