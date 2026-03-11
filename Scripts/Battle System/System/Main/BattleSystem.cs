@@ -77,7 +77,15 @@ namespace Battle_System.System.Main
                 CharacterDeathCor = null;
             }
         }
-        
+
+        private void StartSystem()
+        {
+        }
+
+        private void EndSystem()
+        {
+        }
+
         private void DrawAndShowCard(int drawNumber, Action onComplete)
         {
             DrawCardAndShowCardCor = DrawAndShowCardCoroutine();
