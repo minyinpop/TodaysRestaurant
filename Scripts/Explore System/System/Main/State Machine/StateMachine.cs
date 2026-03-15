@@ -1,4 +1,4 @@
-namespace Explore_System.System.State_Machine
+namespace Explore_System.System.Main.State_Machine
 {
     internal sealed class StateMachine
     {

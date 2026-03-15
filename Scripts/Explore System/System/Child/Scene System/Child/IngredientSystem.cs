@@ -1,32 +1,46 @@
 using System.Linq;
+using Common.Level.Main;
 using Explore_System.Object;
 using UnityEngine;
 
-namespace Explore_System.System
+namespace Explore_System.System.Child.Scene_System.Child
 {
-    public partial class ExploreSystem
+    public sealed class IngredientSystem : MonoBehaviour
     {
         [field: Header("Ingredient Settings")]
         [field: SerializeField] private IngredientSpawnPoint[] ingredientSpawnPoints;
+        
+        private LevelSO _levelData;
 
-        private void InitializeIngredient()
+        private bool _initialized;
+
+        public void InitializeIngredient(LevelSO levelData)
         {
+            _levelData = levelData;
+            
+            if (_initialized)
+            {
+                Debug.Log($"{name} > {GetType().Name} > {nameof(_initialized)} is already initialize.)");
+                Destroy(gameObject);
+                return;
+            }
+
             var _remainingIngredientEntry = _levelData.LevelIngredient.LevelIngredientEntries.ToList();
             var _remainingSpawnPoints = ingredientSpawnPoints.ToList();
 
             while (_remainingIngredientEntry.Count > 0 && _remainingSpawnPoints.Count > 0)
             {
                 var entry = _remainingIngredientEntry[Random.Range(0, _remainingIngredientEntry.Count)];
-                            _remainingIngredientEntry.Remove(entry);
+                _remainingIngredientEntry.Remove(entry);
                 var spawnAmount = Random.Range(entry.SpawnAmount.Min, entry.SpawnAmount.Max + 1);
-                
+
                 if (spawnAmount <= 0)
                 {
                     Debug.Log($"{entry.IngredientData.ItemName} 的生成數量等於 0，嘗試換到下一個。"); // TODO 開發專用，記得刪除
                     continue;
                 }
 
-                for (var i = 0; i < spawnAmount; i ++)
+                for (var i = 0; i < spawnAmount; i++)
                 {
                     if (_remainingSpawnPoints.Count <= 0)
                     {
@@ -35,7 +49,7 @@ namespace Explore_System.System
                     }
 
                     var spawnPoint = _remainingSpawnPoints[Random.Range(0, _remainingSpawnPoints.Count)];
-                                     _remainingSpawnPoints.Remove(spawnPoint);
+                    _remainingSpawnPoints.Remove(spawnPoint);
                     spawnPoint.InitializeIngredient(entry.IngredientData.ItemObject);
                 }
             }

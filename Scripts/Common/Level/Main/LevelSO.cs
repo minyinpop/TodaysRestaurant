@@ -10,6 +10,12 @@ namespace Common.Level.Main
         [field: Header("Level Name")]
         [field: SerializeField] private string levelName;
                                 public string LevelName => levelName;
+                                
+        [field: Header("Level Scene Name")]
+        [field: SerializeField] private string sceneName;
+                                public string SceneName => sceneName;
+        [field: SerializeField] private string exploreSceneName;
+                                public string ExploreSceneName => exploreSceneName;
     
         [field: Header("Level Possible Items")]
         [field: SerializeField] private LevelIngredient levelIngredient;
@@ -21,6 +27,11 @@ namespace Common.Level.Main
 
         private void OnValidate()
         {
+            if (sceneName == string.Empty)
+            {
+                Debug.Log($"{GetType().Name} > {nameof(sceneName)} cannot be empty.");
+            }
+
             if (levelIngredient == null)
             {
                 Debug.Log($"{GetType().Name} > {nameof(levelIngredient)} cannot be null.");

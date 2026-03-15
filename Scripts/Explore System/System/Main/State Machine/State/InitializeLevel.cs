@@ -1,6 +1,6 @@
 using System;
 
-namespace Explore_System.System.State_Machine.State
+namespace Explore_System.System.Main.State_Machine.State
 {
     public class InitializeLevel
     {

@@ -11,6 +11,7 @@ using UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Select
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using ExploreSystem = Explore_System.System.Main.ExploreSystem;
 
 namespace Scene_Transition_System
 {
@@ -139,59 +140,58 @@ namespace Scene_Transition_System
                     });
                 yield return new WaitUntil(() => complete);
                 
-                var targetScene = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
-                if (targetScene is null)
+                var operation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
+                if (operation is null)
                 {
-                    Debug.Log($"{name} > {GetType().Name} > {nameof(targetScene)} cannot find the new scene.");
+                    Debug.Log($"{name} > {GetType().Name} > {nameof(operation)} cannot find the new scene.");
                     Destroy(gameObject);
+                    yield break;
                 }
-                else
+                
+                operation.allowSceneActivation = false;
+                while (progressBar.value < .9f)
                 {
-                    targetScene.allowSceneActivation = false;
-                    while (progressBar.value < .9f)
-                    {
-                        var progress = Mathf.Clamp01(targetScene.progress / .9f);
-                        progressBar.SetValueWithoutNotify(progress);
-                        yield return null;
-                    }
-                    
-                    progressBar.SetValueWithoutNotify(1);
-                    
-                    complete = false;
-                    animation.DoScale_UI(
-                        rect: handlerRect,
-                        settings: new DoScale(Vector2.zero, .5f, Ease.OutBounce),
-                        onComplete: () =>
-                        {
-                            loadingImage.gameObject.SetActive(false);
-                            completeImage.gameObject.SetActive(true);
-                            animation.DoScale_UI(
-                                rect: handlerRect,
-                                settings: new DoScale(Vector2.one, .5f, Ease.OutBounce),
-                                onComplete: () =>
-                                {
-                                    complete = true;
-                                });
-                        });
-                    yield return new WaitUntil(() => complete);
-                    
-                    targetScene.allowSceneActivation = true;
-                    complete = false;
-                    animation.DoFade_CanvasGroup(
-                        canvasGroup: canvasGroup,
-                        settings: new DoFade_CanvasGroup(0, 1, Ease.Linear),
-                        onComplete: () =>
-                        {
-                            loadingImage.gameObject.SetActive(true);
-                            completeImage.gameObject.SetActive(false);
-                            canvas.gameObject.SetActive(false);
-                            complete = true;
-                        });
-                    yield return new WaitUntil(predicate: () => complete);
-                    
-                    progressBar.SetValueWithoutNotify(0);
-                    onComplete?.Invoke();
+                    var progress = Mathf.Clamp01(operation.progress / .9f);
+                    progressBar.SetValueWithoutNotify(progress);
+                    yield return null;
                 }
+                
+                progressBar.SetValueWithoutNotify(1);
+                
+                complete = false;
+                animation.DoScale_UI(
+                    rect: handlerRect,
+                    settings: new DoScale(Vector2.zero, .5f, Ease.OutBounce),
+                    onComplete: () =>
+                    {
+                        loadingImage.gameObject.SetActive(false);
+                        completeImage.gameObject.SetActive(true);
+                        animation.DoScale_UI(
+                            rect: handlerRect,
+                            settings: new DoScale(Vector2.one, .5f, Ease.OutBounce),
+                            onComplete: () =>
+                            {
+                                complete = true;
+                            });
+                    });
+                yield return new WaitUntil(() => complete);
+                
+                operation.allowSceneActivation = true;
+                complete = false;
+                animation.DoFade_CanvasGroup(
+                    canvasGroup: canvasGroup,
+                    settings: new DoFade_CanvasGroup(0, 1, Ease.Linear),
+                    onComplete: () =>
+                    {
+                        loadingImage.gameObject.SetActive(true);
+                        completeImage.gameObject.SetActive(false);
+                        canvas.gameObject.SetActive(false);
+                        complete = true;
+                    });
+                yield return new WaitUntil(predicate: () => complete);
+                
+                progressBar.SetValueWithoutNotify(0);
+                onComplete?.Invoke();
         }
     }
 }

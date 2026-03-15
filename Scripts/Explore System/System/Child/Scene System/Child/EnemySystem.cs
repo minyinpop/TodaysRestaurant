@@ -1,16 +1,30 @@
 using System.Linq;
+using Common.Level.Main;
 using Explore_System.Object;
 using UnityEngine;
 
-namespace Explore_System.System
+namespace Explore_System.System.Child.Scene_System.Child
 {
-    public partial class ExploreSystem
+    public sealed class EnemySystem : MonoBehaviour
     {
         [field: Header("Enemy Settings")]
         [field: SerializeField] private EnemySpawnPoint[] enemySpawnPoints;
+        
+        private LevelSO _levelData;
+        
+        private bool _initialized;
 
-        private void InitializeEnemy()
+        public void InitializeEnemy(LevelSO levelData)
         {
+            _levelData = levelData;
+            
+            if (_initialized)
+            {
+                Debug.Log($"{name} > {GetType().Name} > {nameof(_initialized)} is already initialize.)");
+                Destroy(gameObject);
+                return;
+            }
+            
             var _remainingEnemyEntry = _levelData.LevelEnemy.LevelEnemyEntries.ToList();
             var _remainingSpawnPoints = enemySpawnPoints.ToList();
 
@@ -35,7 +49,7 @@ namespace Explore_System.System
                     }
 
                     var spawnPoint = _remainingSpawnPoints[Random.Range(0, _remainingSpawnPoints.Count)];
-                    _remainingSpawnPoints.Remove(spawnPoint);
+                                     _remainingSpawnPoints.Remove(spawnPoint);
                     spawnPoint.InitializeEnemy(entry.EnemyData.EnemyObject);
                 }
             }
