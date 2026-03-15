@@ -3,12 +3,19 @@ using System.Collections.Generic;
 using Input_System;
 using Restaurant_System.Object.Creature.Customer.System.Main;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Player_System.System.Player_System
 {
     public partial class PlayerSystem : MonoBehaviour
     {
         private readonly Queue<Action> _cleanUpActions = new();
+
+        private void Awake()
+        {
+            mainCamera = Camera.main;
+            eventSystem = EventSystem.current;
+        }
 
         private void Start()
         {

@@ -6,9 +6,9 @@ using Animation_System.DOTween.Basic;
 using Battle_System.Object.Card_Slot;
 using Battle_System.Object.Card;
 using Battle_System.Object.Card.Battle;
-using Common.Player.Child.Player_Deck;
 using Common.Value.Type;
 using DG.Tweening;
+using Player_System.Data.Child.Player_Deck;
 using UnityEngine;
 
 namespace Battle_System.System.Child

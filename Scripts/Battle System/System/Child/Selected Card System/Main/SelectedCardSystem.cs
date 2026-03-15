@@ -6,9 +6,9 @@ using Battle_System.Object.Card_Slot;
 using Battle_System.Object.Card;
 using Battle_System.System.Child.Selected_Card_System.Child;
 using Common.Button;
-using Common.Player.Child.Player_Team;
 using Common.Value;
 using DG.Tweening;
+using Player_System.Data.Child.Player_Team;
 using UI_System.Message_UI_System.Main;
 using UnityEngine;
 

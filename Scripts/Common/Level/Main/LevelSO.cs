@@ -12,8 +12,8 @@ namespace Common.Level.Main
                                 public string LevelName => levelName;
                                 
         [field: Header("Level Scene Name")]
-        [field: SerializeField] private string sceneName;
-                                public string SceneName => sceneName;
+        [field: SerializeField] private string terrainSceneName;
+                                public string TerrainSceneName => terrainSceneName;
         [field: SerializeField] private string exploreSceneName;
                                 public string ExploreSceneName => exploreSceneName;
     
@@ -27,9 +27,9 @@ namespace Common.Level.Main
 
         private void OnValidate()
         {
-            if (sceneName == string.Empty)
+            if (terrainSceneName == string.Empty)
             {
-                Debug.Log($"{GetType().Name} > {nameof(sceneName)} cannot be empty.");
+                Debug.Log($"{GetType().Name} > {nameof(terrainSceneName)} cannot be empty.");
             }
 
             if (levelIngredient == null)

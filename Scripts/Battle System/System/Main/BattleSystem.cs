@@ -7,9 +7,9 @@ using Battle_System.System.Child.Initiative_System.System.Main;
 using Battle_System.System.Child.Selected_Card_System.Main;
 using Battle_System.System.Main.State_Machine;
 using Battle_System.System.Main.State_Machine.State;
-using Common.Player.Child.Player_Team;
 using Common.Value;
 using Common.Value.Type;
+using Player_System.Data.Child.Player_Team;
 using UnityEngine;
 
 namespace Battle_System.System.Main
@@ -29,18 +29,17 @@ namespace Battle_System.System.Main
         [field: Header("Data")]
         [field: SerializeField] private PlayerTeamSO playerTeamData;
         
-        private readonly StateMachine StateMachine = new();
+        private readonly StateMachine _stateMachine = new();
         
-        private TossResult TossResult = TossResult.Tails;
-        
-        private GameObject InitiativeSystemObject;
+        // TODO 預設為 Tails
+        private const TossResult _tossResult = TossResult.Heads;
 
-        private IEnumerator TurnCor;
-        private IEnumerator AttackCor;
-        private IEnumerator CharacterDeathCor;
-        private IEnumerator DrawCardAndShowCardCor;
+        private IEnumerator _turnCoroutine;
+        private IEnumerator _attackCoroutine;
+        private IEnumerator _characterDeathCoroutine;
+        private IEnumerator _drawCardAndShowCardCoroutine;
 
-        private bool IsEnd;
+        private bool _isEnd;
         
         // public static event Action ReloadScene;
         // public static event Action<string, Action> ChangeScene;
@@ -59,22 +58,22 @@ namespace Battle_System.System.Main
         private void OnDisable()
         {
             PlayerTeamSystem.RecycleCard -= OnRecycleCard;
-            if (TurnCor is not null)
+            if (_turnCoroutine is not null)
             {
-                StopCoroutine(TurnCor);
-                TurnCor = null;
+                StopCoroutine(_turnCoroutine);
+                _turnCoroutine = null;
             }
 
-            if (AttackCor is not null)
+            if (_attackCoroutine is not null)
             {
-                StopCoroutine(AttackCor);
-                AttackCor = null;
+                StopCoroutine(_attackCoroutine);
+                _attackCoroutine = null;
             }
             
-            if (CharacterDeathCor is not null)
+            if (_characterDeathCoroutine is not null)
             {
-                StopCoroutine(CharacterDeathCor);
-                CharacterDeathCor = null;
+                StopCoroutine(_characterDeathCoroutine);
+                _characterDeathCoroutine = null;
             }
         }
 
@@ -88,8 +87,8 @@ namespace Battle_System.System.Main
 
         private void DrawAndShowCard(int drawNumber, Action onComplete)
         {
-            DrawCardAndShowCardCor = DrawAndShowCardCoroutine();
-            StartCoroutine(DrawCardAndShowCardCor);
+            _drawCardAndShowCardCoroutine = DrawAndShowCardCoroutine();
+            StartCoroutine(_drawCardAndShowCardCoroutine);
             return;
             
             IEnumerator DrawAndShowCardCoroutine()
@@ -113,14 +112,14 @@ namespace Battle_System.System.Main
                 });
                 yield return new WaitUntil(() => cardPoolRefillComplete && AddCardToHandComplete);
                 onComplete?.Invoke();
-                DrawCardAndShowCardCor = null;
+                _drawCardAndShowCardCoroutine = null;
             }
         }
 
         private void OnRecycleCard(CardType[] cardTypes, Action onComplete)
         {
-            CharacterDeathCor = RecycleCardCoroutine();
-            StartCoroutine(CharacterDeathCor);
+            _characterDeathCoroutine = RecycleCardCoroutine();
+            StartCoroutine(_characterDeathCoroutine);
             return;
 
             IEnumerator RecycleCardCoroutine()
@@ -176,7 +175,7 @@ namespace Battle_System.System.Main
             #region OnBattleStart
                 private void OnBattleStart()
                 {
-                    StateMachine.ChangeState(new OnBattleStart(
+                    _stateMachine.ChangeState(new OnBattleStart(
                         onEnter: () =>
                         {
                             cardPoolSystem.Refill(
@@ -184,53 +183,52 @@ namespace Battle_System.System.Main
                                 {
                                     playerTeamData.GetCharacterNumber(out var number);
                                     number = Mathf.Clamp(number * 2, 1, 8);
-                                    DrawAndShowCard(number, OnInitiativeCoin);
+                                    DrawAndShowCard(number, TurnManager);
                                 });
                         },
                         onExit: () =>
                         {
-                            // Exit.
                         }));
                 }
             #endregion
             
-            #region OnInitiativeCoin
-                private void OnInitiativeCoin()
-                {
-                    StateMachine.ChangeState(new OnInitiativeCoin(
-                        onEnter: () =>
-                        {
-                            InitiativeSystemObject = Instantiate(initiativeSystem.gameObject);
-                            InitiativeSystemObject.GetComponent<InitiativeSystem>().OnShowResultComplete += result =>
-                            {
-                                TossResult = result;
-                                TurnManager();
-                            };
-                        },
-                        onExit: () =>
-                        {
-                            Destroy(InitiativeSystemObject);
-                            InitiativeSystemObject = null;
-                        }));
-                }
-            #endregion
+            // #region OnInitiativeCoin
+            //     private void OnInitiativeCoin()
+            //     {
+            //         StateMachine.ChangeState(new OnInitiativeCoin(
+            //             onEnter: () =>
+            //             {
+            //                 InitiativeSystemObject = Instantiate(initiativeSystem.gameObject);
+            //                 InitiativeSystemObject.GetComponent<InitiativeSystem>().OnShowResultComplete += result =>
+            //                 {
+            //                     TossResult = result;
+            //                     TurnManager();
+            //                 };
+            //             },
+            //             onExit: () =>
+            //             {
+            //                 Destroy(InitiativeSystemObject);
+            //                 InitiativeSystemObject = null;
+            //             }));
+            //     }
+            // #endregion
             
             #region TurnManager
                 private void TurnManager()
                 {
-                    TurnCor = TurnManagerCoroutine();
-                    StartCoroutine(TurnCor);
+                    _turnCoroutine = TurnManagerCoroutine();
+                    StartCoroutine(_turnCoroutine);
                 }
 
                 private IEnumerator TurnManagerCoroutine()
                 {
-                    while (!IsEnd)
+                    while (!_isEnd)
                     {
                         var playerTurnEnd = false;
                         var enemyTurnEnd = false;
                         var drawAndShowEnd = false;
                         
-                        switch (TossResult)
+                        switch (_tossResult)
                         {
                             case TossResult.Heads:
                             {
@@ -245,15 +243,15 @@ namespace Battle_System.System.Main
                                             },
                                             characterAllDead: () =>
                                             {
-                                                StopCoroutine(TurnCor);
-                                                TurnCor = null;
+                                                StopCoroutine(_turnCoroutine);
+                                                _turnCoroutine = null;
                                                 OnEnemyWin();
                                             });
                                     },
                                     enemyAllDeath: () =>
                                     {
-                                        StopCoroutine(TurnCor);
-                                        TurnCor = null;
+                                        StopCoroutine(_turnCoroutine);
+                                        _turnCoroutine = null;
                                         OnPlayerWin();
                                     });
                                 break;
@@ -271,15 +269,15 @@ namespace Battle_System.System.Main
                                             },
                                             enemyAllDeath: () =>
                                             {
-                                                StopCoroutine(TurnCor);
-                                                TurnCor = null;
+                                                StopCoroutine(_turnCoroutine);
+                                                _turnCoroutine = null;
                                                 OnPlayerWin();
                                             });
                                     },
                                     characterAllDead: () =>
                                     {
-                                        StopCoroutine(TurnCor);
-                                        TurnCor = null;
+                                        StopCoroutine(_turnCoroutine);
+                                        _turnCoroutine = null;
                                         OnEnemyWin();
                                     });
                                 break;
@@ -297,7 +295,7 @@ namespace Battle_System.System.Main
             #region OnPlayerTurn
                 private void OnPlayerTurn(Action haveEnemyAlive, Action enemyAllDeath)
                 {
-                    StateMachine.ChangeState(new OnPlayerTurn(
+                    _stateMachine.ChangeState(new OnPlayerTurn(
                         onEnter: () =>
                         {
                             selectedCardSystem.OpenUI(
@@ -308,8 +306,8 @@ namespace Battle_System.System.Main
                                 onUIClose: () =>
                                 {
                                     handCardSystem.SetCardsInteractable(false);
-                                    AttackCor = UseCardCoroutine();
-                                    StartCoroutine(AttackCor);
+                                    _attackCoroutine = UseCardCoroutine();
+                                    StartCoroutine(_attackCoroutine);
                                     return;
 
                                     IEnumerator UseCardCoroutine()
@@ -331,15 +329,15 @@ namespace Battle_System.System.Main
                                                     canContinue = false;
                                                     onUseComplete = true;
                                                     enemyAllDeath?.Invoke();
-                                                    StopCoroutine(AttackCor);
-                                                    AttackCor = null;
+                                                    StopCoroutine(_attackCoroutine);
+                                                    _attackCoroutine = null;
                                                 });
                                             yield return new WaitUntil(() => onUseComplete);
                                         }
 
                                         if (haveAnyEnemyAlive)
                                             haveEnemyAlive?.Invoke();
-                                        AttackCor = null;
+                                        _attackCoroutine = null;
                                     }
                                 });
                         },
@@ -353,7 +351,7 @@ namespace Battle_System.System.Main
             #region OnEnemyTurn
                 private void OnEnemyTurn(Action haveCharacterAlive, Action characterAllDead)
                 {
-                    StateMachine.ChangeState(new OnEnemyTurn(
+                    _stateMachine.ChangeState(new OnEnemyTurn(
                         onEnter: () =>
                         {
                             enemyTeamSystem.Attack(
@@ -376,16 +374,16 @@ namespace Battle_System.System.Main
             #region OnPlayerWin
                 private void OnPlayerWin()
                 {
-                    if (TurnCor is not null)
+                    if (_turnCoroutine is not null)
                     {
-                        StopCoroutine(TurnCor);
-                        TurnCor = null;
+                        StopCoroutine(_turnCoroutine);
+                        _turnCoroutine = null;
                     }
 
-                    StateMachine.ChangeState(new OnPlayerWin(
+                    _stateMachine.ChangeState(new OnPlayerWin(
                         onEnter: () =>
                         {
-                            IsEnd = true;
+                            _isEnd = true;
                             // ItemGetUISystem.ShowUI(
                             //     content: new PopUpUIContent(
                             //         message: string.Empty,
@@ -404,16 +402,16 @@ namespace Battle_System.System.Main
             #region OnEnemyWin
                 private void OnEnemyWin()
                 {
-                    if (TurnCor is not null)
+                    if (_turnCoroutine is not null)
                     {
-                        StopCoroutine(TurnCor);
-                        TurnCor = null;
+                        StopCoroutine(_turnCoroutine);
+                        _turnCoroutine = null;
                     }
                     
-                    StateMachine.ChangeState(new OnEnemyWin(
+                    _stateMachine.ChangeState(new OnEnemyWin(
                         onEnter: () =>
                         {
-                            IsEnd = true;
+                            _isEnd = true;
                             // TODO
                             // UISystem.ShowDefeatUI(
                             //     content: new PopUpUIContent(
