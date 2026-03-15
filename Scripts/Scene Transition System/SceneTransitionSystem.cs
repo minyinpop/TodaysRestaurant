@@ -4,6 +4,7 @@ using Animation_System.DOTween;
 using Animation_System.DOTween.Basic;
 using Common.Level.Main;
 using DG.Tweening;
+using Dialogue_System.Utage;
 using Explore_System.System;
 using Title_System;
 using UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Select_UI.Main;
@@ -54,10 +55,10 @@ namespace Scene_Transition_System
             
             SceneManager.sceneLoaded += OnSceneLoaded;
             
-            TitleSystem.OnClickStartGameButton += GoToDialogue;
+            TitleSystem.OnClickStartGameButton += ChangeScene;
             LevelSelectUI.OnClickLevelStartButton += GoToExplore;
             
-            // UtageReceiveMessageSystem.ChangeScene += GoToDialogue;
+            UtageReceiveMessageSystem.ChangeScene += ChangeScene;
         }
 
         private void OnDisable()
@@ -73,17 +74,23 @@ namespace Scene_Transition_System
         {
             SceneManager.sceneLoaded -= OnSceneLoaded;
             
-            TitleSystem.OnClickStartGameButton -= GoToDialogue;
+            TitleSystem.OnClickStartGameButton -= ChangeScene;
             LevelSelectUI.OnClickLevelStartButton -= GoToExplore;
             
-            // UtageReceiveMessageSystem.ChangeScene -= GoToDialogue;
+            UtageReceiveMessageSystem.ChangeScene -= ChangeScene;
         }
         
-        // private void ChangeScene(string sceneName, Action onComplete)
-        // {
-        //     _changeSceneCor = ChangeSceneCoroutine(sceneName, onComplete);
-        //     StartCoroutine(_changeSceneCor);
-        // }
+        private void ChangeScene(string sceneName)
+        {
+            _changeSceneCor = ChangeSceneCoroutine(sceneName);
+            StartCoroutine(_changeSceneCor);
+        }
+        
+        private void ChangeScene(string sceneName, Action onComplete)
+        {
+            _changeSceneCor = ChangeSceneCoroutine(sceneName, onComplete);
+            StartCoroutine(_changeSceneCor);
+        }
         
         private void GoToDialogue(string sceneName)
         {
@@ -147,6 +154,8 @@ namespace Scene_Transition_System
                         progressBar.SetValueWithoutNotify(progress);
                         yield return null;
                     }
+                    
+                    progressBar.SetValueWithoutNotify(1);
                     
                     complete = false;
                     animation.DoScale_UI(

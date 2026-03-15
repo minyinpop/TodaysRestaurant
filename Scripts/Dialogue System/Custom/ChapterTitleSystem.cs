@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using Dialogue_System.Utage;
 using Febucci.UI;
 using Febucci.UI.Effects;
