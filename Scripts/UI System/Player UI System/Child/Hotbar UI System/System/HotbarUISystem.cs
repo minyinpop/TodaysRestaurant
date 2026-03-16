@@ -8,35 +8,68 @@ namespace UI_System.Player_UI_System.Child.Hotbar_UI_System.System
     {
         [field: Header("Objects")]
         [field: SerializeField] private HotbarUI hotbarUI;
+
+        private bool _isHotbarEnabled = true;
         
         private void Awake()
         {
-            if (hotbarUI == null)
+            if (hotbarUI is null)
             {
-                Debug.Log($"{nameof(HotbarUISystem)} > {nameof(hotbarUI)} cannot be null.");
+                Debug.Log($"{name} > {GetType().Name} > {nameof(hotbarUI)} cannot be null.");
+                Destroy(gameObject);
             }
+            
+            SetHotbarUI(_isHotbarEnabled);
         }
-        
+
+        public void SetHotbarUI(bool isEnabled)
+        {
+            _isHotbarEnabled = isEnabled;
+            hotbarUI.gameObject.SetActive(_isHotbarEnabled);
+        }
+
         #region Input
             public void UseSelectedHotbarSlotItem()
             {
-                hotbarUI.UseSelectedHotbarSlotItem();
+                if (_isHotbarEnabled)
+                {
+                    hotbarUI.UseSelectedHotbarSlotItem();
+                }
             }
             
             public void PerformHotbar(int hotbarIndex)
             {
-                hotbarUI.PerformHotbar(hotbarIndex);
+                if (_isHotbarEnabled)
+                {
+                    hotbarUI.PerformHotbar(hotbarIndex);
+                }
             }
         #endregion
         
         public bool TryAddItem(IItem itemData)
         {
-            return hotbarUI.TryAddItem(itemData);
+            if (_isHotbarEnabled)
+            {
+                return hotbarUI.TryAddItem(itemData);
+            }
+            else
+            {
+                Debug.Log($"{name} > {GetType().Name} > {nameof(TryAddItem)} > hotbar is disabled.");
+                return false;
+            }
         }
 
         public bool TryRemoveItem(ItemSO itemData)
         {
-            return hotbarUI.TryRemoveItem(itemData);
+            if (_isHotbarEnabled)
+            {
+                return hotbarUI.TryRemoveItem(itemData);
+            }
+            else
+            {
+                Debug.Log($"{name} > {GetType().Name} > {nameof(TryRemoveItem)} > hotbar is disabled.");
+                return false;
+            }
         }
     }
 }

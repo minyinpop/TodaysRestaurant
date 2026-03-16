@@ -12,28 +12,28 @@ namespace UI_System.Explore_UI_System
         [field: SerializeField] private new DoAnimation animation;
         
         [field: Header("Object")]
-        [field: SerializeField] private CanvasGroup cg;
+        [field: SerializeField] private CanvasGroup mask;
         [field: SerializeField] private DoFade_CanvasGroup fadeInSettings;
         [field: SerializeField] private DoFade_CanvasGroup fadeOutSettings;
 
         private void Awake()
         {
-            if (cg is null)
+            if (mask is null)
             {
-                Debug.Log($"{nameof(ExploreUISystem)} > {nameof(cg)} cannot be null.");
+                Debug.Log($"{nameof(ExploreUISystem)} > {nameof(mask)} cannot be null.");
                 Destroy(gameObject);
                 return;
             }
             
-            cg.gameObject.SetActive(false);
+            mask.gameObject.SetActive(false);
         }
 
         public void FadeIn(Action onComplete = null)
         {
-            cg.gameObject.SetActive(true);
+            mask.gameObject.SetActive(true);
             
             animation.DoFade_CanvasGroup(
-                canvasGroup: cg,
+                canvasGroup: mask,
                 settings: fadeInSettings,
                 onComplete: onComplete);
         }
@@ -41,11 +41,11 @@ namespace UI_System.Explore_UI_System
         public void FadeOut(Action onComplete = null)
         {
             animation.DoFade_CanvasGroup(
-                canvasGroup: cg,
+                canvasGroup: mask,
                 settings: fadeOutSettings,
                 onComplete: () =>
                 {
-                    cg.gameObject.SetActive(false);
+                    mask.gameObject.SetActive(false);
                     onComplete?.Invoke();
                 });
         }

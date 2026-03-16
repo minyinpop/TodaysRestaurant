@@ -8,7 +8,7 @@ namespace UI_System.Player_UI_System.Main
 {
     public sealed class PlayerUISystem : MonoBehaviour
     {
-        [field: Header("Objects")]
+        [field: Header("Components")]
         [field: SerializeField] private HotbarUISystem hotbarUISystem;
                                 private static HotbarUISystem _hotbarUISystem;
         [field: SerializeField] private BackpackUISystem backpackUISystem;
@@ -18,34 +18,30 @@ namespace UI_System.Player_UI_System.Main
 
         private void Awake()
         {
-            if (hotbarUISystem == null)
+            if (hotbarUISystem is null)
             {
-                Debug.Log($"{nameof(PlayerUISystem)} > {nameof(hotbarUISystem)} cannot be null.");
+                Debug.Log($"{name} > {GetType().Name} > {nameof(hotbarUISystem)} cannot be null.");
+                Destroy(gameObject);
                 return;
             }
-            else
-            {
-                _hotbarUISystem = hotbarUISystem;
-            }
             
-            if (backpackUISystem == null)
+            if (backpackUISystem is null)
             {
-                Debug.Log($"{nameof(PlayerUISystem)} > {nameof(backpackUISystem)} cannot be null.");
+                Debug.Log($"{name} > {GetType().Name} > {nameof(backpackUISystem)} cannot be null.");
+                Destroy(gameObject);
                 return;
             }
-            else
+            
+            if (itemDragUISystem is null)
             {
-                _backpackUISystem = backpackUISystem;
+                Debug.Log($"{name} > {GetType().Name} > {nameof(backpackUISystem)} cannot be null.");
+                Destroy(gameObject);
+                return;
             }
             
-            if (itemDragUISystem == null)
-            {
-                Debug.Log($"{nameof(PlayerUISystem)} > {nameof(itemDragUISystem)} cannot be null.");
-            }
-            else
-            {
-                _itemDragUISystem = itemDragUISystem;
-            }
+            _hotbarUISystem = hotbarUISystem;
+            _backpackUISystem = backpackUISystem;
+            _itemDragUISystem = itemDragUISystem;
         }
 
         #region Player
@@ -56,14 +52,24 @@ namespace UI_System.Player_UI_System.Main
         #endregion
 
         #region Inventory
-            public static void PerformHotbar(int hotbarIndex)
+            public static void SetHotbarUI(bool isEnabled)
             {
-                _hotbarUISystem.PerformHotbar(hotbarIndex);
+                _hotbarUISystem.SetHotbarUI(isEnabled);
             }
-            
+
+            public static void SetBackpackUI(bool isEnabled)
+            {
+                _backpackUISystem.SetBackpackUI(isEnabled);
+            }
+
             public static void RequireBackpackUI()
             {
                 _backpackUISystem.RequireBackpackUI();
+            }
+
+            public static void PerformHotbar(int hotbarIndex)
+            {
+                _hotbarUISystem.PerformHotbar(hotbarIndex);
             }
             
             public static bool TryAddItem(IItem itemData)

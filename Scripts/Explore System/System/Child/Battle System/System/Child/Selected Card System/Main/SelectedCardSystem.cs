@@ -152,7 +152,6 @@ namespace Explore_System.System.Child.Battle_System.System.Child.Selected_Card_S
             IEnumerator OnConfirmButtonClickCoroutine()
             {
                 var onConfirm = false;
-                var onClose = false;
                 var selectedCards = new List<ICard>();
                 foreach (var slot in CardSlots)
                 {
@@ -213,7 +212,7 @@ namespace Explore_System.System.Child.Battle_System.System.Child.Selected_Card_S
                         });
                 }
 
-                yield return new WaitUntil(() => onConfirm && onClose);
+                yield return new WaitUntil(() => onConfirm);
                 if (onConfirm) CloseUI();
                 OnClickConfirmButtonCor = null;
             }

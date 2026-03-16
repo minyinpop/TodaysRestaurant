@@ -4,7 +4,9 @@ using Common.Level.Main;
 using Explore_System.System.Child.Enemy_System;
 using Explore_System.System.Child.Ingredient_System;
 using Player_System.Object;
+using Player_System.System.Player_System;
 using UI_System.Explore_UI_System;
+using UI_System.Player_UI_System.Main;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -156,6 +158,11 @@ namespace Explore_System.System.Main
                             exploreUISystem.FadeIn(
                                 onComplete: () => complete = true);
                             yield return new WaitUntil(() => complete);
+                        #endregion
+                        
+                        #region 關閉與戰鬥場景不相關的 UI
+                            PlayerUISystem.SetHotbarUI(false);
+                            PlayerUISystem.SetBackpackUI(false);
                         #endregion
 
                         #region 隱藏探索場景

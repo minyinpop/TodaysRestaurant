@@ -88,10 +88,6 @@ namespace Explore_System.System.Child.Battle_System.System.Main
             OnBattleStart();
         }
 
-        private void EndSystem()
-        {
-        }
-
         private void DrawAndShowCard(int drawNumber, Action onComplete)
         {
             _drawCardAndShowCardCoroutine = DrawAndShowCardCoroutine();
