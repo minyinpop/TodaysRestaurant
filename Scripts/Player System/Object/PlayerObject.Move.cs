@@ -8,41 +8,48 @@ namespace Player_System.Object
     {
         [field: Header("Move System")]
         [field: SerializeField] private Rigidbody rig;
-        [field: SerializeField] private PlayerAttributeSO attributeSO;
+        [field: SerializeField] private PlayerAttributeSO attributeData;
 
+        private bool _canWalk = true;
         private bool _isWalking;
         
         private void DetectMove()
         {
-            if (rig.linearVelocity == Vector3.zero && _isWalking)
+            if (!_canWalk)
+            {
+                _isWalking = false;
+                
+                rig.linearVelocity = Vector3.zero;
+                return;
+            }
+
+            var direction = InputSystem.WalkDirection;
+            rig.linearVelocity = new Vector3(
+                x: direction.x * (attributeData.MoveSpeed * Time.fixedDeltaTime),
+                y: rig.linearVelocity.y,
+                z: direction.y * (attributeData.MoveSpeed * Time.fixedDeltaTime));
+            
+            if (direction == Vector2.zero && _isWalking)
             {
                 _isWalking = false;
                 _stateMachine.ChangeState(_idleState);
             }
-            else if (rig.linearVelocity != Vector3.zero && !_isWalking)
+            else if (direction != Vector2.zero && !_isWalking)
             {
                 _isWalking = true;
                 _stateMachine.ChangeState(_moveState);
             }
-            
-            var direction = InputSystem.WalkDirection;
-            attributeSO.GetMoveSpeed(out var speed);
-            
-            rig.linearVelocity = new Vector3(
-                x: direction.x * (speed * Time.fixedDeltaTime),
-                y: rig.linearVelocity.y,
-                z: direction.y * (speed * Time.fixedDeltaTime));
-        }
 
-        private void DetectFlip()
-        {
-            if (rig.linearVelocity.x > 0)
+            if (direction != Vector2.zero)
             {
-                TurnsRight();
-            }
-            else if (rig.linearVelocity.x < 0)
-            {
-                TurnsLeft();
+                if (rig.linearVelocity.x > 0)
+                {
+                    TurnsRight();
+                }
+                else if (rig.linearVelocity.x < 0)
+                {
+                    TurnsLeft();
+                }
             }
         }
     }

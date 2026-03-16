@@ -48,9 +48,9 @@ namespace Player_System.Object
                     return;
                 }
                 
-                if (attributeSO is null)
+                if (attributeData is null)
                 {
-                    Debug.Log($"{gameObject.name} > {GetType().Name} > {nameof(attributeSO)} cannot be null.");
+                    Debug.Log($"{gameObject.name} > {GetType().Name} > {nameof(attributeData)} cannot be null.");
                     Destroy(gameObject);
                     return;
                 }
@@ -84,6 +84,10 @@ namespace Player_System.Object
                         return;
                     }
 
+                    // TODO 被攻擊到的動畫
+                    _canInteract = false;
+                    _canWalk = false;
+
                     OnHurt.Invoke();
                 },
                 onExit: () =>
@@ -102,11 +106,6 @@ namespace Player_System.Object
         private void FixedUpdate()
         {
             DetectMove();
-        }
-
-        private void Update()
-        {
-            DetectFlip();
         }
 
         private void OnDestroy()

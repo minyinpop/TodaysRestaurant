@@ -17,6 +17,8 @@ namespace Player_System.Object
         
         private readonly List<InteractableObject> _interactableObjects = new();
 
+        private bool _canInteract = true;
+
         private void StartDetectInteractableObject()
         {
             detectArea.OnEnterDetect += OnEnterDetect;
@@ -51,14 +53,13 @@ namespace Player_System.Object
 
         private void InteractWithObject()
         {
-            if (_interactableObjects.Count == 0)
+            if (!_canInteract)
             {
                 return;
             }
-
-            if (_interactableObjects.First() == null)
+            
+            if (_interactableObjects.Count == 0)
             {
-                Debug.Log($"{gameObject.name} > {GetType().Name} > {nameof(_interactableObjects)} the first object data is be null.");
                 return;
             }
             

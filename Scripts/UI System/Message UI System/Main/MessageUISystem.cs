@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Common.Item.Data.Ingredient;
 using Common.Value;
+using UI_System.Message_UI_System.Child.Defeat_UI_System.System;
 using UI_System.Message_UI_System.Child.Item_Get_UI_System.System;
 using UI_System.Message_UI_System.Child.Switch_UI_System.System;
 using UI_System.Message_UI_System.Child.Tip_UI_System.System;
@@ -18,60 +19,93 @@ namespace UI_System.Message_UI_System.Main
                                 private static SwitchUISystem _switchUISystem;
         [field: SerializeField] private Transform itemGetUISystemParent;
                                 private static ItemGetUISystem _itemGetUISystem;
+        [field: SerializeField] private Transform defeatUISystemParent;
+                                private static DefeatUISystem _defeatUISystem;
 
         private void Awake()
         {
-            if (tipUISystemParent == null)
-            {
-                Debug.Log($"{nameof(MessageUISystem)} > {nameof(tipUISystemParent)} cannot be null.");
-                return;
-            }
+            #region 提示 UI
+                if (tipUISystemParent is null)
+                {
+                    Debug.Log($"{name} > {GetType().Name} > {nameof(tipUISystemParent)} cannot be null.)");
+                    Destroy(gameObject);
+                    return;
+                }
+                
+                if (!tipUISystemParent.TryGetComponent(out _tipUISystem))
+                {
+                    Debug.Log($"{name} > {GetType().Name} > {nameof(tipUISystemParent)} cannot get {nameof(_tipUISystem.GetType)}.");
+                    Destroy(gameObject);
+                    return;
+                }
+            #endregion
             
-            if (!tipUISystemParent.TryGetComponent(out _tipUISystem))
-            {
-                Debug.Log($"{nameof(MessageUISystem)} > {nameof(tipUISystemParent)} cannot get {nameof(TipUISystem)}.");
-                return;
-            }
-            
-            if (switchUISystemParent == null)
-            {
-                Debug.Log($"{nameof(MessageUISystem)} > {nameof(switchUISystemParent)} cannot be null.");
-                return;
-            }
+            #region 選擇 UI
+                if (switchUISystemParent is null)
+                {
+                    Debug.Log($"{name} > {GetType().Name} > {nameof(switchUISystemParent)} cannot be null.)");
+                    Destroy(gameObject);
+                    return;
+                }
+                
+                if (!switchUISystemParent.TryGetComponent(out _switchUISystem))
+                {
+                    Debug.Log($"{name} > {GetType().Name} > {nameof(switchUISystemParent)} cannot get {nameof(_switchUISystem.GetType)}.");
+                    Destroy(gameObject);
+                    return;
+                }
+            #endregion
 
-            if (!switchUISystemParent.TryGetComponent(out _switchUISystem))
-            {
-                Debug.Log($"{nameof(MessageUISystem)} > {nameof(switchUISystemParent)} cannot get {nameof(SwitchUISystem)}.");
-                return;
-            }
-
-            if (itemGetUISystemParent == null)
-            {
-                Debug.Log($"{nameof(MessageUISystem)} > {nameof(itemGetUISystemParent)} cannot be null.");
-                return;
-            }
+            #region 獲得物品 UI
+                if (itemGetUISystemParent is null)
+                {
+                    Debug.Log($"{name} > {GetType().Name} > {nameof(itemGetUISystemParent)} cannot be null.)");
+                    Destroy(gameObject);
+                    return;
+                }
+                    
+                if (!itemGetUISystemParent.TryGetComponent(out _itemGetUISystem))
+                {
+                    Debug.Log($"{name} > {GetType().Name} > {nameof(itemGetUISystemParent)} cannot get {nameof(_itemGetUISystem.GetType)}.");
+                    Destroy(gameObject);
+                    return;
+                }
+            #endregion
             
-            if (!itemGetUISystemParent.TryGetComponent(out _itemGetUISystem))
-            {
-                Debug.Log($"{nameof(MessageUISystem)} > {nameof(itemGetUISystemParent)} cannot get {nameof(ItemGetUISystem)}.");
-            }
+            #region 戰敗 UI
+                if (defeatUISystemParent is null)
+                {
+                    Debug.Log($"{name} > {GetType().Name} > {nameof(defeatUISystemParent)} cannot be null.)");
+                    Destroy(gameObject);
+                    return;
+                }
+                        
+                if (!defeatUISystemParent.TryGetComponent(out _defeatUISystem))
+                {
+                    Debug.Log($"{name} > {GetType().Name} > {nameof(defeatUISystemParent)} cannot get {nameof(_defeatUISystem.GetType)}.");
+                    Destroy(gameObject);
+                }
+            #endregion
         }
         
-        #region Message UI
-            public static void ShowTipUI(PopUpUIContent content, Action onConfirm = null)
-            {
-                _tipUISystem.ShowTipUI(content, onConfirm);
-            }
-            
-            public static void ShowSwitchUI(PopUpUIContent content, Action onConfirm, Action onCancel = null)
-            {
-                _switchUISystem.ShowUI(content, onConfirm, onCancel);
-            }
-            
-            public static void ShowItemGetUI(PopUpUIContent content, List<IngredientSO> items, Action onConfirm)
-            {
-                _itemGetUISystem.ShowUI(content, items, onConfirm);
-            }
-        #endregion
+        public static void ShowTipUI(PopUpUIContent content, Action onConfirm = null)
+        {
+            _tipUISystem.ShowUI(content, onConfirm);
+        }
+        
+        public static void ShowSwitchUI(PopUpUIContent content, Action onConfirm, Action onCancel = null)
+        {
+            _switchUISystem.ShowUI(content, onConfirm, onCancel);
+        }
+        
+        public static void ShowItemGetUI(PopUpUIContent content, List<IngredientSO> items, Action onConfirm)
+        {
+            _itemGetUISystem.ShowUI(content, items, onConfirm);
+        }
+
+        public static void ShowDefeatUI(PopUpUIContent content, Action onConfirm)
+        {
+            _defeatUISystem.ShowUI(content, onConfirm);
+        }
     }
 }

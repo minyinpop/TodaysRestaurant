@@ -15,17 +15,17 @@ namespace UI_System.Message_UI_System.Child.Tip_UI_System.System
         {
             if (mask == null)
             {
-                Debug.Log($"{nameof(TipUISystem)} > {nameof(mask)} cannot be null.)");
+                Debug.Log($"{nameof(TipUISystem)} > {nameof(mask)} cannot be null.");
                 return;
             }
 
             if (tipUI == null)
             {
-                Debug.Log($"{nameof(TipUISystem)} > {nameof(tipUI)} cannot be null.)");
+                Debug.Log($"{nameof(TipUISystem)} > {nameof(tipUI)} cannot be null.");
             }
         }
 
-        public void ShowTipUI(PopUpUIContent content, Action onConfirm)
+        public void ShowUI(PopUpUIContent content, Action onConfirm)
         {
             mask.SetActive(true);
             

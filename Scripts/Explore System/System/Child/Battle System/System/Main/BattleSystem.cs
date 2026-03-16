@@ -10,6 +10,7 @@ using Explore_System.System.Child.Battle_System.System.Child.Selected_Card_Syste
 using Explore_System.System.Child.Battle_System.System.Main.State_Machine;
 using Explore_System.System.Child.Battle_System.System.Main.State_Machine.State;
 using Player_System.Data.Child.Player_Team;
+using UI_System.Message_UI_System.Main;
 using UnityEngine;
 
 namespace Explore_System.System.Child.Battle_System.System.Main
@@ -394,17 +395,16 @@ namespace Explore_System.System.Child.Battle_System.System.Main
                         onEnter: () =>
                         {
                             _isEnd = true;
-                            // TODO
-                            // UISystem.ShowDefeatUI(
-                            //     content: new PopUpUIContent(
-                            //         message: "被打敗了",
-                            //         confirmButtonTitle: "再來一次",
-                            //         cancelButtonTitle: string.Empty,
-                            //         closeButtonTitle: string.Empty),
-                            //     onConfirm: () =>
-                            //     {
-                            //         Debug.Log("確認玩家戰敗畫面");
-                            //     });
+                            MessageUISystem.ShowDefeatUI(
+                                content: new PopUpUIContent(
+                                    message: "被打敗了",
+                                    confirmButtonTitle: "再來一次",
+                                    cancelButtonTitle: string.Empty,
+                                    closeButtonTitle: string.Empty),
+                                onConfirm: () =>
+                                {
+                                    Debug.Log("確認玩家戰敗畫面");
+                                });
                         },
                         onExit: () =>
                         {
