@@ -77,7 +77,7 @@ namespace Player_System.Object
             _hurtState = new OnHurt(
                 onEnter: () =>
                 {
-                    Debug.Log("A");
+                    // TODO 玩家被打後會進到戰鬥系統
                 },
                 onExit: () =>
                 {

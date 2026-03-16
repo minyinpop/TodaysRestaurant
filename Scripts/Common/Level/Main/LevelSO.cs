@@ -1,5 +1,6 @@
 using Common.Level.Child.Level_Possible_Enemies;
 using Common.Level.Child.Level_Possible_Items;
+using Common.Scene_Name;
 using UnityEngine;
 
 namespace Common.Level.Main
@@ -12,10 +13,12 @@ namespace Common.Level.Main
                                 public string LevelName => levelName;
                                 
         [field: Header("Level Scene Name")]
-        [field: SerializeField] private string terrainSceneName;
-                                public string TerrainSceneName => terrainSceneName;
-        [field: SerializeField] private string exploreSceneName;
-                                public string ExploreSceneName => exploreSceneName;
+        [field: SerializeField] private SceneNameSO terrainSceneNameData;
+                                public SceneNameSO TerrainSceneNameData => terrainSceneNameData;
+        [field: SerializeField] private SceneNameSO exploreSceneNameData;
+                                public SceneNameSO ExploreSceneNameData => exploreSceneNameData;
+        [field: SerializeField] private SceneNameSO battleSceneNameData;
+                                public SceneNameSO BattleSceneNameData => battleSceneNameData;
     
         [field: Header("Level Possible Items")]
         [field: SerializeField] private LevelIngredient levelIngredient;
@@ -27,9 +30,19 @@ namespace Common.Level.Main
 
         private void OnValidate()
         {
-            if (terrainSceneName == string.Empty)
+            if (terrainSceneNameData is null)
             {
-                Debug.Log($"{GetType().Name} > {nameof(terrainSceneName)} cannot be empty.");
+                Debug.Log($"{GetType().Name} > {nameof(terrainSceneNameData)} cannot be null.");
+            }
+
+            if (exploreSceneNameData is null)
+            {
+                Debug.Log($"{GetType().Name} > {nameof(exploreSceneNameData)} cannot be null.");
+            }
+            
+            if (battleSceneNameData is null)
+            {
+                Debug.Log($"{GetType().Name} > {nameof(battleSceneNameData)} cannot be null.");
             }
 
             if (levelIngredient == null)

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
-using Battle_System.Object.Card;
 using Common.Value.Type;
+using Explore_System.System.Child.Battle_System.Object.Card;
 using UnityEngine;
 
 namespace Player_System.Data.Child.Player_Deck

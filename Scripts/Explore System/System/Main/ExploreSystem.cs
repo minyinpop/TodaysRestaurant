@@ -1,22 +1,24 @@
+using System;
 using System.Collections;
 using Common.Level.Main;
-using Explore_System.System.Child;
+using Explore_System.System.Child.Enemy_System;
+using Explore_System.System.Child.Ingredient_System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Explore_System.System.Main
 {
-    public sealed class ExploreSystem : MonoBehaviour
+    public sealed class ExploreSystem : SceneStarter
     {
         private LevelSO _levelData;
         
-        private Scene _terrainScene;
-        private Scene _exploreScene;
-        
         private bool _initialized;
         private IEnumerator _initializeCoroutine;
+        
+        private Scene _terrainScene;
+        private Scene _exploreScene;
 
-        public void StartSystem(LevelSO levelData)
+        public override void StartSystem(LevelSO levelData, Action onComplete)
         {
             if (_initialized)
             {
@@ -24,20 +26,28 @@ namespace Explore_System.System.Main
                 Destroy(gameObject);
                 return;
             }
-            
+
+            if (levelData is null)
+            {
+                Debug.Log($"{name} > {GetType().Name} > {nameof(StartSystem)} > {nameof(levelData)} cannot be null.");
+                Destroy(gameObject);
+                return;
+            }
+
+            _initialized = true;
             _levelData = levelData;
             
-            _initializeCoroutine = Initialize();
+            _initializeCoroutine = InitializeCoroutine();
             StartCoroutine(_initializeCoroutine);
             return;
 
-            IEnumerator Initialize()
+            IEnumerator InitializeCoroutine()
             {
                 #region Spawn Terrain
-                    var operation = SceneManager.LoadSceneAsync(_levelData.TerrainSceneName, LoadSceneMode.Additive);
+                    var operation = SceneManager.LoadSceneAsync(_levelData.TerrainSceneNameData.SceneName, LoadSceneMode.Additive);
                     if (operation is null)
                     {
-                        Debug.Log($"{name} > {GetType().Name} > {_levelData.ExploreSceneName} cannot find the new scene.");
+                        Debug.Log($"{name} > {GetType().Name} > {_levelData.ExploreSceneNameData} cannot find the new scene.");
                         Destroy(gameObject);
                         yield break;
                     }
@@ -46,17 +56,17 @@ namespace Explore_System.System.Main
                 #endregion
                 
                 #region Spawn Enemy / Ingredient
-                    operation = SceneManager.LoadSceneAsync(_levelData.ExploreSceneName, LoadSceneMode.Additive);
+                    operation = SceneManager.LoadSceneAsync(_levelData.ExploreSceneNameData.SceneName, LoadSceneMode.Additive);
                     if (operation is null)
                     {
-                        Debug.Log($"{name} > {GetType().Name} > {_levelData.ExploreSceneName} cannot find the new scene.");
+                        Debug.Log($"{name} > {GetType().Name} > {_levelData.ExploreSceneNameData} cannot find the new scene.");
                         Destroy(gameObject);
                         yield break;
                     }
 
                     yield return operation;
                     
-                    _exploreScene = SceneManager.GetSceneByName(_levelData.ExploreSceneName);
+                    _exploreScene = SceneManager.GetSceneByName(_levelData.ExploreSceneNameData.SceneName);
                     var rootObjects = _exploreScene.GetRootGameObjects();
                     var canGetEnemySystem = false;
                     var canGetIngredientSystem = false;
@@ -95,6 +105,8 @@ namespace Explore_System.System.Main
                         Destroy(gameObject);
                     }
                 #endregion
+                
+                onComplete.Invoke();
             }
         }
 
