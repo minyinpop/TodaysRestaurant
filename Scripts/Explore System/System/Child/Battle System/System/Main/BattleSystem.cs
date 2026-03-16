@@ -14,7 +14,7 @@ using UnityEngine;
 
 namespace Explore_System.System.Child.Battle_System.System.Main
 {
-    internal sealed class BattleSystem : MonoBehaviour
+    internal sealed class BattleSystem : SceneStarter
     {
         [field: Header("Systems")]
         [field: SerializeField] private SelectedCardSystem selectedCardSystem;
@@ -32,32 +32,27 @@ namespace Explore_System.System.Child.Battle_System.System.Main
         private readonly StateMachine _stateMachine = new();
         
         // TODO 預設為 Tails
-        private const TossResult _tossResult = TossResult.Heads;
+        private const TossResult _tossResult = TossResult.Tails;
 
         private IEnumerator _turnCoroutine;
         private IEnumerator _attackCoroutine;
         private IEnumerator _characterDeathCoroutine;
         private IEnumerator _drawCardAndShowCardCoroutine;
 
+        private bool _isStarted;
         private bool _isEnd;
         
         // public static event Action ReloadScene;
         // public static event Action<string, Action> ChangeScene;
         // public static event Action<string, int> StartScenario;
 
-        private void Start()
-        {
-            OnBattleStart();
-        }
-
-        private void OnEnable()
+        private void Awake()
         {
             PlayerTeamSystem.RecycleCard += OnRecycleCard;
         }
 
         private void OnDisable()
         {
-            PlayerTeamSystem.RecycleCard -= OnRecycleCard;
             if (_turnCoroutine is not null)
             {
                 StopCoroutine(_turnCoroutine);
@@ -77,8 +72,20 @@ namespace Explore_System.System.Child.Battle_System.System.Main
             }
         }
 
-        private void StartSystem()
+        private void OnDestroy()
         {
+            PlayerTeamSystem.RecycleCard -= OnRecycleCard;
+        }
+
+        public override void StartSystem()
+        {
+            if (_isStarted)
+            {
+                Debug.Log($"{name} > {GetType().Name} > is already started.");
+                return;
+            }
+
+            OnBattleStart();
         }
 
         private void EndSystem()
@@ -191,27 +198,6 @@ namespace Explore_System.System.Child.Battle_System.System.Main
                         }));
                 }
             #endregion
-            
-            // #region OnInitiativeCoin
-            //     private void OnInitiativeCoin()
-            //     {
-            //         StateMachine.ChangeState(new OnInitiativeCoin(
-            //             onEnter: () =>
-            //             {
-            //                 InitiativeSystemObject = Instantiate(initiativeSystem.gameObject);
-            //                 InitiativeSystemObject.GetComponent<InitiativeSystem>().OnShowResultComplete += result =>
-            //                 {
-            //                     TossResult = result;
-            //                     TurnManager();
-            //                 };
-            //             },
-            //             onExit: () =>
-            //             {
-            //                 Destroy(InitiativeSystemObject);
-            //                 InitiativeSystemObject = null;
-            //             }));
-            //     }
-            // #endregion
             
             #region TurnManager
                 private void TurnManager()

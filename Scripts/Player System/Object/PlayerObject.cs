@@ -17,8 +17,8 @@ namespace Player_System.Object
         private IState _idleState;
         private IState _moveState;
         private IState _hurtState;
-        
-        private Action OnPerformInteractCleanupAction;
+
+        public static event Action OnHurt;
 
         private void Awake()
         {
@@ -77,20 +77,25 @@ namespace Player_System.Object
             _hurtState = new OnHurt(
                 onEnter: () =>
                 {
-                    // TODO 玩家被打後會進到戰鬥系統
+                    if (OnHurt is null)
+                    {
+                        Debug.Log($"{name} > {GetType().Name} > {nameof(OnHurt)} cannot be null.");
+                        Destroy(gameObject);
+                        return;
+                    }
+
+                    OnHurt.Invoke();
                 },
                 onExit: () =>
                 {
                 });
+            
+            InputSystem.OnPerformedInteract += OnPerformInteract;
         }
 
         private void Start()
         {
-            InputSystem.OnPerformedInteract += OnPerformInteract;
-            OnPerformInteractCleanupAction = () => InputSystem.OnPerformedInteract -= OnPerformInteract;
-            
             StartDetectInteractableObject();
-
             _stateMachine.InitializeState(_idleState);
         }
 
@@ -107,8 +112,7 @@ namespace Player_System.Object
         private void OnDestroy()
         {
             StopDetectInteractableObject();
-            
-            OnPerformInteractCleanupAction?.Invoke();
+            InputSystem.OnPerformedInteract -= OnPerformInteract;
         }
 
         private void OnPerformInteract()

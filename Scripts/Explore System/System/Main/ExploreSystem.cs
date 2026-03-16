@@ -3,6 +3,8 @@ using System.Collections;
 using Common.Level.Main;
 using Explore_System.System.Child.Enemy_System;
 using Explore_System.System.Child.Ingredient_System;
+using Player_System.Object;
+using UI_System.Explore_UI_System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -10,13 +12,34 @@ namespace Explore_System.System.Main
 {
     public sealed class ExploreSystem : SceneStarter
     {
+        [field: Header("Component")]
+        [field: SerializeField] private ExploreUISystem exploreUISystem;
+        
         private LevelSO _levelData;
         
         private bool _initialized;
-        private IEnumerator _initializeCoroutine;
+        private IEnumerator _initializeExploreCoroutine;
+        private IEnumerator _initializeBattleCoroutine;
         
         private Scene _terrainScene;
         private Scene _exploreScene;
+        private Scene _battleScene;
+
+        private Action _playerHurtEvent;
+
+        private void Awake()
+        {
+            if (exploreUISystem is null)
+            {
+                Debug.Log($"{name} > {GetType().Name} > {nameof(exploreUISystem)} cannot be null.");
+                Destroy(gameObject);
+            }
+        }
+
+        private void OnDestroy()
+        {
+            _playerHurtEvent?.Invoke();
+        }
 
         public override void StartSystem(LevelSO levelData, Action onComplete)
         {
@@ -37,13 +60,13 @@ namespace Explore_System.System.Main
             _initialized = true;
             _levelData = levelData;
             
-            _initializeCoroutine = InitializeCoroutine();
-            StartCoroutine(_initializeCoroutine);
+            _initializeExploreCoroutine = InitializeExploreCoroutine();
+            StartCoroutine(_initializeExploreCoroutine);
             return;
 
-            IEnumerator InitializeCoroutine()
+            IEnumerator InitializeExploreCoroutine()
             {
-                #region Spawn Terrain
+                #region 生成地形
                     var operation = SceneManager.LoadSceneAsync(_levelData.TerrainSceneNameData.SceneName, LoadSceneMode.Additive);
                     if (operation is null)
                     {
@@ -55,7 +78,7 @@ namespace Explore_System.System.Main
                     yield return operation;
                 #endregion
                 
-                #region Spawn Enemy / Ingredient
+                #region 生成敵人與可採集的資源
                     operation = SceneManager.LoadSceneAsync(_levelData.ExploreSceneNameData.SceneName, LoadSceneMode.Additive);
                     if (operation is null)
                     {
@@ -106,12 +129,78 @@ namespace Explore_System.System.Main
                     }
                 #endregion
                 
+                #region 訂閱事件
+                    PlayerObject.OnHurt += InitializeBattle;
+                    _playerHurtEvent = () =>
+                    {
+                        PlayerObject.OnHurt -= InitializeBattle;
+                        _playerHurtEvent = null;
+                    };
+                #endregion
+                
                 onComplete.Invoke();
-            }
-        }
+                
+                yield break;
+                
+                void InitializeBattle()
+                {
+                    _initializeBattleCoroutine = InitializeBattleCoroutine();
+                    StartCoroutine(_initializeBattleCoroutine);
+                    return;
 
-        public void EndSystem()
-        {
+                    IEnumerator InitializeBattleCoroutine()
+                    {
+                        var complete = false;
+                        
+                        #region 淡入過場
+                            exploreUISystem.FadeIn(
+                                onComplete: () => complete = true);
+                            yield return new WaitUntil(() => complete);
+                        #endregion
+
+                        #region 隱藏探索場景
+                            foreach (var rootObject in _exploreScene.GetRootGameObjects())
+                            {
+                                rootObject.SetActive(false);
+                            }
+                        #endregion
+                        
+                        #region 生成戰鬥場景
+                            yield return SceneManager.LoadSceneAsync(_levelData.BattleSceneNameData.SceneName, LoadSceneMode.Additive);
+                        #endregion
+                        
+                        complete = false;
+                        
+                        #region 淡出過場
+                            exploreUISystem.FadeOut(
+                                onComplete: () => complete = true);
+                            yield return new WaitUntil(() => complete);
+                        #endregion
+                        
+                        #region 啟動戰鬥系統
+                            var isGetSceneStarter = false;
+                            _battleScene = SceneManager.GetSceneByName(_levelData.BattleSceneNameData.SceneName);
+                            
+                            foreach (var rootObject in _battleScene.GetRootGameObjects())
+                            {
+                                if (rootObject.TryGetComponent<SceneStarter>(out var sceneStarter))
+                                {
+                                    isGetSceneStarter = true;
+                                    
+                                    sceneStarter.StartSystem();
+                                    break;
+                                }
+                            }
+
+                            if (!isGetSceneStarter)
+                            {
+                                Debug.Log($"{name} > {GetType().Name} > cannot find {nameof(SceneStarter)} in {nameof(rootObjects)}");
+                                Destroy(gameObject);
+                            }
+                        #endregion
+                    }
+                }
+            }
         }
     }
 }
