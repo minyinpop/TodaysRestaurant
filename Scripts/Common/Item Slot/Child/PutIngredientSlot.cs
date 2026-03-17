@@ -1,7 +1,7 @@
+using Common.Item_Slot.Main;
 using Common.Item.Data.Ingredient;
-using Common.Storage_Slot.Main;
 
-namespace Common.Storage_Slot.Child
+namespace Common.Item_Slot.Child
 {
     public sealed class PutIngredientSlot : StorageSlot
     {

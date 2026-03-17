@@ -1,7 +1,7 @@
 using System.Collections.Generic;
+using Common.Item_Slot.Child;
 using Common.Item.Data;
 using Common.Item.Data.Serving_Note;
-using Common.Storage_Slot.Child;
 using UnityEngine;
 
 namespace UI_System.Restaurant_UI_System.Child.Serving_Note_UI_System.Object

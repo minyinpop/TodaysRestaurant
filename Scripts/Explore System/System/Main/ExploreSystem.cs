@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Common;
 using Common.Level.Main;
 using Explore_System.System.Child.Enemy_System;
 using Explore_System.System.Child.Ingredient_System;

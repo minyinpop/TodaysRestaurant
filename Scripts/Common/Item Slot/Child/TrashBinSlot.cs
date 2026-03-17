@@ -1,22 +1,22 @@
-using System;
+using Common.Item_Slot.Main;
 using Common.Item.Data;
-using Common.Storage_Slot.Main;
-using UnityEngine;
 
-namespace Common.Storage_Slot.Child
+namespace Common.Item_Slot.Child
 {
-    public sealed class StorageGetSlot : StorageSlot
+    public sealed class TrashBinSlot : StorageSlot
     {
         #region PointerEvent
             protected override void OnPointerEnter()
             {
                 if (!interactable) return;
+                slotImage.sprite = pointerEnterSprite;
                 animation.DoScale_UI(slotRect, scaleUpSettings);
             }
 
             protected override void OnPointerExit()
             {
                 if (!interactable) return;
+                slotImage.sprite = pointerExitSprite;
                 animation.DoScale_UI(slotRect, scaleDownSettings);
             }
         #endregion
@@ -28,18 +28,9 @@ namespace Common.Storage_Slot.Child
         #endregion
         
         #region Item
-            public override void TryAddItem(ItemSO itemData, Action onComplete)
+            public override bool TryAddItem(IItem item)
             {
-                _currentItem = itemData ?? throw new NotImplementedException();
-                itemImage.sprite = itemData.ItemSprite;
-                itemImage.gameObject.SetActive(true);
-                slotRect.localScale = Vector2.one * 1.25f;
-                animation.DoScale_UI(slotRect, scaleDownSettings,
-                    onComplete: () =>
-                    {
-                        interactable = true;
-                        onComplete?.Invoke();
-                    });
+                return item.ItemID != 999;
             }
         #endregion
     }

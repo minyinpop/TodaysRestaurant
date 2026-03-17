@@ -2,19 +2,22 @@ using System;
 using Common.Level.Main;
 using UnityEngine;
 
-public abstract class SceneStarter : MonoBehaviour
+namespace Common
 {
-    public virtual void StartSystem()
+    public abstract class SceneStarter : MonoBehaviour
     {
-        /*
+        public virtual void StartSystem()
+        {
+            /*
          * 
          */
-    }
+        }
 
-    public virtual void StartSystem(LevelSO levelSO, Action onComplete)
-    {
-        /*
+        public virtual void StartSystem(LevelSO levelSO, Action onComplete)
+        {
+            /*
          * 
          */
+        }
     }
 }

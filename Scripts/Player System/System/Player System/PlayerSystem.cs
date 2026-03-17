@@ -1,7 +1,6 @@
 using Input_System;
 using Restaurant_System.Object.Creature.Customer.System.Main;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace Player_System.System.Player_System
 {
@@ -10,7 +9,6 @@ namespace Player_System.System.Player_System
         private void Awake()
         {
             mainCamera = Camera.main;
-            eventSystem = EventSystem.current;
             
             InputSystem.OnClickedLeftButton += OnClickedLeftButton;
             InputSystem.OnClickedRightButton += OnClickedRightButton;

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Common;
 using Common.Value;
 using Common.Value.Type;
 using Explore_System.System.Child.Battle_System.System.Child;
@@ -10,6 +11,7 @@ using Explore_System.System.Child.Battle_System.System.Child.Selected_Card_Syste
 using Explore_System.System.Child.Battle_System.System.Main.State_Machine;
 using Explore_System.System.Child.Battle_System.System.Main.State_Machine.State;
 using Player_System.Data.Child.Player_Team;
+using UI_System.Message_UI_System.Child.Item_Get_UI_System.System;
 using UI_System.Message_UI_System.Main;
 using UnityEngine;
 
@@ -367,14 +369,14 @@ namespace Explore_System.System.Child.Battle_System.System.Main
                         onEnter: () =>
                         {
                             _isEnd = true;
-                            // ItemGetUISystem.ShowUI(
-                            //     content: new PopUpUIContent(
-                            //         message: string.Empty,
-                            //         confirmButtonTitle: "拿取物品",
-                            //         cancelButtonTitle: string.Empty,
-                            //         closeButtonTitle: string.Empty),
-                            //     items: null, // TODO 怪物掉落物
-                            //     onConfirm: () => Debug.Log("Confirm player win."));
+                            MessageUISystem.ShowItemGetUI(
+                                content: new PopUpUIContent(
+                                    message: string.Empty,
+                                    confirmButtonTitle: "拿取物品",
+                                    cancelButtonTitle: string.Empty,
+                                    closeButtonTitle: string.Empty),
+                                items: null, // TODO 怪物掉落物
+                                onConfirm: () => Debug.Log("Confirm player win."));
                         },
                         onExit: () =>
                         {

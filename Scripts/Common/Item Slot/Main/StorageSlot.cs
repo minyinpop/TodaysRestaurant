@@ -7,7 +7,7 @@ using Common.Pointer_Event;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Common.Storage_Slot.Main
+namespace Common.Item_Slot.Main
 {
     [RequireComponent(typeof(DoAnimation))]
     public abstract class StorageSlot : PointerEvent

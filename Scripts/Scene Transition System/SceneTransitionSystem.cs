@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using Animation_System.DOTween;
 using Animation_System.DOTween.Basic;
+using Common;
 using Common.Level.Main;
 using Common.Scene_Name;
 using DG.Tweening;

@@ -1,4 +1,7 @@
-public interface IAttackable
+namespace Common
 {
-    public void TakeDamage(int damage);
+    public interface IAttackable
+    {
+        public void TakeDamage(int damage);
+    }
 }

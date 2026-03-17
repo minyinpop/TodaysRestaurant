@@ -1,0 +1,161 @@
+using Animation_System.DOTween;
+using Animation_System.DOTween.Basic;
+using Common.Item_Slot.Main;
+using Common.Item.Data;
+using Common.Pointer_Event;
+using Player_System.System.Player_System;
+using UnityEngine;
+using UnityEngine.UI;
+
+namespace Common.Item_Slot.Child
+{
+    [RequireComponent(typeof(DoAnimation))]
+    public sealed class HotbarSlot : PointerEvent, IItemSlot
+    {
+        [field: Header("Component")]
+        [field: SerializeField] private new DoAnimation animation;
+        
+        [field: Header("State")]
+        [field: SerializeField] private bool canInteract;
+        
+        [field: Header("Slot RectTransform")]
+        [field: SerializeField] private RectTransform slotRect;
+        [field: SerializeField] private DoScale slotScaleUpSettings;
+        [field: SerializeField] private DoScale slotScaleDownSettings;
+        
+        [field: Header("Item Image")]
+        [field: SerializeField] private Image itemImage;
+        
+        [field: Header("Slot Border")]
+        [field: SerializeField] private Image slotBorderImage;
+        [field: SerializeField] private Color focusSlotColor;
+        [field: SerializeField] private Color unFocusSlotColor;
+        
+        private IItem _currentItem;
+
+        private void Awake()
+        {
+            if (animation is null)
+            {
+                Debug.Log($"{name} > {GetType().Name} > {nameof(animation)} cannot be null.");
+                Destroy(gameObject);
+                return;
+            }
+            
+            if (slotRect is null)
+            {
+                Debug.Log($"{name} > {GetType().Name} > {nameof(slotRect)} cannot be null.");
+                Destroy(gameObject);
+                return;
+            }
+
+            if (itemImage is null)
+            {
+                Debug.Log($"{name} > {GetType().Name} > {nameof(itemImage)} cannot be null.");
+                Destroy(gameObject);
+                return;
+            }
+
+            if (slotBorderImage is null)
+            {
+                Debug.Log($"{name} > {GetType().Name} > {nameof(slotBorderImage)} cannot be null.");
+                Destroy(gameObject);
+            }
+        }
+
+        #region PointerEvent
+            protected override void OnPointerEnter()
+            {
+                if (canInteract)
+                {
+                    animation.DoScale_UI(slotRect, slotScaleUpSettings);
+                }
+            }
+
+            protected override void OnPointerExit()
+            {
+                if (canInteract)
+                {
+                    animation.DoScale_UI(slotRect, slotScaleDownSettings);
+                }
+            }
+
+            protected override void OnPointerClick()
+            {
+                if (canInteract)
+                {
+                    PlayerSystem.DragItemFromItemSlot(this);
+                }
+            }
+        #endregion
+        
+        #region IItemSlot
+            public bool TryAddItem(IItem item)
+            {
+                if (item is null)
+                {
+                    Debug.Log($"{name} > {GetType().Name} > {nameof(TryAddItem)} > {nameof(item)} cannot be null.");
+                    Destroy(gameObject);
+                    return false;
+                }
+                
+                if (_currentItem is not null)
+                {
+                    return false;
+                }
+                
+                _currentItem = item;
+                
+                itemImage.sprite = _currentItem.ItemSprite;
+                itemImage.gameObject.SetActive(true);
+                return true;
+            }
+
+            public bool TryGetItem(out IItem item)
+            {
+                if (_currentItem is null)
+                {
+                    item = null;
+                    return false;
+                }
+                
+                itemImage.gameObject.SetActive(false);
+                itemImage.sprite = null;
+            
+                item = _currentItem;
+                _currentItem = null;
+                return true;
+            }
+
+            public bool TryRemoveItem(IItem itemData)
+            {
+                if (_currentItem is null) return false;
+                if (_currentItem != itemData) return false;
+                
+                itemImage.gameObject.SetActive(false);
+                itemImage.sprite = null;
+                
+                itemData.Remove();
+                _currentItem = null;
+                return true;
+            }
+        #endregion
+        
+        public void Selected()
+        {
+            slotBorderImage.color = focusSlotColor;
+            _currentItem?.Selected();
+        }
+
+        public void UnSelected()
+        {
+            slotBorderImage.color = unFocusSlotColor;
+            _currentItem?.UnSelected();
+        }
+
+        public void Use()
+        {
+            _currentItem?.Use();
+        }
+    }
+}
