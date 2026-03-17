@@ -30,8 +30,12 @@ namespace Common.Item_Slot.Child
         [field: SerializeField] private Image slotBorderImage;
         [field: SerializeField] private Color focusSlotColor;
         [field: SerializeField] private Color unFocusSlotColor;
-        
-        private IItem _currentItem;
+
+        public IItem CurrentItem
+        {
+            get;
+            private set;
+        }
 
         private void Awake()
         {
@@ -99,21 +103,21 @@ namespace Common.Item_Slot.Child
                     return false;
                 }
                 
-                if (_currentItem is not null)
+                if (CurrentItem is not null)
                 {
                     return false;
                 }
                 
-                _currentItem = item;
+                CurrentItem = item;
                 
-                itemImage.sprite = _currentItem.ItemSprite;
+                itemImage.sprite = CurrentItem.ItemSprite;
                 itemImage.gameObject.SetActive(true);
                 return true;
             }
 
             public bool TryGetItem(out IItem item)
             {
-                if (_currentItem is null)
+                if (CurrentItem is null)
                 {
                     item = null;
                     return false;
@@ -122,21 +126,21 @@ namespace Common.Item_Slot.Child
                 itemImage.gameObject.SetActive(false);
                 itemImage.sprite = null;
             
-                item = _currentItem;
-                _currentItem = null;
+                item = CurrentItem;
+                CurrentItem = null;
                 return true;
             }
 
             public bool TryRemoveItem(IItem itemData)
             {
-                if (_currentItem is null) return false;
-                if (_currentItem != itemData) return false;
+                if (CurrentItem is null) return false;
+                if (CurrentItem != itemData) return false;
                 
                 itemImage.gameObject.SetActive(false);
                 itemImage.sprite = null;
                 
                 itemData.Remove();
-                _currentItem = null;
+                CurrentItem = null;
                 return true;
             }
         #endregion
@@ -144,18 +148,18 @@ namespace Common.Item_Slot.Child
         public void Selected()
         {
             slotBorderImage.color = focusSlotColor;
-            _currentItem?.Selected();
+            CurrentItem?.Selected();
         }
 
         public void UnSelected()
         {
             slotBorderImage.color = unFocusSlotColor;
-            _currentItem?.UnSelected();
+            CurrentItem?.UnSelected();
         }
 
         public void Use()
         {
-            _currentItem?.Use();
+            CurrentItem?.Use();
         }
     }
 }
