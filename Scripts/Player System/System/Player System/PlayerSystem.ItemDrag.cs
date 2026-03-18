@@ -20,7 +20,7 @@ namespace Player_System.System.Player_System
             
             if (_draggedItem is null)
             {
-                #region 獲取當前處物格的物品並開始拖曳
+                #region 開始拖曳物品
                     _sourceSlot = itemSlot;
                     _sourceSlot.TryGetItem(out var item);
                     
@@ -37,22 +37,29 @@ namespace Player_System.System.Player_System
             }
             else
             {
-                _destinationSlot = itemSlot;
+                _destinationSlot = other.GetComponent<StorageSlot>();
                 
-                if (_destinationSlot.CurrentItem is null)
+                if (_destinationSlot.IsEmpty())
                 {
-                    #region 直接添加物品到該儲存格並結束拖曳
-                        if (_destinationSlot.TryAddItem(_draggedItem))
-                        {
-                            PlayerUISystem.RequireItemDragUI(false, null);
-                            
-                            _sourceSlot = null;
-                            _destinationSlot = null;
-                            _draggedItem = null;
-                        }
-                    #endregion
+                    PutItemToEmptySlot();
                 }
                 // else SwitchItem(); // TODO [2025.12.31] 暫時禁止物品交互功能
+            }
+
+            return;
+            
+            void TryToTakeItem()
+            {
+            }
+
+            void PutItemToEmptySlot()
+            {
+                if (!_destinationSlot.TryAddItem(_draggedItem)) return;
+                PlayerUISystem.RequireItemDragUI(false, null);
+                
+                _sourceSlot = null;
+                _destinationSlot = null;
+                _draggedItem = null;
             }
 
             /*

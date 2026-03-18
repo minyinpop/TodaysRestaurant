@@ -4,8 +4,6 @@ namespace Common.Item_Slot.Main
 {
     public interface IItemSlot
     {
-        public IItem CurrentItem { get; }
-        
         public bool TryAddItem(IItem item);
 
         public bool TryGetItem(out IItem item);

@@ -8,10 +8,13 @@ namespace Player_System.System.Player_System
 {
     public partial class PlayerSystem
     {
-        [field: Header("Tag")]
-        [field: SerializeField] private string utensilsTag;
+        [field: Header("Mouse System")]
+        [field: SerializeField] private PlayerItemDragSystem playerItemDragSystem;
+        [field: SerializeField] private Camera mainCamera;
         
-        private Camera mainCamera;
+        [field: Header("Tag")]
+        [field: SerializeField] private string storageSlot;
+        [field: SerializeField] private string utensilsTag;
 
         private void OnClickedLeftButton()
         {
