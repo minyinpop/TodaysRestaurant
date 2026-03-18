@@ -6,18 +6,18 @@ namespace Common
 {
     public abstract class SceneStarter : MonoBehaviour
     {
-        public virtual void StartSystem()
+        public virtual void StartSystem(LevelSO levelSO)
         {
             /*
-         * 
-         */
+             * 
+             */
         }
 
         public virtual void StartSystem(LevelSO levelSO, Action onComplete)
         {
             /*
-         * 
-         */
+             * 
+             */
         }
     }
 }

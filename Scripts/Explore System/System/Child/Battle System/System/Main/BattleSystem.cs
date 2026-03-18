@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Common;
+using Common.Level.Main;
 using Common.Value;
 using Common.Value.Type;
 using Explore_System.System.Child.Battle_System.System.Child;
@@ -80,11 +81,12 @@ namespace Explore_System.System.Child.Battle_System.System.Main
             PlayerTeamSystem.RecycleCard -= OnRecycleCard;
         }
 
-        public override void StartSystem()
+        public override void StartSystem(LevelSO levelData)
         {
             if (_isStarted)
             {
                 Debug.Log($"{name} > {GetType().Name} > is already started.");
+                Destroy(gameObject);
                 return;
             }
 

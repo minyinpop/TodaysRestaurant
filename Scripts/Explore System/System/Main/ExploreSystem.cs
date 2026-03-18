@@ -195,7 +195,7 @@ namespace Explore_System.System.Main
                                 {
                                     isGetSceneStarter = true;
                                     
-                                    sceneStarter.StartSystem();
+                                    sceneStarter.StartSystem(_levelData);
                                     break;
                                 }
                             }

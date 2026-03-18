@@ -27,11 +27,12 @@ namespace Player_System.System.Player_System
                     if (item is null)
                     {
                         _sourceSlot = null;
-                        return;
                     }
-
-                    _draggedItem = item;
-                    PlayerUISystem.RequireItemDragUI(true, _draggedItem);
+                    else
+                    {
+                        _draggedItem = item;
+                        PlayerUISystem.RequireItemDragUI(true, _draggedItem);
+                    }
                 #endregion
             }
             else
