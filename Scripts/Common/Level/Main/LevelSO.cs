@@ -1,5 +1,5 @@
-using Common.Level.Child.Level_Possible_Enemies;
-using Common.Level.Child.Level_Possible_Items;
+using Common.Level.Child.Level_Enemy;
+using Common.Level.Child.Level_Ingredient;
 using Common.Scene_Name;
 using UnityEngine;
 
@@ -20,13 +20,11 @@ namespace Common.Level.Main
         [field: SerializeField] private SceneNameSO battleSceneNameData;
                                 public SceneNameSO BattleSceneNameData => battleSceneNameData;
     
-        [field: Header("Level Possible Items")]
-        [field: SerializeField] private LevelIngredient levelIngredient;
-                                public LevelIngredient LevelIngredient => levelIngredient;
-                                
-        [field: Header("Level Possible Enemies")]
-        [field: SerializeField] private LevelEnemy levelEnemy;
-                                public LevelEnemy LevelEnemy => levelEnemy;
+        [field: Header("Level Data")]
+        [field: SerializeField] private LevelIngredientSO levelIngredientData;
+                                public LevelIngredientSO LevelIngredientData => levelIngredientData;
+        [field: SerializeField] private LevelEnemySO levelEnemyData;
+                                public LevelEnemySO LevelEnemyData => levelEnemyData;
 
         private void OnValidate()
         {
@@ -45,14 +43,14 @@ namespace Common.Level.Main
                 Debug.Log($"{GetType().Name} > {nameof(battleSceneNameData)} cannot be null.");
             }
 
-            if (levelIngredient == null)
+            if (levelIngredientData == null)
             {
-                Debug.Log($"{GetType().Name} > {nameof(levelIngredient)} cannot be null.");
+                Debug.Log($"{GetType().Name} > {nameof(levelIngredientData)} cannot be null.");
             }
 
-            if (levelEnemy == null)
+            if (levelEnemyData == null)
             {
-                Debug.Log($"{GetType().Name} > {nameof(levelEnemy)} cannot be null.");
+                Debug.Log($"{GetType().Name} > {nameof(levelEnemyData)} cannot be null.");
             }
         }
     }

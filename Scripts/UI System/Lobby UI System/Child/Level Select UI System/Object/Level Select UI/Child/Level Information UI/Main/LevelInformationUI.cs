@@ -74,7 +74,7 @@ namespace UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Se
             #region Ingredient
                 InstantiateContainer(ingredientSlotContainerParent, out var container);
 
-                foreach (var ingredient in levelData.LevelIngredient.LevelIngredientEntries)
+                foreach (var ingredient in levelData.LevelIngredientData.LevelIngredientEntries)
                 {
                     if (!container.CanAddSlot())
                     {
@@ -93,7 +93,7 @@ namespace UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Se
             #region Enemy
                 InstantiateContainer(enemySlotContainerParent, out container);
 
-                foreach (var entry in levelData.LevelEnemy.LevelEnemyEntries)
+                foreach (var entry in levelData.LevelEnemyData.EnemyEntries)
                 {
                     if (!container.CanAddSlot())
                     {
@@ -101,8 +101,8 @@ namespace UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Se
                     }
                         
                     var newSlot = Instantiate(slotPrefab);
-                    newSlot.Initialize(entry.EnemyData);
-                        
+                    newSlot.Initialize(entry.ExploreEnemyEntry.EnemyData);
+                    
                     container.TryAddSlot(newSlot);
                 }
 

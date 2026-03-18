@@ -1,11 +1,11 @@
 using System;
 using System.Collections;
 using Common;
+using Common.Enemy.Enemy_Object;
+using Common.Level.Child.Level_Enemy;
 using Common.Level.Main;
 using Explore_System.System.Child.Enemy_System;
 using Explore_System.System.Child.Ingredient_System;
-using Player_System.Object;
-using Player_System.System.Player_System;
 using UI_System.Explore_UI_System;
 using UI_System.Player_UI_System.Main;
 using UnityEngine;
@@ -28,7 +28,7 @@ namespace Explore_System.System.Main
         private Scene _exploreScene;
         private Scene _battleScene;
 
-        private Action _playerHurtEvent;
+        private Action _onEnemyAttackCleanupAction;
 
         private void Awake()
         {
@@ -41,7 +41,7 @@ namespace Explore_System.System.Main
 
         private void OnDestroy()
         {
-            _playerHurtEvent?.Invoke();
+            _onEnemyAttackCleanupAction?.Invoke();
         }
 
         public override void StartSystem(LevelSO levelData, Action onComplete)
@@ -133,11 +133,11 @@ namespace Explore_System.System.Main
                 #endregion
                 
                 #region 訂閱事件
-                    PlayerObject.OnHurt += InitializeBattle;
-                    _playerHurtEvent = () =>
+                    EnemyObject.OnAttack += InitializeBattle;
+                    _onEnemyAttackCleanupAction = () =>
                     {
-                        PlayerObject.OnHurt -= InitializeBattle;
-                        _playerHurtEvent = null;
+                        EnemyObject.OnAttack -= InitializeBattle;
+                        _onEnemyAttackCleanupAction = null;
                     };
                 #endregion
                 
@@ -145,7 +145,7 @@ namespace Explore_System.System.Main
                 
                 yield break;
                 
-                void InitializeBattle()
+                void InitializeBattle(BattleEnemyEntry entry)
                 {
                     _initializeBattleCoroutine = InitializeBattleCoroutine();
                     StartCoroutine(_initializeBattleCoroutine);
@@ -195,7 +195,7 @@ namespace Explore_System.System.Main
                                 {
                                     isGetSceneStarter = true;
                                     
-                                    sceneStarter.StartSystem(_levelData);
+                                    sceneStarter.StartSystem(entry);
                                     break;
                                 }
                             }

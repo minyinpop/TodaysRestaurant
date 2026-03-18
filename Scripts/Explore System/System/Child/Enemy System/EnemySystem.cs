@@ -25,14 +25,14 @@ namespace Explore_System.System.Child.Enemy_System
                 return;
             }
             
-            var _remainingEnemyEntry = _levelData.LevelEnemy.LevelEnemyEntries.ToList();
+            var _remainingEnemyEntry = _levelData.LevelEnemyData.EnemyEntries.ToList();
             var _remainingSpawnPoints = enemySpawnPoints.ToList();
 
             while (_remainingEnemyEntry.Count > 0 && _remainingSpawnPoints.Count > 0)
             {
                 var entry = _remainingEnemyEntry[Random.Range(0, _remainingEnemyEntry.Count)];
                             _remainingEnemyEntry.Remove(entry);
-                var spawnAmount = Random.Range(entry.SpawnAmount.Min, entry.SpawnAmount.Max + 1);
+                var spawnAmount = Random.Range(entry.ExploreEnemyEntry.SpawnAmount.Min, entry.ExploreEnemyEntry.SpawnAmount.Max + 1);
                 
                 if (spawnAmount <= 0)
                 {
@@ -48,7 +48,7 @@ namespace Explore_System.System.Child.Enemy_System
 
                     var spawnPoint = _remainingSpawnPoints[Random.Range(0, _remainingSpawnPoints.Count)];
                                      _remainingSpawnPoints.Remove(spawnPoint);
-                    spawnPoint.InitializeEnemy(entry.EnemyData.EnemyObject);
+                    spawnPoint.InitializeEnemy(entry.ExploreEnemyEntry.EnemyData.EnemyObject, entry.BattleEnemyEntry);
                 }
             }
         }

@@ -1,4 +1,5 @@
 using Common.Enemy.Enemy_Object;
+using Common.Level.Child.Level_Enemy;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -8,17 +9,19 @@ namespace Explore_System.Object
     {
         private EnemyObject _currentEnemyObject;
 
-        public void InitializeEnemy(EnemyObject enemyObject)
+        public void InitializeEnemy(EnemyObject enemyObject, BattleEnemyEntry entry)
         {
             if (enemyObject is null)
             {
-                Debug.Log($"{gameObject.name} > {GetType().Name} > {nameof(InitializeEnemy)} > {nameof(enemyObject)} cannot be null.");
+                Debug.Log($"{name} > {GetType().Name} > {nameof(InitializeEnemy)} > {nameof(enemyObject)} cannot be null.");
+                Destroy(gameObject);
                 return;
             }
 
             if (_currentEnemyObject is not null)
             {
-                Debug.Log($"{gameObject.name} is already occupied.");
+                Debug.Log($"{name} > {GetType().Name} > {nameof(InitializeEnemy)} > {nameof(_currentEnemyObject)} is already occupied.");
+                Destroy(gameObject);
                 return;
             }
 
@@ -30,13 +33,13 @@ namespace Explore_System.Object
                 var parent = transform;
                 
                 _currentEnemyObject = Instantiate(prefab, position, rotation, parent).GetComponent<EnemyObject>();
-                _currentEnemyObject.Initialize(hit.position);
+                _currentEnemyObject.Initialize(hit.position, entry);
             }
             else
             {
                 Debug.Log($"{name} > {GetType().Name} cannot found a valid position.");
+                Destroy(gameObject);
             }
-
         }
     }
 }

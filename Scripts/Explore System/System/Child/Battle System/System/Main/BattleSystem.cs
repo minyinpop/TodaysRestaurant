@@ -3,16 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Common;
-using Common.Level.Main;
+using Common.Level.Child.Level_Enemy;
 using Common.Value;
 using Common.Value.Type;
 using Explore_System.System.Child.Battle_System.System.Child;
-using Explore_System.System.Child.Battle_System.System.Child.Initiative_System.System.Main;
 using Explore_System.System.Child.Battle_System.System.Child.Selected_Card_System.Main;
 using Explore_System.System.Child.Battle_System.System.Main.State_Machine;
 using Explore_System.System.Child.Battle_System.System.Main.State_Machine.State;
 using Player_System.Data.Child.Player_Team;
-using UI_System.Message_UI_System.Child.Item_Get_UI_System.System;
 using UI_System.Message_UI_System.Main;
 using UnityEngine;
 
@@ -25,7 +23,6 @@ namespace Explore_System.System.Child.Battle_System.System.Main
         [field: SerializeField] private CardPoolSystem cardPoolSystem;
         [field: SerializeField] private ShowCardSystem showCardSystem;
         [field: SerializeField] private HandCardSystem handCardSystem;
-        [field: SerializeField] private InitiativeSystem initiativeSystem;
         [field: SerializeField] private UseCardSystem useCardSystem;
         [field: SerializeField] private PlayerTeamSystem playerTeamSystem;
         [field: SerializeField] private EnemyTeamSystem enemyTeamSystem;
@@ -35,7 +32,7 @@ namespace Explore_System.System.Child.Battle_System.System.Main
         
         private readonly StateMachine _stateMachine = new();
         
-        // TODO 預設為 Tails
+        // TODO 改成誰先被打到誰就先行動
         private const TossResult _tossResult = TossResult.Tails;
 
         private IEnumerator _turnCoroutine;
@@ -45,13 +42,67 @@ namespace Explore_System.System.Child.Battle_System.System.Main
 
         private bool _isStarted;
         private bool _isEnd;
-        
-        // public static event Action ReloadScene;
-        // public static event Action<string, Action> ChangeScene;
-        // public static event Action<string, int> StartScenario;
 
+        private BattleEnemyEntry _currentBattleEnemyEntry;
+        
         private void Awake()
         {
+            if (selectedCardSystem is null)
+            {
+                Debug.Log($"{name} > {GetType().Name} > {nameof(selectedCardSystem)} cannot be null.");
+                Destroy(gameObject);
+                return;
+            }
+            
+            if (cardPoolSystem is null)
+            {
+                Debug.Log($"{name} > {GetType().Name} > {nameof(cardPoolSystem)} cannot be null.");
+                Destroy(gameObject);
+                return;
+            }
+
+            if (showCardSystem is null)
+            {
+                Debug.Log($"{name} > {GetType().Name} > {nameof(showCardSystem)} cannot be null.");
+                Destroy(gameObject);
+                return;
+            }
+            
+            if (handCardSystem is null)
+            {
+                Debug.Log($"{name} > {GetType().Name} > {nameof(handCardSystem)} cannot be null.");
+                Destroy(gameObject);
+                return;
+            }
+            
+            if (useCardSystem is null)
+            {
+                Debug.Log($"{name} > {GetType().Name} > {nameof(useCardSystem)} cannot be null.");
+                Destroy(gameObject);
+                return;
+            }
+            
+            if (playerTeamSystem is null)
+            {
+                Debug.Log($"{name} > {GetType().Name} > {nameof(playerTeamSystem)} cannot be null.");
+                Destroy(gameObject);
+                return;
+            }
+
+            if (enemyTeamSystem is null)
+            {
+                Debug.Log($"{name} > {GetType().Name} > {nameof(enemyTeamSystem)} cannot be null.");
+                Destroy(gameObject);
+                return;
+            }
+
+            if (playerTeamData is null)
+            {
+                Debug.Log($"{name} > {GetType().Name} > {nameof(playerTeamData)} cannot be null.");
+                Destroy(gameObject);
+                return;           
+            }
+
             PlayerTeamSystem.RecycleCard += OnRecycleCard;
         }
 
@@ -81,7 +132,7 @@ namespace Explore_System.System.Child.Battle_System.System.Main
             PlayerTeamSystem.RecycleCard -= OnRecycleCard;
         }
 
-        public override void StartSystem(LevelSO levelData)
+        public override void StartSystem(BattleEnemyEntry entry)
         {
             if (_isStarted)
             {
@@ -89,6 +140,8 @@ namespace Explore_System.System.Child.Battle_System.System.Main
                 Destroy(gameObject);
                 return;
             }
+
+            _currentBattleEnemyEntry = entry;
 
             OnBattleStart();
         }
@@ -377,7 +430,7 @@ namespace Explore_System.System.Child.Battle_System.System.Main
                                     confirmButtonTitle: "拿取物品",
                                     cancelButtonTitle: string.Empty,
                                     closeButtonTitle: string.Empty),
-                                items: null, // TODO 怪物掉落物
+                                items: _currentBattleEnemyEntry.ItemsData,
                                 onConfirm: () => Debug.Log("Confirm player win."));
                         },
                         onExit: () =>

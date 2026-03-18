@@ -25,7 +25,7 @@ namespace Explore_System.System.Child.Ingredient_System
                 return;
             }
 
-            var _remainingIngredientEntry = _levelData.LevelIngredient.LevelIngredientEntries.ToList();
+            var _remainingIngredientEntry = _levelData.LevelIngredientData.LevelIngredientEntries.ToList();
             var _remainingSpawnPoints = ingredientSpawnPoints.ToList();
 
             while (_remainingIngredientEntry.Count > 0 && _remainingSpawnPoints.Count > 0)

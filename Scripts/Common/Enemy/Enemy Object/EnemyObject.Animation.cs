@@ -73,7 +73,14 @@ namespace Common.Enemy.Enemy_Object
                 }
                 case "Attack":
                 {
-                    OnAttack();
+                    if (OnAttack is null)
+                    {
+                        Debug.Log($"{name} > {GetType().Name} > {nameof(OnAttack)} cannot be null.");
+                        Destroy(gameObject);
+                        return;
+                    }
+
+                    OnAttack.Invoke(_battleEnemyEntry);
                     break;
                 }
             }

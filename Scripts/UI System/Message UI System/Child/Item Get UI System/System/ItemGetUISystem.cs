@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Animation_System.DOTween;
 using Animation_System.DOTween.Basic;
+using Common.Item.Data;
 using Common.Item.Data.Ingredient;
 using Common.Value;
 using UI_System.Message_UI_System.Child.Item_Get_UI_System.Object;
@@ -50,7 +51,7 @@ namespace UI_System.Message_UI_System.Child.Item_Get_UI_System.System
             itemGetUI.gameObject.SetActive(false);
         }
 
-        public void ShowUI(PopUpUIContent content, List<IngredientSO> items, Action onConfirm)
+        public void ShowUI(PopUpUIContent content, IItem[] items, Action onConfirm)
         {
             mask.gameObject.SetActive(true);
             

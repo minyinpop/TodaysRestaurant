@@ -1,6 +1,8 @@
+using System;
 using Common.Enemy.Data;
 using Common.Enemy.Enemy_Object.State_Machine;
 using Common.Enemy.Enemy_Object.State_Machine.State;
+using Common.Level.Child.Level_Enemy;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -16,11 +18,15 @@ namespace Common.Enemy.Enemy_Object
 
         private bool _initialized;
         
+        private BattleEnemyEntry _battleEnemyEntry;
+        
         private readonly StateMachine _stateMachine = new();
 
         private IState _idleState;
         private IState _chaseState;
         private IState _attackState;
+
+        public static event Action<BattleEnemyEntry> OnAttack;
         
         private void Awake()
         {
@@ -192,22 +198,20 @@ namespace Common.Enemy.Enemy_Object
             StopMove();
         }
 
-        private void OnAttack()
-        {
-            _attackTarget?.GetComponent<IAttackable>().TakeDamage(0);
-        }
-
-        public void Initialize(Vector3 position)
+        public void Initialize(Vector3 spawnPoint, BattleEnemyEntry entry)
         {
             if (_initialized)
             {
                 Debug.Log($"{name} > {GetType().Name} > {nameof(Initialize)} > {nameof(_initialized)} is already initialize.");
+                Destroy(gameObject);
                 return;
             }
 
             _initialized = true;
 
-            _agent.Warp(position);
+            _battleEnemyEntry = entry;
+
+            _agent.Warp(spawnPoint);
             
             _stateMachine.InitializeState(_idleState);
         }

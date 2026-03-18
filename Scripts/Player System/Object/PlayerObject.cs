@@ -1,4 +1,3 @@
-using System;
 using Common;
 using Input_System;
 using Player_System.Object.State_Machine;
@@ -18,8 +17,6 @@ namespace Player_System.Object
         private IState _idleState;
         private IState _moveState;
         private IState _hurtState;
-
-        public static event Action OnHurt;
 
         private void Awake()
         {
@@ -78,18 +75,9 @@ namespace Player_System.Object
             _hurtState = new OnHurt(
                 onEnter: () =>
                 {
-                    if (OnHurt is null)
-                    {
-                        Debug.Log($"{name} > {GetType().Name} > {nameof(OnHurt)} cannot be null.");
-                        Destroy(gameObject);
-                        return;
-                    }
-
                     // TODO 被攻擊到的動畫
                     _canInteract = false;
                     _canWalk = false;
-
-                    OnHurt.Invoke();
                 },
                 onExit: () =>
                 {
@@ -120,9 +108,10 @@ namespace Player_System.Object
             InteractWithObject();
         }
 
-        public void TakeDamage(int damage)
+        public bool TakeDamage()
         {
             _stateMachine.ChangeState(_hurtState);
+            return true;
         }
     }
 }

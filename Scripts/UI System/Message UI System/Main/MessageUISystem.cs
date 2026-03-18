@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Common.Item.Data;
 using Common.Item.Data.Ingredient;
 using Common.Value;
 using UI_System.Message_UI_System.Child.Defeat_UI_System.System;
@@ -98,7 +99,7 @@ namespace UI_System.Message_UI_System.Main
             _switchUISystem.ShowUI(content, onConfirm, onCancel);
         }
         
-        public static void ShowItemGetUI(PopUpUIContent content, List<IngredientSO> items, Action onConfirm)
+        public static void ShowItemGetUI(PopUpUIContent content, IItem[] items, Action onConfirm)
         {
             _itemGetUISystem.ShowUI(content, items, onConfirm);
         }

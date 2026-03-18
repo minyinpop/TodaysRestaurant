@@ -61,6 +61,8 @@ namespace Common.Item_Slot.Child
                 Debug.Log($"{name} > {GetType().Name} > {nameof(slotBorderImage)} cannot be null.");
                 Destroy(gameObject);
             }
+            
+            itemImage.gameObject.SetActive(false);
         }
 
         #region PointerEvent

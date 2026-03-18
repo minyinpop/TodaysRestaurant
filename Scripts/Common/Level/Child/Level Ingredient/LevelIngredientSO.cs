@@ -1,23 +1,23 @@
-using Common.Enemy.Data;
+using Common.Item.Data.Ingredient;
 using Common.Value;
 using UnityEngine;
 
-namespace Common.Level.Child.Level_Possible_Enemies
+namespace Common.Level.Child.Level_Ingredient
 {
-    [CreateAssetMenu(menuName = "Minyinpop/Level/Child/Level Enemy", fileName = "New Data")]
-    public sealed class LevelEnemy : ScriptableObject
+    [CreateAssetMenu(menuName = "Minyinpop/Level/Child/Level Ingredient", fileName = "New Data")]
+    public sealed class LevelIngredientSO : ScriptableObject
     {
         [field: Header("Data")]
-        [field: SerializeField] private LevelEnemyEntry[] levelEnemyEntries;
-                                public LevelEnemyEntry[] LevelEnemyEntries => levelEnemyEntries;
+        [field: SerializeField] private LevelIngredientEntry[] levelIngredientEntries;
+                                public LevelIngredientEntry[] LevelIngredientEntries => levelIngredientEntries;
 
         private void OnValidate()
         {
-            foreach (var entry in levelEnemyEntries)
+            foreach (var entry in levelIngredientEntries)
             {
-                if (entry.EnemyData is null)
+                if (entry.IngredientData is null)
                 {
-                    Debug.Log($"{GetType().Name} > {nameof(entry.EnemyData)} cannot be null.");
+                    Debug.Log($"{GetType().Name} > {nameof(entry.IngredientData)} cannot be null.");
                 }
 
                 if (entry.SpawnAmount.Min < 0)
@@ -39,10 +39,10 @@ namespace Common.Level.Child.Level_Possible_Enemies
     }
 
     [System.Serializable]
-    public sealed class LevelEnemyEntry
+    public sealed class LevelIngredientEntry
     {
-        [field: SerializeField] private EnemySO enemyData;
-                                public EnemySO EnemyData => enemyData;
+        [field: SerializeField] private IngredientSO ingredientData;
+                                public IngredientSO IngredientData => ingredientData;
         [field: SerializeField] private Range spawnAmount;
                                 public Range SpawnAmount => spawnAmount;
     }

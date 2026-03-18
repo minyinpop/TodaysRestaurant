@@ -1,6 +1,7 @@
 using Common.Item_Slot.Main;
 using Common.Item.Data;
 using UI_System.Player_UI_System.Main;
+using UnityEngine;
 
 namespace Player_System.System.Player_System
 {
@@ -20,7 +21,7 @@ namespace Player_System.System.Player_System
             
             if (_draggedItem is null)
             {
-                #region 開始拖曳物品
+                #region 從當前點擊到的格子獲取要被拖曳的物品
                     _sourceSlot = itemSlot;
                     _sourceSlot.TryGetItem(out var item);
                     
@@ -41,30 +42,38 @@ namespace Player_System.System.Player_System
                 
                 if (_destinationSlot.Item is null)
                 {
-                    if (_destinationSlot.TryAddItem(_draggedItem))
-                    {
-                        PlayerUISystem.RequireItemDragUI(false, null);
+                    #region 把拖曳中的物品給添加到當前點擊的格子
+                        if (_destinationSlot.TryAddItem(_draggedItem))
+                        {
+                            PlayerUISystem.RequireItemDragUI(false, null);
 
-                        _sourceSlot = null;
-                        _destinationSlot = null;
-                        _draggedItem = null;
-                    }
+                            _sourceSlot = null;
+                            _destinationSlot = null;
+                            _draggedItem = null;
+                        }
+                    #endregion
                 }
-                // else SwitchItem(); // TODO [2025.12.31] 暫時禁止物品交互功能
+                else
+                {
+                    #region 與當前點擊的格子交換物品
+                        /*
+                         * 可能要幫 ItemSlot 做一個交換物品的 function。
+                         */
+                        if (_destinationSlot.TryGetItem(out var item))
+                        {
+                            if (_destinationSlot.TryAddItem(_draggedItem))
+                            {
+                                _draggedItem = item;
+                                
+                                PlayerUISystem.RequireItemDragUI(true, _draggedItem);
+                                
+                                _sourceSlot = _destinationSlot;
+                                _destinationSlot = null;
+                            }
+                        }
+                    #endregion
+                }
             }
-
-            /*
-            void SwitchItem()
-            {
-                _destinationSlot.TryGetItem(out var item);
-                if (!_destinationSlot.TryAddItem(_draggedItem)) return;
-                _draggedItem = item;
-                UISystem.RequireItemDragUI(true, _draggedItem);
-                
-                _sourceSlot = _destinationSlot;
-                _destinationSlot = null;
-            }
-            */
         }
     }
 }
