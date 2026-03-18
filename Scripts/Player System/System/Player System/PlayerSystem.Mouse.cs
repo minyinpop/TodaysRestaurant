@@ -9,7 +9,6 @@ namespace Player_System.System.Player_System
     public partial class PlayerSystem
     {
         [field: Header("Mouse System")]
-        [field: SerializeField] private PlayerItemDragSystem playerItemDragSystem;
         [field: SerializeField] private Camera mainCamera;
         
         [field: Header("Tag")]

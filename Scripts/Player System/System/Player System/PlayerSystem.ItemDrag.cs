@@ -37,29 +37,20 @@ namespace Player_System.System.Player_System
             }
             else
             {
-                _destinationSlot = other.GetComponent<StorageSlot>();
+                _destinationSlot = itemSlot;
                 
-                if (_destinationSlot.IsEmpty())
+                if (_destinationSlot.Item is null)
                 {
-                    PutItemToEmptySlot();
+                    if (_destinationSlot.TryAddItem(_draggedItem))
+                    {
+                        PlayerUISystem.RequireItemDragUI(false, null);
+
+                        _sourceSlot = null;
+                        _destinationSlot = null;
+                        _draggedItem = null;
+                    }
                 }
                 // else SwitchItem(); // TODO [2025.12.31] 暫時禁止物品交互功能
-            }
-
-            return;
-            
-            void TryToTakeItem()
-            {
-            }
-
-            void PutItemToEmptySlot()
-            {
-                if (!_destinationSlot.TryAddItem(_draggedItem)) return;
-                PlayerUISystem.RequireItemDragUI(false, null);
-                
-                _sourceSlot = null;
-                _destinationSlot = null;
-                _draggedItem = null;
             }
 
             /*
