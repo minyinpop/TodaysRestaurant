@@ -761,7 +761,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UI_System.Message_UI_System.Child.Item_Get_UI_System.Object.ItemGetUI
   messageTMP: {fileID: 749063111710523583}
-  itemSlotParent: {fileID: 0}
+  itemSlotParent: {fileID: 5975178102997040387}
   confirmButton: {fileID: 4985623844059049159}
 --- !u!1 &2369418465159716459
 GameObject:
@@ -1752,16 +1752,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87f778e641f140428fc7dc20dc700e0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UI_System.System.Child.Message_UI_System.ItemGetUISystem
-  animation: {fileID: 0}
-  mask: {fileID: 4652948158688224922}
+  animation: {fileID: 4693047588564380272}
+  mask: {fileID: 6225615089099135541}
   fadeInSettings:
-    EndValue: 0
-    Duration: 0
-    Ease: 0
+    EndValue: 1
+    Duration: 1
+    Ease: 1
   fadeOutSettings:
     EndValue: 0
-    Duration: 0
-    Ease: 0
+    Duration: 1
+    Ease: 1
   itemGetUI: {fileID: 8332306653714923645}
 --- !u!114 &4693047588564380272
 MonoBehaviour:
@@ -2028,6 +2028,7 @@ GameObject:
   - component: {fileID: 2163753805622878039}
   - component: {fileID: 1294291572503761985}
   - component: {fileID: 4713599544715172114}
+  - component: {fileID: 6225615089099135541}
   m_Layer: 0
   m_Name: Mask
   m_TagString: Untagged
@@ -2092,6 +2093,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!225 &6225615089099135541
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4652948158688224922}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &4802065741188335404
 GameObject:
   m_ObjectHideFlags: 0
