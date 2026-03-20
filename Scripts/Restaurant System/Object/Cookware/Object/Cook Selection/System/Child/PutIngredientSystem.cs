@@ -4,7 +4,7 @@ using System.Linq;
 using Animation_System.DOTween;
 using Animation_System.DOTween.Basic;
 using Common.Button;
-using Common.Item_Slot.Legacy.Child;
+using Common.Item_Slot.New.Child;
 using Common.Item.Data.Food;
 using Common.Item.Data.Ingredient;
 using UnityEngine;
@@ -45,26 +45,27 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Child
         {
             if (PutIngredientUI.activeSelf) return;
             
-            // Button
-            ConfirmButton.OnClick += onConfirm;
-            CloseAction.Add(() => ConfirmButton.OnClick -= onConfirm);
-            CloseButton.OnClick += onCancel;
-            CloseAction.Add(() => CloseButton.OnClick -= onCancel);
+            #region Button
+                ConfirmButton.OnClick += onConfirm;
+                CloseAction.Add(() => ConfirmButton.OnClick -= onConfirm);
+                CloseButton.OnClick += onCancel;
+                CloseAction.Add(() => CloseButton.OnClick -= onCancel);
+            #endregion
             
-            // Item Slot
-            selectedFoodData.GetRecipeSheet(out var recipeSheet);
-            foreach (var itemData in recipeSheet)
-            {
-                var itemSlot = Instantiate(ItemSlotPrefab, ItemSlotParent);
-                var itemSlot_ItemSlot = itemSlot.GetComponent<PutIngredientSlot>();
-                slots.Add(itemSlot_ItemSlot);
-                itemSlot_ItemSlot.TryAddItem(itemData);
-            }
+            #region Item Slot
+                foreach (var itemData in selectedFoodData.RecipeSheet)
+                {
+                    var slot = Instantiate(ItemSlotPrefab, ItemSlotParent).GetComponent<PutIngredientSlot>();
+                    slots.Add(slot);
+                    slot.Initialize(itemData);
+                }
+            #endregion
             
-            // UI
-            PutIngredientUI.SetActive(true);
-            DoAnimation.DoFade_CanvasGroup(PutIngredientUI_CanvasGroup, FadeInSettings,
-                onComplete: () => SetInteractable(true));
+            #region UI
+                PutIngredientUI.SetActive(true);
+                DoAnimation.DoFade_CanvasGroup(PutIngredientUI_CanvasGroup, FadeInSettings,
+                    onComplete: () => SetInteractable(true));
+            #endregion
         }
 
         public void Hide(Action onComplete = null)
@@ -91,7 +92,7 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Child
         
         public bool CheckRecipeIsCorrect()
         {
-            return !slots.Where(itemSlot => itemSlot.IsEmpty()).Any();
+            return slots.All(slot => slot.Item is not null);
         }
 
         public void GetIngredients(out Queue<IIngredient> ingredients)
@@ -100,7 +101,16 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Child
             foreach (var itemSlot in slots)
             {
                 itemSlot.TryGetItem(out var item);
-                ingredients.Enqueue(item);
+
+                if (item is IIngredient ingredient)
+                {
+                    ingredients.Enqueue(ingredient);
+                }
+                else
+                {
+                    Debug.Log($"{name} > {GetType().Name} > {nameof(GetIngredients)} > {nameof(item)} is not an ingredient.");
+                    Destroy(gameObject);
+                }
             }
         }
     }

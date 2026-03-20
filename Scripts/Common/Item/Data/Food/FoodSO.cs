@@ -1,4 +1,4 @@
-using Common.Value;
+using Common.Item.Data.Ingredient;
 using Common.Value.Type;
 using UnityEngine;
 
@@ -13,7 +13,7 @@ namespace Common.Item.Data.Food
             [field: SerializeField] private CookType CookType;
             [field: SerializeField] private FoodType FoodType;
             
-            public override  void GetItemType(out ItemType itemType, out CookType cookType, out FoodType foodType)
+            public void GetItemType(out ItemType itemType, out CookType cookType, out FoodType foodType)
             {
                 itemType = ItemType;
                 cookType = CookType;
@@ -23,8 +23,8 @@ namespace Common.Item.Data.Food
         
         #region Recipe Sheet
             [field: Header("Recipe Sheet")]
-            [field: SerializeField] private RecipeSheet recipeSheet;
-                                    public RecipeSheet RecipeSheet => recipeSheet;
+            [field: SerializeField] private IngredientSO[] recipeSheet;
+                                    public IngredientSO[] RecipeSheet => recipeSheet;
         #endregion
         
         #region Cook Time
@@ -53,7 +53,7 @@ namespace Common.Item.Data.Food
         
         #region Overcook
             [field: Header("Overcook")]
-            [field: SerializeField] private FoodSO overcookedItem;
+            [field: SerializeField] private ItemSO overcookedItem;
                                     public IItem OvercookedItem
                                     {
                                         get

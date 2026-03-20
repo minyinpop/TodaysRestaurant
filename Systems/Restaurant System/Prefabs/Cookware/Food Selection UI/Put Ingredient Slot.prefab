@@ -90,24 +90,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88ff3a78b2dd48a0992d3f7e7e8f09a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::General.Object.Item_Slot.Type.PutIngredientSlot
-  SlotRect: {fileID: 4079683175370231930}
-  SlotImage: {fileID: 0}
-  SelectedColor: {r: 0, g: 0, b: 0, a: 0}
-  UnSelectedColor: {r: 0, g: 0, b: 0, a: 0}
-  ItemRect: {fileID: 0}
-  ItemImage: {fileID: 559108227245032418}
-  HaveItemColor: {r: 1, g: 1, b: 1, a: 1}
-  NoItemColor: {r: 1, g: 1, b: 1, a: 0.5019608}
-  DoAnimation: {fileID: 881584172497782052}
-  ScaleUpSettings:
+  animation: {fileID: 881584172497782052}
+  canInteract: 1
+  slotRect: {fileID: 4079683175370231930}
+  slotScaleUpSettings:
     EndValue: {x: 1.1, y: 1.1, z: 1}
-    Duration: 0.2
+    Duration: 0.1
     Ease: 18
-  ScaleDownSettings:
+  slotScaleDownSettings:
     EndValue: {x: 1, y: 1, z: 1}
-    Duration: 0.2
+    Duration: 0.1
     Ease: 18
-  Interactable: 1
+  itemImage: {fileID: 559108227245032418}
 --- !u!114 &881584172497782052
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -9,6 +9,7 @@ namespace Common.Item.Data
         public string ItemName { get; }
         
         public Sprite ItemSprite { get; }
+        
 
         public void Selected();
 

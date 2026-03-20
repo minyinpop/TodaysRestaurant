@@ -73,36 +73,34 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Main
                             {
                                 var totalCookTime = 0f;
                                 var totalPrice = 0;
-                
-                                // Dish
-                                selectedDishData.GetCookTime(out var dishCookTime);
-                                selectedDishData.GetPrice(out var dishPrice);
-                                totalCookTime += dishCookTime;
-                                totalPrice += dishPrice;
-                
-                                // Ingredient
-                                putIngredientSystem.GetIngredients(out var ingredients);
-                                foreach (var ingredient in ingredients)
-                                {
-                                    // ingredient.GetCookTime(out var ingredientCookTime);
-                                    // ingredient.GetPrice(out var ingredientPrice);
-                                    totalCookTime += ingredient.CookTime;
-                                    totalPrice += ingredient.Price;
-                                }
 
-                                // var cookDish = ScriptableObject.CreateInstance<CustomFoodItem>();
-                                var cookDish = new CustomFoodItem();
-                                cookDish.Initialize(selectedDishData, totalCookTime, totalPrice);
+                                #region Dish
+                                    totalCookTime += selectedDishData.CookTime;
+                                    totalPrice += selectedDishData.Price;
+                                #endregion
+                
+                                #region Ingredient
+                                    putIngredientSystem.GetIngredients(out var ingredients);
+                                    foreach (var ingredient in ingredients)
+                                    {
+                                        totalCookTime += ingredient.CookTime;
+                                        totalPrice += ingredient.Price;
+                                    }
+
+                                    var cookDish = new CustomFoodItem();
+                                    cookDish.Initialize(selectedDishData, totalCookTime, totalPrice);
+                                #endregion
                                 
-                                // UI
-                                var isSelectionUIClosed = false;
-                                var isPutIngredientUIClosed = false;
-                                selectionSystem.Hide(
-                                    onComplete: () => isSelectionUIClosed = true);
-                                putIngredientSystem.Hide(
-                                    onComplete: () => isPutIngredientUIClosed = true);
-                                yield return new WaitUntil(() => isSelectionUIClosed && isPutIngredientUIClosed);
-                                onConfirm?.Invoke(cookDish);
+                                #region UI
+                                    var isSelectionUIClosed = false;
+                                    var isPutIngredientUIClosed = false;
+                                    selectionSystem.Hide(
+                                        onComplete: () => isSelectionUIClosed = true);
+                                    putIngredientSystem.Hide(
+                                        onComplete: () => isPutIngredientUIClosed = true);
+                                    yield return new WaitUntil(() => isSelectionUIClosed && isPutIngredientUIClosed);
+                                    onConfirm?.Invoke(cookDish);
+                                #endregion
                             }
                         },
                         onCancel: () =>
