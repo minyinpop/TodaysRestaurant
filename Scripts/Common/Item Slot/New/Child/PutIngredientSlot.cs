@@ -1,6 +1,7 @@
 using Animation_System.DOTween;
 using Animation_System.DOTween.Basic;
 using Common.Item_Slot.New.Main;
+using Common.Item.Data;
 using Common.Item.Data.Ingredient;
 using Common.Pointer_Event;
 using Player_System.System.Player_System;
@@ -10,7 +11,7 @@ using UnityEngine.UI;
 namespace Common.Item_Slot.New.Child
 {
     [RequireComponent(typeof(DoAnimation))]
-    public sealed class PutIngredientSlot : PointerEvent, IItemSlot<IIngredient>
+    public sealed class PutIngredientSlot : PointerEvent, IItemSlot
     {
         [field: Header("Component")]
         [field: SerializeField] private new DoAnimation animation;
@@ -30,8 +31,8 @@ namespace Common.Item_Slot.New.Child
         
         private bool _initialized;
         
-        private IIngredient _targetItem;
-        public IIngredient Item { get; private set; }
+        private IItem _targetItem;
+        public IItem Item { get; private set; }
         
         private void Awake()
         {
@@ -53,10 +54,7 @@ namespace Common.Item_Slot.New.Child
             {
                 Debug.Log($"{name} > {GetType().Name} > {nameof(itemImage)} cannot be null.");
                 Destroy(gameObject);
-                return;
             }
-            
-            itemImage.gameObject.SetActive(false);
         }
         
         #region PointerEvent
@@ -80,47 +78,47 @@ namespace Common.Item_Slot.New.Child
             {
                 if (canInteract)
                 {
-                    // PlayerSystem.DragItemFromItemSlot(this);
+                    PlayerSystem.DragItemFromItemSlot(this);
                 }
             }
         #endregion
         
         #region IItemSlot
-            public bool TryAddItem(IIngredient ingredient)
+            public bool TryAddItem(IItem item)
             {
                 #region 條件檢查
-                if (!_initialized)
-                {
-                    Debug.Log($"{name} > {GetType().Name} > need to initialize first.");
-                    Destroy(gameObject);
-                    return false;
-                }
-                
-                if (ingredient is null)
-                {
-                    Debug.Log($"{name} > {GetType().Name} > {nameof(TryAddItem)} > {nameof(ingredient)} cannot be null.");
-                    Destroy(gameObject);
-                    return false;
-                }
+                    if (!_initialized)
+                    {
+                        Debug.Log($"{name} > {GetType().Name} > need to initialize first.");
+                        Destroy(gameObject);
+                        return false;
+                    }
                     
-                if (Item is not null)
-                {
-                    return false;
-                }
+                    if (item is null)
+                    {
+                        Debug.Log($"{name} > {GetType().Name} > {nameof(TryAddItem)} > {nameof(item)} cannot be null.");
+                        Destroy(gameObject);
+                        return false;
+                    }
+                        
+                    if (Item is not null)
+                    {
+                        return false;
+                    }
 
-                if (_targetItem != ingredient)
-                {
-                }
+                    if (_targetItem != item)
+                    {
+                    }
                 #endregion
                 
-                Item = ingredient;
+                Item = item;
                 
                 itemImage.sprite = Item.ItemSprite;
                 itemImage.color = hadItemColor;
                 return true;
             }
 
-            public bool TryGetItem(out IIngredient item)
+            public bool TryGetItem(out IItem item)
             {
                 if (!_initialized)
                 {
@@ -166,7 +164,6 @@ namespace Common.Item_Slot.New.Child
             
             itemImage.sprite = _targetItem.ItemSprite;
             itemImage.color = noItemColor;
-            itemImage.gameObject.SetActive(true);
         }
     }
 }

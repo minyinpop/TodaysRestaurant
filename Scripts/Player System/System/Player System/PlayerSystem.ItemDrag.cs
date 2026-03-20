@@ -1,18 +1,17 @@
 using Common.Item_Slot.New.Main;
 using Common.Item.Data;
-using Common.Item.Data.Ingredient;
 using UI_System.Player_UI_System.Main;
 
 namespace Player_System.System.Player_System
 {
     public partial class PlayerSystem
     {
-        private static IItemSlot<IItem> _sourceSlot;
-        private static IItemSlot<IItem> _destinationSlot;
+        private static IItemSlot _sourceSlot;
+        private static IItemSlot _destinationSlot;
         
         private static IItem _draggedItem;
         
-        public static void DragItemFromItemSlot(IItemSlot<IItem> itemSlot)
+        public static void DragItemFromItemSlot(IItemSlot itemSlot)
         {
             if (itemSlot is null)
             {

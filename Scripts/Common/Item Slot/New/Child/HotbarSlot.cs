@@ -10,7 +10,7 @@ using UnityEngine.UI;
 namespace Common.Item_Slot.New.Child
 {
     [RequireComponent(typeof(DoAnimation))]
-    public sealed class HotbarSlot : PointerEvent, IItemSlot<IItem>
+    public sealed class HotbarSlot : PointerEvent, IItemSlot
     {
         [field: Header("Component")]
         [field: SerializeField] private new DoAnimation animation;
@@ -114,18 +114,18 @@ namespace Common.Item_Slot.New.Child
                 return true;
             }
 
-            public bool TryGetItem(out IItem item)
+            public bool TryGetItem(out IItem ingredient)
             {
                 if (Item is null)
                 {
-                    item = null;
+                    ingredient = null;
                     return false;
                 }
                 
                 itemImage.gameObject.SetActive(false);
                 itemImage.sprite = null;
             
-                item = Item;
+                ingredient = Item;
                 Item = null;
                 return true;
             }
