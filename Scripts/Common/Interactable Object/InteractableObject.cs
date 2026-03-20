@@ -1,5 +1,4 @@
-using Player_System.System;
-using Player_System.System.Player_System;
+using Player_System.Object;
 
 namespace Common.Interactable_Object
 {
@@ -8,6 +7,6 @@ namespace Common.Interactable_Object
         public void OnEnterDetect();
         public void OnExitDetect();
 
-        public bool OnInteract(PlayerSystem playerSystem);
+        public bool OnInteract(PlayerObject playerObject);
     }
 }

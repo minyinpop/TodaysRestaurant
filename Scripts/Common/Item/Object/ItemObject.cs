@@ -1,6 +1,6 @@
 using Common.Interactable_Object;
 using Common.Item.Data;
-using Player_System.System.Player_System;
+using Player_System.Object;
 using UnityEngine;
 
 namespace Common.Item.Object
@@ -27,9 +27,9 @@ namespace Common.Item.Object
         {
         }
 
-        public bool OnInteract(PlayerSystem playerSystem)
+        public bool OnInteract(PlayerObject playerObject)
         {
-            if (playerSystem.TryAddItem(itemData))
+            if (playerObject.TryAddItem(itemData))
             {
                 Destroy(gameObject);
                 return true;

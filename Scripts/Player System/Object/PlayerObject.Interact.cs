@@ -65,7 +65,7 @@ namespace Player_System.Object
             
             var interactableObject = _interactableObjects.First();
 
-            if (interactableObject.OnInteract(playerSystem))
+            if (interactableObject.OnInteract(this))
             {
                 _interactableObjects.Remove(interactableObject);
             }

@@ -5,8 +5,7 @@ using Common.Interactable_Object;
 using Common.Item.Data.Food;
 using Common.Item.Data.Food.Custom_Food;
 using Common.Value.Type;
-using Player_System.System;
-using Player_System.System.Player_System;
+using Player_System.Object;
 using Restaurant_System.Object.Cookware.Object.Cook_Game.System.Main;
 using Restaurant_System.Object.Cookware.System.State_Machine;
 using Restaurant_System.Object.Cookware.System.State_Machine.State;
@@ -47,7 +46,7 @@ namespace Restaurant_System.Object.Cookware.System
         public static event Action<CookType, Action<CustomFoodItem>, Action> OpenCookSelectionUI;
         public static event Action CloseCookSelectionUI;
 
-        private PlayerSystem _interactingPlayer;
+        private PlayerObject _interactingPlayer;
 
         private void Start()
         {
@@ -71,9 +70,9 @@ namespace Restaurant_System.Object.Cookware.System
                 CloseCookSelectionUI?.Invoke();
             }
 
-            public bool OnInteract(PlayerSystem playerSystem)
+            public bool OnInteract(PlayerObject playerObject)
             {
-                _interactingPlayer = playerSystem;
+                _interactingPlayer = playerObject;
                 _stateMachine.InteractState();
                 return false;
             }
@@ -224,6 +223,13 @@ namespace Restaurant_System.Object.Cookware.System
 
                             void OnBubbleClicked()
                             {
+                                if (_interactingPlayer is null)
+                                {
+                                    Debug.Log($"{name} > {GetType().Name} > {nameof(OnCompleteState)} > {nameof(OnBubbleClicked)} > {nameof(_interactingPlayer)} is null.");
+                                    Destroy(gameObject);
+                                    return;
+                                }
+                                
                                 if (_interactingPlayer.TryAddItem(_currentCookItem))
                                 {
                                     OnEmptyState();

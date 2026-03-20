@@ -6,6 +6,7 @@ using Common.Interactable_Object;
 using Common.Item.Data;
 using Common.Item.Data.Serving_Note;
 using Common.Value;
+using Player_System.Object;
 using Player_System.System.Player_System;
 using Restaurant_System.Object.Creature.Customer.System.Child;
 using Restaurant_System.Object.Creature.Customer.System.Main.State_Machine;
@@ -87,7 +88,7 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
                 _currentBubble?.SetInteractable(false);
             }
 
-            public bool OnInteract(PlayerSystem playerSystem)
+            public bool OnInteract(PlayerObject playerObject)
             {
                 return false;
             }
