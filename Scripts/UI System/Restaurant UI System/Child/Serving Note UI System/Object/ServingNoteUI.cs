@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Common.Item_Slot.Child;
+using Common.Item_Slot.New.Child;
 using Common.Item.Data;
 using Common.Item.Data.Serving_Note;
 using UnityEngine;
@@ -19,9 +19,8 @@ namespace UI_System.Restaurant_UI_System.Child.Serving_Note_UI_System.Object
         {
             if (_servingNoteData is not null) return;
             _servingNoteData = servingNoteData;
-
-            _servingNoteData.GetOrderedItems(out var orderedItems);
-            foreach (var orderedItem in orderedItems)
+            
+            foreach (var orderedItem in _servingNoteData.OrderedItems)
             {
                 var newSlot = Instantiate(slotPrefab, slotParent).GetComponent<ServingNoteSlot>();
                 newSlot.Initialize(orderedItem);
@@ -35,8 +34,7 @@ namespace UI_System.Restaurant_UI_System.Child.Serving_Note_UI_System.Object
             
             foreach (var slot in _servingNoteSlots)
             {
-                slot.TryPeekItem(out var slotItemData);
-                orderedItems.Add(slotItemData);
+                orderedItems.Add(slot.Item);
             }
         }
     }

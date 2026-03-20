@@ -1,8 +1,8 @@
-using Common.Item_Slot.Main;
+using Common.Item_Slot.Legacy.Main;
 using Common.Item.Data;
 using UnityEngine;
 
-namespace Common.Item_Slot.Child
+namespace Common.Item_Slot.Legacy.Child
 {
     public sealed class BackpackSlot : StorageSlot
     {

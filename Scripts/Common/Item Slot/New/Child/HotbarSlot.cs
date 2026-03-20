@@ -1,13 +1,13 @@
 using Animation_System.DOTween;
 using Animation_System.DOTween.Basic;
-using Common.Item_Slot.Main;
+using Common.Item_Slot.New.Main;
 using Common.Item.Data;
 using Common.Pointer_Event;
 using Player_System.System.Player_System;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Common.Item_Slot.Child
+namespace Common.Item_Slot.New.Child
 {
     [RequireComponent(typeof(DoAnimation))]
     public sealed class HotbarSlot : PointerEvent, IItemSlot

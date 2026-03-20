@@ -6,8 +6,6 @@ using Common.Interactable_Object;
 using Common.Item.Data;
 using Common.Item.Data.Serving_Note;
 using Common.Value;
-using Player_System;
-using Player_System.System;
 using Player_System.System.Player_System;
 using Restaurant_System.Object.Creature.Customer.System.Child;
 using Restaurant_System.Object.Creature.Customer.System.Main.State_Machine;
@@ -133,7 +131,7 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
                         _currentBubble.StartCountDown(3,
                             onComplete: () =>
                             {
-                                var orderedItems = new List<ItemSO>();
+                                var orderedItems = new List<IItem>();
                                 
                                 selectFoodPageData.GetRandomItemData(out var firstItemData);
                                 orderedItems.Add(firstItemData);
@@ -230,9 +228,8 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
                             onConfirm: () =>
                             {
                                 RestaurantUISystem.GetServingNoteItems(_servingNoteData, out var servingNoteItems);
-                                _servingNoteData.GetOrderedItems(out var orderedItems);
                                 
-                                var correctNumber = orderedItems.Count;
+                                var correctNumber = _servingNoteData.OrderedItems.Count;
                                 
                                 for (var i = servingNoteItems.Count - 1; i >= 0; i--)
                                 {
@@ -244,7 +241,7 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
                                         continue;
                                     }
                                     
-                                    foreach (var orderedItem in orderedItems)
+                                    foreach (var orderedItem in _servingNoteData.OrderedItems)
                                     {
                                         if (servingNoteItem.ItemID == orderedItem.ItemID)
                                         {

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Common.Button;
-using Common.Item_Slot.Main;
+using Common.Item_Slot.Legacy.Main;
 using Common.Item.Data.Ingredient;
 using Common.Value;
 using TMPro;

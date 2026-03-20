@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UI_System.Restaurant_UI_System.Main;
 using UnityEngine;
 
@@ -10,8 +11,8 @@ namespace Common.Item.Data.Serving_Note
         [field: Header("Components")]
         [field: SerializeField] private GameObject servingNotePrefab;
 
-        private readonly List<ItemSO> _orderedItems = new();
-        
+        public List<IItem> OrderedItems { get; private set; } = new();
+
         #region Interaction
             public override void Selected() { }
             public override void UnSelected() { }
@@ -25,26 +26,16 @@ namespace Common.Item.Data.Serving_Note
                 RestaurantUISystem.RemoveServingNoteUI(this);
             }
         #endregion
-        
-        #region Ordered Items
-            public void SetOrderedItems(List<ItemSO> orderedItems)
-            {
-                Reset();
-                foreach (var item in orderedItems)
-                    _orderedItems.Add(item);
-            }
 
-            public void GetOrderedItems(out List<ItemSO> orderedItems)
-            {
-                orderedItems = _orderedItems;
-            }
-        #endregion
+        public void SetOrderedItems(List<IItem> items)
+        {
+            Reset();
+            OrderedItems = items.ToList();
+        }
 
-        #region States
-            public void Reset()
-            {
-                _orderedItems.Clear();
-            }
-        #endregion
+        public void Reset()
+        {
+            OrderedItems.Clear();
+        }
     }
 }

@@ -1,4 +1,4 @@
-using Common.Item_Slot.Main;
+using Common.Item_Slot.New.Main;
 using Common.Item.Data;
 using UI_System.Player_UI_System.Main;
 using UnityEngine;

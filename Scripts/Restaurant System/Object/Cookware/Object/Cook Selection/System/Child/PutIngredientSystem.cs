@@ -4,7 +4,7 @@ using System.Linq;
 using Animation_System.DOTween;
 using Animation_System.DOTween.Basic;
 using Common.Button;
-using Common.Item_Slot.Child;
+using Common.Item_Slot.Legacy.Child;
 using Common.Item.Data.Food;
 using Common.Item.Data.Ingredient;
 using UnityEngine;

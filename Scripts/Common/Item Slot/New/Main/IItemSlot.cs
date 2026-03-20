@@ -1,6 +1,6 @@
 using Common.Item.Data;
 
-namespace Common.Item_Slot.Main
+namespace Common.Item_Slot.New.Main
 {
     public interface IItemSlot
     {
