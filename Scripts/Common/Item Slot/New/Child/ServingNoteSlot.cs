@@ -10,7 +10,7 @@ using UnityEngine.UI;
 namespace Common.Item_Slot.New.Child
 {
     [RequireComponent(typeof(DoAnimation))]
-    public sealed class ServingNoteSlot : PointerEvent, IItemSlot
+    public sealed class ServingNoteSlot : PointerEvent, IItemSlot<IItem>
     {
         [field: Header("Component")]
         [field: SerializeField] private new DoAnimation animation;
@@ -30,6 +30,8 @@ namespace Common.Item_Slot.New.Child
 
         private IItem _targetItem;
         public IItem Item { get; private set; }
+
+        private bool _initialized;
         
         private void Awake()
         {
@@ -124,6 +126,13 @@ namespace Common.Item_Slot.New.Child
 
         public void Initialize(IItem item)
         {
+            if (_initialized)
+            {
+                Debug.Log($"{name} > {GetType().Name} > {nameof(_initialized)} is true.");
+                Destroy(gameObject);
+                return;
+            }
+
             if (item is null)
             {
                 Debug.Log($"{name} > {GetType().Name} > {nameof(Initialize)} > {nameof(item)} cannot be null.)");

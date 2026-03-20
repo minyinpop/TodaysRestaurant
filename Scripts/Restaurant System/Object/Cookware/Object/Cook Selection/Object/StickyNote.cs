@@ -45,7 +45,14 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.Object
 
         private void OnStickyNoteClicked()
         {
-            OnClick?.Invoke(FoodData);
+            if (OnClick is null)
+            {
+                Debug.Log($"{name} > {GetType().Name} > {nameof(OnClick)} cannot be null.");
+                Destroy(gameObject);
+                return;
+            }
+
+            OnClick.Invoke(FoodData);
         }
     }
 }

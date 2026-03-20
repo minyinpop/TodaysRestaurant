@@ -1,7 +1,7 @@
 using Animation_System.DOTween;
 using Animation_System.DOTween.Basic;
 using Common.Item_Slot.New.Main;
-using Common.Item.Data;
+using Common.Item.Data.Ingredient;
 using Common.Pointer_Event;
 using Player_System.System.Player_System;
 using UnityEngine;
@@ -10,7 +10,7 @@ using UnityEngine.UI;
 namespace Common.Item_Slot.New.Child
 {
     [RequireComponent(typeof(DoAnimation))]
-    public sealed class HotbarSlot : PointerEvent, IItemSlot<IItem>
+    public sealed class PutIngredientSlot : PointerEvent, IItemSlot<IIngredient>
     {
         [field: Header("Component")]
         [field: SerializeField] private new DoAnimation animation;
@@ -25,14 +25,14 @@ namespace Common.Item_Slot.New.Child
         
         [field: Header("Item Image")]
         [field: SerializeField] private Image itemImage;
+        [field: SerializeField] private Color hadItemColor;
+        [field: SerializeField] private Color noItemColor;
         
-        [field: Header("Slot Border")]
-        [field: SerializeField] private Image slotBorderImage;
-        [field: SerializeField] private Color focusSlotColor;
-        [field: SerializeField] private Color unFocusSlotColor;
-
-        public IItem Item { get; private set; }
-
+        private bool _initialized;
+        
+        private IIngredient _targetItem;
+        public IIngredient Item { get; private set; }
+        
         private void Awake()
         {
             if (animation is null)
@@ -55,17 +55,10 @@ namespace Common.Item_Slot.New.Child
                 Destroy(gameObject);
                 return;
             }
-
-            if (slotBorderImage is null)
-            {
-                Debug.Log($"{name} > {GetType().Name} > {nameof(slotBorderImage)} cannot be null.");
-                Destroy(gameObject);
-                return;
-            }
             
             itemImage.gameObject.SetActive(false);
         }
-
+        
         #region PointerEvent
             protected override void OnPointerEnter()
             {
@@ -87,78 +80,93 @@ namespace Common.Item_Slot.New.Child
             {
                 if (canInteract)
                 {
-                    PlayerSystem.DragItemFromItemSlot(this);
+                    // PlayerSystem.DragItemFromItemSlot(this);
                 }
             }
         #endregion
         
         #region IItemSlot
-            public bool TryAddItem(IItem item)
+            public bool TryAddItem(IIngredient ingredient)
             {
-                if (item is null)
+                #region 條件檢查
+                if (!_initialized)
                 {
-                    Debug.Log($"{name} > {GetType().Name} > {nameof(TryAddItem)} > {nameof(item)} cannot be null.");
+                    Debug.Log($"{name} > {GetType().Name} > need to initialize first.");
                     Destroy(gameObject);
                     return false;
                 }
                 
+                if (ingredient is null)
+                {
+                    Debug.Log($"{name} > {GetType().Name} > {nameof(TryAddItem)} > {nameof(ingredient)} cannot be null.");
+                    Destroy(gameObject);
+                    return false;
+                }
+                    
                 if (Item is not null)
                 {
                     return false;
                 }
+
+                if (_targetItem != ingredient)
+                {
+                }
+                #endregion
                 
-                Item = item;
+                Item = ingredient;
                 
                 itemImage.sprite = Item.ItemSprite;
-                itemImage.gameObject.SetActive(true);
+                itemImage.color = hadItemColor;
                 return true;
             }
 
-            public bool TryGetItem(out IItem item)
+            public bool TryGetItem(out IIngredient item)
             {
+                if (!_initialized)
+                {
+                    Debug.Log($"{name} > {GetType().Name} > need to initialize first.");
+                    Destroy(gameObject);
+                    item = null;
+                    return false;
+                }
+                
                 if (Item is null)
                 {
                     item = null;
                     return false;
                 }
                 
-                itemImage.gameObject.SetActive(false);
                 itemImage.sprite = null;
-            
+                itemImage.color = noItemColor;
+                
                 item = Item;
-                Item = null;
-                return true;
-            }
-
-            public bool TryRemoveItem(IItem itemData)
-            {
-                if (Item is null) return false;
-                if (Item != itemData) return false;
-                
-                itemImage.gameObject.SetActive(false);
-                itemImage.sprite = null;
-                
-                itemData.Remove();
                 Item = null;
                 return true;
             }
         #endregion
         
-        public void Selected()
+        public void Initialize(IIngredient item)
         {
-            slotBorderImage.color = focusSlotColor;
-            Item?.Selected();
-        }
+            if (_initialized)
+            {
+                Debug.Log($"{name} > {GetType().Name} > {nameof(_initialized)} is true.");
+                Destroy(gameObject);
+                return;
+            }
 
-        public void UnSelected()
-        {
-            slotBorderImage.color = unFocusSlotColor;
-            Item?.UnSelected();
-        }
-
-        public void Use()
-        {
-            Item?.Use();
+            if (item is null)
+            {
+                Debug.Log($"{name} > {GetType().Name} > {nameof(Initialize)} > {nameof(item)} cannot be null.)");
+                Destroy(gameObject);
+                return;
+            }
+            
+            _initialized = true;
+            _targetItem = item;
+            
+            itemImage.sprite = _targetItem.ItemSprite;
+            itemImage.color = noItemColor;
+            itemImage.gameObject.SetActive(true);
         }
     }
 }

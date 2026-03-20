@@ -2,12 +2,12 @@ using Common.Item.Data;
 
 namespace Common.Item_Slot.New.Main
 {
-    public interface IItemSlot
+    public interface IItemSlot<T> where T : IItem
     {
-        public IItem Item { get; }
+        public T Item { get; }
         
-        public bool TryAddItem(IItem item);
+        public bool TryAddItem(T item);
 
-        public bool TryGetItem(out IItem item);
+        public bool TryGetItem(out T item);
     }
 }

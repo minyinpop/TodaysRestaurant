@@ -12,7 +12,7 @@ namespace Common.Item.Object
 
         private void Awake()
         {
-            if (itemData == null)
+            if (itemData is null)
             {
                 Debug.Log($"{gameObject.name} > {GetType().Name} > {nameof(itemData)} cannot be null.");
                 Destroy(gameObject);

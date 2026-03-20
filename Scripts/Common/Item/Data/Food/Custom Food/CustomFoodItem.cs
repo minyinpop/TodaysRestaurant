@@ -1,3 +1,4 @@
+using Common.Item.Data.Ingredient;
 using Common.Value;
 using UnityEngine;
 
@@ -37,7 +38,7 @@ namespace Common.Item.Data.Food.Custom_Food
         #endregion
 
         #region Recipe Sheet
-            public RecipeSheet RecipeSheet => _food.RecipeSheet;
+            public IngredientSO[] RecipeSheet => _food.RecipeSheet;
         #endregion
 
         #region Cook Time
