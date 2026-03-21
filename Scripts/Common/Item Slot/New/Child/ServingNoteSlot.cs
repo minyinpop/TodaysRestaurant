@@ -86,11 +86,11 @@ namespace Common.Item_Slot.New.Child
         #endregion
         
         #region IItemSlot
-            public bool TryAddItem(IItem item)
+            public bool AddItem(IItem item)
             {
                 if (item is null)
                 {
-                    Debug.Log($"{name} > {GetType().Name} > {nameof(TryAddItem)} > {nameof(item)} cannot be null.");
+                    Debug.Log($"{name} > {GetType().Name} > {nameof(AddItem)} > {nameof(item)} cannot be null.");
                     Destroy(gameObject);
                     return false;
                 }
@@ -107,7 +107,7 @@ namespace Common.Item_Slot.New.Child
                 return true;
             }
 
-            public bool TryGetItem(out IItem ingredient)
+            public bool GetItem(out IItem ingredient)
             {
                 if (Item is null)
                 {
@@ -120,6 +120,29 @@ namespace Common.Item_Slot.New.Child
                 
                 ingredient = Item;
                 Item = null;
+                return true;
+            }
+            
+            public bool ChangeItem(IItem targetItem, out IItem slotItem)
+            {
+                #region 檢查傳入的物品
+                    if (targetItem is null)
+                    {
+                        throw new System.ArgumentNullException($"{name} > {GetType().Name} > {nameof(AddItem)} > {nameof(targetItem)} cannot be null.");
+                    }
+                #endregion
+                
+                #region 檢查格子狀態
+                    if (Item is null)
+                    {
+                        throw new System.InvalidOperationException($"{name} > {GetType().Name} > {nameof(ChangeItem)} > {nameof(Item)} cannot be null.");
+                    }
+                #endregion
+
+                slotItem = Item;
+                Item = targetItem;
+                
+                itemImage.sprite = Item.ItemSprite;
                 return true;
             }
         #endregion

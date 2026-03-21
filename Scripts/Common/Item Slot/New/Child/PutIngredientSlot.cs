@@ -31,7 +31,7 @@ namespace Common.Item_Slot.New.Child
         
         private bool _initialized;
         
-        private IItem _targetItem;
+        private IIngredient _targetItem;
         public IItem Item { get; private set; }
         
         private void Awake()
@@ -84,30 +84,41 @@ namespace Common.Item_Slot.New.Child
         #endregion
         
         #region IItemSlot
-            public bool TryAddItem(IItem item)
+            public bool AddItem(IItem item)
             {
-                #region 條件檢查
-                    if (!_initialized)
-                    {
-                        Debug.Log($"{name} > {GetType().Name} > need to initialize first.");
-                        Destroy(gameObject);
-                        return false;
-                    }
-                    
+                #region 檢查傳入的物品
                     if (item is null)
                     {
-                        Debug.Log($"{name} > {GetType().Name} > {nameof(TryAddItem)} > {nameof(item)} cannot be null.");
-                        Destroy(gameObject);
+                        throw new System.ArgumentNullException($"{name} > {GetType().Name} > {nameof(AddItem)} > {nameof(item)} cannot be null.");
+                    }
+
+                    if (item is not IIngredient ingredient)
+                    {
                         return false;
+                    }
+                #endregion
+
+                #region 檢查格子狀態
+                    if (!_initialized)
+                    {
+                        throw new System.InvalidOperationException($"{name} > {GetType().Name} > need to initialize first.");
                     }
                         
                     if (Item is not null)
                     {
                         return false;
                     }
+                #endregion
 
-                    if (_targetItem != item)
+                #region 檢查傳入的物品跟目標物品條件是否通過
+                    if (ingredient.IngredientType != _targetItem.IngredientType)
                     {
+                        return false;
+                    }
+
+                    if (ingredient.IngredientTier < _targetItem.IngredientTier)
+                    {
+                        return false;
                     }
                 #endregion
                 
@@ -118,27 +129,75 @@ namespace Common.Item_Slot.New.Child
                 return true;
             }
 
-            public bool TryGetItem(out IItem item)
+            public bool GetItem(out IItem item)
             {
-                if (!_initialized)
-                {
-                    Debug.Log($"{name} > {GetType().Name} > need to initialize first.");
-                    Destroy(gameObject);
-                    item = null;
-                    return false;
-                }
+                #region 檢查格子狀態
+                    if (!_initialized)
+                    {
+                        throw new System.InvalidOperationException($"{name} > {GetType().Name} > need to initialize first.");
+                    }
                 
-                if (Item is null)
-                {
-                    item = null;
-                    return false;
-                }
+                    if (Item is null)
+                    {
+                        item = null;
+                        return false;
+                    }
+                #endregion
                 
-                itemImage.sprite = null;
+                itemImage.sprite = _targetItem.ItemSprite;
                 itemImage.color = noItemColor;
                 
                 item = Item;
                 Item = null;
+                return true;
+            }
+
+            public bool ChangeItem(IItem targetItem, out IItem slotItem)
+            {
+                #region 檢查傳入的物品
+                    if (targetItem is null)
+                    {
+                        throw new System.ArgumentNullException($"{name} > {GetType().Name} > {nameof(AddItem)} > {nameof(targetItem)} cannot be null.");
+                    }
+
+                    if (targetItem is not IIngredient ingredient)
+                    {
+                        slotItem = null;
+                        return false;
+                    }
+                #endregion
+                
+                #region 檢查格子狀態
+                    if (!_initialized)
+                    {
+                        throw new System.InvalidOperationException($"{name} > {GetType().Name} > need to initialize first.");
+                    }
+
+                    if (Item is null)
+                    {
+                        throw new System.InvalidOperationException($"{name} > {GetType().Name} > {nameof(ChangeItem)} > {nameof(Item)} cannot be null.");
+                    }
+                #endregion
+                
+                #region 檢查傳入的物品跟目標物品條件是否通過
+                    if (ingredient.IngredientType != _targetItem.IngredientType)
+                    {
+                        slotItem = null;
+                        return false;
+                    }
+
+                    if (ingredient.IngredientTier < _targetItem.IngredientTier)
+                    {
+                        slotItem = null;
+                        return false;
+                    }
+                #endregion
+
+                slotItem = Item;
+                Item = targetItem;
+                
+                itemImage.sprite = Item.ItemSprite;
+                itemImage.color = hadItemColor;
                 return true;
             }
         #endregion

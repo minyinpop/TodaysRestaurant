@@ -48,7 +48,7 @@ namespace UI_System.Player_UI_System.Child.Hotbar_UI_System.Object
         #region Item
             public bool TryAddItem(IItem itemData)
             {
-                var result = _hotbarSlots.Any(slot => slot.TryAddItem(itemData));
+                var result = _hotbarSlots.Any(slot => slot.AddItem(itemData));
                 return result;
             }
 

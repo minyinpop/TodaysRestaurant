@@ -100,7 +100,7 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Child
             ingredients = new Queue<IIngredient>();
             foreach (var itemSlot in slots)
             {
-                itemSlot.TryGetItem(out var item);
+                itemSlot.GetItem(out var item);
 
                 if (item is IIngredient ingredient)
                 {

@@ -1,5 +1,6 @@
 using Common.Item.Object;
 using Common.Value;
+using Common.Value.Type;
 using UnityEngine;
 
 namespace Common.Item.Data.Ingredient
@@ -8,6 +9,8 @@ namespace Common.Item.Data.Ingredient
     public sealed class IngredientSO : ItemSO, IIngredient
     {
         [field: Header("Information")]
+        [field: SerializeField] private IngredientType ingredientType;
+                                public IngredientType IngredientType => ingredientType;
         [field: SerializeField] private IngredientTier ingredientTier;
                                 public IngredientTier IngredientTier => ingredientTier;
         [field: SerializeField] private float cookTime;
