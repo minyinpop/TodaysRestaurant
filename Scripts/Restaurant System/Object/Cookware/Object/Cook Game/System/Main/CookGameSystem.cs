@@ -22,7 +22,7 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Game.System.Main
         [field: SerializeField] private DoScale ZoomOut;
         
         private readonly Queue<Action> _cleanUpActions = new();
-
+        
         public event Action OnComplete;
         public event Action OnCancel;
 

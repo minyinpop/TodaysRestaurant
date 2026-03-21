@@ -252,6 +252,7 @@ MonoBehaviour:
     EndValue: {x: 1, y: 1, z: 1}
     Duration: 0.2
     Ease: 18
+  Interactable: 0
 --- !u!114 &3005839170450424858
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1023,12 +1024,12 @@ MonoBehaviour:
   DoAnimation: {fileID: 6099741314896449419}
   ZoomIn:
     EndValue: {x: 0.4, y: 0.4, z: 1}
-    Duration: 0
-    Ease: 0
+    Duration: 0.2
+    Ease: 1
   ZoomOut:
-    EndValue: {x: 0, y: 0, z: 1}
-    Duration: 0
-    Ease: 0
+    EndValue: {x: 0, y: 0.4, z: 0}
+    Duration: 0.2
+    Ease: 1
   DetectSystem: {fileID: 8307077111265433124}
   UtensilsParent: {fileID: 5921705836772378912}
   Utensils: {fileID: 7585125914143315646}
@@ -1147,6 +1148,7 @@ MonoBehaviour:
     EndValue: {x: 1, y: 1, z: 1}
     Duration: 0.2
     Ease: 18
+  Interactable: 0
 --- !u!114 &304933897619101008
 MonoBehaviour:
   m_ObjectHideFlags: 0
