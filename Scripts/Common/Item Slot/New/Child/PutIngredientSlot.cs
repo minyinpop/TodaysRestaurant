@@ -94,7 +94,7 @@ namespace Common.Item_Slot.New.Child
 
                     if (item is not IIngredient ingredient)
                     {
-                        return false;
+                        throw new System.ArgumentException($"{name} > {GetType().Name} > {nameof(AddItem)} > {nameof(item)} is not ingredient.");
                     }
                 #endregion
 
@@ -106,7 +106,7 @@ namespace Common.Item_Slot.New.Child
                         
                     if (Item is not null)
                     {
-                        return false;
+                        throw new System.InvalidOperationException($"{name} > {GetType().Name} > {nameof(AddItem)} > {nameof(Item)} is not null.");
                     }
                 #endregion
 
@@ -139,6 +139,7 @@ namespace Common.Item_Slot.New.Child
                 
                     if (Item is null)
                     {
+                        Debug.Log("A");
                         item = null;
                         return false;
                     }
@@ -162,8 +163,7 @@ namespace Common.Item_Slot.New.Child
 
                     if (targetItem is not IIngredient ingredient)
                     {
-                        slotItem = null;
-                        return false;
+                        throw new System.ArgumentException($"{name} > {GetType().Name} > {nameof(AddItem)} > {nameof(targetItem)} is not ingredient.");
                     }
                 #endregion
                 

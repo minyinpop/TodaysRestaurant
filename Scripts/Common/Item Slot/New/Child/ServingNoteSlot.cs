@@ -37,26 +37,18 @@ namespace Common.Item_Slot.New.Child
         {
             if (animation is null)
             {
-                Debug.Log($"{name} > {GetType().Name} > {nameof(animation)} cannot be null.");
-                Destroy(gameObject);
-                return;
+                throw new System.ArgumentNullException($"{name} > {GetType().Name} > {nameof(animation)} is null.");
             }
             
             if (slotRect is null)
             {
-                Debug.Log($"{name} > {GetType().Name} > {nameof(slotRect)} cannot be null.");
-                Destroy(gameObject);
-                return;
+                throw new System.ArgumentNullException($"{name} > {GetType().Name} > {nameof(slotRect)} is null.");
             }
 
             if (itemImage is null)
             {
-                Debug.Log($"{name} > {GetType().Name} > {nameof(itemImage)} cannot be null.");
-                Destroy(gameObject);
-                return;
+                throw new System.ArgumentNullException($"{name} > {GetType().Name} > {nameof(itemImage)} is null.");
             }
-            
-            itemImage.gameObject.SetActive(false);
         }
         
         #region PointerEvent
@@ -88,35 +80,48 @@ namespace Common.Item_Slot.New.Child
         #region IItemSlot
             public bool AddItem(IItem item)
             {
-                if (item is null)
-                {
-                    Debug.Log($"{name} > {GetType().Name} > {nameof(AddItem)} > {nameof(item)} cannot be null.");
-                    Destroy(gameObject);
-                    return false;
-                }
+                #region 檢查傳入的物品
+                    if (item is null)
+                    {
+                        throw new System.ArgumentNullException($"{name} > {GetType().Name} > {nameof(AddItem)} > {nameof(item)} is null.");
+                    }
+                #endregion
+                
+                #region 檢查格子狀態
+                    if (!_initialized)
+                    {
+                        throw new System.InvalidOperationException($"{name} > {GetType().Name} > need to initialize first.");
+                    }
                     
-                if (Item is not null)
-                {
-                    return false;
-                }
-                    
+                    if (Item is not null)
+                    {
+                        throw new System.InvalidOperationException($"{name} > {GetType().Name} > {nameof(AddItem)} > {nameof(Item)} is not null.");
+                    }
+                #endregion
+                
                 Item = item;
-                    
+                
                 itemImage.sprite = Item.ItemSprite;
-                itemImage.gameObject.SetActive(true);
+                itemImage.color = hadItemColor;
                 return true;
             }
 
             public bool GetItem(out IItem ingredient)
             {
-                if (Item is null)
-                {
-                    ingredient = null;
-                    return false;
-                }
+                #region 檢查格子狀態
+                    if (!_initialized)
+                    {
+                        throw new System.InvalidOperationException($"{name} > {GetType().Name} > need to initialize first.");
+                    }
                     
-                itemImage.gameObject.SetActive(false);
-                itemImage.sprite = null;
+                    if (Item is null)
+                    {
+                        throw new System.InvalidOperationException($"{name} > {GetType().Name} > {nameof(AddItem)} > {nameof(Item)} is null.");
+                    }
+                #endregion
+                    
+                itemImage.sprite = _targetItem.ItemSprite;
+                itemImage.color = noItemColor;
                 
                 ingredient = Item;
                 Item = null;
@@ -128,14 +133,14 @@ namespace Common.Item_Slot.New.Child
                 #region 檢查傳入的物品
                     if (targetItem is null)
                     {
-                        throw new System.ArgumentNullException($"{name} > {GetType().Name} > {nameof(AddItem)} > {nameof(targetItem)} cannot be null.");
+                        throw new System.ArgumentNullException($"{name} > {GetType().Name} > {nameof(AddItem)} > {nameof(targetItem)} is null.");
                     }
                 #endregion
                 
                 #region 檢查格子狀態
                     if (Item is null)
                     {
-                        throw new System.InvalidOperationException($"{name} > {GetType().Name} > {nameof(ChangeItem)} > {nameof(Item)} cannot be null.");
+                        throw new System.InvalidOperationException($"{name} > {GetType().Name} > {nameof(ChangeItem)} > {nameof(Item)} is null.");
                     }
                 #endregion
 
@@ -151,23 +156,19 @@ namespace Common.Item_Slot.New.Child
         {
             if (_initialized)
             {
-                Debug.Log($"{name} > {GetType().Name} > {nameof(_initialized)} is true.");
-                Destroy(gameObject);
-                return;
+                throw new System.InvalidOperationException($"{name} > {GetType().Name} > {nameof(_initialized)} is true.");
             }
 
             if (item is null)
             {
-                Debug.Log($"{name} > {GetType().Name} > {nameof(Initialize)} > {nameof(item)} cannot be null.)");
-                Destroy(gameObject);
-                return;
+                throw new System.ArgumentNullException($"{name} > {GetType().Name} > {nameof(Initialize)} > {nameof(item)} is null.");
             }
-
+            
+            _initialized = true;
             _targetItem = item;
             
             itemImage.sprite = _targetItem.ItemSprite;
             itemImage.color = noItemColor;
-            itemImage.gameObject.SetActive(true);
         }
     }
 }
