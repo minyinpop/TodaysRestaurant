@@ -55,9 +55,15 @@ namespace UI_System.Message_UI_System.Child.Item_Get_UI_System.Object.Main
             {
                 throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(confirmButton)} cannot be null.");
             }
+        }
+
+        private void OnEnable()
+        {
+            Debug.Log($"啟用 {name}");
             
             messageTMP.SetText(string.Empty);
             confirmButton.SetInteractable(false);
+            confirmButton.gameObject.SetActive(false);
             
             foreach (var container in _slotContainers)
             {
@@ -128,20 +134,15 @@ namespace UI_System.Message_UI_System.Child.Item_Get_UI_System.Object.Main
                 
                 #region 啟用確認按鈕
                     confirmButton.SetInteractable(true);
-                    confirmButton.OnClick += OnClickConfirmButton;
-                #endregion
-
-                yield break;
-                
-                void OnClickConfirmButton()
-                {
-                    #region 關閉確認按鈕
-                        confirmButton.SetInteractable(false);
-                        confirmButton.OnClick -= OnClickConfirmButton;
-                    #endregion
+                    confirmButton.gameObject.SetActive(true);
                     
-                    onConfirm.Invoke();
-                }
+                    confirmButton.OnClick += onConfirm;
+                    _onConfirmButtonCleanupAction = () =>
+                    {
+                        confirmButton.SetInteractable(false);
+                        confirmButton.OnClick -= onConfirm;
+                    };
+                #endregion
             }
         }
 

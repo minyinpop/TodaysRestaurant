@@ -1,4 +1,3 @@
-using Common.Player.Child.Player_Attribute;
 using Common.Player.Child.Player_Deck;
 using Common.Player.Child.Player_Inventory;
 using Common.Player.Child.Player_Level;
@@ -12,8 +11,6 @@ namespace Common.Player.Main
     internal sealed class PlayerSO : ScriptableObject
     {
         [field: Header("Player Data")]
-        [field: SerializeField] private PlayerAttributeSO playerAttribute;
-                                public PlayerAttributeSO PlayerAttribute => playerAttribute;
         [field: SerializeField] private PlayerDeckSO playerDeck;
                                 public PlayerDeckSO PlayerDeck => playerDeck;
         [field: SerializeField] private PlayerInventorySO playerInventory;

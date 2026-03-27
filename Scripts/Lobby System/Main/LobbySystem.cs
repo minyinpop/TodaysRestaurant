@@ -18,23 +18,22 @@ namespace Lobby_System.Main
         
         private void Awake()
         {
-            if (levelSelectSystem == null)
+            if (levelSelectSystem is null)
             {
-                Debug.Log($"{nameof(LobbySystem)} > {nameof(levelSelectSystem)} cannot be null.");
-                return;
+                throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(levelSelectSystem)} cannot be null.");
             }
             
-            InputSystem.OnPerformedMap += OnPerformedMap;
+            InputSystem.OnPerformedMap += OnPerformLevelSelectButton;
             _onLobbyLevelSelectUIPerformedCleanupAction = () =>
             {
-                InputSystem.OnPerformedMap -= OnPerformedMap;
+                InputSystem.OnPerformedMap -= OnPerformLevelSelectButton;
                 _onLobbyLevelSelectUIPerformedCleanupAction = null;
             };
 
-            LobbyUISystem.OnClickLevelSelectButtonEvent += OnPerformedMap;
+            LobbyUISystem.OnClickLevelSelectButtonEvent += OnPerformLevelSelectButton;
             _onClickLevelSelectButtonCleanupAction = () =>
             {
-                LobbyUISystem.OnClickLevelSelectButtonEvent -= OnPerformedMap;
+                LobbyUISystem.OnClickLevelSelectButtonEvent -= OnPerformLevelSelectButton;
                 _onClickLevelSelectButtonCleanupAction = null;
             };
         }
@@ -45,7 +44,7 @@ namespace Lobby_System.Main
             _onClickLevelSelectButtonCleanupAction?.Invoke();
         }
 
-        private void OnPerformedMap()
+        private void OnPerformLevelSelectButton()
         {
             _isLevelSelectUIOpen = !_isLevelSelectUIOpen;
             

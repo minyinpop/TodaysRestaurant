@@ -427,7 +427,7 @@ namespace Explore_System.System.Child.Battle_System.System.Main
                             _isEnd = true;
                             MessageUISystem.ShowItemGetUI(
                                 content: new PopUpUIContent(
-                                    message: string.Empty,
+                                    message: "戰鬥勝利",
                                     confirmButtonTitle: "拿取物品",
                                     cancelButtonTitle: string.Empty,
                                     closeButtonTitle: string.Empty),

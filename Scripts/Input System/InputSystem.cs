@@ -18,13 +18,7 @@ namespace Input_System
         {
             _inputManager.Enable();
             
-            #region Player
-                _inputManager.Player.Walk.started += OnPlayerWalkStarted;
-                _cleanupActions.Enqueue(() => _inputManager.Player.Walk.started -= OnPlayerWalkStarted);
-                    
-                _inputManager.Player.Walk.canceled += OnPlayerWalkCanceled;
-                _cleanupActions.Enqueue(() => _inputManager.Player.Walk.canceled -= OnPlayerWalkCanceled);
-                    
+            #region Player   
                 _inputManager.Player.Hotbar.performed += OnHotbarPerformed;
                 _cleanupActions.Enqueue(() => _inputManager.Player.Hotbar.performed -= OnHotbarPerformed);
 
@@ -36,6 +30,9 @@ namespace Input_System
 
                 _inputManager.Player.Interact.performed += OnInteractPerformed;
                 _cleanupActions.Enqueue(() => _inputManager.Player.Interact.performed -= OnInteractPerformed);
+
+                _inputManager.Player.Restaurant.performed += OnRestaurantPerformed;
+                _cleanupActions.Enqueue(() => _inputManager.Player.Restaurant.performed -= OnRestaurantPerformed);
             #endregion
             
             #region Mouse

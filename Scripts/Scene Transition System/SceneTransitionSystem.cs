@@ -10,6 +10,7 @@ using Dialogue_System.Utage;
 using Explore_System.System.Child.Battle_System.System.Main;
 using Title_System;
 using UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Select_UI.Main;
+using UI_System.Lobby_UI_System.Main;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -36,6 +37,7 @@ namespace Scene_Transition_System
         [field: SerializeField] private SceneNameSO dialogueSceneNameData;
         [field: SerializeField] private SceneNameSO lobbySceneNameData;
         [field: SerializeField] private SceneNameSO exploreSceneNameData;
+        [field: SerializeField] private SceneNameSO restaurantSceneNameData;
         
         private IEnumerator _changeSceneCoroutine;
 
@@ -79,6 +81,8 @@ namespace Scene_Transition_System
             
             LevelSelectUI.OnClickLevelStartButton += GoToExplore;
             
+            LobbyUISystem.OnClickRestaurantButtonEvent += GoToRestaurant;
+            
             UtageReceiveMessageSystem.ChangeScene += ChangeScene;
         }
 
@@ -97,6 +101,8 @@ namespace Scene_Transition_System
             BattleSystem.OnClickEnemyWinConfirmButton -= GoToLobby;
             
             LevelSelectUI.OnClickLevelStartButton -= GoToExplore;
+            
+            LobbyUISystem.OnClickRestaurantButtonEvent -= GoToRestaurant;
             
             UtageReceiveMessageSystem.ChangeScene -= ChangeScene;
         }
@@ -144,6 +150,14 @@ namespace Scene_Transition_System
                         }
                     }
                 });
+            StartCoroutine(_changeSceneCoroutine);
+        }
+
+        private void GoToRestaurant()
+        {
+            _changeSceneCoroutine = ChangeSceneCoroutine(
+                sceneName: restaurantSceneNameData.SceneName,
+                onSceneLoaded: onComplete => onComplete.Invoke());
             StartCoroutine(_changeSceneCoroutine);
         }
 

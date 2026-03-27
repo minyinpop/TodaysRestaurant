@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using Animation_System.Spine;
-using Common.Character;
+using Common.Player.Child.Player_Character;
 using Common.Status_Bar;
 using Explore_System.System.Child.Battle_System.Object.Card;
 using UnityEngine;
@@ -18,8 +18,8 @@ namespace Explore_System.System.Child.Battle_System.Object.Creature.Character
         [field: SerializeField] private StatusBar healthBar;
         
         [field: Header("Data")]
-        [field: SerializeField] private CharacterSO characterData;
-                                public CharacterSO CharacterData => characterData;
+        [field: SerializeField] private PlayerCharacterSO characterData;
+                                public PlayerCharacterSO CharacterData => characterData;
         
         public static event Action<ICard, Action, Action> OnAttack;
 

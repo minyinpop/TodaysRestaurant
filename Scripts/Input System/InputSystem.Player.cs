@@ -9,18 +9,6 @@ namespace Input_System
     {
         #region Walk
             public static Vector2 WalkDirection => _inputManager.Player.Walk.ReadValue<Vector2>();
-            
-            public static event Action OnStartedPlayerWalk;
-            private static void OnPlayerWalkStarted(InputAction.CallbackContext _)
-            {
-                OnStartedPlayerWalk?.Invoke();
-            }
-            
-            public static event Action OnCancelPlayerWalk;
-            private static void OnPlayerWalkCanceled(InputAction.CallbackContext _)
-            {
-                OnCancelPlayerWalk?.Invoke();
-            }
         #endregion
             
         #region Hotbar
@@ -67,6 +55,14 @@ namespace Input_System
             private static void OnInteractPerformed(InputAction.CallbackContext _)
             {
                 OnPerformedInteract?.Invoke();
+            }
+        #endregion
+
+        #region Restaurant
+            public static event Action OnPerformedRestaurant;
+            private static void OnRestaurantPerformed(InputAction.CallbackContext _)
+            {
+                OnPerformedRestaurant?.Invoke();
             }
         #endregion
     }

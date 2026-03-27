@@ -3,10 +3,10 @@ using Common.Value;
 using Common.Value.Type;
 using UnityEngine;
 
-namespace Common.Character
+namespace Common.Player.Child.Player_Character
 {
-    [CreateAssetMenu(menuName = "Minyinpop/Character", fileName = "New Data")]
-    public sealed class CharacterSO : ScriptableObject
+    [CreateAssetMenu(menuName = "Minyinpop/Player/Child/Deck", fileName = "New Data")]
+    public sealed class PlayerCharacterSO : ScriptableObject
     {
         [field: Header("Health")]
         [field: SerializeField] private int maxHealth;
@@ -16,6 +16,10 @@ namespace Common.Character
         [field: Header("Damage")]
         [field: SerializeField] private Damage damage;
                                 public Damage Damage => damage;
+                                
+        [field: Header("Move Speed")]
+        [field: SerializeField] private float moveSpeed;
+                                public float MoveSpeed => moveSpeed;
         
         [field: Header("Card Type")]
         [field: SerializeField] private CardType[] cardTypes;

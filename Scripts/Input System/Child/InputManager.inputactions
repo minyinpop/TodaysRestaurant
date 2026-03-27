@@ -48,7 +48,16 @@
                     "id": "262a6eda-5d34-4b83-a57b-4dffa88962f8",
                     "expectedControlType": "",
                     "processors": "",
-                    "interactions": "",
+                    "interactions": "Press",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Restaurant",
+                    "type": "Button",
+                    "id": "74570e7e-e514-443f-875b-66ab53425c09",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "Press",
                     "initialStateCheck": false
                 }
             ],
@@ -301,8 +310,19 @@
                     "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Keyboard&Mouse",
                     "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c779cc51-15bb-45a6-8ae6-1daf6d7af770",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Restaurant",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
