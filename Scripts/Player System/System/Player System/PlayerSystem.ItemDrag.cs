@@ -6,12 +6,12 @@ namespace Player_System.System.Player_System
 {
     public partial class PlayerSystem
     {
-        private static IItemSlot _sourceSlot;
-        private static IItemSlot _destinationSlot;
+        private static ItemSlot _sourceSlot;
+        private static ItemSlot _destinationSlot;
         
         private static IItem _draggedItem;
         
-        public static void DragItemFromItemSlot(IItemSlot itemSlot)
+        public static void DragItemFromItemSlot(ItemSlot itemSlot)
         {
             if (itemSlot is null)
             {

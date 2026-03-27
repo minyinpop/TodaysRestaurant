@@ -80,7 +80,7 @@ namespace Common.Enemy.Enemy_Object
                         return;
                     }
 
-                    OnAttack.Invoke(_battleEnemyEntry);
+                    OnAttack.Invoke(this, _battleEnemyEntry);
                     break;
                 }
             }

@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using Common;
 using Common.Level.Child.Level_Enemy;
+using Common.Player.Child.Player_Team;
 using Common.Value;
 using Common.Value.Type;
 using Explore_System.System.Child.Battle_System.System.Child;
 using Explore_System.System.Child.Battle_System.System.Child.Selected_Card_System.Main;
 using Explore_System.System.Child.Battle_System.System.Main.State_Machine;
 using Explore_System.System.Child.Battle_System.System.Main.State_Machine.State;
-using Player_System.Data.Child.Player_Team;
 using UI_System.Message_UI_System.Main;
 using UnityEngine;
 
@@ -44,6 +44,9 @@ namespace Explore_System.System.Child.Battle_System.System.Main
         private bool _isEnd;
 
         private BattleEnemyEntry _currentBattleEnemyEntry;
+
+        public static event Action OnClickPlayerWinConfirmButton;
+        public static event Action<Action> OnClickEnemyWinConfirmButton;
         
         private void Awake()
         {
@@ -132,13 +135,12 @@ namespace Explore_System.System.Child.Battle_System.System.Main
             PlayerTeamSystem.RecycleCard -= OnRecycleCard;
         }
 
+        // Note: entry 一定不為 null，所以檢測裡面的參數，詳情請點開 class 查看。
         public override void StartSystem(BattleEnemyEntry entry)
         {
             if (_isStarted)
             {
-                Debug.Log($"{name} > {GetType().Name} > is already started.");
-                Destroy(gameObject);
-                return;
+                throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(_isStarted)} is already started.");
             }
 
             _currentBattleEnemyEntry = entry;
@@ -242,7 +244,7 @@ namespace Explore_System.System.Child.Battle_System.System.Main
                             cardPoolSystem.Refill(
                                 onComplete:() =>
                                 {
-                                    playerTeamData.GetCharacterNumber(out var number);
+                                    var number = playerTeamData.CharacterNumber;
                                     number = Mathf.Clamp(number * 2, 1, 8);
                                     DrawAndShowCard(number, TurnManager);
                                 });
@@ -325,8 +327,7 @@ namespace Explore_System.System.Child.Battle_System.System.Main
                         }
                         
                         yield return new WaitUntil(() => playerTurnEnd && enemyTurnEnd);
-                        playerTeamData.GetCharacterNumber(out var number);
-                        DrawAndShowCard(number, () => drawAndShowEnd = true);
+                        DrawAndShowCard(playerTeamData.CharacterNumber, () => drawAndShowEnd = true);
                         yield return new WaitUntil(() => drawAndShowEnd);
                     }
                 }
@@ -426,12 +427,20 @@ namespace Explore_System.System.Child.Battle_System.System.Main
                             _isEnd = true;
                             MessageUISystem.ShowItemGetUI(
                                 content: new PopUpUIContent(
-                                    message: string.Empty,
+                                    message: "戰鬥勝利",
                                     confirmButtonTitle: "拿取物品",
                                     cancelButtonTitle: string.Empty,
                                     closeButtonTitle: string.Empty),
                                 items: _currentBattleEnemyEntry.ItemsData,
-                                onConfirm: () => Debug.Log("Confirm player win."));
+                                onConfirm: () =>
+                                {
+                                    if (OnClickPlayerWinConfirmButton is null)
+                                    {
+                                        throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(OnClickPlayerWinConfirmButton)} has no subscriber.");
+                                    }
+
+                                    OnClickPlayerWinConfirmButton.Invoke();
+                                });
                         },
                         onExit: () =>
                         {
@@ -455,12 +464,21 @@ namespace Explore_System.System.Child.Battle_System.System.Main
                             MessageUISystem.ShowDefeatUI(
                                 content: new PopUpUIContent(
                                     message: "被打敗了",
-                                    confirmButtonTitle: "再來一次",
+                                    confirmButtonTitle: "返回城鎮",
                                     cancelButtonTitle: string.Empty,
                                     closeButtonTitle: string.Empty),
                                 onConfirm: () =>
                                 {
-                                    Debug.Log("確認玩家戰敗畫面");
+                                    if (OnClickEnemyWinConfirmButton is null)
+                                    {
+                                        // TODO 開發日誌：2026.03.27 16:06 不清楚為什麼 throw 的時候，editor 的 console 沒有 print，build 環境也沒有 crash。
+                                        throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(OnClickEnemyWinConfirmButton)} has no subscriber.");
+                                    }
+
+                                    OnClickEnemyWinConfirmButton.Invoke(() =>
+                                    {
+                                        Debug.Log("返回到大廳。");
+                                    });
                                 });
                         },
                         onExit: () =>

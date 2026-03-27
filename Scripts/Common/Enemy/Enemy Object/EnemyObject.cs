@@ -26,7 +26,7 @@ namespace Common.Enemy.Enemy_Object
         private IState _chaseState;
         private IState _attackState;
 
-        public static event Action<BattleEnemyEntry> OnAttack;
+        public static event Action<EnemyObject, BattleEnemyEntry> OnAttack;
         
         private void Awake()
         {

@@ -11,7 +11,7 @@ using UnityEngine.UI;
 namespace Common.Item_Slot.New.Child
 {
     [RequireComponent(typeof(DoAnimation))]
-    public sealed class PutIngredientSlot : PointerEvent, IItemSlot
+    public sealed class PutIngredientSlot : PointerEvent, ItemSlot
     {
         [field: Header("Component")]
         [field: SerializeField] private new DoAnimation animation;

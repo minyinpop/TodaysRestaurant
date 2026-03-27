@@ -10,7 +10,7 @@ using UnityEngine.UI;
 namespace Common.Item_Slot.New.Child
 {
     [RequireComponent(typeof(DoAnimation))]
-    public sealed class HotbarSlot : PointerEvent, IItemSlot
+    public sealed class HotbarSlot : PointerEvent, ItemSlot
     {
         [field: Header("Component")]
         [field: SerializeField] private new DoAnimation animation;

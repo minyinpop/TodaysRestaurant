@@ -1,5 +1,6 @@
 using System;
 using Common.Button;
+using Input_System;
 using UI_System.Lobby_UI_System.Child.Level_Select_UI_System.System;
 using UnityEngine;
 
@@ -10,49 +11,67 @@ namespace UI_System.Lobby_UI_System.Main
         [field: Header("Systems")]
         [field: SerializeField] private LevelSelectUISystem levelSelectUISystem;
                                 private static LevelSelectUISystem _levelSelectUISystem;
-                                
+        
         [field: Header("Objects")]
         [field: SerializeField] private Button levelSelectButton;
+        [field: SerializeField] private Button restaurantButton;
         
-        private Action _levelSelectButtonCleanupAction;
         public static event Action OnClickLevelSelectButtonEvent;
+        public static event Action OnClickRestaurantButtonEvent;
         
         private void Awake()
         {
-            if (levelSelectUISystem == null)
+            if (levelSelectUISystem is null)
             {
-                Debug.Log($"{nameof(LobbyUISystem)} > {nameof(levelSelectUISystem)} cannot be null.");
+                throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(levelSelectUISystem)} cannot be null.");
             }
-            else
+
+            if (levelSelectButton is null)
             {
-                _levelSelectUISystem = levelSelectUISystem;
+                throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(levelSelectButton)} cannot be null.");
             }
+
+            if (restaurantButton is null)
+            {
+                throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(restaurantButton)} cannot be null.");
+            }
+
+            _levelSelectUISystem = levelSelectUISystem;
             
-            if (levelSelectButton == null)
-            {
-                Debug.Log($"{nameof(LevelSelectUISystem)} > {nameof(levelSelectButton)} cannot be null.");
-            }
-            else
-            {
-                levelSelectButton.OnClick += OnClickLevelSelectButton;
-                _levelSelectButtonCleanupAction = () =>
-                {
-                    levelSelectButton.OnClick -= OnClickLevelSelectButton;
-                    _levelSelectButtonCleanupAction = null;
-                };
-            }
+            levelSelectButton.OnClick += OnClickLevelSelectButton;
+            restaurantButton.OnClick += OnClickRestaurantButton;
+
+            InputSystem.OnPerformedRestaurant += OnClickRestaurantButton;
         }
         
         private void OnDestroy()
         {
-            _levelSelectButtonCleanupAction?.Invoke();
+            levelSelectButton.OnClick -= OnClickLevelSelectButton;
+            restaurantButton.OnClick -= OnClickRestaurantButton;
+            
+            InputSystem.OnPerformedRestaurant -= OnClickRestaurantButton;
         }
 
         private void OnClickLevelSelectButton()
         {
-            OnClickLevelSelectButtonEvent?.Invoke();
-        }
+            if (OnClickLevelSelectButtonEvent is null)
+            {
+                throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(OnClickLevelSelectButtonEvent)} cannot be null.");
+            }
 
+            OnClickLevelSelectButtonEvent.Invoke();
+        }
+        
+        private void OnClickRestaurantButton()
+        {
+            if (OnClickRestaurantButtonEvent is null)
+            {
+                throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(OnClickRestaurantButtonEvent)} cannot be null.");
+            }
+            
+            OnClickRestaurantButtonEvent.Invoke();
+        }
+        
         public static void ShowLevelSelectUI()
         {
             _levelSelectUISystem.ShowLevelSelectUI();

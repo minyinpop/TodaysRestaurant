@@ -1,3 +1,4 @@
+using System;
 using Common;
 using Common.Item.Data;
 using Input_System;
@@ -24,34 +25,26 @@ namespace Player_System.Object
             #region PlayerSystem
                 if (playerSystem is null)
                 {
-                    Debug.Log($"{gameObject.name} > {GetType().Name} > {nameof(playerSystem)} cannot be null.");
-                    Destroy(gameObject);
-                    return;
+                    throw new InvalidOperationException($"{gameObject.name} > {GetType().Name} > {nameof(playerSystem)} cannot be null.");
                 }
             #endregion
             
             #region PlayerSystem.Interact
                 if (detectArea is null)
                 {
-                    Debug.Log($"{gameObject.name} > {GetType().Name} > {nameof(detectArea)} cannot be null.");
-                    Destroy(gameObject);
-                    return;
+                    throw new InvalidOperationException($"{gameObject.name} > {GetType().Name} > {nameof(detectArea)} cannot be null.");
                 }
             #endregion
             
             #region PlayerSystem.Move
                 if (rig is null)
                 {
-                    Debug.Log($"{gameObject.name} > {GetType().Name} > {nameof(rig)} cannot be null.");
-                    Destroy(gameObject);
-                    return;
+                    throw new InvalidOperationException($"{gameObject.name} > {GetType().Name} > {nameof(rig)} cannot be null.");
                 }
                 
-                if (attributeData is null)
+                if (playerCharacterData is null)
                 {
-                    Debug.Log($"{gameObject.name} > {GetType().Name} > {nameof(attributeData)} cannot be null.");
-                    Destroy(gameObject);
-                    return;
+                    throw new InvalidOperationException($"{gameObject.name} > {GetType().Name} > {nameof(playerCharacterData)} cannot be null.");
                 }
             #endregion
 

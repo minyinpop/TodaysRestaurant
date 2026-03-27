@@ -1,5 +1,5 @@
+using Common.Player.Child.Player_Character;
 using Input_System;
-using Player_System.Data.Child.Player_Attribute;
 using UnityEngine;
 
 namespace Player_System.Object
@@ -8,7 +8,7 @@ namespace Player_System.Object
     {
         [field: Header("Move System")]
         [field: SerializeField] private Rigidbody rig;
-        [field: SerializeField] private PlayerAttributeSO attributeData;
+        [field: SerializeField] private PlayerCharacterSO playerCharacterData;
 
         private bool _canWalk = true;
         private bool _isWalking;
@@ -25,9 +25,9 @@ namespace Player_System.Object
 
             var direction = InputSystem.WalkDirection;
             rig.linearVelocity = new Vector3(
-                x: direction.x * (attributeData.MoveSpeed * Time.fixedDeltaTime),
+                x: direction.x * (playerCharacterData.MoveSpeed * Time.fixedDeltaTime),
                 y: rig.linearVelocity.y,
-                z: direction.y * (attributeData.MoveSpeed * Time.fixedDeltaTime));
+                z: direction.y * (playerCharacterData.MoveSpeed * Time.fixedDeltaTime));
             
             if (direction == Vector2.zero && _isWalking)
             {

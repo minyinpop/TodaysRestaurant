@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Common.Enemy.Data;
 using Common.Item.Data;
 using Common.Value;
@@ -36,6 +37,6 @@ namespace Common.Level.Child.Level_Enemy
         [field: SerializeField] private EnemySO[] enemiesData;
                                 public EnemySO[] EnemiesData => enemiesData;
         [field: SerializeField] private ItemSO[] itemsData;
-                                public ItemSO[] ItemsData => itemsData;
+                                public IReadOnlyList<ItemSO> ItemsData => itemsData;
     }
 }
