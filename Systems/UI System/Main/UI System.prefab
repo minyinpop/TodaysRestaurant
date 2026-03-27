@@ -761,7 +761,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UI_System.Message_UI_System.Child.Item_Get_UI_System.Object.ItemGetUI
   messageTMP: {fileID: 749063111710523583}
-  itemSlotParent: {fileID: 5975178102997040387}
+  slotParent: {fileID: 5975178102997040387}
+  slotContainerPrefab: {fileID: 4301968343163177989, guid: 38b2fa1b23117b8409e0387330fa6c56, type: 3}
+  slotPrefab: {fileID: 3048867568660310561, guid: d470de681b7f2744d8f198ec9a43907b, type: 3}
   confirmButton: {fileID: 4985623844059049159}
 --- !u!1 &2369418465159716459
 GameObject:
@@ -1714,15 +1716,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UI_System.System.Child.Message_UI_System.ItemGetUISystem
   animation: {fileID: 4693047588564380272}
   mask: {fileID: 6225615089099135541}
-  fadeInSettings:
+  maskFadeInSettings:
     EndValue: 1
     Duration: 1
     Ease: 1
-  fadeOutSettings:
+  maskFadeOutSettings:
     EndValue: 0
     Duration: 1
     Ease: 1
-  itemGetUI: {fileID: 8332306653714923645}
+  itemGetUI: {fileID: 1980723641524251599}
+  itemGetUIFadeInSettings:
+    EndValue: 1
+    Duration: 1
+    Ease: 1
+  itemGetUIFadeOutSettings:
+    EndValue: 0
+    Duration: 1
+    Ease: 1
 --- !u!114 &4693047588564380272
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1853,7 +1863,7 @@ GameObject:
   - component: {fileID: 5975178102997040387}
   - component: {fileID: 7093790010730567719}
   m_Layer: 5
-  m_Name: Item Slots
+  m_Name: Slot Parent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5754,7 +5764,7 @@ PrefabInstance:
     - target: {fileID: 5556659824784765278, guid: 8656e90a2c8825040a34f6bf0abb9b40, type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 2880599093308005677, guid: 307cd3319757fe24e9f702460e2f3168, type: 2}
+      objectReference: {fileID: -7588412657756542612, guid: 307cd3319757fe24e9f702460e2f3168, type: 2}
     - target: {fileID: 6063699475138121391, guid: 8656e90a2c8825040a34f6bf0abb9b40, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -5838,7 +5848,7 @@ PrefabInstance:
     - target: {fileID: 7170291609563302385, guid: 8656e90a2c8825040a34f6bf0abb9b40, type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 2880599093308005677, guid: 307cd3319757fe24e9f702460e2f3168, type: 2}
+      objectReference: {fileID: -7588412657756542612, guid: 307cd3319757fe24e9f702460e2f3168, type: 2}
     - target: {fileID: 7233451459313803617, guid: 8656e90a2c8825040a34f6bf0abb9b40, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -6888,7 +6898,7 @@ PrefabInstance:
     - target: {fileID: 2496456606940292085, guid: 44c36361678420a40a05365c2d680868, type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 2880599093308005677, guid: 307cd3319757fe24e9f702460e2f3168, type: 2}
+      objectReference: {fileID: -7588412657756542612, guid: 307cd3319757fe24e9f702460e2f3168, type: 2}
     - target: {fileID: 2509065161655284843, guid: 44c36361678420a40a05365c2d680868, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1

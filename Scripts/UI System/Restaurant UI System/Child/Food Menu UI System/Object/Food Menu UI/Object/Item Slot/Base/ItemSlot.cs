@@ -5,7 +5,7 @@ using Common.Pointer_Event;
 
 namespace UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_Menu_UI.Object.Item_Slot.Base
 {
-    internal abstract class ItemSlot : PointerEvent
+    public abstract class ItemSlot : PointerEvent
     {
         public event Action<ItemSlot, ItemSO> OnClick;
         protected void OnClicked(ItemSO itemData) { OnClick?.Invoke(this, itemData); }

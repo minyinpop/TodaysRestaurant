@@ -134,13 +134,12 @@ namespace Explore_System.System.Child.Battle_System.System.Main
             PlayerTeamSystem.RecycleCard -= OnRecycleCard;
         }
 
+        // Note: entry 一定不為 null，所以檢測裡面的參數，詳情請點開 class 查看。
         public override void StartSystem(BattleEnemyEntry entry)
         {
             if (_isStarted)
             {
-                Debug.Log($"{name} > {GetType().Name} > is already started.");
-                Destroy(gameObject);
-                return;
+                throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(_isStarted)} is already started.");
             }
 
             _currentBattleEnemyEntry = entry;
@@ -433,7 +432,10 @@ namespace Explore_System.System.Child.Battle_System.System.Main
                                     cancelButtonTitle: string.Empty,
                                     closeButtonTitle: string.Empty),
                                 items: _currentBattleEnemyEntry.ItemsData,
-                                onConfirm: () => Debug.Log("Confirm player win."));
+                                onConfirm: () =>
+                                {
+                                    // TODO 玩家點選確認按鈕後的程序
+                                });
                         },
                         onExit: () =>
                         {

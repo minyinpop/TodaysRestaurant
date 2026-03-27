@@ -99,7 +99,7 @@ namespace UI_System.Message_UI_System.Main
             _switchUISystem.ShowUI(content, onConfirm, onCancel);
         }
         
-        public static void ShowItemGetUI(PopUpUIContent content, IItem[] items, Action onConfirm)
+        public static void ShowItemGetUI(PopUpUIContent content, IReadOnlyList<ItemSO> items, Action onConfirm)
         {
             _itemGetUISystem.ShowUI(content, items, onConfirm);
         }
