@@ -2,7 +2,7 @@ using Common.Enemy.Data;
 using Common.Item.Data;
 using UnityEngine;
 
-namespace Player_System.Data.Child.Player_Level
+namespace Common.Player.Child.Player_Level
 {
     [CreateAssetMenu(menuName = "Minyinpop/Player/Child/Level", fileName = "New Data")]
     public sealed class PlayerLevelSO : ScriptableObject

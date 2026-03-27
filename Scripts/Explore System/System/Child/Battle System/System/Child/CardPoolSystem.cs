@@ -3,12 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Animation_System.DOTween.Basic;
+using Common.Player.Child.Player_Deck;
 using Common.Value.Type;
 using DG.Tweening;
 using Explore_System.System.Child.Battle_System.Object.Card_Slot;
 using Explore_System.System.Child.Battle_System.Object.Card;
 using Explore_System.System.Child.Battle_System.Object.Card.Battle;
-using Player_System.Data.Child.Player_Deck;
 using UnityEngine;
 
 namespace Explore_System.System.Child.Battle_System.System.Child

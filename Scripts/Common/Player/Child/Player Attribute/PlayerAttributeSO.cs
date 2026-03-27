@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Player_System.Data.Child.Player_Attribute
+namespace Common.Player.Child.Player_Attribute
 {
     [CreateAssetMenu(menuName = "Minyinpop/Player/Child/Attribute", fileName = "New Data")]
     internal sealed class PlayerAttributeSO : ScriptableObject

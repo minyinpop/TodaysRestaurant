@@ -8,29 +8,32 @@ namespace Common.Status_Bar
     internal sealed class StatusBar : MonoBehaviour
     {
         [field: Header("Object")]
-        [field: SerializeField] private Slider InnerFill;
-        [field: SerializeField] private Slider OuterFill;
+        [field: SerializeField] private Slider innerFill;
+        [field: SerializeField] private Slider outerFill;
 
-        private float MaxValue = 1;
+        private float _value;
+        private float _maxValue = 1;
         
-        private float CurrentValue;
+        private Tween _tween;
 
-        private Tween CurrentTween;
-
-        public void Initialize(float maxValue)
+        public void Initialize(float value, float maxValue)
         {
-            MaxValue = maxValue;
+            if (value > maxValue)
+            {
+                throw new ArgumentOutOfRangeException($"{name} > {GetType().Name} > {nameof(Initialize)} > {nameof(value)} cannot be greater than {nameof(maxValue)}.");
+            }
+
+            _value = value;
+            _maxValue = maxValue;
             
-            InitValue(InnerFill);
-            InitValue(OuterFill);
-            
-            CurrentValue = MaxValue;
+            InitValue(innerFill);
+            InitValue(outerFill);
             return;
             
             void InitValue(Slider slider)
             {
-                slider.maxValue = MaxValue;
-                slider.value = MaxValue;
+                slider.maxValue = _maxValue;
+                slider.value = _value;
             }
         }
         
@@ -39,20 +42,23 @@ namespace Common.Status_Bar
             // TODO
         }
         
-        public void Subtract(float value, Action isAlive, Action isDeath)
+        public void Subtract(float value)
         {
-            CurrentValue = Mathf.Clamp(CurrentValue -= value, 0, MaxValue);
-            if (Mathf.Approximately(CurrentValue, 0))
-                isDeath?.Invoke();
-            else
-                isAlive?.Invoke();
-            CurrentTween?.Kill();
-            CurrentTween = DOTween.Sequence()
-                .Append(OuterFill
-                    .DOValue(CurrentValue, .25f))
-                .Join(InnerFill
-                    .DOValue(CurrentValue, 1))
-                .OnKill(() => CurrentTween = null);
+            if (value < 0)
+            {
+                throw new ArgumentOutOfRangeException(
+                    $"{name} > {GetType().Name} > {nameof(Subtract)} > {nameof(value)} cannot be less than 0.");
+            }
+
+            _value = Mathf.Clamp(_value -= value, 0, _maxValue);
+            
+            _tween?.Kill();
+            _tween = DOTween.Sequence()
+                .Append(outerFill
+                    .DOValue(_value, .25f))
+                .Join(innerFill
+                    .DOValue(_value, 1))
+                .OnKill(() => _tween = null);
         }
     }
 }

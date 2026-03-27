@@ -3,12 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using Animation_System.DOTween.Basic;
 using Common.Button;
+using Common.Player.Child.Player_Team;
 using Common.Value;
 using DG.Tweening;
 using Explore_System.System.Child.Battle_System.Object.Card_Slot;
 using Explore_System.System.Child.Battle_System.Object.Card;
 using Explore_System.System.Child.Battle_System.System.Child.Selected_Card_System.Child;
-using Player_System.Data.Child.Player_Team;
 using UI_System.Message_UI_System.Main;
 using UnityEngine;
 
@@ -45,8 +45,7 @@ namespace Explore_System.System.Child.Battle_System.System.Child.Selected_Card_S
 
         private void Start()
         {
-            playerTeamSO.GetCharacterNumber(out var number);
-            for (var i = 0; i < number; i++)
+            for (var i = 0; i < playerTeamSO.CharacterNumber; i++)
             {
                 var slot = Instantiate(SlotPrefab, SpawnParent);
                 var slotScript = slot.GetComponent<CardSlot>();

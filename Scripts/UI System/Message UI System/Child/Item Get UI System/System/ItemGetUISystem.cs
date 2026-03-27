@@ -43,16 +43,12 @@ namespace UI_System.Message_UI_System.Child.Item_Get_UI_System.System
             }
             
             mask.gameObject.SetActive(false);
-            mask.alpha = 0;
-            
             itemGetUI.gameObject.SetActive(false);
-            itemGetUI.alpha = 0;
         }
 
         public void ShowUI(PopUpUIContent content, IReadOnlyList<ItemSO> items, Action onConfirm)
         {
             #region 初始設定 mask
-                mask.alpha = 0;
                 mask.gameObject.SetActive(true);
             #endregion
             
@@ -63,9 +59,7 @@ namespace UI_System.Message_UI_System.Child.Item_Get_UI_System.System
                     onComplete: () =>
                     {
                         #region 初始設定 itemGetUI
-                            itemGetUI.alpha = 0;
                             itemGetUI.gameObject.SetActive(true);
-                            
                             itemGetUI.GetComponent<ItemGetUI>().SetMessage(content);
                         #endregion
                             
@@ -79,13 +73,37 @@ namespace UI_System.Message_UI_System.Child.Item_Get_UI_System.System
                                         items: items,
                                         onConfirm: () =>
                                         {
-                                            // TODO 執行 UI 的重置
-                                            onConfirm.Invoke();
+                                            HideUI(
+                                                onComplete: () =>
+                                                {
+                                                    onConfirm.Invoke();
+                                                });
                                         });
                                 });
                         #endregion
                     });
             #endregion
+        }
+
+        private void HideUI(Action onComplete)
+        {
+            animation.DoFade_CanvasGroup(
+                canvasGroup: itemGetUI,
+                settings: itemGetUIFadeOutSettings,
+                onComplete: () =>
+                {
+                    animation.DoFade_CanvasGroup(
+                        canvasGroup: mask,
+                        settings: maskFadeOutSettings,
+                        onComplete: () =>
+                        {
+                            mask.gameObject.SetActive(false);
+                            itemGetUI.gameObject.SetActive(false);
+                            
+                            itemGetUI.GetComponent<ItemGetUI>().ClearMessage();
+                            onComplete.Invoke();
+                        });
+                });
         }
     }
 }

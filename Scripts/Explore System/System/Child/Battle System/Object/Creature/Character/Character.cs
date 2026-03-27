@@ -19,6 +19,7 @@ namespace Explore_System.System.Child.Battle_System.Object.Creature.Character
         
         [field: Header("Data")]
         [field: SerializeField] private CharacterSO characterData;
+                                public CharacterSO CharacterData => characterData;
         
         public static event Action<ICard, Action, Action> OnAttack;
 
@@ -26,7 +27,9 @@ namespace Explore_System.System.Child.Battle_System.Object.Creature.Character
 
         private void Start()
         {
-            healthBar.Initialize(characterData.Health);
+            healthBar.Initialize(
+                value: characterData.Health,
+                maxValue: characterData.MaxHealth);
         }
 
         private void OnEnable()
@@ -42,13 +45,6 @@ namespace Explore_System.System.Child.Battle_System.Object.Creature.Character
                 _currentCoroutine = null;
             }
         }
-
-        #region Data
-            public void GetCharacterData(out CharacterSO data)
-            {
-                data = characterData;
-            }
-        #endregion
 
         #region Attack
             public void Attack(ICard card, SpineAnimation animation, Action haveEnemyAlive, Action enemyAllDead)
@@ -66,10 +62,11 @@ namespace Explore_System.System.Child.Battle_System.Object.Creature.Character
         #endregion
 
         #region Hurt
-            public void Hurt(float damage, Action isAlive, Action isDeath)
+            public void Hurt(int damage, Action isAlive, Action isDeath)
             {
-                healthBar.Subtract(damage,
-                    isAlive: () =>
+                characterData.SubtractHealth(
+                    damage: damage,
+                    alive: () =>
                     {
                         AnimationSystem.Hurt(() =>
                         {
@@ -77,7 +74,7 @@ namespace Explore_System.System.Child.Battle_System.Object.Creature.Character
                             isAlive?.Invoke();
                         });
                     },
-                    isDeath: () =>
+                    dead: () =>
                     {
                         AnimationSystem.Dead(
                             onComplete: () =>
@@ -85,6 +82,8 @@ namespace Explore_System.System.Child.Battle_System.Object.Creature.Character
                                 isDeath?.Invoke();
                             });
                     });
+
+                healthBar.Subtract(damage);
             }
         #endregion
     }

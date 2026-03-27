@@ -29,6 +29,44 @@ namespace UI_System.Message_UI_System.Child.Item_Get_UI_System.Object.Main
 
         private IEnumerator _itemGetCoroutine;
 
+        private void Awake()
+        {
+            if (messageTMP is null)
+            {
+                throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(messageTMP)} cannot be null.");
+            }
+            
+            if (slotParent is null)
+            {
+                throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(slotParent)} cannot be null.");
+            }
+            
+            if (slotContainerPrefab is null)
+            {
+                throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(slotContainerPrefab)} cannot be null.");
+            }
+            
+            if (slotPrefab is null)
+            {
+                throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(slotPrefab)} cannot be null.");
+            }
+            
+            if (confirmButton is null)
+            {
+                throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(confirmButton)} cannot be null.");
+            }
+            
+            messageTMP.SetText(string.Empty);
+            confirmButton.SetInteractable(false);
+            
+            foreach (var container in _slotContainers)
+            {
+                Destroy(container.gameObject);
+            }
+
+            _slotContainers.Clear();
+        }
+
         private void OnDisable()
         {
             if (_itemGetCoroutine is not null)
@@ -90,21 +128,34 @@ namespace UI_System.Message_UI_System.Child.Item_Get_UI_System.Object.Main
                 
                 #region 啟用確認按鈕
                     confirmButton.SetInteractable(true);
+                    confirmButton.OnClick += OnClickConfirmButton;
                 #endregion
 
-                yield return null;
+                yield break;
+                
+                void OnClickConfirmButton()
+                {
+                    #region 關閉確認按鈕
+                        confirmButton.SetInteractable(false);
+                        confirmButton.OnClick -= OnClickConfirmButton;
+                    #endregion
+                    
+                    onConfirm.Invoke();
+                }
             }
         }
 
         public void ClearMessage()
         {
-            // TODO
-            /*
             messageTMP.SetText(string.Empty);
-            confirmButton.SetTitle(string.Empty);
+            confirmButton.SetInteractable(false);
             
-            _onConfirmButtonCleanupAction?.Invoke();
-            */
+            foreach (var container in _slotContainers)
+            {
+                Destroy(container.gameObject);
+            }
+
+            _slotContainers.Clear();
         }
     }
 }

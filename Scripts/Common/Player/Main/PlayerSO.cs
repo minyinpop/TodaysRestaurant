@@ -1,12 +1,12 @@
-using Player_System.Data.Child.Player_Attribute;
-using Player_System.Data.Child.Player_Deck;
-using Player_System.Data.Child.Player_Inventory;
-using Player_System.Data.Child.Player_Level;
-using Player_System.Data.Child.Player_Team;
-using Player_System.Data.Child.Player_Unlock_Food;
+using Common.Player.Child.Player_Attribute;
+using Common.Player.Child.Player_Deck;
+using Common.Player.Child.Player_Inventory;
+using Common.Player.Child.Player_Level;
+using Common.Player.Child.Player_Team;
+using Common.Player.Child.Player_Unlock_Food;
 using UnityEngine;
 
-namespace Player_System.Data.Main
+namespace Common.Player.Main
 {
     [CreateAssetMenu(menuName = "Minyinpop/Player/Main/Player", fileName = "New Data")]
     internal sealed class PlayerSO : ScriptableObject

@@ -85,8 +85,7 @@ namespace Explore_System.System.Child.Battle_System.System.Child
                                 isDeath: () =>
                                 {
                                     AliveCharacters.Remove(character);
-                                    character.GetCharacterData(out var characterData);
-                                    RecycleCard?.Invoke(characterData.CardTypes,
+                                    RecycleCard?.Invoke(character.CharacterData.CardTypes,
                                         () =>
                                         {
                                             // onComplete
@@ -127,8 +126,7 @@ namespace Explore_System.System.Child.Battle_System.System.Child
                                 completes[i] = false;
                             foreach (var (character, index) in deadCharacters)
                             {
-                                character.GetCharacterData(out var characterData);
-                                RecycleCard?.Invoke(characterData.CardTypes,
+                                RecycleCard?.Invoke(character.CharacterData.CardTypes,
                                     () =>
                                     {
                                         // onComplete.

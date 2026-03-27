@@ -4,6 +4,7 @@ using Common;
 using Common.Enemy.Enemy_Object;
 using Common.Level.Child.Level_Enemy;
 using Common.Level.Main;
+using Explore_System.System.Child.Battle_System.System.Main;
 using Explore_System.System.Child.Enemy_System;
 using Explore_System.System.Child.Ingredient_System;
 using UI_System.Explore_UI_System;
@@ -21,50 +22,64 @@ namespace Explore_System.System.Main
         private LevelSO _levelData;
         
         private bool _initialized;
-        private IEnumerator _initializeExploreCoroutine;
-        private IEnumerator _initializeBattleCoroutine;
+        private IEnumerator _exploreCoroutine;
+        private IEnumerator _battleCoroutine;
         
         private Scene _terrainScene;
         private Scene _exploreScene;
         private Scene _battleScene;
 
         private Action _onEnemyAttackCleanupAction;
+        private Action _onExitBattleCleanupAction;
+
+        private EnemyObject _attackingEnemy;
 
         private void Awake()
         {
             if (exploreUISystem is null)
             {
-                Debug.Log($"{name} > {GetType().Name} > {nameof(exploreUISystem)} cannot be null.");
-                Destroy(gameObject);
+                throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(exploreUISystem)} cannot be null.");
+            }
+        }
+
+        private void OnDisable()
+        {
+            if (_exploreCoroutine is not null)
+            {
+                StopCoroutine(_exploreCoroutine);
+                _exploreCoroutine = null;
+            }
+
+            if (_battleCoroutine is not null)
+            {
+                StopCoroutine(_battleCoroutine);
+                _battleCoroutine = null;
             }
         }
 
         private void OnDestroy()
         {
             _onEnemyAttackCleanupAction?.Invoke();
+            _onExitBattleCleanupAction?.Invoke();
         }
 
         public override void StartSystem(LevelSO levelData, Action onComplete)
         {
             if (_initialized)
             {
-                Debug.Log($"{name} > {GetType().Name} > {nameof(_initialized)} is already initialize.");
-                Destroy(gameObject);
-                return;
+                throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(StartSystem)} is already initialize.");
             }
 
             if (levelData is null)
             {
-                Debug.Log($"{name} > {GetType().Name} > {nameof(StartSystem)} > {nameof(levelData)} cannot be null.");
-                Destroy(gameObject);
-                return;
+                throw new ArgumentNullException($"{name} > {GetType().Name} > {nameof(StartSystem)} > {nameof(levelData)} cannot be null.");
             }
 
             _initialized = true;
             _levelData = levelData;
             
-            _initializeExploreCoroutine = InitializeExploreCoroutine();
-            StartCoroutine(_initializeExploreCoroutine);
+            _exploreCoroutine = InitializeExploreCoroutine();
+            StartCoroutine(_exploreCoroutine);
             return;
 
             IEnumerator InitializeExploreCoroutine()
@@ -133,11 +148,18 @@ namespace Explore_System.System.Main
                 #endregion
                 
                 #region 訂閱事件
-                    EnemyObject.OnAttack += InitializeBattle;
+                    EnemyObject.OnAttack += EnterBattle;
                     _onEnemyAttackCleanupAction = () =>
                     {
-                        EnemyObject.OnAttack -= InitializeBattle;
+                        EnemyObject.OnAttack -= EnterBattle;
                         _onEnemyAttackCleanupAction = null;
+                    };
+
+                    BattleSystem.OnClickPlayerWinConfirmButton += ExitBattle;
+                    _onExitBattleCleanupAction = () =>
+                    {
+                        BattleSystem.OnClickPlayerWinConfirmButton -= ExitBattle;
+                        _onExitBattleCleanupAction = null;
                     };
                 #endregion
                 
@@ -145,15 +167,24 @@ namespace Explore_System.System.Main
                 
                 yield break;
                 
-                void InitializeBattle(BattleEnemyEntry entry)
+                void EnterBattle(EnemyObject enemy, BattleEnemyEntry entry)
                 {
-                    _initializeBattleCoroutine = InitializeBattleCoroutine();
-                    StartCoroutine(_initializeBattleCoroutine);
+                    if (_battleCoroutine is not null)
+                    {
+                        throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(EnterBattle)} is already in enter battle state.");
+                    }
+
+                    _battleCoroutine = EnterBattleCoroutine();
+                    StartCoroutine(_battleCoroutine);
                     return;
 
-                    IEnumerator InitializeBattleCoroutine()
+                    IEnumerator EnterBattleCoroutine()
                     {
                         var complete = false;
+
+                        #region 設定哪個敵人發起的攻擊
+                            _attackingEnemy = enemy;
+                        #endregion
                         
                         #region 淡入過場
                             exploreUISystem.FadeIn(
@@ -205,6 +236,66 @@ namespace Explore_System.System.Main
                                 Debug.Log($"{name} > {GetType().Name} > cannot find {nameof(SceneStarter)} in {nameof(rootObjects)}");
                                 Destroy(gameObject);
                             }
+                        #endregion
+
+                        #region 清除戰鬥系統的暫存
+                            _battleCoroutine = null;
+                        #endregion
+                    }
+                }
+
+                void ExitBattle()
+                {
+                    if (_battleCoroutine is not null)
+                    {
+                        throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(ExitBattle)} is already in exit battle state.");
+                    }
+
+                    _battleCoroutine = ExitBattleCoroutine();
+                    StartCoroutine(_battleCoroutine);
+                    return;
+
+                    IEnumerator ExitBattleCoroutine()
+                    {
+                        var complete = false;
+                        
+                        #region 淡入過場
+                            exploreUISystem.FadeIn(
+                                onComplete: () => complete = true);
+                            yield return new WaitUntil(() => complete);
+                        #endregion
+
+                        #region 啟用戰鬥前所關閉的 UI
+                            PlayerUISystem.SetHotbarUI(true);
+                            PlayerUISystem.SetBackpackUI(true);
+                        #endregion
+
+                        #region 清除戰鬥場景
+                            yield return SceneManager.UnloadSceneAsync(_battleScene);
+                        #endregion
+                        
+                        #region 啟用探索場景
+                            foreach (var rootObject in _exploreScene.GetRootGameObjects())
+                            {
+                                rootObject.SetActive(true);
+                            }
+                        #endregion
+
+                        #region 清除發起攻擊的敵人
+                            Destroy(_attackingEnemy.gameObject);
+                            _attackingEnemy = null;
+                        #endregion
+
+                        complete = false;
+                        
+                        #region 淡出過場
+                            exploreUISystem.FadeOut(
+                                onComplete: () => complete = true);
+                            yield return new WaitUntil(() => complete);
+                        #endregion
+                        
+                        #region 清除戰鬥系統的暫存
+                            _battleCoroutine = null;
                         #endregion
                     }
                 }

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Common.Item.Data;
-using Common.Item.Data.Ingredient;
 using Common.Value;
 using UI_System.Message_UI_System.Child.Defeat_UI_System.System;
 using UI_System.Message_UI_System.Child.Item_Get_UI_System.System;

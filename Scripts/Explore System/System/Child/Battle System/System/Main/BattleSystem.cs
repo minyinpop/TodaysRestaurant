@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using Common;
 using Common.Level.Child.Level_Enemy;
+using Common.Player.Child.Player_Team;
 using Common.Value;
 using Common.Value.Type;
 using Explore_System.System.Child.Battle_System.System.Child;
 using Explore_System.System.Child.Battle_System.System.Child.Selected_Card_System.Main;
 using Explore_System.System.Child.Battle_System.System.Main.State_Machine;
 using Explore_System.System.Child.Battle_System.System.Main.State_Machine.State;
-using Player_System.Data.Child.Player_Team;
 using UI_System.Message_UI_System.Main;
 using UnityEngine;
 
@@ -45,6 +45,7 @@ namespace Explore_System.System.Child.Battle_System.System.Main
 
         private BattleEnemyEntry _currentBattleEnemyEntry;
 
+        public static event Action OnClickPlayerWinConfirmButton;
         public static event Action<Action> OnClickEnemyWinConfirmButton;
         
         private void Awake()
@@ -243,7 +244,7 @@ namespace Explore_System.System.Child.Battle_System.System.Main
                             cardPoolSystem.Refill(
                                 onComplete:() =>
                                 {
-                                    playerTeamData.GetCharacterNumber(out var number);
+                                    var number = playerTeamData.CharacterNumber;
                                     number = Mathf.Clamp(number * 2, 1, 8);
                                     DrawAndShowCard(number, TurnManager);
                                 });
@@ -326,8 +327,7 @@ namespace Explore_System.System.Child.Battle_System.System.Main
                         }
                         
                         yield return new WaitUntil(() => playerTurnEnd && enemyTurnEnd);
-                        playerTeamData.GetCharacterNumber(out var number);
-                        DrawAndShowCard(number, () => drawAndShowEnd = true);
+                        DrawAndShowCard(playerTeamData.CharacterNumber, () => drawAndShowEnd = true);
                         yield return new WaitUntil(() => drawAndShowEnd);
                     }
                 }
@@ -434,7 +434,12 @@ namespace Explore_System.System.Child.Battle_System.System.Main
                                 items: _currentBattleEnemyEntry.ItemsData,
                                 onConfirm: () =>
                                 {
-                                    // TODO 玩家點選確認按鈕後的程序
+                                    if (OnClickPlayerWinConfirmButton is null)
+                                    {
+                                        throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(OnClickPlayerWinConfirmButton)} has no subscriber.");
+                                    }
+
+                                    OnClickPlayerWinConfirmButton.Invoke();
                                 });
                         },
                         onExit: () =>
@@ -459,7 +464,7 @@ namespace Explore_System.System.Child.Battle_System.System.Main
                             MessageUISystem.ShowDefeatUI(
                                 content: new PopUpUIContent(
                                     message: "被打敗了",
-                                    confirmButtonTitle: "再來一次",
+                                    confirmButtonTitle: "返回城鎮",
                                     cancelButtonTitle: string.Empty,
                                     closeButtonTitle: string.Empty),
                                 onConfirm: () =>

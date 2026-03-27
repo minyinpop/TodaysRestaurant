@@ -4,7 +4,7 @@ using Common.Value.Type;
 using Explore_System.System.Child.Battle_System.Object.Card;
 using UnityEngine;
 
-namespace Player_System.Data.Child.Player_Deck
+namespace Common.Player.Child.Player_Deck
 {
     [CreateAssetMenu(menuName = "Minyinpop/Player/Child/Deck", fileName = "New Data")]
     internal sealed class PlayerDeckSO : ScriptableObject

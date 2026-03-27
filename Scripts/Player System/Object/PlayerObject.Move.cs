@@ -1,5 +1,5 @@
+using Common.Player.Child.Player_Attribute;
 using Input_System;
-using Player_System.Data.Child.Player_Attribute;
 using UnityEngine;
 
 namespace Player_System.Object

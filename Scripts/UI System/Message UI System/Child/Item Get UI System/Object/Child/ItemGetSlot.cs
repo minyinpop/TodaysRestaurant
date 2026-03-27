@@ -13,14 +13,14 @@ namespace UI_System.Message_UI_System.Child.Item_Get_UI_System.Object.Child
     [RequireComponent(typeof(DoAnimation))]
     public sealed class ItemGetSlot : PointerEvent, ItemSlot
     {
-        [field: Header("Animation")]
+        [field: Header("Components")]
         [field: SerializeField] private RectTransform slotRect;
+        [field: SerializeField] private Image itemImage;
+        
+        [field: Header("Animation")]
         [field: SerializeField] private new DoAnimation animation;
         [field: SerializeField] private DoScale scaleUpSettings;
         [field: SerializeField] private DoScale scaleDownSettings;
-        
-        [field: Header("Image")]
-        [field: SerializeField] private Image itemImage;
         
         public IItem Item { get; private set; }
 
@@ -31,6 +31,11 @@ namespace UI_System.Message_UI_System.Child.Item_Get_UI_System.Object.Child
             if (slotRect is null)
             {
                 throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(slotRect)} cannot be null.");
+            }
+
+            if (itemImage is null)
+            {
+                throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(itemImage)} cannot be null.");
             }
 
             if (animation is null)
@@ -78,6 +83,7 @@ namespace UI_System.Message_UI_System.Child.Item_Get_UI_System.Object.Child
                 #endregion
                 
                 #region 設定顯示
+                    itemImage.sprite = Item.ItemSprite;
                     itemImage.gameObject.SetActive(true);
                 #endregion
 
