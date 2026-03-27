@@ -7,6 +7,7 @@ using Common.Level.Main;
 using Common.Scene_Name;
 using DG.Tweening;
 using Dialogue_System.Utage;
+using Explore_System.System.Child.Battle_System.System.Main;
 using Title_System;
 using UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Select_UI.Main;
 using UnityEngine;
@@ -33,6 +34,7 @@ namespace Scene_Transition_System
         
         [field: Header("Scene Name")]
         [field: SerializeField] private SceneNameSO dialogueSceneNameData;
+        [field: SerializeField] private SceneNameSO lobbySceneNameData;
         [field: SerializeField] private SceneNameSO exploreSceneNameData;
         
         private IEnumerator _changeSceneCoroutine;
@@ -43,23 +45,22 @@ namespace Scene_Transition_System
         {
             if (animation is null)
             {
-                Debug.Log($"{name} > {GetType().Name} > {nameof(animation)} cannot be null.");
-                Destroy(gameObject);
-                return;
+                throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(animation)} cannot be null.");
             }
 
             if (dialogueSceneNameData is null)
             {
-                Debug.Log($"{name} > {GetType().Name} > {nameof(dialogueSceneNameData)} cannot be null.");
-                Destroy(gameObject);
-                return;
+                throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(dialogueSceneNameData)} cannot be null.");
             }
-            
+
+            if (lobbySceneNameData is null)
+            {
+                throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(lobbySceneNameData)} cannot be null.");
+            }
+
             if (exploreSceneNameData is null)
             {
-                Debug.Log($"{name} > {GetType().Name} > {nameof(exploreSceneNameData)} cannot be null.");
-                Destroy(gameObject);
-                return;
+                throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(exploreSceneNameData)} cannot be null.");
             }
 
             #region Singleton
@@ -73,7 +74,9 @@ namespace Scene_Transition_System
                 DontDestroyOnLoad(gameObject);
             #endregion
             
-            TitleSystem.OnClickStartGameButton += ChangeScene;
+            TitleSystem.OnClickStartGameButton += GoToLobby;
+            BattleSystem.OnClickEnemyWinConfirmButton += GoToLobby;
+            
             LevelSelectUI.OnClickLevelStartButton += GoToExplore;
             
             UtageReceiveMessageSystem.ChangeScene += ChangeScene;
@@ -90,7 +93,9 @@ namespace Scene_Transition_System
 
         private void OnDestroy()
         {
-            TitleSystem.OnClickStartGameButton -= ChangeScene;
+            TitleSystem.OnClickStartGameButton -= GoToLobby;
+            BattleSystem.OnClickEnemyWinConfirmButton -= GoToLobby;
+            
             LevelSelectUI.OnClickLevelStartButton -= GoToExplore;
             
             UtageReceiveMessageSystem.ChangeScene -= ChangeScene;
@@ -104,19 +109,19 @@ namespace Scene_Transition_System
             StartCoroutine(_changeSceneCoroutine);
         }
         
-        private void ChangeScene(string sceneName, Action onComplete)
+        private void GoToLobby(Action onComplete)
         {
             _changeSceneCoroutine = ChangeSceneCoroutine(
-                sceneName: sceneName,
+                sceneName: lobbySceneNameData.SceneName,
                 onSceneLoaded: onComplete => onComplete.Invoke(),
                 onComplete: onComplete);
             StartCoroutine(_changeSceneCoroutine);
         }
         
-        private void GoToDialogue(string sceneName)
+        private void GoToDialogue()
         {
             _changeSceneCoroutine = ChangeSceneCoroutine(
-                sceneName: sceneName,
+                sceneName: dialogueSceneNameData.SceneName,
                 onSceneLoaded: onComplete => onComplete.Invoke());
             StartCoroutine(_changeSceneCoroutine);
         }

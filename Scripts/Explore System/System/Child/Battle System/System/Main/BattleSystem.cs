@@ -44,6 +44,8 @@ namespace Explore_System.System.Child.Battle_System.System.Main
         private bool _isEnd;
 
         private BattleEnemyEntry _currentBattleEnemyEntry;
+
+        public static event Action<Action> OnClickEnemyWinConfirmButton;
         
         private void Awake()
         {
@@ -460,7 +462,16 @@ namespace Explore_System.System.Child.Battle_System.System.Main
                                     closeButtonTitle: string.Empty),
                                 onConfirm: () =>
                                 {
-                                    Debug.Log("確認玩家戰敗畫面");
+                                    if (OnClickEnemyWinConfirmButton is null)
+                                    {
+                                        // TODO 開發日誌：2026.03.27 16:06 不清楚為什麼 throw 的時候，editor 的 console 沒有 print，build 環境也沒有 crash。
+                                        throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(OnClickEnemyWinConfirmButton)} has no subscriber.");
+                                    }
+
+                                    OnClickEnemyWinConfirmButton.Invoke(() =>
+                                    {
+                                        Debug.Log("返回到大廳。");
+                                    });
                                 });
                         },
                         onExit: () =>
