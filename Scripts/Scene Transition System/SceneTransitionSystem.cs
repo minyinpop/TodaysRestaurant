@@ -8,9 +8,9 @@ using Common.Scene_Name;
 using DG.Tweening;
 using Dialogue_System.Utage;
 using Explore_System.System.Child.Battle_System.System.Main;
-using Title_System;
 using UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Select_UI.Main;
 using UI_System.Lobby_UI_System.Main;
+using UI_System.Title_UI_System.Main;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -76,7 +76,7 @@ namespace Scene_Transition_System
                 DontDestroyOnLoad(gameObject);
             #endregion
             
-            TitleSystem.OnClickStartGameButton += GoToLobby;
+            TitleUISystem.OnClickStartGameButton += GoToLobby;
             BattleSystem.OnClickEnemyWinConfirmButton += GoToLobby;
             
             LevelSelectUI.OnClickLevelStartButton += GoToExplore;
@@ -97,7 +97,7 @@ namespace Scene_Transition_System
 
         private void OnDestroy()
         {
-            TitleSystem.OnClickStartGameButton -= GoToLobby;
+            TitleUISystem.OnClickStartGameButton -= GoToLobby;
             BattleSystem.OnClickEnemyWinConfirmButton -= GoToLobby;
             
             LevelSelectUI.OnClickLevelStartButton -= GoToExplore;

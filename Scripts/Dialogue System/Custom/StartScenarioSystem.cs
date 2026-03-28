@@ -1,4 +1,4 @@
-using Title_System;
+using UI_System.Title_UI_System.Main;
 using UnityEngine;
 using Utage;
 
@@ -11,7 +11,7 @@ namespace Dialogue_System.Custom
         
         private void Awake()
         {
-            TitleSystem.StartScenario += StartScenario;
+            TitleUISystem.StartScenario += StartScenario;
             
             // BattleSystem.StartScenario += StartScenario;
             // ActiveActions.Enqueue(() => BattleSystem.StartScenario -= StartScenario);
@@ -19,7 +19,7 @@ namespace Dialogue_System.Custom
 
         private void OnDestroy()
         {
-            TitleSystem.StartScenario -= StartScenario;
+            TitleUISystem.StartScenario -= StartScenario;
         }
 
         private void StartScenario(string label, int page)
