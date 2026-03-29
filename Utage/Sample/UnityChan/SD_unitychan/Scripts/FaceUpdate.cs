@@ -39,13 +39,13 @@ namespace Utage.Sample.UnityChan
 
 		void Update ()
 		{
-
+/*
 			if (Input.GetMouseButton (0)) {
 				current = 1;
 			} else if (!isKeepFace) {
 				current = Mathf.Lerp (current, 0, delayWeight);
 			}
-			anim.SetLayerWeight (1, current);
+*/			anim.SetLayerWeight (1, current);
 		}
 	 
 

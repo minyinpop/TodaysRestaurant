@@ -328,5 +328,29 @@ namespace Utage
 			}
 			return null;
 		}
+		
+		//AdvGraphicInfoを含む、AdvGraphicInfoListを取得
+		public AdvGraphicInfoList FindGraphicInfoList(AdvGraphicInfo graphicInfo)
+		{
+			foreach (var item in SettingDataManager.CharacterSetting.List)
+			{
+				var graphicList = item.Graphic; 
+				if (graphicList.InfoList.Contains(graphicInfo))
+				{
+					return graphicList;
+				}
+			}
+			foreach (var item in SettingDataManager.TextureSetting.List)
+			{
+				var graphicList = item.Graphic; 
+				if (graphicList.InfoList.Contains(graphicInfo))
+				{
+					return graphicList;
+				}
+			}
+			
+			Debug.LogError($"{graphicInfo.Key}　はTextureシートまたは、Characterシート以下にありません");
+			return null;
+		}
 	}
 }

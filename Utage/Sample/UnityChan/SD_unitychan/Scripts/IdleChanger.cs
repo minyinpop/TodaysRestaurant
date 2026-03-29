@@ -38,7 +38,7 @@ namespace Utage.Sample.UnityChan
 			// ランダム判定用関数をスタートする
 			StartCoroutine ("RandomChange");
 		}
-	
+	/*
 		// Update is called once per frame
 		void  Update ()
 		{
@@ -87,7 +87,7 @@ namespace Utage.Sample.UnityChan
             }
 		}
 
-
+*/
 		// ランダム判定用関数
 		IEnumerator RandomChange ()
 		{

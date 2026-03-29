@@ -200,6 +200,13 @@ namespace Utage
 			this.LastResource = graphic;
 			this.Layer.Manager.OnDrawGraphicObject.Invoke(this, graphic);
 		}
+		
+		//本来のとは違う流れで描画処理を外部から呼ぶ処理
+		//AdvGraphicInfoはロード済みであること
+		public virtual void DrawSubExplicit(AdvGraphicInfo graphic, float fadeTime)
+		{
+			DrawSub(graphic, fadeTime);
+		}
 
 
 		//コマンドによる位置設定を適用

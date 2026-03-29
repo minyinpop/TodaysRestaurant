@@ -153,6 +153,9 @@ namespace Utage
 		public const string IdImageEffect = "ImageEffect";					//イメージエフェクトの開始
 		public const string IdImageEffectOff = "ImageEffectOff";            //イメージエフェクトの終了
 
+		public const string IdPostEffect = "PostEffect";			//ポストエフェクトの開始
+		public const string IdPostEffectOff = "PostEffectOff";      //ポストエフェクトの終了
+
 		public const string IdParam = "Param";						//パラメーター代入
 		public const string IdIf = "If";							//If文制御
 		public const string IdElseIf = "ElseIf";                    //If文制御
@@ -309,6 +312,11 @@ namespace Utage
 					return new AdvCommandImageEffect(row, dataManager);
 				case IdImageEffectOff:
 					return new AdvCommandImageEffectOff(row, dataManager);
+
+				case IdPostEffect:
+					return new AdvCommandPostEffect(row, dataManager);
+				case IdPostEffectOff:
+					return new AdvCommandPostEffectOff(row, dataManager);
 
 
 				case IdSe:

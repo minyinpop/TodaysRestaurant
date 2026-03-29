@@ -387,6 +387,23 @@ namespace Utage
 			return allGraphics;
 		}
 
+		//指定のオブジェクトがレイヤー以下の現在のオブジェクトにあるか？
+		//つまり、すでに非表示だったり、フェードアウト中などではないか
+		public bool ContainsCurrentGraphic(AdvGraphicObject graphicObject)
+		{
+			foreach (var layer in LayerList)
+			{
+				foreach (var keyValue in layer.CurrentGraphics)
+				{
+					if (keyValue.Value == graphicObject)
+					{
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+
 		//ロード中かチェック
 		internal bool IsLoading
 		{

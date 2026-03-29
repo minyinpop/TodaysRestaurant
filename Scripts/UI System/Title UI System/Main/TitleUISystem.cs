@@ -1,6 +1,6 @@
 using System;
 using Common.Button;
-using UI_System.Title_UI_System.Child.Login_UI_System;
+using UI_System.Title_UI_System.Child.Account_UI_System;
 using UnityEngine;
 
 namespace UI_System.Title_UI_System.Main
@@ -8,7 +8,7 @@ namespace UI_System.Title_UI_System.Main
     internal sealed class TitleUISystem : MonoBehaviour
     {
         [field: Header("System")]
-        [field: SerializeField] private LoginUISystem loginUISystem;
+        [field: SerializeField] private AccountUISystem accountUISystem;
         
         [field: Header("Button")]
         [field: SerializeField] private Button StartButton;
@@ -20,9 +20,9 @@ namespace UI_System.Title_UI_System.Main
 
         private void Awake()
         {
-            if (loginUISystem is null)
+            if (accountUISystem is null)
             {
-                throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(loginUISystem)} cannot be null.");
+                throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(accountUISystem)} cannot be null.");
             }
 
             if (StartButton is null)
@@ -43,6 +43,8 @@ namespace UI_System.Title_UI_System.Main
             StartButton.OnClick += OnStartButtonClicked;
             OptionButton.OnClick += OnOptionButtonClicked;
             QuitButton.OnClick += OnQuitButtonClicked;
+
+            accountUISystem.OnLoginSuccess += OnLoginSuccess;
         }
 
         private void OnDestroy()
@@ -50,28 +52,14 @@ namespace UI_System.Title_UI_System.Main
             StartButton.OnClick -= OnStartButtonClicked;
             OptionButton.OnClick -= OnOptionButtonClicked;
             QuitButton.OnClick -= OnQuitButtonClicked;
+            
+            accountUISystem.OnLoginSuccess -= OnLoginSuccess;
         }
 
         #region Button
             private void OnStartButtonClicked()
             {
-                if (OnClickStartGameButton is null)
-                {
-                    throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(OnClickStartGameButton)} has no subscriber.");
-                }
-                
-                loginUISystem.OpenLoginUI(
-                    onLogin: () =>
-                    {
-                        OnClickStartGameButton.Invoke(() =>
-                        {
-                            Debug.Log("場景切換完畢。");
-                            /*
-                             * TODO 正式版使用
-                             * StartScenario.Invoke("Main", 0);
-                            */
-                        });
-                    });
+                accountUISystem.OpenLoginUI();
             }
 
             private void OnOptionButtonClicked()
@@ -83,5 +71,22 @@ namespace UI_System.Title_UI_System.Main
                 Application.Quit();
             }
         #endregion
+
+        private void OnLoginSuccess()
+        {
+            if (OnClickStartGameButton is null)
+            {
+                throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(OnClickStartGameButton)} has no subscriber.");
+            }
+            
+            OnClickStartGameButton.Invoke(() =>
+            {
+                Debug.Log("場景切換完畢。");
+                /*
+                 * TODO 正式版使用
+                 * StartScenario.Invoke("Main", 0);
+                 */
+            });
+        }
     }
 }

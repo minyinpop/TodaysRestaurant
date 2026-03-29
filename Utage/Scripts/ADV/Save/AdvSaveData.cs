@@ -169,7 +169,7 @@ namespace Utage
 
 		static readonly int MagicID = FileIOManager.ToMagicID('S', 'a', 'v', 'e');  //識別ID
 		public const int Version = 10;   //ファイルバージョン
-		public BinaryBuffer Buffer = new BinaryBuffer();
+		public BinaryBuffer Buffer { get; protected set; } = new BinaryBuffer();
 
 		/// <summary>
 		/// バイナリ読み込み

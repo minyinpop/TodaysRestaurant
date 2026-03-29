@@ -6,7 +6,7 @@ using UtageExtensions;
 namespace Utage
 {
 
-	//特定のオブジェクトの色をカスタムする
+	//特定のオブジェクトの色をカスタムする（各オブジェクト設定）
 	public class SampleAutoConditionalGraphicSwitcherManager : MonoBehaviour
 	{
 		AdvEngine Engine => this.GetAdvEngineCacheFindIfMissing(ref engine);

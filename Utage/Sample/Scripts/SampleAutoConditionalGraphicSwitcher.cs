@@ -8,8 +8,10 @@ using UtageExtensions;
 namespace Utage
 {
 
-	//CharacterシートやTextureシートのConditionalをマイフレームチェックして
+	//CharacterシートやTextureシートのConditionalを毎フレームチェックして
 	//自動的にオブジェクトの表示変更を行うコンポーネント
+	//ロード処理が行われないので、アバターやダイシングなど全Conditionalで同じリソースを使用するものにのみ有効
+	//デフォルトの通常テクスチャの表示の場合は、SampleExplicitConditionalGraphicSwitcherで手動タイミングで呼び出すこと
 	public class SampleAutoConditionalGraphicSwitcher : MonoBehaviour
 	{
 		AdvEngine Engine => this.GetAdvEngineCacheFindIfMissing(ref engine);
@@ -23,33 +25,8 @@ namespace Utage
 		{
 //			Debug.Log("OnDraw");
 			CurrentGraphicInfo = graphicInfo;
-			CurrentGraphicList = FindGraphicInfoList(graphicInfo);
+			CurrentGraphicList = Engine.DataManager.FindGraphicInfoList(graphicInfo);
 		}
-
-		//指定の表示を含む、AdvGraphicInfoListを取得
-		AdvGraphicInfoList FindGraphicInfoList(AdvGraphicInfo graphicInfo)
-		{
-			foreach (var item in Engine.DataManager.SettingDataManager.CharacterSetting.List)
-			{
-				var graphicList = item.Graphic; 
-				if (graphicList.InfoList.Contains(graphicInfo))
-				{
-					return graphicList;
-				}
-			}
-			foreach (var item in Engine.DataManager.SettingDataManager.TextureSetting.List)
-			{
-				var graphicList = item.Graphic; 
-				if (graphicList.InfoList.Contains(graphicInfo))
-				{
-					return graphicList;
-				}
-			}
-			
-			Debug.LogError($"{graphicInfo.Key}　はTextureシートまたは、Characterシート以下にありません");
-			return null;
-		}
-		
 
 		//毎フレームチェック（ほかのコマンド処理などが終わったあとなのでLateUpdateで行う）
 		void LateUpdate()
@@ -84,19 +61,24 @@ namespace Utage
 		}
 
 		//表示を変える
+		//AdvGraphicInfoはロード済みの前提
+		//AvatarやダイシングならFileNameが同じならロード済み。
+		//（注）デフォルトのテクスチャを使うだけの表示は、新しいテクスチャロードが必要なので、その処理も追記が必要
 		void OnAutoChangeGraphic(AdvGraphicObject graphicObject,AdvGraphicInfo graphic)
 		{
-			//AdvGraphicInfoはロード済みの前提
-			//AvatarやダイシングならFileNameが同じならロード済み。
-			//（注）デフォルトのテクスチャを使うだけの表示は、新しいテクスチャロードが必要なので、その処理も追記が必要
-			
 			//表示を変更
+
+			//Loaderに参照を持たせてからロード
+			//Loader.LoadGraphicは、前のリソースを開放可能にしてから次のリソースをロードするため、
+			//今のリソースのロード時間がかかると「なにも描画オブジェクトがない」状態になりかねないため、未ロードのものは使用しないこと
+			graphicObject.Loader.LoadGraphic(graphic, () => graphicObject.DrawSubExplicit(graphic,0));
+/*			
 			graphicObject.TargetObject.ChangeResourceOnDraw(graphic,0);
 			if (graphicObject.RenderObject != graphicObject.TargetObject)
 			{
 				//テクスチャ書き込みをしている
 				graphicObject.RenderObject.ChangeResourceOnDraw(graphic, 0);
 			}
-		}
+*/		}
 	}
 }
