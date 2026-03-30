@@ -200,9 +200,7 @@ namespace Scene_Transition_System
                 var operation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
                 if (operation is null)
                 {
-                    Debug.Log($"{name} > {GetType().Name} > cannot find the new scene named: {sceneName}.");
-                    Destroy(gameObject);
-                    yield break;
+                    throw new InvalidOperationException(nameof(sceneName));
                 }
                 
                 while (operation.progress < .9f)
@@ -221,7 +219,7 @@ namespace Scene_Transition_System
                 if (playerUISystem is not null)
                 {
                     complete = false;
-                    PlayerUISystem.SaveInventory(
+                    PlayerUISystem.LoadInventory(
                         onComplete: () =>
                         {
                             Debug.Log("物品讀取成功！");
@@ -230,6 +228,7 @@ namespace Scene_Transition_System
                         onFail: () =>
                         {
                             Debug.Log("物品讀取失敗！");
+                            complete = true;
                         });
                     yield return new WaitUntil(() => complete);
                 }

@@ -1,8 +1,11 @@
 using System;
+using Input_System;
 using PlayFab;
 using PlayFab.ClientModels;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 using Button = Common.Button.Button;
 
 namespace UI_System.Title_UI_System.Child.Account_UI_System
@@ -68,6 +71,14 @@ namespace UI_System.Title_UI_System.Child.Account_UI_System
             returnButton.OnClick += OnClickReturnButton;
         }
 
+        private void OnEnable()
+        {
+            Debug.Log("A");
+            accountInputField.Select();
+            
+            InputSystem.OnPerformedTab += OnClickTabButton;
+        }
+
         private void OnDisable()
         {
             accountInputField.text = string.Empty;
@@ -78,6 +89,8 @@ namespace UI_System.Title_UI_System.Child.Account_UI_System
             loginButton.SetInteractable(false);
             registerButton.SetInteractable(false);
             returnButton.SetInteractable(false);
+            
+            InputSystem.OnPerformedTab -= OnClickTabButton;
         }
 
         private void OnDestroy()
@@ -232,6 +245,13 @@ namespace UI_System.Title_UI_System.Child.Account_UI_System
             }
             
             OnClickReturnButtonEvent.Invoke();
+        }
+
+        private void OnClickTabButton()
+        {
+            var currentSelectable = EventSystem.current?.currentSelectedGameObject?.GetComponent<Selectable>();
+            var nextSelectable = currentSelectable?.FindSelectableOnDown();
+            nextSelectable?.Select();
         }
     }
 }

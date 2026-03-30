@@ -47,13 +47,9 @@ namespace Common.Item_Slot.New.Child
                     throw new InvalidOperationException(nameof(itemImage));
                 }
             #endregion
-            
-            #region 防呆
-                itemImage.gameObject.SetActive(false);
-            #endregion
         }
         
-        #region PointerEvent
+        #region 鼠標互動
             protected override void OnPointerEnter()
             {
                 if (canInteract)
@@ -79,9 +75,9 @@ namespace Common.Item_Slot.New.Child
             }
         #endregion
         
-        public bool AddItem(IItem item)
-        {
-            #region 條件檢查
+        #region 物品事件
+            public bool AddItem(IItem item)
+            {
                 if (item is null)
                 {
                     throw new ArgumentNullException(nameof(item));
@@ -91,48 +87,54 @@ namespace Common.Item_Slot.New.Child
                 {
                     return false;
                 }
-            #endregion
+                    
+                Item = item;
                 
-            Item = item;
-                
-            itemImage.sprite = Item.ItemSprite;
-            itemImage.gameObject.SetActive(true);
-            return true;
-        }
+                itemImage.sprite = Item.ItemSprite;
+                itemImage.gameObject.SetActive(true);
+                return true;
+            }
 
-        public bool GetItem(out IItem ingredient)
-        {
-            if (Item is null)
+            public bool GetItem(out IItem ingredient)
             {
-                ingredient = null;
-                return false;
+                if (Item is null)
+                {
+                    ingredient = null;
+                    return false;
+                }
+                    
+                itemImage.gameObject.SetActive(false);
+                itemImage.sprite = null;
+                
+                ingredient = Item;
+                Item = null;
+                return true;
             }
                 
-            itemImage.gameObject.SetActive(false);
-            itemImage.sprite = null;
-            
-            ingredient = Item;
-            Item = null;
-            return true;
-        }
-            
-        public bool ChangeItem(IItem targetItem, out IItem slotItem)
-        {
-            if (targetItem is null)
+            public bool ChangeItem(IItem targetItem, out IItem slotItem)
             {
-                throw new ArgumentNullException(nameof(targetItem));
-            }
-            
-            if (Item is null)
-            {
-                throw new InvalidOperationException(nameof(Item));
-            }
-            
-            slotItem = Item;
-            Item = targetItem;
+                if (targetItem is null)
+                {
+                    throw new ArgumentNullException(nameof(targetItem));
+                }
                 
-            itemImage.sprite = Item.ItemSprite;
-            return true;
+                if (Item is null)
+                {
+                    throw new InvalidOperationException(nameof(Item));
+                }
+                
+                slotItem = Item;
+                Item = targetItem;
+                    
+                itemImage.sprite = Item.ItemSprite;
+                return true;
+            }
+        #endregion
+
+        public void Refresh()
+        {
+            itemImage.gameObject.SetActive(Item is not null);
+            itemImage.sprite = Item?.ItemSprite;
         }
     }
 }

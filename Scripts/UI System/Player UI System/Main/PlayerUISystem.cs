@@ -157,7 +157,66 @@ namespace UI_System.Player_UI_System.Main
 
             public static void LoadInventory(Action onComplete, Action onFail)
             {
-                // TODO 讀取物品
+                var request = new GetUserDataRequest();
+                
+                PlayFabClientAPI.GetUserData(
+                    request: request,
+                    resultCallback: result =>
+                    {
+                        const string targetDataName = "Inventory";
+
+                        if (result.Data is not null && result.Data.ContainsKey(targetDataName))
+                        {
+                            var json = result.Data[targetDataName].Value;
+                            var data = JsonUtility.FromJson<InventorySaveData>(json);
+                            
+                            #region 載入快捷欄的物品
+                                var hotbarSlots = _hotbarUISystem.GetHotbarSlots();
+
+                                for (var i = 0; i < data.hotbarSlots.Count; i++)
+                                {
+                                    var slotData = data.hotbarSlots[i];
+                                    var item = ItemDatabase.GetItem(slotData.ItemId);
+
+                                    if (item is null)
+                                    {
+                                        continue;
+                                    }
+                                    
+                                    hotbarSlots[i].AddItem(item);
+                                }
+                            #endregion
+                            
+                            #region 載入背包的物品
+                                var backpackSlots = _backpackUISystem.GetBackpackSlots();
+
+                                for (var i = 0; i < data.backpackSlots.Count; i++)
+                                {
+                                    var slotData = data.backpackSlots[i];
+                                    var item = ItemDatabase.GetItem(slotData.ItemId);
+                                    
+                                    if (item is null)
+                                    {
+                                        continue;
+                                    }
+                                    
+                                    backpackSlots[i].AddItem(item);
+                                }
+                            #endregion
+                            
+                            onComplete.Invoke();
+                        }
+                        else
+                        {
+                            onFail.Invoke();
+                        }
+                    },
+                    errorCallback: error =>
+                    {
+                        Debug.Log($"無法成功向 PlayFab 獲取資料");
+                        Debug.LogError(error.GenerateErrorReport());
+                        onFail.Invoke();
+                    });
             }
         #endregion
         

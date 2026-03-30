@@ -1,6 +1,7 @@
 using System;
 using Animation_System.DOTween;
 using Animation_System.DOTween.Basic;
+using Common.Item.Data;
 using UnityEngine;
 
 namespace UI_System.Title_UI_System.Child.Account_UI_System
@@ -147,12 +148,18 @@ namespace UI_System.Title_UI_System.Child.Account_UI_System
                             {
                                 maskCanvasGroup.gameObject.SetActive(false);
 
-                                if (OnLoginSuccess is null)
-                                {
-                                    throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(OnLoginSuccess)} cannot be null.");
-                                }
+                                #region 登入成功後的事件
+                                    ItemDatabase.Initialize();
+                                #endregion
 
-                                OnLoginSuccess.Invoke();
+                                #region 發送登入成功訊息
+                                    if (OnLoginSuccess is null)
+                                    {
+                                        throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(OnLoginSuccess)} cannot be null.");
+                                    }
+
+                                    OnLoginSuccess.Invoke();
+                                #endregion
                             });
                     });
             }

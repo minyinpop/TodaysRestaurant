@@ -65,5 +65,13 @@ namespace Input_System
                 OnPerformedRestaurant?.Invoke();
             }
         #endregion
+        
+        #region Tab
+            public static event Action OnPerformedTab;
+            private static void OnTabPerformed(InputAction.CallbackContext _)
+            {
+                OnPerformedTab?.Invoke();
+            }
+        #endregion
     }
 }

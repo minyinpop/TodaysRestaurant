@@ -24,7 +24,15 @@ namespace UI_System.Player_UI_System.Child.Backpack_UI_System.Object
                 throw new InvalidOperationException(nameof(playerInventoryData));
             }
         }
-        
+
+        private void OnEnable()
+        {
+            foreach (var slot in backpackSlots)
+            {
+                slot.Refresh();
+            }
+        }
+
         public bool AddItem(IItem item)
         {
             if (item is null)
