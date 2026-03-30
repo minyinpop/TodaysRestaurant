@@ -1,4 +1,8 @@
+using System;
+using System.Collections.Generic;
 using Common.Button;
+using Common.Item_Slot.New.Child;
+using Common.Item.Data;
 using UI_System.Player_UI_System.Child.Backpack_UI_System.Object;
 using UnityEngine;
 
@@ -46,30 +50,55 @@ namespace UI_System.Player_UI_System.Child.Backpack_UI_System.System
             fastButton.OnClick -= RequireBackpackUI;
         }
 
-        public void SetBackpackUI(bool isEnabled)
-        {
-            _isBackpackEnabled = isEnabled;
-            
-            if (_isBackpackEnabled)
+        #region 裝置輸入
+            public void SetBackpackUI(bool isEnabled)
             {
-                fastButton.gameObject.SetActive(true);
-            }
-            else
-            {
-                mask.SetActive(false);
-                backpackUI.gameObject.SetActive(false);
+                _isBackpackEnabled = isEnabled;
                 
-                fastButton.gameObject.SetActive(false);
+                if (_isBackpackEnabled)
+                {
+                    fastButton.gameObject.SetActive(true);
+                }
+                else
+                {
+                    mask.SetActive(false);
+                    backpackUI.gameObject.SetActive(false);
+                    
+                    fastButton.gameObject.SetActive(false);
+                }
             }
+
+            public void RequireBackpackUI()
+            {
+                if (_isBackpackEnabled)
+                {
+                    mask.SetActive(!mask.gameObject.activeSelf);
+                    backpackUI.gameObject.SetActive(!backpackUI.gameObject.activeSelf);
+                }
+            }
+        #endregion
+
+        public bool AddItem(IItem item)
+        {
+            #region 條件檢查
+                if (item is null)
+                {
+                    throw new ArgumentNullException(nameof(item));
+                }
+
+                if (!_isBackpackEnabled)
+                {
+                    Debug.Log("背包尚未開啟，故無法添加物品。");
+                    throw new InvalidOperationException(nameof(_isBackpackEnabled));
+                }
+            #endregion
+
+            return backpackUI.AddItem(item);
         }
 
-        public void RequireBackpackUI()
+        public IReadOnlyList<BackpackSlot> GetBackpackSlots()
         {
-            if (_isBackpackEnabled)
-            {
-                mask.SetActive(!mask.gameObject.activeSelf);
-                backpackUI.gameObject.SetActive(!backpackUI.gameObject.activeSelf);
-            }
+            return backpackUI.BackpackSlots;
         }
     }
 }

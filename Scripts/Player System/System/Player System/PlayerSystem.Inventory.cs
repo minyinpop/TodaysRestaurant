@@ -17,12 +17,12 @@ namespace Player_System.System.Player_System
 
         public bool TryAddItem(IItem itemData)
         {
-            return PlayerUISystem.TryAddItem(itemData);
+            return PlayerUISystem.AddItem(itemData);
         }
 
         public static bool TryRemoveItem(ItemSO itemData)
         {
-            return PlayerUISystem.TryRemoveItem(itemData);
+            return PlayerUISystem.RemoveItem(itemData);
         }
     }
 }

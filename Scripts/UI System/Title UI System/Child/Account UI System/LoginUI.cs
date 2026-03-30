@@ -13,6 +13,9 @@ namespace UI_System.Title_UI_System.Child.Account_UI_System
         [field: SerializeField] private TMP_InputField accountInputField;
         [field: SerializeField] private TMP_InputField passwordInputField;
         
+        [field: Header("Error Result Text")]
+        [field: SerializeField] private TextMeshProUGUI loginErrorResultText;
+        
         [field: Header("Button")]
         [field: SerializeField] private Button loginButton;
         [field: SerializeField] private Button registerButton;
@@ -24,30 +27,41 @@ namespace UI_System.Title_UI_System.Child.Account_UI_System
 
         private void Awake()
         {
-            if (accountInputField is null)
-            {
-                throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(accountInputField)} cannot be null.");
-            }
+            #region 輸入框
+                if (accountInputField is null)
+                {
+                    throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(accountInputField)} cannot be null.");
+                }
+                
+                if (passwordInputField is null)
+                {
+                    throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(passwordInputField)} cannot be null.");
+                }
+            #endregion
             
-            if (passwordInputField is null)
-            {
-                throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(passwordInputField)} cannot be null.");
-            }
+            #region 文字提示
+                if (loginErrorResultText is null)
+                {
+                    throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(loginErrorResultText)} cannot be null.");           
+                }
+            #endregion
 
-            if (loginButton is null)
-            {
-                throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(loginButton)} cannot be null.");
-            }
-            
-            if (registerButton is null)
-            {
-                throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(registerButton)} cannot be null.");
-            }
-            
-            if (returnButton is null)
-            {
-                throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(returnButton)} cannot be null.");
-            }
+            #region 按鈕
+                if (loginButton is null)
+                {
+                    throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(loginButton)} cannot be null.");
+                }
+                
+                if (registerButton is null)
+                {
+                    throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(registerButton)} cannot be null.");
+                }
+                
+                if (returnButton is null)
+                {
+                    throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(returnButton)} cannot be null.");
+                }
+            #endregion
             
             loginButton.OnClick += OnClickLoginButton;
             registerButton.OnClick += OnClickRegisterButton;
@@ -58,6 +72,8 @@ namespace UI_System.Title_UI_System.Child.Account_UI_System
         {
             accountInputField.text = string.Empty;
             passwordInputField.text = string.Empty;
+            
+            loginErrorResultText.text = string.Empty;
             
             loginButton.SetInteractable(false);
             registerButton.SetInteractable(false);
@@ -80,59 +96,122 @@ namespace UI_System.Title_UI_System.Child.Account_UI_System
 
         private void OnClickLoginButton()
         {
-            if (string.IsNullOrEmpty(PlayFabSettings.staticSettings.TitleId))
-            {
-                throw new InvalidOperationException("請先設定 TitleId。");
-            }
+            #region 條件檢查
+                if (string.IsNullOrEmpty(PlayFabSettings.staticSettings.TitleId))
+                {
+                    throw new InvalidOperationException("請先設定 TitleId。");
+                }
+            #endregion
             
-            if (accountInputField.text.Contains("@"))
-            {
-                var request = new LoginWithEmailAddressRequest
+            #region 清除提示訊息
+                loginErrorResultText.text = string.Empty;
+            #endregion
+            
+            #region 使用電子信箱登入
+                if (accountInputField.text.Contains("@"))
                 {
-                    Email = accountInputField.text,
-                    Password = passwordInputField.text
-                };
-                
-                PlayFabClientAPI.LoginWithEmailAddress(
-                    request: request,
-                    resultCallback: result =>
+                    var request = new LoginWithEmailAddressRequest
                     {
-                        if (OnClickLoginButtonEvent is null)
+                        Email = accountInputField.text,
+                        Password = passwordInputField.text
+                    };
+                    
+                    PlayFabClientAPI.LoginWithEmailAddress(
+                        request: request,
+                        resultCallback: result =>
                         {
-                            throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(OnClickLoginButtonEvent)} cannot be null.");
-                        }
-                        
-                        OnClickLoginButtonEvent.Invoke();
-                    },
-                    errorCallback: error =>
-                    {
-                        Debug.Log($"清求 Mail 登入失敗：{error.ErrorMessage}");
-                    });
-            }
-            else
-            {
-                var request = new LoginWithPlayFabRequest
+                            if (OnClickLoginButtonEvent is null)
+                            {
+                                throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(OnClickLoginButtonEvent)} cannot be null.");
+                            }
+                            
+                            OnClickLoginButtonEvent.Invoke();
+                        },
+                        errorCallback: error =>
+                        {
+                            switch (error.Error)
+                            {
+                                case PlayFabErrorCode.InvalidParams:
+                                {
+                                    loginErrorResultText.text = "電子信箱或密碼不得為空";
+                                    break;
+                                }
+                                case PlayFabErrorCode.InvalidEmailAddress:
+                                {
+                                    loginErrorResultText.text = "電子信箱的格式錯誤";
+                                    break;
+                                }
+                                case PlayFabErrorCode.AccountNotFound:
+                                {
+                                    loginErrorResultText.text = "此帳號不存在";
+                                    break;
+                                }
+                                case PlayFabErrorCode.InvalidEmailOrPassword:
+                                {
+                                    loginErrorResultText.text = "電子信箱或密碼錯誤";
+                                    break;
+                                }
+                                default:
+                                {
+                                    Debug.Log("錯誤訊息：");
+                                    Debug.Log(error.Error);
+                                    break;
+                                }
+                            }
+                        });
+                    return;
+                }
+            #endregion
+            
+            #region 使用帳號登入
+                if (!accountInputField.text.Contains("@"))
                 {
-                    Username = accountInputField.text,
-                    Password = passwordInputField.text
-                };
-                
-                PlayFabClientAPI.LoginWithPlayFab(
-                    request: request,
-                    resultCallback: result =>
+                    var request = new LoginWithPlayFabRequest
                     {
-                        if (OnClickLoginButtonEvent is null)
+                        Username = accountInputField.text,
+                        Password = passwordInputField.text
+                    };
+                    
+                    PlayFabClientAPI.LoginWithPlayFab(
+                        request: request,
+                        resultCallback: result =>
                         {
-                            throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(OnClickLoginButtonEvent)} cannot be null.");
-                        }
-                        
-                        OnClickLoginButtonEvent.Invoke();
-                    },
-                    errorCallback: error =>
-                    {
-                        Debug.Log($"清求 Username 登入失敗：{error.ErrorMessage}");
-                    });
-            }
+                            if (OnClickLoginButtonEvent is null)
+                            {
+                                throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(OnClickLoginButtonEvent)} cannot be null.");
+                            }
+                            
+                            OnClickLoginButtonEvent.Invoke();
+                        },
+                        errorCallback: error =>
+                        {
+                            switch (error.Error)
+                            {
+                                case PlayFabErrorCode.InvalidParams:
+                                {
+                                    loginErrorResultText.text = "帳號或密碼不得為空";
+                                    break;
+                                }
+                                case PlayFabErrorCode.AccountNotFound:
+                                {
+                                    loginErrorResultText.text = "此帳號不存在";
+                                    break;
+                                }
+                                case PlayFabErrorCode.InvalidUsernameOrPassword:
+                                {
+                                    loginErrorResultText.text = "帳號或密碼錯誤";
+                                    break;
+                                }
+                                default:
+                                {
+                                    Debug.Log("錯誤訊息：");
+                                    Debug.Log(error.Error);
+                                    break;
+                                }
+                            }
+                        });
+                }
+            #endregion
         }
         
         private void OnClickRegisterButton()

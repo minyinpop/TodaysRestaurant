@@ -10,6 +10,7 @@ using Dialogue_System.Utage;
 using Explore_System.System.Child.Battle_System.System.Main;
 using UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Select_UI.Main;
 using UI_System.Lobby_UI_System.Main;
+using UI_System.Player_UI_System.Main;
 using UI_System.Title_UI_System.Main;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -175,6 +176,25 @@ namespace Scene_Transition_System
                     });
                 yield return new WaitUntil(() => complete);
             #endregion
+
+            #region 儲存玩家的物品
+                var playerUISystem = FindFirstObjectByType<PlayerUISystem>();
+                if (playerUISystem is not null)
+                {
+                    complete = false;
+                    PlayerUISystem.SaveInventory(
+                        onComplete: () =>
+                        {
+                            Debug.Log("物品儲存成功！");
+                            complete = true;
+                        },
+                        onFail: () =>
+                        {
+                            Debug.Log("物品儲存失敗！");
+                        });
+                    yield return new WaitUntil(() => complete);
+                }
+            #endregion
             
             #region 新場景載入
                 var operation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
@@ -194,6 +214,25 @@ namespace Scene_Transition_System
                 
                 progressBar.SetValueWithoutNotify(1);
                 yield return operation;
+            #endregion
+            
+            #region 讀取玩家的物品
+                playerUISystem = FindFirstObjectByType<PlayerUISystem>();
+                if (playerUISystem is not null)
+                {
+                    complete = false;
+                    PlayerUISystem.SaveInventory(
+                        onComplete: () =>
+                        {
+                            Debug.Log("物品讀取成功！");
+                            complete = true;
+                        },
+                        onFail: () =>
+                        {
+                            Debug.Log("物品讀取失敗！");
+                        });
+                    yield return new WaitUntil(() => complete);
+                }
             #endregion
             
             #region 啟用新場景啟動器
