@@ -1,6 +1,7 @@
 using System;
 using Animation_System.DOTween;
 using Animation_System.DOTween.Basic;
+using Common.Item.Data;
 using UnityEngine;
 
 namespace UI_System.Title_UI_System.Child.Account_UI_System
@@ -27,6 +28,12 @@ namespace UI_System.Title_UI_System.Child.Account_UI_System
         [field: SerializeField] private CanvasGroup registerUICanvasGroup;
         [field: SerializeField] private DoFade_CanvasGroup registerUIFadeInSettings;
         [field: SerializeField] private DoFade_CanvasGroup registerUIFadeOutSettings;
+        
+        [field: Header("Email Verification UI")]
+        [field: SerializeField] private EmailVerificationUI mailVerificationUI;
+        [field: SerializeField] private CanvasGroup mailVerificationUICanvasGroup;
+        [field: SerializeField] private DoFade_CanvasGroup mailVerificationUIFadeInSettings;
+        [field: SerializeField] private DoFade_CanvasGroup mailVerificationUIFadeOutSettings;
 
         public event Action OnLoginSuccess;
 
@@ -62,11 +69,23 @@ namespace UI_System.Title_UI_System.Child.Account_UI_System
                 {
                     throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(registerUICanvasGroup)} cannot be null.");
                 }
+                
+                if (mailVerificationUI is null)
+                {
+                    throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(mailVerificationUI)} cannot be null.");
+                }
+                
+                if (mailVerificationUICanvasGroup is null)
+                {
+                    throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(mailVerificationUICanvasGroup)} cannot be null.");
+                }
             #endregion
             
             #region 防止小錯誤
                 maskCanvasGroup.gameObject.SetActive(false);
                 loginUICanvasGroup.gameObject.SetActive(false);
+                registerUICanvasGroup.gameObject.SetActive(false);
+                mailVerificationUICanvasGroup.gameObject.SetActive(false);
             #endregion
             
             #region 訂閱登入介面的事件
@@ -76,6 +95,7 @@ namespace UI_System.Title_UI_System.Child.Account_UI_System
             #endregion
             
             #region 訂閱註冊介面的事件
+                registerUI.OnClickRegisterButtonEvent += OnClickRegisterButtonFromRegisterUI;
                 registerUI.OnClickReturnButtonEvent += OnClickReturnButtonFromRegisterUI;
             #endregion
         }
@@ -86,6 +106,7 @@ namespace UI_System.Title_UI_System.Child.Account_UI_System
             loginUI.OnClickRegisterButtonEvent -= OnClickRegisterButtonFromLoginUI;
             loginUI.OnClickReturnButtonEvent -= OnClickReturnButtonFromLoginUI;
             
+            registerUI.OnClickRegisterButtonEvent -= OnClickRegisterButtonFromRegisterUI;
             registerUI.OnClickReturnButtonEvent -= OnClickReturnButtonFromRegisterUI;
         }
 
@@ -110,7 +131,7 @@ namespace UI_System.Title_UI_System.Child.Account_UI_System
                 });
         }
 
-        #region Login UI
+        #region 登入介面
             private void OnClickLoginButtonFromLoginUI()
             {
                 animation.DoFade_CanvasGroup(
@@ -127,26 +148,39 @@ namespace UI_System.Title_UI_System.Child.Account_UI_System
                             {
                                 maskCanvasGroup.gameObject.SetActive(false);
 
-                                if (OnLoginSuccess is null)
-                                {
-                                    throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(OnLoginSuccess)} cannot be null.");
-                                }
+                                #region 登入成功後的事件
+                                    ItemDatabase.Initialize();
+                                #endregion
 
-                                OnLoginSuccess.Invoke();
+                                #region 發送登入成功訊息
+                                    if (OnLoginSuccess is null)
+                                    {
+                                        throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(OnLoginSuccess)} cannot be null.");
+                                    }
+
+                                    OnLoginSuccess.Invoke();
+                                #endregion
                             });
                     });
             }
 
             private void OnClickRegisterButtonFromLoginUI()
             {
-                registerUI.gameObject.SetActive(true);
-                
                 animation.DoFade_CanvasGroup(
-                    canvasGroup: registerUICanvasGroup,
-                    settings: registerUIFadeInSettings,
+                    canvasGroup: loginUICanvasGroup,
+                    settings: loginUIFadeOutSettings,
                     onComplete: () =>
                     {
-                        registerUI.OnOpenEvent();
+                        loginUICanvasGroup.gameObject.SetActive(false);
+                        registerUI.gameObject.SetActive(true);
+                        
+                        animation.DoFade_CanvasGroup(
+                            canvasGroup: registerUICanvasGroup,
+                            settings: registerUIFadeInSettings,
+                            onComplete: () =>
+                            {
+                                registerUI.OnOpenEvent();
+                            });
                     });
             }
 
@@ -170,7 +204,27 @@ namespace UI_System.Title_UI_System.Child.Account_UI_System
             }
         #endregion
 
-        #region Register UI
+        #region 註冊介面
+            private void OnClickRegisterButtonFromRegisterUI()
+            {
+                animation.DoFade_CanvasGroup(
+                    canvasGroup: registerUICanvasGroup,
+                    settings: registerUIFadeOutSettings,
+                    onComplete: () =>
+                    {
+                        registerUI.gameObject.SetActive(false);
+                        loginUI.gameObject.SetActive(true);
+                        
+                        animation.DoFade_CanvasGroup(
+                            canvasGroup: loginUICanvasGroup,
+                            settings: loginUIFadeInSettings,
+                            onComplete: () =>
+                            {
+                                loginUI.OnOpenEvent();
+                            });
+                    });
+            }
+            
             private void OnClickReturnButtonFromRegisterUI()
             {
                 animation.DoFade_CanvasGroup(
@@ -179,8 +233,20 @@ namespace UI_System.Title_UI_System.Child.Account_UI_System
                     onComplete: () =>
                     {
                         registerUI.gameObject.SetActive(false);
+                        loginUI.gameObject.SetActive(true);
+                        
+                        animation.DoFade_CanvasGroup(
+                            canvasGroup: loginUICanvasGroup,
+                            settings: loginUIFadeInSettings,
+                            onComplete: () =>
+                            {
+                                loginUI.OnOpenEvent();
+                            });
                     });
             }
+        #endregion
+        
+        #region 信箱認證介面
         #endregion
     }
 }

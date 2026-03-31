@@ -4,6 +4,9 @@ namespace Common.Value.Type
     {
         Red_Mushroom,
         White_Mushroom,
-        Panellus_Mushroom
+        Panellus_Mushroom,
+        Milk,
+        Sugar,
+        Water
     }
 }

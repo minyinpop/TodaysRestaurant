@@ -33,6 +33,9 @@ namespace Input_System
 
                 _inputManager.Player.Restaurant.performed += OnRestaurantPerformed;
                 _cleanupActions.Enqueue(() => _inputManager.Player.Restaurant.performed -= OnRestaurantPerformed);
+
+                _inputManager.Player.Tab.performed += OnTabPerformed;
+                _cleanupActions.Enqueue(() => _inputManager.Player.Tab.performed -= OnTabPerformed);
             #endregion
             
             #region Mouse

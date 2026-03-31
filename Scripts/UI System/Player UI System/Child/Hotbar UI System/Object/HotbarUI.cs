@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Common.Item_Slot.New.Child;
@@ -12,19 +13,17 @@ namespace UI_System.Player_UI_System.Child.Hotbar_UI_System.Object
         [field: Header("Data")]
         [field: SerializeField] private PlayerInventorySO playerInventoryData;
         
-        [field: Header("Components")]
-        [field: SerializeField] private RectTransform hotbarSlotParent;
-
-        private readonly List<HotbarSlot> _hotbarSlots = new();
+        [field: Header("Item Slot")]
+        [field: SerializeField] private HotbarSlot[] hotbarSlots;
+                                public IReadOnlyList<HotbarSlot> HotbarSlots => hotbarSlots;
+        
         private HotbarSlot _selectedHotbarSlot;
 
         private void Awake()
         {
-            for (var i = 0; i < hotbarSlotParent.childCount; i++)
+            if (playerInventoryData is null)
             {
-                var currentSlot = hotbarSlotParent.GetChild(i);
-                _hotbarSlots.Add(currentSlot.GetComponent<HotbarSlot>());
-                currentSlot.gameObject.SetActive(true);
+                throw new InvalidOperationException(nameof(playerInventoryData));
             }
         }
 
@@ -41,20 +40,20 @@ namespace UI_System.Player_UI_System.Child.Hotbar_UI_System.Object
             
             public void PerformHotbar(int hotbarIndex)
             {
-                ChangeSelectedHotbarSlot(_hotbarSlots[hotbarIndex]);
+                ChangeSelectedHotbarSlot(hotbarSlots[hotbarIndex]);
             }
         #endregion
         
         #region Item
-            public bool TryAddItem(IItem itemData)
+            public bool AddItem(IItem itemData)
             {
-                var result = _hotbarSlots.Any(slot => slot.AddItem(itemData));
+                var result = hotbarSlots.Any(slot => slot.AddItem(itemData));
                 return result;
             }
 
-            public bool TryRemoveItem(ItemSO itemData)
+            public bool RemoveItem(ItemSO itemData)
             {
-                return _hotbarSlots.Any(hotbarSlot => hotbarSlot.TryRemoveItem(itemData));
+                return hotbarSlots.Any(hotbarSlot => hotbarSlot.TryRemoveItem(itemData));
             }
         #endregion
         

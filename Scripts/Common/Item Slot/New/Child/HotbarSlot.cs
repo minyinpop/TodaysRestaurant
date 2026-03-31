@@ -1,3 +1,4 @@
+using System;
 using Animation_System.DOTween;
 using Animation_System.DOTween.Basic;
 using Common.Item_Slot.New.Main;
@@ -35,35 +36,31 @@ namespace Common.Item_Slot.New.Child
 
         private void Awake()
         {
-            if (animation is null)
-            {
-                Debug.Log($"{name} > {GetType().Name} > {nameof(animation)} cannot be null.");
-                Destroy(gameObject);
-                return;
-            }
-            
-            if (slotRect is null)
-            {
-                Debug.Log($"{name} > {GetType().Name} > {nameof(slotRect)} cannot be null.");
-                Destroy(gameObject);
-                return;
-            }
+            #region 必要條件檢查
+                if (animation is null)
+                {
+                    throw new InvalidOperationException(nameof(animation));
+                }
+                
+                if (slotRect is null)
+                {
+                    throw new InvalidOperationException(nameof(slotRect));
+                }
 
-            if (itemImage is null)
-            {
-                Debug.Log($"{name} > {GetType().Name} > {nameof(itemImage)} cannot be null.");
-                Destroy(gameObject);
-                return;
-            }
+                if (itemImage is null)
+                {
+                    throw new InvalidOperationException(nameof(itemImage));
+                }
 
-            if (slotBorderImage is null)
-            {
-                Debug.Log($"{name} > {GetType().Name} > {nameof(slotBorderImage)} cannot be null.");
-                Destroy(gameObject);
-                return;
-            }
+                if (slotBorderImage is null)
+                {
+                    throw new InvalidOperationException(nameof(slotBorderImage));
+                }
+            #endregion
             
-            itemImage.gameObject.SetActive(false);
+            #region 防呆
+                itemImage.gameObject.SetActive(false);
+            #endregion
         }
 
         #region PointerEvent
@@ -92,80 +89,72 @@ namespace Common.Item_Slot.New.Child
             }
         #endregion
         
-        #region IItemSlot
-            public bool AddItem(IItem item)
+        public bool AddItem(IItem item)
+        {
+            if (item is null)
             {
-                if (item is null)
-                {
-                    Debug.Log($"{name} > {GetType().Name} > {nameof(AddItem)} > {nameof(item)} cannot be null.");
-                    Destroy(gameObject);
-                    return false;
-                }
-                
-                if (Item is not null)
-                {
-                    return false;
-                }
-                
-                Item = item;
-                
-                itemImage.sprite = Item.ItemSprite;
-                itemImage.gameObject.SetActive(true);
-                return true;
-            }
-
-            public bool GetItem(out IItem ingredient)
-            {
-                if (Item is null)
-                {
-                    ingredient = null;
-                    return false;
-                }
-                
-                itemImage.gameObject.SetActive(false);
-                itemImage.sprite = null;
-            
-                ingredient = Item;
-                Item = null;
-                return true;
+                throw new ArgumentNullException(nameof(item));
             }
             
-            public bool ChangeItem(IItem targetItem, out IItem slotItem)
+            if (Item is not null)
             {
-                #region 檢查傳入的物品
-                    if (targetItem is null)
-                    {
-                        throw new System.ArgumentNullException($"{name} > {GetType().Name} > {nameof(AddItem)} > {nameof(targetItem)} cannot be null.");
-                    }
-                #endregion
-                
-                #region 檢查格子狀態
-                    if (Item is null)
-                    {
-                        throw new System.InvalidOperationException($"{name} > {GetType().Name} > {nameof(ChangeItem)} > {nameof(Item)} cannot be null.");
-                    }
-                #endregion
+                return false;
+            }
+            
+            Item = item;
+            
+            itemImage.sprite = Item.ItemSprite;
+            itemImage.gameObject.SetActive(true);
+            return true;
+        }
 
-                slotItem = Item;
-                Item = targetItem;
-                
-                itemImage.sprite = Item.ItemSprite;
-                return true;
+        public bool GetItem(out IItem ingredient)
+        {
+            if (Item is null)
+            {
+                ingredient = null;
+                return false;
+            }
+            
+            itemImage.gameObject.SetActive(false);
+            itemImage.sprite = null;
+        
+            ingredient = Item;
+            Item = null;
+            return true;
+        }
+        
+        public bool ChangeItem(IItem targetItem, out IItem slotItem)
+        {
+            if (targetItem is null)
+            {
+                throw new ArgumentNullException(nameof(targetItem));
+            }
+            
+            if (Item is null)
+            {
+                throw new InvalidOperationException(nameof(Item));
             }
 
-            public bool TryRemoveItem(IItem itemData)
-            {
-                if (Item is null) return false;
-                if (Item != itemData) return false;
-                
-                itemImage.gameObject.SetActive(false);
-                itemImage.sprite = null;
-                
-                itemData.Remove();
-                Item = null;
-                return true;
-            }
-        #endregion
+            slotItem = Item;
+            Item = targetItem;
+            
+            itemImage.sprite = Item.ItemSprite;
+            return true;
+        }
+
+        public bool TryRemoveItem(IItem itemData)
+        {
+            if (Item is null) return false;
+            if (Item != itemData) return false;
+            
+            itemImage.gameObject.SetActive(false);
+            itemImage.sprite = null;
+            
+            itemData.Remove();
+            Item = null;
+            return true;
+        }
         
         public void Selected()
         {
