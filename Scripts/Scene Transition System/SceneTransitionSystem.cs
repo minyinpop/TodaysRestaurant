@@ -4,10 +4,13 @@ using Animation_System.DOTween;
 using Animation_System.DOTween.Basic;
 using Common;
 using Common.Level.Main;
+using Common.Player.Child.Player_Level;
 using Common.Scene_Name;
 using DG.Tweening;
 using Dialogue_System.Utage;
 using Explore_System.System.Child.Battle_System.System.Main;
+using Explore_System.System.Main;
+using Lobby_System.Main;
 using UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Select_UI.Main;
 using UI_System.Lobby_UI_System.Main;
 using UI_System.Player_UI_System.Main;
@@ -39,6 +42,9 @@ namespace Scene_Transition_System
         [field: SerializeField] private SceneNameSO lobbySceneNameData;
         [field: SerializeField] private SceneNameSO exploreSceneNameData;
         [field: SerializeField] private SceneNameSO restaurantSceneNameData;
+        
+        [field: Header("Data")]
+        [field: SerializeField] private PlayerLevelSO playerLevelData;
         
         private IEnumerator _changeSceneCoroutine;
 
@@ -120,7 +126,20 @@ namespace Scene_Transition_System
         {
             _changeSceneCoroutine = ChangeSceneCoroutine(
                 sceneName: lobbySceneNameData.SceneName,
-                onSceneLoaded: onComplete => onComplete.Invoke(),
+                onSceneLoaded: onComplete =>
+                {
+                    var scene = SceneManager.GetSceneByName(exploreSceneNameData.SceneName);
+                    var rootObjects = scene.GetRootGameObjects();
+                    
+                    foreach (var rootObject in rootObjects)
+                    {
+                        if (rootObject.TryGetComponent<LobbySystem>(out var lobbySystem))
+                        {
+                            lobbySystem.StartSystem(onComplete);
+                            break;
+                        }
+                    }
+                },
                 onComplete: onComplete);
             StartCoroutine(_changeSceneCoroutine);
         }
@@ -144,9 +163,9 @@ namespace Scene_Transition_System
                     
                     foreach (var rootObject in rootObjects)
                     {
-                        if (rootObject.TryGetComponent<SceneStarter>(out var sceneStarter))
+                        if (rootObject.TryGetComponent<ExploreSystem>(out var exploreSystem))
                         {
-                            sceneStarter.StartSystem(levelData, onComplete);
+                            exploreSystem.StartSystem(levelData, onComplete);
                             break;
                         }
                     }

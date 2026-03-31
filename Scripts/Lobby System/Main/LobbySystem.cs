@@ -1,4 +1,5 @@
 using System;
+using Common;
 using Input_System;
 using Lobby_System.Child;
 using UI_System.Lobby_UI_System.Main;
@@ -42,6 +43,11 @@ namespace Lobby_System.Main
         {
             _onLobbyLevelSelectUIPerformedCleanupAction?.Invoke();
             _onClickLevelSelectButtonCleanupAction?.Invoke();
+        }
+
+        public void StartSystem(Action onComplete)
+        {
+            onComplete.Invoke();
         }
 
         private void OnPerformLevelSelectButton()

@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using Common.Level.Main;
+using Common.Player.Child.Player_Level;
 using UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Select_UI.Child.Level_Pick_UI.Child;
 using UnityEngine;
 
@@ -13,7 +15,7 @@ namespace UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Se
         [field: SerializeField] private LevelPickButton buttonPrefab;
         
         [field: Header("Data")]
-        [field: SerializeField] private LevelSO[] levelsData;
+        [field: SerializeField] private PlayerLevelSO playerLevelData;
 
         private bool _initialized;
 
@@ -21,19 +23,22 @@ namespace UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Se
         {
             if (buttonContainerParent is null)
             {
-                Debug.Log($"{nameof(LevelPickUI)} > {nameof(buttonContainerParent)} cannot be null.");
-                return;
+                throw new InvalidOperationException(nameof(buttonContainerParent));
             }
             
             if (buttonContainerPrefab is null)
             {
-                Debug.Log($"{nameof(LevelPickUI)} > {nameof(buttonContainerPrefab)} cannot be null.");
-                return;
+                throw new InvalidOperationException(nameof(buttonContainerPrefab));
             }
             
             if (buttonPrefab is null)
             {
-                Debug.Log($"{nameof(LevelPickUI)} > {nameof(buttonPrefab)} cannot be null.");
+                throw new InvalidOperationException(nameof(buttonPrefab));
+            }
+            
+            if (playerLevelData is null)
+            {
+                throw new InvalidOperationException(nameof(playerLevelData));
             }
         }
 
@@ -50,7 +55,7 @@ namespace UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Se
                 
                 levelPickButtons = new Queue<LevelPickButton>();
                 
-                foreach (var levelData in levelsData)
+                foreach (var levelData in playerLevelData.UnlockLevels)
                 {
                     #region Container
                         var newContainer = Instantiate(buttonContainerPrefab, buttonContainerParent);

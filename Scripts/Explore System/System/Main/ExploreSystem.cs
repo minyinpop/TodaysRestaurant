@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using Common;
 using Common.Enemy.Enemy_Object;
 using Common.Level.Child.Level_Enemy;
 using Common.Level.Main;
@@ -14,7 +13,7 @@ using UnityEngine.SceneManagement;
 
 namespace Explore_System.System.Main
 {
-    public sealed class ExploreSystem : SceneStarter
+    public sealed class ExploreSystem : MonoBehaviour
     {
         [field: Header("Component")]
         [field: SerializeField] private ExploreUISystem exploreUISystem;
@@ -63,7 +62,7 @@ namespace Explore_System.System.Main
             _onExitBattleCleanupAction?.Invoke();
         }
 
-        public override void StartSystem(LevelSO levelData, Action onComplete)
+        public void StartSystem(LevelSO levelData, Action onComplete)
         {
             if (_initialized)
             {
@@ -222,18 +221,18 @@ namespace Explore_System.System.Main
                             
                             foreach (var rootObject in _battleScene.GetRootGameObjects())
                             {
-                                if (rootObject.TryGetComponent<SceneStarter>(out var sceneStarter))
+                                if (rootObject.TryGetComponent<BattleSystem>(out var battleSystem))
                                 {
                                     isGetSceneStarter = true;
                                     
-                                    sceneStarter.StartSystem(entry);
+                                    battleSystem.StartSystem(entry);
                                     break;
                                 }
                             }
 
                             if (!isGetSceneStarter)
                             {
-                                Debug.Log($"{name} > {GetType().Name} > cannot find {nameof(SceneStarter)} in {nameof(rootObjects)}");
+                                Debug.Log($"{name} > {GetType().Name} > cannot find {nameof(BattleSystem)} in {nameof(rootObjects)}");
                                 Destroy(gameObject);
                             }
                         #endregion

@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Common;
 using Common.Level.Child.Level_Enemy;
 using Common.Player.Child.Player_Team;
 using Common.Value;
@@ -16,7 +15,7 @@ using UnityEngine;
 
 namespace Explore_System.System.Child.Battle_System.System.Main
 {
-    internal sealed class BattleSystem : SceneStarter
+    internal sealed class BattleSystem : MonoBehaviour
     {
         [field: Header("Systems")]
         [field: SerializeField] private SelectedCardSystem selectedCardSystem;
@@ -136,7 +135,7 @@ namespace Explore_System.System.Child.Battle_System.System.Main
         }
 
         // Note: entry 一定不為 null，所以檢測裡面的參數，詳情請點開 class 查看。
-        public override void StartSystem(BattleEnemyEntry entry)
+        public void StartSystem(BattleEnemyEntry entry)
         {
             if (_isStarted)
             {
