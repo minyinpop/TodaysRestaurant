@@ -8,10 +8,6 @@ namespace Common.Level.Main
     [CreateAssetMenu(menuName = "Minyinpop/Level/Main/Level", fileName = "New Data")]
     public sealed class LevelSO : ScriptableObject
     {
-        [field: Header("Level ID")]
-        [field: SerializeField] private int levelID;
-                                public int LevelID => levelID;
-        
         [field: Header("Level Name")]
         [field: SerializeField] private string levelName;
                                 public string LevelName => levelName;

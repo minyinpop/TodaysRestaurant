@@ -6,7 +6,7 @@ namespace Common.Level.Main
 {
     public static class LevelDatabase
     {
-        private static readonly Dictionary<int, LevelSO> _levelDatabase = new();
+        private static readonly Dictionary<string, LevelSO> _levelDatabase = new();
         
         private static bool _initialized;
 
@@ -14,7 +14,10 @@ namespace Common.Level.Main
         {
             if (_initialized)
             {
-                Debug.Log("關卡資料庫已初始化。");
+                #region 開發提示
+                    Debug.Log("物品資料庫已初始化過了！");
+                #endregion
+                
                 return;
             }
             
@@ -22,20 +25,18 @@ namespace Common.Level.Main
 
             foreach (var level in Resources.LoadAll<LevelSO>("Level"))
             {
-                _levelDatabase[level.LevelID] = level;
+                _levelDatabase[level.LevelName] = level;
             }
-            
-            Debug.Log($"LevelDatabase 初始化完成，數量: {_levelDatabase.Count}");
         }
 
-        public static LevelSO GetLevel(int levelID)
+        public static LevelSO GetLevel(string levelName)
         {
             if (!_initialized)
             {
                 throw new InvalidOperationException(nameof(_initialized));
             }
 
-            return _levelDatabase.GetValueOrDefault(levelID);
+            return _levelDatabase.GetValueOrDefault(levelName);
         }
     }
 }

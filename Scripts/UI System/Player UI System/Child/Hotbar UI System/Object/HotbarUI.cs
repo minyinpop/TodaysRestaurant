@@ -1,31 +1,18 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Common.Item_Slot.New.Child;
 using Common.Item.Data;
-using Common.Player.Child.Player_Inventory;
 using UnityEngine;
 
 namespace UI_System.Player_UI_System.Child.Hotbar_UI_System.Object
 {
     public sealed class HotbarUI : MonoBehaviour
     {
-        [field: Header("Data")]
-        [field: SerializeField] private PlayerInventorySO playerInventoryData;
-        
         [field: Header("Item Slot")]
         [field: SerializeField] private HotbarSlot[] hotbarSlots;
                                 public IReadOnlyList<HotbarSlot> HotbarSlots => hotbarSlots;
         
         private HotbarSlot _selectedHotbarSlot;
-
-        private void Awake()
-        {
-            if (playerInventoryData is null)
-            {
-                throw new InvalidOperationException(nameof(playerInventoryData));
-            }
-        }
 
         private void Start()
         {

@@ -2,9 +2,7 @@ using System;
 using System.Collections;
 using Animation_System.DOTween;
 using Animation_System.DOTween.Basic;
-using Common;
 using Common.Level.Main;
-using Common.Player.Child.Player_Level;
 using Common.Scene_Name;
 using DG.Tweening;
 using Dialogue_System.Utage;
@@ -13,7 +11,6 @@ using Explore_System.System.Main;
 using Lobby_System.Main;
 using UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Select_UI.Main;
 using UI_System.Lobby_UI_System.Main;
-using UI_System.Player_UI_System.Main;
 using UI_System.Title_UI_System.Main;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -42,9 +39,6 @@ namespace Scene_Transition_System
         [field: SerializeField] private SceneNameSO lobbySceneNameData;
         [field: SerializeField] private SceneNameSO exploreSceneNameData;
         [field: SerializeField] private SceneNameSO restaurantSceneNameData;
-        
-        [field: Header("Data")]
-        [field: SerializeField] private PlayerLevelSO playerLevelData;
         
         private IEnumerator _changeSceneCoroutine;
 
@@ -128,6 +122,8 @@ namespace Scene_Transition_System
                 sceneName: lobbySceneNameData.SceneName,
                 onSceneLoaded: onComplete =>
                 {
+                    onComplete.Invoke();
+                    /*
                     var scene = SceneManager.GetSceneByName(exploreSceneNameData.SceneName);
                     var rootObjects = scene.GetRootGameObjects();
                     
@@ -139,6 +135,7 @@ namespace Scene_Transition_System
                             break;
                         }
                     }
+                    */
                 },
                 onComplete: onComplete);
             StartCoroutine(_changeSceneCoroutine);
@@ -195,25 +192,6 @@ namespace Scene_Transition_System
                     });
                 yield return new WaitUntil(() => complete);
             #endregion
-
-            #region 儲存玩家的物品
-                var playerUISystem = FindFirstObjectByType<PlayerUISystem>();
-                if (playerUISystem is not null)
-                {
-                    complete = false;
-                    PlayerUISystem.SaveInventory(
-                        onComplete: () =>
-                        {
-                            Debug.Log("物品儲存成功！");
-                            complete = true;
-                        },
-                        onFail: () =>
-                        {
-                            Debug.Log("物品儲存失敗！");
-                        });
-                    yield return new WaitUntil(() => complete);
-                }
-            #endregion
             
             #region 新場景載入
                 var operation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
@@ -231,26 +209,6 @@ namespace Scene_Transition_System
                 
                 progressBar.SetValueWithoutNotify(1);
                 yield return operation;
-            #endregion
-            
-            #region 讀取玩家的物品
-                playerUISystem = FindFirstObjectByType<PlayerUISystem>();
-                if (playerUISystem is not null)
-                {
-                    complete = false;
-                    PlayerUISystem.LoadInventory(
-                        onComplete: () =>
-                        {
-                            Debug.Log("物品讀取成功！");
-                            complete = true;
-                        },
-                        onFail: () =>
-                        {
-                            Debug.Log("物品讀取失敗！");
-                            complete = true;
-                        });
-                    yield return new WaitUntil(() => complete);
-                }
             #endregion
             
             #region 啟用新場景啟動器

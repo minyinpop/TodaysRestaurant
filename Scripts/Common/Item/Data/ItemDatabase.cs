@@ -14,7 +14,10 @@ namespace Common.Item.Data
         {
             if (_initialized)
             {
-                Debug.Log("物品資料庫已初始化。");
+                #region 開發提示
+                    Debug.Log("物品資料庫已初始化過了！");
+                #endregion
+                
                 return;
             }
             
@@ -24,8 +27,6 @@ namespace Common.Item.Data
             {
                 _itemDatabase[item.ItemID] = item;
             }
-            
-            Debug.Log($"ItemDatabase 初始化完成，數量: {_itemDatabase.Count}");
         }
 
         public static IItem GetItem(int itemID)

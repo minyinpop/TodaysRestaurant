@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Common.Level.Main;
-using Common.Player.Child.Player_Level;
+using Common.Player.Child.Player_Level.Main;
 using UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Select_UI.Child.Level_Pick_UI.Child;
 using UnityEngine;
 
@@ -13,9 +13,6 @@ namespace UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Se
         [field: SerializeField] private RectTransform buttonContainerParent;
         [field: SerializeField] private GameObject buttonContainerPrefab;
         [field: SerializeField] private LevelPickButton buttonPrefab;
-        
-        [field: Header("Data")]
-        [field: SerializeField] private PlayerLevelSO playerLevelData;
 
         private bool _initialized;
 
@@ -35,11 +32,6 @@ namespace UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Se
             {
                 throw new InvalidOperationException(nameof(buttonPrefab));
             }
-            
-            if (playerLevelData is null)
-            {
-                throw new InvalidOperationException(nameof(playerLevelData));
-            }
         }
 
         public void Initialize(out Queue<LevelPickButton> levelPickButtons)
@@ -55,7 +47,9 @@ namespace UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Se
                 
                 levelPickButtons = new Queue<LevelPickButton>();
                 
-                foreach (var levelData in playerLevelData.UnlockLevels)
+                var data = PlayerUnlockLevelSaver.LoadUnlockLevelFromLocal();
+                
+                foreach (var unlockLevel in data.UnlockLevels)
                 {
                     #region Container
                         var newContainer = Instantiate(buttonContainerPrefab, buttonContainerParent);
@@ -65,7 +59,7 @@ namespace UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Se
                         var newButton = Instantiate(buttonPrefab.gameObject, newContainer.transform);
                         var newButton_LevelPickButton = newButton.GetComponent<LevelPickButton>();
                         
-                        newButton_LevelPickButton.Initialize(levelData);
+                        newButton_LevelPickButton.Initialize(LevelDatabase.GetLevel(unlockLevel.LevelName));
                         levelPickButtons.Enqueue(newButton_LevelPickButton);
                     #endregion
                 }

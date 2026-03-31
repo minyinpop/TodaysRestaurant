@@ -1,0 +1,9 @@
+有使用到快捷欄與背包的場景。
+>
+在 OnDisable 或 OnDestroy 前，把所有的格物格給讀取一遍。
+>
+儲存到 PlayerInventorySO。
+>
+在 SceneTransitionSystem 切換完場景後，讀取 PlayerInventorySO，並把物品顯示在 UI 上。
+>
+再關閉遊戲或是退出的時候，自動把 PlayerInventorySO 給上傳到 PlayFab。

@@ -81,7 +81,6 @@ namespace UI_System.Title_UI_System.Main
             
             OnClickStartGameButton.Invoke(() =>
             {
-                Debug.Log("場景切換完畢。");
                 /*
                  * TODO 正式版使用
                  * StartScenario.Invoke("Main", 0);

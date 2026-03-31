@@ -73,7 +73,6 @@ namespace UI_System.Title_UI_System.Child.Account_UI_System
 
         private void OnEnable()
         {
-            Debug.Log("A");
             accountInputField.Select();
             
             InputSystem.OnPerformedTab += OnClickTabButton;

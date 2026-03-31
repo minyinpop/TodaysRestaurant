@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Common.Item.Data;
-using PlayFab;
-using PlayFab.ClientModels;
+using Common.Player.Child.Player_Inventory_Saver.Child;
+using Common.Player.Child.Player_Inventory_Saver.Main;
 using UI_System.Player_UI_System.Child.Backpack_UI_System.System;
 using UI_System.Player_UI_System.Child.Hotbar_UI_System.System;
 using UI_System.Player_UI_System.Child.Item_Drag_UI_System.System;
@@ -25,29 +25,107 @@ namespace UI_System.Player_UI_System.Main
             #region 必要條件檢查
                 if (hotbarUISystem is null)
                 {
-                    Debug.Log($"{name} > {GetType().Name} > {nameof(hotbarUISystem)} cannot be null.");
-                    Destroy(gameObject);
-                    return;
+                    throw new InvalidOperationException(nameof(hotbarUISystem));
                 }
                 
                 if (backpackUISystem is null)
                 {
-                    Debug.Log($"{name} > {GetType().Name} > {nameof(backpackUISystem)} cannot be null.");
-                    Destroy(gameObject);
-                    return;
+                    throw new InvalidOperationException(nameof(backpackUISystem));
                 }
                 
                 if (itemDragUISystem is null)
                 {
-                    Debug.Log($"{name} > {GetType().Name} > {nameof(backpackUISystem)} cannot be null.");
-                    Destroy(gameObject);
-                    return;
+                    throw new InvalidOperationException(nameof(itemDragUISystem));
                 }
             #endregion
             
             _hotbarUISystem = hotbarUISystem;
             _backpackUISystem = backpackUISystem;
             _itemDragUISystem = itemDragUISystem;
+        }
+
+        private void OnEnable()
+        {
+            #region 從本地獲取玩家的物品
+                var data = PlayerInventorySaver.LoadInventoryFromLocal();
+                
+                #region 載入快捷欄的物品
+                    var hotbarSlots = _hotbarUISystem.GetHotbarSlots();
+
+                    for (var i = 0; i < data.HotbarSlots.Count; i++)
+                    {
+                        var slotData = data.HotbarSlots[i];
+                        var item = ItemDatabase.GetItem(slotData.ItemId);
+
+                        if (item is null)
+                        {
+                            continue;
+                        }
+                                                
+                        hotbarSlots[i].AddItem(item);
+                    }
+                #endregion
+                                    
+                #region 載入背包的物品
+                    var backpackSlots = _backpackUISystem.GetBackpackSlots();
+
+                    for (var i = 0; i < data.BackpackSlots.Count; i++)
+                    {
+                        var slotData = data.BackpackSlots[i];
+                        var item = ItemDatabase.GetItem(slotData.ItemId);
+                                                
+                        if (item is null)
+                        {
+                            continue;
+                        }
+                                                
+                        backpackSlots[i].AddItem(item);
+                    }
+                #endregion
+            #endregion
+        }
+
+        private void OnDisable()
+        {
+            #region 儲存玩家的物品到本地
+                var saveData = new InventorySaveData
+                {
+                    HotbarSlots = new List<InventorySaveDataEntry>(),
+                    BackpackSlots = new List<InventorySaveDataEntry>()
+                };
+                    
+                #region 快捷欄
+                var hotbarSlots = _hotbarUISystem.GetHotbarSlots();
+                        
+                for (var i = 0; i < hotbarSlots.Count; i++)
+                {
+                    var item = hotbarSlots[i].Item;
+
+                    saveData.HotbarSlots.Add(new InventorySaveDataEntry
+                    {
+                        SlotIndex = i,
+                        ItemId = item?.ItemID ?? 0
+                    });
+                }
+                #endregion
+                    
+                #region 背包
+                var backpackSlots = _backpackUISystem.GetBackpackSlots();
+                            
+                for (var i = 0; i < backpackSlots.Count; i++)
+                {
+                    var item = backpackSlots[i].Item;
+
+                    saveData.BackpackSlots.Add(new InventorySaveDataEntry
+                    {
+                        SlotIndex = i,
+                        ItemId = item?.ItemID ?? 0
+                    });
+                }
+                #endregion
+                    
+                PlayerInventorySaver.SaveInventoryToLocal(saveData);
+            #endregion
         }
 
         #region 玩家控制
@@ -95,130 +173,7 @@ namespace UI_System.Player_UI_System.Main
                 return _hotbarUISystem.RemoveItem(itemData);
             }
 
-            public static void SaveInventory(Action onComplete, Action onFail)
-            {
-                var saveData = new InventorySaveData
-                {
-                    hotbarSlots = new List<SlotSaveData>(),
-                    backpackSlots = new List<SlotSaveData>()
-                };
-                
-                #region 快捷欄
-                    var hotbarSlots = _hotbarUISystem.GetHotbarSlots();
-                    
-                    for (var i = 0; i < hotbarSlots.Count; i++)
-                    {
-                        var item = hotbarSlots[i].Item;
-
-                        saveData.hotbarSlots.Add(new SlotSaveData
-                        {
-                            SlotIndex = i,
-                            ItemId = item?.ItemID ?? 0
-                        });
-                    }
-                #endregion
-                
-                #region 背包
-                    var backpackSlots = _backpackUISystem.GetBackpackSlots();
-                        
-                    for (var i = 0; i < backpackSlots.Count; i++)
-                    {
-                        var item = backpackSlots[i].Item;
-
-                        saveData.backpackSlots.Add(new SlotSaveData
-                        {
-                            SlotIndex = i,
-                            ItemId = item?.ItemID ?? 0
-                        });
-                    }
-                #endregion
-                
-                var json = JsonUtility.ToJson(saveData);
-
-                var request = new UpdateUserDataRequest
-                {
-                    Data = new Dictionary<string, string>
-                    {
-                        { "Inventory", json }
-                    }
-                };
-                
-                PlayFabClientAPI.UpdateUserData(
-                    request: request,
-                    resultCallback: result =>
-                    {
-                        onComplete.Invoke();
-                    },
-                    errorCallback: error =>
-                    {
-                        onFail.Invoke();
-                    });
-            }
-
-            public static void LoadInventory(Action onComplete, Action onFail)
-            {
-                var request = new GetUserDataRequest();
-                
-                PlayFabClientAPI.GetUserData(
-                    request: request,
-                    resultCallback: result =>
-                    {
-                        const string targetDataName = "Inventory";
-
-                        if (result.Data is not null && result.Data.ContainsKey(targetDataName))
-                        {
-                            var json = result.Data[targetDataName].Value;
-                            var data = JsonUtility.FromJson<InventorySaveData>(json);
-                            
-                            #region 載入快捷欄的物品
-                                var hotbarSlots = _hotbarUISystem.GetHotbarSlots();
-
-                                for (var i = 0; i < data.hotbarSlots.Count; i++)
-                                {
-                                    var slotData = data.hotbarSlots[i];
-                                    var item = ItemDatabase.GetItem(slotData.ItemId);
-
-                                    if (item is null)
-                                    {
-                                        continue;
-                                    }
-                                    
-                                    hotbarSlots[i].AddItem(item);
-                                }
-                            #endregion
-                            
-                            #region 載入背包的物品
-                                var backpackSlots = _backpackUISystem.GetBackpackSlots();
-
-                                for (var i = 0; i < data.backpackSlots.Count; i++)
-                                {
-                                    var slotData = data.backpackSlots[i];
-                                    var item = ItemDatabase.GetItem(slotData.ItemId);
-                                    
-                                    if (item is null)
-                                    {
-                                        continue;
-                                    }
-                                    
-                                    backpackSlots[i].AddItem(item);
-                                }
-                            #endregion
-                            
-                            onComplete.Invoke();
-                        }
-                        else
-                        {
-                            onFail.Invoke();
-                        }
-                    },
-                    errorCallback: error =>
-                    {
-                        Debug.Log($"無法成功向 PlayFab 獲取資料");
-                        Debug.LogError(error.GenerateErrorReport());
-                        onFail.Invoke();
-                    });
-            }
-        #endregion
+            #endregion
         
         #region 物品拖曳
             public static void RequireItemDragUI(bool isDragging, IItem item)
@@ -226,19 +181,5 @@ namespace UI_System.Player_UI_System.Main
                 _itemDragUISystem.RequiresUI(isDragging, item);
             }
         #endregion
-    }
-    
-    [Serializable]
-    public class InventorySaveData
-    {
-        public List<SlotSaveData> hotbarSlots;
-        public List<SlotSaveData> backpackSlots;
-    }
-    
-    [Serializable]
-    public class SlotSaveData
-    {
-        public int SlotIndex;
-        public int ItemId;
     }
 }

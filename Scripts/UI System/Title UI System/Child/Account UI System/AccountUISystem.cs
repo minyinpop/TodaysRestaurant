@@ -2,6 +2,7 @@ using System;
 using Animation_System.DOTween;
 using Animation_System.DOTween.Basic;
 using Common.Item.Data;
+using Common.Level.Main;
 using UnityEngine;
 
 namespace UI_System.Title_UI_System.Child.Account_UI_System
@@ -150,6 +151,7 @@ namespace UI_System.Title_UI_System.Child.Account_UI_System
 
                                 #region 登入成功後的事件
                                     ItemDatabase.Initialize();
+                                    LevelDatabase.Initialize();
                                 #endregion
 
                                 #region 發送登入成功訊息

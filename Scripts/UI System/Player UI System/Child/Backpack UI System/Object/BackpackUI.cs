@@ -3,27 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using Common.Item_Slot.New.Child;
 using Common.Item.Data;
-using Common.Player.Child.Player_Inventory;
 using UnityEngine;
 
 namespace UI_System.Player_UI_System.Child.Backpack_UI_System.Object
 {
     public sealed class BackpackUI : MonoBehaviour
     {
-        [field: Header("Data")]
-        [field: SerializeField] private PlayerInventorySO playerInventoryData;
-        
         [field: Header("Item Slot")]
         [field: SerializeField] private BackpackSlot[] backpackSlots;
                                 public IReadOnlyList<BackpackSlot> BackpackSlots => backpackSlots;
-                                
-        private void Awake()
-        {
-            if (playerInventoryData is null)
-            {
-                throw new InvalidOperationException(nameof(playerInventoryData));
-            }
-        }
 
         private void OnEnable()
         {
