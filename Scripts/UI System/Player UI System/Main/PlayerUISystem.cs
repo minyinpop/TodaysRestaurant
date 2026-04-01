@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
+using Common.Data_Saver.Player_Inventory_Saver.Child;
+using Common.Data_Saver.Player_Inventory_Saver.Main;
+using Common.Database;
 using Common.Item.Data;
-using Common.Player.Child.Player_Inventory_Saver.Child;
-using Common.Player.Child.Player_Inventory_Saver.Main;
 using UI_System.Player_UI_System.Child.Backpack_UI_System.System;
 using UI_System.Player_UI_System.Child.Hotbar_UI_System.System;
 using UI_System.Player_UI_System.Child.Item_Drag_UI_System.System;
@@ -103,7 +104,6 @@ namespace UI_System.Player_UI_System.Main
 
                     saveData.HotbarSlots.Add(new InventorySaveDataEntry
                     {
-                        SlotIndex = i,
                         ItemId = item?.ItemID ?? 0
                     });
                 }
@@ -118,7 +118,6 @@ namespace UI_System.Player_UI_System.Main
 
                     saveData.BackpackSlots.Add(new InventorySaveDataEntry
                     {
-                        SlotIndex = i,
                         ItemId = item?.ItemID ?? 0
                     });
                 }

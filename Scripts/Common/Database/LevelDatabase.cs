@@ -1,14 +1,17 @@
 using System;
 using System.Collections.Generic;
+using Common.Level.Main;
 using UnityEngine;
 
-namespace Common.Item.Data
+namespace Common.Database
 {
-    public static class ItemDatabase
+    public static class LevelDatabase
     {
-        private static readonly Dictionary<int, IItem> _itemDatabase = new();
+        private static readonly Dictionary<string, LevelSO> _levelDatabase = new();
         
         private static bool _initialized;
+        
+        private const string ResourcePath = "Level";
 
         public static void Initialize()
         {
@@ -23,20 +26,20 @@ namespace Common.Item.Data
             
             _initialized = true;
 
-            foreach (var item in Resources.LoadAll<ItemSO>("Item"))
+            foreach (var level in Resources.LoadAll<LevelSO>(ResourcePath))
             {
-                _itemDatabase[item.ItemID] = item;
+                _levelDatabase[level.LevelName] = level;
             }
         }
 
-        public static IItem GetItem(int itemID)
+        public static LevelSO GetLevel(string levelName)
         {
             if (!_initialized)
             {
                 throw new InvalidOperationException(nameof(_initialized));
             }
 
-            return _itemDatabase.GetValueOrDefault(itemID);
+            return _levelDatabase.GetValueOrDefault(levelName);
         }
     }
 }

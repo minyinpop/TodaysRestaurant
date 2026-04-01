@@ -24,7 +24,7 @@ namespace UI_System.Title_UI_System.Child.Account_UI_System
         [field: SerializeField] private Button registerButton;
         [field: SerializeField] private Button returnButton;
 
-        public event Action OnClickLoginButtonEvent;
+        public event Action<bool> OnClickLoginButtonEvent;
         public event Action OnClickRegisterButtonEvent;
         public event Action OnClickReturnButtonEvent;
 
@@ -137,7 +137,7 @@ namespace UI_System.Title_UI_System.Child.Account_UI_System
                                 throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(OnClickLoginButtonEvent)} cannot be null.");
                             }
                             
-                            OnClickLoginButtonEvent.Invoke();
+                            OnClickLoginButtonEvent.Invoke(result.NewlyCreated);
                         },
                         errorCallback: error =>
                         {
@@ -193,7 +193,7 @@ namespace UI_System.Title_UI_System.Child.Account_UI_System
                                 throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(OnClickLoginButtonEvent)} cannot be null.");
                             }
                             
-                            OnClickLoginButtonEvent.Invoke();
+                            OnClickLoginButtonEvent.Invoke(result.NewlyCreated);
                         },
                         errorCallback: error =>
                         {

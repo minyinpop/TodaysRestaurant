@@ -1,4 +1,4 @@
-using Common.Player.Child.Player_Character;
+using Common.Character;
 using UnityEngine;
 
 namespace Common.Player.Child.Player_Team
@@ -7,13 +7,13 @@ namespace Common.Player.Child.Player_Team
     internal sealed class PlayerTeamSO : ScriptableObject
     {
         [field: Header("Team")]
-        [field: SerializeField] private PlayerCharacterSO[] characters;
+        [field: SerializeField] private CharacterSO[] characters;
                                 public int CharacterNumber => characters.Length;
 
         [field: Header("Character")]
-        [field: SerializeField] private PlayerCharacterSO bernardData;
-                                public PlayerCharacterSO BernardData => bernardData;
-        [field: SerializeField] private PlayerCharacterSO rayData;
-                                public PlayerCharacterSO RayData => rayData;
+        [field: SerializeField] private CharacterSO bernardData;
+                                public CharacterSO BernardData => bernardData;
+        [field: SerializeField] private CharacterSO rayData;
+                                public CharacterSO RayData => rayData;
     }
 }

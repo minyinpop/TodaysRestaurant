@@ -26,7 +26,7 @@ namespace Explore_System.System.Child.Battle_System.System.Child
         
         private IEnumerator _hurtCoroutine;
 
-        private void OnEnable()
+        private void Awake()
         {
             BattleCard.OnUse += Attack;
             Enemy.OnAttack += Hurt;
@@ -34,15 +34,19 @@ namespace Explore_System.System.Child.Battle_System.System.Child
         
         private void OnDisable()
         {
-            BattleCard.OnUse -= Attack;
-            Enemy.OnAttack -= Hurt;
             if (_hurtCoroutine is not null)
             {
                 StopCoroutine(_hurtCoroutine);
                 _hurtCoroutine = null;
             }
         }
-
+        
+        private void OnDestroy()
+        {
+            BattleCard.OnUse -= Attack;
+            Enemy.OnAttack -= Hurt;
+        }
+        
         #region Attack
             private void Attack(ICard card, SpineAnimation anima, Action haveEnemyAlive, Action enemyAllDead)
             {

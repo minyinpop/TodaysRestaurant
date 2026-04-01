@@ -42,9 +42,9 @@ namespace Player_System.Object
                     throw new InvalidOperationException($"{gameObject.name} > {GetType().Name} > {nameof(rig)} cannot be null.");
                 }
                 
-                if (playerCharacterData is null)
+                if (characterData is null)
                 {
-                    throw new InvalidOperationException($"{gameObject.name} > {GetType().Name} > {nameof(playerCharacterData)} cannot be null.");
+                    throw new InvalidOperationException($"{gameObject.name} > {GetType().Name} > {nameof(characterData)} cannot be null.");
                 }
             #endregion
 

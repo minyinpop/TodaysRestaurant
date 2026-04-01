@@ -1,14 +1,13 @@
 using System.IO;
-using Common.Player.Child.Player_Level.Child;
+using Common.Data_Saver.Player_Level_Saver.Child;
 using UnityEngine;
 
-namespace Common.Player.Child.Player_Level.Main
+namespace Common.Data_Saver.Player_Level_Saver.Main
 {
     public static class PlayerUnlockLevelSaver
     {
         private const string Keyword = "Unlock_Level";
-
-        private const string LocalPath = "/Unlock_Level.json";
+        private const string LocalPath = "/" + Keyword + ".json";
 
         public static void SaveUnlockLevelToLocal(UnlockLevelSaveData saveData)
         {

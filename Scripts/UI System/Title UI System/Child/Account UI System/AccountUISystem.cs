@@ -1,8 +1,7 @@
 using System;
 using Animation_System.DOTween;
 using Animation_System.DOTween.Basic;
-using Common.Item.Data;
-using Common.Level.Main;
+using Common.Database;
 using UnityEngine;
 
 namespace UI_System.Title_UI_System.Child.Account_UI_System
@@ -133,7 +132,7 @@ namespace UI_System.Title_UI_System.Child.Account_UI_System
         }
 
         #region 登入介面
-            private void OnClickLoginButtonFromLoginUI()
+            private void OnClickLoginButtonFromLoginUI(bool isNewAccount)
             {
                 animation.DoFade_CanvasGroup(
                     canvasGroup: loginUICanvasGroup,
@@ -152,6 +151,7 @@ namespace UI_System.Title_UI_System.Child.Account_UI_System
                                 #region 登入成功後的事件
                                     ItemDatabase.Initialize();
                                     LevelDatabase.Initialize();
+                                    CharacterDatabase.Initialize();
                                 #endregion
 
                                 #region 發送登入成功訊息
@@ -246,9 +246,6 @@ namespace UI_System.Title_UI_System.Child.Account_UI_System
                             });
                     });
             }
-        #endregion
-        
-        #region 信箱認證介面
         #endregion
     }
 }

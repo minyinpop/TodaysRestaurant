@@ -1,17 +1,16 @@
 using System.Collections.Generic;
 using System.IO;
-using Common.Player.Child.Player_Inventory_Saver.Child;
+using Common.Data_Saver.Player_Inventory_Saver.Child;
 using PlayFab;
 using PlayFab.ClientModels;
 using UnityEngine;
 
-namespace Common.Player.Child.Player_Inventory_Saver.Main
+namespace Common.Data_Saver.Player_Inventory_Saver.Main
 {
     public static class PlayerInventorySaver
     {
         private const string Keyword = "Inventory";
-        
-        private const string LocalPath = "/Inventory.json";
+        private const string LocalPath = "/" + Keyword + ".json";
         
         #region 本地操作
             public static void SaveInventoryToLocal(InventorySaveData saveData)
