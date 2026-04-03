@@ -4,7 +4,6 @@ using Animation_System.DOTween;
 using Animation_System.DOTween.Basic;
 using Common.Scene_Name;
 using DG.Tweening;
-using Dialogue_System.Utage;
 using Explore_System.System.Child.Battle_System.System.Main;
 using UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Select_UI.Main;
 using UI_System.Lobby_UI_System.Main;
@@ -76,15 +75,12 @@ namespace Scene_Transition_System
             
             #region 訂閱各系統的使用需求
                 TitleUISystem.OnLoginGame += GoToLobby;
-                TitleUISystem.OnStartTutorial += GoToDialogue;
                 
                 BattleSystem.OnClickEnemyWinConfirmButton += GoToLobby;
                 
                 LevelSelectUI.OnClickLevelStartButton += GoToExplore;
                 
                 LobbyUISystem.OnClickRestaurantButtonEvent += GoToRestaurant;
-                
-                UtageReceiveMessageSystem.GoToExplore += GoToExplore;
             #endregion
         }
 
@@ -100,23 +96,12 @@ namespace Scene_Transition_System
         private void OnDestroy()
         {
             TitleUISystem.OnLoginGame -= GoToLobby;
-            TitleUISystem.OnStartTutorial -= GoToDialogue;
             
             BattleSystem.OnClickEnemyWinConfirmButton -= GoToLobby;
             
             LevelSelectUI.OnClickLevelStartButton -= GoToExplore;
             
             LobbyUISystem.OnClickRestaurantButtonEvent -= GoToRestaurant;
-            
-            UtageReceiveMessageSystem.GoToExplore -= GoToExplore;
-        }
-        
-        private void ChangeScene(string sceneName)
-        {
-            _changeSceneCoroutine = ChangeSceneCoroutine(
-                sceneName: sceneName,
-                onSceneLoaded: onComplete => onComplete.Invoke());
-            StartCoroutine(_changeSceneCoroutine);
         }
 
         private IEnumerator ChangeSceneCoroutine(string sceneName, Action<Action> onSceneLoaded, Action onComplete = null)

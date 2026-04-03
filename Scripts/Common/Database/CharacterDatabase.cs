@@ -35,26 +35,39 @@ namespace Common.Database
         
         public static bool GetCharacter(string characterName, out CharacterData characterData)
         {
-            if (!_initialized)
-            {
-                throw new InvalidOperationException(nameof(Initialize));
-            }
+            #region 必要條件檢查
+                if (!_initialized)
+                {
+                    throw new InvalidOperationException(nameof(Initialize));
+                }
+            #endregion
             
-            if (_characterDatabase.TryGetValue(characterName, out var originalData))
-            {
-                PlayerCharacterSaver.LoadCharacterFromLocal(characterName, out var saveData);
-                
-                characterData = new CharacterData(
-                        characterName: originalData.name,
-                        health: saveData.Health,
-                        moveSpeed: originalData.MoveSpeed,
-                        cardTypes: originalData.CardTypes);
-                return true;
-            }
+            #region 從角色資料庫獲取資料
+                if (_characterDatabase.TryGetValue(characterName, out var originalData))
+                {
+                    if (PlayerCharacterSaver.LoadCharacterFromLocal(characterName, out var saveData))
+                    {
+                        characterData = new CharacterData(
+                                characterName: originalData.name,
+                                health: saveData.Health,
+                                moveSpeed: originalData.MoveSpeed,
+                                cardTypes: originalData.CardTypes);
+                    }
+                    else
+                    {
+                        characterData = new CharacterData(
+                            characterName: originalData.name,
+                            health: originalData.MaxHealth,
+                            moveSpeed: originalData.MoveSpeed,
+                            cardTypes: originalData.CardTypes);
+                    }
+                    
+                    return true;
+                }
 
-            Debug.Log($"無法在角色資料庫中查到名為 {characterName} 的角色。");
-            characterData = null;
-            return false;
+                Debug.Log($"無法在角色資料庫中查到名為 {characterName} 的角色。");
+                throw new InvalidOperationException(characterName);
+            #endregion
         }
     }
 }

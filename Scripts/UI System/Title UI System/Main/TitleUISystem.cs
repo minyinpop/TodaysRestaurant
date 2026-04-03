@@ -90,13 +90,15 @@ namespace UI_System.Title_UI_System.Main
             #region 必要條件檢查
                 if (OnLoginGame is null)
                 {
-                    throw new InvalidOperationException(nameof(OnLoginGame));
+                    throw new InvalidOperationException($"{nameof(OnLoginGame)} 沒有被訂閱。");
                 }
 
+                /*
                 if (OnStartTutorial is null)
                 {
                     throw new InvalidOperationException(nameof(OnStartTutorial));
                 }
+                */
             #endregion
             
             #region 初始化資料庫
@@ -104,7 +106,10 @@ namespace UI_System.Title_UI_System.Main
                 LevelDatabase.Initialize();
                 CharacterDatabase.Initialize();
             #endregion
+            
+            OnLoginGame.Invoke();
 
+            /*
             if (isNewAccount)
             {
                 Debug.Log("登入源：已完成新手教學的帳號");
@@ -115,6 +120,7 @@ namespace UI_System.Title_UI_System.Main
                 Debug.Log("登入源：未完成新手教學的帳號");
                 OnStartTutorial.Invoke("Start", 0);
             }
+            */
         }
     }
 }

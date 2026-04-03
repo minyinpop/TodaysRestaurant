@@ -1,3 +1,6 @@
+using Lobby_System.Main;
+using UnityEngine.SceneManagement;
+
 namespace Scene_Transition_System
 {
     public partial class SceneTransitionSystem
@@ -6,12 +9,9 @@ namespace Scene_Transition_System
         {
             _changeSceneCoroutine = ChangeSceneCoroutine(
                 sceneName: lobbySceneNameData.SceneName,
-                onSceneLoaded: _ =>
+                onSceneLoaded: onComplete =>
                 {
-                    // TODO LobbySystem 還沒製作 StartSystem
-                    
-                    /*
-                    var scene = SceneManager.GetSceneByName(exploreSceneNameData.SceneName);
+                    var scene = SceneManager.GetSceneByName(lobbySceneNameData.SceneName);
                     var rootObjects = scene.GetRootGameObjects();
 
                     foreach (var rootObject in rootObjects)
@@ -22,7 +22,6 @@ namespace Scene_Transition_System
                             break;
                         }
                     }
-                    */
                 });
             StartCoroutine(_changeSceneCoroutine);
         }

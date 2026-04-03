@@ -170,5 +170,26 @@ namespace Animation_System.DOTween
                     });
             }
         #endregion
+        
+        #region Color
+            private Tween DoColor_Image_Tween;
+
+            public void DoColor_Image(Image image, DoColor_Image settings, Action onComplete = null)
+            {
+                DoColor_Image_Tween?.Kill();
+                settings.GetValues(out var endValue, out var duration, out var ease);
+                DoColor_Image_Tween = image
+                    .DOColor(endValue, duration)
+                    .SetEase(ease)
+                    .OnComplete(() =>
+                    {
+                        onComplete?.Invoke();
+                    })
+                    .OnKill(() =>
+                    {
+                        DoColor_Image_Tween = null;
+                    });
+            }
+        #endregion
     }
 }
