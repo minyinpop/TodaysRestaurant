@@ -25,8 +25,8 @@ namespace Dialogue_System.Utage
                     #endregion
 
                     #region 讀取資料
-                        var title = command.ParseCellOptional(AdvColumnName.Arg2, "");
-                        var subtitle = command.ParseCellOptional(AdvColumnName.Arg3, "");
+                        var title = command.ParseCellOptional(AdvColumnName.Arg2, string.Empty);
+                        var subtitle = command.ParseCellOptional(AdvColumnName.Arg3, string.Empty);
                         var duration = command.ParseCellOptional(AdvColumnName.Arg6, 3);
                     #endregion
                     
@@ -43,7 +43,7 @@ namespace Dialogue_System.Utage
                     #endregion
 
                     #region 讀取資料
-                        var levelName = command.ParseCellOptional(AdvColumnName.Arg2, "");
+                        var levelName = command.ParseCellOptional(AdvColumnName.Arg2, string.Empty);
                     #endregion
 
                     if (LevelDatabase.GetLevel(levelName, out var levelData))
@@ -52,7 +52,7 @@ namespace Dialogue_System.Utage
                     }
                     else
                     {
-                        throw new InvalidOperationException(nameof(levelName));
+                        throw new InvalidOperationException(levelName);
                     }
 
                     break;
