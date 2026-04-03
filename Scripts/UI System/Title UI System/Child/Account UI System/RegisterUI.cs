@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Common.Button;
 using PlayFab;
 using PlayFab.ClientModels;
@@ -25,6 +26,9 @@ namespace UI_System.Title_UI_System.Child.Account_UI_System
         
         public event Action OnClickRegisterButtonEvent;
         public event Action OnClickReturnButtonEvent;
+        
+        private const float _buttonCooldownTime = 3f;
+        private IEnumerator _buttonCooldownCoroutine;
 
         private void Awake()
         {
@@ -90,6 +94,12 @@ namespace UI_System.Title_UI_System.Child.Account_UI_System
             
             registerButton.SetInteractable(false);
             returnButton.SetInteractable(false);
+            
+            if (_buttonCooldownCoroutine is not null)
+            {
+                StopCoroutine(_buttonCooldownCoroutine);
+                _buttonCooldownCoroutine = null;
+            }
         }
         
         private void OnDestroy()
@@ -113,7 +123,11 @@ namespace UI_System.Title_UI_System.Child.Account_UI_System
                 }
             #endregion
             
-            #region 重置物件
+            #region 暫時關閉所有的按鈕互動
+                SetAllButtonInteractable(false);
+            #endregion
+            
+            #region 清除提示訊息
                 mailErrorResultText.text = string.Empty;
                 usernameErrorResultText.text = string.Empty;
                 passwordErrorResultText.text = string.Empty;
@@ -156,12 +170,12 @@ namespace UI_System.Title_UI_System.Child.Account_UI_System
                                 }
                                 case "Username":
                                 {
-                                    usernameErrorResultText.text = "使用者名稱需要在 3 至 20 個字元之間";
+                                    usernameErrorResultText.text = "使用者名稱需要在 3 個字元以上";
                                     continue;
                                 }
                                 case "Password":
                                 {
-                                    passwordErrorResultText.text = "密碼需要在 6 至 100 個字元之間";
+                                    passwordErrorResultText.text = "密碼需要在 6 個字元以上";
                                     continue;
                                 }
                             }
@@ -183,6 +197,10 @@ namespace UI_System.Title_UI_System.Child.Account_UI_System
                             }
                         }
                     #endregion
+                    
+                    #region 開啟所有按鈕的互動
+                        StartButtonCooldown();
+                    #endregion
                 });
         }
 
@@ -194,6 +212,25 @@ namespace UI_System.Title_UI_System.Child.Account_UI_System
             }
             
             OnClickReturnButtonEvent.Invoke();
+        }
+        
+        private void SetAllButtonInteractable(bool interactable)
+        {
+            registerButton.SetInteractable(interactable);
+            returnButton.SetInteractable(interactable);
+        }
+
+        private void StartButtonCooldown()
+        {
+            _buttonCooldownCoroutine = ButtonCooldown();
+            StartCoroutine(_buttonCooldownCoroutine);
+            return;
+
+            IEnumerator ButtonCooldown()
+            {
+                yield return new WaitForSeconds(_buttonCooldownTime);
+                SetAllButtonInteractable(true);
+            }
         }
     }
 }

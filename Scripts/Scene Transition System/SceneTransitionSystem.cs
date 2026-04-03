@@ -2,13 +2,10 @@ using System;
 using System.Collections;
 using Animation_System.DOTween;
 using Animation_System.DOTween.Basic;
-using Common.Level.Main;
 using Common.Scene_Name;
 using DG.Tweening;
 using Dialogue_System.Utage;
 using Explore_System.System.Child.Battle_System.System.Main;
-using Explore_System.System.Main;
-using Lobby_System.Main;
 using UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Select_UI.Main;
 using UI_System.Lobby_UI_System.Main;
 using UI_System.Title_UI_System.Main;
@@ -19,7 +16,7 @@ using UnityEngine.UI;
 namespace Scene_Transition_System
 {
     [RequireComponent(typeof(DoAnimation))]
-    internal sealed class SceneTransitionSystem : MonoBehaviour
+    public partial class SceneTransitionSystem : MonoBehaviour
     {
         [field: Header("Components")]
         [field: SerializeField] private new DoAnimation animation;
@@ -46,45 +43,49 @@ namespace Scene_Transition_System
 
         private void Awake()
         {
-            if (animation is null)
-            {
-                throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(animation)} cannot be null.");
-            }
-
-            if (dialogueSceneNameData is null)
-            {
-                throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(dialogueSceneNameData)} cannot be null.");
-            }
-
-            if (lobbySceneNameData is null)
-            {
-                throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(lobbySceneNameData)} cannot be null.");
-            }
-
-            if (exploreSceneNameData is null)
-            {
-                throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(exploreSceneNameData)} cannot be null.");
-            }
-
-            #region Singleton
-                if (_instance is not null)
+            #region 必要條件檢查
+                if (animation is null)
                 {
-                    Destroy(gameObject);
-                    return;
+                    throw new InvalidOperationException(nameof(animation));
                 }
 
-                _instance = gameObject;
-                DontDestroyOnLoad(gameObject);
+                if (dialogueSceneNameData is null)
+                {
+                    throw new InvalidOperationException(nameof(dialogueSceneNameData));
+                }
+
+                if (lobbySceneNameData is null)
+                {
+                    throw new InvalidOperationException(nameof(lobbySceneNameData));
+                }
+
+                if (exploreSceneNameData is null)
+                {
+                    throw new InvalidOperationException(nameof(exploreSceneNameData));
+                }
             #endregion
+
+            if (_instance is not null)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
+            _instance = gameObject;
+            DontDestroyOnLoad(gameObject);
             
-            TitleUISystem.OnClickStartGameButton += GoToLobby;
-            BattleSystem.OnClickEnemyWinConfirmButton += GoToLobby;
-            
-            LevelSelectUI.OnClickLevelStartButton += GoToExplore;
-            
-            LobbyUISystem.OnClickRestaurantButtonEvent += GoToRestaurant;
-            
-            UtageReceiveMessageSystem.ChangeScene += ChangeScene;
+            #region 訂閱各系統的使用需求
+                TitleUISystem.OnLoginGame += GoToLobby;
+                TitleUISystem.OnStartTutorial += GoToDialogue;
+                
+                BattleSystem.OnClickEnemyWinConfirmButton += GoToLobby;
+                
+                LevelSelectUI.OnClickLevelStartButton += GoToExplore;
+                
+                LobbyUISystem.OnClickRestaurantButtonEvent += GoToRestaurant;
+                
+                UtageReceiveMessageSystem.GoToExplore += GoToExplore;
+            #endregion
         }
 
         private void OnDisable()
@@ -98,82 +99,22 @@ namespace Scene_Transition_System
 
         private void OnDestroy()
         {
-            TitleUISystem.OnClickStartGameButton -= GoToLobby;
+            TitleUISystem.OnLoginGame -= GoToLobby;
+            TitleUISystem.OnStartTutorial -= GoToDialogue;
+            
             BattleSystem.OnClickEnemyWinConfirmButton -= GoToLobby;
             
             LevelSelectUI.OnClickLevelStartButton -= GoToExplore;
             
             LobbyUISystem.OnClickRestaurantButtonEvent -= GoToRestaurant;
             
-            UtageReceiveMessageSystem.ChangeScene -= ChangeScene;
+            UtageReceiveMessageSystem.GoToExplore -= GoToExplore;
         }
         
         private void ChangeScene(string sceneName)
         {
             _changeSceneCoroutine = ChangeSceneCoroutine(
                 sceneName: sceneName,
-                onSceneLoaded: onComplete => onComplete.Invoke());
-            StartCoroutine(_changeSceneCoroutine);
-        }
-        
-        private void GoToLobby(Action onComplete)
-        {
-            _changeSceneCoroutine = ChangeSceneCoroutine(
-                sceneName: lobbySceneNameData.SceneName,
-                onSceneLoaded: onComplete =>
-                {
-                    onComplete.Invoke();
-                    /*
-                    var scene = SceneManager.GetSceneByName(exploreSceneNameData.SceneName);
-                    var rootObjects = scene.GetRootGameObjects();
-                    
-                    foreach (var rootObject in rootObjects)
-                    {
-                        if (rootObject.TryGetComponent<LobbySystem>(out var lobbySystem))
-                        {
-                            lobbySystem.StartSystem(onComplete);
-                            break;
-                        }
-                    }
-                    */
-                },
-                onComplete: onComplete);
-            StartCoroutine(_changeSceneCoroutine);
-        }
-        
-        private void GoToDialogue()
-        {
-            _changeSceneCoroutine = ChangeSceneCoroutine(
-                sceneName: dialogueSceneNameData.SceneName,
-                onSceneLoaded: onComplete => onComplete.Invoke());
-            StartCoroutine(_changeSceneCoroutine);
-        }
-
-        private void GoToExplore(LevelSO levelData)
-        {
-            _changeSceneCoroutine = ChangeSceneCoroutine(
-                sceneName: exploreSceneNameData.SceneName,
-                onSceneLoaded: onComplete =>
-                {
-                    var scene = SceneManager.GetSceneByName(exploreSceneNameData.SceneName);
-                    var rootObjects = scene.GetRootGameObjects();
-                    
-                    foreach (var rootObject in rootObjects)
-                    {
-                        if (rootObject.TryGetComponent<ExploreSystem>(out var exploreSystem))
-                        {
-                            exploreSystem.StartSystem(levelData, onComplete);
-                            break;
-                        }
-                    }
-                });
-            StartCoroutine(_changeSceneCoroutine);
-        }
-
-        private void GoToRestaurant()
-        {
-            _changeSceneCoroutine = ChangeSceneCoroutine(
-                sceneName: restaurantSceneNameData.SceneName,
                 onSceneLoaded: onComplete => onComplete.Invoke());
             StartCoroutine(_changeSceneCoroutine);
         }

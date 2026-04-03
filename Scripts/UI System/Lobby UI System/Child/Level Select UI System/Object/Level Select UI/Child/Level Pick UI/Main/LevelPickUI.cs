@@ -14,6 +14,13 @@ namespace UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Se
         [field: SerializeField] private RectTransform buttonContainerParent;
         [field: SerializeField] private GameObject buttonContainerPrefab;
         [field: SerializeField] private LevelPickButton buttonPrefab;
+        
+        [field: Header("Data")]
+        [field: SerializeField] private LevelSO defaultLevel;
+                                public LevelSO DefaultLevel => defaultLevel;
+                                
+        private readonly Queue<LevelPickButton> _levelPickButtons = new();
+        public Queue<LevelPickButton> LevelPickButtons => _levelPickButtons;
 
         private bool _initialized;
 
@@ -33,37 +40,73 @@ namespace UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Se
             {
                 throw new InvalidOperationException(nameof(buttonPrefab));
             }
+            
+            if (defaultLevel is null)
+            {
+                throw new InvalidOperationException(nameof(defaultLevel));
+            }
         }
 
-        public void Initialize(out Queue<LevelPickButton> levelPickButtons)
+        public void Initialize()
         {
-            if (_initialized)
+            #region 必要條件檢查
+                if (_initialized)
+                {
+                    throw new InvalidOperationException(nameof(_initialized));
+                }
+            #endregion
+            
+            _initialized = true;
+
+            if (PlayerLevelSaver.LoadUnlockLevelFromLocal(out var saveData))
             {
-                Debug.Log($"{nameof(LevelPickUI)} > {nameof(Initialize)} is already initialized.");
-                levelPickButtons = null;
+                Debug.Log("從本地獲取玩家解鎖的關卡。");
+
+                foreach (var unlockLevel in saveData.UnlockLevels)
+                {
+                    #region 條件檢查
+                        if (!unlockLevel.IsUnlock)
+                        {
+                            continue;
+                        }
+                    #endregion
+                    
+                    #region 生成容器
+                        var newContainer = Instantiate(buttonContainerPrefab, buttonContainerParent);
+                    #endregion
+
+                    #region 生成關卡選擇按鈕
+                        var newButton = Instantiate(buttonPrefab.gameObject, newContainer.transform);
+                        var newButton_LevelPickButton = newButton.GetComponent<LevelPickButton>();
+                    #endregion
+
+                    #region 從關卡資料庫獲取關卡
+                        LevelDatabase.GetLevel(unlockLevel.LevelName, out var levelData);
+                    #endregion
+                    
+                    #region 初始化關卡選擇按鈕
+                        newButton_LevelPickButton.Initialize(levelData);
+                        _levelPickButtons.Enqueue(newButton_LevelPickButton);
+                    #endregion
+                }
             }
             else
             {
-                _initialized = true;
+                Debug.Log("無法從本地獲取玩家解鎖的關卡，使用預設關卡。");
                 
-                levelPickButtons = new Queue<LevelPickButton>();
-                
-                var data = PlayerUnlockLevelSaver.LoadUnlockLevelFromLocal();
-                
-                foreach (var unlockLevel in data.UnlockLevels)
-                {
-                    #region Container
-                        var newContainer = Instantiate(buttonContainerPrefab, buttonContainerParent);
-                    #endregion
+                #region 生成容器
+                    var newContainer = Instantiate(buttonContainerPrefab, buttonContainerParent);
+                #endregion
+
+                #region 生成關卡選擇按鈕
+                    var newButton = Instantiate(buttonPrefab.gameObject, newContainer.transform);
+                    var newButton_LevelPickButton = newButton.GetComponent<LevelPickButton>();
+                #endregion
                     
-                    #region Button
-                        var newButton = Instantiate(buttonPrefab.gameObject, newContainer.transform);
-                        var newButton_LevelPickButton = newButton.GetComponent<LevelPickButton>();
-                        
-                        newButton_LevelPickButton.Initialize(LevelDatabase.GetLevel(unlockLevel.LevelName));
-                        levelPickButtons.Enqueue(newButton_LevelPickButton);
-                    #endregion
-                }
+                #region 初始化關卡選擇按鈕
+                    newButton_LevelPickButton.Initialize(defaultLevel);
+                    _levelPickButtons.Enqueue(newButton_LevelPickButton);
+                #endregion
             }
         }
     }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Input_System;
 using PlayFab;
 using PlayFab.ClientModels;
@@ -27,6 +28,9 @@ namespace UI_System.Title_UI_System.Child.Account_UI_System
         public event Action<bool> OnClickLoginButtonEvent;
         public event Action OnClickRegisterButtonEvent;
         public event Action OnClickReturnButtonEvent;
+
+        private const float _buttonCooldownTime = 3f;
+        private IEnumerator _buttonCooldownCoroutine;
 
         private void Awake()
         {
@@ -90,6 +94,12 @@ namespace UI_System.Title_UI_System.Child.Account_UI_System
             returnButton.SetInteractable(false);
             
             InputSystem.OnPerformedTab -= OnClickTabButton;
+
+            if (_buttonCooldownCoroutine is not null)
+            {
+                StopCoroutine(_buttonCooldownCoroutine);
+                _buttonCooldownCoroutine = null;
+            }
         }
 
         private void OnDestroy()
@@ -113,6 +123,10 @@ namespace UI_System.Title_UI_System.Child.Account_UI_System
                 {
                     throw new InvalidOperationException("請先設定 TitleId。");
                 }
+            #endregion
+            
+            #region 暫時關閉所有的按鈕互動
+                SetAllButtonInteractable(false);
             #endregion
             
             #region 清除提示訊息
@@ -141,35 +155,41 @@ namespace UI_System.Title_UI_System.Child.Account_UI_System
                         },
                         errorCallback: error =>
                         {
-                            switch (error.Error)
-                            {
-                                case PlayFabErrorCode.InvalidParams:
+                            #region 顯示登入錯誤訊息
+                                switch (error.Error)
                                 {
-                                    loginErrorResultText.text = "電子信箱或密碼不得為空";
-                                    break;
+                                    case PlayFabErrorCode.InvalidParams:
+                                    {
+                                        loginErrorResultText.text = "電子信箱或密碼不得為空";
+                                        break;
+                                    }
+                                    case PlayFabErrorCode.InvalidEmailAddress:
+                                    {
+                                        loginErrorResultText.text = "電子信箱的格式錯誤";
+                                        break;
+                                    }
+                                    case PlayFabErrorCode.AccountNotFound:
+                                    {
+                                        loginErrorResultText.text = "此帳號不存在";
+                                        break;
+                                    }
+                                    case PlayFabErrorCode.InvalidEmailOrPassword:
+                                    {
+                                        loginErrorResultText.text = "電子信箱或密碼錯誤";
+                                        break;
+                                    }
+                                    default:
+                                    {
+                                        Debug.Log("錯誤訊息：");
+                                        Debug.Log(error.Error);
+                                        break;
+                                    }
                                 }
-                                case PlayFabErrorCode.InvalidEmailAddress:
-                                {
-                                    loginErrorResultText.text = "電子信箱的格式錯誤";
-                                    break;
-                                }
-                                case PlayFabErrorCode.AccountNotFound:
-                                {
-                                    loginErrorResultText.text = "此帳號不存在";
-                                    break;
-                                }
-                                case PlayFabErrorCode.InvalidEmailOrPassword:
-                                {
-                                    loginErrorResultText.text = "電子信箱或密碼錯誤";
-                                    break;
-                                }
-                                default:
-                                {
-                                    Debug.Log("錯誤訊息：");
-                                    Debug.Log(error.Error);
-                                    break;
-                                }
-                            }
+                            #endregion
+                            
+                            #region 開啟所有按鈕的互動
+                                StartButtonCooldown();
+                            #endregion
                         });
                     return;
                 }
@@ -197,30 +217,41 @@ namespace UI_System.Title_UI_System.Child.Account_UI_System
                         },
                         errorCallback: error =>
                         {
-                            switch (error.Error)
-                            {
-                                case PlayFabErrorCode.InvalidParams:
+                            #region 顯示登入錯誤訊息
+                                switch (error.Error)
                                 {
-                                    loginErrorResultText.text = "帳號或密碼不得為空";
-                                    break;
+                                    case PlayFabErrorCode.InvalidParams:
+                                    {
+                                        loginErrorResultText.text = "帳號或密碼不得為空";
+                                        break;
+                                    }
+                                    case PlayFabErrorCode.AccountNotFound:
+                                    {
+                                        loginErrorResultText.text = "此帳號不存在";
+                                        break;
+                                    }
+                                    case PlayFabErrorCode.InvalidUsernameOrPassword:
+                                    {
+                                        loginErrorResultText.text = "帳號或密碼錯誤";
+                                        break;
+                                    }
+                                    case PlayFabErrorCode.APIClientRequestRateLimitExceeded:
+                                    {
+                                        loginErrorResultText.text = "錯誤太多次 請稍後再嘗試";
+                                        break;
+                                    }
+                                    default:
+                                    {
+                                        Debug.Log("錯誤訊息：");
+                                        Debug.Log(error.Error);
+                                        break;
+                                    }
                                 }
-                                case PlayFabErrorCode.AccountNotFound:
-                                {
-                                    loginErrorResultText.text = "此帳號不存在";
-                                    break;
-                                }
-                                case PlayFabErrorCode.InvalidUsernameOrPassword:
-                                {
-                                    loginErrorResultText.text = "帳號或密碼錯誤";
-                                    break;
-                                }
-                                default:
-                                {
-                                    Debug.Log("錯誤訊息：");
-                                    Debug.Log(error.Error);
-                                    break;
-                                }
-                            }
+                            #endregion
+                            
+                            #region 開啟所有按鈕的互動
+                                StartButtonCooldown();
+                            #endregion
                         });
                 }
             #endregion
@@ -250,7 +281,27 @@ namespace UI_System.Title_UI_System.Child.Account_UI_System
         {
             var currentSelectable = EventSystem.current?.currentSelectedGameObject?.GetComponent<Selectable>();
             var nextSelectable = currentSelectable?.FindSelectableOnDown();
-            nextSelectable?.Select();
+                nextSelectable?.Select();
+        }
+
+        private void SetAllButtonInteractable(bool interactable)
+        {
+            loginButton.SetInteractable(interactable);
+            registerButton.SetInteractable(interactable);
+            returnButton.SetInteractable(interactable);
+        }
+
+        private void StartButtonCooldown()
+        {
+            _buttonCooldownCoroutine = ButtonCooldown();
+            StartCoroutine(_buttonCooldownCoroutine);
+            return;
+
+            IEnumerator ButtonCooldown()
+            {
+                yield return new WaitForSeconds(_buttonCooldownTime);
+                SetAllButtonInteractable(true);
+            }
         }
     }
 }

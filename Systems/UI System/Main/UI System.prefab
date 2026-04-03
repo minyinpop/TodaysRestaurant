@@ -6140,7 +6140,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec72c8a74eb1442fb9ec2eb422b8f166, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UI_System.System.Child.Backpack_UI_System.BackpackUI
-  playerInventoryData: {fileID: 11400000, guid: c1b842ac914f4ba489863def0b697eb1, type: 2}
   backpackSlots:
   - {fileID: 6252525726649726468}
   - {fileID: 5279969970385780949}
@@ -17164,7 +17163,7 @@ MonoBehaviour:
   m_CharacterValidation: 0
   m_RegexValue: 
   m_GlobalPointSize: 28
-  m_CharacterLimit: 0
+  m_CharacterLimit: 100
   m_OnEndEdit:
     m_PersistentCalls:
       m_Calls: []
@@ -19247,7 +19246,7 @@ MonoBehaviour:
   m_CharacterValidation: 0
   m_RegexValue: 
   m_GlobalPointSize: 28
-  m_CharacterLimit: 0
+  m_CharacterLimit: 100
   m_OnEndEdit:
     m_PersistentCalls:
       m_Calls: []
@@ -22126,7 +22125,7 @@ MonoBehaviour:
   confirmButton: {fileID: 724844655097157528}
   foodTypeButtonParent: {fileID: 6842789360361759957}
   foodTypeButtonPrefab: {fileID: 7674888563974020716, guid: e9bd5ca5e937d5c47870e90fd1d47f81, type: 3}
-  playerUnlockFoodData: {fileID: 11400000, guid: 7513e73f40eaad2419558deb44f66da1, type: 2}
+  playerUnlockFoodData: {fileID: 0}
   selectFoodPageData: {fileID: 11400000, guid: 5cb293368c6d3cf4a8a881c7efd4c452, type: 2}
 --- !u!1 &6642727481389442058
 GameObject:
@@ -24637,7 +24636,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab1b7c4579f342c6892d22b6f108ad89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UI_System.System.Child.Hotbar_UI_System.HotbarUI
-  playerInventoryData: {fileID: 11400000, guid: c1b842ac914f4ba489863def0b697eb1, type: 2}
   hotbarSlots:
   - {fileID: 9114198892290744090}
   - {fileID: 1683001635050257723}
@@ -25426,7 +25424,6 @@ MonoBehaviour:
   levelPickUI: {fileID: 2925610363930247779}
   levelInformationUI: {fileID: 5277654004161297522}
   levelStartButton: {fileID: 1712057955979150480}
-  defaultLevel: {fileID: 11400000, guid: 45863d7f385a0c3479753c6841633048, type: 2}
 --- !u!1 &7545595012699120818
 GameObject:
   m_ObjectHideFlags: 0
@@ -29424,17 +29421,17 @@ MonoBehaviour:
   m_VerticalScrollbarEventHandler: {fileID: 0}
   m_LayoutGroup: {fileID: 0}
   m_ScrollSensitivity: 1
-  m_ContentType: 6
+  m_ContentType: 5
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 7
+  m_KeyboardType: 0
   m_LineType: 0
   m_HideMobileInput: 0
   m_HideSoftKeyboard: 0
-  m_CharacterValidation: 7
+  m_CharacterValidation: 5
   m_RegexValue: 
   m_GlobalPointSize: 28
-  m_CharacterLimit: 0
+  m_CharacterLimit: 20
   m_OnEndEdit:
     m_PersistentCalls:
       m_Calls: []
@@ -30365,8 +30362,7 @@ MonoBehaviour:
   buttonContainerParent: {fileID: 4096135296422526445}
   buttonContainerPrefab: {fileID: 3956705581099301356, guid: 695ef61ab763ce541aa0a64d5027cb51, type: 3}
   buttonPrefab: {fileID: 8777720992782988785, guid: 18e3d2cf280f02742b5726b6aca2247f, type: 3}
-  levelsData:
-  - {fileID: 11400000, guid: 45863d7f385a0c3479753c6841633048, type: 2}
+  defaultLevel: {fileID: 11400000, guid: 45863d7f385a0c3479753c6841633048, type: 2}
 --- !u!1001 &1059971476915710455
 PrefabInstance:
   m_ObjectHideFlags: 0

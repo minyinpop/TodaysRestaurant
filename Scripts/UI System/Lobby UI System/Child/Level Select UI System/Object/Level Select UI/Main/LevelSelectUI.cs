@@ -15,86 +15,78 @@ namespace UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Se
         [field: SerializeField] private LevelInformationUI levelInformationUI;
         [field: SerializeField] private Button levelStartButton;
         
-        [field: Header("Data")]
-        [field: SerializeField] private LevelSO defaultLevel;
-                                private LevelSO _currentFocusLevel;
-                                
-        private readonly Queue<Action> _levelPickButtonCleanupActions = new();
-        private Action _levelStartButtonCleanupAction;
+        private LevelSO _currentFocusLevel;
         
         public static event Action<LevelSO> OnClickLevelStartButton;
 
         private void Awake()
         {
-            if (levelPickUI == null)
+            if (levelPickUI is null)
             {
-                Debug.Log($"{nameof(LevelSelectUI)} > {nameof(levelPickUI)} cannot be null.");
-            }
-            else if (levelInformationUI == null)
-            {
-                Debug.Log($"{nameof(LevelSelectUI)} > {nameof(levelInformationUI)} cannot be null.");
-            }
-            else if (levelStartButton == null)
-            {
-                Debug.Log($"{gameObject.name} > {GetType().Name} > {nameof(levelStartButton)} cannot be null.");
-            }
-            else if (defaultLevel == null)
-            {
-                Debug.Log($"{nameof(LevelSelectUI)} > {nameof(defaultLevel)} cannot be null.");
-            }
-            else
-            {
-                _currentFocusLevel = defaultLevel;
-
-                #region Level Pick UI
-                    levelPickUI.Initialize(out var levelPickButtons);
-
-                    foreach (var levelPickButton in levelPickButtons)
-                    {
-                        levelPickButton.OnClick += OnLevelPickButtonClicked;
-                        _levelPickButtonCleanupActions.Enqueue(() => levelPickButton.OnClick -= OnLevelPickButtonClicked);
-                    }
-                #endregion
-                
-                #region Level Information UI
-                    levelInformationUI.Initialize(_currentFocusLevel);
-                #endregion
-                
-                #region Level Start Button
-                    levelStartButton.OnClick += OnLevelStartButtonClicked;
-                    _levelStartButtonCleanupAction = () => levelStartButton.OnClick -= OnLevelStartButtonClicked;
-                #endregion
-            }
-
-            return;
-
-            void OnLevelPickButtonClicked(LevelSO levelData)
-            {
-                _currentFocusLevel = levelData;
-                levelInformationUI.Refresh(_currentFocusLevel);
+                throw new InvalidOperationException(nameof(levelPickUI));
             }
             
-            void OnLevelStartButtonClicked()
+            if (levelInformationUI is null)
             {
-                if (OnClickLevelStartButton == null)
+                throw new InvalidOperationException(nameof(levelInformationUI));
+            }
+            
+            if (levelStartButton is null)
+            {
+                throw new InvalidOperationException(nameof(levelStartButton));
+            }
+            
+            #region 設定初始專注關卡
+                _currentFocusLevel = levelPickUI.DefaultLevel;
+            #endregion
+
+            #region 初始化關卡選擇介面
+                levelPickUI.Initialize();
+            #endregion
+            
+            #region 初始化關卡資訊介面
+                levelInformationUI.Initialize(_currentFocusLevel);
+            #endregion
+            
+            #region 按鈕訂閱
+                foreach (var levelPickButton in levelPickUI.LevelPickButtons)
                 {
-                    Debug.Log($"{name} > {GetType().Name} > {nameof(OnClickLevelStartButton)} cannot be null.");
-                    Destroy(gameObject);
-                    return;
+                    levelPickButton.OnClick += OnLevelPickButtonClicked;
                 }
                 
-                OnClickLevelStartButton.Invoke(_currentFocusLevel);
-            }
+                levelStartButton.OnClick += OnLevelStartButtonClicked;
+            #endregion
+        }
+
+        private void OnDisable()
+        {
+            levelStartButton.OnClick -= OnLevelStartButtonClicked;
         }
 
         private void OnDestroy()
         {
-            while (_levelPickButtonCleanupActions.Count > 0)
+            foreach (var levelPickButton in levelPickUI.LevelPickButtons)
             {
-                _levelPickButtonCleanupActions.Dequeue()?.Invoke();
+                levelPickButton.OnClick -= OnLevelPickButtonClicked;
             }
             
-            _levelStartButtonCleanupAction?.Invoke();
+            levelStartButton.OnClick -= OnLevelStartButtonClicked;
+        }
+        
+        private void OnLevelPickButtonClicked(LevelSO levelData)
+        {
+            _currentFocusLevel = levelData;
+            levelInformationUI.Refresh(_currentFocusLevel);
+        }
+        
+        private void OnLevelStartButtonClicked()
+        {
+            if (OnClickLevelStartButton is null)
+            {
+                throw new InvalidOperationException(nameof(OnClickLevelStartButton));
+            }
+            
+            OnClickLevelStartButton.Invoke(_currentFocusLevel);
         }
     }
 }

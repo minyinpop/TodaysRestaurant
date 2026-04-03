@@ -45,7 +45,7 @@ namespace Explore_System.System.Child.Battle_System.System.Main
         private BattleEnemyEntry _currentBattleEnemyEntry;
 
         public static event Action OnClickPlayerWinConfirmButton;
-        public static event Action<Action> OnClickEnemyWinConfirmButton;
+        public static event Action OnClickEnemyWinConfirmButton;
         
         private void Awake()
         {
@@ -474,10 +474,7 @@ namespace Explore_System.System.Child.Battle_System.System.Main
                                         throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(OnClickEnemyWinConfirmButton)} has no subscriber.");
                                     }
 
-                                    OnClickEnemyWinConfirmButton.Invoke(() =>
-                                    {
-                                        Debug.Log("返回到大廳。");
-                                    });
+                                    OnClickEnemyWinConfirmButton.Invoke();
                                 });
                         },
                         onExit: () =>

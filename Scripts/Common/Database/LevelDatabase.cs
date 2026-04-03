@@ -32,14 +32,20 @@ namespace Common.Database
             }
         }
 
-        public static LevelSO GetLevel(string levelName)
+        public static bool GetLevel(string levelName, out LevelSO levelData)
         {
             if (!_initialized)
             {
                 throw new InvalidOperationException(nameof(_initialized));
             }
 
-            return _levelDatabase.GetValueOrDefault(levelName);
+            if (_levelDatabase.TryGetValue(levelName, out levelData))
+            {
+                return true;
+            }
+
+            Debug.Log($"無法在關卡資料庫中查到名為 {levelName} 的關卡。");
+            return false;
         }
     }
 }

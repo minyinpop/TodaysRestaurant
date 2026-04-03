@@ -1,7 +1,6 @@
 using System;
 using Animation_System.DOTween;
 using Animation_System.DOTween.Basic;
-using Common.Database;
 using UnityEngine;
 
 namespace UI_System.Title_UI_System.Child.Account_UI_System
@@ -35,7 +34,13 @@ namespace UI_System.Title_UI_System.Child.Account_UI_System
         [field: SerializeField] private DoFade_CanvasGroup mailVerificationUIFadeInSettings;
         [field: SerializeField] private DoFade_CanvasGroup mailVerificationUIFadeOutSettings;
 
-        public event Action OnLoginSuccess;
+        /// <summary>
+        /// 登入成功後觸發。
+        /// </summary>
+        /// <param name="isNewAccount">
+        /// 是否為第一次創建該帳號（true = 新帳號，false = 舊帳號）
+        /// </param>
+        public event Action<bool> OnLoginSuccess;
 
         private void Awake()
         {
@@ -148,19 +153,13 @@ namespace UI_System.Title_UI_System.Child.Account_UI_System
                             {
                                 maskCanvasGroup.gameObject.SetActive(false);
 
-                                #region 登入成功後的事件
-                                    ItemDatabase.Initialize();
-                                    LevelDatabase.Initialize();
-                                    CharacterDatabase.Initialize();
-                                #endregion
-
                                 #region 發送登入成功訊息
                                     if (OnLoginSuccess is null)
                                     {
-                                        throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(OnLoginSuccess)} cannot be null.");
+                                        throw new InvalidOperationException(nameof(OnLoginSuccess));
                                     }
 
-                                    OnLoginSuccess.Invoke();
+                                    OnLoginSuccess.Invoke(isNewAccount);
                                 #endregion
                             });
                     });

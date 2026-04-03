@@ -1,4 +1,6 @@
 ﻿// UTAGE: Unity Text Adventure Game Engine (c) Ryohei Tokimurausing System;
+
+using UnityEngine;
 using UtageExtensions;
 
 namespace Utage

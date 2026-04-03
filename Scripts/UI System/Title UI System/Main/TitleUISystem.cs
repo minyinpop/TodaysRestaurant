@@ -1,5 +1,6 @@
 using System;
 using Common.Button;
+using Common.Database;
 using UI_System.Title_UI_System.Child.Account_UI_System;
 using UnityEngine;
 
@@ -15,8 +16,20 @@ namespace UI_System.Title_UI_System.Main
         [field: SerializeField] private Button OptionButton;
         [field: SerializeField] private Button QuitButton;
 
-        public static event Action<Action> OnClickStartGameButton;
-        public static event Action<string, int> StartScenario;
+        /// <summary>
+        /// 登入帳號（用於完成新手教學的舊帳號）
+        /// </summary>
+        public static event Action OnLoginGame;
+        /// <summary>
+        /// 開始新手教學（用於第一次創建帳號）
+        /// </summary>
+        /// <param name="label">
+        /// 開始的章節名稱
+        /// </param>
+        /// <param name="page">
+        /// 開始於該章節的第幾行
+        /// </param>>
+        public static event Action<string, int> OnStartTutorial;
 
         private void Awake()
         {
@@ -72,20 +85,36 @@ namespace UI_System.Title_UI_System.Main
             }
         #endregion
 
-        private void OnLoginSuccess()
+        private void OnLoginSuccess(bool isNewAccount)
         {
-            if (OnClickStartGameButton is null)
-            {
-                throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(OnClickStartGameButton)} has no subscriber.");
-            }
+            #region 必要條件檢查
+                if (OnLoginGame is null)
+                {
+                    throw new InvalidOperationException(nameof(OnLoginGame));
+                }
+
+                if (OnStartTutorial is null)
+                {
+                    throw new InvalidOperationException(nameof(OnStartTutorial));
+                }
+            #endregion
             
-            OnClickStartGameButton.Invoke(() =>
+            #region 初始化資料庫
+                ItemDatabase.Initialize();
+                LevelDatabase.Initialize();
+                CharacterDatabase.Initialize();
+            #endregion
+
+            if (isNewAccount)
             {
-                /*
-                 * TODO 正式版使用
-                 * StartScenario.Invoke("Main", 0);
-                 */
-            });
+                Debug.Log("登入源：已完成新手教學的帳號");
+                OnLoginGame.Invoke();
+            }
+            else
+            {
+                Debug.Log("登入源：未完成新手教學的帳號");
+                OnStartTutorial.Invoke("Start", 0);
+            }
         }
     }
 }
