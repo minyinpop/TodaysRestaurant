@@ -16,7 +16,7 @@ namespace UI_System.Title_UI_System.Child.Account_UI_System
         [field: Header("Button")]
         [field: SerializeField] private Button confirmButton;
         
-        public event Action OnClickConfirmButtonEvent;
+        // public event Action OnClickConfirmButtonEvent;
 
         private void Awake()
         {

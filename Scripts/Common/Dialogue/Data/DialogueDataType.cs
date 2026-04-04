@@ -12,6 +12,9 @@ namespace Common.Dialogue.Data
         Show_Text,
         Hide_Text,
         
+        Show_Title,
+        Hide_Title,
+        
         Wait
     }
 }

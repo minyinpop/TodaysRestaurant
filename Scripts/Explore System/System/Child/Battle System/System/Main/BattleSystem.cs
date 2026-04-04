@@ -271,6 +271,7 @@ namespace Explore_System.System.Child.Battle_System.System.Main
                         
                         switch (_tossResult)
                         {
+                            /*
                             case TossResult.Heads:
                             {
                                 OnPlayerTurn(
@@ -297,6 +298,8 @@ namespace Explore_System.System.Child.Battle_System.System.Main
                                     });
                                 break;
                             }
+                            */
+                            
                             case TossResult.Tails:
                             {
                                 OnEnemyTurn(

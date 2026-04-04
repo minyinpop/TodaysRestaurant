@@ -1,6 +1,7 @@
 using System;
 using Animation_System.DOTween.Basic;
 using DG.Tweening;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,6 +16,8 @@ namespace Animation_System.DOTween
             ScaleTween?.Kill();
             DoFade_CanvasGroup_Tween?.Kill();
             DoValue_Slider_Tween?.Kill();
+            DoColor_Image_Tween?.Kill();
+            DoText_Tween?.Kill();
         }
 
         #region Move
@@ -188,6 +191,31 @@ namespace Animation_System.DOTween
                     .OnKill(() =>
                     {
                         DoColor_Image_Tween = null;
+                    });
+            }
+        #endregion
+        
+        #region Text
+            private Tween DoText_Tween;
+
+            public void DoText(TextMeshProUGUI tmp, DoText settings, Action onComplete = null)
+            {
+                DoText_Tween?.Kill();
+                DoText_Tween = tmp
+                    .DOText(
+                        endValue: settings.EndValue,
+                        duration: settings.Duration,
+                        richTextEnabled: settings.RichTextEnabled,
+                        scrambleMode: settings.ScrambleMode,
+                        scrambleChars: settings.ScrambleChars)
+                    .SetEase(settings.Ease)
+                    .OnComplete(() =>
+                    {
+                        onComplete?.Invoke();
+                    })
+                    .OnKill(() =>
+                    {
+                        DoText_Tween = null;
                     });
             }
         #endregion

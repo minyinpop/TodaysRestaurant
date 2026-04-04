@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Common.Dialogue.Child.Character.Animation;
-using Common.Dialogue.Child.Character.Hide;
-using Common.Dialogue.Child.Character.Show;
+using Common.Dialogue.Child.Character;
 using Common.Dialogue.Data;
 using Spine.Unity;
 using UnityEngine;
@@ -26,14 +24,21 @@ namespace UI_System.Dialogue_UI_System.Child
 
         public void ShowCharacter(ShowCharacter dialogueData, Action onComplete)
         {
-            if (_characters.ContainsKey(dialogueData.CharacterType))
+            if (dialogueData.CharacterType == DialogueCharacterType.Narrator)
             {
-                Debug.Log($"場上已顯示類型為 {dialogueData.CharacterType} 的角色，將跳過此行指令。");
+                Debug.Log("無法顯示旁白，將跳過此行指令。");
             }
             else
             {
-                var character = Instantiate(dialogueData.CharacterGraphic.gameObject, spawnParent).GetComponent<SkeletonGraphic>();
-                _characters.Add(dialogueData.CharacterType, character);
+                if (_characters.ContainsKey(dialogueData.CharacterType))
+                {
+                    Debug.Log($"場上已顯示類型為 {dialogueData.CharacterType} 的角色，將跳過此行指令。");
+                }
+                else
+                {
+                    var character = Instantiate(dialogueData.CharacterGraphic.gameObject, spawnParent).GetComponent<SkeletonGraphic>();
+                    _characters.Add(dialogueData.CharacterType, character);
+                }
             }
             
             onComplete.Invoke();
@@ -57,11 +62,14 @@ namespace UI_System.Dialogue_UI_System.Child
         {
             if (_characters.TryGetValue(dialogueData.CharacterType, out var character))
             {
-                dialogueData.Animation.GetValues(out var layer, out var animationName, out var loop);
-                character.AnimationState.SetAnimation(
-                    trackIndex: layer,
-                    animationName: animationName,
-                    loop: loop);
+                foreach (var spineAnimation in dialogueData.SpineAnimations)
+                {
+                    spineAnimation.GetValues(out var layer, out var animationName, out var loop);
+                    character.AnimationState.SetAnimation(
+                        trackIndex: layer,
+                        animationName: animationName,
+                        loop: loop);
+                }
             }
             else
             {
