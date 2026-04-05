@@ -1,17 +1,16 @@
 using System.Collections.Generic;
-using Common.Character;
 using Common.Dialogue.Main;
 using UnityEngine;
 
 namespace Common.Database
 {
-    public static class ChapterDatabase
+    public static class DialogueDatabase
     {
-        private static readonly Dictionary<string, DialogueSO> _chapterDatabase = new();
+        private static readonly Dictionary<string, DialogueSO> _dialogueDatabase = new();
 
         private static bool _initialized;
         
-        private const string ResourcePath = "Chapter";
+        private const string ResourcePath = "Dialogue";
         
         public static void Initialize()
         {
@@ -28,7 +27,7 @@ namespace Common.Database
 
             foreach (var dialogue in Resources.LoadAll<DialogueSO>(ResourcePath))
             {
-                _chapterDatabase[dialogue.name] = dialogue;
+                _dialogueDatabase[dialogue.name] = dialogue;
             }
         }
     }
