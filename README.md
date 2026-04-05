@@ -7,7 +7,7 @@
 - **[📱｜聯絡方式](https://github.com/minyinpop/TodaysRestaurant?tab=readme-ov-file#%E8%81%AF%E7%B5%A1%E6%96%B9%E5%BC%8F)**
 ---
 ### 🌐｜版本資訊
-- **此專案的版本為 6000.1.15f1，請使用該版本的編輯器來製作。**
+- **此專案的版本為 6000.3.8f1，請使用該版本的編輯器來製作。**
 - **此專案採用 3D URP 渲染管線，請勿使用 BRP 或是 HDRP。**
 ---
 ### 🗂️｜使用插件
@@ -17,10 +17,8 @@
 > 3. **New Input System**
 
 > **額外插件**
-> 1. **Utage 4**
-> 2. **Spine For Unity**
-> 3. **Text Animator**
-> 4. **DOTween**
+> 1. **Spine For Unity**
+> 2. **DOTween**
 
 > [!IMPORTANT]
 > **請先安裝好官方插件，額外插件已經附在 Assets 了。**
