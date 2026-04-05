@@ -1,5 +1,7 @@
+using System;
+using Common.Enemy_Battle_Group;
 using Common.Enemy.Enemy_Object;
-using Common.Level.Child.Level_Enemy;
+using Common.Level.Child;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -9,20 +11,16 @@ namespace Explore_System.Object
     {
         private EnemyObject _currentEnemyObject;
 
-        public void InitializeEnemy(EnemyObject enemyObject, BattleEnemyEntry entry)
+        public void InitializeEnemy(EnemyObject enemyObject, EnemyBattleGroupSO enemyBattleGroupData)
         {
             if (enemyObject is null)
             {
-                Debug.Log($"{name} > {GetType().Name} > {nameof(InitializeEnemy)} > {nameof(enemyObject)} cannot be null.");
-                Destroy(gameObject);
-                return;
+                throw new ArgumentException(nameof(enemyObject));
             }
 
             if (_currentEnemyObject is not null)
             {
-                Debug.Log($"{name} > {GetType().Name} > {nameof(InitializeEnemy)} > {nameof(_currentEnemyObject)} is already occupied.");
-                Destroy(gameObject);
-                return;
+                throw new InvalidOperationException($"{nameof(_currentEnemyObject)} is not empty.");
             }
 
             if (NavMesh.SamplePosition(transform.position, out var hit, float.MaxValue, NavMesh.AllAreas))
@@ -33,7 +31,7 @@ namespace Explore_System.Object
                 var parent = transform;
                 
                 _currentEnemyObject = Instantiate(prefab, position, rotation, parent).GetComponent<EnemyObject>();
-                _currentEnemyObject.Initialize(hit.position, entry);
+                _currentEnemyObject.Initialize(hit.position, enemyBattleGroupData);
             }
             else
             {

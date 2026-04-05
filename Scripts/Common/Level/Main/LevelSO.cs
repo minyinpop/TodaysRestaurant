@@ -1,5 +1,4 @@
-using Common.Level.Child.Level_Enemy;
-using Common.Level.Child.Level_Ingredient;
+using Common.Level.Child;
 using Common.Scene_Name;
 using Common.Scene_Starter;
 using UnityEngine;
@@ -14,12 +13,12 @@ namespace Common.Level.Main
                                 public string LevelName => levelName;
                                 
         [field: Header("Level Scene Name")]
-        [field: SerializeField] private SceneNameSO terrainSceneNameData;
-                                public SceneNameSO TerrainSceneNameData => terrainSceneNameData;
-        [field: SerializeField] private SceneNameSO exploreSceneNameData;
-                                public SceneNameSO ExploreSceneNameData => exploreSceneNameData;
-        [field: SerializeField] private SceneNameSO battleSceneNameData;
-                                public SceneNameSO BattleSceneNameData => battleSceneNameData;
+        [field: SerializeField] private SceneNameType terrainSceneNameType;
+                                public SceneNameType TerrainSceneNameType => terrainSceneNameType;
+        [field: SerializeField] private SceneNameType exploreSceneNameType;
+                                public SceneNameType ExploreSceneNameType => exploreSceneNameType;
+        [field: SerializeField] private SceneNameType battleSceneNameType;
+                                public SceneNameType BattleSceneNameType => battleSceneNameType;
     
         [field: Header("Level Data")]
         [field: SerializeField] private LevelIngredientSO levelIngredientData;
@@ -29,21 +28,6 @@ namespace Common.Level.Main
 
         private void OnValidate()
         {
-            if (terrainSceneNameData is null)
-            {
-                Debug.Log($"{GetType().Name} > {nameof(terrainSceneNameData)} cannot be null.");
-            }
-
-            if (exploreSceneNameData is null)
-            {
-                Debug.Log($"{GetType().Name} > {nameof(exploreSceneNameData)} cannot be null.");
-            }
-            
-            if (battleSceneNameData is null)
-            {
-                Debug.Log($"{GetType().Name} > {nameof(battleSceneNameData)} cannot be null.");
-            }
-
             if (levelIngredientData == null)
             {
                 Debug.Log($"{GetType().Name} > {nameof(levelIngredientData)} cannot be null.");

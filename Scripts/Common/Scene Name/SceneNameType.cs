@@ -12,8 +12,8 @@ namespace Common.Scene_Name
         Restaurant_Scene,
         
         Explore_Scene,
-        Explore_Resource_Scene,
-        Explore_Terrain_Scene,
-        Explore_Battle_Scene
+        Explore_Forest_Terrain_Scene,
+        Explore_Forest_Explore_Scene,
+        Explore_Forest_Battle_Scene
     }
 }

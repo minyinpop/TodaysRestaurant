@@ -3,9 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Common.Database;
-using Common.Level.Child.Level_Enemy;
+using Common.Enemy_Battle_Group;
 using Common.Player.Child.Player_Team;
 using Common.Scene_Name;
+using Common.Scene_Starter;
 using Common.Value;
 using Common.Value.Type;
 using Explore_System.System.Child.Battle_System.System.Child;
@@ -17,7 +18,7 @@ using UnityEngine;
 
 namespace Explore_System.System.Child.Battle_System.System.Main
 {
-    internal sealed class BattleSystem : MonoBehaviour
+    public sealed class BattleSystem : SceneStarter
     {
         [field: Header("Systems")]
         [field: SerializeField] private SelectedCardSystem selectedCardSystem;
@@ -44,7 +45,7 @@ namespace Explore_System.System.Child.Battle_System.System.Main
         private bool _isStarted;
         private bool _isEnd;
 
-        private BattleEnemyEntry _currentBattleEnemyEntry;
+        private EnemyBattleGroupSO _enemyBattleGroupData;
 
         public static event Action OnClickPlayerWinConfirmButton;
         public static event Action<SceneNameSO> OnClickEnemyWinConfirmButton;
@@ -53,58 +54,42 @@ namespace Explore_System.System.Child.Battle_System.System.Main
         {
             if (selectedCardSystem is null)
             {
-                Debug.Log($"{name} > {GetType().Name} > {nameof(selectedCardSystem)} cannot be null.");
-                Destroy(gameObject);
-                return;
+                throw new InvalidOperationException(nameof(selectedCardSystem));
             }
             
             if (cardPoolSystem is null)
             {
-                Debug.Log($"{name} > {GetType().Name} > {nameof(cardPoolSystem)} cannot be null.");
-                Destroy(gameObject);
-                return;
+                throw new InvalidOperationException(nameof(cardPoolSystem));
             }
 
             if (showCardSystem is null)
             {
-                Debug.Log($"{name} > {GetType().Name} > {nameof(showCardSystem)} cannot be null.");
-                Destroy(gameObject);
-                return;
+                throw new InvalidOperationException(nameof(showCardSystem));
             }
             
             if (handCardSystem is null)
             {
-                Debug.Log($"{name} > {GetType().Name} > {nameof(handCardSystem)} cannot be null.");
-                Destroy(gameObject);
-                return;
+                throw new InvalidOperationException(nameof(handCardSystem));
             }
             
             if (useCardSystem is null)
             {
-                Debug.Log($"{name} > {GetType().Name} > {nameof(useCardSystem)} cannot be null.");
-                Destroy(gameObject);
-                return;
+                throw new InvalidOperationException(nameof(useCardSystem));
             }
             
             if (playerTeamSystem is null)
             {
-                Debug.Log($"{name} > {GetType().Name} > {nameof(playerTeamSystem)} cannot be null.");
-                Destroy(gameObject);
-                return;
-            }
-
-            if (enemyTeamSystem is null)
-            {
-                Debug.Log($"{name} > {GetType().Name} > {nameof(enemyTeamSystem)} cannot be null.");
-                Destroy(gameObject);
-                return;
+                throw new InvalidOperationException(nameof(playerTeamSystem));
             }
 
             if (playerTeamData is null)
             {
-                Debug.Log($"{name} > {GetType().Name} > {nameof(playerTeamData)} cannot be null.");
-                Destroy(gameObject);
-                return;           
+                throw new InvalidOperationException(nameof(playerTeamData));
+            }
+
+            if (enemyTeamSystem is null)
+            {
+                throw new InvalidOperationException(nameof(enemyTeamSystem));
             }
 
             PlayerTeamSystem.RecycleCard += OnRecycleCard;
@@ -137,16 +122,27 @@ namespace Explore_System.System.Child.Battle_System.System.Main
         }
 
         // Note: entry 一定不為 null，所以檢測裡面的參數，詳情請點開 class 查看。
-        public void StartSystem(BattleEnemyEntry entry)
+        public override void StartSystem(SceneStarterData starterData, Action onComplete)
         {
-            if (_isStarted)
-            {
-                throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(_isStarted)} is already started.");
-            }
+            #region 必要條件檢查
+                if (_isStarted)
+                {
+                    throw new InvalidOperationException(nameof(_isStarted));
+                }
 
-            _currentBattleEnemyEntry = entry;
+                if (starterData is not EnemyBattleGroupSO data)
+                {
+                    throw new ArgumentException($"{nameof(data)} is not {nameof(EnemyBattleGroupSO)}");
+                }
+            #endregion
 
-            OnBattleStart();
+            #region 參數附值
+                _enemyBattleGroupData = data;
+            #endregion
+
+            #region 進入開始戰鬥狀態
+                OnBattleStart();
+            #endregion
         }
 
         private void DrawAndShowCard(int drawNumber, Action onComplete)
@@ -435,7 +431,7 @@ namespace Explore_System.System.Child.Battle_System.System.Main
                                     confirmButtonTitle: "拿取物品",
                                     cancelButtonTitle: string.Empty,
                                     closeButtonTitle: string.Empty),
-                                items: _currentBattleEnemyEntry.ItemsData,
+                                items: _enemyBattleGroupData.LootsData,
                                 onConfirm: () =>
                                 {
                                     if (OnClickPlayerWinConfirmButton is null)

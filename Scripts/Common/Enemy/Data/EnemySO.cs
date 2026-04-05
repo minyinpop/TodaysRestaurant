@@ -21,8 +21,6 @@ namespace Common.Enemy.Data
                                     public int Health => health;
             [field: SerializeField] private Damage damage;
                                     public Damage Damage => damage;
-            [field: SerializeField] private float moveSpeed;
-                                    public float MoveSpeed => moveSpeed;
         #endregion
 
         private void OnValidate()
@@ -51,12 +49,6 @@ namespace Common.Enemy.Data
                 if (damage.BasicDamage < 0)
                 {
                     Debug.Log($"{name} > {GetType().Name} > {nameof(damage.BasicDamage)} cannot be negative.");
-                    return;
-                }
-                
-                if (moveSpeed < 0)
-                {
-                    Debug.Log($"{name} > {GetType().Name} > {nameof(moveSpeed)} cannot be negative.");
                 }
             #endregion
         }

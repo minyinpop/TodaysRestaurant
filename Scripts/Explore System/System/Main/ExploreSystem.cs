@@ -1,12 +1,12 @@
 using System;
 using System.Collections;
+using Common.Database;
+using Common.Enemy_Battle_Group;
 using Common.Enemy.Enemy_Object;
-using Common.Level.Child.Level_Enemy;
 using Common.Level.Main;
 using Common.Scene_Starter;
+using Explore_System.System.Child;
 using Explore_System.System.Child.Battle_System.System.Main;
-using Explore_System.System.Child.Enemy_System;
-using Explore_System.System.Child.Ingredient_System;
 using UI_System.Explore_UI_System;
 using UI_System.Player_UI_System.Main;
 using UnityEngine;
@@ -84,11 +84,15 @@ namespace Explore_System.System.Main
 
             IEnumerator InitializeExploreCoroutine()
             {
+                SceneNameDatabase.GetSceneName(_levelData.TerrainSceneNameType, out var terrainSceneName);
+                SceneNameDatabase.GetSceneName(_levelData.ExploreSceneNameType, out var exploreSceneName);
+                SceneNameDatabase.GetSceneName(_levelData.BattleSceneNameType, out var battleSceneName);
+                
                 #region 生成地形
-                    var operation = SceneManager.LoadSceneAsync(_levelData.TerrainSceneNameData.SceneName, LoadSceneMode.Additive);
+                    var operation = SceneManager.LoadSceneAsync(terrainSceneName.SceneName, LoadSceneMode.Additive);
                     if (operation is null)
                     {
-                        Debug.Log($"{name} > {GetType().Name} > {_levelData.ExploreSceneNameData} cannot find the new scene.");
+                        Debug.Log($"{name} > {GetType().Name} > {_levelData.ExploreSceneNameType} cannot find the new scene.");
                         Destroy(gameObject);
                         yield break;
                     }
@@ -97,17 +101,17 @@ namespace Explore_System.System.Main
                 #endregion
                 
                 #region 生成敵人與可採集的資源
-                    operation = SceneManager.LoadSceneAsync(_levelData.ExploreSceneNameData.SceneName, LoadSceneMode.Additive);
+                    operation = SceneManager.LoadSceneAsync(exploreSceneName.SceneName, LoadSceneMode.Additive);
                     if (operation is null)
                     {
-                        Debug.Log($"{name} > {GetType().Name} > {_levelData.ExploreSceneNameData} cannot find the new scene.");
+                        Debug.Log($"{name} > {GetType().Name} > {_levelData.ExploreSceneNameType} cannot find the new scene.");
                         Destroy(gameObject);
                         yield break;
                     }
 
                     yield return operation;
                     
-                    _exploreScene = SceneManager.GetSceneByName(_levelData.ExploreSceneNameData.SceneName);
+                    _exploreScene = SceneManager.GetSceneByName(exploreSceneName.SceneName);
                     var rootObjects = _exploreScene.GetRootGameObjects();
                     var canGetEnemySystem = false;
                     var canGetIngredientSystem = false;
@@ -167,7 +171,7 @@ namespace Explore_System.System.Main
                 
                 yield break;
                 
-                void EnterBattle(EnemyObject enemy, BattleEnemyEntry entry)
+                void EnterBattle(EnemyObject enemyObject, EnemyBattleGroupSO enemyBattleGroupData)
                 {
                     if (_battleCoroutine is not null)
                     {
@@ -183,7 +187,7 @@ namespace Explore_System.System.Main
                         var complete = false;
 
                         #region 設定哪個敵人發起的攻擊
-                            _attackingEnemy = enemy;
+                            _attackingEnemy = enemyObject;
                         #endregion
                         
                         #region 淡入過場
@@ -205,7 +209,7 @@ namespace Explore_System.System.Main
                         #endregion
                         
                         #region 生成戰鬥場景
-                            yield return SceneManager.LoadSceneAsync(_levelData.BattleSceneNameData.SceneName, LoadSceneMode.Additive);
+                            yield return SceneManager.LoadSceneAsync(battleSceneName.SceneName, LoadSceneMode.Additive);
                         #endregion
                         
                         complete = false;
@@ -218,15 +222,18 @@ namespace Explore_System.System.Main
                         
                         #region 啟動戰鬥系統
                             var isGetSceneStarter = false;
-                            _battleScene = SceneManager.GetSceneByName(_levelData.BattleSceneNameData.SceneName);
+                            _battleScene = SceneManager.GetSceneByName(battleSceneName.SceneName);
                             
                             foreach (var rootObject in _battleScene.GetRootGameObjects())
                             {
                                 if (rootObject.TryGetComponent<BattleSystem>(out var battleSystem))
                                 {
-                                    isGetSceneStarter = true;
-                                    
-                                    battleSystem.StartSystem(entry);
+                                    battleSystem.StartSystem(
+                                        starterData: enemyBattleGroupData,
+                                        onComplete: () =>
+                                        {
+                                            isGetSceneStarter = true;
+                                        });
                                     break;
                                 }
                             }

@@ -1,8 +1,8 @@
 using System;
+using Common.Enemy_Battle_Group;
 using Common.Enemy.Data;
 using Common.Enemy.Enemy_Object.State_Machine;
 using Common.Enemy.Enemy_Object.State_Machine.State;
-using Common.Level.Child.Level_Enemy;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -18,7 +18,7 @@ namespace Common.Enemy.Enemy_Object
 
         private bool _initialized;
         
-        private BattleEnemyEntry _battleEnemyEntry;
+        private EnemyBattleGroupSO _enemyBattleGroupData;
         
         private readonly StateMachine _stateMachine = new();
 
@@ -26,22 +26,18 @@ namespace Common.Enemy.Enemy_Object
         private IState _chaseState;
         private IState _attackState;
 
-        public static event Action<EnemyObject, BattleEnemyEntry> OnAttack;
+        public static event Action<EnemyObject, EnemyBattleGroupSO> OnAttack;
         
         private void Awake()
         {
             if (_agent is null)
             {
-                Debug.Log($"{name} > {GetType().Name} > {nameof(_agent)} cannot be null.");
-                Destroy(gameObject);
-                return;
+                throw new InvalidOperationException(nameof(_agent));
             }
 
             if (enemyData is null)
             {
-                Debug.Log($"{name} > {GetType().Name} > {nameof(enemyData)} cannot be null.");
-                Destroy(gameObject);
-                return;
+                throw new InvalidOperationException(nameof(enemyData));
             }
             
             #region Animation
@@ -198,7 +194,7 @@ namespace Common.Enemy.Enemy_Object
             StopMove();
         }
 
-        public void Initialize(Vector3 spawnPoint, BattleEnemyEntry entry)
+        public void Initialize(Vector3 spawnPoint, EnemyBattleGroupSO enemyBattleGroupData)
         {
             if (_initialized)
             {
@@ -209,7 +205,7 @@ namespace Common.Enemy.Enemy_Object
 
             _initialized = true;
 
-            _battleEnemyEntry = entry;
+            _enemyBattleGroupData = enemyBattleGroupData;
 
             _agent.Warp(spawnPoint);
             

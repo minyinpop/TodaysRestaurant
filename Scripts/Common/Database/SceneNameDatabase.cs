@@ -15,14 +15,13 @@ namespace Common.Database
 
         public static void Initialize()
         {
-            if (_initialized)
-            {
-                #region 開發提示
+            #region 必要條件檢查
+                if (_initialized)
+                {
                     Debug.Log("物品資料庫已初始化過了！");
-                #endregion
-                
-                return;
-            }
+                    return;
+                }
+            #endregion
             
             _initialized = true;
 
@@ -34,15 +33,17 @@ namespace Common.Database
 
         public static bool GetSceneName(SceneNameType type, out SceneNameSO data)
         {
-            if (!_initialized)
-            {
-                throw new InvalidOperationException(nameof(_initialized));
-            }
+            #region 必要條件檢查
+                if (!_initialized)
+                {
+                    throw new InvalidOperationException(nameof(_initialized));
+                }
 
-            if (_sceneNameDatabase.TryGetValue(type, out data))
-            {
-                return true;
-            }
+                if (_sceneNameDatabase.TryGetValue(type, out data))
+                {
+                    return true;
+                }
+            #endregion
 
             Debug.Log($"無法在場景名稱資料庫中查到名為 {type} 的場景。");
             return false;
