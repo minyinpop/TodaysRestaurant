@@ -29,7 +29,7 @@ namespace UI_System.Title_UI_System.Main
         /// <param name="page">
         /// 開始於該章節的第幾行
         /// </param>>
-        // public static event Action<string, int> OnStartTutorial;
+        public static event Action<string, int> OnStartTutorial;
 
         private void Awake()
         {
