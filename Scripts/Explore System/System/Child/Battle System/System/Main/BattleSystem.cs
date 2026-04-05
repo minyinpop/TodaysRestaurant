@@ -2,8 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Common.Database;
 using Common.Level.Child.Level_Enemy;
 using Common.Player.Child.Player_Team;
+using Common.Scene_Name;
 using Common.Value;
 using Common.Value.Type;
 using Explore_System.System.Child.Battle_System.System.Child;
@@ -45,7 +47,7 @@ namespace Explore_System.System.Child.Battle_System.System.Main
         private BattleEnemyEntry _currentBattleEnemyEntry;
 
         public static event Action OnClickPlayerWinConfirmButton;
-        public static event Action OnClickEnemyWinConfirmButton;
+        public static event Action<SceneNameSO> OnClickEnemyWinConfirmButton;
         
         private void Awake()
         {
@@ -477,7 +479,8 @@ namespace Explore_System.System.Child.Battle_System.System.Main
                                         throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(OnClickEnemyWinConfirmButton)} has no subscriber.");
                                     }
 
-                                    OnClickEnemyWinConfirmButton.Invoke();
+                                    SceneNameDatabase.GetSceneName(SceneNameType.Lobby_Scene, out var sceneNameData);
+                                    OnClickEnemyWinConfirmButton.Invoke(sceneNameData);
                                 });
                         },
                         onExit: () =>

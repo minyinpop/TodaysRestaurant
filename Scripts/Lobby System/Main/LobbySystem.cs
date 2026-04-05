@@ -1,5 +1,5 @@
 using System;
-using Common;
+using Common.Scene_Starter;
 using Input_System;
 using Lobby_System.Child;
 using UI_System.Lobby_UI_System.Main;
@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Lobby_System.Main
 {
-    public sealed class LobbySystem : MonoBehaviour
+    public sealed class LobbySystem : SceneStarter
     {
         [field: Header("Systems")]
         [field: SerializeField] private LevelSelectSystem levelSelectSystem;
@@ -45,7 +45,7 @@ namespace Lobby_System.Main
             _onClickLevelSelectButtonCleanupAction?.Invoke();
         }
 
-        public void StartSystem(Action onComplete)
+        public override void StartSystem(Action onComplete)
         {
             onComplete.Invoke();
         }

@@ -3,8 +3,10 @@ using System.Collections;
 using Animation_System.DOTween;
 using Animation_System.DOTween.Basic;
 using Common.Scene_Name;
+using Common.Scene_Starter;
 using DG.Tweening;
 using Explore_System.System.Child.Battle_System.System.Main;
+using UI_System.Dialogue_UI_System.Main;
 using UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Select_UI.Main;
 using UI_System.Lobby_UI_System.Main;
 using UI_System.Title_UI_System.Main;
@@ -15,7 +17,7 @@ using UnityEngine.UI;
 namespace Scene_Transition_System
 {
     [RequireComponent(typeof(DoAnimation))]
-    public partial class SceneTransitionSystem : MonoBehaviour
+    public class SceneTransitionSystem : MonoBehaviour
     {
         [field: Header("Components")]
         [field: SerializeField] private new DoAnimation animation;
@@ -30,12 +32,6 @@ namespace Scene_Transition_System
         [field: SerializeField] private Image loadingImage;
         [field: SerializeField] private Image completeImage;
         
-        [field: Header("Scene Name")]
-        [field: SerializeField] private SceneNameSO dialogueSceneNameData;
-        [field: SerializeField] private SceneNameSO lobbySceneNameData;
-        [field: SerializeField] private SceneNameSO exploreSceneNameData;
-        [field: SerializeField] private SceneNameSO restaurantSceneNameData;
-        
         private IEnumerator _changeSceneCoroutine;
 
         private static GameObject _instance;
@@ -46,21 +42,6 @@ namespace Scene_Transition_System
                 if (animation is null)
                 {
                     throw new InvalidOperationException(nameof(animation));
-                }
-
-                if (dialogueSceneNameData is null)
-                {
-                    throw new InvalidOperationException(nameof(dialogueSceneNameData));
-                }
-
-                if (lobbySceneNameData is null)
-                {
-                    throw new InvalidOperationException(nameof(lobbySceneNameData));
-                }
-
-                if (exploreSceneNameData is null)
-                {
-                    throw new InvalidOperationException(nameof(exploreSceneNameData));
                 }
             #endregion
 
@@ -73,14 +54,22 @@ namespace Scene_Transition_System
             _instance = gameObject;
             DontDestroyOnLoad(gameObject);
             
-            #region 訂閱各系統的使用需求
-                TitleUISystem.OnLoginGame += GoToLobby;
-                
-                BattleSystem.OnClickEnemyWinConfirmButton += GoToLobby;
-                
-                LevelSelectUI.OnClickLevelStartButton += GoToExplore;
-                
-                LobbyUISystem.OnClickRestaurantButtonEvent += GoToRestaurant;
+            #region 標題場景訂閱
+                TitleUISystem.OnLoginGame += ChangeScene;
+                TitleUISystem.OnStartTutorial += ChangeScene;
+            #endregion
+            
+            #region 大廳場景訂閱
+                LobbyUISystem.OnClickRestaurantButtonEvent += ChangeScene;
+                LevelSelectUI.OnClickLevelStartButton += ChangeScene;
+            #endregion
+            
+            #region 對話場景訂閱
+                DialogueUISystem.OnChangeScene += ChangeScene;
+            #endregion
+            
+            #region 戰鬥場景訂閱
+                BattleSystem.OnClickEnemyWinConfirmButton += ChangeScene;
             #endregion
         }
 
@@ -95,13 +84,83 @@ namespace Scene_Transition_System
 
         private void OnDestroy()
         {
-            TitleUISystem.OnLoginGame -= GoToLobby;
+            #region 標題場景訂閱
+                TitleUISystem.OnLoginGame -= ChangeScene;
+                TitleUISystem.OnStartTutorial -= ChangeScene;
+            #endregion
             
-            BattleSystem.OnClickEnemyWinConfirmButton -= GoToLobby;
+            #region 大廳場景訂閱
+                LobbyUISystem.OnClickRestaurantButtonEvent -= ChangeScene;
+                LevelSelectUI.OnClickLevelStartButton -= ChangeScene;
+            #endregion
             
-            LevelSelectUI.OnClickLevelStartButton -= GoToExplore;
+            #region 對話場景訂閱
+                DialogueUISystem.OnChangeScene -= ChangeScene;
+            #endregion
             
-            LobbyUISystem.OnClickRestaurantButtonEvent -= GoToRestaurant;
+            #region 戰鬥場景訂閱
+                BattleSystem.OnClickEnemyWinConfirmButton -= ChangeScene;
+            #endregion
+        }
+
+        private void ChangeScene(SceneNameSO sceneNameData)
+        {
+            var systemFound = false;
+
+            _changeSceneCoroutine = ChangeSceneCoroutine(
+                sceneName: sceneNameData.SceneName,
+                onSceneLoaded: onComplete =>
+                {
+                    var scene = SceneManager.GetSceneByName(sceneNameData.SceneName);
+                    var rootObjects = scene.GetRootGameObjects();
+
+                    foreach (var rootObject in rootObjects)
+                    {
+                        if (rootObject.TryGetComponent<SceneStarter>(out var sceneStarter))
+                        {
+                            systemFound = true;
+
+                            sceneStarter.StartSystem(onComplete);
+                            break;
+                        }
+                    }
+                    
+                    if (!systemFound)
+                    {
+                        throw new InvalidOperationException(nameof(SceneStarter));
+                    }
+                });
+            StartCoroutine(_changeSceneCoroutine);
+        }
+
+        private void ChangeScene(SceneNameSO sceneNameData, SceneStarterData starterData)
+        {
+            var systemFound = false;
+
+            _changeSceneCoroutine = ChangeSceneCoroutine(
+                sceneName: sceneNameData.SceneName,
+                onSceneLoaded: onComplete =>
+                {
+                    var scene = SceneManager.GetSceneByName(sceneNameData.SceneName);
+                    var rootObjects = scene.GetRootGameObjects();
+
+                    foreach (var rootObject in rootObjects)
+                    {
+                        if (rootObject.TryGetComponent<SceneStarter>(out var sceneStarter))
+                        {
+                            systemFound = true;
+
+                            sceneStarter.StartSystem(starterData, onComplete);
+                            break;
+                        }
+                    }
+                    
+                    if (!systemFound)
+                    {
+                        throw new InvalidOperationException(nameof(SceneStarter));
+                    }
+                });
+            StartCoroutine(_changeSceneCoroutine);
         }
 
         private IEnumerator ChangeSceneCoroutine(string sceneName, Action<Action> onSceneLoaded, Action onComplete = null)

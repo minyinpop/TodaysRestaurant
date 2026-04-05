@@ -1,5 +1,7 @@
 using System;
 using Common.Button;
+using Common.Database;
+using Common.Scene_Name;
 using Input_System;
 using UI_System.Lobby_UI_System.Child.Level_Select_UI_System.System;
 using UnityEngine;
@@ -17,7 +19,7 @@ namespace UI_System.Lobby_UI_System.Main
         [field: SerializeField] private Button restaurantButton;
         
         public static event Action OnClickLevelSelectButtonEvent;
-        public static event Action OnClickRestaurantButtonEvent;
+        public static event Action<SceneNameSO> OnClickRestaurantButtonEvent;
         
         private void Awake()
         {
@@ -68,8 +70,9 @@ namespace UI_System.Lobby_UI_System.Main
             {
                 throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(OnClickRestaurantButtonEvent)} cannot be null.");
             }
-            
-            OnClickRestaurantButtonEvent.Invoke();
+
+            SceneNameDatabase.GetSceneName(SceneNameType.Restaurant_Scene, out var sceneNameData);
+            OnClickRestaurantButtonEvent.Invoke(sceneNameData);
         }
         
         public static void ShowLevelSelectUI()

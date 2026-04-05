@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using Common.Dialogue.Data;
 using Common.Dialogue.Main;
 using UnityEngine;
 
@@ -6,7 +8,7 @@ namespace Common.Database
 {
     public static class DialogueDatabase
     {
-        private static readonly Dictionary<string, DialogueSO> _dialogueDatabase = new();
+        private static readonly Dictionary<DialogueType, DialogueSO> _dialogueDatabase = new();
 
         private static bool _initialized;
         
@@ -17,7 +19,7 @@ namespace Common.Database
             if (_initialized)
             {
                 #region 開發提示
-                    Debug.Log("章節資料庫已初始化過了！");
+                    Debug.Log("對話資料庫已初始化過了！");
                 #endregion
                 
                 return;
@@ -27,8 +29,24 @@ namespace Common.Database
 
             foreach (var dialogue in Resources.LoadAll<DialogueSO>(ResourcePath))
             {
-                _dialogueDatabase[dialogue.name] = dialogue;
+                _dialogueDatabase[dialogue.DialogueType] = dialogue;
             }
+        }
+
+        public static bool GetDialogue(DialogueType type, out DialogueSO data)
+        {
+            if (!_initialized)
+            {
+                throw new InvalidOperationException(nameof(_initialized));
+            }
+
+            if (_dialogueDatabase.TryGetValue(type, out data))
+            {
+                return true;
+            }
+
+            Debug.Log($"無法在對話資料庫中查到名為 {type} 的對話。");
+            return false;
         }
     }
 }

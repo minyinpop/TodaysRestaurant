@@ -9,7 +9,7 @@ namespace Common.Dialogue.Child.Tool
         [field: Header("State")]
         [field: SerializeField] private bool autoPass;
                                 public override bool AutoPass => autoPass;
-                                
+        
         [field: Header("Time")]
         [field: SerializeField] private float waitTime;
                                 public float WaitTime => waitTime;

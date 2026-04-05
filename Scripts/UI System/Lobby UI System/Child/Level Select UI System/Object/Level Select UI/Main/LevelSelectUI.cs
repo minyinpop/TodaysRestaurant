@@ -1,7 +1,8 @@
 using System;
-using System.Collections.Generic;
 using Common.Button;
+using Common.Database;
 using Common.Level.Main;
+using Common.Scene_Name;
 using UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Select_UI.Child.Level_Information_UI.Main;
 using UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Select_UI.Child.Level_Pick_UI.Main;
 using UnityEngine;
@@ -17,7 +18,7 @@ namespace UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Se
         
         private LevelSO _currentFocusLevel;
         
-        public static event Action<LevelSO> OnClickLevelStartButton;
+        public static event Action<SceneNameSO, LevelSO> OnClickLevelStartButton;
 
         private void Awake()
         {
@@ -86,7 +87,9 @@ namespace UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Se
                 throw new InvalidOperationException(nameof(OnClickLevelStartButton));
             }
             
-            OnClickLevelStartButton.Invoke(_currentFocusLevel);
+            SceneNameDatabase.GetSceneName(SceneNameType.Explore_Scene, out var sceneName);
+            
+            OnClickLevelStartButton.Invoke(sceneName, _currentFocusLevel);
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections;
 using Common.Enemy.Enemy_Object;
 using Common.Level.Child.Level_Enemy;
 using Common.Level.Main;
+using Common.Scene_Starter;
 using Explore_System.System.Child.Battle_System.System.Main;
 using Explore_System.System.Child.Enemy_System;
 using Explore_System.System.Child.Ingredient_System;
@@ -13,7 +14,7 @@ using UnityEngine.SceneManagement;
 
 namespace Explore_System.System.Main
 {
-    public sealed class ExploreSystem : MonoBehaviour
+    public sealed class ExploreSystem : SceneStarter
     {
         [field: Header("Component")]
         [field: SerializeField] private ExploreUISystem exploreUISystem;
@@ -62,16 +63,16 @@ namespace Explore_System.System.Main
             _onExitBattleCleanupAction?.Invoke();
         }
 
-        public void StartSystem(LevelSO levelData, Action onComplete)
+        public override void StartSystem(SceneStarterData starterData, Action onComplete)
         {
             if (_initialized)
             {
                 throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(StartSystem)} is already initialize.");
             }
 
-            if (levelData is null)
+            if (starterData is not LevelSO levelData)
             {
-                throw new ArgumentNullException($"{name} > {GetType().Name} > {nameof(StartSystem)} > {nameof(levelData)} cannot be null.");
+                throw new ArgumentException($"{starterData} is not {nameof(LevelSO)}.");
             }
 
             _initialized = true;

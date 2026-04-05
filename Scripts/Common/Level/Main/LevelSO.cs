@@ -1,12 +1,13 @@
 using Common.Level.Child.Level_Enemy;
 using Common.Level.Child.Level_Ingredient;
 using Common.Scene_Name;
+using Common.Scene_Starter;
 using UnityEngine;
 
 namespace Common.Level.Main
 {
     [CreateAssetMenu(menuName = "Minyinpop/Level/Main/Level", fileName = "New Data")]
-    public sealed class LevelSO : ScriptableObject
+    public sealed class LevelSO : SceneStarterData
     {
         [field: Header("Level Name")]
         [field: SerializeField] private string levelName;

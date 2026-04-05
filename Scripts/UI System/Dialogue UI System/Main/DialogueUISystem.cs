@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using Common.Button;
+using Common.Database;
 using Common.Dialogue.Child.Background;
 using Common.Dialogue.Child.Character;
 using Common.Dialogue.Child.Text;
@@ -8,6 +9,8 @@ using Common.Dialogue.Child.Title;
 using Common.Dialogue.Child.Tool;
 using Common.Dialogue.Data;
 using Common.Dialogue.Main;
+using Common.Scene_Name;
+using Common.Scene_Starter;
 using UI_System.Dialogue_UI_System.Child;
 using UnityEngine;
 
@@ -28,9 +31,9 @@ namespace UI_System.Dialogue_UI_System.Main
         
         private IEnumerator _dialogueCoroutine;
 
-        public DialogueSO DevelopDialogue;
-
         private bool _continueDialogue;
+
+        public static event Action<SceneNameSO, SceneStarterData> OnChangeScene;
 
         private void Awake()
         {
@@ -67,11 +70,6 @@ namespace UI_System.Dialogue_UI_System.Main
             #endregion
 
             continueButton.OnClick += OnClickContinueButton;
-        }
-
-        private void Start()
-        {
-            StartDialogue(DevelopDialogue);
         }
 
         private void OnDisable()
@@ -259,6 +257,15 @@ namespace UI_System.Dialogue_UI_System.Main
                             }
                             
                             continueButton.SetInteractable(true);
+                            break;
+                        }
+                        case DialogueDataType.ChangeScene:
+                        {
+                            var changeSceneData = dialogueData as ChangeScene;
+                            
+                            SceneNameDatabase.GetSceneName(changeSceneData.SceneNameType, out var sceneNameData);
+                            
+                            OnChangeScene.Invoke(sceneNameData, changeSceneData.SceneStarterData);
                             break;
                         }
                         default:
