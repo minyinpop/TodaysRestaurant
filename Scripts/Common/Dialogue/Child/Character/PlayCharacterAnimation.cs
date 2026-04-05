@@ -14,6 +14,8 @@ namespace Common.Dialogue.Child.Character
         [field: Header("Animation")]
         [field: SerializeField] private SpineAnimation[] spineAnimations;
                                 public SpineAnimation[] SpineAnimations => spineAnimations;
+        [field: SerializeField] private float startSeconds;
+                                public float StartSeconds => startSeconds;
                                 
         [field: Header("Character Type")]
         [field: SerializeField] private DialogueCharacterType characterType;

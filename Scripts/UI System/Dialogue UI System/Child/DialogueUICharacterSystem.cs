@@ -65,10 +65,11 @@ namespace UI_System.Dialogue_UI_System.Child
                 foreach (var spineAnimation in dialogueData.SpineAnimations)
                 {
                     spineAnimation.GetValues(out var layer, out var animationName, out var loop);
-                    character.AnimationState.SetAnimation(
+                    var entry = character.AnimationState.SetAnimation(
                         trackIndex: layer,
                         animationName: animationName,
                         loop: loop);
+                    entry.TrackTime = dialogueData.StartSeconds;
                 }
             }
             else

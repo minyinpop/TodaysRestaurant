@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Common.Dialogue.Data;
 using Common.Dialogue.Main;
 using UnityEditor;
 using UnityEditorInternal;
@@ -9,14 +10,17 @@ namespace Common.Dialogue.Editor
     [CustomEditor(typeof(DialogueSO))]
     public sealed class DialogueSOEditor : UnityEditor.Editor
     {
+        private SerializedProperty _startIndex;
+        
         private SerializedProperty _dialogueDataEntries;
         private ReorderableList _dialogueDataEntriesList;
 
-        // 🔥 內層 List Cache（關鍵）
         private Dictionary<string, ReorderableList> _innerLists = new();
 
         private void OnEnable()
         {
+            _startIndex = serializedObject.FindProperty("startIndex");
+            
             _dialogueDataEntries = serializedObject.FindProperty("dialogueDataEntries");
 
             _dialogueDataEntriesList = new ReorderableList(serializedObject, _dialogueDataEntries)
@@ -28,7 +32,7 @@ namespace Common.Dialogue.Editor
                         alignment = TextAnchor.MiddleCenter
                     };
 
-                    EditorGUI.LabelField(rect, "對話資料", style);
+                    EditorGUI.LabelField(rect, "段落列表", style);
                 },
 
                 drawElementCallback = (rect, index, isActive, isFocused) =>
@@ -38,22 +42,20 @@ namespace Common.Dialogue.Editor
 
                     rect.x += 12;
 
-                    // Foldout
                     var foldoutRect = new Rect(rect.x, rect.y, rect.width, EditorGUIUtility.singleLineHeight);
 
                     element.isExpanded = EditorGUI.Foldout(
                         foldoutRect,
                         element.isExpanded,
-                        $"對話 {index + 1:D2}",
+                        $"段落 {index + 1:D2}",
                         true
                     );
 
                     if (!element.isExpanded)
                         return;
 
-                    // 子 List
                     var contentRect = new Rect(
-                        rect.x + 10,
+                        rect.x,
                         rect.y + EditorGUIUtility.singleLineHeight + 4,
                         rect.width - 10,
                         GetDialogueDataHeight(dialogueData)
@@ -66,7 +68,7 @@ namespace Common.Dialogue.Editor
                 {
                     var element = _dialogueDataEntries.GetArrayElementAtIndex(index);
 
-                    float height = EditorGUIUtility.singleLineHeight + 6;
+                    float height = EditorGUIUtility.singleLineHeight;
 
                     if (element.isExpanded)
                     {
@@ -84,26 +86,62 @@ namespace Common.Dialogue.Editor
             serializedObject.Update();
 
             EditorGUILayout.Space(8);
+            
+                EditorGUILayout.BeginVertical("box");
 
-            EditorGUILayout.BeginHorizontal();
-
-            if (GUILayout.Button("展開全部"))
-            {
-                for (int i = 0; i < _dialogueDataEntries.arraySize; i++)
+                var titleStyle = new GUIStyle(EditorStyles.boldLabel)
                 {
-                    _dialogueDataEntries.GetArrayElementAtIndex(i).isExpanded = true;
-                }
-            }
+                    alignment = TextAnchor.MiddleCenter,
+                    fontSize = 12
+                };
 
-            if (GUILayout.Button("收起全部"))
-            {
-                for (int i = 0; i < _dialogueDataEntries.arraySize; i++)
+                EditorGUILayout.LabelField("起始段落", titleStyle);
+
+                EditorGUILayout.Space(4);
+
+                    EditorGUILayout.BeginHorizontal();
+                    
+                    EditorGUILayout.LabelField("段落", GUILayout.Width(64));
+                    _startIndex.intValue = EditorGUILayout.IntField(_startIndex.intValue);
+
+                    if (_dialogueDataEntries.arraySize > 0)
+                    {
+                        if (_startIndex.intValue > _dialogueDataEntries.arraySize - 1)
+                        {
+                            _startIndex.intValue = _dialogueDataEntries.arraySize;
+                        }
+                    }
+
+                    if (_startIndex.intValue < 0)
+                    {
+                        _startIndex.intValue = EditorGUILayout.IntField(0);
+                    }
+
+                    EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.EndVertical();
+            
+            EditorGUILayout.Space(32);
+
+                EditorGUILayout.BeginHorizontal();
+
+                if (GUILayout.Button("展開全部"))
                 {
-                    _dialogueDataEntries.GetArrayElementAtIndex(i).isExpanded = false;
+                    for (int i = 0; i < _dialogueDataEntries.arraySize; i++)
+                    {
+                        _dialogueDataEntries.GetArrayElementAtIndex(i).isExpanded = true;
+                    }
                 }
-            }
 
-            EditorGUILayout.EndHorizontal();
+                if (GUILayout.Button("收起全部"))
+                {
+                    for (int i = 0; i < _dialogueDataEntries.arraySize; i++)
+                    {
+                        _dialogueDataEntries.GetArrayElementAtIndex(i).isExpanded = false;
+                    }
+                }
+
+                EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.Space(8);
 
@@ -113,8 +151,6 @@ namespace Common.Dialogue.Editor
 
             serializedObject.ApplyModifiedProperties();
         }
-
-        // ===== 🔥 內層 ReorderableList =====
 
         private ReorderableList GetDialogueList(SerializedProperty property)
         {
@@ -132,7 +168,7 @@ namespace Common.Dialogue.Editor
                         alignment = TextAnchor.MiddleCenter
                     };
                     
-                    EditorGUI.LabelField(rect, "台詞列表", style);
+                    EditorGUI.LabelField(rect, "指令列表", style);
                 },
 
                 drawElementCallback = (rect, index, isActive, isFocused) =>
@@ -141,8 +177,24 @@ namespace Common.Dialogue.Editor
 
                     rect.y += 2;
 
-                    var label = GetDialoguePreview(index);
+                    string label;
 
+                    if (element.objectReferenceValue is not DialogueData data)
+                    {
+                        label = $"⚪ 指令 {index + 1:D2}";
+                    }
+                    else
+                    {
+                        if (data.AutoPass)
+                        {
+                            label = $"🟢 指令 {index + 1:D2}";
+                        }
+                        else
+                        {
+                            label = $"🟡 指令 {index + 1:D2}";
+                        }
+                    }
+                    
                     EditorGUI.PropertyField(rect, element, new GUIContent(label), true);
                 },
 
@@ -156,8 +208,6 @@ namespace Common.Dialogue.Editor
             _innerLists[key] = list;
             return list;
         }
-
-        // ===== 巢狀繪製 =====
 
         private float GetDialogueDataHeight(SerializedProperty list)
         {
@@ -177,7 +227,7 @@ namespace Common.Dialogue.Editor
 
                 var btnRect = new Rect(rect.x, rect.y + 22, rect.width, EditorGUIUtility.singleLineHeight);
 
-                if (GUI.Button(btnRect, "新增一筆對話"))
+                if (GUI.Button(btnRect, "新增一筆指令"))
                 {
                     list.arraySize++;
                 }
@@ -187,13 +237,6 @@ namespace Common.Dialogue.Editor
 
             var reorderableList = GetDialogueList(list);
             reorderableList.DoList(rect);
-        }
-
-        // ===== Preview =====
-
-        private string GetDialoguePreview(int index)
-        {
-            return $"劇情 {index + 1:D2}";
         }
     }
 }

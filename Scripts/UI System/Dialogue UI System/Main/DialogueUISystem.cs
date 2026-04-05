@@ -111,9 +111,9 @@ namespace UI_System.Dialogue_UI_System.Main
         
         private IEnumerator DialogueCoroutine()
         {
-            for (var i = _dialogueData.StartIndex; i < _dialogueData.DialogueDataEntries.Length; i++)
+            for (var i = _dialogueData.StartIndex - 1; i < _dialogueData.DialogueDataEntries.Length; i++)
             {
-                Debug.Log($"= = = {i + 1} = = =");
+                Debug.Log($"= = = 段落 {i + 1:D2} = = =");
                 
                 var dialogueDataEntry = _dialogueData.DialogueDataEntries[i];
                 
@@ -121,7 +121,6 @@ namespace UI_System.Dialogue_UI_System.Main
                 {
                     if (dialogueDataEntry.DialogueData is null)
                     {
-                        Debug.Log("偵測到空的指令，即將跳過。");
                         continue;
                     }
 
