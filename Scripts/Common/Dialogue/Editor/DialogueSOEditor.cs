@@ -10,17 +10,19 @@ namespace Common.Dialogue.Editor
     [CustomEditor(typeof(DialogueSO))]
     public sealed class DialogueSOEditor : UnityEditor.Editor
     {
+        private SerializedProperty _dialogueType;
+        private SerializedProperty _skipMessage;
         private SerializedProperty _startIndex;
-        
         private SerializedProperty _dialogueDataEntries;
-        private ReorderableList _dialogueDataEntriesList;
 
+        private ReorderableList _dialogueDataEntriesList;
         private Dictionary<string, ReorderableList> _innerLists = new();
 
         private void OnEnable()
         {
+            _dialogueType = serializedObject.FindProperty("dialogueType");
+            _skipMessage = serializedObject.FindProperty("skipMessage");
             _startIndex = serializedObject.FindProperty("startIndex");
-            
             _dialogueDataEntries = serializedObject.FindProperty("dialogueDataEntries");
 
             _dialogueDataEntriesList = new ReorderableList(serializedObject, _dialogueDataEntries)
@@ -87,61 +89,67 @@ namespace Common.Dialogue.Editor
 
             EditorGUILayout.Space(8);
             
-                EditorGUILayout.BeginVertical("box");
+            EditorGUILayout.BeginVertical("box");
 
-                var titleStyle = new GUIStyle(EditorStyles.boldLabel)
+            var titleStyle = new GUIStyle(EditorStyles.boldLabel)
+            {
+                alignment = TextAnchor.MiddleCenter,
+                fontSize = 12
+            };
+
+            EditorGUILayout.LabelField("基本設定", titleStyle);
+
+            EditorGUILayout.Space(4);
+
+            DrawStyledField(_dialogueType, "對話類型");
+            DrawStyledField(_skipMessage, "跳過訊息");
+
+            EditorGUILayout.Space(6);
+
+            EditorGUILayout.LabelField("起始段落", titleStyle);
+
+            EditorGUILayout.Space(4);
+
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("段落", GUILayout.Width(64));
+
+            _startIndex.intValue = EditorGUILayout.IntField(_startIndex.intValue);
+
+            if (_dialogueDataEntries.arraySize > 0)
+            {
+                _startIndex.intValue = Mathf.Clamp(_startIndex.intValue, 1, _dialogueDataEntries.arraySize);
+            }
+            else
+            {
+                _startIndex.intValue = 1;
+            }
+
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.EndVertical();
+
+            EditorGUILayout.Space(16);
+
+            // ===== 控制按鈕 =====
+            EditorGUILayout.BeginHorizontal();
+
+            if (GUILayout.Button("展開全部"))
+            {
+                for (int i = 0; i < _dialogueDataEntries.arraySize; i++)
                 {
-                    alignment = TextAnchor.MiddleCenter,
-                    fontSize = 12
-                };
-
-                EditorGUILayout.LabelField("起始段落", titleStyle);
-
-                EditorGUILayout.Space(4);
-
-                    EditorGUILayout.BeginHorizontal();
-                    
-                    EditorGUILayout.LabelField("段落", GUILayout.Width(64));
-                    _startIndex.intValue = EditorGUILayout.IntField(_startIndex.intValue);
-
-                    if (_dialogueDataEntries.arraySize > 0)
-                    {
-                        if (_startIndex.intValue > _dialogueDataEntries.arraySize - 1)
-                        {
-                            _startIndex.intValue = _dialogueDataEntries.arraySize;
-                        }
-                    }
-
-                    if (_startIndex.intValue < 0)
-                    {
-                        _startIndex.intValue = EditorGUILayout.IntField(0);
-                    }
-
-                    EditorGUILayout.EndHorizontal();
-
-                EditorGUILayout.EndVertical();
-            
-            EditorGUILayout.Space(32);
-
-                EditorGUILayout.BeginHorizontal();
-
-                if (GUILayout.Button("展開全部"))
-                {
-                    for (int i = 0; i < _dialogueDataEntries.arraySize; i++)
-                    {
-                        _dialogueDataEntries.GetArrayElementAtIndex(i).isExpanded = true;
-                    }
+                    _dialogueDataEntries.GetArrayElementAtIndex(i).isExpanded = true;
                 }
+            }
 
-                if (GUILayout.Button("收起全部"))
+            if (GUILayout.Button("收起全部"))
+            {
+                for (int i = 0; i < _dialogueDataEntries.arraySize; i++)
                 {
-                    for (int i = 0; i < _dialogueDataEntries.arraySize; i++)
-                    {
-                        _dialogueDataEntries.GetArrayElementAtIndex(i).isExpanded = false;
-                    }
+                    _dialogueDataEntries.GetArrayElementAtIndex(i).isExpanded = false;
                 }
+            }
 
-                EditorGUILayout.EndHorizontal();
+            EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.Space(8);
 
@@ -150,6 +158,50 @@ namespace Common.Dialogue.Editor
             EditorGUILayout.Space(8);
 
             serializedObject.ApplyModifiedProperties();
+        }
+
+        // ===== 共用 UI 畫法 =====
+        private void DrawStyledField(SerializedProperty property, string label)
+        {
+            EditorGUILayout.BeginHorizontal();
+
+            EditorGUILayout.LabelField(label, GUILayout.Width(64));
+
+            switch (property.propertyType)
+            {
+                case SerializedPropertyType.Enum:
+                {
+                    property.enumValueIndex = EditorGUILayout.Popup(property.enumValueIndex, property.enumDisplayNames);
+                    break;
+                }
+                case SerializedPropertyType.String:
+                {
+                    if (property.name == "skipMessage")
+                    {
+                        property.stringValue = EditorGUILayout.TextArea(
+                            property.stringValue,
+                            GUILayout.Height(300)
+                        );
+                    }
+                    else
+                    {
+                        property.stringValue = EditorGUILayout.TextField(property.stringValue);
+                    }
+                    break;
+                }
+                case SerializedPropertyType.Integer:
+                {
+                    property.intValue = EditorGUILayout.IntField(property.intValue);
+                    break;
+                }
+                default:
+                {
+                    EditorGUILayout.PropertyField(property, GUIContent.none);
+                    break;
+                }
+            }
+
+            EditorGUILayout.EndHorizontal();
         }
 
         private ReorderableList GetDialogueList(SerializedProperty property)
@@ -167,7 +219,7 @@ namespace Common.Dialogue.Editor
                     {
                         alignment = TextAnchor.MiddleCenter
                     };
-                    
+
                     EditorGUI.LabelField(rect, "指令列表", style);
                 },
 
@@ -185,16 +237,11 @@ namespace Common.Dialogue.Editor
                     }
                     else
                     {
-                        if (data.AutoPass)
-                        {
-                            label = $"🟢 指令 {index + 1:D2}";
-                        }
-                        else
-                        {
-                            label = $"🟡 指令 {index + 1:D2}";
-                        }
+                        label = data.AutoPass
+                            ? $"🟢 指令 {index + 1:D2}"
+                            : $"🟡 指令 {index + 1:D2}";
                     }
-                    
+
                     EditorGUI.PropertyField(rect, element, new GUIContent(label), true);
                 },
 

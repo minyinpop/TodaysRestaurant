@@ -11,21 +11,24 @@ using Common.Dialogue.Data;
 using Common.Dialogue.Main;
 using Common.Scene_Name;
 using Common.Scene_Starter;
+using Common.Value;
 using UI_System.Dialogue_UI_System.Child;
+using UI_System.Message_UI_System.Main;
 using UnityEngine;
 
 namespace UI_System.Dialogue_UI_System.Main
 {
     public sealed class DialogueUISystem : MonoBehaviour
     {
-        [field: Header("Systems")]
+        [field: Header("系統")]
         [field: SerializeField] private DialogueUIBackgroundSystem backgroundSystem;
         [field: SerializeField] private DialogueUICharacterSystem characterSystem;
         [field: SerializeField] private DialogueUITextSystem textSystem;
         [field: SerializeField] private DialogueUITitleSystem titleSystem;
         
-        [field: Header("Button")]
+        [field: Header("按鈕")]
         [field: SerializeField] private Button continueButton;
+        [field: SerializeField] private Button skipButton;
         
         private DialogueSO _dialogueData;
         
@@ -62,6 +65,11 @@ namespace UI_System.Dialogue_UI_System.Main
                 {
                     throw new InvalidOperationException(nameof(continueButton));
                 }
+
+                if (skipButton is null)
+                {
+                    throw new InvalidOperationException(nameof(skipButton));
+                }
             #endregion
             
             #region 初始化按鈕狀態
@@ -70,6 +78,7 @@ namespace UI_System.Dialogue_UI_System.Main
             #endregion
 
             continueButton.OnClick += OnClickContinueButton;
+            skipButton.OnClick += OnClickSkipButton;
         }
 
         private void OnDisable()
@@ -84,6 +93,7 @@ namespace UI_System.Dialogue_UI_System.Main
         private void OnDestroy()
         {
             continueButton.OnClick -= OnClickContinueButton;
+            skipButton.OnClick -= OnClickSkipButton;
         }
 
         public void StartDialogue(DialogueSO dialogueData)
@@ -285,6 +295,39 @@ namespace UI_System.Dialogue_UI_System.Main
         {
             continueButton.SetInteractable(false);
             _continueDialogue = true;
+        }
+
+        private void OnClickSkipButton()
+        {
+            MessageUISystem.ShowDialogueSkipUI(
+                content: new PopUpUIContent(
+                    message: _dialogueData.SkipMessage,
+                    confirmButtonTitle: "跳過劇情",
+                    cancelButtonTitle: "繼續觀看",
+                    closeButtonTitle: string.Empty),
+                onConfirm: () =>
+                {
+                    foreach (var dialogueDataEntry in _dialogueData.DialogueDataEntries)
+                    {
+                        foreach (var dialogueData in dialogueDataEntry.DialogueData)
+                        {
+                            if (dialogueData is not ChangeScene changeSceneData)
+                            {
+                                continue;
+                            }
+
+                            if (OnChangeScene is null)
+                            {
+                                throw new InvalidOperationException($"{nameof(OnChangeScene)} 沒有 class 訂閱。");
+                            }
+                            
+                            SceneNameDatabase.GetSceneName(changeSceneData.SceneNameType, out var sceneNameData);
+                            
+                            OnChangeScene.Invoke(sceneNameData, changeSceneData.SceneStarterData);
+                            return;
+                        }
+                    }
+                });
         }
     }
 }

@@ -48,41 +48,50 @@ namespace UI_System.Player_UI_System.Main
         private void OnEnable()
         {
             #region 從本地獲取玩家的物品
-                var data = PlayerInventorySaver.LoadInventoryFromLocal();
-                
-                #region 載入快捷欄的物品
-                    var hotbarSlots = _hotbarUISystem.GetHotbarSlots();
+                if (PlayerInventorySaver.LoadInventoryFromLocal(out var saveData))
+                {
+                    Debug.Log("成功從本地獲取玩家物品庫資料。");
+                    
+                    #region 載入快捷欄的物品
+                        var hotbarSlots = _hotbarUISystem.GetHotbarSlots();
 
-                    for (var i = 0; i < data.HotbarSlots.Count; i++)
-                    {
-                        var slotData = data.HotbarSlots[i];
-                        var item = ItemDatabase.GetItem(slotData.ItemId);
-
-                        if (item is null)
+                        for (var i = 0; i < saveData.HotbarSlots.Count; i++)
                         {
-                            continue;
-                        }
-                                                
-                        hotbarSlots[i].AddItem(item);
-                    }
-                #endregion
-                                    
-                #region 載入背包的物品
-                    var backpackSlots = _backpackUISystem.GetBackpackSlots();
+                            var slotData = saveData.HotbarSlots[i];
+                            var item = ItemDatabase.GetItem(slotData.ItemId);
 
-                    for (var i = 0; i < data.BackpackSlots.Count; i++)
-                    {
-                        var slotData = data.BackpackSlots[i];
-                        var item = ItemDatabase.GetItem(slotData.ItemId);
-                                                
-                        if (item is null)
-                        {
-                            continue;
+                            if (item is null)
+                            {
+                                continue;
+                            }
+                                                    
+                            hotbarSlots[i].AddItem(item);
                         }
-                                                
-                        backpackSlots[i].AddItem(item);
-                    }
-                #endregion
+                    #endregion
+                                        
+                    #region 載入背包的物品
+                        var backpackSlots = _backpackUISystem.GetBackpackSlots();
+
+                        for (var i = 0; i < saveData.BackpackSlots.Count; i++)
+                        {
+                            var slotData = saveData.BackpackSlots[i];
+                            var item = ItemDatabase.GetItem(slotData.ItemId);
+                                                    
+                            if (item is null)
+                            {
+                                continue;
+                            }
+                                                    
+                            backpackSlots[i].AddItem(item);
+                        }
+                    #endregion
+                    
+                    Debug.Log("已更新到快捷欄與背包。");
+                }
+                else
+                {
+                    Debug.Log("無法從本地獲取玩家物品資料庫。");
+                }
             #endregion
         }
 
@@ -96,35 +105,39 @@ namespace UI_System.Player_UI_System.Main
                 };
                     
                 #region 快捷欄
-                var hotbarSlots = _hotbarUISystem.GetHotbarSlots();
-                        
-                for (var i = 0; i < hotbarSlots.Count; i++)
-                {
-                    var item = hotbarSlots[i].Item;
-
-                    saveData.HotbarSlots.Add(new InventorySaveDataEntry
+                    var hotbarSlots = _hotbarUISystem.GetHotbarSlots();
+                            
+                    for (var i = 0; i < hotbarSlots.Count; i++)
                     {
-                        ItemId = item?.ItemID ?? 0
-                    });
-                }
+                        var item = hotbarSlots[i].Item;
+
+                        saveData.HotbarSlots.Add(new InventorySaveDataEntry
+                        {
+                            HaveItem = item is not null,
+                            ItemId = item?.ItemID ?? 0
+                        });
+                    }
                 #endregion
                     
                 #region 背包
-                var backpackSlots = _backpackUISystem.GetBackpackSlots();
-                            
-                for (var i = 0; i < backpackSlots.Count; i++)
-                {
-                    var item = backpackSlots[i].Item;
-
-                    saveData.BackpackSlots.Add(new InventorySaveDataEntry
+                    var backpackSlots = _backpackUISystem.GetBackpackSlots();
+                                
+                    for (var i = 0; i < backpackSlots.Count; i++)
                     {
-                        ItemId = item?.ItemID ?? 0
-                    });
-                }
+                        var item = backpackSlots[i].Item;
+
+                        saveData.BackpackSlots.Add(new InventorySaveDataEntry
+                        {
+                            HaveItem = item is not null,
+                            ItemId = item?.ItemID ?? 0
+                        });
+                    }
                 #endregion
-                    
+                
                 PlayerInventorySaver.SaveInventoryToLocal(saveData);
-            #endregion
+                Debug.Log("成功把玩家的物品給儲存到本地。");
+
+                #endregion
         }
 
         #region 玩家控制

@@ -2,13 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Common.Data_Saver.Player_Inventory_Saver.Main;
 using Common.Database;
 using Common.Enemy_Battle_Group;
 using Common.Player.Child.Player_Team;
 using Common.Scene_Name;
-using Common.Scene_Starter;
 using Common.Value;
 using Common.Value.Type;
+using Explore_System.System.Child.Battle_System.Object;
 using Explore_System.System.Child.Battle_System.System.Child;
 using Explore_System.System.Child.Battle_System.System.Child.Selected_Card_System.Main;
 using Explore_System.System.Child.Battle_System.System.Main.State_Machine;
@@ -18,9 +19,9 @@ using UnityEngine;
 
 namespace Explore_System.System.Child.Battle_System.System.Main
 {
-    public sealed class BattleSystem : SceneStarter
+    public sealed class BattleSystem : MonoBehaviour
     {
-        [field: Header("Systems")]
+        [field: Header("子系統")]
         [field: SerializeField] private SelectedCardSystem selectedCardSystem;
         [field: SerializeField] private CardPoolSystem cardPoolSystem;
         [field: SerializeField] private ShowCardSystem showCardSystem;
@@ -29,68 +30,74 @@ namespace Explore_System.System.Child.Battle_System.System.Main
         [field: SerializeField] private PlayerTeamSystem playerTeamSystem;
         [field: SerializeField] private EnemyTeamSystem enemyTeamSystem;
         
-        [field: Header("Data")]
+        [field: Header("資料")]
         [field: SerializeField] private PlayerTeamSO playerTeamData;
+        
+        [field: Header("敵人位置")]
+        [field: SerializeField] private BattleEnemySlot[] enemySlots;
         
         private readonly StateMachine _stateMachine = new();
         
         // TODO 改成誰先被打到誰就先行動
         private const TossResult _tossResult = TossResult.Tails;
-
+        
         private IEnumerator _turnCoroutine;
         private IEnumerator _attackCoroutine;
         private IEnumerator _characterDeathCoroutine;
         private IEnumerator _drawCardAndShowCardCoroutine;
-
+        
         private bool _isStarted;
         private bool _isEnd;
-
+        
         private EnemyBattleGroupSO _enemyBattleGroupData;
-
+        
+        // TODO 玩家打贏後，要把戰利品給玩家
         public static event Action OnClickPlayerWinConfirmButton;
         public static event Action<SceneNameSO> OnClickEnemyWinConfirmButton;
         
         private void Awake()
         {
-            if (selectedCardSystem is null)
-            {
-                throw new InvalidOperationException(nameof(selectedCardSystem));
-            }
-            
-            if (cardPoolSystem is null)
-            {
-                throw new InvalidOperationException(nameof(cardPoolSystem));
-            }
+            #region 必要條件檢查
+                if (selectedCardSystem is null)
+                {
+                    throw new InvalidOperationException(nameof(selectedCardSystem));
+                }
+                
+                if (cardPoolSystem is null)
+                {
+                    throw new InvalidOperationException(nameof(cardPoolSystem));
+                }
 
-            if (showCardSystem is null)
-            {
-                throw new InvalidOperationException(nameof(showCardSystem));
-            }
-            
-            if (handCardSystem is null)
-            {
-                throw new InvalidOperationException(nameof(handCardSystem));
-            }
-            
-            if (useCardSystem is null)
-            {
-                throw new InvalidOperationException(nameof(useCardSystem));
-            }
-            
-            if (playerTeamSystem is null)
-            {
-                throw new InvalidOperationException(nameof(playerTeamSystem));
-            }
+                if (showCardSystem is null)
+                {
+                    throw new InvalidOperationException(nameof(showCardSystem));
+                }
+                
+                if (handCardSystem is null)
+                {
+                    throw new InvalidOperationException(nameof(handCardSystem));
+                }
+                
+                if (useCardSystem is null)
+                {
+                    throw new InvalidOperationException(nameof(useCardSystem));
+                }
+                
+                if (playerTeamSystem is null)
+                {
+                    throw new InvalidOperationException(nameof(playerTeamSystem));
+                }
 
-            if (playerTeamData is null)
-            {
-                throw new InvalidOperationException(nameof(playerTeamData));
-            }
+                if (enemyTeamSystem is null)
+                {
+                    throw new InvalidOperationException(nameof(enemyTeamSystem));
+                }
 
-            if (enemyTeamSystem is null)
-            {
-                throw new InvalidOperationException(nameof(enemyTeamSystem));
-            }
+                if (playerTeamData is null)
+                {
+                    throw new InvalidOperationException(nameof(playerTeamData));
+                }
+            #endregion
 
             PlayerTeamSystem.RecycleCard += OnRecycleCard;
         }
@@ -114,30 +121,65 @@ namespace Explore_System.System.Child.Battle_System.System.Main
                 StopCoroutine(_characterDeathCoroutine);
                 _characterDeathCoroutine = null;
             }
+            
+            if (_drawCardAndShowCardCoroutine is not null)
+            {
+                StopCoroutine(_drawCardAndShowCardCoroutine);
+                _drawCardAndShowCardCoroutine = null;
+            }
         }
 
         private void OnDestroy()
         {
             PlayerTeamSystem.RecycleCard -= OnRecycleCard;
         }
-
-        // Note: entry 一定不為 null，所以檢測裡面的參數，詳情請點開 class 查看。
-        public override void StartSystem(SceneStarterData starterData, Action onComplete)
+        
+        public void StartSystem(EnemyBattleGroupSO enemyBattleGroupData, Action onComplete)
         {
             #region 必要條件檢查
                 if (_isStarted)
                 {
                     throw new InvalidOperationException(nameof(_isStarted));
                 }
-
-                if (starterData is not EnemyBattleGroupSO data)
-                {
-                    throw new ArgumentException($"{nameof(data)} is not {nameof(EnemyBattleGroupSO)}");
-                }
             #endregion
 
             #region 參數附值
-                _enemyBattleGroupData = data;
+                _enemyBattleGroupData = enemyBattleGroupData;
+            #endregion
+
+            #region 生成敵人
+                foreach (var enemyObject in _enemyBattleGroupData.EnemyObjects)
+                {
+                    #region 必要條件檢查
+                        if (enemyObject is null)
+                        {
+                            continue;
+                        }
+                    #endregion
+                    
+                    var complete = false;
+
+                    foreach (var enemySlot in enemySlots)
+                    {
+                        if (enemySlot.SetEnemy(enemyObject))
+                        {
+                            complete = true;
+                            break;
+                        }
+                    }
+
+                    if (complete)
+                    {
+                        continue;
+                    }
+                    
+                    Debug.Log("敵人太多了，沒有足夠的格子可供後續的敵人生成。");
+                    break;
+                }
+            #endregion
+
+            #region 返回系統準備完畢
+                onComplete.Invoke();
             #endregion
 
             #region 進入開始戰鬥狀態
@@ -235,6 +277,10 @@ namespace Explore_System.System.Child.Battle_System.System.Main
             #region OnBattleStart
                 private void OnBattleStart()
                 {
+                    #region 設定系統狀態
+                        _isStarted = true;
+                    #endregion
+                    
                     _stateMachine.ChangeState(new OnBattleStart(
                         onEnter: () =>
                         {
@@ -398,11 +444,15 @@ namespace Explore_System.System.Child.Battle_System.System.Main
                             enemyTeamSystem.Attack(
                                 haveCharacterAlive: () =>
                                 {
-                                    haveCharacterAlive?.Invoke();
+                                    Debug.Log("敵人攻擊結束，還有角色存活。");
+                                    
+                                    haveCharacterAlive.Invoke();
                                 },
                                 characterAllDead: () =>
                                 {
-                                    characterAllDead?.Invoke();
+                                    Debug.Log("敵人攻擊結束，所有角色已被打敗。");
+                                    
+                                    characterAllDead.Invoke();
                                 });
                         },
                         onExit: () =>
@@ -415,12 +465,18 @@ namespace Explore_System.System.Child.Battle_System.System.Main
             #region OnPlayerWin
                 private void OnPlayerWin()
                 {
-                    if (_turnCoroutine is not null)
-                    {
-                        StopCoroutine(_turnCoroutine);
-                        _turnCoroutine = null;
-                    }
-
+                    #region 清除資料
+                        if (_turnCoroutine is not null)
+                        {
+                            StopCoroutine(_turnCoroutine);
+                            _turnCoroutine = null;
+                        }
+                    #endregion
+                    
+                    #region 儲存資料
+                        playerTeamSystem.SaveData();
+                    #endregion
+                    
                     _stateMachine.ChangeState(new OnPlayerWin(
                         onEnter: () =>
                         {
@@ -438,7 +494,9 @@ namespace Explore_System.System.Child.Battle_System.System.Main
                                     {
                                         throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(OnClickPlayerWinConfirmButton)} has no subscriber.");
                                     }
-
+                                    
+                                    PlayerInventorySaver.AddItemToInventory(_enemyBattleGroupData.LootsData);
+                                    
                                     OnClickPlayerWinConfirmButton.Invoke();
                                 });
                         },
@@ -451,11 +509,13 @@ namespace Explore_System.System.Child.Battle_System.System.Main
             #region OnEnemyWin
                 private void OnEnemyWin()
                 {
-                    if (_turnCoroutine is not null)
-                    {
-                        StopCoroutine(_turnCoroutine);
-                        _turnCoroutine = null;
-                    }
+                    #region 清除資料
+                        if (_turnCoroutine is not null)
+                        {
+                            StopCoroutine(_turnCoroutine);
+                            _turnCoroutine = null;
+                        }
+                    #endregion
                     
                     _stateMachine.ChangeState(new OnEnemyWin(
                         onEnter: () =>

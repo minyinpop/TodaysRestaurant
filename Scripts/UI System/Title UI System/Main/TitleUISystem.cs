@@ -1,5 +1,6 @@
 using System;
 using Common.Button;
+using Common.Data_Saver.Player_Inventory_Saver.Main;
 using Common.Database;
 using Common.Dialogue.Data;
 using Common.Dialogue.Main;
@@ -105,6 +106,10 @@ namespace UI_System.Title_UI_System.Main
                 CharacterDatabase.Initialize();
                 DialogueDatabase.Initialize();
                 SceneNameDatabase.Initialize();
+            #endregion
+
+            #region 初始化玩家物品資料
+                PlayerInventorySaver.InitializeInventoryToLocal();
             #endregion
             
             if (isNewAccount)

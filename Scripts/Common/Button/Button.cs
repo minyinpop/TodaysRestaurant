@@ -26,6 +26,17 @@ namespace Common.Button
 
         public event Action OnClick;
 
+        /* 2026.04.06 會跳 ERROR
+        private void OnDisable()
+        {
+            if (Rect is not null)
+            {
+                OnPointerExitScale.GetValues(out var endValue, out _, out _);
+                Rect.localScale = endValue;
+            }
+        }
+        */
+
         public void SetInteractable(bool interactable)
         {
             Interactable = interactable;

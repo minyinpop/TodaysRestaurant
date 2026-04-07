@@ -59,8 +59,6 @@ namespace UI_System.Message_UI_System.Child.Item_Get_UI_System.Object.Main
 
         private void OnEnable()
         {
-            Debug.Log($"啟用 {name}");
-            
             messageTMP.SetText(string.Empty);
             confirmButton.SetInteractable(false);
             confirmButton.gameObject.SetActive(false);

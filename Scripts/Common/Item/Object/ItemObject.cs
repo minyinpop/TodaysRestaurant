@@ -1,3 +1,4 @@
+using System;
 using Common.Interactable_Object;
 using Common.Item.Data;
 using Player_System.Object;
@@ -9,6 +10,8 @@ namespace Common.Item.Object
     {
         [field: Header("Data")]
         [field: SerializeField] private ItemSO itemData;
+
+        public static event Action OnTake;
 
         private void Awake()
         {
@@ -31,6 +34,8 @@ namespace Common.Item.Object
         {
             if (playerObject.TryAddItem(itemData))
             {
+                OnTake?.Invoke();
+                
                 Destroy(gameObject);
                 return true;
             }

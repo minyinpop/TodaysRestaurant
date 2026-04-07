@@ -69,7 +69,7 @@ namespace Explore_System.System.Child.Battle_System.Object.Creature.Character
             void OnComplete(TrackEntry entry)
             {
                 CurrentEntry.Complete -= OnComplete;
-                onComplete?.Invoke();
+                onComplete.Invoke();
             }
         }
         
@@ -81,7 +81,7 @@ namespace Explore_System.System.Child.Battle_System.Object.Creature.Character
             
             IEnumerator DeadCoroutine()
             {
-                onComplete?.Invoke();
+                onComplete.Invoke();
                 DeadAnima.GetValues(out var animas);
                 var complete = false;
                 foreach (var anima in animas)

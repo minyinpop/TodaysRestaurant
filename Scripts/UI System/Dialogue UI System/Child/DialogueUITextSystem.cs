@@ -71,15 +71,20 @@ namespace UI_System.Dialogue_UI_System.Child
             #endregion
             
             #region 設定角色名稱
-                if (dialogueData.CharacterType == DialogueCharacterType.Narrator)
+                switch (dialogueData.CharacterType)
                 {
-                    characterNamePanel.SetActive(false);
-                    characterName.text = string.Empty;
-                }
-                else
-                {
-                    characterNamePanel.SetActive(true);
-                    characterName.text = dialogueData.CharacterType.ToString();
+                    case DialogueCharacterType.Narrator:
+                    {
+                        characterNamePanel.SetActive(false);
+                        characterName.text = string.Empty;
+                        break;
+                    }
+                    case DialogueCharacterType.Bernard:
+                    {
+                        characterNamePanel.SetActive(true);
+                        characterName.text = "伯";
+                        break;
+                    }
                 }
             #endregion
             

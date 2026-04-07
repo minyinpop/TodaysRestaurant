@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Common.Item.Data;
 using Common.Value;
 using UI_System.Message_UI_System.Child.Defeat_UI_System.System;
+using UI_System.Message_UI_System.Child.Dialogue_Skip_UI_System.System;
 using UI_System.Message_UI_System.Child.Item_Get_UI_System.System;
 using UI_System.Message_UI_System.Child.Switch_UI_System.System;
 using UI_System.Message_UI_System.Child.Tip_UI_System.System;
@@ -21,6 +22,8 @@ namespace UI_System.Message_UI_System.Main
                                 private static ItemGetUISystem _itemGetUISystem;
         [field: SerializeField] private Transform defeatUISystemParent;
                                 private static DefeatUISystem _defeatUISystem;
+        [field: SerializeField] private Transform dialogueSkipUISystemParent;
+                                private static DialogueSkipUISystem _dialogueSkipUISystem;
 
         private void Awake()
         {
@@ -86,6 +89,21 @@ namespace UI_System.Message_UI_System.Main
                     Destroy(gameObject);
                 }
             #endregion
+
+            #region 劇情概要 UI
+                if (dialogueSkipUISystemParent is null)
+                {
+                    Debug.Log($"{name} > {GetType().Name} > {nameof(dialogueSkipUISystemParent)} cannot be null.)");
+                    Destroy(gameObject);
+                    return;
+                }
+                            
+                if (!dialogueSkipUISystemParent.TryGetComponent(out _dialogueSkipUISystem))
+                {
+                    Debug.Log($"{name} > {GetType().Name} > {nameof(dialogueSkipUISystemParent)} cannot get {nameof(_dialogueSkipUISystem.GetType)}.");
+                    Destroy(gameObject);
+                }
+            #endregion
         }
         
         public static void ShowTipUI(PopUpUIContent content, Action onConfirm = null)
@@ -106,6 +124,11 @@ namespace UI_System.Message_UI_System.Main
         public static void ShowDefeatUI(PopUpUIContent content, Action onConfirm)
         {
             _defeatUISystem.ShowUI(content, onConfirm);
+        }
+
+        public static void ShowDialogueSkipUI(PopUpUIContent content, Action onConfirm, Action onCancel = null)
+        {
+            _dialogueSkipUISystem.ShowUI(content, onConfirm, onCancel);
         }
     }
 }

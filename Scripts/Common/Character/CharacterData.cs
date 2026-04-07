@@ -1,12 +1,13 @@
 using System;
 using Common.Value.Type;
+using UnityEngine;
 
 namespace Common.Character
 {
     [Serializable]
     public sealed class CharacterData
     {
-        public string CharacterName { get; }
+        public CharacterType CharacterType { get; }
 
         public int Health { get; private set; }
 
@@ -14,9 +15,9 @@ namespace Common.Character
         
         public CardType[] CardTypes { get; }
 
-        public CharacterData(string characterName, int health, float moveSpeed, CardType[] cardTypes)
+        public CharacterData(CharacterType characterType, int health, float moveSpeed, CardType[] cardTypes)
         {
-            CharacterName = characterName;
+            CharacterType = characterType;
             Health = health;
             MoveSpeed = moveSpeed;
             CardTypes = cardTypes;
@@ -30,13 +31,19 @@ namespace Common.Character
             }
 
             Health = Math.Max(Health - damage, 0);
+            
+            Debug.Log($"{CharacterType.ToString()} 受到了 {damage} 點傷害，當前血量為 {Health}。");
 
             if (Health > 0)
             {
+                Debug.Log($"{CharacterType.ToString()} 還存活著。");
+                
                 alive.Invoke();
             }
             else
             {
+                Debug.Log($"{CharacterType.ToString()} 已經死亡。");
+                
                 dead.Invoke();
             }
         }

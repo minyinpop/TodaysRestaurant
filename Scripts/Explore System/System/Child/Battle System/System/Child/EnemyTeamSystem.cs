@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Common.Value.Type;
+using Explore_System.System.Child.Battle_System.Object;
 using Explore_System.System.Child.Battle_System.Object.Card;
 using Explore_System.System.Child.Battle_System.Object.Creature.Character;
 using Explore_System.System.Child.Battle_System.Object.Creature.Enemy;
@@ -12,81 +13,116 @@ namespace Explore_System.System.Child.Battle_System.System.Child
 {
     internal sealed class EnemyTeamSystem : MonoBehaviour
     {
-        [field: Header("Object")]
-        [field: SerializeField] private List<Enemy> AliveEnemies;
+        [field: Header("敵人位置")]
+        [field: SerializeField] private BattleEnemySlot[] battleEnemySlots;
 
-        private IEnumerator CurrentCor;
-        
-        private void OnEnable()
+        private IEnumerator _coroutine;
+
+        private void Awake()
         {
             Character.OnAttack += Hurt;
         }
 
         private void OnDisable()
         {
-            Character.OnAttack -= Hurt;
-            if (CurrentCor is not null)
+            if (_coroutine is not null)
             {
-                StopCoroutine(CurrentCor);
-                CurrentCor = null;
+                StopCoroutine(_coroutine);
+                _coroutine = null;
             }
+        }
+
+        private void OnDestroy()
+        {
+            Character.OnAttack -= Hurt;
         }
 
         #region Attack
             public void Attack(Action haveCharacterAlive, Action characterAllDead)
             {
-                if (CurrentCor is not null)
-                {
-                    StopCoroutine(CurrentCor);
-                    CurrentCor = null;
-                }
+                #region 必要條件檢查
+                    if (_coroutine is not null)
+                    {
+                        StopCoroutine(_coroutine);
+                        _coroutine = null;
+                    }
+                #endregion
 
-                CurrentCor = AttackCoroutine(haveCharacterAlive, characterAllDead);
-                StartCoroutine(CurrentCor);
+                _coroutine = AttackCoroutine(haveCharacterAlive, characterAllDead);
+                StartCoroutine(_coroutine);
             }
 
             private IEnumerator AttackCoroutine(Action haveCharacterAlive, Action characterAllDead)
             {
-                var enemies = AliveEnemies.ToList();
-                for (var i = enemies.Count; i > 0; i--)
-                {
-                    var enemy = enemies.OrderBy(_ => UnityEngine.Random.value).First();
-                    var attackComplete = false;
-                    enemies.Remove(enemy);
-                    enemy.Attack(
-                        haveCharacterAlive: () =>
-                        {
-                            if (enemies.Any())
-                                attackComplete = true;
-                            else
+                var completes = new Dictionary<BattleEnemyObject, bool>();
+                
+                #region 獲取活著並且可以戰鬥的敵人
+                    foreach (var enemySlot in battleEnemySlots)
+                    {
+                        var enemyObject = enemySlot.battleEnemyObject;
+
+                        #region 條件檢查
+                            if (enemyObject is null)
                             {
-                                StopCoroutine(CurrentCor);
-                                CurrentCor = null;
-                                haveCharacterAlive?.Invoke();
+                                continue;
                             }
-                        },
-                        characterAllDead: () =>
-                        {
-                            StopCoroutine(CurrentCor);
-                            CurrentCor = null;
-                            characterAllDead?.Invoke();
-                        });
-                    yield return new WaitUntil(() => attackComplete);
-                }
+
+                            if (enemyObject.death)
+                            {
+                                continue;
+                            }
+                        #endregion
+                        
+                        completes.Add(enemyObject, false);
+                    }
+                #endregion
+                
+                #region 執行敵人的邏輯
+                    foreach (var enemyObject in completes.Keys.ToArray())
+                    {
+                        var onThisEnemyAttackComplete = false;
+                        
+                        #region 敵人攻擊
+                            enemyObject.Attack(
+                                haveCharacterAlive: () =>
+                                {
+                                    onThisEnemyAttackComplete = true;
+                                    completes[enemyObject] = true;
+                                },
+                                characterAllDead: () =>
+                                {
+                                    #region 終止異步協程
+                                        StopCoroutine(_coroutine);
+                                        _coroutine = null;
+                                    #endregion
+                                    
+                                    characterAllDead.Invoke();
+                                });
+                        #endregion
+
+                        yield return new WaitUntil(() => onThisEnemyAttackComplete);
+                    }
+                #endregion
+                
+                #region 敵人回合結束
+                    yield return new WaitUntil(() => completes.All(c => c.Value));
+                    
+                    haveCharacterAlive.Invoke();
+                #endregion
             }
         #endregion
 
         #region Hurt
             private void Hurt(ICard card, Action haveEnemyAlive, Action enemyAllDead)
             {
-                if (CurrentCor is not null)
+                if (_coroutine is not null)
                 {
-                    StopCoroutine(CurrentCor);
-                    CurrentCor = null;
+                    StopCoroutine(_coroutine);
+                    _coroutine = null;
                 }
 
-                CurrentCor = HurtCoroutine(card, haveEnemyAlive, enemyAllDead);
-                StartCoroutine(CurrentCor);
+                _coroutine = HurtCoroutine(card, haveEnemyAlive, enemyAllDead);
+                StartCoroutine(_coroutine);
             }
 
             private IEnumerator HurtCoroutine(ICard card, Action haveEnemyAlive, Action enemyAllDead)
@@ -97,55 +133,125 @@ namespace Explore_System.System.Child.Battle_System.System.Child
                 {
                     case AttackType.Single:
                     {
-                        var enemy = AliveEnemies[0];
-                        enemy.Hurt(damage.BasicDamage,
-                            isAlive: () =>
-                            {
-                                haveEnemyAlive?.Invoke();
-                            },
-                            isDeath: () =>
-                            {
-                                AliveEnemies.Remove(enemy);
-                                if (AliveEnemies.Any())
-                                    haveEnemyAlive?.Invoke();
-                                else
-                                    enemyAllDead?.Invoke();
-                            });
+                        foreach (var enemySlot in battleEnemySlots)
+                        {
+                            #region 檢查這個位置是否有敵人
+                                if (enemySlot.battleEnemyObject is null)
+                                {
+                                    continue;
+                                }
+                            #endregion
+                
+                            #region 檢查這個位置的敵人是否活著
+                                if (enemySlot.battleEnemyObject.death)
+                                {
+                                    continue;
+                                }
+                            #endregion
+                            
+                            var enemyObject = enemySlot.battleEnemyObject;
+                            
+                            enemyObject.Hurt(damage.BasicDamage,
+                                isAlive: () =>
+                                {
+                                    haveEnemyAlive.Invoke();
+                                },
+                                isDeath: () =>
+                                {
+                                    if (IsAnyEnemyAlive())
+                                    {
+                                        haveEnemyAlive.Invoke();
+                                    }
+                                    else
+                                    {
+                                        enemyAllDead.Invoke();
+                                    }
+                                });
+                            
+                            break;
+                        }
+                        
                         break;
                     }
                     case AttackType.All:
                     {
-                        var isAnyEnemyAlive = false;
-                        var completes = new List<bool>();
-                        for (var i = 0; i < AliveEnemies.Count; i++)
+                        var completes = new Dictionary<BattleEnemyObject, bool>();
+                        
+                        foreach (var enemySlot in battleEnemySlots)
                         {
-                            var index = i;
-                            var enemy = AliveEnemies[index];
-                            completes.Add(false);
-                            enemy.Hurt(damage.BasicDamage,
+                            #region 檢查這個位置是否有敵人
+                                if (enemySlot.battleEnemyObject is null)
+                                {
+                                    continue;
+                                }
+                            #endregion
+
+                            #region 檢查這個位置的敵人是否活著
+                                if (enemySlot.battleEnemyObject.death)
+                                {
+                                    continue;
+                                }
+                            #endregion
+                            
+                            var enemyObject = enemySlot.battleEnemyObject;
+                            
+                            completes.Add(enemyObject, false);
+                            
+                            enemyObject.Hurt(damage.BasicDamage,
                                 isAlive: () =>
                                 {
-                                    isAnyEnemyAlive = true;
-                                    completes[index] = true;
+                                    completes[enemyObject] = true;
                                 },
                                 isDeath: () =>
                                 {
-                                    AliveEnemies.Remove(enemy);
-                                    completes[index] = true;
+                                    completes[enemyObject] = true;
                                 });
                         }
                         
-                        yield return new WaitUntil(() => completes.All(c => c));
-                        if (isAnyEnemyAlive)
-                            haveEnemyAlive?.Invoke();
+                        yield return new WaitUntil(() => completes.All(c => c.Value));
+                        
+                        if (IsAnyEnemyAlive())
+                        {
+                            haveEnemyAlive.Invoke();
+                        }
                         else
-                            enemyAllDead?.Invoke();
+                        {
+                            enemyAllDead.Invoke();
+                        }
+                        
                         break;
                     }
                 }
                 
-                CurrentCor = null;
+                _coroutine = null;
             }
         #endregion
+
+        private bool IsAnyEnemyAlive()
+        {
+            var isAnyAlive = false;
+            
+            foreach (var enemySlot in battleEnemySlots)
+            {
+                #region 檢查這個位置是否有敵人
+                    if (enemySlot.battleEnemyObject is null)
+                    {
+                        continue;
+                    }
+                #endregion
+                
+                #region 檢查這個位置的敵人是否活著
+                    if (enemySlot.battleEnemyObject.death)
+                    {
+                        continue;
+                    }
+                #endregion
+
+                isAnyAlive = true;
+                break;
+            }
+
+            return isAnyAlive;
+        }
     }
 }

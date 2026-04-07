@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Animation_System.Spine;
+using Common.Data_Saver.Player_Character_Saver.Child;
+using Common.Data_Saver.Player_Character_Saver.Main;
 using Common.Value;
 using Common.Value.Type;
 using Explore_System.System.Child.Battle_System.Object.Card;
@@ -16,9 +18,9 @@ namespace Explore_System.System.Child.Battle_System.System.Child
     internal sealed class PlayerTeamSystem : MonoBehaviour
     {
         [field: Header("Character")]
-        [field: SerializeField] private Character Bernard;
-        [field: SerializeField] private Character Ray;
-        [field: SerializeField] private Character Muu;
+        [field: SerializeField] private Character bernard;
+        [field: SerializeField] private Character ray;
+        [field: SerializeField] private Character muu;
 
         public /*readonly*/ List<Character> AliveCharacters = new();
         
@@ -29,7 +31,7 @@ namespace Explore_System.System.Child.Battle_System.System.Child
         private void Awake()
         {
             BattleCard.OnUse += Attack;
-            Enemy.OnAttack += Hurt;
+            BattleEnemyObject.OnAttack += Hurt;
         }
         
         private void OnDisable()
@@ -44,7 +46,7 @@ namespace Explore_System.System.Child.Battle_System.System.Child
         private void OnDestroy()
         {
             BattleCard.OnUse -= Attack;
-            Enemy.OnAttack -= Hurt;
+            BattleEnemyObject.OnAttack -= Hurt;
         }
         
         #region Attack
@@ -55,12 +57,12 @@ namespace Explore_System.System.Child.Battle_System.System.Child
                 {
                     case CardType.BattleCard_Fork:
                     {
-                        Bernard.Attack(card, anima, haveEnemyAlive, enemyAllDead);
+                        bernard.Attack(card, anima, haveEnemyAlive, enemyAllDead);
                         break;
                     }
                     case CardType.BattleCard_Spoon:
                     {
-                        Ray.Attack(card, anima, haveEnemyAlive, enemyAllDead);
+                        ray.Attack(card, anima, haveEnemyAlive, enemyAllDead);
                         break;
                     }
                 }
@@ -92,7 +94,6 @@ namespace Explore_System.System.Child.Battle_System.System.Child
                                     RecycleCard?.Invoke(character.CharacterData.CardTypes,
                                         () =>
                                         {
-                                            // onComplete
                                             if (AliveCharacters.Any())
                                                 haveCharacterAlive?.Invoke();
                                             else
@@ -151,5 +152,16 @@ namespace Explore_System.System.Child.Battle_System.System.Child
                 }
             }
         #endregion
+
+        public void SaveData()
+        {
+            #region 儲存資料
+            var saveData = new CharacterSaveData(
+                characterType: bernard.CharacterData.CharacterType,
+                health: bernard.CharacterData.Health);
+            
+            PlayerCharacterSaver.SaveCharacterToLocal(saveData);
+            #endregion
+        }
     }
 }

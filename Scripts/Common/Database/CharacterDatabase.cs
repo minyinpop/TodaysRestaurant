@@ -8,7 +8,7 @@ namespace Common.Database
 {
     public static class CharacterDatabase
     {
-        private static readonly Dictionary<string, CharacterSO> _characterDatabase = new();
+        private static readonly Dictionary<CharacterType, CharacterSO> _characterDatabase = new();
         
         private static bool _initialized;
         
@@ -29,11 +29,11 @@ namespace Common.Database
 
             foreach (var character in Resources.LoadAll<CharacterSO>(ResourcePath))
             {
-                _characterDatabase[character.name] = character;
+                _characterDatabase[character.CharacterType] = character;
             }
         }
         
-        public static bool GetCharacter(string characterName, out CharacterData characterData)
+        public static bool GetCharacter(CharacterType characterType, out CharacterData characterData)
         {
             #region 必要條件檢查
                 if (!_initialized)
@@ -43,12 +43,12 @@ namespace Common.Database
             #endregion
             
             #region 從角色資料庫獲取資料
-                if (_characterDatabase.TryGetValue(characterName, out var originalData))
+                if (_characterDatabase.TryGetValue(characterType, out var originalData))
                 {
-                    if (PlayerCharacterSaver.LoadCharacterFromLocal(characterName, out var saveData))
+                    if (PlayerCharacterSaver.LoadCharacterFromLocal(characterType, out var saveData))
                     {
                         characterData = new CharacterData(
-                                characterName: originalData.name,
+                                characterType: originalData.CharacterType,
                                 health: saveData.Health,
                                 moveSpeed: originalData.MoveSpeed,
                                 cardTypes: originalData.CardTypes);
@@ -56,7 +56,7 @@ namespace Common.Database
                     else
                     {
                         characterData = new CharacterData(
-                            characterName: originalData.name,
+                            characterType: originalData.CharacterType,
                             health: originalData.MaxHealth,
                             moveSpeed: originalData.MoveSpeed,
                             cardTypes: originalData.CardTypes);
@@ -65,8 +65,8 @@ namespace Common.Database
                     return true;
                 }
 
-                Debug.Log($"無法在角色資料庫中查到名為 {characterName} 的角色。");
-                throw new InvalidOperationException(characterName);
+                Debug.Log($"無法在角色資料庫中查到名為 {characterType.ToString()} 的角色。");
+                throw new InvalidOperationException(characterType.ToString());
             #endregion
         }
     }

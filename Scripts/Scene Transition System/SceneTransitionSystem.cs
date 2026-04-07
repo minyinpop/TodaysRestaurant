@@ -4,8 +4,10 @@ using Animation_System.DOTween;
 using Animation_System.DOTween.Basic;
 using Common.Scene_Name;
 using Common.Scene_Starter;
+using Compete_Only;
 using DG.Tweening;
 using Explore_System.System.Child.Battle_System.System.Main;
+using Explore_System.System.Main;
 using UI_System.Dialogue_UI_System.Main;
 using UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Select_UI.Main;
 using UI_System.Lobby_UI_System.Main;
@@ -71,6 +73,14 @@ namespace Scene_Transition_System
             #region 戰鬥場景訂閱
                 BattleSystem.OnClickEnemyWinConfirmButton += ChangeScene;
             #endregion
+            
+            #region 探索場景訂閱
+                ExploreSystem.OnLevelExplore += ChangeScene;
+            #endregion
+            
+            #region 比賽投稿用專用訂閱
+                MissionUI_DevelopOnly.ChangeScene_DevelopOnly += ChangeScene;
+            #endregion
         }
 
         private void OnDisable()
@@ -100,6 +110,14 @@ namespace Scene_Transition_System
             
             #region 戰鬥場景訂閱
                 BattleSystem.OnClickEnemyWinConfirmButton -= ChangeScene;
+            #endregion
+            
+            #region 探索場景訂閱
+                ExploreSystem.OnLevelExplore -= ChangeScene;
+            #endregion
+            
+            #region 比賽投稿用專用訂閱
+                MissionUI_DevelopOnly.ChangeScene_DevelopOnly -= ChangeScene;
             #endregion
         }
 

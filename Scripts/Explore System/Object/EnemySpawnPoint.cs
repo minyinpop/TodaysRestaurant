@@ -1,7 +1,6 @@
 using System;
 using Common.Enemy_Battle_Group;
 using Common.Enemy.Enemy_Object;
-using Common.Level.Child;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -9,7 +8,7 @@ namespace Explore_System.Object
 {
     public sealed class EnemySpawnPoint : MonoBehaviour
     {
-        private EnemyObject _currentEnemyObject;
+        public EnemyObject enemyObject { get; private set; }
 
         public void InitializeEnemy(EnemyObject enemyObject, EnemyBattleGroupSO enemyBattleGroupData)
         {
@@ -18,9 +17,9 @@ namespace Explore_System.Object
                 throw new ArgumentException(nameof(enemyObject));
             }
 
-            if (_currentEnemyObject is not null)
+            if (this.enemyObject is not null)
             {
-                throw new InvalidOperationException($"{nameof(_currentEnemyObject)} is not empty.");
+                throw new InvalidOperationException($"{nameof(this.enemyObject)} is not empty.");
             }
 
             if (NavMesh.SamplePosition(transform.position, out var hit, float.MaxValue, NavMesh.AllAreas))
@@ -30,8 +29,8 @@ namespace Explore_System.Object
                 var rotation = enemyObject.transform.rotation;
                 var parent = transform;
                 
-                _currentEnemyObject = Instantiate(prefab, position, rotation, parent).GetComponent<EnemyObject>();
-                _currentEnemyObject.Initialize(hit.position, enemyBattleGroupData);
+                this.enemyObject = Instantiate(prefab, position, rotation, parent).GetComponent<EnemyObject>();
+                this.enemyObject.Initialize(hit.position, enemyBattleGroupData);
             }
             else
             {

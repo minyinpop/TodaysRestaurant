@@ -4,6 +4,7 @@ using Common.Database;
 using Common.Enemy_Battle_Group;
 using Common.Enemy.Enemy_Object;
 using Common.Level.Main;
+using Common.Scene_Name;
 using Common.Scene_Starter;
 using Explore_System.System.Child;
 using Explore_System.System.Child.Battle_System.System.Main;
@@ -29,10 +30,14 @@ namespace Explore_System.System.Main
         private Scene _exploreScene;
         private Scene _battleScene;
 
+        private EnemySystem _enemySystem;
+
         private Action _onEnemyAttackCleanupAction;
         private Action _onExitBattleCleanupAction;
 
         private EnemyObject _attackingEnemy;
+
+        public static Action<SceneNameSO> OnLevelExplore;
 
         private void Awake()
         {
@@ -120,10 +125,10 @@ namespace Explore_System.System.Main
                     {
                         if (!canGetEnemySystem)
                         {
-                            if (rootObject.TryGetComponent<EnemySystem>(out var enemySystem))
+                            if (rootObject.TryGetComponent(out _enemySystem))
                             {
                                 canGetEnemySystem = true;
-                                enemySystem.InitializeEnemy(_levelData);
+                                _enemySystem.InitializeEnemy(_levelData);
                             }
                         }
 
@@ -212,16 +217,7 @@ namespace Explore_System.System.Main
                             yield return SceneManager.LoadSceneAsync(battleSceneName.SceneName, LoadSceneMode.Additive);
                         #endregion
                         
-                        complete = false;
-                        
-                        #region 淡出過場
-                            exploreUISystem.FadeOut(
-                                onComplete: () => complete = true);
-                            yield return new WaitUntil(() => complete);
-                        #endregion
-                        
                         #region 啟動戰鬥系統
-                            var isGetSceneStarter = false;
                             _battleScene = SceneManager.GetSceneByName(battleSceneName.SceneName);
                             
                             foreach (var rootObject in _battleScene.GetRootGameObjects())
@@ -229,24 +225,24 @@ namespace Explore_System.System.Main
                                 if (rootObject.TryGetComponent<BattleSystem>(out var battleSystem))
                                 {
                                     battleSystem.StartSystem(
-                                        starterData: enemyBattleGroupData,
+                                        enemyBattleGroupData: enemyBattleGroupData,
                                         onComplete: () =>
                                         {
-                                            isGetSceneStarter = true;
+                                            #region 清除戰鬥系統的暫存
+                                                _battleCoroutine = null;
+                                            #endregion
                                         });
                                     break;
                                 }
                             }
-
-                            if (!isGetSceneStarter)
-                            {
-                                Debug.Log($"{name} > {GetType().Name} > cannot find {nameof(BattleSystem)} in {nameof(rootObjects)}");
-                                Destroy(gameObject);
-                            }
                         #endregion
-
-                        #region 清除戰鬥系統的暫存
-                            _battleCoroutine = null;
+                        
+                        complete = false;
+                        
+                        #region 淡出過場
+                            exploreUISystem.FadeOut(
+                                onComplete: () => complete = true);
+                            yield return new WaitUntil(() => complete);
                         #endregion
                     }
                 }
@@ -257,7 +253,7 @@ namespace Explore_System.System.Main
                     {
                         throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(ExitBattle)} is already in exit battle state.");
                     }
-
+                    
                     _battleCoroutine = ExitBattleCoroutine();
                     StartCoroutine(_battleCoroutine);
                     return;
@@ -271,7 +267,7 @@ namespace Explore_System.System.Main
                                 onComplete: () => complete = true);
                             yield return new WaitUntil(() => complete);
                         #endregion
-
+                        
                         #region 啟用戰鬥前所關閉的 UI
                             PlayerUISystem.SetHotbarUI(true);
                             PlayerUISystem.SetBackpackUI(true);
@@ -299,6 +295,27 @@ namespace Explore_System.System.Main
                             exploreUISystem.FadeOut(
                                 onComplete: () => complete = true);
                             yield return new WaitUntil(() => complete);
+                        #endregion
+                        
+                        #region 確認是否還有敵人存活
+                            #region 必要狀態確認
+                                if (_enemySystem is null)
+                                {
+                                    throw new InvalidOperationException($"{nameof(_enemySystem)} 為 null。");
+                                }
+                                
+                                if (OnLevelExplore is null)
+                                {
+                                    throw new InvalidOperationException($"{nameof(OnLevelExplore)} 沒有 class 訂閱。");
+                                }
+                            #endregion
+                            
+                            if (!_enemySystem.IsAnyEnemyAlive())
+                            {
+                                SceneNameDatabase.GetSceneName(SceneNameType.Lobby_Scene, out var sceneNameData);
+                                OnLevelExplore.Invoke(sceneNameData);
+                                yield break;
+                            }
                         #endregion
                         
                         #region 清除戰鬥系統的暫存

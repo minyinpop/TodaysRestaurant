@@ -52,5 +52,18 @@ namespace Explore_System.System.Child
                 }
             }
         }
+
+        public bool IsAnyEnemyAlive()
+        {
+            foreach (var spawnPoint in enemySpawnPoints)
+            {
+                if (spawnPoint.enemyObject is not null)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 }

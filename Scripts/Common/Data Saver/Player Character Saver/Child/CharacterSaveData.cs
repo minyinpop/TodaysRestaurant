@@ -1,15 +1,17 @@
+using Common.Character;
+
 namespace Common.Data_Saver.Player_Character_Saver.Child
 {
     [System.Serializable]
     public sealed class CharacterSaveData
     {
-        public string CharacterName { get; }
+        public CharacterType CharacterType { get; }
         
         public int Health { get; }
 
-        public CharacterSaveData(string characterName, int health)
+        public CharacterSaveData(CharacterType characterType, int health)
         {
-            CharacterName = characterName;
+            CharacterType = characterType;
             Health = health;
         }
     }
