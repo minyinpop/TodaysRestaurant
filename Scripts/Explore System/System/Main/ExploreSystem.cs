@@ -225,7 +225,7 @@ namespace Explore_System.System.Main
                                 if (rootObject.TryGetComponent<BattleSystem>(out var battleSystem))
                                 {
                                     battleSystem.StartSystem(
-                                        enemyBattleGroupData: enemyBattleGroupData,
+                                        starterData: enemyBattleGroupData,
                                         onComplete: () =>
                                         {
                                             #region 清除戰鬥系統的暫存

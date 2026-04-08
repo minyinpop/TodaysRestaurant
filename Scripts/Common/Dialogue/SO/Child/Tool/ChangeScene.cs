@@ -3,7 +3,7 @@ using Common.Scene_Name;
 using Common.Scene_Starter;
 using UnityEngine;
 
-namespace Common.Dialogue.Child.Tool
+namespace Common.Dialogue.SO.Child.Tool
 {
     [CreateAssetMenu(menuName = "Minyinpop/Dialogue/Child/Tool/Change Scene", fileName = "New Data")]
     public sealed class ChangeScene : DialogueData

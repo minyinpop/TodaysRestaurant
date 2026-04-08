@@ -2,7 +2,7 @@ using Animation_System.DOTween.Basic;
 using Common.Dialogue.Data;
 using UnityEngine;
 
-namespace Common.Dialogue.Child.Background
+namespace Common.Dialogue.SO.Child.Background
 {
     [CreateAssetMenu(menuName = "Minyinpop/Dialogue/Child/Background/Hide Background", fileName = "New Data")]
     public sealed class HideBackground : DialogueData

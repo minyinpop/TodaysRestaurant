@@ -33,7 +33,7 @@ namespace Player_System.Object
                 if (_interactableObjects.Contains(detectObjectScript)) return;
                 
                 _interactableObjects.Add(detectObjectScript);
-                detectObjectScript.OnEnterDetect();
+                detectObjectScript.OnEnterDetect(this);
             }
 
             void OnExitDetect(GameObject detectObj)
@@ -41,7 +41,7 @@ namespace Player_System.Object
                 if (!detectObj.TryGetComponent<InteractableObject>(out var detectObjectScript)) return;
                 
                 _interactableObjects.Remove(detectObjectScript);
-                detectObjectScript.OnExitDetect();
+                detectObjectScript.OnExitDetect(this);
             }
         }
 

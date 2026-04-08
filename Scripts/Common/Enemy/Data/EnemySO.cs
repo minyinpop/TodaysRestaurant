@@ -31,12 +31,6 @@ namespace Common.Enemy.Data
                     Debug.Log($"{name} > {GetType().Name} > {nameof(enemyImage)} cannot be null.");
                     return;
                 }
-
-                if (EnemyObject == null)
-                {
-                    Debug.Log($"{name} > {GetType().Name} > {nameof(enemyObject)} cannot be null.");
-                    return;
-                }
             #endregion
 
             #region Attribute

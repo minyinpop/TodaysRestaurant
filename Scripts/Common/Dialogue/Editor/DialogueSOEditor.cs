@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using Common.Dialogue.Data;
-using Common.Dialogue.Main;
+using Common.Dialogue.SO.Main;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;

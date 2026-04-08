@@ -10,7 +10,7 @@ namespace Player_System.Object
         [field: SerializeField] private Rigidbody rig;
         [field: SerializeField] private CharacterSO characterData;
 
-        private bool _canWalk = true;
+        public bool _canWalk = true;
         private bool _isWalking;
         
         private void DetectMove()

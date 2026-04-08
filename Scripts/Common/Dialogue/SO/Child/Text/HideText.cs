@@ -1,7 +1,7 @@
 using Common.Dialogue.Data;
 using UnityEngine;
 
-namespace Common.Dialogue.Child.Text
+namespace Common.Dialogue.SO.Child.Text
 {
     [CreateAssetMenu(menuName = "Minyinpop/Dialogue/Child/Text/Hide Text", fileName = "New Data")]
     public sealed class HideText : DialogueData

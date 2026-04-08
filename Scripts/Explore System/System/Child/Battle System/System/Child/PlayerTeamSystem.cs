@@ -11,6 +11,7 @@ using Explore_System.System.Child.Battle_System.Object.Card;
 using Explore_System.System.Child.Battle_System.Object.Card.Battle;
 using Explore_System.System.Child.Battle_System.Object.Creature.Character;
 using Explore_System.System.Child.Battle_System.Object.Creature.Enemy;
+using Explore_System.System.Child.Battle_System.Object.Creature.Enemy.Main;
 using UnityEngine;
 
 namespace Explore_System.System.Child.Battle_System.System.Child

@@ -2,7 +2,7 @@ using Animation_System.DOTween.Basic;
 using Common.Dialogue.Data;
 using UnityEngine;
 
-namespace Common.Dialogue.Child.Title
+namespace Common.Dialogue.SO.Child.Title
 {
     [CreateAssetMenu(menuName = "Minyinpop/Dialogue/Child/Title/Show Title", fileName = "New Data")]
     public sealed class ShowTitle : DialogueData

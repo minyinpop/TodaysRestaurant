@@ -1,7 +1,7 @@
 using System;
 using Animation_System.DOTween;
-using Common.Dialogue.Child.Text;
 using Common.Dialogue.Data;
+using Common.Dialogue.SO.Child.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -83,6 +83,30 @@ namespace UI_System.Dialogue_UI_System.Child
                     {
                         characterNamePanel.SetActive(true);
                         characterName.text = "伯";
+                        break;
+                    }
+                    case DialogueCharacterType.Ray:
+                    {
+                        characterNamePanel.SetActive(true);
+                        characterName.text = "雷";
+                        break;
+                    }
+                    case DialogueCharacterType.Muu_1:
+                    {
+                        characterNamePanel.SetActive(true);
+                        characterName.text = "？？？";
+                        break;
+                    }
+                    case DialogueCharacterType.Muu_2:
+                    {
+                        characterNamePanel.SetActive(true);
+                        characterName.text = "武";
+                        break;
+                    }
+                    default:
+                    {
+                        characterNamePanel.SetActive(true);
+                        characterName.text = dialogueData.CharacterType.ToString();
                         break;
                     }
                 }

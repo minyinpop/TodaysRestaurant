@@ -22,11 +22,11 @@ namespace Common.Item.Object
             }
         }
 
-        public void OnEnterDetect()
+        public void OnEnterDetect(PlayerObject playerObject)
         {
         }
 
-        public void OnExitDetect()
+        public void OnExitDetect(PlayerObject playerObject)
         {
         }
 

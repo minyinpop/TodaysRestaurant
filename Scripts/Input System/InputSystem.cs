@@ -56,15 +56,5 @@ namespace Input_System
 
             _inputManager.Disable();
         }
-        
-        public static void Enable()
-        {
-            _inputManager.Enable();
-        }
-
-        public static void Disable()
-        {
-            _inputManager.Disable();
-        }
     }
 }

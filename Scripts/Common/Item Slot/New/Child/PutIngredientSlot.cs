@@ -89,12 +89,13 @@ namespace Common.Item_Slot.New.Child
                 #region 檢查傳入的物品
                     if (item is null)
                     {
-                        throw new System.ArgumentNullException($"{name} > {GetType().Name} > {nameof(AddItem)} > {nameof(item)} cannot be null.");
+                        throw new System.ArgumentNullException($"傳入的 {nameof(item)} 為空值。");
                     }
 
                     if (item is not IIngredient ingredient)
                     {
-                        throw new System.ArgumentException($"{name} > {GetType().Name} > {nameof(AddItem)} > {nameof(item)} is not ingredient.");
+                        Debug.Log($"{item.ItemName} 不是 {nameof(IIngredient)} 類型，無法被放置到 {GetType().Name}");
+                        return false;
                     }
                 #endregion
 

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Common.Dialogue.Data;
-using Common.Dialogue.Main;
+using Common.Dialogue.SO.Main;
 using UnityEngine;
 
 namespace Common.Database

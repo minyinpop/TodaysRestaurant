@@ -2,7 +2,7 @@ using Animation_System.DOTween.Basic;
 using Common.Dialogue.Data;
 using UnityEngine;
 
-namespace Common.Dialogue.Child.Text
+namespace Common.Dialogue.SO.Child.Text
 {
     [CreateAssetMenu(menuName = "Minyinpop/Dialogue/Child/Text/Show Text", fileName = "New Data")]
     public sealed class ShowText : DialogueData

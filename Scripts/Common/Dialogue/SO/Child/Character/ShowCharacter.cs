@@ -2,7 +2,7 @@ using Common.Dialogue.Data;
 using Spine.Unity;
 using UnityEngine;
 
-namespace Common.Dialogue.Child.Character
+namespace Common.Dialogue.SO.Child.Character
 {
     [CreateAssetMenu(menuName = "Minyinpop/Dialogue/Child/Character/Show Character", fileName = "New Data")]
     public sealed class ShowCharacter : DialogueData

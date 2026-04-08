@@ -1,7 +1,7 @@
 using Common.Dialogue.Data;
 using UnityEngine;
 
-namespace Common.Dialogue.Child.Title
+namespace Common.Dialogue.SO.Child.Title
 {
     [CreateAssetMenu(menuName = "Minyinpop/Dialogue/Child/Title/Hide Title", fileName = "New Data")]
     public sealed class HideTitle : DialogueData

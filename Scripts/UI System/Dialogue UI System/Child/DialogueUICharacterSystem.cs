@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Common.Dialogue.Child.Character;
 using Common.Dialogue.Data;
 using Common.Dialogue.Object;
+using Common.Dialogue.SO.Child.Character;
 using Spine.Unity;
 using UnityEngine;
 
@@ -115,10 +115,13 @@ namespace UI_System.Dialogue_UI_System.Child
                 foreach (var spineAnimation in dialogueData.SpineAnimations)
                 {
                     spineAnimation.GetValues(out var layer, out var animationName, out var loop);
-                    var entry = character.AnimationState.SetAnimation(
+                    
+                    var entry = character.AnimationState.AddAnimation(
                         trackIndex: layer,
                         animationName: animationName,
-                        loop: loop);
+                        loop: loop,
+                        delay: 0);
+                    
                     entry.TrackTime = dialogueData.StartSeconds;
                 }
             }

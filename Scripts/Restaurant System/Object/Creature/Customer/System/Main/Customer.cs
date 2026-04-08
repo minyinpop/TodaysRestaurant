@@ -78,12 +78,12 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
         }
 
         #region InteractableObject
-            public void OnEnterDetect()
+            public void OnEnterDetect(PlayerObject playerObject)
             {
                 _currentBubble?.SetInteractable(true);
             }
             
-            public void OnExitDetect()
+            public void OnExitDetect(PlayerObject playerObject)
             {
                 _currentBubble?.SetInteractable(false);
             }

@@ -1,7 +1,7 @@
 using Common.Dialogue.Data;
 using UnityEngine;
 
-namespace Common.Dialogue.Child.Tool
+namespace Common.Dialogue.SO.Child.Tool
 {
     [CreateAssetMenu(menuName = "Minyinpop/Dialogue/Child/Tool/Wait", fileName = "New Data")]
     public sealed class Wait : DialogueData

@@ -43,6 +43,10 @@ namespace Restaurant_System.Object.Cookware.System
         private bool _isCookGameComplete;
         private bool _interactable;
 
+        public static event Action OnGameTime;
+        public static event Action OnCookComplete;
+        public static event Action OnAddDish;
+
         public static event Action<CookType, Action<CustomFoodItem>, Action> OpenCookSelectionUI;
         public static event Action CloseCookSelectionUI;
 
@@ -59,13 +63,15 @@ namespace Restaurant_System.Object.Cookware.System
         }
 
         #region InteractableObject
-            public void OnEnterDetect()
+            public void OnEnterDetect(PlayerObject playerObject)
             {
+                _interactingPlayer = playerObject;
                 _currentBubble?.SetInteractable(true);
             }
 
-            public void OnExitDetect()
+            public void OnExitDetect(PlayerObject playerObject)
             {
+                _interactingPlayer = null;
                 _currentBubble?.SetInteractable(false);
                 CloseCookSelectionUI?.Invoke();
             }
@@ -146,6 +152,8 @@ namespace Restaurant_System.Object.Cookware.System
                     _stateMachine.ChangeState(new OnGameTime(
                         onEnter: () =>
                         {
+                            OnGameTime?.Invoke();
+                            
                             _currentBubble = Instantiate(GameTimeBubblePrefab, BubbleParent).GetComponent<ClickableBubble>();
                             
                             _currentBubble.OnClick += OnBubbleClicked;
@@ -213,6 +221,8 @@ namespace Restaurant_System.Object.Cookware.System
                     _stateMachine.ChangeState(new OnComplete(
                         onEnter: () =>
                         {
+                            OnCookComplete?.Invoke();
+                            
                             _currentBubble = Instantiate(CompleteBubblePrefab, BubbleParent).GetComponent<ClickableBubble>();
                             
                             _currentBubble.OnClick += OnBubbleClicked;
@@ -232,6 +242,8 @@ namespace Restaurant_System.Object.Cookware.System
                                 
                                 if (_interactingPlayer.TryAddItem(_currentCookItem))
                                 {
+                                    OnAddDish?.Invoke();
+                                    
                                     OnEmptyState();
                                 }
                                 else

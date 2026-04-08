@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace Common.Status_Bar
 {
-    internal sealed class StatusBar : MonoBehaviour
+    public sealed class StatusBar : MonoBehaviour
     {
         [field: Header("Object")]
         [field: SerializeField] private Slider innerFill;
@@ -39,17 +39,21 @@ namespace Common.Status_Bar
         
         public void Add(float value)
         {
-            // TODO
+            /* 未測試，不清楚是不是正常的 2026.04.09 02:46
+            _value = Mathf.Clamp(_value += value, 0, _maxValue);
+            
+            _tween?.Kill();
+            _tween = DOTween.Sequence()
+                .Append(outerFill
+                    .DOValue(_value, .25f))
+                .Join(innerFill
+                    .DOValue(_value, 1))
+                .OnKill(() => _tween = null);
+            */
         }
         
         public void Subtract(float value)
         {
-            if (value < 0)
-            {
-                throw new ArgumentOutOfRangeException(
-                    $"{name} > {GetType().Name} > {nameof(Subtract)} > {nameof(value)} cannot be less than 0.");
-            }
-
             _value = Mathf.Clamp(_value -= value, 0, _maxValue);
             
             _tween?.Kill();
