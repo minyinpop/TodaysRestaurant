@@ -3,6 +3,8 @@ namespace Common.Dialogue.Data
     [System.Serializable]
     public enum DialogueType
     {
-        Tutorial
+        Tutorial_01,
+        Tutorial_02,
+        Tutorial_03
     }
 }
