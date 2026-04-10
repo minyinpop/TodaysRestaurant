@@ -45,6 +45,36 @@ namespace Scene_Transition_System
                 {
                     throw new InvalidOperationException(nameof(animation));
                 }
+
+                if (canvas is null)
+                {
+                    throw new InvalidOperationException(nameof(canvas));
+                }
+
+                if (canvasGroup is null)
+                {
+                    throw new InvalidOperationException(nameof(canvasGroup));
+                }
+
+                if (progressBar is null)
+                {
+                    throw new InvalidOperationException(nameof(progressBar));
+                }
+
+                if (handlerRect is null)
+                {
+                    throw new InvalidOperationException(nameof(handlerRect));
+                }
+
+                if (loadingImage is null)
+                {
+                    throw new InvalidOperationException(nameof(loadingImage));
+                }
+
+                if (completeImage is null)
+                {
+                    throw new InvalidOperationException(nameof(completeImage));
+                }
             #endregion
 
             if (_instance is not null)

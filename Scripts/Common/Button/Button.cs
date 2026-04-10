@@ -1,6 +1,8 @@
 using System;
 using Animation_System.DOTween;
 using Animation_System.DOTween.Basic;
+using Audio_System.Data;
+using Audio_System.Main;
 using Common.Pointer_Event;
 using TMPro;
 using UnityEngine;
@@ -12,17 +14,20 @@ namespace Common.Button
     [RequireComponent(typeof(DoAnimation))]
     public sealed class Button : PointerEvent
     {
-        [field: Header("Component")]
+        [field: Header("自身狀態設定")]
+        [field: SerializeField] private bool Interactable;
+        
+        [field: Header("自身組件")]
         [field: SerializeField] private RectTransform Rect;
         [field: SerializeField] private TextMeshProUGUI TitleTMP;
         
-        [field: Header("Animation Settings")]
+        [field: Header("動畫設定")]
         [field: SerializeField] private DoAnimation DoAnimation;
         [field: SerializeField] private DoScale OnPointerEnterScale;
         [field: SerializeField] private DoScale OnPointerExitScale;
         
-        [field: Header("Status Settings")]
-        [field: SerializeField] private bool Interactable;
+        [field: Header("聲音播放資料")]
+        [field: SerializeField] private PlaySFXData playSFXData;
 
         public event Action OnClick;
 
@@ -51,12 +56,20 @@ namespace Common.Button
         #region PointerEvent
             protected override void OnPointerEnter()
             {
-                if (Interactable) DoAnimation?.DoScale_UI(Rect, OnPointerEnterScale);
+                if (Interactable)
+                {
+                    AudioSystem.Instance.SFXSystem.PlaySFX(playSFXData);
+                    
+                    DoAnimation?.DoScale_UI(Rect, OnPointerEnterScale);
+                }
             }
             
             protected override void OnPointerExit()
             {
-                if (Interactable) DoAnimation?.DoScale_UI(Rect, OnPointerExitScale);
+                if (Interactable)
+                {
+                    DoAnimation?.DoScale_UI(Rect, OnPointerExitScale);
+                }
             }
 
             protected override void OnPointerClick()
