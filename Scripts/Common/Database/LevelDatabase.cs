@@ -18,7 +18,7 @@ namespace Common.Database
             if (_initialized)
             {
                 #region 開發提示
-                    Debug.Log("物品資料庫已初始化過了！");
+                    Debug.Log("關卡資料庫已初始化過了！");
                 #endregion
                 
                 return;

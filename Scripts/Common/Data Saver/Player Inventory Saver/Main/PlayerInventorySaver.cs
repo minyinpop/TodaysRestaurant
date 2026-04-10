@@ -1,10 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using Common.Data_Saver.Player_Inventory_Saver.Child;
 using Common.Item.Data;
-using PlayFab;
-using PlayFab.ClientModels;
 using UnityEngine;
 
 namespace Common.Data_Saver.Player_Inventory_Saver.Main
@@ -12,7 +9,9 @@ namespace Common.Data_Saver.Player_Inventory_Saver.Main
     public static class PlayerInventorySaver
     {
         private const string _keyword = "Inventory";
-        private const string _localPath = "/" + _keyword + ".json";
+
+        private static string _folderPath;
+        private static string _filePath;
 
         private static bool _initialized;
 
@@ -31,62 +30,72 @@ namespace Common.Data_Saver.Player_Inventory_Saver.Main
                 #endregion
 
                 _initialized = true;
-                
-                var filePath = Application.persistentDataPath + _localPath;
 
-                #region 檢查本地端是否已經有玩家物品資料了
-                    if (File.Exists(filePath))
+                _folderPath = $"{Application.persistentDataPath}/SaveData";
+                _filePath = $"{_folderPath}/{_keyword}.json";
+                
+                if (Directory.Exists(_folderPath))
+                {
+                    if (File.Exists(_filePath))
                     {
-                        Debug.Log("本地端已經有玩家物品資料了。");
+                        Debug.Log("已經有玩家物品資料了。");
                         return false;
                     }
-                #endregion
+                }
+                else
+                {
+                    Debug.Log($"創建 SaveData 資料夾，位置：{_folderPath}。");
+                    Directory.CreateDirectory(_folderPath);
+                }
                 
                 SpawnNewInventorySaveData(out var saveData);
                 
                 var json = JsonUtility.ToJson(saveData);
-                File.WriteAllText(filePath, json);
+                File.WriteAllText(_filePath, json);
 
-                Debug.Log("已在本地端創建新的玩家物品資料。");
+                Debug.Log($"創建 {_keyword}.json，位置：{_filePath}。");
                 return true;
             }
             
             public static bool SaveInventoryToLocal(InventorySaveData saveData)
             {
-                #region 必要條件檢查
-                    if (!_initialized)
-                    {
-                        Debug.Log("無法添加物品到本地的玩家資料，因為尚未初始化。");
-                        return false;
-                    }
-                #endregion
+                if (!_initialized)
+                {
+                    Debug.Log("無法添加物品到本地的玩家資料，因為尚未初始化。");
+                    return false;
+                }
                 
-                Debug.Log("已成功把物品給存到本地的資料庫了。");
-                
-                var filePath = Application.persistentDataPath + _localPath;
+                if (!Directory.Exists(_folderPath))
+                {
+                    Debug.Log("無法把物品添加到本地玩家物品資料，因為找不到資料夾。");
+                    return false;
+                }
+
+                if (!File.Exists(_filePath))
+                {
+                    Debug.Log("無法把物品添加到本地玩家物品資料，因為找不到檔案。");
+                    return false;
+                }
+
                 var json = JsonUtility.ToJson(saveData);
                 
-                File.WriteAllText(filePath, json);
+                File.WriteAllText(_filePath, json);
                 return true;
                 
             }
 
             public static bool LoadInventoryFromLocal(out InventorySaveData saveData)
             {
-                #region 必要條件檢查
-                    if (!_initialized)
-                    {
-                        Debug.Log("無法讀取物品到本地的玩家資料，因為尚未初始化。");
-                        saveData = null;
-                        return false;
-                    }
-                #endregion
-                
-                var filePath = Application.persistentDataPath + _localPath;
-
-                if (File.Exists(filePath))
+                if (!_initialized)
                 {
-                    var json = File.ReadAllText(filePath);
+                    Debug.Log("無法讀取物品到本地的玩家資料，因為尚未初始化。");
+                    saveData = null;
+                    return false;
+                }
+                
+                if (File.Exists(_filePath))
+                {
+                    var json = File.ReadAllText(_filePath);
                     saveData = JsonUtility.FromJson<InventorySaveData>(json);
                     Debug.Log("已在本地端獲取到玩家物品資料。");
                 }

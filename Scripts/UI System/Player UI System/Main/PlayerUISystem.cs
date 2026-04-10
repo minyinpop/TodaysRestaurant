@@ -50,8 +50,6 @@ namespace UI_System.Player_UI_System.Main
             #region 從本地獲取玩家的物品
                 if (PlayerInventorySaver.LoadInventoryFromLocal(out var saveData))
                 {
-                    Debug.Log("成功從本地獲取玩家物品庫資料。");
-                    
                     #region 載入快捷欄的物品
                         var hotbarSlots = _hotbarUISystem.GetHotbarSlots();
 
@@ -86,7 +84,7 @@ namespace UI_System.Player_UI_System.Main
                         }
                     #endregion
                     
-                    Debug.Log("已更新到快捷欄與背包。");
+                    Debug.Log($"已成功從 {nameof(PlayerInventorySaver)} 獲取本地的玩家物品資料並更新到 UI。");
                 }
                 else
                 {

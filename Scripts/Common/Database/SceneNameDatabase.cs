@@ -18,7 +18,7 @@ namespace Common.Database
             #region 必要條件檢查
                 if (_initialized)
                 {
-                    Debug.Log("物品資料庫已初始化過了！");
+                    Debug.Log("場景名稱資料庫已初始化過了！");
                     return;
                 }
             #endregion

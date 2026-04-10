@@ -6,6 +6,7 @@ namespace Common.Dialogue.Data
         Bernard,
         Ray,
         Muu_1,
-        Muu_2
+        Muu_2,
+        Gu
     }
 }

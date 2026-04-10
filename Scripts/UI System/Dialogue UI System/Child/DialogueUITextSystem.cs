@@ -103,6 +103,12 @@ namespace UI_System.Dialogue_UI_System.Child
                         characterName.text = "武";
                         break;
                     }
+                    case DialogueCharacterType.Gu:
+                    {
+                        characterNamePanel.SetActive(true);
+                        characterName.text = "禮帽菇";
+                        break;
+                    }
                     default:
                     {
                         characterNamePanel.SetActive(true);

@@ -62,7 +62,7 @@ namespace UI_System.Title_UI_System.Main
             {
                 throw new InvalidOperationException($"{nameof(dataCleanButton)} 沒有被掛載。");
             }
-            
+
             startButton.OnClick += OnStartButtonClicked;
             optionButton.OnClick += OnOptionButtonClicked;
             quitButton.OnClick += OnQuitButtonClicked;
@@ -106,14 +106,31 @@ namespace UI_System.Title_UI_System.Main
                         closeButtonTitle: string.Empty),
                     onConfirm: () =>
                     {
-                        var filePath = Application.persistentDataPath;
-                        
-                        if (File.Exists(filePath))
+                        if (Directory.Exists($"{Application.persistentDataPath}/SaveData"))
                         {
-                            Directory.Delete(filePath, true);
+                            PlayerPrefs.SetInt("DeleteAllLocalData", 1);
+                            PlayerPrefs.Save();
+                            
+                            MessageUISystem.ShowTipUI(
+                                content: new PopUpUIContent(
+                                    message: "已成功刪除所有本地檔案！\n即將重開遊戲！",
+                                    confirmButtonTitle: "確認",
+                                    cancelButtonTitle: string.Empty,
+                                    closeButtonTitle: string.Empty),
+                                onConfirm: () =>
+                                {
+                                    Application.Quit();
+                                });
                         }
-                        
-                        Application.Quit();
+                        else
+                        {
+                            MessageUISystem.ShowTipUI(
+                                content: new PopUpUIContent(
+                                    message: "無法找尋到本地檔案！",
+                                    confirmButtonTitle: "確認",
+                                    cancelButtonTitle: string.Empty,
+                                    closeButtonTitle: string.Empty));
+                        }
                     });
             }
         #endregion
@@ -139,14 +156,12 @@ namespace UI_System.Title_UI_System.Main
                 DialogueDatabase.Initialize();
                 SceneNameDatabase.Initialize();
             #endregion
-
-            #region 初始化玩家物品資料
-                PlayerInventorySaver.InitializeInventoryToLocal();
-            #endregion
+            
+            PlayerInventorySaver.InitializeInventoryToLocal();
             
             if (isNewAccount)
             {
-                Debug.Log("登入源：已完成新手教學的帳號"); // TODO Delete
+                Debug.Log("登入源：已完成新手教學的帳號");
                 
                 SceneNameDatabase.GetSceneName(SceneNameType.Lobby_Scene, out var sceneNameData);
                 
@@ -154,7 +169,7 @@ namespace UI_System.Title_UI_System.Main
             }
             else
             {
-                Debug.Log("登入源：未完成新手教學的帳號"); // TODO Delete
+                Debug.Log("登入源：未完成新手教學的帳號");
                 
                 SceneNameDatabase.GetSceneName(SceneNameType.Dialogue_Scene, out var sceneNameData);
                 DialogueDatabase.GetDialogue(DialogueType.Tutorial_01, out var dialogueData);

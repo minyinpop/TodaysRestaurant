@@ -122,7 +122,6 @@ namespace Tutorial_System
         #region 步驟 1
             public override void StartSystemWhenFinish(SceneStarterData starterData)
             {
-                Debug.Log("AAA");
                 RefreshTip1("請靠近<b><color=yellow>深煮鍋</color></b>並<b><color=yellow>點擊氣泡</color></b>");
             }
             

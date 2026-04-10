@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Common.Dialogue.Data;
 using Common.Dialogue.Object;
 using Common.Dialogue.SO.Child.Character;
+using Spine;
 using Spine.Unity;
 using UnityEngine;
 
@@ -14,6 +15,7 @@ namespace UI_System.Dialogue_UI_System.Child
         [field: SerializeField] private DialogueCharacterPosition leftPosition;
         [field: SerializeField] private DialogueCharacterPosition middlePosition;
         [field: SerializeField] private DialogueCharacterPosition rightPosition;
+        [field: SerializeField] private DialogueCharacterPosition guOnlyPosition;
         
         private readonly Dictionary<DialogueCharacterType, DialogueCharacterPosition> _characters = new();
 
@@ -21,17 +23,22 @@ namespace UI_System.Dialogue_UI_System.Child
         {
             if (leftPosition is null)
             {
-                throw new InvalidOperationException(nameof(leftPosition));
+                throw new InvalidOperationException($"{nameof(leftPosition)} 沒有被掛載。");
             }
             
             if (middlePosition is null)
             {
-                throw new InvalidOperationException(nameof(middlePosition));
+                throw new InvalidOperationException($"{nameof(middlePosition)} 沒有被掛載。");
             }
             
             if (rightPosition is null)
             {
-                throw new InvalidOperationException(nameof(rightPosition));
+                throw new InvalidOperationException($"{nameof(rightPosition)} 沒有被掛載。");
+            }
+            
+            if (guOnlyPosition is null)
+            {
+                throw new InvalidOperationException($"{nameof(guOnlyPosition)} 沒有被掛載。");
             }
         }
 
@@ -70,6 +77,11 @@ namespace UI_System.Dialogue_UI_System.Child
                         case DialogueCharacterPositionType.Right:
                         {
                             position = rightPosition;
+                            break;
+                        }
+                        case DialogueCharacterPositionType.MrGu_Only:
+                        {
+                            position = guOnlyPosition;
                             break;
                         }
                         default:
@@ -112,15 +124,28 @@ namespace UI_System.Dialogue_UI_System.Child
             {
                 var character = position.CharacterObject.GetComponent<SkeletonGraphic>();
                 
-                foreach (var spineAnimation in dialogueData.SpineAnimations)
+                for (var i = 0; i < dialogueData.SpineAnimations.Length; i++)
                 {
-                    spineAnimation.GetValues(out var layer, out var animationName, out var loop);
+                    TrackEntry entry;
                     
-                    var entry = character.AnimationState.AddAnimation(
-                        trackIndex: layer,
-                        animationName: animationName,
-                        loop: loop,
-                        delay: 0);
+                    var spineAnimation = dialogueData.SpineAnimations[i];
+                        spineAnimation.GetValues(out var layer, out var animationName, out var loop);
+                    
+                    if (i <= 0)
+                    {
+                        entry = character.AnimationState.SetAnimation(
+                            trackIndex: layer,
+                            animationName: animationName,
+                            loop: loop);
+                    }
+                    else
+                    {
+                        entry = character.AnimationState.AddAnimation(
+                            trackIndex: layer,
+                            animationName: animationName,
+                            loop: loop,
+                            delay: 0);
+                    }
                     
                     entry.TrackTime = dialogueData.StartSeconds;
                 }
