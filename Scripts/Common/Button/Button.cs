@@ -16,6 +16,7 @@ namespace Common.Button
     {
         [field: Header("自身狀態設定")]
         [field: SerializeField] private bool Interactable;
+        [field: SerializeField] private bool CanPlaySFX;
         
         [field: Header("自身組件")]
         [field: SerializeField] private RectTransform Rect;
@@ -58,9 +59,12 @@ namespace Common.Button
             {
                 if (Interactable)
                 {
-                    AudioSystem.Instance.SFXSystem.PlaySFX(playSFXData);
-                    
                     DoAnimation?.DoScale_UI(Rect, OnPointerEnterScale);
+                }
+                
+                if (CanPlaySFX)
+                {
+                    AudioSystem.Instance.SFXSystem.PlayOneShot(playSFXData);
                 }
             }
             

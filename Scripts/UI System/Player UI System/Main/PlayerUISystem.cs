@@ -13,14 +13,14 @@ namespace UI_System.Player_UI_System.Main
 {
     public sealed class PlayerUISystem : MonoBehaviour
     {
-        [field: Header("Components")]
+        [field: Header("自身組件")]
         [field: SerializeField] private HotbarUISystem hotbarUISystem;
                                 private static HotbarUISystem _hotbarUISystem;
         [field: SerializeField] private BackpackUISystem backpackUISystem;
                                 private static BackpackUISystem _backpackUISystem;
         [field: SerializeField] private ItemDragUISystem itemDragUISystem;
                                 private static ItemDragUISystem _itemDragUISystem;
-
+        
         private void Awake()
         {
             #region 必要條件檢查
@@ -48,48 +48,41 @@ namespace UI_System.Player_UI_System.Main
         private void OnEnable()
         {
             #region 從本地獲取玩家的物品
-                if (PlayerInventorySaver.LoadInventoryFromLocal(out var saveData))
-                {
-                    #region 載入快捷欄的物品
-                        var hotbarSlots = _hotbarUISystem.GetHotbarSlots();
+                PlayerInventorySaver.LoadInventoryFromLocal(out var saveData);
+                
+                #region 載入快捷欄的物品
+                    var hotbarSlots = _hotbarUISystem.GetHotbarSlots();
 
-                        for (var i = 0; i < saveData.HotbarSlots.Count; i++)
+                    for (var i = 0; i < saveData.HotbarSlots.Count; i++)
+                    {
+                        var slotData = saveData.HotbarSlots[i];
+                        var item = ItemDatabase.GetItem(slotData.ItemId);
+
+                        if (item is null)
                         {
-                            var slotData = saveData.HotbarSlots[i];
-                            var item = ItemDatabase.GetItem(slotData.ItemId);
-
-                            if (item is null)
-                            {
-                                continue;
-                            }
-                                                    
-                            hotbarSlots[i].AddItem(item);
+                            continue;
                         }
-                    #endregion
-                                        
-                    #region 載入背包的物品
-                        var backpackSlots = _backpackUISystem.GetBackpackSlots();
+                                                
+                        hotbarSlots[i].AddItem(item);
+                    }
+                #endregion
+                                    
+                #region 載入背包的物品
+                    var backpackSlots = _backpackUISystem.GetBackpackSlots();
 
-                        for (var i = 0; i < saveData.BackpackSlots.Count; i++)
+                    for (var i = 0; i < saveData.BackpackSlots.Count; i++)
+                    {
+                        var slotData = saveData.BackpackSlots[i];
+                        var item = ItemDatabase.GetItem(slotData.ItemId);
+                                                
+                        if (item is null)
                         {
-                            var slotData = saveData.BackpackSlots[i];
-                            var item = ItemDatabase.GetItem(slotData.ItemId);
-                                                    
-                            if (item is null)
-                            {
-                                continue;
-                            }
-                                                    
-                            backpackSlots[i].AddItem(item);
+                            continue;
                         }
-                    #endregion
-                    
-                    Debug.Log($"已成功從 {nameof(PlayerInventorySaver)} 獲取本地的玩家物品資料並更新到 UI。");
-                }
-                else
-                {
-                    Debug.Log("無法從本地獲取玩家物品資料庫。");
-                }
+                                                
+                        backpackSlots[i].AddItem(item);
+                    }
+                #endregion
             #endregion
         }
 

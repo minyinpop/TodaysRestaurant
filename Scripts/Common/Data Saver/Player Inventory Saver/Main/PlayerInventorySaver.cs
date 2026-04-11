@@ -13,193 +13,138 @@ namespace Common.Data_Saver.Player_Inventory_Saver.Main
         private static string _folderPath;
         private static string _filePath;
 
-        private static bool _initialized;
-
         private const int _hotbarSlotCount = 10;
         private const int _backpackSlotCount = 50;
-        
-        #region 本地操作
-            public static bool InitializeInventoryToLocal()
+            
+        public static void SaveInventoryToLocal(InventorySaveData saveData)
+        {
+            CheckPath();
+            CheckFolder();
+            CheckFile();
+
+            var json = JsonUtility.ToJson(saveData);
+            File.WriteAllText(_filePath, json);
+        }
+
+        public static void LoadInventoryFromLocal(out InventorySaveData saveData)
+        {
+            CheckPath();
+            CheckFolder();
+            CheckFile();
+            
+            var json = File.ReadAllText(_filePath);
+            saveData = JsonUtility.FromJson<InventorySaveData>(json);
+        }
+
+        public static void AddItemToInventory(IReadOnlyList<IItem> itemsData)
+        {
+            if (itemsData is null)
             {
-                #region 檢查必要條件
-                    if (_initialized)
-                    {
-                        Debug.Log("玩家的物品資料庫已經初始化。");
-                        return false;
-                    }
-                #endregion
-
-                _initialized = true;
-
-                _folderPath = $"{Application.persistentDataPath}/SaveData";
-                _filePath = $"{_folderPath}/{_keyword}.json";
-                
-                if (Directory.Exists(_folderPath))
-                {
-                    if (File.Exists(_filePath))
-                    {
-                        Debug.Log("已經有玩家物品資料了。");
-                        return false;
-                    }
-                }
-                else
-                {
-                    Debug.Log($"創建 SaveData 資料夾，位置：{_folderPath}。");
-                    Directory.CreateDirectory(_folderPath);
-                }
-                
-                SpawnNewInventorySaveData(out var saveData);
-                
-                var json = JsonUtility.ToJson(saveData);
-                File.WriteAllText(_filePath, json);
-
-                Debug.Log($"創建 {_keyword}.json，位置：{_filePath}。");
-                return true;
+                Debug.Log($"{nameof(itemsData)} 不能傳入空值。");
+                return;
             }
             
-            public static bool SaveInventoryToLocal(InventorySaveData saveData)
+            CheckPath();
+            CheckFolder();
+            CheckFile();
+            
+            LoadInventoryFromLocal(out var saveData);
+
+            foreach (var itemData in itemsData)
             {
-                if (!_initialized)
-                {
-                    Debug.Log("無法添加物品到本地的玩家資料，因為尚未初始化。");
-                    return false;
-                }
-                
-                if (!Directory.Exists(_folderPath))
-                {
-                    Debug.Log("無法把物品添加到本地玩家物品資料，因為找不到資料夾。");
-                    return false;
-                }
-
-                if (!File.Exists(_filePath))
-                {
-                    Debug.Log("無法把物品添加到本地玩家物品資料，因為找不到檔案。");
-                    return false;
-                }
-
-                var json = JsonUtility.ToJson(saveData);
-                
-                File.WriteAllText(_filePath, json);
-                return true;
-                
-            }
-
-            public static bool LoadInventoryFromLocal(out InventorySaveData saveData)
-            {
-                if (!_initialized)
-                {
-                    Debug.Log("無法讀取物品到本地的玩家資料，因為尚未初始化。");
-                    saveData = null;
-                    return false;
-                }
-                
-                if (File.Exists(_filePath))
-                {
-                    var json = File.ReadAllText(_filePath);
-                    saveData = JsonUtility.FromJson<InventorySaveData>(json);
-                    Debug.Log("已在本地端獲取到玩家物品資料。");
-                }
-                else
-                {
-                    SpawnNewInventorySaveData(out saveData);
-                    Debug.Log("無法在本地端找尋到玩家的物品資料，已自動創建新的資料到本地端。");
-                }
-
-                return true;
-            }
-
-            public static void AddItemToInventory(IReadOnlyList<IItem> itemsData)
-            {
-                #region 必要條件檢查
-                    if (itemsData is null)
+                #region 在快捷欄裡搜尋有空位的格子
+                    foreach (var saveDataEntry in saveData.HotbarSlots)
                     {
-                        Debug.Log($"{nameof(itemsData)} 不能為空的。");
-                        return;
-                    }
-
-                    if (!_initialized)
-                    {
-                        Debug.Log("無法讀取物品到本地的玩家資料，因為尚未初始化。");
-                        return;
-                    }
-                #endregion
-                
-                #region 從本地獲取玩家的物品資料
-                    if (!LoadInventoryFromLocal(out var saveData))
-                    {
-                        Debug.Log("無法從本地獲取玩家的物品資料。");
-                        return;
-                    }
-                #endregion
-
-                #region 添加物品
-                    foreach (var itemData in itemsData)
-                    {
-                        #region 在快捷欄裡搜尋有空位的格子
-                            foreach (var saveDataEntry in saveData.HotbarSlots)
-                            {
-                                if (saveDataEntry.HaveItem)
-                                {
-                                    continue;
-                                }
-                                
-                                saveDataEntry.HaveItem = true;
-                                saveDataEntry.ItemId = itemData.ItemID;
-                            }
-                        #endregion
+                        if (saveDataEntry.HaveItem)
+                        {
+                            continue;
+                        }
                         
-                        #region 在背包裡搜尋有空位的格子
-                            foreach (var saveDataEntry in saveData.BackpackSlots)
-                            {
-                                if (saveDataEntry.HaveItem)
-                                {
-                                    continue;
-                                }
-                                
-                                saveDataEntry.HaveItem = true;
-                                saveDataEntry.ItemId = itemData.ItemID;
-                            }
-                        #endregion
+                        saveDataEntry.HaveItem = true;
+                        saveDataEntry.ItemId = itemData.ItemID;
                     }
                 #endregion
-
-                #region 儲存到本地的玩家物品資料
-                    SaveInventoryToLocal(saveData);
+                
+                #region 在背包裡搜尋有空位的格子
+                    foreach (var saveDataEntry in saveData.BackpackSlots)
+                    {
+                        if (saveDataEntry.HaveItem)
+                        {
+                            continue;
+                        }
+                        
+                        saveDataEntry.HaveItem = true;
+                        saveDataEntry.ItemId = itemData.ItemID;
+                    }
                 #endregion
             }
-        #endregion
+
+            SaveInventoryToLocal(saveData);
+        }
         
-        #region 工具 function
-            private static void SpawnNewInventorySaveData(out InventorySaveData saveData)
+        private static void CheckPath()
+        {
+            if (string.IsNullOrEmpty(_folderPath))
             {
-                List<InventorySaveDataEntry> hotbarSlots = new();
-                List<InventorySaveDataEntry> backpackSlots = new();
-
-                for (var i = 0; i < _hotbarSlotCount; i++)
-                {
-                    hotbarSlots.Add(new InventorySaveDataEntry
-                    {
-                        HaveItem = false,
-                        ItemId = 0
-                    });
-                }
-                            
-                for (var i = 0; i < _backpackSlotCount; i++)
-                {
-                    backpackSlots.Add(new InventorySaveDataEntry
-                    {
-                        HaveItem = false,
-                        ItemId = 0
-                    });
-                }
-
-                saveData = new InventorySaveData
-                {
-                    HotbarSlots = hotbarSlots,
-                    BackpackSlots = backpackSlots
-                };
+                _folderPath = $"{Application.persistentDataPath}/SaveData";
             }
-        #endregion
+
+            if (string.IsNullOrEmpty(_filePath))
+            {
+                _filePath = $"{_folderPath}/{_keyword}.json";
+            }
+        }
+
+        private static void CheckFolder()
+        {
+            if (Directory.Exists(_folderPath))
+            {
+                return;
+            }
+
+            Directory.CreateDirectory(_folderPath);
+            Debug.Log($"找不到 SaveData，已自動創建，位置：{_folderPath}。");
+        }
+
+        private static void CheckFile()
+        {
+            if (File.Exists(_filePath))
+            {
+                return;
+            }
+
+            List<InventorySaveDataEntry> hotbarSlots = new();
+            List<InventorySaveDataEntry> backpackSlots = new();
+
+            for (var i = 0; i < _hotbarSlotCount; i++)
+            {
+                hotbarSlots.Add(new InventorySaveDataEntry
+                {
+                    HaveItem = false,
+                    ItemId = 0
+                });
+            }
+                        
+            for (var i = 0; i < _backpackSlotCount; i++)
+            {
+                backpackSlots.Add(new InventorySaveDataEntry
+                {
+                    HaveItem = false,
+                    ItemId = 0
+                });
+            }
+
+            var saveData = new InventorySaveData
+            {
+                HotbarSlots = hotbarSlots,
+                BackpackSlots = backpackSlots
+            };
+
+            var json = JsonUtility.ToJson(saveData);
+            File.WriteAllText(_filePath, json);
+            
+            Debug.Log($"找不到 {_keyword}.json，已自動創建，位置：{_filePath}。");
+        }
         
         /*
         #region PlayFab 操作

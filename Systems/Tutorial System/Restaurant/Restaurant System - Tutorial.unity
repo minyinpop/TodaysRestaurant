@@ -945,6 +945,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b98354d339b7416e91546b8df61e8b79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::General.Object.Button
+  Interactable: 0
   Rect: {fileID: 966772036}
   TitleTMP: {fileID: 0}
   DoAnimation: {fileID: 192517098}
@@ -956,7 +957,8 @@ MonoBehaviour:
     EndValue: {x: 1, y: 1, z: 1}
     Duration: 0.2
     Ease: 18
-  Interactable: 0
+  playSFXData:
+    Clip: {fileID: 0}
 --- !u!114 &192517100
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4784,6 +4786,18 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1975193441654685531, guid: 577a583dca879cb41935feb87e7479b4, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1975193441654685531, guid: 577a583dca879cb41935feb87e7479b4, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1975193441654685531, guid: 577a583dca879cb41935feb87e7479b4, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2087967895584465030, guid: 577a583dca879cb41935feb87e7479b4, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -5570,6 +5584,7 @@ PrefabInstance:
     - {fileID: 8786522123331504594, guid: 577a583dca879cb41935feb87e7479b4, type: 3}
     - {fileID: 2349185423394483038, guid: 577a583dca879cb41935feb87e7479b4, type: 3}
     - {fileID: 7032955653830890416, guid: 577a583dca879cb41935feb87e7479b4, type: 3}
+    - {fileID: 8494355954349360894, guid: 577a583dca879cb41935feb87e7479b4, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 577a583dca879cb41935feb87e7479b4, type: 3}

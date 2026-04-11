@@ -28,6 +28,17 @@ namespace Audio_System.Child
             }
         }
 
+        public void PlayOneShot(PlayBGMData data)
+        {
+            if (data.Clip is null)
+            {
+                Debug.Log($"{nameof(BGMSystem)} 無法播放空的 {nameof(AudioClip)}。");
+                return;
+            }
+            
+            BGMSource.PlayOneShot(data.Clip);
+        }
+
         public void FadeInBGM(PlayBGMData data, Action onComplete = null)
         {
             if (data.Clip is null)

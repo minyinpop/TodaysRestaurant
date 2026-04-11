@@ -20,7 +20,7 @@ namespace UI_System.Title_UI_System.Main
         
         [field: Header("Button")]
         [field: SerializeField] private Button startButton;
-        [field: SerializeField] private Button optionButton;
+        [field: SerializeField] private Button settingsButton;
         [field: SerializeField] private Button quitButton;
         [field: SerializeField] private Button dataCleanButton;
 
@@ -35,6 +35,8 @@ namespace UI_System.Title_UI_System.Main
         /// 開始的章節名稱
         /// </param>
         public static event Action<SceneNameSO, DialogueSO> OnStartTutorial;
+        
+        public static event Action OnClickSettingsButton;
 
         private void Awake()
         {
@@ -48,9 +50,9 @@ namespace UI_System.Title_UI_System.Main
                 throw new InvalidOperationException($"{nameof(startButton)} 沒有被掛載。");
             }
             
-            if (optionButton is null)
+            if (settingsButton is null)
             {
-                throw new InvalidOperationException($"{nameof(optionButton)} 沒有被掛載。");
+                throw new InvalidOperationException($"{nameof(settingsButton)} 沒有被掛載。");
             }
             
             if (quitButton is null)
@@ -64,7 +66,7 @@ namespace UI_System.Title_UI_System.Main
             }
 
             startButton.OnClick += OnStartButtonClicked;
-            optionButton.OnClick += OnOptionButtonClicked;
+            settingsButton.OnClick += OnSettingsButtonClicked;
             quitButton.OnClick += OnQuitButtonClicked;
             dataCleanButton.OnClick += OnDataCleanButtonClicked;
 
@@ -74,7 +76,7 @@ namespace UI_System.Title_UI_System.Main
         private void OnDestroy()
         {
             startButton.OnClick -= OnStartButtonClicked;
-            optionButton.OnClick -= OnOptionButtonClicked;
+            settingsButton.OnClick -= OnSettingsButtonClicked;
             quitButton.OnClick -= OnQuitButtonClicked;
             dataCleanButton.OnClick -= OnDataCleanButtonClicked;
             
@@ -87,8 +89,14 @@ namespace UI_System.Title_UI_System.Main
                 accountUISystem.OpenLoginUI();
             }
 
-            private void OnOptionButtonClicked()
+            private void OnSettingsButtonClicked()
             {
+                if (OnClickSettingsButton is null)
+                {
+                    throw new InvalidOperationException($"沒有 class 訂閱 {nameof(OnClickSettingsButton)}。");
+                }
+                
+                OnClickSettingsButton.Invoke();
             }
             
             private void OnQuitButtonClicked()
@@ -156,8 +164,6 @@ namespace UI_System.Title_UI_System.Main
                 DialogueDatabase.Initialize();
                 SceneNameDatabase.Initialize();
             #endregion
-            
-            PlayerInventorySaver.InitializeInventoryToLocal();
             
             if (isNewAccount)
             {

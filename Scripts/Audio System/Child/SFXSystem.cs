@@ -27,7 +27,7 @@ namespace Audio_System.Child
             }
         }
         
-        public void PlaySFX(PlaySFXData data)
+        public void PlayOneShot(PlaySFXData data)
         {
             if (data.Clip is null)
             {

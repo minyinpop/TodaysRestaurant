@@ -5,6 +5,7 @@ using Common.Database;
 using Common.Dialogue.Data;
 using Common.Dialogue.SO.Child.Background;
 using Common.Dialogue.SO.Child.Character;
+using Common.Dialogue.SO.Child.Sound;
 using Common.Dialogue.SO.Child.Text;
 using Common.Dialogue.SO.Child.Title;
 using Common.Dialogue.SO.Child.Tool;
@@ -25,6 +26,7 @@ namespace UI_System.Dialogue_UI_System.Main
         [field: SerializeField] private DialogueUICharacterSystem characterSystem;
         [field: SerializeField] private DialogueUITextSystem textSystem;
         [field: SerializeField] private DialogueUITitleSystem titleSystem;
+        [field: SerializeField] private DialogueUISoundSystem soundSystem;
         
         [field: Header("按鈕")]
         [field: SerializeField] private Button continueButton;
@@ -43,32 +45,37 @@ namespace UI_System.Dialogue_UI_System.Main
             #region 必要條件檢查
                 if (backgroundSystem is null)
                 {
-                    throw new InvalidOperationException(nameof(backgroundSystem));
+                    throw new InvalidOperationException($"{nameof(backgroundSystem)} 沒有被掛載。");
                 }
                 
                 if (characterSystem is null)
                 {
-                    throw new InvalidOperationException(nameof(characterSystem));
+                    throw new InvalidOperationException($"{nameof(characterSystem)} 沒有被掛載。");
                 }
                 
                 if (textSystem is null)
                 {
-                    throw new InvalidOperationException(nameof(textSystem));
+                    throw new InvalidOperationException($"{nameof(textSystem)} 沒有被掛載。");
                 }
 
                 if (titleSystem is null)
                 {
-                    throw new InvalidOperationException(nameof(titleSystem));
+                    throw new InvalidOperationException($"{nameof(titleSystem)} 沒有被掛載。");
+                }
+                
+                if (soundSystem is null)
+                {
+                    throw new InvalidOperationException($"{nameof(soundSystem)} 沒有被掛載。");
                 }
 
                 if (continueButton is null)
                 {
-                    throw new InvalidOperationException(nameof(continueButton));
+                    throw new InvalidOperationException($"{nameof(continueButton)} 沒有被掛載。");
                 }
 
                 if (skipButton is null)
                 {
-                    throw new InvalidOperationException(nameof(skipButton));
+                    throw new InvalidOperationException($"{nameof(skipButton)} 沒有被掛載。");
                 }
             #endregion
             
@@ -241,6 +248,54 @@ namespace UI_System.Dialogue_UI_System.Main
                         {
                             titleSystem.HideTitle(
                                 dialogueData: dialogueData as HideTitle,
+                                onComplete: () =>
+                                {
+                                    if (dialogueData.AutoPass)
+                                    {
+                                        _continueDialogue = true;
+                                        return;
+                                    }
+                                    
+                                    continueButton.SetInteractable(true);
+                                });
+                            break;
+                        }
+                        case DialogueDataType.Fade_In_BGM:
+                        {
+                            soundSystem.FadeInBGM(
+                                dialogueData: dialogueData as FadeInBGM,
+                                onComplete: () =>
+                                {
+                                    if (dialogueData.AutoPass)
+                                    {
+                                        _continueDialogue = true;
+                                        return;
+                                    }
+                                    
+                                    continueButton.SetInteractable(true);
+                                });
+                            break;
+                        }
+                        case DialogueDataType.Fade_Out_BGM:
+                        {
+                            soundSystem.FadeOutBGM(
+                                dialogueData: dialogueData as FadeOutBGM,
+                                onComplete: () =>
+                                {
+                                    if (dialogueData.AutoPass)
+                                    {
+                                        _continueDialogue = true;
+                                        return;
+                                    }
+                                    
+                                    continueButton.SetInteractable(true);
+                                });
+                            break;
+                        }
+                        case DialogueDataType.Play_SFX:
+                        {
+                            soundSystem.PlaySFX(
+                                dialogueData: dialogueData as PlaySFX,
                                 onComplete: () =>
                                 {
                                     if (dialogueData.AutoPass)
