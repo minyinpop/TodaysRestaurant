@@ -8,10 +8,6 @@ namespace Common.Dialogue.SO.Child.Tool
     [CreateAssetMenu(menuName = "Minyinpop/Dialogue/Child/Tool/Change Scene", fileName = "New Data")]
     public sealed class ChangeScene : DialogueData
     {
-        [field: Header("State")]
-        [field: SerializeField] private bool autoPass;
-                                public override bool AutoPass => autoPass;
-        
         [field: Header("Scene Name")]
         [field: SerializeField] private SceneNameType sceneNameType;
                                 public SceneNameType SceneNameType => sceneNameType;

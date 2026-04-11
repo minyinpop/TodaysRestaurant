@@ -5,8 +5,10 @@ using UnityEngine;
 namespace Audio_System.Data
 {
     [Serializable]
-    public sealed class PlayBGMData
+    public sealed class FadeInBGMData
     {
+        public bool ChangeClip;
+        
         public AudioClip Clip;
 
         public bool Loop;

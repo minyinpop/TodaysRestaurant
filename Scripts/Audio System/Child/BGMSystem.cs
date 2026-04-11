@@ -1,6 +1,5 @@
 using System;
 using Animation_System.DOTween;
-using Animation_System.DOTween.Basic;
 using Audio_System.Data;
 using UnityEngine;
 
@@ -28,7 +27,7 @@ namespace Audio_System.Child
             }
         }
 
-        public void PlayOneShot(PlayBGMData data)
+        public void PlayOneShot(FadeInBGMData data)
         {
             if (data.Clip is null)
             {
@@ -39,19 +38,18 @@ namespace Audio_System.Child
             BGMSource.PlayOneShot(data.Clip);
         }
 
-        public void FadeInBGM(PlayBGMData data, Action onComplete = null)
+        public void FadeInBGM(FadeInBGMData data, Action onComplete = null)
         {
-            if (data.Clip is null)
+            if (data.ChangeClip)
             {
-                Debug.Log($"{nameof(BGMSystem)} 無法播放空的 {nameof(AudioClip)}。");
-                return;
+                BGMSource.clip = data.Clip;
+                
+                BGMSource.loop = data.Loop;
+                
+                BGMSource.time = data.startTime;
             }
-
-            BGMSource.clip = data.Clip;
-
-            BGMSource.loop = data.Loop;
-
-            BGMSource.time = data.startTime;
+            
+            BGMSource.volume = 0;
             
             BGMSource.Play();
             
@@ -64,20 +62,25 @@ namespace Audio_System.Child
                 });
         }
 
-        public void FadeOutBGM(DoFade_AudioSource settings, Action onComplete = null)
+        public void FadeOutBGM(FadeOutBGMData data, Action onComplete = null)
         {
             animation.DoFade_AudioSource(
                 source: BGMSource,
-                settings: settings,
+                settings: data.Settings,
                 onComplete: () =>
                 {
-                    BGMSource.Stop();
-                    
-                    BGMSource.clip = null;
-                    
-                    BGMSource.loop = false;
-
-                    BGMSource.time = 0;
+                    if (data.KeepClip)
+                    {
+                        BGMSource.Pause();
+                    }
+                    else
+                    {
+                        BGMSource.Stop();
+                        
+                        BGMSource.clip = null;
+                        
+                        BGMSource.loop = false;
+                    }
                     
                     onComplete?.Invoke();
                 });

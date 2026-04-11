@@ -1,6 +1,7 @@
-using Animation_System.DOTween.Basic;
+using Audio_System.Data;
 using Common.Dialogue.Data;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Common.Dialogue.SO.Child.Sound
 {
@@ -8,12 +9,14 @@ namespace Common.Dialogue.SO.Child.Sound
     public sealed class FadeOutBGM : DialogueData
     {
         [field: Header("狀態")]
-        [field: SerializeField] private bool autoPass;
-                                public override bool AutoPass => autoPass;
+        [field: SerializeField] private bool blockProcess;
+                                public override bool BlockProcess => blockProcess;
+        [field: SerializeField, FormerlySerializedAs("autoPass")] private bool clickToPass;
+                                                                          public override bool ClickToPass => clickToPass;
         
         [field: Header("資料")]
-        [field: SerializeField] private DoFade_AudioSource fadeOutSettings;
-                                public DoFade_AudioSource FadeOutSettings => fadeOutSettings;
+        [field: SerializeField] private FadeOutBGMData fadeOutBGMData;
+                                public FadeOutBGMData FadeOutBGMData => fadeOutBGMData;
         
         private const DialogueDataType _dialogueDataType = DialogueDataType.Fade_Out_BGM;
         public override DialogueDataType DialogueDataType => _dialogueDataType;

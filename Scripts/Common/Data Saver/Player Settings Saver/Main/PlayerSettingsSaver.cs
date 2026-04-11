@@ -61,8 +61,6 @@ namespace Common.Data_Saver.Player_Settings_Saver.Main
             {
                 return;
             }
-
-            File.Create(_filePath);
             
             var saveData = new SettingsSaveData
             {

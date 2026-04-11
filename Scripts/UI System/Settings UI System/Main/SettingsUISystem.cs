@@ -2,7 +2,7 @@ using System;
 using Animation_System.DOTween;
 using Animation_System.DOTween.Basic;
 using Common.Button;
-using UI_System.Player_UI_System.Main;
+using UI_System.Settings_UI_System.Child;
 using UI_System.Title_UI_System.Main;
 using UnityEngine;
 
@@ -13,6 +13,9 @@ namespace UI_System.Settings_UI_System.Main
     {
         [field: Header("自身組件")]
         [field: SerializeField] private new DoAnimation animation;
+        
+        [field: Header("自身系統")]
+        [field: SerializeField] private AudioSettingsUISystem audioSettingsUISystem;
         
         [field: Header("遮罩")]
         [field: SerializeField] private CanvasGroup maskCanvasGroup;
@@ -35,6 +38,11 @@ namespace UI_System.Settings_UI_System.Main
                 throw new InvalidOperationException($"{nameof(animation)} 沒有被掛載。");
             }
 
+            if (audioSettingsUISystem is null)
+            {
+                throw new InvalidOperationException($"{nameof(audioSettingsUISystem)} 沒有被掛載。");
+            }
+
             if (maskCanvasGroup is null)
             {
                 throw new InvalidOperationException($"{nameof(maskCanvasGroup)} 沒有被掛載。");
@@ -54,7 +62,7 @@ namespace UI_System.Settings_UI_System.Main
             {
                 throw new InvalidOperationException($"{nameof(closeButton)} 沒有被掛載。");
             }
-
+            
             TitleUISystem.OnClickSettingsButton += OnClickSettingsButton;
 
             if (fastButton is not null)
@@ -63,6 +71,11 @@ namespace UI_System.Settings_UI_System.Main
             }
             
             closeButton.OnClick += OnClickCloseButton;
+        }
+
+        private void Start()
+        {
+            audioSettingsUISystem.Initialize();
         }
 
         private void OnDestroy()

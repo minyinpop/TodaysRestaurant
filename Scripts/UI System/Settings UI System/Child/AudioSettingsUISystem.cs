@@ -1,13 +1,15 @@
 using System;
 using Audio_System.Data;
 using Audio_System.Main;
+using Common.Data_Saver.Player_Settings_Saver.Child;
+using Common.Data_Saver.Player_Settings_Saver.Main;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
 
 namespace UI_System.Settings_UI_System.Child
 {
-    public sealed class AudioSettingsSystem : MonoBehaviour
+    public sealed class AudioSettingsUISystem : MonoBehaviour
     {
         [field: Header("音量設定")]
         [field: SerializeField] private Slider mainVolumeSlider;
@@ -46,10 +48,16 @@ namespace UI_System.Settings_UI_System.Child
             {
                 throw new InvalidOperationException($"{nameof(volumeChangedClip)} 沒有被掛載。");
             }
+        }
 
-            mainVolumeSlider.onValueChanged.AddListener(OnMainVolumeSliderChanged);
-            BGMVolumeSlider.onValueChanged.AddListener(OnBGMVolumeSliderChanged);
-            SFXVolumeSlider.onValueChanged.AddListener(OnSFXVolumeSliderChanged);
+        private void OnDisable()
+        {
+            PlayerSettingsSaver.SaveSettingsToLocal(new SettingsSaveData
+            {
+                MasterVolume = mainVolumeSlider.value,
+                BGMVolume = BGMVolumeSlider.value,
+                SFXVolume = SFXVolumeSlider.value
+            });
         }
 
         private void OnDestroy()
@@ -59,16 +67,29 @@ namespace UI_System.Settings_UI_System.Child
             SFXVolumeSlider.onValueChanged.RemoveListener(OnSFXVolumeSliderChanged);
         }
 
+        public void Initialize()
+        {
+            PlayerSettingsSaver.LoadSettingsFromLocal(out var saveData);
+            
+            SetMasterVolume(saveData.MasterVolume);
+            SetBGMVolume(saveData.BGMVolume);
+            SetSFXVolume(saveData.SFXVolume);
+            
+            mainVolumeSlider.onValueChanged.AddListener(OnMainVolumeSliderChanged);
+            BGMVolumeSlider.onValueChanged.AddListener(OnBGMVolumeSliderChanged);
+            SFXVolumeSlider.onValueChanged.AddListener(OnSFXVolumeSliderChanged);
+        }
+
         private void OnMainVolumeSliderChanged(float value)
         {
-            audioMixer.SetFloat("Master Volume", value);
+            SetMasterVolume(value);
         }
         
         private void OnBGMVolumeSliderChanged(float value)
         {
-            audioMixer.SetFloat("BGM Volume", value);
+            SetBGMVolume(value);
             
-            AudioSystem.Instance.BGMSystem.PlayOneShot(new PlayBGMData
+            AudioSystem.Instance.BGMSystem.PlayOneShot(new FadeInBGMData
             {
                 Clip = volumeChangedClip
             });
@@ -76,12 +97,30 @@ namespace UI_System.Settings_UI_System.Child
 
         private void OnSFXVolumeSliderChanged(float value)
         {
-            audioMixer.SetFloat("SFX Volume", value);
+            SetSFXVolume(value);
             
             AudioSystem.Instance.SFXSystem.PlayOneShot(new PlaySFXData
             {
                 Clip = volumeChangedClip
             });
+        }
+        
+        private void SetMasterVolume(float value)
+        {
+            mainVolumeSlider.value = value;
+            audioMixer.SetFloat("Master Volume", value);
+        }
+        
+        private void SetBGMVolume(float value)
+        {
+            BGMVolumeSlider.value = value;
+            audioMixer.SetFloat("BGM Volume", value);
+        }
+        
+        private void SetSFXVolume(float value)
+        {
+            SFXVolumeSlider.value = value;
+            audioMixer.SetFloat("SFX Volume", value);
         }
     }
 }

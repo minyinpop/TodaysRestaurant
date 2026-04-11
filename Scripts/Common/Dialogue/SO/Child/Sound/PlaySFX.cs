@@ -1,6 +1,7 @@
 using Audio_System.Data;
 using Common.Dialogue.Data;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Common.Dialogue.SO.Child.Sound
 {
@@ -8,8 +9,10 @@ namespace Common.Dialogue.SO.Child.Sound
     public sealed class PlaySFX : DialogueData
     {
         [field: Header("狀態")]
-        [field: SerializeField] private bool autoPass;
-                                public override bool AutoPass => autoPass;
+        [field: SerializeField] private bool blockProcess;
+                                public override bool BlockProcess => blockProcess;
+        [field: SerializeField, FormerlySerializedAs("autoPass")] private bool clickToPass;
+                                                                          public override bool ClickToPass => clickToPass;
         
         [field: Header("資料")]
         [field: SerializeField] private PlaySFXData playSFXData;

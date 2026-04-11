@@ -6,6 +6,8 @@ namespace Common.Dialogue.Data
     {
         public abstract DialogueDataType DialogueDataType { get; }
         
-        public abstract bool AutoPass { get; }
+        public virtual bool BlockProcess => false;
+        
+        public virtual bool ClickToPass => false;
     }
 }

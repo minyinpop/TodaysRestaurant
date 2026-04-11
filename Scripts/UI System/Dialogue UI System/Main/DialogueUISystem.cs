@@ -145,27 +145,48 @@ namespace UI_System.Dialogue_UI_System.Main
                     {
                         case DialogueDataType.Show_Background:
                         {
+                            if (!dialogueData.BlockProcess)
+                            {
+                                _continueDialogue = true;
+                            }
+
                             backgroundSystem.ShowBackground(
-                                dialogueData: dialogueData as ShowBackground,
-                                onComplete: () =>
-                                {
-                                    if (dialogueData.AutoPass)
+                                    dialogueData: dialogueData as ShowBackground,
+                                    onComplete: () =>
                                     {
-                                        _continueDialogue = true;
-                                        return;
-                                    }
-                                    
-                                    continueButton.SetInteractable(true);
-                                });
+                                        if (!dialogueData.BlockProcess)
+                                        {
+                                            return;
+                                        }
+                                        
+                                        if (!dialogueData.ClickToPass)
+                                        {
+                                            _continueDialogue = true;
+                                            return;
+                                        }
+                                        
+                                        continueButton.SetInteractable(true);
+                                    });
+
                             break;
                         }
                         case DialogueDataType.Hide_Background:
                         {
+                            if (!dialogueData.BlockProcess)
+                            {
+                                _continueDialogue = true;
+                            }
+
                             backgroundSystem.HideBackground(
                                 dialogueData: dialogueData as HideBackground,
                                 onComplete: () =>
                                 {
-                                    if (dialogueData.AutoPass)
+                                    if (!dialogueData.BlockProcess)
+                                    {
+                                        return;
+                                    }
+                                    
+                                    if (!dialogueData.ClickToPass)
                                     {
                                         _continueDialogue = true;
                                         return;
@@ -198,11 +219,21 @@ namespace UI_System.Dialogue_UI_System.Main
                         }
                         case DialogueDataType.Show_Text:
                         {
+                            if (!dialogueData.BlockProcess)
+                            {
+                                _continueDialogue = true;
+                            }
+                            
                             textSystem.ShowText(
                                 dialogueData: dialogueData as ShowText,
                                 onComplete: () =>
                                 {
-                                    if (dialogueData.AutoPass)
+                                    if (!dialogueData.BlockProcess)
+                                    {
+                                        return;
+                                    }
+                                    
+                                    if (!dialogueData.ClickToPass)
                                     {
                                         _continueDialogue = true;
                                         return;
@@ -218,23 +249,27 @@ namespace UI_System.Dialogue_UI_System.Main
                                 dialogueData: dialogueData as HideText,
                                 onComplete: () =>
                                 {
-                                    if (dialogueData.AutoPass)
-                                    {
-                                        _continueDialogue = true;
-                                        return;
-                                    }
-                                    
-                                    continueButton.SetInteractable(true);
+                                    _continueDialogue = true;
                                 });
                             break;
                         }
                         case DialogueDataType.Show_Title:
                         {
+                            if (!dialogueData.BlockProcess)
+                            {
+                                _continueDialogue = true;
+                            }
+                            
                             titleSystem.ShowTitle(
                                 dialogueData: dialogueData as ShowTitle,
                                 onComplete: () =>
                                 {
-                                    if (dialogueData.AutoPass)
+                                    if (!dialogueData.BlockProcess)
+                                    {
+                                        return;
+                                    }
+
+                                    if (!dialogueData.ClickToPass)
                                     {
                                         _continueDialogue = true;
                                         return;
@@ -250,23 +285,27 @@ namespace UI_System.Dialogue_UI_System.Main
                                 dialogueData: dialogueData as HideTitle,
                                 onComplete: () =>
                                 {
-                                    if (dialogueData.AutoPass)
-                                    {
-                                        _continueDialogue = true;
-                                        return;
-                                    }
-                                    
-                                    continueButton.SetInteractable(true);
+                                    _continueDialogue = true;
                                 });
                             break;
                         }
                         case DialogueDataType.Fade_In_BGM:
                         {
+                            if (!dialogueData.BlockProcess)
+                            {
+                                _continueDialogue = true;
+                            }
+                            
                             soundSystem.FadeInBGM(
                                 dialogueData: dialogueData as FadeInBGM,
                                 onComplete: () =>
                                 {
-                                    if (dialogueData.AutoPass)
+                                    if (!dialogueData.BlockProcess)
+                                    {
+                                        return;
+                                    }
+                                    
+                                    if (!dialogueData.ClickToPass)
                                     {
                                         _continueDialogue = true;
                                         return;
@@ -278,11 +317,21 @@ namespace UI_System.Dialogue_UI_System.Main
                         }
                         case DialogueDataType.Fade_Out_BGM:
                         {
+                            if (!dialogueData.BlockProcess)
+                            {
+                                _continueDialogue = true;
+                            }
+                            
                             soundSystem.FadeOutBGM(
                                 dialogueData: dialogueData as FadeOutBGM,
                                 onComplete: () =>
                                 {
-                                    if (dialogueData.AutoPass)
+                                    if (!dialogueData.BlockProcess)
+                                    {
+                                        return;
+                                    }
+                                    
+                                    if (!dialogueData.ClickToPass)
                                     {
                                         _continueDialogue = true;
                                         return;
@@ -294,11 +343,21 @@ namespace UI_System.Dialogue_UI_System.Main
                         }
                         case DialogueDataType.Play_SFX:
                         {
+                            if (!dialogueData.BlockProcess)
+                            {
+                                _continueDialogue = true;
+                            }
+                            
                             soundSystem.PlaySFX(
                                 dialogueData: dialogueData as PlaySFX,
                                 onComplete: () =>
                                 {
-                                    if (dialogueData.AutoPass)
+                                    if (!dialogueData.BlockProcess)
+                                    {
+                                        return;
+                                    }
+                                    
+                                    if (!dialogueData.ClickToPass)
                                     {
                                         _continueDialogue = true;
                                         return;
@@ -315,11 +374,7 @@ namespace UI_System.Dialogue_UI_System.Main
                                 yield return new WaitForSeconds(data.WaitTime);
                             }
                             
-                            if (dialogueData.AutoPass)
-                            {
-                                _continueDialogue = true;
-                                break;
-                            }
+                            _continueDialogue = true;
                             
                             continueButton.SetInteractable(true);
                             break;
