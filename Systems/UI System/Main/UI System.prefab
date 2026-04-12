@@ -9079,6 +9079,7 @@ RectTransform:
   - {fileID: 5590234019547827398}
   - {fileID: 4817590725321924478}
   - {fileID: 8149467343207215944}
+  - {fileID: 1209314087523980031}
   m_Father: {fileID: 7386913125236933746}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -9098,11 +9099,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d4608c1289d440f9d8e4801f899629b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UI_System.Message_UI_System.Main.MessageUISystem
-  tipUISystemParent: {fileID: 3128592277801253597}
-  switchUISystemParent: {fileID: 4965245229912832738}
-  itemGetUISystemParent: {fileID: 5590234019547827398}
-  defeatUISystemParent: {fileID: 4817590725321924478}
-  dialogueSkipUISystemParent: {fileID: 8149467343207215944}
+  tipUISystem: {fileID: 5389320025499167662}
+  switchUISystem: {fileID: 5856531879511272207}
+  itemGetUISystem: {fileID: 2549643800522672119}
+  defeatUISystem: {fileID: 1652729176455658381}
+  dialogueSkipUISystem: {fileID: 3425697315774522743}
+  audioUISystem: {fileID: 3500698500888667686}
 --- !u!1 &2234850138259357123
 GameObject:
   m_ObjectHideFlags: 0
@@ -24939,18 +24941,18 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6265507605917116821}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1232408398885698680}
   - {fileID: 1036694474712759269}
-  m_Father: {fileID: 7791620979899471632}
+  m_Father: {fileID: 1209314087523980031}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -32}
+  m_AnchoredPosition: {x: 0, y: 458}
   m_SizeDelta: {x: 160, y: 128}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &4251611635256371893
@@ -25905,6 +25907,79 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!1 &6442117875868029015
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1209314087523980031}
+  - component: {fileID: 3500698500888667686}
+  - component: {fileID: 7505847102577456912}
+  m_Layer: 0
+  m_Name: Audio UI System
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1209314087523980031
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6442117875868029015}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 8796980969943211486}
+  m_Father: {fileID: 5348698207660260192}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &3500698500888667686
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6442117875868029015}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7086fe23f324033911f04de1f88b2f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI_System.Message_UI_System.Child.Audio_UI_System.AudioUISystem
+  animation: {fileID: 7505847102577456912}
+  BGMNameText: {fileID: 5000940865072197730}
+  BGMNamePanelCanvasGroup: {fileID: 6952189112732718955}
+  BGMNamePanelFadeInSettings:
+    EndValue: 1
+    Duration: 0.5
+    Ease: 1
+  BGMNamePanelFadeOutSettings:
+    EndValue: 0
+    Duration: 0.5
+    Ease: 1
+--- !u!114 &7505847102577456912
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6442117875868029015}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a817bf6649934d0e8fef10e3075e14a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Animation_System.DOTween.DoAnimation
 --- !u!1 &6450154519277563319
 GameObject:
   m_ObjectHideFlags: 0
@@ -28290,7 +28365,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7791620979899471632}
   - component: {fileID: 4019466956603600100}
-  - component: {fileID: 2580235206704250533}
   m_Layer: 0
   m_Name: Dialogue UI Sound System
   m_TagString: Untagged
@@ -28309,8 +28383,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 8796980969943211486}
+  m_Children: []
   m_Father: {fileID: 2783687426948265271}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -28330,29 +28403,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc07455fefb545a7b114c5d956bacabb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UI_System.Dialogue_UI_System.Child.DialogueUISoundSystem
-  animation: {fileID: 2580235206704250533}
-  BGMNameText: {fileID: 5000940865072197730}
-  BGMNamePanelCanvasGroup: {fileID: 6952189112732718955}
-  BGMNamePanelFadeInSettings:
-    EndValue: 1
-    Duration: 0.1
-    Ease: 1
-  BGMNamePanelFadeOutSettings:
-    EndValue: 0
-    Duration: 0.1
-    Ease: 1
---- !u!114 &2580235206704250533
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7062164087536404444}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a817bf6649934d0e8fef10e3075e14a7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Animation_System.DOTween.DoAnimation
 --- !u!1 &7072522261449579897
 GameObject:
   m_ObjectHideFlags: 0

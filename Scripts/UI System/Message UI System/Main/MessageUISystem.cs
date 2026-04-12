@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Common.Item.Data;
 using Common.Value;
+using UI_System.Message_UI_System.Child.Audio_UI_System;
 using UI_System.Message_UI_System.Child.Defeat_UI_System.System;
 using UI_System.Message_UI_System.Child.Dialogue_Skip_UI_System.System;
 using UI_System.Message_UI_System.Child.Item_Get_UI_System.System;
@@ -14,96 +15,57 @@ namespace UI_System.Message_UI_System.Main
     public sealed class MessageUISystem : MonoBehaviour
     {
         [field: Header("Objects")]
-        [field: SerializeField] private Transform tipUISystemParent;
+        [field: SerializeField] private TipUISystem tipUISystem;
                                 private static TipUISystem _tipUISystem;
-        [field: SerializeField] private Transform switchUISystemParent;
+        [field: SerializeField] private SwitchUISystem switchUISystem;
                                 private static SwitchUISystem _switchUISystem;
-        [field: SerializeField] private Transform itemGetUISystemParent;
+        [field: SerializeField] private ItemGetUISystem itemGetUISystem;
                                 private static ItemGetUISystem _itemGetUISystem;
-        [field: SerializeField] private Transform defeatUISystemParent;
+        [field: SerializeField] private DefeatUISystem defeatUISystem;
                                 private static DefeatUISystem _defeatUISystem;
-        [field: SerializeField] private Transform dialogueSkipUISystemParent;
+        [field: SerializeField] private DialogueSkipUISystem dialogueSkipUISystem;
                                 private static DialogueSkipUISystem _dialogueSkipUISystem;
+        [field: SerializeField] private AudioUISystem audioUISystem;
+                                private static AudioUISystem _audioUISystem;
 
         private void Awake()
         {
-            #region 提示 UI
-                if (tipUISystemParent is null)
-                {
-                    Debug.Log($"{name} > {GetType().Name} > {nameof(tipUISystemParent)} cannot be null.)");
-                    Destroy(gameObject);
-                    return;
-                }
-                
-                if (!tipUISystemParent.TryGetComponent(out _tipUISystem))
-                {
-                    Debug.Log($"{name} > {GetType().Name} > {nameof(tipUISystemParent)} cannot get {nameof(_tipUISystem.GetType)}.");
-                    Destroy(gameObject);
-                    return;
-                }
-            #endregion
+            if (tipUISystem is null)
+            {
+                throw new InvalidOperationException($"{nameof(tipUISystem)} 沒有被掛載。");
+            }
             
-            #region 選擇 UI
-                if (switchUISystemParent is null)
-                {
-                    Debug.Log($"{name} > {GetType().Name} > {nameof(switchUISystemParent)} cannot be null.)");
-                    Destroy(gameObject);
-                    return;
-                }
-                
-                if (!switchUISystemParent.TryGetComponent(out _switchUISystem))
-                {
-                    Debug.Log($"{name} > {GetType().Name} > {nameof(switchUISystemParent)} cannot get {nameof(_switchUISystem.GetType)}.");
-                    Destroy(gameObject);
-                    return;
-                }
-            #endregion
-
-            #region 獲得物品 UI
-                if (itemGetUISystemParent is null)
-                {
-                    Debug.Log($"{name} > {GetType().Name} > {nameof(itemGetUISystemParent)} cannot be null.)");
-                    Destroy(gameObject);
-                    return;
-                }
-                    
-                if (!itemGetUISystemParent.TryGetComponent(out _itemGetUISystem))
-                {
-                    Debug.Log($"{name} > {GetType().Name} > {nameof(itemGetUISystemParent)} cannot get {nameof(_itemGetUISystem.GetType)}.");
-                    Destroy(gameObject);
-                    return;
-                }
-            #endregion
+            if (switchUISystem is null)
+            {
+                throw new InvalidOperationException($"{nameof(switchUISystem)} 沒有被掛載。");
+            }
             
-            #region 戰敗 UI
-                if (defeatUISystemParent is null)
-                {
-                    Debug.Log($"{name} > {GetType().Name} > {nameof(defeatUISystemParent)} cannot be null.)");
-                    Destroy(gameObject);
-                    return;
-                }
-                        
-                if (!defeatUISystemParent.TryGetComponent(out _defeatUISystem))
-                {
-                    Debug.Log($"{name} > {GetType().Name} > {nameof(defeatUISystemParent)} cannot get {nameof(_defeatUISystem.GetType)}.");
-                    Destroy(gameObject);
-                }
-            #endregion
+            if (itemGetUISystem is null)
+            {
+                throw new InvalidOperationException($"{nameof(itemGetUISystem)} 沒有被掛載。");
+            }
+            
+            if (defeatUISystem is null)
+            {
+                throw new InvalidOperationException($"{nameof(defeatUISystem)} 沒有被掛載。");
+            }
+            
+            if (dialogueSkipUISystem is null)
+            {
+                throw new InvalidOperationException($"{nameof(dialogueSkipUISystem)} 沒有被掛載。");
+            }
+            
+            if (audioUISystem is null)
+            {
+                throw new InvalidOperationException($"{nameof(audioUISystem)} 沒有被掛載。");
+            }
 
-            #region 劇情概要 UI
-                if (dialogueSkipUISystemParent is null)
-                {
-                    Debug.Log($"{name} > {GetType().Name} > {nameof(dialogueSkipUISystemParent)} cannot be null.)");
-                    Destroy(gameObject);
-                    return;
-                }
-                            
-                if (!dialogueSkipUISystemParent.TryGetComponent(out _dialogueSkipUISystem))
-                {
-                    Debug.Log($"{name} > {GetType().Name} > {nameof(dialogueSkipUISystemParent)} cannot get {nameof(_dialogueSkipUISystem.GetType)}.");
-                    Destroy(gameObject);
-                }
-            #endregion
+            _tipUISystem = tipUISystem;
+            _switchUISystem = switchUISystem;
+            _itemGetUISystem = itemGetUISystem;
+            _defeatUISystem = defeatUISystem;
+            _dialogueSkipUISystem = dialogueSkipUISystem;
+            _audioUISystem = audioUISystem;
         }
         
         public static void ShowTipUI(PopUpUIContent content, Action onConfirm = null)
@@ -129,6 +91,11 @@ namespace UI_System.Message_UI_System.Main
         public static void ShowDialogueSkipUI(PopUpUIContent content, Action onConfirm, Action onCancel = null)
         {
             _dialogueSkipUISystem.ShowUI(content, onConfirm, onCancel);
+        }
+
+        public static void ShowAudioUI(string BGMName, Action onComplete = null)
+        {
+            _audioUISystem.StartShowName(BGMName);
         }
     }
 }
