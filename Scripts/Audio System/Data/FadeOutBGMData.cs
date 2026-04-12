@@ -6,6 +6,8 @@ namespace Audio_System.Data
     [Serializable]
     public sealed class FadeOutBGMData
     {
+        public AudioSourceType AudioSourceType;
+        
         public bool KeepClip;
 
         public DoFade_AudioSource Settings;

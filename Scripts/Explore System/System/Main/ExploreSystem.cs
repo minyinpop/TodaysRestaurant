@@ -338,7 +338,7 @@ namespace Explore_System.System.Main
 
         public override void OnTransitionComplete()
         {
-            AudioSystem.Instance.BGMSystem.FadeInBGM(fadeInBGMData);
+            AudioSystem.Instance.CommonBGM.FadeInBGM(fadeInBGMData);
         }
     }
 }

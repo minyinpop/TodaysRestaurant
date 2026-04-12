@@ -60,11 +60,11 @@ namespace Common.Button
                 if (Interactable)
                 {
                     DoAnimation?.DoScale_UI(Rect, OnPointerEnterScale);
-                }
-                
-                if (CanPlaySFX)
-                {
-                    AudioSystem.Instance.SFXSystem.PlayOneShot(playSFXData);
+                    
+                    if (CanPlaySFX)
+                    {
+                        AudioSystem.Instance.UISFX.PlayOneShot(playSFXData);
+                    }
                 }
             }
             

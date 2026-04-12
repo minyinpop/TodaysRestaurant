@@ -11,7 +11,7 @@ namespace Player_System.Object
         
         [field: Header("聲音系統 - 腳步")]
         [field: SerializeField] private PlaySFXData[] walkOnDirtSFX;
-
+        
         private void PlayTakeItemSFX()
         {
             if (takeItemSFX is null)
@@ -20,9 +20,9 @@ namespace Player_System.Object
                 return;
             }
             
-            AudioSystem.Instance.SFXSystem.PlayOneShot(takeItemSFX);
+            AudioSystem.Instance.InteractSFX.PlayOneShot(takeItemSFX);
         }
-
+        
         private void PlayWalkOnDirtSFX()
         {
             if (walkOnDirtSFX.Length <= 0)
@@ -31,7 +31,7 @@ namespace Player_System.Object
                 return;
             }
             
-            AudioSystem.Instance.SFXSystem.PlayOneShot(walkOnDirtSFX[Random.Range(0, walkOnDirtSFX.Length)]);
+            AudioSystem.Instance.FootstepSFX.PlayOneShot(walkOnDirtSFX[Random.Range(0, walkOnDirtSFX.Length)]);
         }
     }
 }

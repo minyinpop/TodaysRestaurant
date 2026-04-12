@@ -65,8 +65,8 @@ namespace Common.Data_Saver.Player_Settings_Saver.Main
             var saveData = new SettingsSaveData
             {
                 MasterVolume = 0,
-                BGMVolume = 0,
-                SFXVolume = 0
+                MainBGMVolume = 0,
+                MainSFXVolume = 0
             };
             
             var json = JsonUtility.ToJson(saveData);

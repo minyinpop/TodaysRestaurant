@@ -8,6 +8,10 @@ namespace Audio_System.Child
     [RequireComponent(typeof(DoAnimation))]
     public sealed class SFXSystem : MonoBehaviour
     {
+        [field: Header("播放器類型")]
+        [field: SerializeField] private AudioSourceType audioSourceType;
+                                private AudioSourceType _audioSourceType => audioSourceType;
+        
         [field: Header("自身組件")]
         [field: SerializeField] private new DoAnimation animation;
         

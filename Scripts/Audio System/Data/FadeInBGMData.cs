@@ -7,6 +7,8 @@ namespace Audio_System.Data
     [Serializable]
     public sealed class FadeInBGMData
     {
+        public AudioSourceType AudioSourceType;
+        
         public bool ChangeClip;
         
         public AudioClip Clip;
