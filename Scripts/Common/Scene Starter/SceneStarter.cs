@@ -26,5 +26,10 @@ namespace Common.Scene_Starter
         {
             Debug.Log($"該場景沒有 {nameof(SceneStarter)}，或是沒有 {nameof(SceneStarter)} 繼承 {nameof(StartSystem)}");
         }
+
+        public virtual void OnTransitionComplete()
+        {
+            Debug.Log($"該場景沒有 {nameof(SceneStarter)}，或是沒有 {nameof(SceneStarter)} 繼承 {nameof(OnTransitionComplete)}");
+        }
     }
 }

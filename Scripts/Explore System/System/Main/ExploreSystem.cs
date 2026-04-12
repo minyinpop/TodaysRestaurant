@@ -1,5 +1,7 @@
 using System;
 using System.Collections;
+using Audio_System.Data;
+using Audio_System.Main;
 using Common.Database;
 using Common.Enemy_Battle_Group;
 using Common.Enemy.Enemy_Object;
@@ -17,8 +19,11 @@ namespace Explore_System.System.Main
 {
     public sealed class ExploreSystem : SceneStarter
     {
-        [field: Header("Component")]
+        [field: Header("自身組件")]
         [field: SerializeField] private ExploreUISystem exploreUISystem;
+        
+        [field: Header("背景音樂")]
+        [field: SerializeField] private FadeInBGMData fadeInBGMData;
         
         private LevelSO _levelData;
         
@@ -43,7 +48,12 @@ namespace Explore_System.System.Main
         {
             if (exploreUISystem is null)
             {
-                throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(exploreUISystem)} cannot be null.");
+                throw new InvalidOperationException($"{nameof(exploreUISystem)} 沒有被掛載。");
+            }
+
+            if (fadeInBGMData is null)
+            {
+                throw new InvalidOperationException($"{nameof(fadeInBGMData)} 沒有被掛載。");
             }
         }
 
@@ -72,14 +82,14 @@ namespace Explore_System.System.Main
         {
             if (_initialized)
             {
-                throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(StartSystem)} is already initialize.");
+                throw new InvalidOperationException($"{nameof(ExploreSystem)} 已經初始化過了。");
             }
 
             if (starterData is not LevelSO levelData)
             {
-                throw new ArgumentException($"{starterData} is not {nameof(LevelSO)}.");
+                throw new ArgumentException($"{starterData} 不是 {nameof(LevelSO)}。");
             }
-
+            
             _initialized = true;
             _levelData = levelData;
             
@@ -101,7 +111,7 @@ namespace Explore_System.System.Main
                         Destroy(gameObject);
                         yield break;
                     }
-
+                    
                     yield return operation;
                 #endregion
                 
@@ -324,6 +334,11 @@ namespace Explore_System.System.Main
                     }
                 }
             }
+        }
+
+        public override void OnTransitionComplete()
+        {
+            AudioSystem.Instance.BGMSystem.FadeInBGM(fadeInBGMData);
         }
     }
 }

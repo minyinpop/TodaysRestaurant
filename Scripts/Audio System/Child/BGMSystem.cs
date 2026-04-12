@@ -1,6 +1,7 @@
 using System;
 using Animation_System.DOTween;
 using Audio_System.Data;
+using UI_System.Message_UI_System.Main;
 using UnityEngine;
 
 namespace Audio_System.Child
@@ -40,6 +41,14 @@ namespace Audio_System.Child
 
         public void FadeInBGM(FadeInBGMData data, Action onComplete = null)
         {
+            if (data.Clip is null)
+            {
+                Debug.Log($"{nameof(data)} 不能傳入空的 {nameof(AudioClip)}。");
+                return;
+            }
+            
+            MessageUISystem.ShowAudioUI(data.Clip.name);
+            
             if (data.ChangeClip)
             {
                 BGMSource.clip = data.Clip;

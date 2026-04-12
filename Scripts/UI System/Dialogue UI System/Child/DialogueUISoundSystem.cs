@@ -1,7 +1,6 @@
 using System;
 using Audio_System.Main;
 using Common.Dialogue.SO.Child.Sound;
-using UI_System.Message_UI_System.Main;
 using UnityEngine;
 
 namespace UI_System.Dialogue_UI_System.Child
@@ -10,8 +9,6 @@ namespace UI_System.Dialogue_UI_System.Child
     {
         public void FadeInBGM(FadeInBGM dialogueData, Action onComplete)
         {
-            MessageUISystem.ShowAudioUI(dialogueData.FadeInBGMData.Clip.name);
-            
             AudioSystem.Instance.BGMSystem.FadeInBGM(
                 data: dialogueData.FadeInBGMData,
                 onComplete: onComplete);

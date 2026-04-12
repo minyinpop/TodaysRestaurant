@@ -9,7 +9,7 @@ namespace Player_System.Object
 {
     public partial class PlayerObject
     {
-        [field: Header("Detect System")]
+        [field: Header("偵測系統 - 範圍")]
         [field: SerializeField] private DetectArea detectArea;
 
         private Action _onEnterDetectCleanupAction;
@@ -63,6 +63,11 @@ namespace Player_System.Object
                 return;
             }
             
+            _stateMachine.ChangeState(_takeItemState);
+        }
+
+        private void RemoveInteractableObject()
+        {
             var interactableObject = _interactableObjects.First();
 
             if (interactableObject.OnInteract(this))

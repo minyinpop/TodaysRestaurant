@@ -110,6 +110,10 @@ MonoBehaviour:
     Layer: 0
     AnimationName: Walk_01
     Loop: 1
+  take:
+    Layer: 0
+    AnimationName: TakeThing
+    Loop: 0
   turnLeft:
     EndValue: {x: 0, y: 0, z: 0}
     Duration: 0.1
@@ -120,10 +124,19 @@ MonoBehaviour:
     Duration: 0.1
     RotateMode: 1
     Ease: 1
+  takeItemSFX:
+    Clip: {fileID: 8300000, guid: 1a5783e4ddcbbef4cb89cede484699e9, type: 3}
+  walkOnDirtSFX:
+  - Clip: {fileID: 8300000, guid: df8e3f387e6c80544b15eed5ab6c8713, type: 3}
+  - Clip: {fileID: 8300000, guid: 82194181bd0ceda4c84dcb09b5a8166f, type: 3}
+  - Clip: {fileID: 8300000, guid: 85fb183d088830d438fba6cca934c98b, type: 3}
+  - Clip: {fileID: 8300000, guid: b37b18dff9df9224881d2acf2d19e63e, type: 3}
+  - Clip: {fileID: 8300000, guid: 422a6630a854e5b4fb4c38ef14299002, type: 3}
   playerSystem: {fileID: 0}
   detectArea: {fileID: 2175107635336491122}
   rig: {fileID: 1810716096319531938}
   characterData: {fileID: 11400000, guid: 09dfc44ecd70bbb479f6390867e257a7, type: 2}
+  _canWalk: 1
 --- !u!114 &4316437671976539439
 MonoBehaviour:
   m_ObjectHideFlags: 0

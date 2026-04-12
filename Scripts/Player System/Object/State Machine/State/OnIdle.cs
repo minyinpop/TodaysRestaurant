@@ -13,7 +13,7 @@ namespace Player_System.Object.State_Machine.State
             OnExit = onExit;
         }
 
-        public void Enter() => OnEnter?.Invoke();
-        public void Exit() => OnExit?.Invoke();
+        public void Enter() => OnEnter.Invoke();
+        public void Exit() => OnExit.Invoke();
     }
 }

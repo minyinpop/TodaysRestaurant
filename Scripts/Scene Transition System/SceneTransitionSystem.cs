@@ -186,6 +186,7 @@ namespace Scene_Transition_System
                 onComplete: () =>
                 {
                     sceneStarter.StartSystemWhenFinish();
+                    sceneStarter.OnTransitionComplete();
                 });
             StartCoroutine(_changeSceneCoroutine);
         }
@@ -221,6 +222,7 @@ namespace Scene_Transition_System
                 onComplete: () =>
                 {
                     sceneStarter.StartSystemWhenFinish(starterData);
+                    sceneStarter.OnTransitionComplete();
                 });
             StartCoroutine(_changeSceneCoroutine);
         }
