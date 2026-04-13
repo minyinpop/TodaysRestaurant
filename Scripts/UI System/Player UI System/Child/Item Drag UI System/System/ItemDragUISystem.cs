@@ -15,13 +15,13 @@ namespace UI_System.Player_UI_System.Child.Item_Drag_UI_System.System
 
         private void Awake()
         {
-            if (itemDragUI == null)
+            if (itemDragUI is null)
             {
                 Debug.Log($"{nameof(ItemDragUISystem)} > {nameof(itemDragUI)} > cannot be null.");
                 return;
             }
             
-            if (itemDragUIRect == null)
+            if (itemDragUIRect is null)
             {
                 Debug.Log($"{nameof(ItemDragUISystem)} > {nameof(itemDragUIRect)} > cannot be null.");
             }

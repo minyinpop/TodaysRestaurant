@@ -66,8 +66,6 @@ namespace Player_System.Object
                 {
                     case "Take":
                     {
-                        PlayTakeItemSFX();
-                        
                         RemoveInteractableObject();
                         break;
                     }

@@ -1,4 +1,6 @@
 using System;
+using Audio_System.Data;
+using Audio_System.Main;
 using Common.Interactable_Object;
 using Common.Item.Data;
 using Player_System.Object;
@@ -8,8 +10,11 @@ namespace Common.Item.Object
 {
     public sealed class ItemObject : MonoBehaviour, InteractableObject
     {
-        [field: Header("Data")]
+        [field: Header("物品資料")]
         [field: SerializeField] private ItemSO itemData;
+        
+        [field: Header("音效資料")]
+        [field: SerializeField] private PlaySFXData takeSFX;
 
         public static event Action OnTake;
 
@@ -34,6 +39,8 @@ namespace Common.Item.Object
         {
             if (playerObject.TryAddItem(itemData))
             {
+                AudioSystem.Instance.InteractSFX.PlayOneShot(takeSFX);
+                
                 OnTake?.Invoke();
                 
                 Destroy(gameObject);

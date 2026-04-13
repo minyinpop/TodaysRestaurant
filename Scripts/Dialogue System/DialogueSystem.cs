@@ -8,7 +8,7 @@ namespace Dialogue_System
 {
     public sealed class DialogueSystem : SceneStarter
     {
-        [field: Header("System")]
+        [field: Header("系統")]
         [field: SerializeField] private DialogueUISystem dialogueUISystem;
 
         private void Awake()

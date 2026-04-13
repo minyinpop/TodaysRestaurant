@@ -19,6 +19,8 @@ namespace Player_System.System.Player_System
             
             // CookwareSystem.TryAddItem += TryAddItem;
             Customer.GivingServingNote += TryAddItem;
+
+            _itemDragSFX = itemDragSFX;
         }
 
         private void OnDestroy()

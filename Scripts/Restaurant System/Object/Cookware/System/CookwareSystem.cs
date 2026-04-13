@@ -50,7 +50,7 @@ namespace Restaurant_System.Object.Cookware.System
         private readonly Queue<Action> _cleanUpActions = new();
 
         private bool _isCookGameComplete;
-        private bool _interactable;
+        private bool _interactable = true;
 
         public static event Action OnGameTime;
         public static event Action OnCookComplete;
@@ -123,7 +123,6 @@ namespace Restaurant_System.Object.Cookware.System
             {
                 Debug.Log($"{nameof(audioSource)} 沒有被掛載。");
                 Destroy(gameObject);
-                return;
             }
         }
 
@@ -134,7 +133,10 @@ namespace Restaurant_System.Object.Cookware.System
 
         private void OnDisable()
         {
-            while (_cleanUpActions.Count > 0) _cleanUpActions.Dequeue()?.Invoke();
+            while (_cleanUpActions.Count > 0)
+            {
+                _cleanUpActions.Dequeue()?.Invoke();
+            }
         }
 
         #region InteractableObject
@@ -170,12 +172,21 @@ namespace Restaurant_System.Object.Cookware.System
                             
                             _currentBubble.OnClick += _stateMachine.InteractState;
                             _cleanUpActions.Enqueue(() => _currentBubble.OnClick -= _stateMachine.InteractState);
+
+                            _interactable = true;
                             
                             _currentBubble.SetInteractable(_interactable);
                         },
                         onInteract: () =>
                         {
-                            AudioSystem.Instance.OtherSFX.PlayOneShot(openSFXData);
+                            if (!_interactable)
+                            {
+                                return;
+                            }
+
+                            _interactable = false;
+
+                            AudioSystem.Instance.InteractSFX.PlayOneShot(openSFXData);
                             
                             OpenCookSelectionUI?.Invoke(cookwareType,
                                 /* onConfirm */ cookItem =>
@@ -185,7 +196,9 @@ namespace Restaurant_System.Object.Cookware.System
                                 },
                                 /* onCancel: */ () =>
                                 {
-                                    AudioSystem.Instance.OtherSFX.PlayOneShot(closeSFXData);
+                                    AudioSystem.Instance.InteractSFX.PlayOneShot(closeSFXData);
+
+                                    _interactable = true;
                                 });
                         },
                         onExit: () =>
@@ -202,6 +215,18 @@ namespace Restaurant_System.Object.Cookware.System
                     _stateMachine.ChangeState(new OnCook(
                         onEnter: () =>
                         {
+                            if (cookingAMBData.Clip is null)
+                            {
+                                Debug.Log($"{name} 的 {nameof(CookwareSystem)} 沒有掛載烹飪中的環境音。");
+                            }
+                            else
+                            {
+                                audioSource.clip = cookingAMBData.Clip;
+                                audioSource.loop = cookingAMBData.Loop;
+                                audioSource.time = cookingAMBData.StartTime;
+                                audioSource.Play();
+                            }
+                            
                             _currentBubble = Instantiate(cookBubblePrefab, bubbleParent).GetComponent<ClickableBubble>();
 
                             // TODO 2025.12.03 從這裡繼續做
@@ -214,7 +239,6 @@ namespace Restaurant_System.Object.Cookware.System
                         },
                         onInteract: () =>
                         {
-                            // TODO
                         },
                         onExit: () =>
                         {
@@ -234,50 +258,63 @@ namespace Restaurant_System.Object.Cookware.System
                             
                             _currentBubble = Instantiate(gameTimeBubblePrefab, bubbleParent).GetComponent<ClickableBubble>();
                             
-                            _currentBubble.OnClick += OnBubbleClicked;
-                            _cleanUpActions.Enqueue(() => _currentBubble.OnClick -= OnBubbleClicked);
+                            _currentBubble.OnClick += _stateMachine.InteractState;
+                            _cleanUpActions.Enqueue(() => _currentBubble.OnClick -= _stateMachine.InteractState);
+
+                            _interactable = true;
                             
                             _currentBubble.SetInteractable(_interactable);
-                            _currentBubble.StartCountDown(Mathf.Abs(gameTimeDuration),
+                            _currentBubble.StartCountDown(
+                                time: Mathf.Abs(gameTimeDuration),
                                 onComplete: OnOvercookedState);
-                            return;
-
-                            void OnBubbleClicked()
-                            {
-                                _currentBubble.SetRaycastTarget(false);
-                                
-                                _currentCookGame = Instantiate(cookGamePrefab, gameParent).GetComponent<CookGameSystem>();
-                                
-                                _currentCookGame.OnComplete += OnCookGameComplete;
-                                _cleanUpActions.Enqueue(() =>
-                                {
-                                    if (_currentCookGame is not null)
-                                        _currentCookGame.OnComplete -= OnCookGameComplete;
-                                });
-                                
-                                _currentCookGame.OnCancel += OnCookGameCancel;
-                                _cleanUpActions.Enqueue(() =>
-                                {
-                                    if (_currentCookGame is not null)
-                                        _currentCookGame.OnCancel -= OnCookGameCancel;
-                                });
-                                return;
-
-                                void OnCookGameComplete()
-                                {
-                                    _isCookGameComplete = true;
-                                    OnCookState();
-                                }
-                                
-                                void OnCookGameCancel()
-                                {
-                                    _currentBubble.SetRaycastTarget(true);
-                                }
-                            }
                         },
                         onInteract: () =>
                         {
-                            // TODO
+                            if (!_interactable)
+                            {
+                                return;
+                            }
+
+                            _interactable = false;
+                            
+                            AudioSystem.Instance.InteractSFX.PlayOneShot(openSFXData);
+                            
+                            _currentBubble.SetRaycastTarget(false);
+                            
+                            _currentCookGame = Instantiate(cookGamePrefab, gameParent).GetComponent<CookGameSystem>();
+                            
+                            _currentCookGame.OnComplete += OnCookGameComplete;
+                            _cleanUpActions.Enqueue(() =>
+                            {
+                                if (_currentCookGame is not null)
+                                    _currentCookGame.OnComplete -= OnCookGameComplete;
+                            });
+                            
+                            _currentCookGame.OnCancel += OnCookGameCancel;
+                            _cleanUpActions.Enqueue(() =>
+                            {
+                                if (_currentCookGame is not null)
+                                    _currentCookGame.OnCancel -= OnCookGameCancel;
+                            });
+                            return;
+
+                            void OnCookGameComplete()
+                            {
+                                _isCookGameComplete = true;
+                                
+                                AudioSystem.Instance.InteractSFX.PlayOneShot(closeSFXData);
+                                
+                                OnCookState();
+                            }
+                            
+                            void OnCookGameCancel()
+                            {
+                                _interactable = true;
+                                
+                                AudioSystem.Instance.InteractSFX.PlayOneShot(closeSFXData);
+                                
+                                _currentBubble.SetRaycastTarget(true);
+                            }
                         },
                         onExit: () =>
                         {
@@ -303,36 +340,42 @@ namespace Restaurant_System.Object.Cookware.System
                             
                             _currentBubble = Instantiate(completeBubblePrefab, bubbleParent).GetComponent<ClickableBubble>();
                             
-                            _currentBubble.OnClick += OnBubbleClicked;
-                            _cleanUpActions.Enqueue(() => _currentBubble.OnClick -= OnBubbleClicked);
+                            _currentBubble.OnClick += _stateMachine.InteractState;
+                            _cleanUpActions.Enqueue(() => _currentBubble.OnClick -= _stateMachine.InteractState);
                             
                             _currentBubble.SetInteractable(_interactable);
-                            return;
-
-                            void OnBubbleClicked()
-                            {
-                                if (_interactingPlayer is null)
-                                {
-                                    Debug.Log($"{name} > {GetType().Name} > {nameof(OnCompleteState)} > {nameof(OnBubbleClicked)} > {nameof(_interactingPlayer)} is null.");
-                                    Destroy(gameObject);
-                                    return;
-                                }
-                                
-                                if (_interactingPlayer.TryAddItem(_currentCookItem))
-                                {
-                                    OnAddDish?.Invoke();
-                                    
-                                    OnEmptyState();
-                                }
-                                else
-                                {
-                                    Debug.Log($"無法添加 {_currentCookItem.ItemName} 至玩家背包。");
-                                }
-                            }
                         },
                         onInteract: () =>
                         {
-                            // TODO
+                            if (!_interactable)
+                            {
+                                return;
+                            }
+                            
+                            if (OnAddDish is null)
+                            {
+                                throw new InvalidOperationException($"{nameof(OnAddDish)} 沒有其它 class 訂閱。");
+                            }
+
+                            if (_interactingPlayer is null)
+                            {
+                                throw new InvalidOperationException($"找不到 {nameof(_interactingPlayer)}。");
+                            }
+                            
+                            _interactable = false;
+                            
+                            if (_interactingPlayer.TryAddItem(_currentCookItem))
+                            {
+                                OnAddDish.Invoke();
+                                
+                                AudioSystem.Instance.InteractSFX.PlayOneShot(closeSFXData);
+                                
+                                OnEmptyState();
+                            }
+                            else
+                            {
+                                Debug.Log($"無法添加 {_currentCookItem.ItemName} 至玩家背包。");
+                            }
                         },
                         onExit: Reset));
                 }
@@ -346,26 +389,32 @@ namespace Restaurant_System.Object.Cookware.System
                         {
                             _currentBubble = Instantiate(overcookedBubblePrefab, bubbleParent).GetComponent<ClickableBubble>();
                             
-                            _currentBubble.OnClick += OnClick;
-                            _cleanUpActions.Enqueue(() => _currentBubble.OnClick -= OnClick);
-                            _currentBubble.SetInteractable(_interactable);
-                            return;
+                            _currentBubble.OnClick += _stateMachine.InteractState;
+                            _cleanUpActions.Enqueue(() => _currentBubble.OnClick -= _stateMachine.InteractState);
 
-                            void OnClick()
-                            {
-                                if (_interactingPlayer.TryAddItem(_currentCookItem))
-                                {
-                                    OnEmptyState();
-                                }
-                                else
-                                {
-                                    Debug.Log($"無法添加 {_currentCookItem.ItemName} 至玩家背包。");
-                                }
-                            }
+                            _interactable = true;
+                            
+                            _currentBubble.SetInteractable(_interactable);
                         },
                         onInteract: () =>
                         {
-                            // TODO
+                            if (!_interactable)
+                            {
+                                return;
+                            }
+                            
+                            _interactable = false;
+
+                            if (_interactingPlayer.TryAddItem(_currentCookItem))
+                            {
+                                AudioSystem.Instance.InteractSFX.PlayOneShot(closeSFXData);
+                                
+                                OnEmptyState();
+                            }
+                            else
+                            {
+                                Debug.Log($"無法添加 {_currentCookItem.ItemName} 至玩家背包。");
+                            }
                         },
                         onExit: Reset));
                 }

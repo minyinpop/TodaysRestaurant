@@ -211,6 +211,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6020713831428204209}
   - component: {fileID: 3891889000195632299}
+  - component: {fileID: 2237671629097617056}
   m_Layer: 0
   m_Name: Backpack UI System
   m_TagString: Untagged
@@ -231,8 +232,8 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3873570971591200289}
-  - {fileID: 661850392362459615}
   - {fileID: 2600921048570651538}
+  - {fileID: 661850392362459615}
   m_Father: {fileID: 4895630642340798626}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -252,9 +253,45 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2dd3388fa9e9447ab79c7eab5f12a7c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UI_System.System.Child.Backpack_UI_System.BackpackUISystem
-  mask: {fileID: 5522322151874508598}
+  animation: {fileID: 2237671629097617056}
+  maskCanvasGroup: {fileID: 5426213277888047714}
+  maskFadeInSettings:
+    EndValue: 1
+    Duration: 0.05
+    Ease: 1
+  maskFadeOutSettings:
+    EndValue: 0
+    Duration: 0.05
+    Ease: 1
   backpackUI: {fileID: 8971712094822781289}
+  backpackUICanvasGroup: {fileID: 1827934687246383055}
+  backpackUIFadeInSettings:
+    EndValue: 1
+    Duration: 0.05
+    Ease: 1
+  backpackUIFadeOutSettings:
+    EndValue: 0
+    Duration: 0.05
+    Ease: 1
   fastButton: {fileID: 6888344630716698065}
+  openBackpackSFXData:
+    AudioSourceType: 201
+    Clip: {fileID: 8300000, guid: df1e3b4f488d22245a9c9e2a2171b38e, type: 3}
+  closeBackpackSFXData:
+    AudioSourceType: 201
+    Clip: {fileID: 8300000, guid: 545d9d6559c61da439acac777ad2f310, type: 3}
+--- !u!114 &2237671629097617056
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 86383273046633157}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a817bf6649934d0e8fef10e3075e14a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Animation_System.DOTween.DoAnimation
 --- !u!1 &87555739698543754
 GameObject:
   m_ObjectHideFlags: 0
@@ -8245,6 +8282,7 @@ GameObject:
   - component: {fileID: 2600921048570651538}
   - component: {fileID: 6947263650309216075}
   - component: {fileID: 1605538044110752957}
+  - component: {fileID: 1827934687246383055}
   - component: {fileID: 8971712094822781289}
   m_Layer: 0
   m_Name: Backpack UI
@@ -8314,6 +8352,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 2.5
+--- !u!225 &1827934687246383055
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1751930832554731664}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!114 &8971712094822781289
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8377,12 +8427,6 @@ MonoBehaviour:
   - {fileID: 4553727316624361600}
   - {fileID: 8226846163215108279}
   - {fileID: 8825941925577412728}
-  openBackpackSFX:
-    AudioSourceType: 201
-    Clip: {fileID: 8300000, guid: b12fe9f35eae0ae4288f6d01a1923303, type: 3}
-  closeBackpackSFX:
-    AudioSourceType: 201
-    Clip: {fileID: 8300000, guid: b12fe9f35eae0ae4288f6d01a1923303, type: 3}
 --- !u!1 &1792155102927674987
 GameObject:
   m_ObjectHideFlags: 0
@@ -23099,6 +23143,7 @@ GameObject:
   - component: {fileID: 3873570971591200289}
   - component: {fileID: 6365552132824436299}
   - component: {fileID: 8376910855545227493}
+  - component: {fileID: 5426213277888047714}
   m_Layer: 0
   m_Name: Mask
   m_TagString: Untagged
@@ -23163,6 +23208,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!225 &5426213277888047714
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5522322151874508598}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &5549893545117708368
 GameObject:
   m_ObjectHideFlags: 0

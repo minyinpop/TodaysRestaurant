@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using Animation_System.DOTween;
 using Animation_System.DOTween.Basic;
+using Audio_System.Data;
+using Audio_System.Main;
 using Common.Scene_Name;
 using Common.Scene_Starter;
 using DG.Tweening;
@@ -21,18 +23,21 @@ namespace Scene_Transition_System
     [RequireComponent(typeof(DoAnimation))]
     public class SceneTransitionSystem : MonoBehaviour
     {
-        [field: Header("Components")]
+        [field: Header("組件")]
         [field: SerializeField] private new DoAnimation animation;
         
-        [field: Header("Loading UI")]
+        [field: Header("讀取介面")]
         [field: SerializeField] private Canvas canvas;
         [field: SerializeField] private CanvasGroup canvasGroup;
         [field: SerializeField] private Slider progressBar;
         
-        [field: Header("Progress Bar Handler")]
+        [field: Header("進度條")]
         [field: SerializeField] private RectTransform handlerRect;
         [field: SerializeField] private Image loadingImage;
         [field: SerializeField] private Image completeImage;
+        
+        [field: Header("聲音資料")]
+        [field: SerializeField] private FadeOutBGMData fadeOutBGMData;
         
         private IEnumerator _changeSceneCoroutine;
 
@@ -229,6 +234,8 @@ namespace Scene_Transition_System
 
         private IEnumerator ChangeSceneCoroutine(string sceneName, Action<Action> onSceneLoaded, Action onComplete = null)
         {
+            AudioSystem.Instance.CommonBGM.FadeOutBGM(fadeOutBGMData);
+            
             #region 淡入過場
                 var complete = false;
                 canvas.gameObject.SetActive(true);

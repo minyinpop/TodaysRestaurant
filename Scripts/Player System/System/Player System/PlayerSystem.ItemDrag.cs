@@ -1,11 +1,18 @@
+using Audio_System.Data;
+using Audio_System.Main;
 using Common.Item_Slot.New.Main;
 using Common.Item.Data;
 using UI_System.Player_UI_System.Main;
+using UnityEngine;
 
 namespace Player_System.System.Player_System
 {
     public partial class PlayerSystem
     {
+        [field: Header("拖曳物品音效")]
+        [field: SerializeField] private PlaySFXData itemDragSFX;
+                                private static PlaySFXData _itemDragSFX;
+        
         private static ItemSlot _sourceSlot;
         private static ItemSlot _destinationSlot;
         
@@ -30,6 +37,8 @@ namespace Player_System.System.Player_System
                     }
                     else
                     {
+                        AudioSystem.Instance.UISFX.PlayOneShot(_itemDragSFX);
+                        
                         _draggedItem = item;
                         PlayerUISystem.RequireItemDragUI(true, _draggedItem);
                     }
@@ -44,6 +53,8 @@ namespace Player_System.System.Player_System
                     #region 把拖曳中的物品給添加到當前點擊的格子
                         if (_destinationSlot.AddItem(_draggedItem))
                         {
+                            AudioSystem.Instance.UISFX.PlayOneShot(_itemDragSFX);
+                            
                             PlayerUISystem.RequireItemDragUI(false, null);
 
                             _sourceSlot = null;
@@ -57,6 +68,8 @@ namespace Player_System.System.Player_System
                     #region 與當前點擊的格子交換物品
                         if (_destinationSlot.ChangeItem(_draggedItem, out var item))
                         {
+                            AudioSystem.Instance.UISFX.PlayOneShot(_itemDragSFX);
+                            
                             _draggedItem = item;
                             
                             PlayerUISystem.RequireItemDragUI(true, _draggedItem);
