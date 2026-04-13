@@ -25,6 +25,10 @@ namespace UI_System.Settings_UI_System.Child
         [field: SerializeField] private Slider interactSFXVolumeSlider;
         [field: SerializeField] private Slider otherSFXVolumeSlider;
         
+        [field: Header("環境音音量")]
+        [field: SerializeField] private Slider mainAMBVolumeSlider;
+        [field: SerializeField] private Slider restaurantAMBVolumeSlider;
+        
         [field: Header("混音組件")]
         [field: SerializeField] private AudioMixer audioMixer;
         
@@ -74,6 +78,16 @@ namespace UI_System.Settings_UI_System.Child
                 throw new InvalidOperationException($"{nameof(otherSFXVolumeSlider)} 沒有被掛載。");
             }
 
+            if (mainAMBVolumeSlider is null)
+            {
+                throw new InvalidOperationException($"{nameof(mainAMBVolumeSlider)} 沒有被掛載。");
+            }
+            
+            if (restaurantAMBVolumeSlider is null)
+            {
+                throw new InvalidOperationException($"{nameof(restaurantAMBVolumeSlider)} 沒有被掛載。");
+            }
+
             if (audioMixer is null)
             {
                 throw new InvalidOperationException($"{nameof(audioMixer)} 沒有被掛載。");
@@ -85,15 +99,18 @@ namespace UI_System.Settings_UI_System.Child
             PlayerSettingsSaver.SaveSettingsToLocal(new SettingsSaveData
             {
                 MasterVolume = masterVolumeSlider.value,
-                MainBGMVolume = mainBGMVolumeSlider.value,
-                MainSFXVolume = mainSFXVolumeSlider.value,
                 
+                MainBGMVolume = mainBGMVolumeSlider.value,
+                CommonBGMVolume = commonBGMVolumeSlider.value,
+                
+                MainSFXVolume = mainSFXVolumeSlider.value,
                 UISFXVolume = uiSFXVolumeSlider.value,
                 FootstepVolume = footStepSFXVolumeSlider.value,
                 InteractSFXVolume = interactSFXVolumeSlider.value,
+                OtherSFXVolume = otherSFXVolumeSlider.value,
                 
-                DialogueBGMVolume = commonBGMVolumeSlider.value,
-                DialogueSFXVolume = otherSFXVolumeSlider.value,
+                MainAMBVolume = mainAMBVolumeSlider.value,
+                RestaurantAMBVolume = restaurantAMBVolumeSlider.value,
             });
         }
 
@@ -120,15 +137,18 @@ namespace UI_System.Settings_UI_System.Child
             PlayerSettingsSaver.LoadSettingsFromLocal(out var saveData);
             
             masterVolumeSlider.SetValueWithoutNotify(saveData.MasterVolume);
-            mainBGMVolumeSlider.SetValueWithoutNotify(saveData.MainBGMVolume);
-            mainSFXVolumeSlider.SetValueWithoutNotify(saveData.MainSFXVolume);
             
+            mainBGMVolumeSlider.SetValueWithoutNotify(saveData.MainBGMVolume);
+            commonBGMVolumeSlider.SetValueWithoutNotify(saveData.CommonBGMVolume);
+            
+            mainSFXVolumeSlider.SetValueWithoutNotify(saveData.MainSFXVolume);
             uiSFXVolumeSlider.SetValueWithoutNotify(saveData.UISFXVolume);
             footStepSFXVolumeSlider.SetValueWithoutNotify(saveData.FootstepVolume);
             interactSFXVolumeSlider.SetValueWithoutNotify(saveData.InteractSFXVolume);
+            otherSFXVolumeSlider.SetValueWithoutNotify(saveData.OtherSFXVolume);
             
-            commonBGMVolumeSlider.SetValueWithoutNotify(saveData.DialogueBGMVolume);
-            otherSFXVolumeSlider.SetValueWithoutNotify(saveData.DialogueSFXVolume);
+            mainAMBVolumeSlider.SetValueWithoutNotify(saveData.MainAMBVolume);
+            restaurantAMBVolumeSlider.SetValueWithoutNotify(saveData.RestaurantAMBVolume);
             
             RegisterListener(masterVolumeSlider, "Master Volume");
             
@@ -140,15 +160,24 @@ namespace UI_System.Settings_UI_System.Child
             RegisterListener(footStepSFXVolumeSlider, "Footstep SFX Volume");
             RegisterListener(interactSFXVolumeSlider, "Interact SFX Volume");
             RegisterListener(otherSFXVolumeSlider, "Other SFX Volume");
+            
+            RegisterListener(mainAMBVolumeSlider, "Main AMB Volume");
+            RegisterListener(restaurantAMBVolumeSlider, "Restaurant AMB Volume");
         }
         
         private void RegisterListener(Slider slider, string valueName)
         {
-            UnityAction<float> action = sliderValue => SetVolume(slider, valueName, sliderValue);
+            #region 初始化設定混音器
+                audioMixer.SetFloat(valueName, slider.value);
+            #endregion
             
-            slider.onValueChanged.AddListener(action);
-            
-            _listeners.Add(slider, action);
+            #region 註冊事件
+                UnityAction<float> action = sliderValue => SetVolume(slider, valueName, sliderValue);
+                
+                slider.onValueChanged.AddListener(action);
+                
+                _listeners.Add(slider, action);
+            #endregion
         }
 
         private void SetVolume(Slider slider, string valueName, float sliderValue)

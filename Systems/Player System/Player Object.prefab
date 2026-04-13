@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1465084030471715380}
   - component: {fileID: 8744528788466213736}
   - component: {fileID: 4316437671976539439}
+  - component: {fileID: 3705989006571371822}
   m_Layer: 3
   m_Name: Player Object
   m_TagString: Player
@@ -125,13 +126,19 @@ MonoBehaviour:
     RotateMode: 1
     Ease: 1
   takeItemSFX:
+    AudioSourceType: 0
     Clip: {fileID: 8300000, guid: 1a5783e4ddcbbef4cb89cede484699e9, type: 3}
   walkOnDirtSFX:
-  - Clip: {fileID: 8300000, guid: df8e3f387e6c80544b15eed5ab6c8713, type: 3}
-  - Clip: {fileID: 8300000, guid: 82194181bd0ceda4c84dcb09b5a8166f, type: 3}
-  - Clip: {fileID: 8300000, guid: 85fb183d088830d438fba6cca934c98b, type: 3}
-  - Clip: {fileID: 8300000, guid: b37b18dff9df9224881d2acf2d19e63e, type: 3}
-  - Clip: {fileID: 8300000, guid: 422a6630a854e5b4fb4c38ef14299002, type: 3}
+  - AudioSourceType: 0
+    Clip: {fileID: 8300000, guid: df8e3f387e6c80544b15eed5ab6c8713, type: 3}
+  - AudioSourceType: 0
+    Clip: {fileID: 8300000, guid: 82194181bd0ceda4c84dcb09b5a8166f, type: 3}
+  - AudioSourceType: 0
+    Clip: {fileID: 8300000, guid: 85fb183d088830d438fba6cca934c98b, type: 3}
+  - AudioSourceType: 0
+    Clip: {fileID: 8300000, guid: b37b18dff9df9224881d2acf2d19e63e, type: 3}
+  - AudioSourceType: 0
+    Clip: {fileID: 8300000, guid: 422a6630a854e5b4fb4c38ef14299002, type: 3}
   playerSystem: {fileID: 0}
   detectArea: {fileID: 2175107635336491122}
   rig: {fileID: 1810716096319531938}
@@ -149,6 +156,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a817bf6649934d0e8fef10e3075e14a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Animation_System.DOTween.DoAnimation
+--- !u!81 &3705989006571371822
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 610023830916742746}
+  m_Enabled: 1
 --- !u!1 &627479015521287916
 GameObject:
   m_ObjectHideFlags: 0

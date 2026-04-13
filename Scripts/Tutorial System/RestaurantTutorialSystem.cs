@@ -1,6 +1,8 @@
 using System;
 using Animation_System.DOTween;
 using Animation_System.DOTween.Basic;
+using Audio_System.Data;
+using Audio_System.Main;
 using Common.Button;
 using Common.Database;
 using Common.Scene_Name;
@@ -34,6 +36,9 @@ namespace Tutorial_System
         
         [field: Header("下個劇情的資料")]
         [field: SerializeField] private SceneStarterData dialogueStarterData;
+        
+        [field: Header("背景音樂")]
+        [field: SerializeField] private FadeInBGMData fadeInBGMData;
 
         private DoFade_CanvasGroup _fadeIn;
         private DoFade_CanvasGroup _fadeOut;
@@ -239,6 +244,11 @@ namespace Tutorial_System
                         canvasGroup: tip1CanvasGroup,
                         settings: _fadeIn);
                 });
+        }
+
+        public override void OnTransitionComplete()
+        {
+            AudioSystem.Instance.CommonBGM.FadeInBGM(fadeInBGMData);
         }
     }
 }

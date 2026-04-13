@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using Common.Button;
-using Common.Data_Saver.Player_Inventory_Saver.Main;
 using Common.Database;
 using Common.Dialogue.Data;
 using Common.Dialogue.SO.Main;
@@ -178,7 +177,7 @@ namespace UI_System.Title_UI_System.Main
                 Debug.Log("登入源：未完成新手教學的帳號");
                 
                 SceneNameDatabase.GetSceneName(SceneNameType.Dialogue_Scene, out var sceneNameData);
-                DialogueDatabase.GetDialogue(DialogueType.Tutorial_01, out var dialogueData);
+                DialogueDatabase.GetDialogue(DialogueType.Tutorial_03, out var dialogueData);
                 
                 OnStartTutorial.Invoke(sceneNameData, dialogueData);
             }

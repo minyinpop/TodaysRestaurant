@@ -50,11 +50,6 @@ namespace Explore_System.System.Main
             {
                 throw new InvalidOperationException($"{nameof(exploreUISystem)} 沒有被掛載。");
             }
-
-            if (fadeInBGMData is null)
-            {
-                throw new InvalidOperationException($"{nameof(fadeInBGMData)} 沒有被掛載。");
-            }
         }
 
         private void OnDisable()
