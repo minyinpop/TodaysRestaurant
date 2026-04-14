@@ -7,6 +7,7 @@ using Common.Interactable_Object;
 using Common.Item.Data.Food;
 using Common.Item.Data.Food.Custom_Food;
 using Common.Value.Type;
+using Input_System;
 using Player_System.Object;
 using Restaurant_System.Object.Cookware.Object.Cook_Game.System.Main;
 using Restaurant_System.Object.Cookware.System.State_Machine;
@@ -46,6 +47,11 @@ namespace Restaurant_System.Object.Cookware.System
         private IFood _currentCookItem;
         
         private readonly StateMachine _stateMachine = new();
+        private IState _onEmptyState;
+        private IState _onCookState;
+        private IState _onGameTimeState;
+        private IState _onCompleteState;
+        private IState _onOvercookedState;
 
         private readonly Queue<Action> _cleanUpActions = new();
 
@@ -124,11 +130,17 @@ namespace Restaurant_System.Object.Cookware.System
                 Debug.Log($"{nameof(audioSource)} 沒有被掛載。");
                 Destroy(gameObject);
             }
+            
+            _onEmptyState = InitializeEmptyState();
+            _onCookState = InitializeCookState();
+            _onGameTimeState = InitializeGameTimeState();
+            _onCompleteState = InitializeCompleteState();
+            _onOvercookedState = InitializeOvercookedState();
         }
 
         private void Start()
         {
-            OnEmptyState();
+            _stateMachine.InitializeState(_onEmptyState);
         }
 
         private void OnDisable()
@@ -153,29 +165,37 @@ namespace Restaurant_System.Object.Cookware.System
                 CloseCookSelectionUI?.Invoke();
             }
 
+            public void OnInteractStart()
+            {
+            }
+
             public bool OnInteract(PlayerObject playerObject)
             {
                 _interactingPlayer = playerObject;
                 _stateMachine.InteractState();
                 return false;
             }
+            
+            public void OnInteractEnd()
+            {
+            }
         #endregion
 
         #region StateMachine
             #region OnEmpty
-                private void OnEmptyState()
+                private IState InitializeEmptyState()
                 {
-                    _stateMachine.ChangeState(new OnEmpty(
+                    return new OnEmpty(
                         onEnter: () =>
                         {
                             _currentBubble = Instantiate(emptyBubblePrefab, bubbleParent).GetComponent<ClickableBubble>();
-                            
+
                             _currentBubble.OnClick += _stateMachine.InteractState;
                             _cleanUpActions.Enqueue(() => _currentBubble.OnClick -= _stateMachine.InteractState);
 
                             _interactable = true;
-                            
-                            _currentBubble.SetInteractable(_interactable);
+
+                            _currentBubble.SetInteractable(_interactable && _interactingPlayer is not null);
                         },
                         onInteract: () =>
                         {
@@ -188,31 +208,37 @@ namespace Restaurant_System.Object.Cookware.System
 
                             AudioSystem.Instance.InteractSFX.PlayOneShot(openSFXData);
                             
+                            InputSystem.DisablePlayerWalk();
+                            
                             OpenCookSelectionUI?.Invoke(cookwareType,
                                 /* onConfirm */ cookItem =>
                                 {
                                     _currentCookItem = cookItem;
-                                    OnCookState();
+                                    _stateMachine.ChangeState(_onCookState);
+                                    
+                                    InputSystem.EnablePlayerWalk();
                                 },
                                 /* onCancel: */ () =>
                                 {
                                     AudioSystem.Instance.InteractSFX.PlayOneShot(closeSFXData);
 
                                     _interactable = true;
+                                    
+                                    InputSystem.EnablePlayerWalk();
                                 });
                         },
                         onExit: () =>
                         {
                             Destroy(_currentBubble.gameObject);
                             _currentBubble = null;
-                        }));
+                        });
                 }
             #endregion
             
             #region OnCook
-                private void OnCookState()
+                private IState InitializeCookState()
                 {
-                    _stateMachine.ChangeState(new OnCook(
+                    return new OnCook(
                         onEnter: () =>
                         {
                             if (cookingAMBData.Clip is null)
@@ -233,8 +259,9 @@ namespace Restaurant_System.Object.Cookware.System
                             _currentBubble.StartCountDown(_currentCookItem.CookTime / 2,
                                 onComplete: () =>
                                 {
-                                    if (_isCookGameComplete) OnCompleteState();
-                                    else OnGameTimeState();
+                                    _stateMachine.ChangeState(_isCookGameComplete
+                                        ? _onCompleteState
+                                        : _onGameTimeState);
                                 });
                         },
                         onInteract: () =>
@@ -244,14 +271,14 @@ namespace Restaurant_System.Object.Cookware.System
                         {
                             Destroy(_currentBubble.gameObject);
                             _currentBubble = null;
-                        }));
+                        });
                 }
             #endregion
             
             #region OnGameTime
-                private void OnGameTimeState()
+                private IState InitializeGameTimeState()
                 {
-                    _stateMachine.ChangeState(new OnGameTime(
+                    return new OnGameTime(
                         onEnter: () =>
                         {
                             OnGameTime?.Invoke();
@@ -263,10 +290,10 @@ namespace Restaurant_System.Object.Cookware.System
 
                             _interactable = true;
                             
-                            _currentBubble.SetInteractable(_interactable);
+                            _currentBubble.SetInteractable(_interactable && _interactingPlayer is not null);
                             _currentBubble.StartCountDown(
                                 time: Mathf.Abs(gameTimeDuration),
-                                onComplete: OnOvercookedState);
+                                onComplete: () => _stateMachine.ChangeState(_onOvercookedState));
                         },
                         onInteract: () =>
                         {
@@ -274,10 +301,12 @@ namespace Restaurant_System.Object.Cookware.System
                             {
                                 return;
                             }
-
+                            
                             _interactable = false;
                             
                             AudioSystem.Instance.InteractSFX.PlayOneShot(openSFXData);
+                            
+                            InputSystem.DisablePlayerWalk();
                             
                             _currentBubble.SetRaycastTarget(false);
                             
@@ -287,14 +316,18 @@ namespace Restaurant_System.Object.Cookware.System
                             _cleanUpActions.Enqueue(() =>
                             {
                                 if (_currentCookGame is not null)
+                                {
                                     _currentCookGame.OnComplete -= OnCookGameComplete;
+                                }
                             });
                             
                             _currentCookGame.OnCancel += OnCookGameCancel;
                             _cleanUpActions.Enqueue(() =>
                             {
                                 if (_currentCookGame is not null)
+                                {
                                     _currentCookGame.OnCancel -= OnCookGameCancel;
+                                }
                             });
                             return;
 
@@ -304,7 +337,9 @@ namespace Restaurant_System.Object.Cookware.System
                                 
                                 AudioSystem.Instance.InteractSFX.PlayOneShot(closeSFXData);
                                 
-                                OnCookState();
+                                InputSystem.EnablePlayerWalk();
+                                
+                                _stateMachine.ChangeState(_onCookState);
                             }
                             
                             void OnCookGameCancel()
@@ -312,6 +347,8 @@ namespace Restaurant_System.Object.Cookware.System
                                 _interactable = true;
                                 
                                 AudioSystem.Instance.InteractSFX.PlayOneShot(closeSFXData);
+                                
+                                InputSystem.EnablePlayerWalk();
                                 
                                 _currentBubble.SetRaycastTarget(true);
                             }
@@ -326,14 +363,14 @@ namespace Restaurant_System.Object.Cookware.System
                             
                             Destroy(_currentBubble.gameObject);
                             _currentBubble = null;
-                        }));
+                        });
                 }
             #endregion
             
             #region OnComplete
-                private void OnCompleteState()
+                private IState InitializeCompleteState()
                 {
-                    _stateMachine.ChangeState(new OnComplete(
+                    return new OnComplete(
                         onEnter: () =>
                         {
                             OnCookComplete?.Invoke();
@@ -342,8 +379,10 @@ namespace Restaurant_System.Object.Cookware.System
                             
                             _currentBubble.OnClick += _stateMachine.InteractState;
                             _cleanUpActions.Enqueue(() => _currentBubble.OnClick -= _stateMachine.InteractState);
+
+                            _interactable = true;
                             
-                            _currentBubble.SetInteractable(_interactable);
+                            _currentBubble.SetInteractable(_interactable && _interactingPlayer is not null);
                         },
                         onInteract: () =>
                         {
@@ -370,21 +409,21 @@ namespace Restaurant_System.Object.Cookware.System
                                 
                                 AudioSystem.Instance.InteractSFX.PlayOneShot(closeSFXData);
                                 
-                                OnEmptyState();
+                                _stateMachine.ChangeState(_onEmptyState);
                             }
                             else
                             {
                                 Debug.Log($"無法添加 {_currentCookItem.ItemName} 至玩家背包。");
                             }
                         },
-                        onExit: Reset));
+                        onExit: Reset);
                 }
             #endregion
             
             #region OnOvercooked
-                private void OnOvercookedState()
+                private IState InitializeOvercookedState()
                 {
-                    _stateMachine.ChangeState(new OnOvercooked(
+                    return new OnOvercooked(
                         onEnter: () =>
                         {
                             _currentBubble = Instantiate(overcookedBubblePrefab, bubbleParent).GetComponent<ClickableBubble>();
@@ -394,7 +433,7 @@ namespace Restaurant_System.Object.Cookware.System
 
                             _interactable = true;
                             
-                            _currentBubble.SetInteractable(_interactable);
+                            _currentBubble.SetInteractable(_interactable && _interactingPlayer is not null);
                         },
                         onInteract: () =>
                         {
@@ -409,14 +448,14 @@ namespace Restaurant_System.Object.Cookware.System
                             {
                                 AudioSystem.Instance.InteractSFX.PlayOneShot(closeSFXData);
                                 
-                                OnEmptyState();
+                                _stateMachine.ChangeState(_onEmptyState);
                             }
                             else
                             {
                                 Debug.Log($"無法添加 {_currentCookItem.ItemName} 至玩家背包。");
                             }
                         },
-                        onExit: Reset));
+                        onExit: Reset);
                 }
             #endregion
         #endregion

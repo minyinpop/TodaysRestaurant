@@ -88,9 +88,17 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
                 _currentBubble?.SetInteractable(false);
             }
 
+            public void OnInteractStart()
+            {
+            }
+
             public bool OnInteract(PlayerObject playerObject)
             {
                 return false;
+            }
+
+            public void OnInteractEnd()
+            {
             }
         #endregion
 

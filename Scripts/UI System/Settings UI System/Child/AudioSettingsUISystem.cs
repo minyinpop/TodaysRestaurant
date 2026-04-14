@@ -23,6 +23,7 @@ namespace UI_System.Settings_UI_System.Child
         [field: SerializeField] private Slider uiSFXVolumeSlider;
         [field: SerializeField] private Slider footStepSFXVolumeSlider;
         [field: SerializeField] private Slider interactSFXVolumeSlider;
+        [field: SerializeField] private Slider attackSFXVolumeSlider;
         [field: SerializeField] private Slider otherSFXVolumeSlider;
         
         [field: Header("環境音音量")]
@@ -43,10 +44,19 @@ namespace UI_System.Settings_UI_System.Child
                 throw new InvalidOperationException($"{nameof(masterVolumeSlider)} 沒有被掛載。");
             }
             
+            
+            
             if (mainBGMVolumeSlider is null)
             {
                 throw new InvalidOperationException($"{nameof(mainBGMVolumeSlider)} 沒有被掛載。");
             }
+            
+            if (commonBGMVolumeSlider is null)
+            {
+                throw new InvalidOperationException($"{nameof(commonBGMVolumeSlider)} 沒有被掛載。");
+            }
+            
+            
             
             if (mainSFXVolumeSlider is null)
             {
@@ -68,15 +78,17 @@ namespace UI_System.Settings_UI_System.Child
                 throw new InvalidOperationException($"{nameof(interactSFXVolumeSlider)} 沒有被掛載。");
             }
             
-            if (commonBGMVolumeSlider is null)
+            if (attackSFXVolumeSlider is null)
             {
-                throw new InvalidOperationException($"{nameof(commonBGMVolumeSlider)} 沒有被掛載。");
+                throw new InvalidOperationException($"{nameof(attackSFXVolumeSlider)} 沒有被掛載。");
             }
             
             if (otherSFXVolumeSlider is null)
             {
                 throw new InvalidOperationException($"{nameof(otherSFXVolumeSlider)} 沒有被掛載。");
             }
+            
+            
 
             if (mainAMBVolumeSlider is null)
             {
@@ -87,7 +99,9 @@ namespace UI_System.Settings_UI_System.Child
             {
                 throw new InvalidOperationException($"{nameof(restaurantAMBVolumeSlider)} 沒有被掛載。");
             }
-
+            
+            
+            
             if (audioMixer is null)
             {
                 throw new InvalidOperationException($"{nameof(audioMixer)} 沒有被掛載。");
@@ -107,6 +121,7 @@ namespace UI_System.Settings_UI_System.Child
                 UISFXVolume = uiSFXVolumeSlider.value,
                 FootstepVolume = footStepSFXVolumeSlider.value,
                 InteractSFXVolume = interactSFXVolumeSlider.value,
+                AttackSFXVolume = attackSFXVolumeSlider.value,
                 OtherSFXVolume = otherSFXVolumeSlider.value,
                 
                 MainAMBVolume = mainAMBVolumeSlider.value,
@@ -145,6 +160,7 @@ namespace UI_System.Settings_UI_System.Child
             uiSFXVolumeSlider.SetValueWithoutNotify(saveData.UISFXVolume);
             footStepSFXVolumeSlider.SetValueWithoutNotify(saveData.FootstepVolume);
             interactSFXVolumeSlider.SetValueWithoutNotify(saveData.InteractSFXVolume);
+            attackSFXVolumeSlider.SetValueWithoutNotify(saveData.AttackSFXVolume);
             otherSFXVolumeSlider.SetValueWithoutNotify(saveData.OtherSFXVolume);
             
             mainAMBVolumeSlider.SetValueWithoutNotify(saveData.MainAMBVolume);
@@ -159,6 +175,7 @@ namespace UI_System.Settings_UI_System.Child
             RegisterListener(uiSFXVolumeSlider, "UI SFX Volume");
             RegisterListener(footStepSFXVolumeSlider, "Footstep SFX Volume");
             RegisterListener(interactSFXVolumeSlider, "Interact SFX Volume");
+            RegisterListener(attackSFXVolumeSlider, "Attack SFX Volume");
             RegisterListener(otherSFXVolumeSlider, "Other SFX Volume");
             
             RegisterListener(mainAMBVolumeSlider, "Main AMB Volume");

@@ -14,6 +14,7 @@ namespace Common.Data_Saver.Player_Settings_Saver.Child
         public float UISFXVolume;
         public float FootstepVolume;
         public float InteractSFXVolume;
+        public float AttackSFXVolume;
         public float OtherSFXVolume;
 
         public float MainAMBVolume;

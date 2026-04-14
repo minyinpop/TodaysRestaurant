@@ -58,7 +58,7 @@ namespace Player_System.Object
                 return;
             }
             
-            if (_interactableObjects.Count == 0)
+            if (_interactableObjects.Count <= 0)
             {
                 return;
             }

@@ -46,8 +46,6 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Main
 
         private void Open(CookType cookwareType, Action<CustomFoodItem> onConfirm, Action onCancel)
         {
-            InputSystem.DisablePlayerWalk();
-            
             OnSelectionUIOpen?.Invoke();
             
             selectionSystem.Show(cookwareType,

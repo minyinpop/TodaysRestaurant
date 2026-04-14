@@ -132,7 +132,6 @@ namespace Tutorial_System
             
             private void OnSelectionUIOpen()
             {
-                InputSystem.DisablePlayerWalk();
                 clickIndicator.SetActive(false);
                 
                 RefreshTip1("請選擇<b><color=yellow>料理</color></b>");
@@ -177,8 +176,6 @@ namespace Tutorial_System
                     settings: _fadeOut,
                     onComplete: () =>
                     {
-                        InputSystem.EnablePlayerWalk();
-                        
                         RefreshTip1("等待<b><color=yellow>深煮鍋</color></b>的烹飪");
                     });
             }
@@ -195,7 +192,6 @@ namespace Tutorial_System
         #region 步驟 5
             private void OnGameStart()
             {
-                InputSystem.DisablePlayerWalk();
                 clickIndicator.SetActive(false);
                 
                 RefreshTip1("<b><color=yellow>拖曳湯勺</color></b>來攪拌食材");
@@ -203,8 +199,6 @@ namespace Tutorial_System
             
             private void OnGameFinish()
             {
-                InputSystem.EnablePlayerWalk();
-                
                 RefreshTip1("繼續等待<b><color=yellow>深煮鍋</color></b>完成最後的烹飪");
             }
         #endregion
@@ -223,8 +217,6 @@ namespace Tutorial_System
                     Debug.Log($"沒有 class 訂閱 {nameof(OnTutorialComplete)}。");
                     return;
                 }
-                
-                InputSystem.DisablePlayerWalk();
                 
                 SceneNameDatabase.GetSceneName(SceneNameType.Dialogue_Scene, out var sceneNameData);
                 OnTutorialComplete.Invoke(sceneNameData, dialogueStarterData);

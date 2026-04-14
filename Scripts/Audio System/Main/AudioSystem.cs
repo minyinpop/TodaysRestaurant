@@ -17,6 +17,8 @@ namespace Audio_System.Main
                                 public SFXSystem FootstepSFX => footstepSfx;
         [field: SerializeField] private SFXSystem interactSFX;
                                 public SFXSystem InteractSFX => interactSFX;
+        [field: SerializeField] private SFXSystem attackSFX;
+                                public SFXSystem AttackSFX => attackSFX;
         [field: SerializeField] private SFXSystem otherSFX;
                                 public SFXSystem OtherSFX => otherSFX;
         
@@ -42,6 +44,11 @@ namespace Audio_System.Main
             if (interactSFX is null)
             {
                 throw new InvalidOperationException($"{nameof(interactSFX)} 沒有被掛載。");
+            }
+
+            if (attackSFX is null)
+            {
+                throw new InvalidOperationException($"{nameof(attackSFX)} 沒有被掛載。");
             }
 
             if (otherSFX is null)

@@ -7,6 +7,8 @@ namespace Common.Interactable_Object
         public void OnEnterDetect(PlayerObject playerObject);
         public void OnExitDetect(PlayerObject playerObject);
 
+        public void OnInteractStart();
         public bool OnInteract(PlayerObject playerObject);
+        public void OnInteractEnd();
     }
 }

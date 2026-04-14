@@ -1,4 +1,5 @@
 using System;
+using Audio_System.Main;
 using Explore_System.System.Child.Battle_System.Object.Creature.Enemy.Main;
 using UnityEngine;
 
@@ -13,6 +14,8 @@ namespace Explore_System.System.Child.Battle_System.Object.Creature.Enemy.Child
             animation.Attack(
                 onAttackPoint: () =>
                 {
+                    AudioSystem.Instance.AttackSFX.PlayOneShot(attackSFXData);
+                    
                     InvokeOnAttack(enemyData.Damage, haveCharacterAlive.Invoke, characterAllDead.Invoke);
                 },
                 onComplete: () =>

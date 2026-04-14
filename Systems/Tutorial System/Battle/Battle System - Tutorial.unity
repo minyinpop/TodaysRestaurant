@@ -3992,8 +3992,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 32
+  m_fontSizeBase: 32
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -4938,16 +4938,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34b43ed2351242baa12d4f665503ab37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Restaurant_System.Object.Cookware.System.CookwareSystem
-  CookwareType: 1
-  EmptyBubblePrefab: {fileID: 4629397611317286650, guid: 32a3285c2fed7cd4493d9405c9c9ca0a, type: 3}
-  CookBubblePrefab: {fileID: 4629397611317286650, guid: 17ddefbb15401e542815260e65a312a2, type: 3}
-  GameTimeBubblePrefab: {fileID: 7852260040052447994, guid: 6678c712261e56a46baa936118fe8a94, type: 3}
-  CompleteBubblePrefab: {fileID: 4629397611317286650, guid: abcedab21bcc3b1488f586113e99cdf2, type: 3}
-  OvercookedBubblePrefab: {fileID: 550562492830469709, guid: 5a00ba58dc9f7fb4a84abe3de6c79417, type: 3}
-  BubbleParent: {fileID: 0}
-  GameTimeDuration: 999
-  CookGamePrefab: {fileID: 4507327093942934865, guid: d27c2ed33b4f74341a2a011257094aa8, type: 3}
-  GameParent: {fileID: 0}
+  cookwareType: 1
+  emptyBubblePrefab: {fileID: 4629397611317286650, guid: 32a3285c2fed7cd4493d9405c9c9ca0a, type: 3}
+  cookBubblePrefab: {fileID: 4629397611317286650, guid: 17ddefbb15401e542815260e65a312a2, type: 3}
+  gameTimeBubblePrefab: {fileID: 7852260040052447994, guid: 6678c712261e56a46baa936118fe8a94, type: 3}
+  completeBubblePrefab: {fileID: 4629397611317286650, guid: abcedab21bcc3b1488f586113e99cdf2, type: 3}
+  overcookedBubblePrefab: {fileID: 550562492830469709, guid: 5a00ba58dc9f7fb4a84abe3de6c79417, type: 3}
+  bubbleParent: {fileID: 0}
+  gameTimeDuration: 999
+  cookGamePrefab: {fileID: 4507327093942934865, guid: d27c2ed33b4f74341a2a011257094aa8, type: 3}
+  gameParent: {fileID: 0}
+  audioSource: {fileID: 0}
+  openSFXData:
+    AudioSourceType: 0
+    Clip: {fileID: 0}
+  closeSFXData:
+    AudioSourceType: 0
+    Clip: {fileID: 0}
+  cookingAMBData:
+    AudioSourceType: 0
+    Clip: {fileID: 0}
+    Loop: 0
+    StartTime: 0
 --- !u!65 &1143333380
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6563,6 +6575,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3073393032720862547, guid: 577a583dca879cb41935feb87e7479b4, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3073393032720862547, guid: 577a583dca879cb41935feb87e7479b4, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3131723054994763666, guid: 577a583dca879cb41935feb87e7479b4, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -6656,6 +6676,30 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6233925708229817119, guid: 577a583dca879cb41935feb87e7479b4, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6309717706649232036, guid: 577a583dca879cb41935feb87e7479b4, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6309717706649232036, guid: 577a583dca879cb41935feb87e7479b4, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6309717706649232036, guid: 577a583dca879cb41935feb87e7479b4, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6309717706649232036, guid: 577a583dca879cb41935feb87e7479b4, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6309717706649232036, guid: 577a583dca879cb41935feb87e7479b4, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6309717706649232036, guid: 577a583dca879cb41935feb87e7479b4, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
@@ -7538,11 +7582,11 @@ RectTransform:
   - {fileID: 807316944}
   m_Father: {fileID: 1854323331}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.8}
-  m_AnchorMax: {x: 0.5, y: 0.8}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 1, y: 0.9}
+  m_AnchorMax: {x: 1, y: 0.9}
+  m_AnchoredPosition: {x: -16, y: -16}
   m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 1, y: 1}
 --- !u!225 &1708451858
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -7582,8 +7626,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.HorizontalLayoutGroup
   m_Padding:
-    m_Left: 32
-    m_Right: 32
+    m_Left: 42
+    m_Right: 42
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 4

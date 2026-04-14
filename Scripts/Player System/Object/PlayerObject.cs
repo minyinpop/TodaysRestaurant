@@ -83,8 +83,6 @@ namespace Player_System.Object
             _takeItemState = new OnTakeItem(
                 onEnter: () =>
                 {
-                    InputSystem.DisablePlayerWalk();
-                    
                     PlayTakeAnimation();
 
                     _canInteract = false;
@@ -92,8 +90,6 @@ namespace Player_System.Object
                 },
                 onExit: () =>
                 {
-                    InputSystem.EnablePlayerWalk();
-                    
                     _canInteract = true;
                     _canWalk = true;
                 });

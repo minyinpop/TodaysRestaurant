@@ -1,4 +1,5 @@
 using System;
+using Audio_System.Data;
 using Common.Enemy.Data;
 using Common.Status_Bar;
 using Common.Value;
@@ -9,14 +10,17 @@ namespace Explore_System.System.Child.Battle_System.Object.Creature.Enemy.Main
     [RequireComponent(typeof(AnimationSystem))]
     public abstract class BattleEnemyObject : MonoBehaviour
     {
-        [field: Header("Component")]
+        [field: Header("組件")]
         [field: SerializeField] protected new AnimationSystem animation;
         
-        [field: Header("Object")]
+        [field: Header("血條")]
         [field: SerializeField] protected StatusBar healthBar;
         
-        [field: Header("Data")]
+        [field: Header("敵人資料")]
         [field: SerializeField] protected EnemySO enemyData;
+        
+        [field: Header("音效資料")]
+        [field: SerializeField] protected PlaySFXData attackSFXData;
 
         protected int _health;
 

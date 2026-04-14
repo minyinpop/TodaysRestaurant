@@ -140,7 +140,6 @@ namespace Common.Item_Slot.New.Child
                 
                     if (Item is null)
                     {
-                        Debug.Log("A");
                         item = null;
                         return false;
                     }

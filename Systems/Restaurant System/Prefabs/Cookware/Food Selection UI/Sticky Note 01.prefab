@@ -182,6 +182,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b98354d339b7416e91546b8df61e8b79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::General.Object.Button
+  Interactable: 1
+  CanPlaySFX: 1
   Rect: {fileID: 6435445485513436355}
   TitleTMP: {fileID: 0}
   DoAnimation: {fileID: 4254814150127067574}
@@ -193,7 +195,9 @@ MonoBehaviour:
     EndValue: {x: 1, y: 1, z: 1}
     Duration: 0.2
     Ease: 18
-  Interactable: 1
+  playSFXData:
+    AudioSourceType: 201
+    Clip: {fileID: 8300000, guid: b90b39f5f0e60c34e9e7cdb6bc98c01f, type: 3}
 --- !u!114 &4254814150127067574
 MonoBehaviour:
   m_ObjectHideFlags: 0

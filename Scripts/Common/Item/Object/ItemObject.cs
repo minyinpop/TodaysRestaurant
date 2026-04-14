@@ -3,6 +3,7 @@ using Audio_System.Data;
 using Audio_System.Main;
 using Common.Interactable_Object;
 using Common.Item.Data;
+using Input_System;
 using Player_System.Object;
 using UnityEngine;
 
@@ -35,6 +36,11 @@ namespace Common.Item.Object
         {
         }
 
+        public void OnInteractStart()
+        {
+            InputSystem.DisablePlayerWalk();
+        }
+
         public bool OnInteract(PlayerObject playerObject)
         {
             if (playerObject.TryAddItem(itemData))
@@ -48,6 +54,11 @@ namespace Common.Item.Object
             }
 
             return false;
+        }
+
+        public void OnInteractEnd()
+        {
+            InputSystem.EnablePlayerWalk();
         }
     }
 }
