@@ -18,14 +18,20 @@ namespace Common.Scene_Name
         // 探索
         Explore_Scene,
         
-        // 探索 - 教學
-        Explore_Tutorial_Terrain_Scene,
-        Explore_Tutorial_Explore_Scene,
-        Explore_Tutorial_Battle_Scene,
-        
         // 探索 - 森林
         Explore_Forest_Terrain_Scene,
         Explore_Forest_Explore_Scene,
         Explore_Forest_Battle_Scene,
+        
+        // 教學 - 探索
+        Explore_Tutorial_Scene,
+        Explore_Tutorial_Terrain_Scene,
+        Explore_Tutorial_Explore_Scene,
+        
+        // 教學 - 餐廳
+        Restaurant_Tutorial_Scene,
+        
+        // 教學 - 戰鬥
+        Battle_Tutorial_Scene,
     }
 }

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1465084030471715380}
   - component: {fileID: 8744528788466213736}
   - component: {fileID: 4316437671976539439}
+  - component: {fileID: 3705989006571371822}
   m_Layer: 3
   m_Name: Player Object
   m_TagString: Player
@@ -110,6 +111,10 @@ MonoBehaviour:
     Layer: 0
     AnimationName: Walk_01
     Loop: 1
+  take:
+    Layer: 0
+    AnimationName: TakeThing
+    Loop: 0
   turnLeft:
     EndValue: {x: 0, y: 0, z: 0}
     Duration: 0.1
@@ -120,10 +125,12 @@ MonoBehaviour:
     Duration: 0.1
     RotateMode: 1
     Ease: 1
+  walkOnDirtSFX: []
   playerSystem: {fileID: 0}
   detectArea: {fileID: 2175107635336491122}
   rig: {fileID: 1810716096319531938}
   characterData: {fileID: 11400000, guid: 09dfc44ecd70bbb479f6390867e257a7, type: 2}
+  _canWalk: 1
 --- !u!114 &4316437671976539439
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -136,6 +143,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a817bf6649934d0e8fef10e3075e14a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Animation_System.DOTween.DoAnimation
+--- !u!81 &3705989006571371822
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 610023830916742746}
+  m_Enabled: 1
 --- !u!1 &627479015521287916
 GameObject:
   m_ObjectHideFlags: 0

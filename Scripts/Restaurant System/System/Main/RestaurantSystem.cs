@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using Common.Scene_Starter;
 using Input_System;
 using Restaurant_System.System.Child;
 using Restaurant_System.System.Main.State_Machine;
@@ -9,7 +11,7 @@ using UnityEngine;
 
 namespace Restaurant_System.System.Main
 {
-    internal sealed class RestaurantSystem : MonoBehaviour
+    internal sealed class RestaurantSystem : SceneStarter
     {
         [field: Header("System")]
         [field: SerializeField] private CustomerManagerSystem CustomerManagerSystem;
@@ -26,8 +28,6 @@ namespace Restaurant_System.System.Main
             _chooseItemState = new ChooseItem(
                 onEnter: () =>
                 {
-                    InputSystem.Disable();
-                    
                     PlayerUISystem.SetHotbarUI(false);
                     PlayerUISystem.SetBackpackUI(false);
                     
@@ -39,7 +39,7 @@ namespace Restaurant_System.System.Main
                 },
                 onExit: () =>
                 {
-                    InputSystem.Enable();
+                    InputSystem.EnablePlayerWalk();
                     
                     PlayerUISystem.SetHotbarUI(true);
                     PlayerUISystem.SetBackpackUI(true);
@@ -54,12 +54,7 @@ namespace Restaurant_System.System.Main
                 {
                 });
         }
-
-        private void Start()
-        {
-            _stateMachine.ChangeState(_chooseItemState);
-        }
-
+        
         private void OnDisable()
         {
             if (RoundStartCor is not null)
@@ -67,6 +62,11 @@ namespace Restaurant_System.System.Main
                 StopCoroutine(RoundStartCor);
                 RoundStartCor = null;
             }
+        }
+
+        public override void StartSystem(Action onComplete)
+        {
+            _stateMachine.ChangeState(_chooseItemState);
         }
     }
 }

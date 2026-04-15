@@ -13,85 +13,76 @@ namespace UI_System.Player_UI_System.Main
 {
     public sealed class PlayerUISystem : MonoBehaviour
     {
-        [field: Header("Components")]
+        [field: Header("自身組件")]
         [field: SerializeField] private HotbarUISystem hotbarUISystem;
-                                private static HotbarUISystem _hotbarUISystem;
+                                public static HotbarUISystem HotbarUISystem;
         [field: SerializeField] private BackpackUISystem backpackUISystem;
-                                private static BackpackUISystem _backpackUISystem;
+                                public static BackpackUISystem BackpackUISystem;
         [field: SerializeField] private ItemDragUISystem itemDragUISystem;
-                                private static ItemDragUISystem _itemDragUISystem;
-
+                                public static ItemDragUISystem ItemDragUISystem;
+        
         private void Awake()
         {
             #region 必要條件檢查
                 if (hotbarUISystem is null)
                 {
-                    throw new InvalidOperationException(nameof(hotbarUISystem));
+                    throw new InvalidOperationException($"{nameof(hotbarUISystem)} 沒有被掛載。");
                 }
                 
                 if (backpackUISystem is null)
                 {
-                    throw new InvalidOperationException(nameof(backpackUISystem));
+                    throw new InvalidOperationException($"{nameof(backpackUISystem)} 沒有被掛載。");
                 }
                 
                 if (itemDragUISystem is null)
                 {
-                    throw new InvalidOperationException(nameof(itemDragUISystem));
+                    throw new InvalidOperationException($"{nameof(itemDragUISystem)} 沒有被掛載。");
                 }
             #endregion
             
-            _hotbarUISystem = hotbarUISystem;
-            _backpackUISystem = backpackUISystem;
-            _itemDragUISystem = itemDragUISystem;
+            HotbarUISystem = hotbarUISystem;
+            BackpackUISystem = backpackUISystem;
+            ItemDragUISystem = itemDragUISystem;
         }
 
         private void OnEnable()
         {
             #region 從本地獲取玩家的物品
-                if (PlayerInventorySaver.LoadInventoryFromLocal(out var saveData))
-                {
-                    Debug.Log("成功從本地獲取玩家物品庫資料。");
-                    
-                    #region 載入快捷欄的物品
-                        var hotbarSlots = _hotbarUISystem.GetHotbarSlots();
+                PlayerInventorySaver.LoadInventoryFromLocal(out var saveData);
+                
+                #region 載入快捷欄的物品
+                    var hotbarSlots = HotbarUISystem.GetHotbarSlots();
 
-                        for (var i = 0; i < saveData.HotbarSlots.Count; i++)
+                    for (var i = 0; i < saveData.HotbarSlots.Count; i++)
+                    {
+                        var slotData = saveData.HotbarSlots[i];
+                        var item = ItemDatabase.GetItem(slotData.ItemId);
+
+                        if (item is null)
                         {
-                            var slotData = saveData.HotbarSlots[i];
-                            var item = ItemDatabase.GetItem(slotData.ItemId);
-
-                            if (item is null)
-                            {
-                                continue;
-                            }
-                                                    
-                            hotbarSlots[i].AddItem(item);
+                            continue;
                         }
-                    #endregion
-                                        
-                    #region 載入背包的物品
-                        var backpackSlots = _backpackUISystem.GetBackpackSlots();
+                                                
+                        hotbarSlots[i].AddItem(item);
+                    }
+                #endregion
+                                    
+                #region 載入背包的物品
+                    var backpackSlots = BackpackUISystem.GetBackpackSlots();
 
-                        for (var i = 0; i < saveData.BackpackSlots.Count; i++)
+                    for (var i = 0; i < saveData.BackpackSlots.Count; i++)
+                    {
+                        var slotData = saveData.BackpackSlots[i];
+                        var item = ItemDatabase.GetItem(slotData.ItemId);
+                                                
+                        if (item is null)
                         {
-                            var slotData = saveData.BackpackSlots[i];
-                            var item = ItemDatabase.GetItem(slotData.ItemId);
-                                                    
-                            if (item is null)
-                            {
-                                continue;
-                            }
-                                                    
-                            backpackSlots[i].AddItem(item);
+                            continue;
                         }
-                    #endregion
-                    
-                    Debug.Log("已更新到快捷欄與背包。");
-                }
-                else
-                {
-                    Debug.Log("無法從本地獲取玩家物品資料庫。");
-                }
+                                                
+                        backpackSlots[i].AddItem(item);
+                    }
+                #endregion
             #endregion
         }
 
@@ -105,7 +96,7 @@ namespace UI_System.Player_UI_System.Main
                 };
                     
                 #region 快捷欄
-                    var hotbarSlots = _hotbarUISystem.GetHotbarSlots();
+                    var hotbarSlots = HotbarUISystem.GetHotbarSlots();
                             
                     for (var i = 0; i < hotbarSlots.Count; i++)
                     {
@@ -120,7 +111,7 @@ namespace UI_System.Player_UI_System.Main
                 #endregion
                     
                 #region 背包
-                    var backpackSlots = _backpackUISystem.GetBackpackSlots();
+                    var backpackSlots = BackpackUISystem.GetBackpackSlots();
                                 
                     for (var i = 0; i < backpackSlots.Count; i++)
                     {
@@ -143,38 +134,38 @@ namespace UI_System.Player_UI_System.Main
         #region 玩家控制
             public static void ClickRightButton()
             {
-                _hotbarUISystem.UseSelectedHotbarSlotItem();
+                HotbarUISystem.UseSelectedHotbarSlotItem();
             }
         #endregion
 
         #region 背包儲物
             public static void SetHotbarUI(bool isEnabled)
             {
-                _hotbarUISystem.SetHotbarUI(isEnabled);
+                HotbarUISystem.SetHotbarUI(isEnabled);
             }
 
             public static void SetBackpackUI(bool isEnabled)
             {
-                _backpackUISystem.SetBackpackUI(isEnabled);
+                BackpackUISystem.SetBackpackUI(isEnabled);
             }
 
             public static void RequireBackpackUI()
             {
-                _backpackUISystem.RequireBackpackUI();
+                BackpackUISystem.RequireBackpackUI();
             }
 
             public static void PerformHotbar(int hotbarIndex)
             {
-                _hotbarUISystem.PerformHotbar(hotbarIndex);
+                HotbarUISystem.PerformHotbar(hotbarIndex);
             }
             
             public static bool AddItem(IItem itemData)
             {
-                var result = _hotbarUISystem.AddItem(itemData);
+                var result = HotbarUISystem.AddItem(itemData);
 
                 if (!result)
                 {
-                    result = _backpackUISystem.AddItem(itemData);
+                    result = BackpackUISystem.AddItem(itemData);
                 }
 
                 return result;
@@ -182,7 +173,7 @@ namespace UI_System.Player_UI_System.Main
             
             public static bool RemoveItem(ItemSO itemData)
             {
-                return _hotbarUISystem.RemoveItem(itemData);
+                return HotbarUISystem.RemoveItem(itemData);
             }
 
             #endregion
@@ -190,7 +181,7 @@ namespace UI_System.Player_UI_System.Main
         #region 物品拖曳
             public static void RequireItemDragUI(bool isDragging, IItem item)
             {
-                _itemDragUISystem.RequiresUI(isDragging, item);
+                ItemDragUISystem.RequiresUI(isDragging, item);
             }
         #endregion
     }

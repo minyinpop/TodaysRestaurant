@@ -41,7 +41,16 @@ namespace Explore_System.System.Child.Battle_System.System.Child.Selected_Card_S
         public static event Action<List<ICard>, Action> BeforeCloseUI;
         public event Action AfterCloseUI;
 
+        public static event Action OnOpen;
+        public static event Action OnConfirm;
+
         private IEnumerator OnClickConfirmButtonCor;
+
+        private void Awake()
+        {
+            ConfirmButton.OnClick += OnConfirmButtonClicked;
+            HandCardSystem.TryAddCardToSelected += TryAdd;
+        }
 
         private void Start()
         {
@@ -52,17 +61,9 @@ namespace Explore_System.System.Child.Battle_System.System.Child.Selected_Card_S
                 CardSlots.Add(slotScript);
             }
         }
-
-        private void OnEnable()
-        {
-            ConfirmButton.OnClick += OnConfirmButtonClicked;
-            HandCardSystem.TryAddCardToSelected += TryAdd;
-        }
         
         private void OnDisable()
         {
-            ConfirmButton.OnClick -= OnConfirmButtonClicked;
-            HandCardSystem.TryAddCardToSelected -= TryAdd;
             if (OnClickConfirmButtonCor is not null)
             {
                 StopCoroutine(OnClickConfirmButtonCor);
@@ -70,9 +71,19 @@ namespace Explore_System.System.Child.Battle_System.System.Child.Selected_Card_S
             }
         }
 
+        private void OnDestroy()
+        {
+            ConfirmButton.OnClick -= OnConfirmButtonClicked;
+            HandCardSystem.TryAddCardToSelected -= TryAdd;
+        }
+
         #region UI
             public void OpenUI(Action onUIOpen = null, Action onUIClose = null)
             {
+                #region 狀態廣播
+                    OnOpen?.Invoke();
+                #endregion
+                
                 UICanvasGroup.gameObject.SetActive(true);
                 AfterCloseUI = onUIClose;
 
@@ -150,6 +161,10 @@ namespace Explore_System.System.Child.Battle_System.System.Child.Selected_Card_S
 
             IEnumerator OnConfirmButtonClickCoroutine()
             {
+                #region 狀態廣播
+                    OnConfirm?.Invoke();
+                #endregion
+                
                 var onConfirm = false;
                 var selectedCards = new List<ICard>();
                 foreach (var slot in CardSlots)

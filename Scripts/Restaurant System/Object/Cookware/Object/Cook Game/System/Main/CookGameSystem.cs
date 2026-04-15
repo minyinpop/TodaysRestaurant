@@ -26,6 +26,9 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Game.System.Main
         public event Action OnComplete;
         public event Action OnCancel;
 
+        public static event Action OnGameStart;
+        public static event Action OnGameFinish;
+
         private void Start()
         {
             CameraSystem.MoveTo(
@@ -66,7 +69,12 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Game.System.Main
                     });
                 });
         }
-        
+
+        private void OnEnable()
+        {
+            OnGameStart?.Invoke();
+        }
+
         private void OnDisable()
         {
             ClearAllActions();
@@ -104,6 +112,8 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Game.System.Main
 
             private void OnProgressComplete()
             {
+                OnGameFinish?.Invoke();
+                
                 ClearAllActions();
                 DoAnimation.DoScale_WorldSpace(gameObject.transform, ZoomOut, () => OnComplete?.Invoke());
             }

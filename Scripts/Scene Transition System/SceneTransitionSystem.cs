@@ -2,12 +2,14 @@ using System;
 using System.Collections;
 using Animation_System.DOTween;
 using Animation_System.DOTween.Basic;
+using Audio_System.Data;
+using Audio_System.Main;
 using Common.Scene_Name;
 using Common.Scene_Starter;
-using Compete_Only;
 using DG.Tweening;
 using Explore_System.System.Child.Battle_System.System.Main;
 using Explore_System.System.Main;
+using Tutorial_System;
 using UI_System.Dialogue_UI_System.Main;
 using UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Select_UI.Main;
 using UI_System.Lobby_UI_System.Main;
@@ -21,18 +23,21 @@ namespace Scene_Transition_System
     [RequireComponent(typeof(DoAnimation))]
     public class SceneTransitionSystem : MonoBehaviour
     {
-        [field: Header("Components")]
+        [field: Header("組件")]
         [field: SerializeField] private new DoAnimation animation;
         
-        [field: Header("Loading UI")]
+        [field: Header("讀取介面")]
         [field: SerializeField] private Canvas canvas;
         [field: SerializeField] private CanvasGroup canvasGroup;
         [field: SerializeField] private Slider progressBar;
         
-        [field: Header("Progress Bar Handler")]
+        [field: Header("進度條")]
         [field: SerializeField] private RectTransform handlerRect;
         [field: SerializeField] private Image loadingImage;
         [field: SerializeField] private Image completeImage;
+        
+        [field: Header("聲音資料")]
+        [field: SerializeField] private FadeOutBGMData fadeOutBGMData;
         
         private IEnumerator _changeSceneCoroutine;
 
@@ -44,6 +49,36 @@ namespace Scene_Transition_System
                 if (animation is null)
                 {
                     throw new InvalidOperationException(nameof(animation));
+                }
+
+                if (canvas is null)
+                {
+                    throw new InvalidOperationException(nameof(canvas));
+                }
+
+                if (canvasGroup is null)
+                {
+                    throw new InvalidOperationException(nameof(canvasGroup));
+                }
+
+                if (progressBar is null)
+                {
+                    throw new InvalidOperationException(nameof(progressBar));
+                }
+
+                if (handlerRect is null)
+                {
+                    throw new InvalidOperationException(nameof(handlerRect));
+                }
+
+                if (loadingImage is null)
+                {
+                    throw new InvalidOperationException(nameof(loadingImage));
+                }
+
+                if (completeImage is null)
+                {
+                    throw new InvalidOperationException(nameof(completeImage));
                 }
             #endregion
 
@@ -80,6 +115,8 @@ namespace Scene_Transition_System
             
             #region 比賽投稿用專用訂閱
                 MissionUI_DevelopOnly.ChangeScene_DevelopOnly += ChangeScene;
+                RestaurantTutorialSystem.OnTutorialComplete += ChangeScene;
+                BattleTutorialSystem.OnTutorialComplete += ChangeScene;
             #endregion
         }
 
@@ -118,11 +155,14 @@ namespace Scene_Transition_System
             
             #region 比賽投稿用專用訂閱
                 MissionUI_DevelopOnly.ChangeScene_DevelopOnly -= ChangeScene;
+                RestaurantTutorialSystem.OnTutorialComplete -= ChangeScene;
+                BattleTutorialSystem.OnTutorialComplete -= ChangeScene;
             #endregion
         }
 
         private void ChangeScene(SceneNameSO sceneNameData)
         {
+            SceneStarter sceneStarter = null;
             var systemFound = false;
 
             _changeSceneCoroutine = ChangeSceneCoroutine(
@@ -134,7 +174,7 @@ namespace Scene_Transition_System
 
                     foreach (var rootObject in rootObjects)
                     {
-                        if (rootObject.TryGetComponent<SceneStarter>(out var sceneStarter))
+                        if (rootObject.TryGetComponent(out sceneStarter))
                         {
                             systemFound = true;
 
@@ -147,12 +187,18 @@ namespace Scene_Transition_System
                     {
                         throw new InvalidOperationException(nameof(SceneStarter));
                     }
+                },
+                onComplete: () =>
+                {
+                    sceneStarter.StartSystemWhenFinish();
+                    sceneStarter.OnTransitionComplete();
                 });
             StartCoroutine(_changeSceneCoroutine);
         }
 
         private void ChangeScene(SceneNameSO sceneNameData, SceneStarterData starterData)
         {
+            SceneStarter sceneStarter = null;
             var systemFound = false;
 
             _changeSceneCoroutine = ChangeSceneCoroutine(
@@ -164,7 +210,7 @@ namespace Scene_Transition_System
 
                     foreach (var rootObject in rootObjects)
                     {
-                        if (rootObject.TryGetComponent<SceneStarter>(out var sceneStarter))
+                        if (rootObject.TryGetComponent(out sceneStarter))
                         {
                             systemFound = true;
 
@@ -177,12 +223,19 @@ namespace Scene_Transition_System
                     {
                         throw new InvalidOperationException(nameof(SceneStarter));
                     }
+                },
+                onComplete: () =>
+                {
+                    sceneStarter.StartSystemWhenFinish(starterData);
+                    sceneStarter.OnTransitionComplete();
                 });
             StartCoroutine(_changeSceneCoroutine);
         }
 
         private IEnumerator ChangeSceneCoroutine(string sceneName, Action<Action> onSceneLoaded, Action onComplete = null)
         {
+            AudioSystem.Instance.CommonBGM.FadeOutBGM(fadeOutBGMData);
+            
             #region 淡入過場
                 var complete = false;
                 canvas.gameObject.SetActive(true);

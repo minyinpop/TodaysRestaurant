@@ -25,14 +25,15 @@ namespace Explore_System.System.Child.Battle_System.System.Child
 
         public static event Func<ICard, bool> TryAddCardToSelected;
 
-        private void OnEnable()
+        private void Awake()
         {
             SelectedCardSystem.ReturnCardToHand += Add;
+            SelectedCardSystem.OnOpen += EnableAllCards;
+            SelectedCardSystem.OnConfirm += DisableAllCards;
         }
 
         private void OnDisable()
         {
-            SelectedCardSystem.ReturnCardToHand -= Add;
             if (AddCor is not null)
             {
                 StopCoroutine(AddCor);
@@ -45,16 +46,35 @@ namespace Explore_System.System.Child.Battle_System.System.Child
                 RecycleCor = null;
             }
         }
-        
-        public void SetCardsInteractable(bool interactable)
+
+        private void OnDestroy()
         {
-            foreach (var cardSlot in CardSlots)
-            {
-                cardSlot.Get(out var card);
-                card.SetInteractable(interactable);
-                cardSlot.Set(card);
-            }
+            SelectedCardSystem.ReturnCardToHand -= Add;
+            SelectedCardSystem.OnOpen -= EnableAllCards;
+            SelectedCardSystem.OnConfirm -= DisableAllCards;
         }
+
+        #region 設定卡片的互動
+            private void EnableAllCards()
+            {
+                foreach (var cardSlot in CardSlots)
+                {
+                    cardSlot.Get(out var card);
+                    card.SetInteractable(true);
+                    cardSlot.Set(card);
+                }
+            }
+
+            private void DisableAllCards()
+            {
+                foreach (var cardSlot in CardSlots)
+                {
+                    cardSlot.Get(out var card);
+                    card.SetInteractable(false);
+                    cardSlot.Set(card);
+                }
+            }
+        #endregion
 
         private void OnCardClicked(ICard card)
         {

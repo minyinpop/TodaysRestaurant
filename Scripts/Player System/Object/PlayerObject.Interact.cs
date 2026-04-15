@@ -9,7 +9,7 @@ namespace Player_System.Object
 {
     public partial class PlayerObject
     {
-        [field: Header("Detect System")]
+        [field: Header("偵測系統 - 範圍")]
         [field: SerializeField] private DetectArea detectArea;
 
         private Action _onEnterDetectCleanupAction;
@@ -33,7 +33,7 @@ namespace Player_System.Object
                 if (_interactableObjects.Contains(detectObjectScript)) return;
                 
                 _interactableObjects.Add(detectObjectScript);
-                detectObjectScript.OnEnterDetect();
+                detectObjectScript.OnEnterDetect(this);
             }
 
             void OnExitDetect(GameObject detectObj)
@@ -41,7 +41,7 @@ namespace Player_System.Object
                 if (!detectObj.TryGetComponent<InteractableObject>(out var detectObjectScript)) return;
                 
                 _interactableObjects.Remove(detectObjectScript);
-                detectObjectScript.OnExitDetect();
+                detectObjectScript.OnExitDetect(this);
             }
         }
 
@@ -58,11 +58,16 @@ namespace Player_System.Object
                 return;
             }
             
-            if (_interactableObjects.Count == 0)
+            if (_interactableObjects.Count <= 0)
             {
                 return;
             }
             
+            _stateMachine.ChangeState(_takeItemState);
+        }
+
+        private void RemoveInteractableObject()
+        {
             var interactableObject = _interactableObjects.First();
 
             if (interactableObject.OnInteract(this))

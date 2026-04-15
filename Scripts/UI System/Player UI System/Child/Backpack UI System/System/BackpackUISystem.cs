@@ -1,5 +1,9 @@
 using System;
 using System.Collections.Generic;
+using Animation_System.DOTween;
+using Animation_System.DOTween.Basic;
+using Audio_System.Data;
+using Audio_System.Main;
 using Common.Button;
 using Common.Item_Slot.New.Child;
 using Common.Item.Data;
@@ -8,41 +12,60 @@ using UnityEngine;
 
 namespace UI_System.Player_UI_System.Child.Backpack_UI_System.System
 {
+    [RequireComponent(typeof(DoAnimation))]
     public sealed class BackpackUISystem : MonoBehaviour
     {
-        [field: Header("Objects")]
-        [field: SerializeField] private GameObject mask;
+        [field: Header("組件")]
+        [field: SerializeField] private new DoAnimation animation;
+        
+        [field: Header("遮罩")]
+        [field: SerializeField] private CanvasGroup maskCanvasGroup;
+        [field: SerializeField] private DoFade_CanvasGroup maskFadeInSettings;
+        [field: SerializeField] private DoFade_CanvasGroup maskFadeOutSettings;
+        
+        [field: Header("背包")]
         [field: SerializeField] private BackpackUI backpackUI;
+        [field: SerializeField] private CanvasGroup backpackUICanvasGroup;
+        [field: SerializeField] private DoFade_CanvasGroup backpackUIFadeInSettings;
+        [field: SerializeField] private DoFade_CanvasGroup backpackUIFadeOutSettings;
+        
+        [field: Header("按鈕")]
         [field: SerializeField] private Button fastButton;
-
-        private bool _isBackpackEnabled = true;
-
+        
+        [field: Header("音效")]
+        [field: SerializeField] private PlaySFXData openBackpackSFXData;
+        [field: SerializeField] private PlaySFXData closeBackpackSFXData;
+        
+        private bool _canSetBackpackUI = true;
+        
         private void Awake()
         {
-            if (mask is null)
+            if (animation is null)
             {
-                Debug.Log($"{name} > {GetType().Name} > {nameof(mask)} cannot be null.");
-                Destroy(gameObject);
-                return;
+                throw new InvalidOperationException($"{nameof(animation)} 沒有被掛載。");
             }
 
+            if (maskCanvasGroup is null)
+            {
+                throw new InvalidOperationException($"{nameof(maskCanvasGroup)} 沒有被掛載。");
+            }
+            
             if (backpackUI is null)
             {
-                Debug.Log($"{name} > {GetType().Name} > {nameof(backpackUI)} cannot be null.");
-                Destroy(gameObject);
-                return;
+                throw new InvalidOperationException($"{nameof(backpackUI)} 沒有被掛載。");
+            }
+
+            if (backpackUICanvasGroup is null)
+            {
+                throw new InvalidOperationException($"{nameof(backpackUICanvasGroup)} 沒有被掛載。");
             }
 
             if (fastButton is null)
             {
-                Debug.Log($"{name} > {GetType().Name} > {nameof(fastButton)} cannot be null.");
-                Destroy(gameObject);
-                return;
+                throw new InvalidOperationException($"{nameof(fastButton)} 沒有被掛載。");
             }
 
             fastButton.OnClick += RequireBackpackUI;
-            
-            SetBackpackUI(_isBackpackEnabled);
         }
         
         private void OnDestroy()
@@ -53,45 +76,35 @@ namespace UI_System.Player_UI_System.Child.Backpack_UI_System.System
         #region 裝置輸入
             public void SetBackpackUI(bool isEnabled)
             {
-                _isBackpackEnabled = isEnabled;
-                
-                if (_isBackpackEnabled)
+                if (isEnabled)
                 {
-                    fastButton.gameObject.SetActive(true);
+                    OpenBackpackUI();
                 }
                 else
                 {
-                    mask.SetActive(false);
-                    backpackUI.gameObject.SetActive(false);
-                    
-                    fastButton.gameObject.SetActive(false);
+                    CloseBackpackUI();
                 }
             }
 
             public void RequireBackpackUI()
             {
-                if (_isBackpackEnabled)
+                if (backpackUI.gameObject.activeSelf)
                 {
-                    mask.SetActive(!mask.gameObject.activeSelf);
-                    backpackUI.gameObject.SetActive(!backpackUI.gameObject.activeSelf);
+                    CloseBackpackUI();
+                }
+                else
+                {
+                    OpenBackpackUI();
                 }
             }
         #endregion
 
         public bool AddItem(IItem item)
         {
-            #region 條件檢查
-                if (item is null)
-                {
-                    throw new ArgumentNullException(nameof(item));
-                }
-
-                if (!_isBackpackEnabled)
-                {
-                    Debug.Log("背包尚未開啟，故無法添加物品。");
-                    throw new InvalidOperationException(nameof(_isBackpackEnabled));
-                }
-            #endregion
+            if (item is null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
 
             return backpackUI.AddItem(item);
         }
@@ -99,6 +112,66 @@ namespace UI_System.Player_UI_System.Child.Backpack_UI_System.System
         public IReadOnlyList<BackpackSlot> GetBackpackSlots()
         {
             return backpackUI.BackpackSlots;
+        }
+
+        private void OpenBackpackUI()
+        {
+            if (!_canSetBackpackUI)
+            {
+                return;
+            }
+
+            _canSetBackpackUI = false;
+            
+            maskCanvasGroup.gameObject.SetActive(true);
+                
+            animation.DoFade_CanvasGroup(
+                canvasGroup: maskCanvasGroup,
+                settings: maskFadeInSettings,
+                onComplete: () =>
+                {
+                    AudioSystem.Instance.UISFX.PlayOneShot(openBackpackSFXData);
+                        
+                    backpackUICanvasGroup.gameObject.SetActive(true);
+                        
+                    animation.DoFade_CanvasGroup(
+                        canvasGroup: backpackUICanvasGroup,
+                        settings: backpackUIFadeInSettings,
+                        onComplete: () =>
+                        {
+                            _canSetBackpackUI = true;
+                        });
+                });
+        }
+
+        private void CloseBackpackUI()
+        {
+            if (!_canSetBackpackUI)
+            {
+                return;
+            }
+            
+            _canSetBackpackUI = false;
+            
+            AudioSystem.Instance.UISFX.PlayOneShot(closeBackpackSFXData);
+            
+            animation.DoFade_CanvasGroup(
+                canvasGroup: backpackUICanvasGroup,
+                settings: backpackUIFadeOutSettings,
+                onComplete: () =>
+                {
+                    backpackUICanvasGroup.gameObject.SetActive(false);
+                    
+                    animation.DoFade_CanvasGroup(
+                        canvasGroup: maskCanvasGroup,
+                        settings: maskFadeOutSettings,
+                        onComplete: () =>
+                        {
+                            maskCanvasGroup.gameObject.SetActive(false);
+                            
+                            _canSetBackpackUI = true;
+                        });
+                });
         }
     }
 }

@@ -1,6 +1,9 @@
 using System;
+using Audio_System.Data;
+using Audio_System.Main;
 using Common.Interactable_Object;
 using Common.Item.Data;
+using Input_System;
 using Player_System.Object;
 using UnityEngine;
 
@@ -8,8 +11,11 @@ namespace Common.Item.Object
 {
     public sealed class ItemObject : MonoBehaviour, InteractableObject
     {
-        [field: Header("Data")]
+        [field: Header("物品資料")]
         [field: SerializeField] private ItemSO itemData;
+        
+        [field: Header("音效資料")]
+        [field: SerializeField] private PlaySFXData takeSFX;
 
         public static event Action OnTake;
 
@@ -22,18 +28,25 @@ namespace Common.Item.Object
             }
         }
 
-        public void OnEnterDetect()
+        public void OnEnterDetect(PlayerObject playerObject)
         {
         }
 
-        public void OnExitDetect()
+        public void OnExitDetect(PlayerObject playerObject)
         {
+        }
+
+        public void OnInteractStart()
+        {
+            InputSystem.DisablePlayerWalk();
         }
 
         public bool OnInteract(PlayerObject playerObject)
         {
             if (playerObject.TryAddItem(itemData))
             {
+                AudioSystem.Instance.InteractSFX.PlayOneShot(takeSFX);
+                
                 OnTake?.Invoke();
                 
                 Destroy(gameObject);
@@ -41,6 +54,11 @@ namespace Common.Item.Object
             }
 
             return false;
+        }
+
+        public void OnInteractEnd()
+        {
+            InputSystem.EnablePlayerWalk();
         }
     }
 }

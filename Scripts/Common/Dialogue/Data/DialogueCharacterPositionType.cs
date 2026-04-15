@@ -9,6 +9,8 @@ namespace Common.Dialogue.Data
         
         Left,
         Middle,
-        Right
+        Right,
+        
+        MrGu_Only
     }
 }

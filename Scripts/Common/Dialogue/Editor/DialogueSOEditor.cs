@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using Common.Dialogue.Data;
-using Common.Dialogue.Main;
+using Common.Dialogue.SO.Main;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
@@ -237,9 +237,21 @@ namespace Common.Dialogue.Editor
                     }
                     else
                     {
-                        label = data.AutoPass
-                            ? $"🟢 指令 {index + 1:D2}"
-                            : $"🟡 指令 {index + 1:D2}";
+                        if (data.BlockProcess)
+                        {
+                            if (data.ClickToPass)
+                            {
+                                label = $"🟡 指令 {index + 1:D2}";
+                            }
+                            else
+                            {
+                                label = $"🔵 指令 {index + 1:D2}";
+                            }
+                        }
+                        else
+                        {
+                            label = $"🟢 指令 {index + 1:D2}";
+                        }
                     }
 
                     EditorGUI.PropertyField(rect, element, new GUIContent(label), true);

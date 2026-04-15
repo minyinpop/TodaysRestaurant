@@ -9,6 +9,18 @@ namespace Input_System
     {
         #region Walk
             public static Vector2 WalkDirection => _inputManager.Player.Walk.ReadValue<Vector2>();
+
+            public static void EnablePlayerWalk()
+            {
+                Debug.Log("開啟玩家移動。");
+                _inputManager.Player.Walk.Enable();
+            }
+
+            public static void DisablePlayerWalk()
+            {
+                Debug.Log("關閉玩家移動。");
+                _inputManager.Player.Walk.Disable();
+            }
         #endregion
             
         #region Hotbar

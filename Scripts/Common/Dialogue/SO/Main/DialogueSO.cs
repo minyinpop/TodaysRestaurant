@@ -2,7 +2,7 @@ using Common.Dialogue.Data;
 using Common.Scene_Starter;
 using UnityEngine;
 
-namespace Common.Dialogue.Main
+namespace Common.Dialogue.SO.Main
 {
     [CreateAssetMenu(menuName = "Minyinpop/Dialogue/Main/Dialogue Data", fileName = "New Data")]
     public sealed class DialogueSO : SceneStarterData

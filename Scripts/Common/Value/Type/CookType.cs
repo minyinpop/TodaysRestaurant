@@ -2,8 +2,8 @@ namespace Common.Value.Type
 {
     public enum CookType
     {
-        Null,
-        Stockpot,
-        BrewStation
+        Null = 0,
+        Stockpot = 1,
+        BrewStation = 2
     }
 }

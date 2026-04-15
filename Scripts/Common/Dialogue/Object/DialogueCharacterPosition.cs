@@ -1,5 +1,5 @@
 using System;
-using Common.Dialogue.Child.Character;
+using Common.Dialogue.SO.Child.Character;
 using UnityEngine;
 
 namespace Common.Dialogue.Object

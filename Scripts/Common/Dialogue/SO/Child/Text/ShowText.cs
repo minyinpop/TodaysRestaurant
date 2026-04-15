@@ -1,15 +1,18 @@
 using Animation_System.DOTween.Basic;
 using Common.Dialogue.Data;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-namespace Common.Dialogue.Child.Text
+namespace Common.Dialogue.SO.Child.Text
 {
     [CreateAssetMenu(menuName = "Minyinpop/Dialogue/Child/Text/Show Text", fileName = "New Data")]
     public sealed class ShowText : DialogueData
     {
         [field: Header("State")]
-        [field: SerializeField] private bool autoPass;
-                                public override bool AutoPass => autoPass;
+        [field: SerializeField] private bool blockProcess;
+                                public override bool BlockProcess => blockProcess;
+        [field: SerializeField, FormerlySerializedAs("autoPass")] private bool clickToPass;
+                                                                          public override bool ClickToPass => clickToPass;
         
         [field: Header("Text Settings")]
         [field: SerializeField] private DoText textSettings;

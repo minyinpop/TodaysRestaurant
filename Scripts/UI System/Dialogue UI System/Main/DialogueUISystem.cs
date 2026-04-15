@@ -2,13 +2,14 @@ using System;
 using System.Collections;
 using Common.Button;
 using Common.Database;
-using Common.Dialogue.Child.Background;
-using Common.Dialogue.Child.Character;
-using Common.Dialogue.Child.Text;
-using Common.Dialogue.Child.Title;
-using Common.Dialogue.Child.Tool;
 using Common.Dialogue.Data;
-using Common.Dialogue.Main;
+using Common.Dialogue.SO.Child.Background;
+using Common.Dialogue.SO.Child.Character;
+using Common.Dialogue.SO.Child.Sound;
+using Common.Dialogue.SO.Child.Text;
+using Common.Dialogue.SO.Child.Title;
+using Common.Dialogue.SO.Child.Tool;
+using Common.Dialogue.SO.Main;
 using Common.Scene_Name;
 using Common.Scene_Starter;
 using Common.Value;
@@ -25,6 +26,7 @@ namespace UI_System.Dialogue_UI_System.Main
         [field: SerializeField] private DialogueUICharacterSystem characterSystem;
         [field: SerializeField] private DialogueUITextSystem textSystem;
         [field: SerializeField] private DialogueUITitleSystem titleSystem;
+        [field: SerializeField] private DialogueUISoundSystem soundSystem;
         
         [field: Header("按鈕")]
         [field: SerializeField] private Button continueButton;
@@ -43,32 +45,37 @@ namespace UI_System.Dialogue_UI_System.Main
             #region 必要條件檢查
                 if (backgroundSystem is null)
                 {
-                    throw new InvalidOperationException(nameof(backgroundSystem));
+                    throw new InvalidOperationException($"{nameof(backgroundSystem)} 沒有被掛載。");
                 }
                 
                 if (characterSystem is null)
                 {
-                    throw new InvalidOperationException(nameof(characterSystem));
+                    throw new InvalidOperationException($"{nameof(characterSystem)} 沒有被掛載。");
                 }
                 
                 if (textSystem is null)
                 {
-                    throw new InvalidOperationException(nameof(textSystem));
+                    throw new InvalidOperationException($"{nameof(textSystem)} 沒有被掛載。");
                 }
 
                 if (titleSystem is null)
                 {
-                    throw new InvalidOperationException(nameof(titleSystem));
+                    throw new InvalidOperationException($"{nameof(titleSystem)} 沒有被掛載。");
+                }
+                
+                if (soundSystem is null)
+                {
+                    throw new InvalidOperationException($"{nameof(soundSystem)} 沒有被掛載。");
                 }
 
                 if (continueButton is null)
                 {
-                    throw new InvalidOperationException(nameof(continueButton));
+                    throw new InvalidOperationException($"{nameof(continueButton)} 沒有被掛載。");
                 }
 
                 if (skipButton is null)
                 {
-                    throw new InvalidOperationException(nameof(skipButton));
+                    throw new InvalidOperationException($"{nameof(skipButton)} 沒有被掛載。");
                 }
             #endregion
             
@@ -138,27 +145,48 @@ namespace UI_System.Dialogue_UI_System.Main
                     {
                         case DialogueDataType.Show_Background:
                         {
+                            if (!dialogueData.BlockProcess)
+                            {
+                                _continueDialogue = true;
+                            }
+
                             backgroundSystem.ShowBackground(
-                                dialogueData: dialogueData as ShowBackground,
-                                onComplete: () =>
-                                {
-                                    if (dialogueData.AutoPass)
+                                    dialogueData: dialogueData as ShowBackground,
+                                    onComplete: () =>
                                     {
-                                        _continueDialogue = true;
-                                        return;
-                                    }
-                                    
-                                    continueButton.SetInteractable(true);
-                                });
+                                        if (!dialogueData.BlockProcess)
+                                        {
+                                            return;
+                                        }
+                                        
+                                        if (!dialogueData.ClickToPass)
+                                        {
+                                            _continueDialogue = true;
+                                            return;
+                                        }
+                                        
+                                        continueButton.SetInteractable(true);
+                                    });
+
                             break;
                         }
                         case DialogueDataType.Hide_Background:
                         {
+                            if (!dialogueData.BlockProcess)
+                            {
+                                _continueDialogue = true;
+                            }
+
                             backgroundSystem.HideBackground(
                                 dialogueData: dialogueData as HideBackground,
                                 onComplete: () =>
                                 {
-                                    if (dialogueData.AutoPass)
+                                    if (!dialogueData.BlockProcess)
+                                    {
+                                        return;
+                                    }
+                                    
+                                    if (!dialogueData.ClickToPass)
                                     {
                                         _continueDialogue = true;
                                         return;
@@ -191,11 +219,21 @@ namespace UI_System.Dialogue_UI_System.Main
                         }
                         case DialogueDataType.Show_Text:
                         {
+                            if (!dialogueData.BlockProcess)
+                            {
+                                _continueDialogue = true;
+                            }
+                            
                             textSystem.ShowText(
                                 dialogueData: dialogueData as ShowText,
                                 onComplete: () =>
                                 {
-                                    if (dialogueData.AutoPass)
+                                    if (!dialogueData.BlockProcess)
+                                    {
+                                        return;
+                                    }
+                                    
+                                    if (!dialogueData.ClickToPass)
                                     {
                                         _continueDialogue = true;
                                         return;
@@ -211,23 +249,27 @@ namespace UI_System.Dialogue_UI_System.Main
                                 dialogueData: dialogueData as HideText,
                                 onComplete: () =>
                                 {
-                                    if (dialogueData.AutoPass)
-                                    {
-                                        _continueDialogue = true;
-                                        return;
-                                    }
-                                    
-                                    continueButton.SetInteractable(true);
+                                    _continueDialogue = true;
                                 });
                             break;
                         }
                         case DialogueDataType.Show_Title:
                         {
+                            if (!dialogueData.BlockProcess)
+                            {
+                                _continueDialogue = true;
+                            }
+                            
                             titleSystem.ShowTitle(
                                 dialogueData: dialogueData as ShowTitle,
                                 onComplete: () =>
                                 {
-                                    if (dialogueData.AutoPass)
+                                    if (!dialogueData.BlockProcess)
+                                    {
+                                        return;
+                                    }
+
+                                    if (!dialogueData.ClickToPass)
                                     {
                                         _continueDialogue = true;
                                         return;
@@ -243,7 +285,79 @@ namespace UI_System.Dialogue_UI_System.Main
                                 dialogueData: dialogueData as HideTitle,
                                 onComplete: () =>
                                 {
-                                    if (dialogueData.AutoPass)
+                                    _continueDialogue = true;
+                                });
+                            break;
+                        }
+                        case DialogueDataType.Fade_In_BGM:
+                        {
+                            if (!dialogueData.BlockProcess)
+                            {
+                                _continueDialogue = true;
+                            }
+                            
+                            soundSystem.FadeInBGM(
+                                dialogueData: dialogueData as FadeInBGM,
+                                onComplete: () =>
+                                {
+                                    if (!dialogueData.BlockProcess)
+                                    {
+                                        return;
+                                    }
+                                    
+                                    if (!dialogueData.ClickToPass)
+                                    {
+                                        _continueDialogue = true;
+                                        return;
+                                    }
+                                    
+                                    continueButton.SetInteractable(true);
+                                });
+                            break;
+                        }
+                        case DialogueDataType.Fade_Out_BGM:
+                        {
+                            if (!dialogueData.BlockProcess)
+                            {
+                                _continueDialogue = true;
+                            }
+                            
+                            soundSystem.FadeOutBGM(
+                                dialogueData: dialogueData as FadeOutBGM,
+                                onComplete: () =>
+                                {
+                                    if (!dialogueData.BlockProcess)
+                                    {
+                                        return;
+                                    }
+                                    
+                                    if (!dialogueData.ClickToPass)
+                                    {
+                                        _continueDialogue = true;
+                                        return;
+                                    }
+                                    
+                                    continueButton.SetInteractable(true);
+                                });
+                            break;
+                        }
+                        case DialogueDataType.Play_SFX:
+                        {
+                            if (!dialogueData.BlockProcess)
+                            {
+                                _continueDialogue = true;
+                            }
+                            
+                            soundSystem.PlaySFX(
+                                dialogueData: dialogueData as PlaySFX,
+                                onComplete: () =>
+                                {
+                                    if (!dialogueData.BlockProcess)
+                                    {
+                                        return;
+                                    }
+                                    
+                                    if (!dialogueData.ClickToPass)
                                     {
                                         _continueDialogue = true;
                                         return;
@@ -260,11 +374,7 @@ namespace UI_System.Dialogue_UI_System.Main
                                 yield return new WaitForSeconds(data.WaitTime);
                             }
                             
-                            if (dialogueData.AutoPass)
-                            {
-                                _continueDialogue = true;
-                                break;
-                            }
+                            _continueDialogue = true;
                             
                             continueButton.SetInteractable(true);
                             break;

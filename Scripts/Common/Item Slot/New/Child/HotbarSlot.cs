@@ -57,10 +57,6 @@ namespace Common.Item_Slot.New.Child
                     throw new InvalidOperationException(nameof(slotBorderImage));
                 }
             #endregion
-            
-            #region 防呆
-                itemImage.gameObject.SetActive(false);
-            #endregion
         }
 
         #region PointerEvent

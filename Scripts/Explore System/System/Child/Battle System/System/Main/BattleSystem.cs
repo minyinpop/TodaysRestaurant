@@ -7,6 +7,7 @@ using Common.Database;
 using Common.Enemy_Battle_Group;
 using Common.Player.Child.Player_Team;
 using Common.Scene_Name;
+using Common.Scene_Starter;
 using Common.Value;
 using Common.Value.Type;
 using Explore_System.System.Child.Battle_System.Object;
@@ -19,7 +20,7 @@ using UnityEngine;
 
 namespace Explore_System.System.Child.Battle_System.System.Main
 {
-    public sealed class BattleSystem : MonoBehaviour
+    public sealed class BattleSystem : SceneStarter
     {
         [field: Header("子系統")]
         [field: SerializeField] private SelectedCardSystem selectedCardSystem;
@@ -134,12 +135,17 @@ namespace Explore_System.System.Child.Battle_System.System.Main
             PlayerTeamSystem.RecycleCard -= OnRecycleCard;
         }
         
-        public void StartSystem(EnemyBattleGroupSO enemyBattleGroupData, Action onComplete)
+        public override void StartSystem(SceneStarterData starterData, Action onComplete)
         {
             #region 必要條件檢查
                 if (_isStarted)
                 {
                     throw new InvalidOperationException(nameof(_isStarted));
+                }
+
+                if (starterData is not EnemyBattleGroupSO enemyBattleGroupData)
+                {
+                    throw new ArgumentException($"{nameof(starterData)} 不是 {nameof(EnemyBattleGroupSO)}。");
                 }
             #endregion
 
@@ -388,11 +394,9 @@ namespace Explore_System.System.Child.Battle_System.System.Main
                             selectedCardSystem.OpenUI(
                                 onUIOpen: () =>
                                 {
-                                    handCardSystem.SetCardsInteractable(true);
                                 }, 
                                 onUIClose: () =>
                                 {
-                                    handCardSystem.SetCardsInteractable(false);
                                     _attackCoroutine = UseCardCoroutine();
                                     StartCoroutine(_attackCoroutine);
                                     return;

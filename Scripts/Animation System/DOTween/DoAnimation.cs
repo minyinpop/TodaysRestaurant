@@ -12,11 +12,18 @@ namespace Animation_System.DOTween
         private void OnDisable()
         {
             MoveTween?.Kill();
+            
             RotateTween?.Kill();
+            
             ScaleTween?.Kill();
+            
             DoFade_CanvasGroup_Tween?.Kill();
+            DoFade_AudioSource_Tween?.Kill();
+            
             DoValue_Slider_Tween?.Kill();
+            
             DoColor_Image_Tween?.Kill();
+            
             DoText_Tween?.Kill();
         }
 
@@ -149,6 +156,27 @@ namespace Animation_System.DOTween
                     .OnKill(() =>
                     {
                         DoFade_CanvasGroup_Tween = null;
+                    });
+            }
+            
+            private Tween DoFade_AudioSource_Tween;
+
+            public void DoFade_AudioSource(AudioSource source, DoFade_AudioSource settings, Action onComplete = null)
+            {
+                DoFade_AudioSource_Tween?.Kill();
+                DoFade_AudioSource_Tween = source
+                    .DOFade(
+                        endValue: settings.EndValue,
+                        duration: settings.Duration)
+                    .SetEase(
+                        ease: settings.Ease)
+                    .OnComplete(() =>
+                    {
+                        onComplete?.Invoke();
+                    })
+                    .OnKill(() =>
+                    {
+                        DoFade_AudioSource_Tween = null;
                     });
             }
         #endregion

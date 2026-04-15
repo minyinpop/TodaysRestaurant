@@ -1,9 +1,9 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using Common.Item.Data.Food.Custom_Food;
 using Common.Value;
 using Common.Value.Type;
+using Input_System;
 using Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Child;
 using Restaurant_System.Object.Cookware.System;
 using UI_System.Message_UI_System.Main;
@@ -16,24 +16,21 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Main
         [field: Header("Child System")]
         [field: SerializeField] private SelectionSystem selectionSystem;
         [field: SerializeField] private PutIngredientSystem putIngredientSystem;
-
+        
         private IEnumerator _closeUICor;
-
-        private readonly Queue<Action> _cleansUpActions = new();
-
-        private void OnEnable()
+        
+        public static event Action OnSelectionUIOpen;
+        public static event Action OnPutIngredientUIOpen;
+        public static event Action OnPutIngredientUIClose;
+        
+        private void Awake()
         {
             CookwareSystem.OpenCookSelectionUI += Open;
-            _cleansUpActions.Enqueue(() => CookwareSystem.OpenCookSelectionUI -= Open);
-            
             CookwareSystem.CloseCookSelectionUI += Close;
-            _cleansUpActions.Enqueue(() => CookwareSystem.CloseCookSelectionUI -= Close);
         }
         
         private void OnDisable()
         {
-            while (_cleansUpActions.Count > 0) _cleansUpActions.Dequeue()?.Invoke();
-            
             if (_closeUICor is not null)
             {
                 StopCoroutine(_closeUICor);
@@ -41,16 +38,28 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Main
             }
         }
 
+        private void OnDestroy()
+        {
+            CookwareSystem.OpenCookSelectionUI -= Open;
+            CookwareSystem.CloseCookSelectionUI -= Close;
+        }
+
         private void Open(CookType cookwareType, Action<CustomFoodItem> onConfirm, Action onCancel)
         {
+            OnSelectionUIOpen?.Invoke();
+            
             selectionSystem.Show(cookwareType,
                 onSelect: selectedDishData =>
                 {
+                    OnPutIngredientUIOpen?.Invoke();
+                    
                     selectionSystem.SetInteractable(false);
+                    
                     putIngredientSystem.Show(selectedDishData,
                         onConfirm: () =>
                         {
                             putIngredientSystem.SetInteractable(false);
+                            
                             if (putIngredientSystem.CheckRecipeIsCorrect())
                             {
                                 _closeUICor = CloseUICoroutine();
@@ -95,9 +104,17 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Main
                                     var isSelectionUIClosed = false;
                                     var isPutIngredientUIClosed = false;
                                     selectionSystem.Hide(
-                                        onComplete: () => isSelectionUIClosed = true);
+                                        onComplete: () =>
+                                        {
+                                            isSelectionUIClosed = true;
+                                        });
                                     putIngredientSystem.Hide(
-                                        onComplete: () => isPutIngredientUIClosed = true);
+                                        onComplete: () =>
+                                        {
+                                            isPutIngredientUIClosed = true;
+                                            
+                                            OnPutIngredientUIClose?.Invoke();
+                                        });
                                     yield return new WaitUntil(() => isSelectionUIClosed && isPutIngredientUIClosed);
                                     onConfirm?.Invoke(cookDish);
                                 #endregion
@@ -117,7 +134,6 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Main
                     selectionSystem.Hide(
                         onComplete: () =>
                         {
-                            // TODO
                         });
                 });
         }

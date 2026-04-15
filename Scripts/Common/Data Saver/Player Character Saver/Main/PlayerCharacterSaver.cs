@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using Common.Character;
 using Common.Data_Saver.Player_Character_Saver.Child;
@@ -8,39 +7,54 @@ namespace Common.Data_Saver.Player_Character_Saver.Main
 {
     public static class PlayerCharacterSaver
     {
+        
         #region 本地操作
             public static void SaveCharacterToLocal(CharacterSaveData saveData)
             {
-                var path = Application.persistentDataPath + "/" + saveData.CharacterType + ".json";
-                var json = JsonUtility.ToJson(saveData);
-                
-                File.WriteAllText(path, json);
+                var folderPath = $"{Application.persistentDataPath}/SaveData";
+                var filePath = $"{folderPath}/{saveData.CharacterType}.json";
+
+                if (!Directory.Exists(folderPath))
+                {
+                    Debug.Log($"創建 SaveData 資料夾，位置：{folderPath}。");
+                    Directory.CreateDirectory(folderPath);
+                }
+
+                if (File.Exists(filePath))
+                {
+                    Debug.Log($"無法覆寫 {saveData.CharacterType} 的角色資料，位置：{filePath}");
+                }
+                else
+                {
+                    var json = JsonUtility.ToJson(saveData);
+                    
+                    File.WriteAllText(filePath, json);
+                }
             }
 
             public static bool LoadCharacterFromLocal(CharacterType characterType, out CharacterSaveData saveData)
             {
-                var path = Application.persistentDataPath + "/" + characterType + ".json";
+                var folderPath = $"{Application.persistentDataPath}/SaveData";
+                var filePath = $"{folderPath}/{characterType}.json";
 
-                if (!File.Exists(path))
+                if (!Directory.Exists(folderPath))
                 {
-                    saveData = null;
-                    return false;
+                    Debug.Log($"創建 SaveData 資料夾，位置：{folderPath}。");
+                    Directory.CreateDirectory(folderPath);
                 }
 
-                try
+                if (File.Exists(filePath))
                 {
-                    var json = File.ReadAllText(path);
+                    var json = File.ReadAllText(filePath);
                         saveData = JsonUtility.FromJson<CharacterSaveData>(json);
                     
                     return true;
                 }
-                catch (Exception exception)
-                {
-                    Debug.Log(exception);
-                    saveData = null;
-                    
-                    return false;
-                }
+
+                Debug.Log($"無法獲取 {characterType} 角色資料，位置：{filePath}");
+
+                saveData = null;
+                return false;
             }
         #endregion
     }

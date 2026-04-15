@@ -9,10 +9,9 @@ namespace UI_System.Player_UI_System.Child.Backpack_UI_System.Object
 {
     public sealed class BackpackUI : MonoBehaviour
     {
-        [field: Header("Item Slot")]
+        [field: Header("物品格子")]
         [field: SerializeField] private BackpackSlot[] backpackSlots;
                                 public IReadOnlyList<BackpackSlot> BackpackSlots => backpackSlots;
-
         private void OnEnable()
         {
             foreach (var slot in backpackSlots)

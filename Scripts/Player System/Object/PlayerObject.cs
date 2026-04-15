@@ -11,7 +11,7 @@ namespace Player_System.Object
 {
     public partial class PlayerObject : MonoBehaviour, IAttackable
     {
-        [field: Header("Player System")]
+        [field: Header("玩家系統 - 主系統")]
         [field: SerializeField] private PlayerSystem playerSystem;
         
         private readonly StateMachine _stateMachine = new();
@@ -19,6 +19,7 @@ namespace Player_System.Object
         private IState _idleState;
         private IState _moveState;
         private IState _hurtState;
+        private IState _takeItemState;
 
         private void Awake()
         {
@@ -69,12 +70,28 @@ namespace Player_System.Object
             _hurtState = new OnHurt(
                 onEnter: () =>
                 {
-                    // TODO 被攻擊到的動畫
+                    InputSystem.DisablePlayerWalk();
+                    
                     _canInteract = false;
                     _canWalk = false;
                 },
                 onExit: () =>
                 {
+                    InputSystem.EnablePlayerWalk();
+                });
+
+            _takeItemState = new OnTakeItem(
+                onEnter: () =>
+                {
+                    PlayTakeAnimation();
+
+                    _canInteract = false;
+                    _canWalk = false;
+                },
+                onExit: () =>
+                {
+                    _canInteract = true;
+                    _canWalk = true;
                 });
             
             InputSystem.OnPerformedInteract += OnPerformInteract;
@@ -82,8 +99,12 @@ namespace Player_System.Object
 
         private void Start()
         {
-            StartDetectInteractableObject();
             _stateMachine.InitializeState(_idleState);
+        }
+
+        private void OnEnable()
+        {
+            StartDetectInteractableObject();
         }
 
         private void FixedUpdate()
@@ -91,9 +112,13 @@ namespace Player_System.Object
             DetectMove();
         }
 
-        private void OnDestroy()
+        private void OnDisable()
         {
             StopDetectInteractableObject();
+        }
+
+        private void OnDestroy()
+        {
             InputSystem.OnPerformedInteract -= OnPerformInteract;
         }
 

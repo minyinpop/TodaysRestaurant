@@ -1,6 +1,6 @@
 using System;
 using Animation_System.DOTween;
-using Common.Dialogue.Child.Title;
+using Common.Dialogue.SO.Child.Title;
 using TMPro;
 using UnityEngine;
 

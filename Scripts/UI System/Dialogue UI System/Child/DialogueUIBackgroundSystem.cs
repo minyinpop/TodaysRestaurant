@@ -1,6 +1,6 @@
 using System;
 using Animation_System.DOTween;
-using Common.Dialogue.Child.Background;
+using Common.Dialogue.SO.Child.Background;
 using UnityEngine;
 using UnityEngine.UI;
 
