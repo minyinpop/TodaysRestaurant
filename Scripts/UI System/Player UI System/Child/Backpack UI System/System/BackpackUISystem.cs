@@ -4,7 +4,6 @@ using Animation_System.DOTween;
 using Animation_System.DOTween.Basic;
 using Audio_System.Data;
 using Audio_System.Main;
-using Common.Button;
 using Common.Item_Slot.New.Child;
 using Common.Item.Data;
 using UI_System.Player_UI_System.Child.Backpack_UI_System.Object;
@@ -28,9 +27,6 @@ namespace UI_System.Player_UI_System.Child.Backpack_UI_System.System
         [field: SerializeField] private CanvasGroup backpackUICanvasGroup;
         [field: SerializeField] private DoFade_CanvasGroup backpackUIFadeInSettings;
         [field: SerializeField] private DoFade_CanvasGroup backpackUIFadeOutSettings;
-        
-        [field: Header("按鈕")]
-        [field: SerializeField] private Button fastButton;
         
         [field: Header("音效")]
         [field: SerializeField] private PlaySFXData openBackpackSFXData;
@@ -59,21 +55,21 @@ namespace UI_System.Player_UI_System.Child.Backpack_UI_System.System
             {
                 throw new InvalidOperationException($"{nameof(backpackUICanvasGroup)} 沒有被掛載。");
             }
-
-            if (fastButton is null)
-            {
-                throw new InvalidOperationException($"{nameof(fastButton)} 沒有被掛載。");
-            }
-
-            fastButton.OnClick += RequireBackpackUI;
         }
         
-        private void OnDestroy()
-        {
-            fastButton.OnClick -= RequireBackpackUI;
-        }
-
         #region 裝置輸入
+            public void SetBackpackUI()
+            {
+                if (backpackUI.gameObject.activeSelf)
+                {
+                    CloseBackpackUI();
+                }
+                else
+                {
+                    OpenBackpackUI();
+                }
+            }
+            
             public void SetBackpackUI(bool isEnabled)
             {
                 if (isEnabled)
@@ -83,18 +79,6 @@ namespace UI_System.Player_UI_System.Child.Backpack_UI_System.System
                 else
                 {
                     CloseBackpackUI();
-                }
-            }
-
-            public void RequireBackpackUI()
-            {
-                if (backpackUI.gameObject.activeSelf)
-                {
-                    CloseBackpackUI();
-                }
-                else
-                {
-                    OpenBackpackUI();
                 }
             }
         #endregion

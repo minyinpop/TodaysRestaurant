@@ -1,6 +1,5 @@
 using System;
 using Common.Scene_Starter;
-using Input_System;
 using Lobby_System.Child;
 using UI_System.Lobby_UI_System.Main;
 using UnityEngine;
@@ -14,7 +13,6 @@ namespace Lobby_System.Main
         
         private bool _isLevelSelectUIOpen;
 
-        private Action _onLobbyLevelSelectUIPerformedCleanupAction;
         private Action _onClickLevelSelectButtonCleanupAction;
         
         private void Awake()
@@ -24,13 +22,6 @@ namespace Lobby_System.Main
                 throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(levelSelectSystem)} cannot be null.");
             }
             
-            InputSystem.OnPerformedMap += OnPerformLevelSelectButton;
-            _onLobbyLevelSelectUIPerformedCleanupAction = () =>
-            {
-                InputSystem.OnPerformedMap -= OnPerformLevelSelectButton;
-                _onLobbyLevelSelectUIPerformedCleanupAction = null;
-            };
-
             LobbyUISystem.OnClickLevelSelectButtonEvent += OnPerformLevelSelectButton;
             _onClickLevelSelectButtonCleanupAction = () =>
             {
@@ -41,7 +32,6 @@ namespace Lobby_System.Main
         
         private void OnDestroy()
         {
-            _onLobbyLevelSelectUIPerformedCleanupAction?.Invoke();
             _onClickLevelSelectButtonCleanupAction?.Invoke();
         }
 

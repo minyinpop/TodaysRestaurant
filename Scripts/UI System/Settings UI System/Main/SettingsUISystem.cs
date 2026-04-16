@@ -3,7 +3,6 @@ using Animation_System.DOTween;
 using Animation_System.DOTween.Basic;
 using Common.Button;
 using UI_System.Settings_UI_System.Child;
-using UI_System.Title_UI_System.Main;
 using UnityEngine;
 
 namespace UI_System.Settings_UI_System.Main
@@ -28,7 +27,6 @@ namespace UI_System.Settings_UI_System.Main
         [field: SerializeField] private DoFade_CanvasGroup settingsUIFadeOutSettings;
 
         [field: Header("按鈕")]
-        [field: SerializeField] private Button fastButton;
         [field: SerializeField] private Button closeButton;
         
         private void Awake()
@@ -53,21 +51,9 @@ namespace UI_System.Settings_UI_System.Main
                 throw new InvalidOperationException($"{nameof(settingsUICanvasGroup)} 沒有被掛載。");
             }
 
-            if (fastButton is null)
-            {
-                Debug.Log($"提示：{nameof(fastButton)} 沒有被掛載。");
-            }
-
             if (closeButton is null)
             {
                 throw new InvalidOperationException($"{nameof(closeButton)} 沒有被掛載。");
-            }
-            
-            TitleUISystem.OnClickSettingsButton += OnClickSettingsButton;
-
-            if (fastButton is not null)
-            {
-                fastButton.OnClick += OnClickSettingsButton;
             }
             
             closeButton.OnClick += OnClickCloseButton;
@@ -80,17 +66,10 @@ namespace UI_System.Settings_UI_System.Main
 
         private void OnDestroy()
         {
-            TitleUISystem.OnClickSettingsButton -= OnClickSettingsButton;
-
-            if (fastButton is not null)
-            {
-                fastButton.OnClick -= OnClickSettingsButton;
-            }
-
             closeButton.OnClick -= OnClickCloseButton;
         }
 
-        private void OnClickSettingsButton()
+        public void OpenUI()
         {
             maskCanvasGroup.gameObject.SetActive(true);
             

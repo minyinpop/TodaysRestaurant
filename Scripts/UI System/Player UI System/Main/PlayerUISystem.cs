@@ -151,7 +151,7 @@ namespace UI_System.Player_UI_System.Main
 
             public static void RequireBackpackUI()
             {
-                BackpackUISystem.RequireBackpackUI();
+                BackpackUISystem.SetBackpackUI();
             }
 
             public static void PerformHotbar(int hotbarIndex)

@@ -45,36 +45,12 @@ namespace Input_System
                 OnPerformedHotbar?.Invoke(index);
             }
         #endregion
-
-        #region Backpack
-            public static event Action OnPerformedBackpack;
-            private static void OnBackpackPerformed(InputAction.CallbackContext _)
-            {
-                OnPerformedBackpack?.Invoke();
-            }
-        #endregion
-        
-        #region Map
-            public static event Action OnPerformedMap;
-            private void OnMapPerformed(InputAction.CallbackContext _)
-            {
-                OnPerformedMap?.Invoke();
-            }
-        #endregion
         
         #region Interact
             public static event Action OnPerformedInteract;
             private static void OnInteractPerformed(InputAction.CallbackContext _)
             {
                 OnPerformedInteract?.Invoke();
-            }
-        #endregion
-
-        #region Restaurant
-            public static event Action OnPerformedRestaurant;
-            private static void OnRestaurantPerformed(InputAction.CallbackContext _)
-            {
-                OnPerformedRestaurant?.Invoke();
             }
         #endregion
         

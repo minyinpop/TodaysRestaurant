@@ -2,7 +2,6 @@ using System;
 using Common.Button;
 using Common.Database;
 using Common.Scene_Name;
-using Input_System;
 using UI_System.Lobby_UI_System.Child.Level_Select_UI_System.System;
 using UnityEngine;
 
@@ -42,16 +41,12 @@ namespace UI_System.Lobby_UI_System.Main
             
             levelSelectButton.OnClick += OnClickLevelSelectButton;
             restaurantButton.OnClick += OnClickRestaurantButton;
-
-            InputSystem.OnPerformedRestaurant += OnClickRestaurantButton;
         }
         
         private void OnDestroy()
         {
             levelSelectButton.OnClick -= OnClickLevelSelectButton;
             restaurantButton.OnClick -= OnClickRestaurantButton;
-            
-            InputSystem.OnPerformedRestaurant -= OnClickRestaurantButton;
         }
 
         private void OnClickLevelSelectButton()
