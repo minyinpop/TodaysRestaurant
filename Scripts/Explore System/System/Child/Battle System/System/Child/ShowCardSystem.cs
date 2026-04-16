@@ -29,13 +29,13 @@ namespace Explore_System.System.Child.Battle_System.System.Child
             }
         }
         
-        public void ShowCard(List<ICard> cards, Action onComplete = null)
+        public void ShowCard(List<Card> cards, Action onComplete = null)
         {
             ShowCor = ShowCardCoroutine(cards, onComplete);
             StartCoroutine(ShowCor);
         }
 
-        private IEnumerator ShowCardCoroutine(List<ICard> cards, Action onComplete = null)
+        private IEnumerator ShowCardCoroutine(List<Card> cards, Action onComplete = null)
         {
             foreach (var slot in CardSlots)
                 Destroy(slot.gameObject);
@@ -68,9 +68,9 @@ namespace Explore_System.System.Child.Battle_System.System.Child
             }
         }
 
-        public void GetShowCards(out List<ICard> cards)
+        public void GetShowCards(out List<Card> cards)
         {
-            cards = new List<ICard>();
+            cards = new List<Card>();
             foreach (var slot in CardSlots)
             {
                 slot.Get(out var card);

@@ -35,10 +35,11 @@ namespace Explore_System.System.Child.Battle_System.System.Child.Selected_Card_S
         [field: SerializeField] private PlayerTeamSO playerTeamSO;
 
         private readonly List<CardSlot> CardSlots = new();
-        private readonly List<ICard> SelectedCards = new();
+        private readonly List<Card> SelectedCards = new();
 
-        public static event Action<ICard> ReturnCardToHand;
-        public static event Action<List<ICard>, Action> BeforeCloseUI;
+        public event Action<Card> ReturnCardToHand;
+        
+        public static event Action<List<Card>, Action> BeforeCloseUI;
         public event Action AfterCloseUI;
 
         public static event Action OnOpen;
@@ -49,7 +50,6 @@ namespace Explore_System.System.Child.Battle_System.System.Child.Selected_Card_S
         private void Awake()
         {
             ConfirmButton.OnClick += OnConfirmButtonClicked;
-            HandCardSystem.TryAddCardToSelected += TryAdd;
         }
 
         private void Start()
@@ -74,7 +74,6 @@ namespace Explore_System.System.Child.Battle_System.System.Child.Selected_Card_S
         private void OnDestroy()
         {
             ConfirmButton.OnClick -= OnConfirmButtonClicked;
-            HandCardSystem.TryAddCardToSelected -= TryAdd;
         }
 
         #region UI
@@ -99,7 +98,7 @@ namespace Explore_System.System.Child.Battle_System.System.Child.Selected_Card_S
             {
                 ConfirmButton.SetInteractable(false);
                 foreach (var card in SelectedCards)
-                    card.SetInteractable(false);
+                    card.Interactable = false;
                 BeforeCloseUI?.Invoke(SelectedCards, () => AnimationSystem.FadeOut()
                     .OnComplete(() =>
                     {
@@ -110,7 +109,7 @@ namespace Explore_System.System.Child.Battle_System.System.Child.Selected_Card_S
             }
         #endregion
 
-        private bool TryAdd(ICard card)
+        public bool TryAdd(Card card)
         {
             for (var i = 0; i < CardSlots.Count; i++)
             {
@@ -126,7 +125,7 @@ namespace Explore_System.System.Child.Battle_System.System.Child.Selected_Card_S
             return false;
         }
 
-        private void OnCardClicked(ICard card)
+        private void OnCardClicked(Card card)
         {
             card.OnClick -= OnCardClicked;
             card.RemoveCardOrder();
@@ -166,7 +165,7 @@ namespace Explore_System.System.Child.Battle_System.System.Child.Selected_Card_S
                 #endregion
                 
                 var onConfirm = false;
-                var selectedCards = new List<ICard>();
+                var selectedCards = new List<Card>();
                 foreach (var slot in CardSlots)
                 {
                     if (slot.IsEmpty()) continue;
@@ -200,7 +199,7 @@ namespace Explore_System.System.Child.Battle_System.System.Child.Selected_Card_S
                 else
                 {
                     foreach (var card in selectedCards)
-                        card.SetInteractable(false);
+                        card.Interactable = false;
                     
                     MessageUISystem.ShowSwitchUI(
                         content: new PopUpUIContent(
@@ -221,7 +220,7 @@ namespace Explore_System.System.Child.Battle_System.System.Child.Selected_Card_S
                                 var slot = CardSlots[i];
                                 var card = selectedCards[i];
                                 slot.Set(card);
-                                card.SetInteractable(true);
+                                card.Interactable = true;
                             }
                         });
                 }

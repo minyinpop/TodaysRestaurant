@@ -1,41 +1,44 @@
-using Explore_System.System.Child.Battle_System.Object.Card;
+using System;
 using UnityEngine;
 
 namespace Explore_System.System.Child.Battle_System.Object.Card_Slot
 {
     internal sealed class CardSlot : MonoBehaviour
     {
-        private ICard Card;
+        private Card.Card _card;
 
-        public bool Set(ICard card)
+        public void Set(Card.Card card)
         {
-            if (!IsEmpty()) return false;
+            if (!IsEmpty())
+            {
+                Debug.Log($"{nameof(card)} 不能傳入空值。");
+                return;
+            }
             
-            Card = card;
-            return true;
+            _card = card;
         }
 
-        public bool Get(out ICard card)
+        public bool Get(out Card.Card card)
         {
             if (IsEmpty())
             {
-                card = null;
-                return false;
+                throw new InvalidOperationException($"{name} 的 {_card} 是空的。");
             }
 
-            card = Card;
-            Card = null;
+            card = _card;
+            _card = null;
+            
             return true;
         }
         
         public bool IsEmpty()
         {
-            return Card is null;
+            return _card is null;
         }
 
-        public bool Compare(ICard card)
+        public bool Compare(Card.Card card)
         {
-            return card == Card;
+            return card == _card;
         }
     }
 }

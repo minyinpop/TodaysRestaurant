@@ -5,8 +5,8 @@ using System.Linq;
 using Common.Value.Type;
 using Explore_System.System.Child.Battle_System.Object;
 using Explore_System.System.Child.Battle_System.Object.Card;
+using Explore_System.System.Child.Battle_System.Object.Card.Battle;
 using Explore_System.System.Child.Battle_System.Object.Creature.Character;
-using Explore_System.System.Child.Battle_System.Object.Creature.Enemy;
 using Explore_System.System.Child.Battle_System.Object.Creature.Enemy.Main;
 using UnityEngine;
 
@@ -114,7 +114,7 @@ namespace Explore_System.System.Child.Battle_System.System.Child
         #endregion
 
         #region Hurt
-            private void Hurt(ICard card, Action haveEnemyAlive, Action enemyAllDead)
+            private void Hurt(Card card, Action haveEnemyAlive, Action enemyAllDead)
             {
                 if (_coroutine is not null)
                 {
@@ -126,11 +126,15 @@ namespace Explore_System.System.Child.Battle_System.System.Child
                 StartCoroutine(_coroutine);
             }
 
-            private IEnumerator HurtCoroutine(ICard card, Action haveEnemyAlive, Action enemyAllDead)
+            private IEnumerator HurtCoroutine(Card card, Action haveEnemyAlive, Action enemyAllDead)
             {
-                card.GetDamage(out var damage);
+                if (card.CardData is not BattleCardSO battleCardData)
+                {
+                    Debug.Log($"{nameof(HurtCoroutine)} 的 {nameof(card)} 不能傳入除了 {nameof(BattleCard)} 以外的卡片。");
+                    yield break;
+                }
                 
-                switch (damage.AttackType)
+                switch (battleCardData.Damage.AttackType)
                 {
                     case AttackType.Single:
                     {
@@ -152,7 +156,7 @@ namespace Explore_System.System.Child.Battle_System.System.Child
                             
                             var enemyObject = enemySlot.battleEnemyObject;
                             
-                            enemyObject.Hurt(damage.BasicDamage,
+                            enemyObject.Hurt(battleCardData.Damage.BasicDamage,
                                 isAlive: () =>
                                 {
                                     haveEnemyAlive.Invoke();
@@ -198,7 +202,7 @@ namespace Explore_System.System.Child.Battle_System.System.Child
                             
                             completes.Add(enemyObject, false);
                             
-                            enemyObject.Hurt(damage.BasicDamage,
+                            enemyObject.Hurt(battleCardData.Damage.BasicDamage,
                                 isAlive: () =>
                                 {
                                     completes[enemyObject] = true;

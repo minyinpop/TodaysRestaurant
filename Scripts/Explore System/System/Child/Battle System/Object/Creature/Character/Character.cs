@@ -5,7 +5,6 @@ using Common.Character;
 using Common.Data_Saver.Player_Character_Saver.Main;
 using Common.Database;
 using Common.Status_Bar;
-using Explore_System.System.Child.Battle_System.Object.Card;
 using UnityEngine;
 
 namespace Explore_System.System.Child.Battle_System.Object.Creature.Character
@@ -24,7 +23,7 @@ namespace Explore_System.System.Child.Battle_System.Object.Creature.Character
         
         public CharacterData CharacterData { get; private set; }
         
-        public static event Action<ICard, Action, Action> OnAttack;
+        public static event Action<Card.Card, Action, Action> OnAttack;
 
         private IEnumerator _currentCoroutine;
 
@@ -99,7 +98,7 @@ namespace Explore_System.System.Child.Battle_System.Object.Creature.Character
         }
 
         #region Attack
-            public void Attack(ICard card, SpineAnimation spine, Action haveEnemyAlive, Action enemyAllDead)
+            public void Attack(Card.Card card, SpineAnimation spine, Action haveEnemyAlive, Action enemyAllDead)
             {
                 AnimationSystem.Attack(spine,
                     onAttackPoint: () =>
