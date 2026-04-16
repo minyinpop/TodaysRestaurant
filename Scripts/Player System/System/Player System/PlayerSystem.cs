@@ -15,8 +15,6 @@ namespace Player_System.System.Player_System
             
             InputSystem.OnPerformedHotbar += PerformHotbar;
             
-            InputSystem.OnPerformedBackpack += RequireBackpackUI;
-            
             // CookwareSystem.TryAddItem += TryAddItem;
             Customer.GivingServingNote += TryAddItem;
 
@@ -29,8 +27,6 @@ namespace Player_System.System.Player_System
             InputSystem.OnClickedRightButton -= OnClickedRightButton;
             
             InputSystem.OnPerformedHotbar -= PerformHotbar;
-            
-            InputSystem.OnPerformedBackpack -= RequireBackpackUI;
             
             // CookwareSystem.TryAddItem -= TryAddItem;
             Customer.GivingServingNote -= TryAddItem;

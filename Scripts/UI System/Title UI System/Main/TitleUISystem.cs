@@ -34,8 +34,6 @@ namespace UI_System.Title_UI_System.Main
         /// 開始的章節名稱
         /// </param>
         public static event Action<SceneNameSO, DialogueSO> OnStartTutorial;
-        
-        public static event Action OnClickSettingsButton;
 
         private void Awake()
         {
@@ -65,7 +63,6 @@ namespace UI_System.Title_UI_System.Main
             }
 
             startButton.OnClick += OnStartButtonClicked;
-            settingsButton.OnClick += OnSettingsButtonClicked;
             quitButton.OnClick += OnQuitButtonClicked;
             dataCleanButton.OnClick += OnDataCleanButtonClicked;
 
@@ -75,7 +72,6 @@ namespace UI_System.Title_UI_System.Main
         private void OnDestroy()
         {
             startButton.OnClick -= OnStartButtonClicked;
-            settingsButton.OnClick -= OnSettingsButtonClicked;
             quitButton.OnClick -= OnQuitButtonClicked;
             dataCleanButton.OnClick -= OnDataCleanButtonClicked;
             
@@ -86,16 +82,6 @@ namespace UI_System.Title_UI_System.Main
             private void OnStartButtonClicked()
             {
                 accountUISystem.OpenLoginUI();
-            }
-
-            private void OnSettingsButtonClicked()
-            {
-                if (OnClickSettingsButton is null)
-                {
-                    throw new InvalidOperationException($"沒有 class 訂閱 {nameof(OnClickSettingsButton)}。");
-                }
-                
-                OnClickSettingsButton.Invoke();
             }
             
             private void OnQuitButtonClicked()
