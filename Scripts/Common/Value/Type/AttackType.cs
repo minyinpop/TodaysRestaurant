@@ -2,7 +2,7 @@ namespace Common.Value.Type
 {
     public enum AttackType
     {
-        Single,
-        All
+        Single = 1,
+        All = 2
     }
 }

@@ -111,13 +111,22 @@ namespace Explore_System.System.Child.Battle_System.System.Child
                 {
                     var index = i;
                     var slot = CardSlots[index];
-                    if (!slot.IsEmpty()) continue;
-                    if (_currentDeck.Count == 0) { onComplete?.Invoke(); yield break; }
+                    
+                    if (!slot.IsEmpty())
+                    {
+                        continue;
+                    }
+                    
+                    if (_currentDeck.Count <= 0)
+                    {
+                        onComplete?.Invoke();
+                        yield break;
+                    }
                     
                     var randomCardData = _currentDeck[UnityEngine.Random.Range(0, _currentDeck.Count)];
                     var card = Instantiate(randomCardData.Card.gameObject, SpawnParent);
 
-                    if (randomCardData.Card is not BattleCard battleCard)
+                    if (card.GetComponent<Card>() is not BattleCard battleCard)
                     {
                         Debug.Log($"在 {nameof(CardPoolSystem)} 裡生成了不是 {nameof(BattleCard)} 的 {nameof(Card)}。");
                         yield break;

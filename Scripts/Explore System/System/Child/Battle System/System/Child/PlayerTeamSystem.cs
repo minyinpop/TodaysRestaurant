@@ -5,7 +5,6 @@ using System.Linq;
 using Animation_System.Spine;
 using Common.Data_Saver.Player_Character_Saver.Child;
 using Common.Data_Saver.Player_Character_Saver.Main;
-using Common.Value;
 using Common.Value.Type;
 using Explore_System.System.Child.Battle_System.Object.Card;
 using Explore_System.System.Child.Battle_System.Object.Card.Battle;
@@ -52,14 +51,20 @@ namespace Explore_System.System.Child.Battle_System.System.Child
         #region Attack
             private void Attack(Card card, SpineAnimation anima, Action haveEnemyAlive, Action enemyAllDead)
             {
-                switch (card.CardData.CardType)
+                if (card.CardData is not BattleCardSO battleCardData)
                 {
-                    case CardType.BattleCard_Fork:
+                    Debug.Log($"{card.name} 不是 {nameof(BattleCardSO)}，無法在 {nameof(Attack)} 裡使用。");
+                    return;
+                }
+
+                switch (battleCardData.BattleCardType)
+                {
+                    case BattleCardType.Fork:
                     {
                         bernard.Attack(card, anima, haveEnemyAlive, enemyAllDead);
                         break;
                     }
-                    case CardType.BattleCard_Spoon:
+                    case BattleCardType.Spoon:
                     {
                         ray.Attack(card, anima, haveEnemyAlive, enemyAllDead);
                         break;
@@ -69,7 +74,7 @@ namespace Explore_System.System.Child.Battle_System.System.Child
         #endregion
 
         #region Hurt
-            private void Hurt(Damage damage, Action haveCharacterAlive, Action characterAllDead)
+            private void Hurt(AttackType attackType, int damage, Action haveCharacterAlive, Action characterAllDead)
             {
                 _hurtCoroutine = HurtCoroutine();
                 StartCoroutine(_hurtCoroutine);
@@ -77,12 +82,12 @@ namespace Explore_System.System.Child.Battle_System.System.Child
                 
                 IEnumerator HurtCoroutine()
                 {
-                    switch (damage.AttackType)
+                    switch (attackType)
                     {
                         case AttackType.Single:
                         {
                             var character = AliveCharacters[0];
-                            character.Hurt(damage.BasicDamage,
+                            character.Hurt(damage,
                                 isAlive: () =>
                                 {
                                     haveCharacterAlive?.Invoke();
@@ -111,7 +116,7 @@ namespace Explore_System.System.Child.Battle_System.System.Child
                                 var index = i;
                                 var character = AliveCharacters[index];
                                 completes.Add(false);
-                                character.Hurt(damage.BasicDamage,
+                                character.Hurt(damage,
                                     isAlive: () =>
                                     {
                                         isAnyCharacterAlive = true;

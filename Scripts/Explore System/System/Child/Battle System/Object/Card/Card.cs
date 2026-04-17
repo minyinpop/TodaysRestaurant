@@ -25,7 +25,7 @@ namespace Explore_System.System.Child.Battle_System.Object.Card
                 Debug.Log($"{nameof(OnHover)} 沒有其它 class 訂閱。");
                 return;
             }
-
+            
             OnHover.Invoke(this);
         }
         
@@ -36,7 +36,7 @@ namespace Explore_System.System.Child.Battle_System.Object.Card
                 Debug.Log($"{nameof(OnHoverExit)} 沒有其它 class 訂閱。");
                 return;
             }
-
+            
             OnHoverExit.Invoke(this);
         }
 
@@ -47,7 +47,7 @@ namespace Explore_System.System.Child.Battle_System.Object.Card
                 Debug.Log($"{nameof(OnClick)} 沒有其它 class 訂閱。");
                 return;
             }
-
+            
             OnClick.Invoke(this);
         }
         

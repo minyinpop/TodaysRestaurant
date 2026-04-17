@@ -16,7 +16,7 @@ namespace Explore_System.System.Child.Battle_System.Object.Creature.Enemy.Child
                 {
                     AudioSystem.Instance.AttackSFX.PlayOneShot(attackSFXData);
                     
-                    InvokeOnAttack(enemyData.Damage, haveCharacterAlive.Invoke, characterAllDead.Invoke);
+                    InvokeOnAttack(enemyData.AttackType, enemyData.Damage, haveCharacterAlive.Invoke, characterAllDead.Invoke);
                 },
                 onComplete: () =>
                 {

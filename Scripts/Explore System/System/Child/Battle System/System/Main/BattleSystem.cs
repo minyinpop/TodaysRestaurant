@@ -12,7 +12,7 @@ using Common.Value;
 using Common.Value.Type;
 using Explore_System.System.Child.Battle_System.Object;
 using Explore_System.System.Child.Battle_System.System.Child;
-using Explore_System.System.Child.Battle_System.System.Child.Selected_Card_System.Main;
+using Explore_System.System.Child.Battle_System.System.Child.Selected_Card_System.System;
 using Explore_System.System.Child.Battle_System.System.Main.State_Machine;
 using Explore_System.System.Child.Battle_System.System.Main.State_Machine.State;
 using UI_System.Message_UI_System.Main;
@@ -113,6 +113,9 @@ namespace Explore_System.System.Child.Battle_System.System.Main
             
             handCardSystem.OnHoverCardEvent += cardInformationSystem.ShowCardInformation;
             handCardSystem.OnHoverExitEvent += cardInformationSystem.HideCardInformation;
+            
+            selectedCardSystem.OnHoverCardEvent += cardInformationSystem.ShowCardInformation;
+            selectedCardSystem.OnHoverExitEvent += cardInformationSystem.HideCardInformation;
         }
 
         private void OnDisable()
@@ -151,6 +154,9 @@ namespace Explore_System.System.Child.Battle_System.System.Main
             
             handCardSystem.OnHoverCardEvent -= cardInformationSystem.ShowCardInformation;
             handCardSystem.OnHoverExitEvent -= cardInformationSystem.HideCardInformation;
+            
+            selectedCardSystem.OnHoverCardEvent -= cardInformationSystem.ShowCardInformation;
+            selectedCardSystem.OnHoverExitEvent -= cardInformationSystem.HideCardInformation;
         }
         
         public override void StartSystem(SceneStarterData starterData, Action onComplete)

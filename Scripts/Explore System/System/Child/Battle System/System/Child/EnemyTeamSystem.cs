@@ -134,7 +134,7 @@ namespace Explore_System.System.Child.Battle_System.System.Child
                     yield break;
                 }
                 
-                switch (battleCardData.Damage.AttackType)
+                switch (battleCardData.AttackType)
                 {
                     case AttackType.Single:
                     {
@@ -156,7 +156,7 @@ namespace Explore_System.System.Child.Battle_System.System.Child
                             
                             var enemyObject = enemySlot.battleEnemyObject;
                             
-                            enemyObject.Hurt(battleCardData.Damage.BasicDamage,
+                            enemyObject.Hurt(battleCardData.Damage,
                                 isAlive: () =>
                                 {
                                     haveEnemyAlive.Invoke();
@@ -202,7 +202,7 @@ namespace Explore_System.System.Child.Battle_System.System.Child
                             
                             completes.Add(enemyObject, false);
                             
-                            enemyObject.Hurt(battleCardData.Damage.BasicDamage,
+                            enemyObject.Hurt(battleCardData.Damage,
                                 isAlive: () =>
                                 {
                                     completes[enemyObject] = true;

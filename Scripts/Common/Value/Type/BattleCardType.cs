@@ -3,8 +3,9 @@ using System;
 namespace Common.Value.Type
 {
     [Serializable]
-    public enum CardType
+    public enum BattleCardType
     {
-        Battle_Card = 1
+        Fork = 1,
+        Spoon = 2
     }
 }

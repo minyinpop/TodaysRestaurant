@@ -3,6 +3,7 @@ using Audio_System.Data;
 using Common.Enemy.Data;
 using Common.Status_Bar;
 using Common.Value;
+using Common.Value.Type;
 using UnityEngine;
 
 namespace Explore_System.System.Child.Battle_System.Object.Creature.Enemy.Main
@@ -24,7 +25,14 @@ namespace Explore_System.System.Child.Battle_System.Object.Creature.Enemy.Main
 
         protected int _health;
 
-        public static event Action<Damage, Action, Action> OnAttack;
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="AttackType"> 攻擊的類型 </param>
+        /// <param name="int"> 攻擊傷害 </param>>
+        /// <param name="Action"> 玩家隊伍的角色活著的回傳 </param>>
+        /// <param name="Action"> 玩家隊伍的角色全部死亡的回傳 </param>>
+        public static event Action<AttackType, int, Action, Action> OnAttack;
         
         public bool death { get; protected set; }
 
@@ -65,14 +73,14 @@ namespace Explore_System.System.Child.Battle_System.Object.Creature.Enemy.Main
         
         public abstract void Hurt(int damage, Action isAlive, Action isDeath);
 
-        protected void InvokeOnAttack(Damage damage, Action haveCharacterAlive, Action characterAllDead)
+        protected void InvokeOnAttack(AttackType attackType, int damage, Action haveCharacterAlive, Action characterAllDead)
         {
             if (OnAttack is null)
             {
                 throw new InvalidOperationException($"沒有 class 訂閱 {nameof(OnAttack)}。");
             }
             
-            OnAttack.Invoke(damage, haveCharacterAlive, characterAllDead);
+            OnAttack.Invoke(attackType, damage, haveCharacterAlive, characterAllDead);
         }
     }
 }
