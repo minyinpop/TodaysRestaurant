@@ -24,7 +24,7 @@ namespace Explore_System.System.Child.Battle_System.System.Child
         [field: Header("Data")]
         [field: SerializeField] private PlayerDeckSO playerDeckData;
 
-        private List<GameObject> CurrentDeck = new();
+        private List<CardSO> _currentDeck = new();
         
         private IEnumerator SortCor;
         private IEnumerator RefillCor;
@@ -32,8 +32,7 @@ namespace Explore_System.System.Child.Battle_System.System.Child
 
         private void Awake()
         {
-            playerDeckData.Get(out var deck);
-            CurrentDeck = deck.ToList();
+            _currentDeck = playerDeckData.CardsData.ToList();
         }
 
         private void OnDisable()
@@ -68,7 +67,7 @@ namespace Explore_System.System.Child.Battle_System.System.Child
 
             private IEnumerator SortCoroutine()
             {
-                var remainingCards = new List<ICard>();
+                var remainingCards = new List<Card>();
                 foreach (var slot in CardSlots)
                 {
                     if (!slot.Get(out var card)) continue;
@@ -113,11 +112,17 @@ namespace Explore_System.System.Child.Battle_System.System.Child
                     var index = i;
                     var slot = CardSlots[index];
                     if (!slot.IsEmpty()) continue;
-                    if (CurrentDeck.Count == 0) { onComplete?.Invoke(); yield break; }
+                    if (_currentDeck.Count == 0) { onComplete?.Invoke(); yield break; }
                     
-                    var randomCardPrefab = CurrentDeck[UnityEngine.Random.Range(0, CurrentDeck.Count)];
-                    var card = Instantiate(randomCardPrefab, SpawnParent);
-                    var battleCard = card.GetComponent<BattleCard>();
+                    var randomCardData = _currentDeck[UnityEngine.Random.Range(0, _currentDeck.Count)];
+                    var card = Instantiate(randomCardData.Card.gameObject, SpawnParent);
+
+                    if (randomCardData.Card is not BattleCard battleCard)
+                    {
+                        Debug.Log($"在 {nameof(CardPoolSystem)} 裡生成了不是 {nameof(BattleCard)} 的 {nameof(Card)}。");
+                        yield break;
+                    }
+                    
                     slot.Set(battleCard);
                     battleCard.Move(slot.transform, new DoAnchorPos(Vector3.zero, .5f, true, Ease.OutExpo),
                         onComplete: () =>
@@ -132,10 +137,10 @@ namespace Explore_System.System.Child.Battle_System.System.Child
         #endregion
         
         #region Draw
-            public void DrawCard(int number, out List<ICard> cards)
+            public void DrawCard(int number, out List<Card> cards)
             {
                 number = Mathf.Clamp(number, 0, CardSlots.Length);
-                cards = new List<ICard>();
+                cards = new List<Card>();
                 for (var i = 0; i < number; i++)
                 {
                     var slot = CardSlots[i];
@@ -157,20 +162,21 @@ namespace Explore_System.System.Child.Battle_System.System.Child
                 foreach (var slot in CardSlots)
                 {
                     slot.Get(out var card);
-                    card.GetCardType(out var type);
-                    if (type == targetType)
+                    if (card.CardData.CardType == targetType)
                     {
                         completes.Add(false);
                         var index = completes.Count - 1;
                         card.DestroyCard(
                             onComplete: () =>
                             {
-                                for (var i = 0; i < CurrentDeck.Count; i++)
+                                for (var i = 0; i < _currentDeck.Count; i++)
                                 {
-                                    var cardPrefab = CurrentDeck[i];
-                                    cardPrefab.GetComponent<ICard>().GetCardType(out var cardType);
-                                    if (cardType != targetType) continue;
-                                    CurrentDeck.Remove(cardPrefab);
+                                    if (_currentDeck[i].CardType != targetType)
+                                    {
+                                        continue;
+                                    }
+                                    
+                                    _currentDeck.Remove(_currentDeck[i]);
                                 }
 
                                 completes[index] = true;

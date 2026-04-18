@@ -52,7 +52,7 @@ namespace Explore_System.System.Child.Battle_System.System.Child
         }
 
         #region Add
-            private void Add(List<ICard> cards, Action onComplete = null)
+            private void Add(List<Card> cards, Action onComplete = null)
             {
                 AddCor = AddCoroutine();
                 StartCoroutine(AddCor);
@@ -135,8 +135,8 @@ namespace Explore_System.System.Child.Battle_System.System.Child
                     foreach (var slot in CardSlots)
                     {
                         slot.Get(out var card);
-                        card.GetCardType(out var type);
-                        if (type == targetType)
+                        
+                        if (card.CardData.CardType == targetType)
                         {
                             completes.Add(false);
                             var index = completes.Count - 1;
@@ -147,7 +147,9 @@ namespace Explore_System.System.Child.Battle_System.System.Child
                                 });
                         }
                         else
+                        {
                             slot.Set(card);
+                        }
                     }
                     
                     yield return new WaitUntil(() => completes.All(c => c));

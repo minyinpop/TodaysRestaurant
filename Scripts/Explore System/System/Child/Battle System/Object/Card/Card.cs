@@ -2,30 +2,54 @@ using System;
 using Animation_System.DOTween.Basic;
 using Animation_System.DOTween.Combine;
 using Common.Pointer_Event;
-using Common.Value;
-using Common.Value.Type;
 using UnityEngine;
 
 namespace Explore_System.System.Child.Battle_System.Object.Card
 {
-    public abstract class Card : PointerEvent, ICard
+    public abstract class Card : PointerEvent
     {
-        public event Action<ICard> OnClick;
-        protected void OnClickEvent() => OnClick?.Invoke(this);
+        [field: Header("卡片資料")]
+        [field: SerializeField] protected CardSO cardData;
+                                public CardSO CardData => cardData;
         
-        #region Information
-            public virtual void GetCardType(out CardType type) =>
-                    throw new NotImplementedException();
-            public virtual void GetDrawChance(out float chance) =>
-                throw new NotImplementedException();
-            public virtual void GetDamage(out Damage damage) =>
-                throw new NotImplementedException();
-        #endregion
-            
-        #region Status
-            public virtual void SetInteractable(bool interactable) =>
-                throw new NotImplementedException();
-        #endregion
+        [field: HideInInspector] public bool Interactable;
+        
+        public event Action<Card> OnHover;
+        public event Action<Card> OnHoverExit;
+        public event Action<Card> OnClick;
+        
+        protected void OnHoverEvent()
+        {
+            if (OnHover is null)
+            {
+                Debug.Log($"{nameof(OnHover)} 沒有其它 class 訂閱。");
+                return;
+            }
+
+            OnHover.Invoke(this);
+        }
+        
+        protected void OnHoverExitEvent()
+        {
+            if (OnHoverExit is null)
+            {
+                Debug.Log($"{nameof(OnHoverExit)} 沒有其它 class 訂閱。");
+                return;
+            }
+
+            OnHoverExit.Invoke(this);
+        }
+
+        protected void OnClickEvent()
+        {
+            if (OnClick is null)
+            {
+                Debug.Log($"{nameof(OnClick)} 沒有其它 class 訂閱。");
+                return;
+            }
+
+            OnClick.Invoke(this);
+        }
         
         #region Main Function
             public virtual void Use(Action haveEnemyAlive, Action enemyAllDeath) =>

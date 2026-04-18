@@ -30,6 +30,7 @@ namespace Explore_System.System.Child.Battle_System.System.Main
         [field: SerializeField] private UseCardSystem useCardSystem;
         [field: SerializeField] private PlayerTeamSystem playerTeamSystem;
         [field: SerializeField] private EnemyTeamSystem enemyTeamSystem;
+        [field: SerializeField] private CardInformationSystem cardInformationSystem;
         
         [field: Header("資料")]
         [field: SerializeField] private PlayerTeamSO playerTeamData;
@@ -94,6 +95,11 @@ namespace Explore_System.System.Child.Battle_System.System.Main
                     throw new InvalidOperationException(nameof(enemyTeamSystem));
                 }
 
+                if (cardInformationSystem is null)
+                {
+                    throw new InvalidOperationException($"{nameof(cardInformationSystem)} 沒有被掛載。");
+                }
+
                 if (playerTeamData is null)
                 {
                     throw new InvalidOperationException(nameof(playerTeamData));
@@ -101,6 +107,12 @@ namespace Explore_System.System.Child.Battle_System.System.Main
             #endregion
 
             PlayerTeamSystem.RecycleCard += OnRecycleCard;
+            
+            handCardSystem.TryAddCardToSelected += selectedCardSystem.TryAdd;
+            selectedCardSystem.ReturnCardToHand += handCardSystem.Add;
+            
+            handCardSystem.OnHoverCardEvent += cardInformationSystem.ShowCardInformation;
+            handCardSystem.OnHoverExitEvent += cardInformationSystem.HideCardInformation;
         }
 
         private void OnDisable()
@@ -133,6 +145,12 @@ namespace Explore_System.System.Child.Battle_System.System.Main
         private void OnDestroy()
         {
             PlayerTeamSystem.RecycleCard -= OnRecycleCard;
+            
+            handCardSystem.TryAddCardToSelected -= selectedCardSystem.TryAdd;
+            selectedCardSystem.ReturnCardToHand -= handCardSystem.Add;
+            
+            handCardSystem.OnHoverCardEvent -= cardInformationSystem.ShowCardInformation;
+            handCardSystem.OnHoverExitEvent -= cardInformationSystem.HideCardInformation;
         }
         
         public override void StartSystem(SceneStarterData starterData, Action onComplete)

@@ -23,11 +23,13 @@ namespace Explore_System.System.Child.Battle_System.System.Child
         private IEnumerator AddCor;
         private IEnumerator RecycleCor;
 
-        public static event Func<ICard, bool> TryAddCardToSelected;
+        public event Func<Card, bool> TryAddCardToSelected;
+
+        public event Action<Card> OnHoverCardEvent;
+        public event Action<Card> OnHoverExitEvent;
 
         private void Awake()
         {
-            SelectedCardSystem.ReturnCardToHand += Add;
             SelectedCardSystem.OnOpen += EnableAllCards;
             SelectedCardSystem.OnConfirm += DisableAllCards;
         }
@@ -49,7 +51,6 @@ namespace Explore_System.System.Child.Battle_System.System.Child
 
         private void OnDestroy()
         {
-            SelectedCardSystem.ReturnCardToHand -= Add;
             SelectedCardSystem.OnOpen -= EnableAllCards;
             SelectedCardSystem.OnConfirm -= DisableAllCards;
         }
@@ -60,7 +61,7 @@ namespace Explore_System.System.Child.Battle_System.System.Child
                 foreach (var cardSlot in CardSlots)
                 {
                     cardSlot.Get(out var card);
-                    card.SetInteractable(true);
+                    card.Interactable = true;
                     cardSlot.Set(card);
                 }
             }
@@ -70,38 +71,61 @@ namespace Explore_System.System.Child.Battle_System.System.Child
                 foreach (var cardSlot in CardSlots)
                 {
                     cardSlot.Get(out var card);
-                    card.SetInteractable(false);
+                    card.Interactable = false;
                     cardSlot.Set(card);
                 }
             }
         #endregion
 
-        private void OnCardClicked(ICard card)
+        private void OnHoverCard(Card card)
         {
-            if (TryAddCardToSelected?.Invoke(card) == false) return;
-            card.OnClick -= OnCardClicked;
+        }
+
+        private void OnHoverExit(Card card)
+        {
+        }
+
+        private void OnClickCard(Card card)
+        {
+            if (TryAddCardToSelected?.Invoke(card) == false)
+            {
+                return;
+            }
+
+            card.OnHover -= OnHoverCard;
+            card.OnHoverExit -= OnHoverExit;
+            card.OnClick -= OnClickCard;
+            
             for (var i = 0; i < CardSlots.Count; i++)
             {
-                var slot = CardSlots[i];
-                if (!slot.Compare(card)) continue;
-                CardSlots.Remove(slot);
-                Destroy(slot.gameObject);
+                if (!CardSlots[i].Compare(card))
+                {
+                    continue;
+                }
+                
+                CardSlots.Remove(CardSlots[i]);
+                Destroy(CardSlots[i].gameObject);
+                
                 return;
             }
         }
 
         #region Add
-            private void Add(ICard card)
+            public void Add(Card card)
             {
                 var slot = Instantiate(SlotPrefab, SpawnParent);
                 var slotScript = slot.GetComponent<CardSlot>();
+                
                 CardSlots.Add(slotScript);
                 slotScript.Set(card);
                 card.Move(slot.transform, new DoAnchorPos(Vector2.zero, .5f, true, Ease.OutExpo));
-                card.OnClick += OnCardClicked;
+                
+                card.OnHover += OnHoverCard;
+                card.OnHoverExit += OnHoverExit;
+                card.OnClick += OnClickCard;
             }
 
-            public void Add(List<ICard> cards, Action onComplete)
+            public void Add(List<Card> cards, Action onComplete)
             {
                 AddCor = AddCoroutine();
                 StartCoroutine(AddCor);
@@ -124,7 +148,11 @@ namespace Explore_System.System.Child.Battle_System.System.Child
                             {
                                 completes[index] = true;
                             });
-                        card.OnClick += OnCardClicked;
+                        
+                        card.OnHover += OnHoverCard;
+                        card.OnHoverExit += OnHoverExit;
+                        card.OnClick += OnClickCard;
+                        
                         yield return new WaitForSeconds(.2f);
                     }
                     
@@ -147,8 +175,7 @@ namespace Explore_System.System.Child.Battle_System.System.Child
                 foreach (var slot in CardSlots)
                 {
                     slot.Get(out var card);
-                    card.GetCardType(out var type);
-                    if (type == targetType)
+                    if (card.CardData.CardType == targetType)
                     {
                         completes.Add(false);
                         var index = completes.Count - 1;

@@ -10,7 +10,6 @@ using Common.Value.Type;
 using Explore_System.System.Child.Battle_System.Object.Card;
 using Explore_System.System.Child.Battle_System.Object.Card.Battle;
 using Explore_System.System.Child.Battle_System.Object.Creature.Character;
-using Explore_System.System.Child.Battle_System.Object.Creature.Enemy;
 using Explore_System.System.Child.Battle_System.Object.Creature.Enemy.Main;
 using UnityEngine;
 
@@ -51,10 +50,9 @@ namespace Explore_System.System.Child.Battle_System.System.Child
         }
         
         #region Attack
-            private void Attack(ICard card, SpineAnimation anima, Action haveEnemyAlive, Action enemyAllDead)
+            private void Attack(Card card, SpineAnimation anima, Action haveEnemyAlive, Action enemyAllDead)
             {
-                card.GetCardType(out var cardType);
-                switch (cardType)
+                switch (card.CardData.CardType)
                 {
                     case CardType.BattleCard_Fork:
                     {

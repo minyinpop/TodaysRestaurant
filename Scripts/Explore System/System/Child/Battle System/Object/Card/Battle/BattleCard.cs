@@ -4,97 +4,79 @@ using Animation_System.DOTween;
 using Animation_System.DOTween.Basic;
 using Animation_System.DOTween.Combine;
 using Animation_System.Spine;
-using Common.Value;
-using Common.Value.Type;
 using DG.Tweening;
-using Explore_System.System.Child.Battle_System.Object.Card.Battle.Data;
 using UnityEngine;
+using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 namespace Explore_System.System.Child.Battle_System.Object.Card.Battle
 {
     [RequireComponent(typeof(DoAnimation))]
-    internal abstract class BattleCard : Card
+    public sealed class BattleCard : Card
     {
-        [field: Header("Component")]
-        [field: SerializeField] private RectTransform CardRect;
-        [field: SerializeField] private RectTransform CardSurfaceRect;
-        [field: SerializeField] private GameObject CardFront;
-        [field: SerializeField] private GameObject CardBack;
+        [field: Header("組件")]
+        [field: SerializeField, FormerlySerializedAs("CardRect")] private RectTransform cardRect;
+        [field: SerializeField, FormerlySerializedAs("CardSurfaceRect")] private RectTransform cardSurfaceRect;
+        [field: SerializeField, FormerlySerializedAs("CardFront")] private GameObject front;
+        [field: SerializeField, FormerlySerializedAs("CardBack")] private GameObject back;
         
-        [field: Header("Child System")]
-        [field: SerializeField] private DoAnimation DoAnimation;
+        [field: Header("動畫")]
+        [field: SerializeField, FormerlySerializedAs("DoAnimation")] private new DoAnimation animation;
         
-        [field: Header("Data")]
-        [field: SerializeField] protected BattleCardSO BattleCardData;
+        [field: Header("資料")]
+        [field: SerializeField, FormerlySerializedAs("BattleCardData")] private BattleCardSO battleCardData;
+                                                                                public BattleCardSO BattleCardData => battleCardData;
         
-        [field: Header("Card Order")]
-        [field: SerializeField] private Transform CardOrderParent;
-        private GameObject CardOrder;
+        [field: Header("選擇順序")]
+        [field: SerializeField, FormerlySerializedAs("CardOrderParent")] private Transform orderParent;
         
-        private bool Interactable;
-
-        public static event Action<ICard, SpineAnimation, Action, Action> OnUse;
+        public static event Action<Card, SpineAnimation, Action, Action> OnUse;
         
-        private IEnumerator MoveAndFlipCor;
+        private GameObject _cardOrder;
+        
+        private IEnumerator _moveAndFlipCoroutine;
 
         private void OnDisable()
         {
-            if (MoveAndFlipCor is not null)
+            if (_moveAndFlipCoroutine is not null)
             {
-                StopCoroutine(MoveAndFlipCor);
-                MoveAndFlipCor = null;
+                StopCoroutine(_moveAndFlipCoroutine);
+                _moveAndFlipCoroutine = null;
             }
         }
 
         #region PointerEvent
             protected override void OnPointerEnter()
             {
-                if (!Interactable) return;
-                DoAnimation.DoScale_UI(CardSurfaceRect, new DoScale(Vector2.one * 1.25f, .25f, Ease.OutCubic));
+                if (Interactable)
+                {
+                    animation.DoScale_UI(cardSurfaceRect, new DoScale(Vector2.one * 1.25f, .25f, Ease.OutCubic));
+                    OnHoverEvent();
+                }
             }
             
             protected override void OnPointerExit()
             {
-                if (!Interactable) return;
-                DoAnimation.DoScale_UI(CardSurfaceRect, new DoScale(Vector2.one, .25f, Ease.OutCubic));
+                if (Interactable)
+                {
+                    animation.DoScale_UI(cardSurfaceRect, new DoScale(Vector2.one, .25f, Ease.OutCubic));
+                    OnHoverExitEvent();
+                }
             }
             
             protected override void OnPointerClick()
             {
-                if (!Interactable) return;
-                OnClickEvent();
-            }
-        #endregion
-
-        #region Information
-            public override void GetCardType(out CardType type)
-            {
-                BattleCardData.GetCardType(out type);
-            }
-            
-            public override void GetDrawChance(out float chance)
-            {
-                BattleCardData.GetDrawChance(out chance);
-            }
-            
-            public override void GetDamage(out Damage damage)
-            {
-                BattleCardData.GetDamage(out damage);
-            }
-        #endregion
-        
-        #region Status
-            public override void SetInteractable(bool interactable)
-            {
-                Interactable = interactable;
+                if (Interactable)
+                {
+                    OnClickEvent();
+                }
             }
         #endregion
 
         #region Main Function
             public override void Use(Action haveEnemyAlive, Action enemyAllDeath)
             {
-                BattleCardData.GetRandomAnimation(out var anima);
-                OnUse?.Invoke(this, anima,
+                OnUse?.Invoke(this, battleCardData.AttackSpine[Random.Range(0, battleCardData.AttackSpine.Count)],
                     () =>
                     {
                         // haveEnemyAlive
@@ -109,8 +91,8 @@ namespace Explore_System.System.Child.Battle_System.Object.Card.Battle
 
             public override void DestroyCard(Action onComplete)
             {
-                DoAnimation.DoScale_UI(
-                    rect: CardRect,
+                animation.DoScale_UI(
+                    rect: cardRect,
                     settings: new DoScale(Vector2.zero, .5f, Ease.InOutBack),
                     onComplete: () =>
                     {
@@ -123,25 +105,25 @@ namespace Explore_System.System.Child.Battle_System.Object.Card.Battle
         #region Order
             public override void SetCardOrder(GameObject cardOrderPrefab)
             {
-                if (CardOrder is not null)
-                    Destroy(CardOrder);
-                CardOrder = Instantiate(cardOrderPrefab, CardOrderParent);
+                if (_cardOrder is not null)
+                    Destroy(_cardOrder);
+                _cardOrder = Instantiate(cardOrderPrefab, orderParent);
             }
             
             public override void RemoveCardOrder()
             {
-                if (CardOrder is null) return;
-                Destroy(CardOrder);
-                CardOrder = null;
+                if (_cardOrder is null) return;
+                Destroy(_cardOrder);
+                _cardOrder = null;
             }
         #endregion
             
         #region Animation
             public override void Move(Transform parent, DoAnchorPos settings, Action onComplete = null)
             {
-                CardRect.SetParent(parent);
-                DoAnimation.DoAnchorPos(
-                    rect: CardRect,
+                cardRect.SetParent(parent);
+                animation.DoAnchorPos(
+                    rect: cardRect,
                     settings: settings,
                     onComplete: () =>
                     {
@@ -151,49 +133,49 @@ namespace Explore_System.System.Child.Battle_System.Object.Card.Battle
 
             public override void MoveAndFlip(Transform parent, DoAnchorPos anchorPosSettings, DoFlip flipSettings, Action onComplete = null)
             {
-                MoveAndFlipCor = MoveAndFlipCoroutine();
-                StartCoroutine(MoveAndFlipCor);
+                _moveAndFlipCoroutine = MoveAndFlipCoroutine();
+                StartCoroutine(_moveAndFlipCoroutine);
                 return;
                 
                 IEnumerator MoveAndFlipCoroutine()
                 {
                     var rotateComplete = false;
                     var scaleComplete = false;
-                    CardRect.SetParent(parent);
+                    cardRect.SetParent(parent);
                     flipSettings.GetValues(out var rotateSettings, out var scaleSettings01, out var scaleSettings02);
-                    DoAnimation.DoAnchorPos(
-                        rect: CardRect,
+                    animation.DoAnchorPos(
+                        rect: cardRect,
                         settings: anchorPosSettings,
                         onComplete: () =>
                         {
-                            DoAnimation.DoRotate(
-                                rect: CardSurfaceRect,
+                            animation.DoRotate(
+                                rect: cardSurfaceRect,
                                 settings: rotateSettings,
                                 onUpdate: () =>
                                 {
-                                    var y = CardSurfaceRect.eulerAngles.y;
-                                    if (CardBack.activeSelf && y is < 270 and > 90)
+                                    var y = cardSurfaceRect.eulerAngles.y;
+                                    if (back.activeSelf && y is < 270 and > 90)
                                     {
-                                        CardFront.SetActive(true);
-                                        CardBack.SetActive(false);
+                                        front.SetActive(true);
+                                        back.SetActive(false);
                                     }
-                                    else if (CardFront.activeSelf && y is < 360 and > 270 or < 90 and > 0)
+                                    else if (front.activeSelf && y is < 360 and > 270 or < 90 and > 0)
                                     {
-                                        CardFront.SetActive(false);
-                                        CardBack.SetActive(true);
+                                        front.SetActive(false);
+                                        back.SetActive(true);
                                     }
                                 },
                                 onComplete: () =>
                                 {
                                     rotateComplete = true;
                                 });
-                            DoAnimation.DoScale_UI(
-                                rect: CardSurfaceRect,
+                            animation.DoScale_UI(
+                                rect: cardSurfaceRect,
                                 settings: scaleSettings01,
                                 onComplete: () =>
                                 {
-                                    DoAnimation.DoScale_UI(
-                                        rect: CardSurfaceRect,
+                                    animation.DoScale_UI(
+                                        rect: cardSurfaceRect,
                                         settings: scaleSettings02,
                                         onComplete: () =>
                                         {
@@ -203,7 +185,7 @@ namespace Explore_System.System.Child.Battle_System.Object.Card.Battle
                         });
                     yield return new WaitUntil(() => rotateComplete && scaleComplete);
                     onComplete?.Invoke();
-                    MoveAndFlipCor = null;
+                    _moveAndFlipCoroutine = null;
                 }
             }
         #endregion
