@@ -1,5 +1,5 @@
 using Common.Enemy_Battle_Group;
-using Common.Enemy.Data;
+using Common.Enemy_Data;
 using Common.Value;
 using UnityEngine;
 

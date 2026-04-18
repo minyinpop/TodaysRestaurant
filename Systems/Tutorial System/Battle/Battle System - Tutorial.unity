@@ -700,7 +700,7 @@ MonoBehaviour:
   battleSystem: {fileID: 201929484}
   tip1CanvasGroup: {fileID: 1708451858}
   tip1Text: {fileID: 807316946}
-  dialogueStarterData: {fileID: 11400000, guid: fe9547e6dd673454d9043d8a2e8f60b0, type: 2}
+  dialogueStarterData: {fileID: 11400000, guid: 02d33da0b99e4ad439318a3014c33edb, type: 2}
 --- !u!114 &155975520
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1332,7 +1332,7 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 232848029}
   m_Enabled: 1
-  serializedVersion: 12
+  serializedVersion: 13
   m_Type: 2
   m_Color: {r: 1, g: 0.32040977, b: 0, a: 1}
   m_Intensity: 20
@@ -1384,7 +1384,7 @@ Light:
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ForceVisible: 0
-  m_ShadowRadius: 0
+  m_ShapeRadius: 0
   m_ShadowAngle: 0
   m_LightUnit: 1
   m_LuxAtDistance: 1
@@ -1515,7 +1515,7 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 258312207}
   m_Enabled: 1
-  serializedVersion: 12
+  serializedVersion: 13
   m_Type: 0
   m_Color: {r: 0.764151, g: 0.568738, b: 0.2991723, a: 1}
   m_Intensity: 4.6
@@ -1567,7 +1567,7 @@ Light:
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ForceVisible: 0
-  m_ShadowRadius: 0
+  m_ShapeRadius: 0
   m_ShadowAngle: 0
   m_LightUnit: 1
   m_LuxAtDistance: 1
@@ -2275,6 +2275,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 1
+  m_UseReflectionProbes: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
@@ -2560,7 +2561,7 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 393662235}
   m_Enabled: 1
-  serializedVersion: 12
+  serializedVersion: 13
   m_Type: 0
   m_Color: {r: 1, g: 0.7757063, b: 0.4764151, a: 1}
   m_Intensity: 115
@@ -2612,7 +2613,7 @@ Light:
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ForceVisible: 0
-  m_ShadowRadius: 0
+  m_ShapeRadius: 0
   m_ShadowAngle: 0
   m_LightUnit: 1
   m_LuxAtDistance: 1
@@ -2658,7 +2659,7 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 410087039}
   m_Enabled: 1
-  serializedVersion: 12
+  serializedVersion: 13
   m_Type: 1
   m_Color: {r: 1, g: 0.9993228, b: 0.995283, a: 1}
   m_Intensity: 1.08
@@ -2710,7 +2711,7 @@ Light:
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ForceVisible: 0
-  m_ShadowRadius: 0
+  m_ShapeRadius: 0
   m_ShadowAngle: 0
   m_LightUnit: 1
   m_LuxAtDistance: 1
@@ -2963,7 +2964,7 @@ GameObject:
   m_Component:
   - component: {fileID: 451292074}
   - component: {fileID: 451292076}
-  - component: {fileID: 451292075}
+  - component: {fileID: 451292077}
   m_Layer: 5
   m_Name: Selected Card System
   m_TagString: Untagged
@@ -2991,19 +2992,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &451292075
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 451292073}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f829e747926407d953f962d4bd5f087, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::System.Battle_System.System.Child.Selected_Card_System.Child.AnimationSystem
-  UICanvasGroup: {fileID: 205875305}
 --- !u!114 &451292076
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3016,16 +3004,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59b424fea95a4ce58227c08d2f8fd267, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::System.Card_Battle_System.System.Child.SelectedCardSystem
-  AnimationSystem: {fileID: 451292075}
-  SpawnParent: {fileID: 1780495994}
-  SlotPrefab: {fileID: 7365358058170198015, guid: 8468f92ee19dcdd4b8db93c1fb82a11f, type: 3}
-  CardOrderPrefabs:
+  animation: {fileID: 451292077}
+  UICanvasGroup: {fileID: 205875305}
+  fadeInSettings:
+    EndValue: 1
+    Duration: 0.1
+    Ease: 1
+  fadeOutSettings:
+    EndValue: 0
+    Duration: 0.1
+    Ease: 1
+  spawnParent: {fileID: 1780495994}
+  slotPrefab: {fileID: 7365358058170198015, guid: 8468f92ee19dcdd4b8db93c1fb82a11f, type: 3}
+  cardOrderPrefabs:
   - {fileID: 5587431052363678179, guid: b20ced098e0c73a498213f166ee8a12e, type: 3}
   - {fileID: 5587431052363678179, guid: 97eaeb32188537247a3fc6c44c6c7e3f, type: 3}
   - {fileID: 5587431052363678179, guid: f4b5c3fb2abf8094e973eecba4456da7, type: 3}
-  UICanvasGroup: {fileID: 205875305}
-  ConfirmButton: {fileID: 1368256553}
+  confirmButton: {fileID: 1368256553}
   playerTeamSO: {fileID: 11400000, guid: 265a56a184a92a64ab50d46d99848320, type: 2}
+--- !u!114 &451292077
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 451292073}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a817bf6649934d0e8fef10e3075e14a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Animation_System.DOTween.DoAnimation
 --- !u!1001 &455927385
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3223,6 +3231,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 269409f7cb4549b4eb53a28132b2234d, type: 3}
   m_PrefabInstance: {fileID: 540004413}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &561089502
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 561089503}
+  m_Layer: 0
+  m_Name: SFX Parent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &561089503
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 561089502}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1116813825}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &610692542
 GameObject:
   m_ObjectHideFlags: 0
@@ -4756,7 +4795,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 561089503}
   m_Father: {fileID: 1935642507}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!114 &1116813826
@@ -4771,16 +4811,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 338d7abb2e0a4177913fdc460a49241e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::System.Battle_System.Object.Character.Type.Friendly.System.AnimationSystem
-  SkeletonAnimation: {fileID: 1116813828}
-  IdleAnima:
+  skeletonAnimation: {fileID: 1116813828}
+  idleSpine:
     Layer: 0
     AnimationName: Breath
     Loop: 1
-  HurtAnima:
+  hurtSpine:
     Layer: 0
     AnimationName: Hurt
     Loop: 0
-  DeadAnima:
+  deathSpine:
     Animations:
     - Layer: 0
       AnimationName: Defeat
@@ -4801,6 +4841,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::System.Battle_System.Object.Character.Type.Friendly.Type.Bernard
   AnimationSystem: {fileID: 1116813826}
+  SFXParent: {fileID: 561089503}
   healthBar: {fileID: 1257145851}
   characterType: 0
 --- !u!114 &1116813828
@@ -5548,6 +5589,54 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c5c89bf464a467e8a6fe109d3bbc8df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Object.StatusBar
+--- !u!1 &1288916973
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1288916975}
+  - component: {fileID: 1288916974}
+  m_Layer: 0
+  m_Name: Scene UI Controller
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1288916974
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1288916973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3e87a65b444443dabbc42a86c5f5890, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI_System.Scene_UI_Controller.BattleSceneUIController
+  fastButtonUISystem: {fileID: 1503121262}
+  levelSelectUISystem: {fileID: 0}
+  backpackUISystem: {fileID: 0}
+  settingsUISystem: {fileID: 1503121261}
+--- !u!4 &1288916975
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1288916973}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1318836730
 GameObject:
   m_ObjectHideFlags: 0
@@ -5680,7 +5769,7 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1320018743}
   m_Enabled: 1
-  serializedVersion: 12
+  serializedVersion: 13
   m_Type: 0
   m_Color: {r: 0.764151, g: 0.568738, b: 0.2991723, a: 1}
   m_Intensity: 4.6
@@ -5732,7 +5821,7 @@ Light:
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ForceVisible: 0
-  m_ShadowRadius: 0
+  m_ShapeRadius: 0
   m_ShadowAngle: 0
   m_LightUnit: 1
   m_LuxAtDistance: 1
@@ -5807,7 +5896,7 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1331230280}
   m_Enabled: 1
-  serializedVersion: 12
+  serializedVersion: 13
   m_Type: 0
   m_Color: {r: 0.764151, g: 0.568738, b: 0.2991723, a: 1}
   m_Intensity: 4.6
@@ -5859,7 +5948,7 @@ Light:
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ForceVisible: 0
-  m_ShadowRadius: 0
+  m_ShapeRadius: 0
   m_ShadowAngle: 0
   m_LightUnit: 1
   m_LuxAtDistance: 1
@@ -5959,8 +6048,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d356cf40cb04208abe1261721f0afab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Card_Battle_System.System.Child.HandCardSystem
-  SpawnParent: {fileID: 176720727}
-  SlotPrefab: {fileID: 7380749744261002411, guid: 511a948331ecf5b4bbac7ce445adc34a, type: 3}
+  spawnParent: {fileID: 176720727}
+  slotPrefab: {fileID: 7380749744261002411, guid: 511a948331ecf5b4bbac7ce445adc34a, type: 3}
 --- !u!1001 &1336588261
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6663,6 +6752,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 1
+  m_UseReflectionProbes: 0
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
@@ -6964,6 +7054,14 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4396492683727165986, guid: 577a583dca879cb41935feb87e7479b4, type: 3}
+      propertyPath: backpackFastButton
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4396492683727165986, guid: 577a583dca879cb41935feb87e7479b4, type: 3}
+      propertyPath: levelSelectFastButton
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 4621069793533591395, guid: 577a583dca879cb41935feb87e7479b4, type: 3}
       propertyPath: m_SizeDelta.x
       value: 0
@@ -7239,6 +7337,22 @@ PrefabInstance:
     - target: {fileID: 8736202890371386717, guid: 577a583dca879cb41935feb87e7479b4, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8796980969943211486, guid: 577a583dca879cb41935feb87e7479b4, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 8796980969943211486, guid: 577a583dca879cb41935feb87e7479b4, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 8796980969943211486, guid: 577a583dca879cb41935feb87e7479b4, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 128
+      objectReference: {fileID: 0}
+    - target: {fileID: 8796980969943211486, guid: 577a583dca879cb41935feb87e7479b4, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -16
       objectReference: {fileID: 0}
     - target: {fileID: 8887580909894777845, guid: 577a583dca879cb41935feb87e7479b4, type: 3}
       propertyPath: m_SizeDelta.x
@@ -7287,6 +7401,28 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 577a583dca879cb41935feb87e7479b4, type: 3}
+--- !u!114 &1503121261 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6686643213259364246, guid: 577a583dca879cb41935feb87e7479b4, type: 3}
+  m_PrefabInstance: {fileID: 1503121260}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f00a368eded84cd78901416fa70b8afd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI_System.Message_UI_System.Child.Settings_UI_System.SettingsUISystem
+--- !u!114 &1503121262 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4396492683727165986, guid: 577a583dca879cb41935feb87e7479b4, type: 3}
+  m_PrefabInstance: {fileID: 1503121260}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 398b98c89a13440a98a27dcb0ecc7462, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI_System.Fast_Button_UI_System.FastButtonUISystem
 --- !u!1 &1512635335
 GameObject:
   m_ObjectHideFlags: 0
@@ -7428,6 +7564,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 1
+  m_UseReflectionProbes: 0
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
@@ -7730,7 +7867,7 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1583847116}
   m_Enabled: 1
-  serializedVersion: 12
+  serializedVersion: 13
   m_Type: 0
   m_Color: {r: 0.764151, g: 0.568738, b: 0.2991723, a: 1}
   m_Intensity: 4.6
@@ -7782,7 +7919,7 @@ Light:
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ForceVisible: 0
-  m_ShadowRadius: 0
+  m_ShapeRadius: 0
   m_ShadowAngle: 0
   m_LightUnit: 1
   m_LuxAtDistance: 1
@@ -8063,11 +8200,11 @@ RectTransform:
   - {fileID: 807316944}
   m_Father: {fileID: 1854323331}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0.9}
-  m_AnchorMax: {x: 1, y: 0.9}
-  m_AnchoredPosition: {x: -16, y: -16}
+  m_AnchorMin: {x: 0, y: 0.9}
+  m_AnchorMax: {x: 0, y: 0.9}
+  m_AnchoredPosition: {x: 16, y: -16}
   m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 1, y: 1}
+  m_Pivot: {x: 0, y: 1}
 --- !u!225 &1708451858
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -8897,6 +9034,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
+  m_UseReflectionProbes: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
@@ -9739,6 +9877,37 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -1053093794917909690, guid: 265db313580c09a4cb9f89f67ce354e5, type: 3}
+--- !u!1 &1964694804
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1964694805}
+  m_Layer: 0
+  m_Name: SFX Parent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1964694805
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1964694804}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2074191849}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1969993075
 GameObject:
   m_ObjectHideFlags: 0
@@ -9892,7 +10061,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1964694805}
   m_Father: {fileID: 7678628}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!114 &2074191850
@@ -9907,16 +10077,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 338d7abb2e0a4177913fdc460a49241e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::System.Battle_System.Object.Character.Type.Friendly.System.AnimationSystem
-  SkeletonAnimation: {fileID: 2074191852}
-  IdleAnima:
+  skeletonAnimation: {fileID: 2074191852}
+  idleSpine:
     Layer: 0
     AnimationName: Breath
     Loop: 1
-  HurtAnima:
+  hurtSpine:
     Layer: 0
     AnimationName: Hurt_01
     Loop: 0
-  DeadAnima:
+  deathSpine:
     Animations:
     - Layer: 0
       AnimationName: Defeat
@@ -9937,8 +10107,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::System.Battle_System.Object.Character.Type.Friendly.Type.Bernard
   AnimationSystem: {fileID: 2074191850}
+  SFXParent: {fileID: 1964694805}
   healthBar: {fileID: 455927387}
-  characterType: 0
+  characterType: 1
 --- !u!114 &2074191852
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10467,3 +10638,4 @@ SceneRoots:
   - {fileID: 262792074}
   - {fileID: 201929485}
   - {fileID: 1503121260}
+  - {fileID: 1288916975}

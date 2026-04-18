@@ -7,27 +7,29 @@ using Common.Value.Type;
 using DG.Tweening;
 using Explore_System.System.Child.Battle_System.Object.Card_Slot;
 using Explore_System.System.Child.Battle_System.Object.Card;
-using Explore_System.System.Child.Battle_System.System.Child.Selected_Card_System.Main;
+using Explore_System.System.Child.Battle_System.Object.Card.Battle;
+using Explore_System.System.Child.Battle_System.System.Child.Selected_Card_System.System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Explore_System.System.Child.Battle_System.System.Child
 {
     internal sealed class HandCardSystem : MonoBehaviour
     {
-        [field: Header("Card Slot")]
-        [field: SerializeField] private Transform SpawnParent;
-        [field: SerializeField] private GameObject SlotPrefab;
+        [field: Header("卡片格子")]
+        [field: SerializeField, FormerlySerializedAs("SpawnParent")] private Transform spawnParent;
+        [field: SerializeField, FormerlySerializedAs("SlotPrefab")] private GameObject slotPrefab;
         
-        private readonly List<CardSlot> CardSlots = new();
+        private readonly List<CardSlot> cardSlots = new();
         
-        private IEnumerator AddCor;
-        private IEnumerator RecycleCor;
-
+        private IEnumerator _addCoroutine;
+        private IEnumerator _recycleCoroutine;
+        
         public event Func<Card, bool> TryAddCardToSelected;
-
+        
         public event Action<Card> OnHoverCardEvent;
         public event Action<Card> OnHoverExitEvent;
-
+        
         private void Awake()
         {
             SelectedCardSystem.OnOpen += EnableAllCards;
@@ -36,16 +38,16 @@ namespace Explore_System.System.Child.Battle_System.System.Child
 
         private void OnDisable()
         {
-            if (AddCor is not null)
+            if (_addCoroutine is not null)
             {
-                StopCoroutine(AddCor);
-                AddCor = null;
+                StopCoroutine(_addCoroutine);
+                _addCoroutine = null;
             }
             
-            if (RecycleCor is not null)
+            if (_recycleCoroutine is not null)
             {
-                StopCoroutine(RecycleCor);
-                RecycleCor = null;
+                StopCoroutine(_recycleCoroutine);
+                _recycleCoroutine = null;
             }
         }
 
@@ -54,35 +56,59 @@ namespace Explore_System.System.Child.Battle_System.System.Child
             SelectedCardSystem.OnOpen -= EnableAllCards;
             SelectedCardSystem.OnConfirm -= DisableAllCards;
         }
-
-        #region 設定卡片的互動
-            private void EnableAllCards()
+        
+        private void EnableAllCards()
+        {
+            foreach (var cardSlot in cardSlots)
             {
-                foreach (var cardSlot in CardSlots)
+                cardSlot.Get(out var card);
+                
+                if (card is null)
                 {
-                    cardSlot.Get(out var card);
-                    card.Interactable = true;
-                    cardSlot.Set(card);
+                    continue;
                 }
+                
+                card.Interactable = true;
+                cardSlot.Set(card);
             }
-
-            private void DisableAllCards()
+        }
+        
+        private void DisableAllCards()
+        {
+            foreach (var cardSlot in cardSlots)
             {
-                foreach (var cardSlot in CardSlots)
+                cardSlot.Get(out var card);
+                
+                if (card is null)
                 {
-                    cardSlot.Get(out var card);
-                    card.Interactable = false;
-                    cardSlot.Set(card);
+                    continue;
                 }
+                
+                card.Interactable = false;
+                cardSlot.Set(card);
             }
-        #endregion
-
+        }
+        
         private void OnHoverCard(Card card)
         {
+            if (OnHoverCardEvent is null)
+            {
+                Debug.Log($"{OnHoverCardEvent} 沒有被其它 class 訂閱。");
+                return;
+            }
+
+            OnHoverCardEvent.Invoke(card);
         }
 
         private void OnHoverExit(Card card)
         {
+            if (OnHoverExitEvent is null)
+            {
+                Debug.Log($"{OnHoverExitEvent} 沒有被其它 class 訂閱。");
+                return;
+            }
+
+            OnHoverExitEvent.Invoke(card);
         }
 
         private void OnClickCard(Card card)
@@ -96,15 +122,17 @@ namespace Explore_System.System.Child.Battle_System.System.Child
             card.OnHoverExit -= OnHoverExit;
             card.OnClick -= OnClickCard;
             
-            for (var i = 0; i < CardSlots.Count; i++)
+            for (var i = 0; i < cardSlots.Count; i++)
             {
-                if (!CardSlots[i].Compare(card))
+                if (!cardSlots[i].Compare(card))
                 {
                     continue;
                 }
+
+                var cardSlot = cardSlots[i];
                 
-                CardSlots.Remove(CardSlots[i]);
-                Destroy(CardSlots[i].gameObject);
+                cardSlots.Remove(cardSlot);
+                Destroy(cardSlot.gameObject);
                 
                 return;
             }
@@ -113,82 +141,111 @@ namespace Explore_System.System.Child.Battle_System.System.Child
         #region Add
             public void Add(Card card)
             {
-                var slot = Instantiate(SlotPrefab, SpawnParent);
+                var slot = Instantiate(slotPrefab, spawnParent);
                 var slotScript = slot.GetComponent<CardSlot>();
                 
-                CardSlots.Add(slotScript);
+                cardSlots.Add(slotScript);
                 slotScript.Set(card);
-                card.Move(slot.transform, new DoAnchorPos(Vector2.zero, .5f, true, Ease.OutExpo));
                 
-                card.OnHover += OnHoverCard;
-                card.OnHoverExit += OnHoverExit;
-                card.OnClick += OnClickCard;
+                if (card is BattleCard battleCard)
+                {
+                    battleCard.Move(slot.transform, new DoAnchorPos(Vector2.zero, .5f, true, Ease.OutExpo));
+                    
+                    battleCard.OnHover += OnHoverCard;
+                    battleCard.OnHoverExit += OnHoverExit;
+                    battleCard.OnClick += OnClickCard;
+                }
+                else
+                {
+                    throw new InvalidOperationException($"{card.name} 是未在 {nameof(HandCardSystem)} 裡面登記的卡片類型，請聯絡團隊添加。");
+                }
             }
 
             public void Add(List<Card> cards, Action onComplete)
             {
-                AddCor = AddCoroutine();
-                StartCoroutine(AddCor);
+                _addCoroutine = AddCoroutine();
+                StartCoroutine(_addCoroutine);
                 return;
 
                 IEnumerator AddCoroutine()
                 {
                     var completes = new List<bool>();
+                    
                     for (var i = 0; i < cards.Count; i++)
                     {
                         completes.Add(false);
+                        
                         var index = i;
-                        var slot = Instantiate(SlotPrefab, SpawnParent);
+                        var slot = Instantiate(slotPrefab, spawnParent);
                         var slotScript = slot.GetComponent<CardSlot>();
                         var card = cards[index];
-                        CardSlots.Add(slotScript);
-                        slotScript.Set(card);
-                        card.Move(slot.transform, new DoAnchorPos(Vector2.zero, .5f, true, Ease.OutExpo), 
-                            onComplete: () =>
-                            {
-                                completes[index] = true;
-                            });
-                        
-                        card.OnHover += OnHoverCard;
-                        card.OnHoverExit += OnHoverExit;
-                        card.OnClick += OnClickCard;
+
+                        if (card is BattleCard battleCard)
+                        {
+                            cardSlots.Add(slotScript);
+                            slotScript.Set(battleCard);
+                            battleCard.Move(slot.transform, new DoAnchorPos(Vector2.zero, .5f, true, Ease.OutExpo), 
+                                onComplete: () =>
+                                {
+                                    completes[index] = true;
+                                });
+                            
+                            battleCard.OnHover += OnHoverCard;
+                            battleCard.OnHoverExit += OnHoverExit;
+                            battleCard.OnClick += OnClickCard;
+                        }
+                        else
+                        {
+                            throw new InvalidOperationException($"{card.name} 是未在 {nameof(HandCardSystem)} 裡面登記的卡片類型，請聯絡團隊添加。");
+                        }
                         
                         yield return new WaitForSeconds(.2f);
                     }
                     
                     yield return new WaitUntil(() => completes.All(c => c));
+                    
                     onComplete?.Invoke();
-                    AddCor = null;
+                    _addCoroutine = null;
                 }
             }
         #endregion
         
-        public void RecycleCard(CardType targetType, Action onComplete)
+        public void RecycleCard(BattleCardType targetType, Action onComplete)
         {
-            RecycleCor = RecycleCardCoroutine();
-            StartCoroutine(RecycleCor);
+            _recycleCoroutine = RecycleCardCoroutine();
+            StartCoroutine(_recycleCoroutine);
             return;
             
             IEnumerator RecycleCardCoroutine()
             {
                 var completes = new List<bool>();
-                foreach (var slot in CardSlots)
+                
+                foreach (var slot in cardSlots)
                 {
                     slot.Get(out var card);
-                    if (card.CardData.CardType == targetType)
+                    
+                    if (card is not BattleCard battleCard)
                     {
-                        completes.Add(false);
-                        var index = completes.Count - 1;
-                        card.DestroyCard(
-                            onComplete: () =>
-                            {
-                                CardSlots.Remove(slot);
-                                Destroy(slot.gameObject);
-                                completes[index] = true;
-                            });
-                    }
-                    else
+                        Debug.Log($"{card.name} 不是 {nameof(BattleCard)}，將自動跳過。");
+                        
                         slot.Set(card);
+                        continue;
+                    }
+                    
+                    if (battleCard.BattleCardData.BattleCardType != targetType)
+                    {
+                        continue;
+                    }
+                    
+                    completes.Add(false);
+                    
+                    card.DestroyCard(
+                        onComplete: () =>
+                        {
+                            cardSlots.Remove(slot);
+                            Destroy(slot.gameObject);
+                            completes[completes.Count - 1] = true;
+                        });
                 }
                 
                 yield return new WaitUntil(() => completes.All(c => c));

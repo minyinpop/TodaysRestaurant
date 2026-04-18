@@ -2,12 +2,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Common.Enemy_Battle_Object.Main;
 using Common.Value.Type;
 using Explore_System.System.Child.Battle_System.Object;
 using Explore_System.System.Child.Battle_System.Object.Card;
 using Explore_System.System.Child.Battle_System.Object.Card.Battle;
 using Explore_System.System.Child.Battle_System.Object.Creature.Character;
-using Explore_System.System.Child.Battle_System.Object.Creature.Enemy.Main;
 using UnityEngine;
 
 namespace Explore_System.System.Child.Battle_System.System.Child
@@ -81,27 +81,30 @@ namespace Explore_System.System.Child.Battle_System.System.Child
                 #region 執行敵人的邏輯
                     foreach (var enemyObject in completes.Keys.ToArray())
                     {
-                        var onThisEnemyAttackComplete = false;
-                        
-                        #region 敵人攻擊
+                        for (var i = 1; i <= enemyObject.EnemyData.AttackTime; i++)
+                        {
+                            var thisAttackSpineComplete = false;
+                            
                             enemyObject.Attack(
                                 haveCharacterAlive: () =>
                                 {
-                                    onThisEnemyAttackComplete = true;
-                                    completes[enemyObject] = true;
                                 },
                                 characterAllDead: () =>
                                 {
-                                    #region 終止異步協程
-                                        StopCoroutine(_coroutine);
-                                        _coroutine = null;
-                                    #endregion
-                                    
-                                    characterAllDead.Invoke();
-                                });
-                        #endregion
+                                    StopCoroutine(_coroutine);
+                                    _coroutine = null;
 
-                        yield return new WaitUntil(() => onThisEnemyAttackComplete);
+                                    characterAllDead.Invoke();
+                                },
+                                onAttackSpineComplete: () =>
+                                {
+                                    thisAttackSpineComplete = true;
+                                });
+                            
+                            yield return new WaitUntil(() => thisAttackSpineComplete);
+                        }
+                        
+                        completes[enemyObject] = true;
                     }
                 #endregion
                 
@@ -134,10 +137,12 @@ namespace Explore_System.System.Child.Battle_System.System.Child
                     yield break;
                 }
                 
-                switch (battleCardData.Damage.AttackType)
+                switch (battleCardData.AttackType)
                 {
                     case AttackType.Single:
                     {
+                        var complete = false;
+                        
                         foreach (var enemySlot in battleEnemySlots)
                         {
                             #region 檢查這個位置是否有敵人
@@ -156,23 +161,28 @@ namespace Explore_System.System.Child.Battle_System.System.Child
                             
                             var enemyObject = enemySlot.battleEnemyObject;
                             
-                            enemyObject.Hurt(battleCardData.Damage.BasicDamage,
+                            enemyObject.Hurt(
+                                battleCardData: battleCardData,
                                 isAlive: () =>
                                 {
                                     haveEnemyAlive.Invoke();
+                                    complete = true;
                                 },
                                 isDeath: () =>
                                 {
                                     if (IsAnyEnemyAlive())
                                     {
                                         haveEnemyAlive.Invoke();
+                                        complete = true;
                                     }
                                     else
                                     {
                                         enemyAllDead.Invoke();
+                                        complete = true;
                                     }
                                 });
                             
+                            yield return new WaitUntil(() => complete);
                             break;
                         }
                         
@@ -202,7 +212,7 @@ namespace Explore_System.System.Child.Battle_System.System.Child
                             
                             completes.Add(enemyObject, false);
                             
-                            enemyObject.Hurt(battleCardData.Damage.BasicDamage,
+                            enemyObject.Hurt(battleCardData,
                                 isAlive: () =>
                                 {
                                     completes[enemyObject] = true;
@@ -211,6 +221,8 @@ namespace Explore_System.System.Child.Battle_System.System.Child
                                 {
                                     completes[enemyObject] = true;
                                 });
+
+                            yield return new WaitForSeconds(.1f);
                         }
                         
                         yield return new WaitUntil(() => completes.All(c => c.Value));

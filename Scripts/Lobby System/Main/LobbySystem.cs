@@ -35,7 +35,7 @@ namespace Lobby_System.Main
             _onClickLevelSelectButtonCleanupAction?.Invoke();
         }
 
-        public override void StartSystem(Action onComplete)
+        public override void InvokeOnSceneLoad(Action onComplete)
         {
             onComplete.Invoke();
         }

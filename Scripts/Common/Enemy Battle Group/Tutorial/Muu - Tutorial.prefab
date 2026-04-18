@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 7466498988742799222}
   - component: {fileID: 3529859212944238239}
   - component: {fileID: 1728742463208251338}
+  - component: {fileID: 6564165102803231614}
   m_Layer: 0
   m_Name: Muu - Tutorial
   m_TagString: Untagged
@@ -35,6 +36,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8892906280971117709}
+  - {fileID: 1659279940137520038}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &7689924893129836351
@@ -150,6 +152,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Explore_System.System.Child.Battle_System.Object.Creature.Enemy.Child.TutorialMuuEnemyObject
   animation: {fileID: 1728742463208251338}
+  SFXParent: {fileID: 1659279940137520038}
   healthBar: {fileID: 2648043135194741228}
   enemyData: {fileID: 11400000, guid: 05e17e9b50feb7443a107f125a0f173e, type: 2}
   attackSFXData:
@@ -167,23 +170,74 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db2ecbc90135481f808003276263432e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::System.Battle_System.Object.Character.Type.Enemy.System.AnimationSystem
-  SkeletonAnimation: {fileID: 7466498988742799222}
-  IdleAnima:
+  skeletonAnimation: {fileID: 7466498988742799222}
+  animation: {fileID: 6564165102803231614}
+  idleSpine:
     Layer: 0
     AnimationName: Breath
     Loop: 1
-  AttackAnima:
-    Layer: 0
+  attackSpines:
+  - Layer: 0
     AnimationName: Attack_01
     Loop: 0
-  HurtAnima:
+  - Layer: 0
+    AnimationName: Attack_02
+    Loop: 0
+  hurtSpine:
     Layer: 0
     AnimationName: Hurt
     Loop: 0
-  DeadAnima:
+  deathSpine:
     Layer: 0
     AnimationName: 
     Loop: 0
+  scaleDownSettings:
+    EndValue: {x: 0, y: 0, z: 1}
+    Duration: 1
+    Ease: 30
+--- !u!114 &6564165102803231614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2684703900095700287}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a817bf6649934d0e8fef10e3075e14a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Animation_System.DOTween.DoAnimation
+--- !u!1 &6794331806739910821
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1659279940137520038}
+  m_Layer: 0
+  m_Name: SFX Parent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1659279940137520038
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6794331806739910821}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7413310697272818729}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7213873949950510148
 GameObject:
   m_ObjectHideFlags: 0
@@ -241,6 +295,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 1
+  m_UseReflectionProbes: 0
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0

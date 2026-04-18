@@ -1,8 +1,10 @@
+using System;
+
 namespace Common.Value.Type
 {
+    [Serializable]
     public enum CardType
     {
-        BattleCard_Fork,
-        BattleCard_Spoon
+        Battle_Card = 1
     }
 }

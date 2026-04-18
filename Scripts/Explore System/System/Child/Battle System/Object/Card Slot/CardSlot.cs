@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace Explore_System.System.Child.Battle_System.Object.Card_Slot
@@ -22,7 +21,8 @@ namespace Explore_System.System.Child.Battle_System.Object.Card_Slot
         {
             if (IsEmpty())
             {
-                throw new InvalidOperationException($"{name} 的 {_card} 是空的。");
+                card = null;
+                return false;
             }
 
             card = _card;

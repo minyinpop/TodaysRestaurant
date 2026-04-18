@@ -267,7 +267,7 @@ GameObject:
   - component: {fileID: 72501982}
   - component: {fileID: 72501981}
   m_Layer: 0
-  m_Name: Explore Scene UI Controller
+  m_Name: Scene UI Controller
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -282,13 +282,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 72501980}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58b1f3b747934ab7a480f96406352579, type: 3}
+  m_Script: {fileID: 11500000, guid: c3e87a65b444443dabbc42a86c5f5890, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UI_System.Scene_UI_Controller.ExploreSceneUIController
   fastButtonUISystem: {fileID: 438519246}
+  levelSelectUISystem: {fileID: 0}
   backpackUISystem: {fileID: 438519245}
   settingsUISystem: {fileID: 438519244}
-  tutorialUISystem: {fileID: 1055669439}
 --- !u!4 &72501982
 Transform:
   m_ObjectHideFlags: 0
@@ -472,6 +472,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
+  m_UseReflectionProbes: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
@@ -2028,6 +2029,9 @@ PrefabInstance:
     - {fileID: 8494355954349360894, guid: 577a583dca879cb41935feb87e7479b4, type: 3}
     - {fileID: 7160850622237414110, guid: 577a583dca879cb41935feb87e7479b4, type: 3}
     - {fileID: 8985285469755038154, guid: 577a583dca879cb41935feb87e7479b4, type: 3}
+    - {fileID: 2448404828778681435, guid: 577a583dca879cb41935feb87e7479b4, type: 3}
+    - {fileID: 8907678855857825547, guid: 577a583dca879cb41935feb87e7479b4, type: 3}
+    - {fileID: 8530883391131714511, guid: 577a583dca879cb41935feb87e7479b4, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 5348698207660260192, guid: 577a583dca879cb41935feb87e7479b4, type: 3}
       insertIndex: -1
@@ -2710,17 +2714,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1036127443}
   m_CullTransparentMesh: 1
---- !u!114 &1055669439 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3698417779781642762, guid: 577a583dca879cb41935feb87e7479b4, type: 3}
-  m_PrefabInstance: {fileID: 438519239}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 474ff551214c4de0a2fd3536146f12db, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UI_System.Tutorial_UI_System.System.TutorialUISystem
 --- !u!114 &1055669440 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5442491762711962006, guid: 577a583dca879cb41935feb87e7479b4, type: 3}
@@ -2870,7 +2863,7 @@ MonoBehaviour:
   m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 307cd3319757fe24e9f702460e2f3168, type: 2}
-  m_sharedMaterial: {fileID: -5170841962734759511, guid: 307cd3319757fe24e9f702460e2f3168, type: 2}
+  m_sharedMaterial: {fileID: 3646039692936710284, guid: 307cd3319757fe24e9f702460e2f3168, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3007,7 +3000,7 @@ MonoBehaviour:
   m_text: "\u6536\u96C6\u4EFB\u610F\u98DF\u6750"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 307cd3319757fe24e9f702460e2f3168, type: 2}
-  m_sharedMaterial: {fileID: -5170841962734759511, guid: 307cd3319757fe24e9f702460e2f3168, type: 2}
+  m_sharedMaterial: {fileID: 3646039692936710284, guid: 307cd3319757fe24e9f702460e2f3168, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3324,7 +3317,7 @@ MonoBehaviour:
   m_text: "\u5F80\u53F3\u524D\u9032\u9032\u884C\u63A2\u7D22\u5427\uFF01"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 307cd3319757fe24e9f702460e2f3168, type: 2}
-  m_sharedMaterial: {fileID: -5170841962734759511, guid: 307cd3319757fe24e9f702460e2f3168, type: 2}
+  m_sharedMaterial: {fileID: 3646039692936710284, guid: 307cd3319757fe24e9f702460e2f3168, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

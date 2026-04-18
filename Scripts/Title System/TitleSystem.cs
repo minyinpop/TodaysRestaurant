@@ -29,10 +29,5 @@ namespace Title_System
                 PlayerPrefs.Save();
             }
         }
-
-        public override void StartSystemWhenFinish()
-        {
-            base.StartSystemWhenFinish();
-        }
     }
 }

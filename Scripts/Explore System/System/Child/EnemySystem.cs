@@ -48,7 +48,7 @@ namespace Explore_System.System.Child
 
                     var spawnPoint = _remainingSpawnPoints[Random.Range(0, _remainingSpawnPoints.Count)];
                                      _remainingSpawnPoints.Remove(spawnPoint);
-                    spawnPoint.InitializeEnemy(entry.ExploreEnemyEntry.EnemyData.EnemyObject, entry.EnemyBattleGroupData);
+                    spawnPoint.InitializeEnemy(entry.ExploreEnemyEntry.EnemyData.EnemyExploreObject, entry.EnemyBattleGroupData);
                 }
             }
         }
@@ -57,7 +57,7 @@ namespace Explore_System.System.Child
         {
             foreach (var spawnPoint in enemySpawnPoints)
             {
-                if (spawnPoint.enemyObject is not null)
+                if (spawnPoint.EnemyExploreObject is not null)
                 {
                     return true;
                 }

@@ -6,6 +6,7 @@ using Animation_System.DOTween.Combine;
 using DG.Tweening;
 using Explore_System.System.Child.Battle_System.Object.Card_Slot;
 using Explore_System.System.Child.Battle_System.Object.Card;
+using Explore_System.System.Child.Battle_System.Object.Card.Battle;
 using UnityEngine;
 
 namespace Explore_System.System.Child.Battle_System.System.Child
@@ -57,13 +58,26 @@ namespace Explore_System.System.Child.Battle_System.System.Child
                 var index = i;
                 var slot = CardSlots[index];
                 var card = cards[index];
-                slot.Set(card);
-                card.MoveAndFlip(slot.transform, AnchorPosSettings, FlipSettings, () =>
+                
+                if (card is not BattleCard battleCard)
                 {
-                    if (index != cards.Count - 1) return;
+                    Debug.Log($"{card.name} 不是 {nameof(BattleCard)}，無法在 {nameof(ShowCardSystem)} 裡使用，已自動跳過該卡片。");
+                    continue;
+                }
+                
+                slot.Set(battleCard);
+                
+                battleCard.MoveAndFlip(slot.transform, AnchorPosSettings, FlipSettings, () =>
+                {
+                    if (index != cards.Count - 1)
+                    {
+                        return;
+                    }
+                    
                     onComplete?.Invoke();
                     ShowCor = null;
                 });
+                
                 yield return new WaitForSeconds(.25f);
             }
         }

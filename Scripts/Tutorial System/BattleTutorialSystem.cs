@@ -2,10 +2,10 @@ using System;
 using Animation_System.DOTween;
 using Animation_System.DOTween.Basic;
 using Common.Database;
+using Common.Enemy_Battle_Object.Child;
 using Common.Scene_Name;
 using Common.Scene_Starter;
 using DG.Tweening;
-using Explore_System.System.Child.Battle_System.Object.Creature.Enemy.Child;
 using Explore_System.System.Child.Battle_System.System.Main;
 using TMPro;
 using UnityEngine;
@@ -66,18 +66,11 @@ namespace Tutorial_System
             TutorialMuuEnemyObject.OnHalfHealth += OnMuuHalfHealth;
         }
         
-        public override void StartSystem(SceneStarterData starterData, Action onComplete)
+        public override void InvokeOnSceneChangeComplete()
         {
-            battleSystem.StartSystem(
-                starterData: starterData,
-                onComplete: () =>
-                {
-                    RefreshTip1("<b><color=yellow>持續攻擊</color></b>粉頭少女直到<b><color=yellow>喚醒她</color></b>吧！");
-                    
-                    onComplete.Invoke();
-                });
+            RefreshTip1("<b><color=yellow>持續攻擊</color></b>粉頭少女直到<b><color=yellow>喚醒她</color></b>吧！");
         }
-
+        
         private void OnDestroy()
         {
             TutorialMuuEnemyObject.OnHalfHealth -= OnMuuHalfHealth;
