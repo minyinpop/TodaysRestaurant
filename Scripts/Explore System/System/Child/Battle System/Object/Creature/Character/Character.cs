@@ -1,9 +1,11 @@
 using System;
 using System.Collections;
 using Animation_System.Spine;
+using Audio_System.Main;
 using Common.Character;
 using Common.Data_Saver.Player_Character_Saver.Main;
 using Common.Database;
+using Common.Enemy.Data;
 using Common.Status_Bar;
 using UnityEngine;
 
@@ -49,7 +51,8 @@ namespace Explore_System.System.Child.Battle_System.Object.Creature.Character
                         characterType: database.CharacterType,
                         health: saveData.Health,
                         moveSpeed: database.MoveSpeed,
-                        cardTypes: database.CardTypes);
+                        battleCardTypes: database.BattleCardTypes,
+                        deathVFX: database.DeathVFX);
 
                     Debug.Log($"已從本地儲存的資料獲取 {characterType.ToString()} 的資料，並更新到物件上。");
                     Debug.Log($"血量：{saveData.Health}");
@@ -60,7 +63,8 @@ namespace Explore_System.System.Child.Battle_System.Object.Creature.Character
                         characterType: database.CharacterType,
                         health: database.Health,
                         moveSpeed: database.MoveSpeed,
-                        cardTypes: database.CardTypes);
+                        battleCardTypes: database.BattleCardTypes,
+                        deathVFX: database.DeathVFX);
                     
                     Debug.Log($"無法從本地儲存的資料獲取 {characterType.ToString()} 的資料，已套用進資料庫的資料。");
                     Debug.Log($"血量：{database.Health}");
@@ -103,7 +107,13 @@ namespace Explore_System.System.Child.Battle_System.Object.Creature.Character
                 AnimationSystem.Attack(spine,
                     onAttackPoint: () =>
                     {
-                        OnAttack?.Invoke(card, haveEnemyAlive, enemyAllDead);
+                        if (OnAttack is null)
+                        {
+                            Debug.Log($"{nameof(OnAttack)} 沒有被其它 class 訂閱。");
+                            return;
+                        }
+
+                        OnAttack.Invoke(card, haveEnemyAlive, enemyAllDead);
                     },
                     onComplete: () =>
                     {
@@ -113,13 +123,24 @@ namespace Explore_System.System.Child.Battle_System.Object.Creature.Character
         #endregion
 
         #region Hurt
-            public void Hurt(int damage, Action isAlive, Action isDeath)
+            public void Hurt(EnemySO enemyData, Action isAlive, Action isDeath)
             {
                 #region 計算傷害
                     CharacterData.SubtractHealth(
-                        damage: damage,
+                        damage: enemyData.Damage,
                         alive: () =>
                         {
+                            #region 播放受擊特效
+                                var vfx = Instantiate(enemyData.AttackVFX.gameObject, transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
+                                vfx.Play();
+                                
+                                Destroy(vfx.gameObject, vfx.main.duration);
+                            #endregion
+                            
+                            #region 播放受擊音效
+                                AudioSystem.Instance.AttackSFX.PlayOneShot(enemyData.AttackSFX);
+                            #endregion
+                            
                             AnimationSystem.Hurt(() =>
                             {
                                 AnimationSystem.Idle();
@@ -128,6 +149,17 @@ namespace Explore_System.System.Child.Battle_System.Object.Creature.Character
                         },
                         dead: () =>
                         {
+                            #region 播放死亡特效
+                                var vfx = Instantiate(CharacterData.DeathVFX.gameObject, transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
+                                vfx.Play();
+                                    
+                                Destroy(vfx.gameObject, vfx.main.duration);
+                            #endregion
+                            
+                            #region 播放受擊音效
+                                AudioSystem.Instance.AttackSFX.PlayOneShot(enemyData.AttackSFX);
+                            #endregion
+                            
                             AnimationSystem.Dead(
                                 onComplete: () =>
                                 {
@@ -137,7 +169,7 @@ namespace Explore_System.System.Child.Battle_System.Object.Creature.Character
                 #endregion
 
                 #region 更新顯示
-                    healthBar.Subtract(damage);
+                    healthBar.Subtract(enemyData.Damage);
                 #endregion
             }
         #endregion

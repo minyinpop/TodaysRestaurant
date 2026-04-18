@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Audio_System.Main;
 using Common.Data_Saver.Player_Inventory_Saver.Main;
 using Common.Database;
 using Common.Enemy_Battle_Group;
@@ -159,7 +160,7 @@ namespace Explore_System.System.Child.Battle_System.System.Main
             selectedCardSystem.OnHoverExitEvent -= cardInformationSystem.HideCardInformation;
         }
         
-        public override void StartSystem(SceneStarterData starterData, Action onComplete)
+        public override void InvokeOnSceneLoad(SceneStarterData starterData, Action onComplete)
         {
             #region 必要條件檢查
                 if (_isStarted)
@@ -211,12 +212,19 @@ namespace Explore_System.System.Child.Battle_System.System.Main
             #region 返回系統準備完畢
                 onComplete.Invoke();
             #endregion
-
+        }
+        
+        public override void InvokeOnSceneChangeComplete()
+        {
+            #region 淡入戰鬥音樂
+                AudioSystem.Instance.CommonBGM.FadeInBGM(_enemyBattleGroupData.BattleBGMData);
+            #endregion
+            
             #region 進入開始戰鬥狀態
                 OnBattleStart();
             #endregion
         }
-
+        
         private void DrawAndShowCard(int drawNumber, Action onComplete)
         {
             _drawCardAndShowCardCoroutine = DrawAndShowCardCoroutine();
@@ -248,7 +256,7 @@ namespace Explore_System.System.Child.Battle_System.System.Main
             }
         }
 
-        private void OnRecycleCard(CardType[] cardTypes, Action onComplete)
+        private void OnRecycleCard(BattleCardType[] cardTypes, Action onComplete)
         {
             _characterDeathCoroutine = RecycleCardCoroutine();
             StartCoroutine(_characterDeathCoroutine);
@@ -520,7 +528,7 @@ namespace Explore_System.System.Child.Battle_System.System.Main
                                 {
                                     if (OnClickPlayerWinConfirmButton is null)
                                     {
-                                        throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(OnClickPlayerWinConfirmButton)} has no subscriber.");
+                                        throw new InvalidOperationException($"{name} > {nameof(BattleSystem)} > {nameof(OnClickPlayerWinConfirmButton)} has no subscriber.");
                                     }
                                     
                                     PlayerInventorySaver.AddItemToInventory(_enemyBattleGroupData.LootsData);
@@ -560,7 +568,7 @@ namespace Explore_System.System.Child.Battle_System.System.Main
                                     if (OnClickEnemyWinConfirmButton is null)
                                     {
                                         // TODO 開發日誌：2026.03.27 16:06 不清楚為什麼 throw 的時候，editor 的 console 沒有 print，build 環境也沒有 crash。
-                                        throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(OnClickEnemyWinConfirmButton)} has no subscriber.");
+                                        throw new InvalidOperationException($"{name} > {nameof(BattleSystem)} > {nameof(OnClickEnemyWinConfirmButton)} has no subscriber.");
                                     }
 
                                     SceneNameDatabase.GetSceneName(SceneNameType.Lobby_Scene, out var sceneNameData);

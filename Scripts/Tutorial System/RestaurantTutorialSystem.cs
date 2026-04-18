@@ -8,7 +8,6 @@ using Common.Database;
 using Common.Scene_Name;
 using Common.Scene_Starter;
 using DG.Tweening;
-using Input_System;
 using Restaurant_System.Object.Cookware.Object.Cook_Game.System.Main;
 using Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Main;
 using Restaurant_System.Object.Cookware.System;
@@ -125,8 +124,10 @@ namespace Tutorial_System
         }
         
         #region 步驟 1
-            public override void StartSystemWhenFinish(SceneStarterData starterData)
+            public override void InvokeOnSceneChangeComplete()
             {
+                AudioSystem.Instance.CommonBGM.FadeInBGM(fadeInBGMData);
+                
                 RefreshTip1("請靠近<b><color=yellow>深煮鍋</color></b>並<b><color=yellow>點擊氣泡</color></b>");
             }
             
@@ -236,11 +237,6 @@ namespace Tutorial_System
                         canvasGroup: tip1CanvasGroup,
                         settings: _fadeIn);
                 });
-        }
-
-        public override void OnTransitionComplete()
-        {
-            AudioSystem.Instance.CommonBGM.FadeInBGM(fadeInBGMData);
         }
     }
 }

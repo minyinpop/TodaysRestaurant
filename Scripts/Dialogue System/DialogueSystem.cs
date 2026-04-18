@@ -19,7 +19,7 @@ namespace Dialogue_System
             }
         }
 
-        public override void StartSystem(SceneStarterData starterData, Action onComplete)
+        public override void InvokeOnSceneLoad(SceneStarterData starterData, Action onComplete)
         {
             if (starterData is DialogueSO dialogueData)
             {

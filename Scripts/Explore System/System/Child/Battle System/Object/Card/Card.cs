@@ -1,6 +1,4 @@
 using System;
-using Animation_System.DOTween.Basic;
-using Animation_System.DOTween.Combine;
 using Common.Pointer_Event;
 using UnityEngine;
 
@@ -8,7 +6,7 @@ namespace Explore_System.System.Child.Battle_System.Object.Card
 {
     public abstract class Card : PointerEvent
     {
-        [field: Header("卡片資料")]
+        [field: Header("父資料 - 卡片資料")]
         [field: SerializeField] protected CardSO cardData;
                                 public CardSO CardData => cardData;
         
@@ -18,7 +16,7 @@ namespace Explore_System.System.Child.Battle_System.Object.Card
         public event Action<Card> OnHoverExit;
         public event Action<Card> OnClick;
         
-        protected void OnHoverEvent()
+        protected void InvokeOnHover()
         {
             if (OnHover is null)
             {
@@ -29,7 +27,7 @@ namespace Explore_System.System.Child.Battle_System.Object.Card
             OnHover.Invoke(this);
         }
         
-        protected void OnHoverExitEvent()
+        protected void InvokeOnHoverExit()
         {
             if (OnHoverExit is null)
             {
@@ -40,7 +38,7 @@ namespace Explore_System.System.Child.Battle_System.Object.Card
             OnHoverExit.Invoke(this);
         }
 
-        protected void OnClickEvent()
+        protected void InvokeOnClick()
         {
             if (OnClick is null)
             {
@@ -50,26 +48,9 @@ namespace Explore_System.System.Child.Battle_System.Object.Card
             
             OnClick.Invoke(this);
         }
+
+        public abstract void Use(Action haveEnemyAlive, Action enemyAllDeath);
         
-        #region Main Function
-            public virtual void Use(Action haveEnemyAlive, Action enemyAllDeath) =>
-                throw new NotImplementedException();
-            public virtual void DestroyCard(Action onComplete) =>
-                throw new NotImplementedException();
-        #endregion
-        
-        #region Order
-            public virtual void SetCardOrder(GameObject cardOrderPrefab) =>
-                throw new NotImplementedException();
-            public virtual void RemoveCardOrder() =>
-                throw new NotImplementedException();
-        #endregion
-        
-        #region Animation
-            public virtual void Move(Transform parent, DoAnchorPos settings, Action onComplete = null) =>
-                throw new NotImplementedException();
-            public virtual void MoveAndFlip(Transform parent, DoAnchorPos anchorPosSettings, DoFlip flipSettings, Action onComplete = null) =>
-                throw new NotImplementedException();
-        #endregion
+        public abstract void DestroyCard(Action onComplete);
     }
 }

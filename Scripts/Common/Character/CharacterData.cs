@@ -13,14 +13,17 @@ namespace Common.Character
 
         public float MoveSpeed { get; }
         
-        public CardType[] CardTypes { get; }
+        public BattleCardType[] BattleCardTypes { get; }
+        
+        public ParticleSystem DeathVFX { get; }
 
-        public CharacterData(CharacterType characterType, int health, float moveSpeed, CardType[] cardTypes)
+        public CharacterData(CharacterType characterType, int health, float moveSpeed, BattleCardType[] battleCardTypes, ParticleSystem deathVFX)
         {
             CharacterType = characterType;
             Health = health;
             MoveSpeed = moveSpeed;
-            CardTypes = cardTypes;
+            BattleCardTypes = battleCardTypes;
+            DeathVFX = deathVFX;
         }
         
         public void SubtractHealth(int damage, Action alive, Action dead)

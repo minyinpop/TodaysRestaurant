@@ -14,20 +14,20 @@ namespace Explore_System.System.Child.Battle_System.Object.Card.Battle
     [RequireComponent(typeof(DoAnimation))]
     public sealed class BattleCard : Card
     {
-        [field: Header("組件")]
+        [field: Header("子資料 - 組件")]
         [field: SerializeField, FormerlySerializedAs("CardRect")] private RectTransform cardRect;
         [field: SerializeField, FormerlySerializedAs("CardSurfaceRect")] private RectTransform cardSurfaceRect;
         [field: SerializeField, FormerlySerializedAs("CardFront")] private GameObject front;
         [field: SerializeField, FormerlySerializedAs("CardBack")] private GameObject back;
         
-        [field: Header("動畫")]
+        [field: Header("子資料 - 動畫")]
         [field: SerializeField, FormerlySerializedAs("DoAnimation")] private new DoAnimation animation;
         
-        [field: Header("資料")]
+        [field: Header("子資料 - 資料")]
         [field: SerializeField, FormerlySerializedAs("BattleCardData")] private BattleCardSO battleCardData;
                                                                                 public BattleCardSO BattleCardData => battleCardData;
         
-        [field: Header("選擇順序")]
+        [field: Header("子資料 - 選擇順序")]
         [field: SerializeField, FormerlySerializedAs("CardOrderParent")] private Transform orderParent;
         
         public static event Action<Card, SpineAnimation, Action, Action> OnUse;
@@ -51,7 +51,7 @@ namespace Explore_System.System.Child.Battle_System.Object.Card.Battle
                 if (Interactable)
                 {
                     animation.DoScale_UI(cardSurfaceRect, new DoScale(Vector2.one * 1.25f, .25f, Ease.OutCubic));
-                    OnHoverEvent();
+                    InvokeOnHover();
                 }
             }
             
@@ -60,7 +60,7 @@ namespace Explore_System.System.Child.Battle_System.Object.Card.Battle
                 if (Interactable)
                 {
                     animation.DoScale_UI(cardSurfaceRect, new DoScale(Vector2.one, .25f, Ease.OutCubic));
-                    OnHoverExitEvent();
+                    InvokeOnHoverExit();
                 }
             }
             
@@ -68,7 +68,7 @@ namespace Explore_System.System.Child.Battle_System.Object.Card.Battle
             {
                 if (Interactable)
                 {
-                    OnClickEvent();
+                    InvokeOnClick();
                 }
             }
         #endregion
@@ -103,14 +103,14 @@ namespace Explore_System.System.Child.Battle_System.Object.Card.Battle
         #endregion
 
         #region Order
-            public override void SetCardOrder(GameObject cardOrderPrefab)
+            public void SetCardOrder(GameObject cardOrderPrefab)
             {
                 if (_cardOrder is not null)
                     Destroy(_cardOrder);
                 _cardOrder = Instantiate(cardOrderPrefab, orderParent);
             }
             
-            public override void RemoveCardOrder()
+            public void RemoveCardOrder()
             {
                 if (_cardOrder is null) return;
                 Destroy(_cardOrder);
@@ -119,7 +119,7 @@ namespace Explore_System.System.Child.Battle_System.Object.Card.Battle
         #endregion
             
         #region Animation
-            public override void Move(Transform parent, DoAnchorPos settings, Action onComplete = null)
+            public void Move(Transform parent, DoAnchorPos settings, Action onComplete = null)
             {
                 cardRect.SetParent(parent);
                 animation.DoAnchorPos(
@@ -131,7 +131,7 @@ namespace Explore_System.System.Child.Battle_System.Object.Card.Battle
                     });
             }
 
-            public override void MoveAndFlip(Transform parent, DoAnchorPos anchorPosSettings, DoFlip flipSettings, Action onComplete = null)
+            public void MoveAndFlip(Transform parent, DoAnchorPos anchorPosSettings, DoFlip flipSettings, Action onComplete = null)
             {
                 _moveAndFlipCoroutine = MoveAndFlipCoroutine();
                 StartCoroutine(_moveAndFlipCoroutine);

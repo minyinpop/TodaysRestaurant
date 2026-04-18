@@ -138,6 +138,8 @@ namespace Explore_System.System.Child.Battle_System.System.Child
                 {
                     case AttackType.Single:
                     {
+                        var complete = false;
+                        
                         foreach (var enemySlot in battleEnemySlots)
                         {
                             #region 檢查這個位置是否有敵人
@@ -156,23 +158,28 @@ namespace Explore_System.System.Child.Battle_System.System.Child
                             
                             var enemyObject = enemySlot.battleEnemyObject;
                             
-                            enemyObject.Hurt(battleCardData.Damage,
+                            enemyObject.Hurt(
+                                battleCardData: battleCardData,
                                 isAlive: () =>
                                 {
                                     haveEnemyAlive.Invoke();
+                                    complete = true;
                                 },
                                 isDeath: () =>
                                 {
                                     if (IsAnyEnemyAlive())
                                     {
                                         haveEnemyAlive.Invoke();
+                                        complete = true;
                                     }
                                     else
                                     {
                                         enemyAllDead.Invoke();
+                                        complete = true;
                                     }
                                 });
                             
+                            yield return new WaitUntil(() => complete);
                             break;
                         }
                         
@@ -202,7 +209,7 @@ namespace Explore_System.System.Child.Battle_System.System.Child
                             
                             completes.Add(enemyObject, false);
                             
-                            enemyObject.Hurt(battleCardData.Damage,
+                            enemyObject.Hurt(battleCardData,
                                 isAlive: () =>
                                 {
                                     completes[enemyObject] = true;
@@ -211,6 +218,8 @@ namespace Explore_System.System.Child.Battle_System.System.Child
                                 {
                                     completes[enemyObject] = true;
                                 });
+
+                            yield return new WaitForSeconds(.1f);
                         }
                         
                         yield return new WaitUntil(() => completes.All(c => c.Value));

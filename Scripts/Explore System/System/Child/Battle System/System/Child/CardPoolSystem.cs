@@ -89,11 +89,21 @@ namespace Explore_System.System.Child.Battle_System.System.Child
                             var index = i;
                             var slot = CardSlots[index];
                             var card = remainingCards[index];
-                            slot.Set(card);
-                            card.Move(slot.transform, new(Vector3.zero, .5f, true, Ease.OutExpo),
+
+                            if (card is not BattleCard battleCard)
+                            {
+                                throw new InvalidOperationException($"{nameof(card)} 不是 {nameof(BattleCard)}，無法添加到 {nameof(CardPoolSystem)} 裡。");
+                            }
+
+                            slot.Set(battleCard);
+                            battleCard.Move(slot.transform, new(Vector3.zero, .5f, true, Ease.OutExpo),
                                 onComplete: () =>
                                 {
-                                    if (index != remainingCards.Count - 1) return;
+                                    if (index != remainingCards.Count - 1)
+                                    {
+                                        return;
+                                    }
+                                    
                                     StartCoroutine(RefillCor);
                                     SortCor = null;
                                 });
@@ -159,7 +169,7 @@ namespace Explore_System.System.Child.Battle_System.System.Child
             }
         #endregion
 
-        public void RecycleCard(CardType targetType, Action onComplete)
+        public void RecycleCard(BattleCardType targetType, Action onComplete)
         {
             RecycleCor = RecycleCardCoroutine();
             StartCoroutine(RecycleCor);
@@ -168,31 +178,46 @@ namespace Explore_System.System.Child.Battle_System.System.Child
             IEnumerator RecycleCardCoroutine()
             {
                 var completes = new List<bool>();
+                
                 foreach (var slot in CardSlots)
                 {
                     slot.Get(out var card);
-                    if (card.CardData.CardType == targetType)
-                    {
-                        completes.Add(false);
-                        var index = completes.Count - 1;
-                        card.DestroyCard(
-                            onComplete: () =>
-                            {
-                                for (var i = 0; i < _currentDeck.Count; i++)
-                                {
-                                    if (_currentDeck[i].CardType != targetType)
-                                    {
-                                        continue;
-                                    }
-                                    
-                                    _currentDeck.Remove(_currentDeck[i]);
-                                }
 
-                                completes[index] = true;
-                            });
-                    }
-                    else
+                    if (card is not BattleCard battleCard)
+                    {
+                        Debug.Log($"{card.name} 不是 {nameof(BattleCard)}，將自動跳過。");
+                        
                         slot.Set(card);
+                        continue;
+                    }
+
+                    if (battleCard.BattleCardData.BattleCardType != targetType)
+                    {
+                        continue;
+                    }
+                    
+                    completes.Add(false);
+                    
+                    card.DestroyCard(
+                        onComplete: () =>
+                        {
+                            for (var i = 0; i < _currentDeck.Count; i++)
+                            {
+                                if (_currentDeck[i] is not BattleCardSO battleCardData)
+                                {
+                                    continue;
+                                }
+                                    
+                                if (battleCardData.BattleCardType != targetType)
+                                {
+                                    continue;
+                                }
+                                    
+                                _currentDeck.Remove(_currentDeck[i]);
+                            }
+
+                            completes[completes.Count - 1] = true;
+                        });
                 }
                 
                 yield return new WaitUntil(() => completes.All(c => c));

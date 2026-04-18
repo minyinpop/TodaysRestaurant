@@ -66,18 +66,11 @@ namespace Tutorial_System
             TutorialMuuEnemyObject.OnHalfHealth += OnMuuHalfHealth;
         }
         
-        public override void StartSystem(SceneStarterData starterData, Action onComplete)
+        public override void InvokeOnSceneChangeComplete()
         {
-            battleSystem.StartSystem(
-                starterData: starterData,
-                onComplete: () =>
-                {
-                    RefreshTip1("<b><color=yellow>持續攻擊</color></b>粉頭少女直到<b><color=yellow>喚醒她</color></b>吧！");
-                    
-                    onComplete.Invoke();
-                });
+            RefreshTip1("<b><color=yellow>持續攻擊</color></b>粉頭少女直到<b><color=yellow>喚醒她</color></b>吧！");
         }
-
+        
         private void OnDestroy()
         {
             TutorialMuuEnemyObject.OnHalfHealth -= OnMuuHalfHealth;

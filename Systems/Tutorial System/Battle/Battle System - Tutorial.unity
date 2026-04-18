@@ -4700,16 +4700,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 338d7abb2e0a4177913fdc460a49241e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::System.Battle_System.Object.Character.Type.Friendly.System.AnimationSystem
-  SkeletonAnimation: {fileID: 1116813828}
-  IdleAnima:
+  skeletonAnimation: {fileID: 1116813828}
+  idleSpine:
     Layer: 0
     AnimationName: Breath
     Loop: 1
-  HurtAnima:
+  hurtSpine:
     Layer: 0
     AnimationName: Hurt
     Loop: 0
-  DeadAnima:
+  deathSpine:
     Animations:
     - Layer: 0
       AnimationName: Defeat
@@ -5340,6 +5340,52 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c5c89bf464a467e8a6fe109d3bbc8df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Object.StatusBar
+--- !u!1 &1288916973
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1288916975}
+  - component: {fileID: 1288916974}
+  m_Layer: 0
+  m_Name: Battle Scene UI Controller
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1288916974
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1288916973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3e87a65b444443dabbc42a86c5f5890, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI_System.Scene_UI_Controller.BattleSceneUIController
+  fastButtonUISystem: {fileID: 1503121262}
+  settingsUISystem: {fileID: 1503121261}
+--- !u!4 &1288916975
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1288916973}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1318836730
 GameObject:
   m_ObjectHideFlags: 0
@@ -6757,6 +6803,14 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4396492683727165986, guid: 577a583dca879cb41935feb87e7479b4, type: 3}
+      propertyPath: backpackFastButton
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4396492683727165986, guid: 577a583dca879cb41935feb87e7479b4, type: 3}
+      propertyPath: levelSelectFastButton
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 4621069793533591395, guid: 577a583dca879cb41935feb87e7479b4, type: 3}
       propertyPath: m_SizeDelta.x
       value: 0
@@ -7032,6 +7086,22 @@ PrefabInstance:
     - target: {fileID: 8736202890371386717, guid: 577a583dca879cb41935feb87e7479b4, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8796980969943211486, guid: 577a583dca879cb41935feb87e7479b4, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 8796980969943211486, guid: 577a583dca879cb41935feb87e7479b4, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 8796980969943211486, guid: 577a583dca879cb41935feb87e7479b4, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 128
+      objectReference: {fileID: 0}
+    - target: {fileID: 8796980969943211486, guid: 577a583dca879cb41935feb87e7479b4, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -16
       objectReference: {fileID: 0}
     - target: {fileID: 8887580909894777845, guid: 577a583dca879cb41935feb87e7479b4, type: 3}
       propertyPath: m_SizeDelta.x
@@ -7080,6 +7150,28 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 577a583dca879cb41935feb87e7479b4, type: 3}
+--- !u!114 &1503121261 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6686643213259364246, guid: 577a583dca879cb41935feb87e7479b4, type: 3}
+  m_PrefabInstance: {fileID: 1503121260}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f00a368eded84cd78901416fa70b8afd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI_System.Message_UI_System.Child.Settings_UI_System.SettingsUISystem
+--- !u!114 &1503121262 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4396492683727165986, guid: 577a583dca879cb41935feb87e7479b4, type: 3}
+  m_PrefabInstance: {fileID: 1503121260}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 398b98c89a13440a98a27dcb0ecc7462, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI_System.Fast_Button_UI_System.FastButtonUISystem
 --- !u!1 &1512635335
 GameObject:
   m_ObjectHideFlags: 0
@@ -7848,11 +7940,11 @@ RectTransform:
   - {fileID: 807316944}
   m_Father: {fileID: 1854323331}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0.9}
-  m_AnchorMax: {x: 1, y: 0.9}
-  m_AnchoredPosition: {x: -16, y: -16}
+  m_AnchorMin: {x: 0, y: 0.9}
+  m_AnchorMax: {x: 0, y: 0.9}
+  m_AnchoredPosition: {x: 16, y: -16}
   m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 1, y: 1}
+  m_Pivot: {x: 0, y: 1}
 --- !u!225 &1708451858
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -9693,16 +9785,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 338d7abb2e0a4177913fdc460a49241e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::System.Battle_System.Object.Character.Type.Friendly.System.AnimationSystem
-  SkeletonAnimation: {fileID: 2074191852}
-  IdleAnima:
+  skeletonAnimation: {fileID: 2074191852}
+  idleSpine:
     Layer: 0
     AnimationName: Breath
     Loop: 1
-  HurtAnima:
+  hurtSpine:
     Layer: 0
     AnimationName: Hurt_01
     Loop: 0
-  DeadAnima:
+  deathSpine:
     Animations:
     - Layer: 0
       AnimationName: Defeat
@@ -10253,3 +10345,4 @@ SceneRoots:
   - {fileID: 262792074}
   - {fileID: 201929485}
   - {fileID: 1503121260}
+  - {fileID: 1288916975}

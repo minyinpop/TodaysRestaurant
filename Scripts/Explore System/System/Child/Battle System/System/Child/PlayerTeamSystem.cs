@@ -5,6 +5,7 @@ using System.Linq;
 using Animation_System.Spine;
 using Common.Data_Saver.Player_Character_Saver.Child;
 using Common.Data_Saver.Player_Character_Saver.Main;
+using Common.Enemy.Data;
 using Common.Value.Type;
 using Explore_System.System.Child.Battle_System.Object.Card;
 using Explore_System.System.Child.Battle_System.Object.Card.Battle;
@@ -23,7 +24,7 @@ namespace Explore_System.System.Child.Battle_System.System.Child
 
         public /*readonly*/ List<Character> AliveCharacters = new();
         
-        public static event Action<CardType[], Action> RecycleCard;
+        public static event Action<BattleCardType[], Action> RecycleCard;
         
         private IEnumerator _hurtCoroutine;
 
@@ -74,7 +75,7 @@ namespace Explore_System.System.Child.Battle_System.System.Child
         #endregion
 
         #region Hurt
-            private void Hurt(AttackType attackType, int damage, Action haveCharacterAlive, Action characterAllDead)
+            private void Hurt(EnemySO enemyData, Action haveCharacterAlive, Action characterAllDead)
             {
                 _hurtCoroutine = HurtCoroutine();
                 StartCoroutine(_hurtCoroutine);
@@ -82,12 +83,13 @@ namespace Explore_System.System.Child.Battle_System.System.Child
                 
                 IEnumerator HurtCoroutine()
                 {
-                    switch (attackType)
+                    switch (enemyData.AttackType)
                     {
                         case AttackType.Single:
                         {
                             var character = AliveCharacters[0];
-                            character.Hurt(damage,
+                            
+                            character.Hurt(enemyData,
                                 isAlive: () =>
                                 {
                                     haveCharacterAlive?.Invoke();
@@ -95,13 +97,17 @@ namespace Explore_System.System.Child.Battle_System.System.Child
                                 isDeath: () =>
                                 {
                                     AliveCharacters.Remove(character);
-                                    RecycleCard?.Invoke(character.CharacterData.CardTypes,
+                                    RecycleCard?.Invoke(character.CharacterData.BattleCardTypes,
                                         () =>
                                         {
                                             if (AliveCharacters.Any())
+                                            {
                                                 haveCharacterAlive?.Invoke();
+                                            }
                                             else
+                                            {
                                                 characterAllDead?.Invoke();
+                                            }
                                         });
                                 });
                             yield break;
@@ -111,12 +117,14 @@ namespace Explore_System.System.Child.Battle_System.System.Child
                             var isAnyCharacterAlive = false;
                             var completes = new List<bool>();
                             var deadCharacters = new Dictionary<Character, int>();
+
                             for (var i = 0; i < AliveCharacters.Count; i++)
                             {
                                 var index = i;
                                 var character = AliveCharacters[index];
+                                
                                 completes.Add(false);
-                                character.Hurt(damage,
+                                character.Hurt(enemyData,
                                     isAlive: () =>
                                     {
                                         isAnyCharacterAlive = true;
@@ -128,14 +136,20 @@ namespace Explore_System.System.Child.Battle_System.System.Child
                                         deadCharacters.Add(character, index);
                                         completes[index] = true;
                                     });
+
+                                yield return new WaitForSeconds(.1f);
                             }
 
                             yield return new WaitUntil(() => completes.All(c => c));
-                            for (var i = 0; i < completes.Count; i++)
-                                completes[i] = false;
+                            
+                            for (var ii = 0; ii < completes.Count; ii++)
+                            {
+                                completes[ii] = false;
+                            }
+                            
                             foreach (var (character, index) in deadCharacters)
                             {
-                                RecycleCard?.Invoke(character.CharacterData.CardTypes,
+                                RecycleCard?.Invoke(character.CharacterData.BattleCardTypes,
                                     () =>
                                     {
                                         // onComplete.
@@ -143,15 +157,20 @@ namespace Explore_System.System.Child.Battle_System.System.Child
                                     });
                                 yield return new WaitUntil(() => completes[index]);
                             }
-                            
+
                             if (isAnyCharacterAlive)
+                            {
                                 haveCharacterAlive?.Invoke();
+                            }
                             else
+                            {
                                 characterAllDead?.Invoke();
+                            }
+                            
                             yield break;
                         }
                     }
-
+                    
                     _hurtCoroutine = null;
                 }
             }

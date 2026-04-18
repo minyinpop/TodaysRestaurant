@@ -73,7 +73,7 @@ namespace Explore_System.System.Main
             _onExitBattleCleanupAction?.Invoke();
         }
 
-        public override void StartSystem(SceneStarterData starterData, Action onComplete)
+        public override void InvokeOnSceneLoad(SceneStarterData starterData, Action onComplete)
         {
             if (_initialized)
             {
@@ -229,7 +229,7 @@ namespace Explore_System.System.Main
                             {
                                 if (rootObject.TryGetComponent<BattleSystem>(out var battleSystem))
                                 {
-                                    battleSystem.StartSystem(
+                                    battleSystem.InvokeOnSceneLoad(
                                         starterData: enemyBattleGroupData,
                                         onComplete: () =>
                                         {
@@ -330,8 +330,8 @@ namespace Explore_System.System.Main
                 }
             }
         }
-
-        public override void OnTransitionComplete()
+        
+        public override void InvokeOnSceneChangeComplete()
         {
             AudioSystem.Instance.CommonBGM.FadeInBGM(fadeInBGMData);
         }

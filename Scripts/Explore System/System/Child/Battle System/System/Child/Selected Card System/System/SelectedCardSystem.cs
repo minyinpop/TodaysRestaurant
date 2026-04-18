@@ -9,6 +9,7 @@ using Common.Value;
 using DG.Tweening;
 using Explore_System.System.Child.Battle_System.Object.Card_Slot;
 using Explore_System.System.Child.Battle_System.Object.Card;
+using Explore_System.System.Child.Battle_System.Object.Card.Battle;
 using UI_System.Message_UI_System.Main;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -129,6 +130,11 @@ namespace Explore_System.System.Child.Battle_System.System.Child.Selected_Card_S
 
         public bool TryAdd(Card card)
         {
+            if (card is not BattleCard battleCard)
+            {
+                throw new ArgumentException($"{nameof(card)} 不是 {nameof(BattleCard)}，無法添加到 {nameof(SelectedCardSystem)}。");
+            }
+
             for (var i = 0; i < _cardSlots.Count; i++)
             {
                 var slot = _cardSlots[i];
@@ -138,13 +144,13 @@ namespace Explore_System.System.Child.Battle_System.System.Child.Selected_Card_S
                     continue;
                 }
                 
-                slot.Set(card);
-                card.SetCardOrder(cardOrderPrefabs[i]);
-                card.Move(slot.transform, new DoAnchorPos(Vector2.zero, .5f, true, Ease.OutExpo));
+                slot.Set(battleCard);
+                battleCard.SetCardOrder(cardOrderPrefabs[i]);
+                battleCard.Move(slot.transform, new DoAnchorPos(Vector2.zero, .5f, true, Ease.OutExpo));
                 
-                card.OnHover += OnHoverCard;
-                card.OnHoverExit += OnHoverExit;
-                card.OnClick += OnClickCard;
+                battleCard.OnHover += OnHoverCard;
+                battleCard.OnHoverExit += OnHoverExit;
+                battleCard.OnClick += OnClickCard;
                 return true;
             }
 
@@ -181,41 +187,55 @@ namespace Explore_System.System.Child.Battle_System.System.Child.Selected_Card_S
                 return;
             }
             
-            ReturnCardToHand.Invoke(card);
-            
-            card.OnHover -= OnHoverCard;
-            card.OnHoverExit -= OnHoverExit;
-            card.OnClick -= OnClickCard;
-            
-            card.RemoveCardOrder();
-            
-            for (var i = 0; i < _cardSlots.Count; i++)
+            if (card is BattleCard battleCard)
             {
-                var slot = _cardSlots[i];
-                if (!slot.Compare(card)) continue;
-                _cardSlots.Remove(slot);
-                Destroy(slot.gameObject);
-                break;
-            }
-                    
-            var newSlot = Instantiate(slotPrefab, spawnParent);
-            var newSlotScript = newSlot.GetComponent<CardSlot>();
-            
-            _cardSlots.Add(newSlotScript);
-            
-            for (var i = 0; i < _cardSlots.Count; i++)
-            {
-                var slot = _cardSlots[i];
+                ReturnCardToHand.Invoke(battleCard);
                 
-                if (slot.IsEmpty())
+                battleCard.OnHover -= OnHoverCard;
+                battleCard.OnHoverExit -= OnHoverExit;
+                battleCard.OnClick -= OnClickCard;
+                
+                battleCard.RemoveCardOrder();
+                
+                for (var i = 0; i < _cardSlots.Count; i++)
                 {
-                    continue;
+                    var slot = _cardSlots[i];
+                    if (!slot.Compare(battleCard)) continue;
+                    _cardSlots.Remove(slot);
+                    Destroy(slot.gameObject);
+                    break;
                 }
+                        
+                var newSlot = Instantiate(slotPrefab, spawnParent);
+                var newSlotScript = newSlot.GetComponent<CardSlot>();
                 
-                slot.Get(out var thisCard);
-                thisCard.SetCardOrder(cardOrderPrefabs[i]);
-                slot.Set(thisCard);
+                _cardSlots.Add(newSlotScript);
+                
+                for (var i = 0; i < _cardSlots.Count; i++)
+                {
+                    var slot = _cardSlots[i];
+                    
+                    if (slot.IsEmpty())
+                    {
+                        continue;
+                    }
+                    
+                    slot.Get(out var thisCard);
+
+                    if (thisCard is not BattleCard thisBattleCard)
+                    {
+                        throw new InvalidOperationException($"{card.name} 不是 {nameof(BattleCard)}，所以無法添加回 {nameof(HandCardSystem)}。");
+                    }
+
+                    thisBattleCard.SetCardOrder(cardOrderPrefabs[i]);
+                    slot.Set(thisCard);
+                }
             }
+            else
+            {
+                throw new InvalidOperationException($"{card.name} 是未在 {nameof(HandCardSystem)} 裡面登記的卡片類型，請聯絡團隊添加。");
+            }
+            
         }
         
         private void OnConfirmButtonClicked()

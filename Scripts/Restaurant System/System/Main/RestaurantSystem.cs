@@ -64,7 +64,7 @@ namespace Restaurant_System.System.Main
             }
         }
 
-        public override void StartSystem(Action onComplete)
+        public override void InvokeOnSceneLoad(Action onComplete)
         {
             _stateMachine.ChangeState(_chooseItemState);
         }

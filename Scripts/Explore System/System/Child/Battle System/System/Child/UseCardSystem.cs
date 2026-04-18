@@ -7,6 +7,7 @@ using Common.Value.Type;
 using DG.Tweening;
 using Explore_System.System.Child.Battle_System.Object.Card_Slot;
 using Explore_System.System.Child.Battle_System.Object.Card;
+using Explore_System.System.Child.Battle_System.Object.Card.Battle;
 using Explore_System.System.Child.Battle_System.System.Child.Selected_Card_System.System;
 using UnityEngine;
 
@@ -61,6 +62,7 @@ namespace Explore_System.System.Child.Battle_System.System.Child
                 IEnumerator AddCoroutine()
                 {
                     var completes = new List<bool>();
+                    
                     for (var i = 0; i < cards.Count; i++)
                     {
                         completes.Add(false);
@@ -69,12 +71,18 @@ namespace Explore_System.System.Child.Battle_System.System.Child
                         var slot = Instantiate(SlotPrefab, SpawnParent);
                         var slotScript = slot.GetComponent<CardSlot>();
                         var card = cards[index];
-                        
+
+                        if (card is not BattleCard battleCard)
+                        {
+                            Debug.Log($"{card.name} 不是 {nameof(BattleCard)}，無法在 {nameof(UseCardSystem)} 裡使用，已自動跳過該卡片。");
+                            continue;
+                        }
+
                         CardSlots.Add(slotScript);
                         
-                        slotScript.Set(card);
+                        slotScript.Set(battleCard);
                         
-                        card.Move(slot.transform, new DoAnchorPos(Vector2.zero, .5f, true, Ease.OutExpo),
+                        battleCard.Move(slot.transform, new DoAnchorPos(Vector2.zero, .5f, true, Ease.OutExpo),
                             onComplete: () =>
                             {
                                 completes[index] = true;
@@ -98,6 +106,7 @@ namespace Explore_System.System.Child.Battle_System.System.Child
             {
                 var onUseComplete = false;
                 var haveAnyEnemyAlive = false;
+                
                 var slot = CardSlots[0];
                 
                 slot.Get(out var card);
@@ -135,7 +144,7 @@ namespace Explore_System.System.Child.Battle_System.System.Child
         #endregion
         
         #region Recycle
-            public void RecycleCard(CardType targetType, Action onComplete)
+            public void RecycleCard(BattleCardType targetType, Action onComplete)
             {
                 RecycleCor = RecycleCardCoroutine();
                 StartCoroutine(RecycleCor);
@@ -149,22 +158,26 @@ namespace Explore_System.System.Child.Battle_System.System.Child
                     {
                         slot.Get(out var card);
                         
-                        if (card.CardData.CardType == targetType)
+                        if (card is not BattleCard battleCard)
                         {
-                            completes.Add(false);
-                            
-                            var index = completes.Count - 1;
-                            
-                            card.DestroyCard(
-                                onComplete: () =>
-                                {
-                                    completes[index] = true;
-                                });
-                        }
-                        else
-                        {
+                            Debug.Log($"{card.name} 不是 {nameof(BattleCard)}，將自動跳過。");
+                        
                             slot.Set(card);
+                            continue;
                         }
+                        
+                        if (battleCard.BattleCardData.BattleCardType != targetType)
+                        {
+                            continue;
+                        }
+                        
+                        completes.Add(false);
+                        
+                        card.DestroyCard(
+                            onComplete: () =>
+                            {
+                                completes[completes.Count - 1] = true;
+                            });
                     }
                     
                     yield return new WaitUntil(() => completes.All(c => c));

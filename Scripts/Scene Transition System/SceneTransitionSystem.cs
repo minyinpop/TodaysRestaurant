@@ -162,8 +162,6 @@ namespace Scene_Transition_System
 
         private void ChangeScene(SceneNameSO sceneNameData)
         {
-            SceneStarter sceneStarter = null;
-            var systemFound = false;
 
             _changeSceneCoroutine = ChangeSceneCoroutine(
                 sceneName: sceneNameData.SceneName,
@@ -171,35 +169,37 @@ namespace Scene_Transition_System
                 {
                     var scene = SceneManager.GetSceneByName(sceneNameData.SceneName);
                     var rootObjects = scene.GetRootGameObjects();
-
+                    
                     foreach (var rootObject in rootObjects)
                     {
-                        if (rootObject.TryGetComponent(out sceneStarter))
+                        if (!rootObject.TryGetComponent<SceneStarter>(out var sceneStarter))
                         {
-                            systemFound = true;
-
-                            sceneStarter.StartSystem(onComplete);
-                            break;
+                            continue;
                         }
-                    }
-                    
-                    if (!systemFound)
-                    {
-                        throw new InvalidOperationException(nameof(SceneStarter));
+                        
+                        sceneStarter.InvokeOnSceneLoad(onComplete);
                     }
                 },
                 onComplete: () =>
                 {
-                    sceneStarter.StartSystemWhenFinish();
-                    sceneStarter.OnTransitionComplete();
+                    var scene = SceneManager.GetSceneByName(sceneNameData.SceneName);
+                    var rootObjects = scene.GetRootGameObjects();
+                    
+                    foreach (var rootObject in rootObjects)
+                    {
+                        if (!rootObject.TryGetComponent<SceneStarter>(out var sceneStarter))
+                        {
+                            continue;
+                        }
+                        
+                        sceneStarter.InvokeOnSceneChangeComplete();
+                    }
                 });
             StartCoroutine(_changeSceneCoroutine);
         }
 
         private void ChangeScene(SceneNameSO sceneNameData, SceneStarterData starterData)
         {
-            SceneStarter sceneStarter = null;
-            var systemFound = false;
 
             _changeSceneCoroutine = ChangeSceneCoroutine(
                 sceneName: sceneNameData.SceneName,
@@ -207,27 +207,32 @@ namespace Scene_Transition_System
                 {
                     var scene = SceneManager.GetSceneByName(sceneNameData.SceneName);
                     var rootObjects = scene.GetRootGameObjects();
-
+                    
                     foreach (var rootObject in rootObjects)
                     {
-                        if (rootObject.TryGetComponent(out sceneStarter))
+                        if (!rootObject.TryGetComponent<SceneStarter>(out var sceneStarter))
                         {
-                            systemFound = true;
-
-                            sceneStarter.StartSystem(starterData, onComplete);
-                            break;
+                            continue;
                         }
-                    }
-                    
-                    if (!systemFound)
-                    {
-                        throw new InvalidOperationException(nameof(SceneStarter));
+                        
+                        sceneStarter.InvokeOnSceneLoad(starterData, onComplete);
+                        sceneStarter.InvokeOnSceneLoad(onComplete);
                     }
                 },
                 onComplete: () =>
                 {
-                    sceneStarter.StartSystemWhenFinish(starterData);
-                    sceneStarter.OnTransitionComplete();
+                    var scene = SceneManager.GetSceneByName(sceneNameData.SceneName);
+                    var rootObjects = scene.GetRootGameObjects();
+                    
+                    foreach (var rootObject in rootObjects)
+                    {
+                        if (!rootObject.TryGetComponent<SceneStarter>(out var sceneStarter))
+                        {
+                            continue;
+                        }
+
+                        sceneStarter.InvokeOnSceneChangeComplete();
+                    }
                 });
             StartCoroutine(_changeSceneCoroutine);
         }

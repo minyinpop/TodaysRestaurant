@@ -51,7 +51,8 @@ namespace Common.Database
                                 characterType: originalData.CharacterType,
                                 health: saveData.Health,
                                 moveSpeed: originalData.MoveSpeed,
-                                cardTypes: originalData.CardTypes);
+                                battleCardTypes: originalData.BattleCardTypes,
+                                deathVFX: originalData.DeathVFX);
                     }
                     else
                     {
@@ -59,7 +60,8 @@ namespace Common.Database
                             characterType: originalData.CharacterType,
                             health: originalData.MaxHealth,
                             moveSpeed: originalData.MoveSpeed,
-                            cardTypes: originalData.CardTypes);
+                            battleCardTypes: originalData.BattleCardTypes,
+                            deathVFX: originalData.DeathVFX);
                     }
                     
                     return true;
