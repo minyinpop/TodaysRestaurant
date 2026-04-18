@@ -5,12 +5,12 @@ using System.Linq;
 using Animation_System.Spine;
 using Common.Data_Saver.Player_Character_Saver.Child;
 using Common.Data_Saver.Player_Character_Saver.Main;
-using Common.Enemy.Data;
+using Common.Enemy_Battle_Object.Main;
+using Common.Enemy_Data;
 using Common.Value.Type;
 using Explore_System.System.Child.Battle_System.Object.Card;
 using Explore_System.System.Child.Battle_System.Object.Card.Battle;
 using Explore_System.System.Child.Battle_System.Object.Creature.Character;
-using Explore_System.System.Child.Battle_System.Object.Creature.Enemy.Main;
 using UnityEngine;
 
 namespace Explore_System.System.Child.Battle_System.System.Child

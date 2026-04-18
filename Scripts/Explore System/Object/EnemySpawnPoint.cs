@@ -1,6 +1,6 @@
 using System;
 using Common.Enemy_Battle_Group;
-using Common.Enemy.Enemy_Object;
+using Common.Enemy_Explore_Object;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -8,29 +8,29 @@ namespace Explore_System.Object
 {
     public sealed class EnemySpawnPoint : MonoBehaviour
     {
-        public EnemyObject enemyObject { get; private set; }
+        public EnemyExploreObject EnemyExploreObject { get; private set; }
 
-        public void InitializeEnemy(EnemyObject enemyObject, EnemyBattleGroupSO enemyBattleGroupData)
+        public void InitializeEnemy(EnemyExploreObject enemyExploreObject, EnemyBattleGroupSO enemyBattleGroupData)
         {
-            if (enemyObject is null)
+            if (enemyExploreObject is null)
             {
-                throw new ArgumentException(nameof(enemyObject));
+                throw new ArgumentException(nameof(enemyExploreObject));
             }
 
-            if (this.enemyObject is not null)
+            if (this.EnemyExploreObject is not null)
             {
-                throw new InvalidOperationException($"{nameof(this.enemyObject)} is not empty.");
+                throw new InvalidOperationException($"{nameof(this.EnemyExploreObject)} is not empty.");
             }
 
             if (NavMesh.SamplePosition(transform.position, out var hit, float.MaxValue, NavMesh.AllAreas))
             {
-                var prefab = enemyObject.gameObject;
+                var prefab = enemyExploreObject.gameObject;
                 var position = hit.position;
-                var rotation = enemyObject.transform.rotation;
+                var rotation = enemyExploreObject.transform.rotation;
                 var parent = transform;
                 
-                this.enemyObject = Instantiate(prefab, position, rotation, parent).GetComponent<EnemyObject>();
-                this.enemyObject.Initialize(hit.position, enemyBattleGroupData);
+                this.EnemyExploreObject = Instantiate(prefab, position, rotation, parent).GetComponent<EnemyExploreObject>();
+                this.EnemyExploreObject.Initialize(hit.position, enemyBattleGroupData);
             }
             else
             {

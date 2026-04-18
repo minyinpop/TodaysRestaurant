@@ -1,5 +1,4 @@
 using System;
-using Audio_System.Data;
 using Audio_System.Main;
 using Common.Interactable_Object;
 using Common.Item.Data;
@@ -14,8 +13,8 @@ namespace Common.Item.Object
         [field: Header("物品資料")]
         [field: SerializeField] private ItemSO itemData;
         
-        [field: Header("音效資料")]
-        [field: SerializeField] private PlaySFXData takeSFX;
+        [field: Header("特效位置")]
+        [field: SerializeField] private Transform VFXParent;
 
         public static event Action OnTake;
 
@@ -23,8 +22,12 @@ namespace Common.Item.Object
         {
             if (itemData is null)
             {
-                Debug.Log($"{gameObject.name} > {GetType().Name} > {nameof(itemData)} cannot be null.");
-                Destroy(gameObject);
+                throw new InvalidOperationException($"{nameof(itemData)} 沒有被掛載。");
+            }
+            
+            if (VFXParent is null)
+            {
+                throw new InvalidOperationException($"{nameof(VFXParent)} 沒有被掛載。");
             }
         }
 
@@ -45,7 +48,16 @@ namespace Common.Item.Object
         {
             if (playerObject.TryAddItem(itemData))
             {
-                AudioSystem.Instance.InteractSFX.PlayOneShot(takeSFX);
+                #region 播放拿取物品的音效
+                    AudioSystem.Instance.InteractSFX.PlayOneShot(itemData.TakeSFX);
+                #endregion
+
+                #region 播放拿取物品的特效
+                    var takeVFX = Instantiate(itemData.TakeVFX.gameObject, VFXParent.position, Quaternion.identity).GetComponent<ParticleSystem>();
+                    takeVFX.Play();
+                    
+                    Destroy(takeVFX.gameObject, takeVFX.main.duration);
+                #endregion
                 
                 OnTake?.Invoke();
                 

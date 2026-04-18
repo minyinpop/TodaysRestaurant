@@ -700,7 +700,7 @@ MonoBehaviour:
   battleSystem: {fileID: 201929484}
   tip1CanvasGroup: {fileID: 1708451858}
   tip1Text: {fileID: 807316946}
-  dialogueStarterData: {fileID: 11400000, guid: fe9547e6dd673454d9043d8a2e8f60b0, type: 2}
+  dialogueStarterData: {fileID: 11400000, guid: 02d33da0b99e4ad439318a3014c33edb, type: 2}
 --- !u!114 &155975520
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3155,6 +3155,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 269409f7cb4549b4eb53a28132b2234d, type: 3}
   m_PrefabInstance: {fileID: 540004413}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &561089502
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 561089503}
+  m_Layer: 0
+  m_Name: SFX Parent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &561089503
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 561089502}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1116813825}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &610692542
 GameObject:
   m_ObjectHideFlags: 0
@@ -4685,7 +4716,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 561089503}
   m_Father: {fileID: 1935642507}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!114 &1116813826
@@ -4730,6 +4762,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::System.Battle_System.Object.Character.Type.Friendly.Type.Bernard
   AnimationSystem: {fileID: 1116813826}
+  SFXParent: {fileID: 561089503}
   healthBar: {fileID: 1257145851}
   characterType: 0
 --- !u!114 &1116813828
@@ -5351,7 +5384,7 @@ GameObject:
   - component: {fileID: 1288916975}
   - component: {fileID: 1288916974}
   m_Layer: 0
-  m_Name: Battle Scene UI Controller
+  m_Name: Scene UI Controller
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5370,6 +5403,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UI_System.Scene_UI_Controller.BattleSceneUIController
   fastButtonUISystem: {fileID: 1503121262}
+  levelSelectUISystem: {fileID: 0}
+  backpackUISystem: {fileID: 0}
   settingsUISystem: {fileID: 1503121261}
 --- !u!4 &1288916975
 Transform:
@@ -9617,6 +9652,37 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -1053093794917909690, guid: 265db313580c09a4cb9f89f67ce354e5, type: 3}
+--- !u!1 &1964694804
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1964694805}
+  m_Layer: 0
+  m_Name: SFX Parent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1964694805
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1964694804}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2074191849}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1969993075
 GameObject:
   m_ObjectHideFlags: 0
@@ -9770,7 +9836,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1964694805}
   m_Father: {fileID: 7678628}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!114 &2074191850
@@ -9815,6 +9882,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::System.Battle_System.Object.Character.Type.Friendly.Type.Bernard
   AnimationSystem: {fileID: 2074191850}
+  SFXParent: {fileID: 1964694805}
   healthBar: {fileID: 455927387}
   characterType: 1
 --- !u!114 &2074191852

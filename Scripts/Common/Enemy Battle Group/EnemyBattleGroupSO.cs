@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using Audio_System.Data;
+using Common.Enemy_Battle_Object.Main;
 using Common.Item.Data;
 using Common.Scene_Starter;
-using Explore_System.System.Child.Battle_System.Object.Creature.Enemy.Main;
 using UnityEngine;
 
 namespace Common.Enemy_Battle_Group

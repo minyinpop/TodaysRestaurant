@@ -5,7 +5,7 @@ using Audio_System.Main;
 using Common.Character;
 using Common.Data_Saver.Player_Character_Saver.Main;
 using Common.Database;
-using Common.Enemy.Data;
+using Common.Enemy_Data;
 using Common.Status_Bar;
 using UnityEngine;
 
@@ -16,6 +16,7 @@ namespace Explore_System.System.Child.Battle_System.Object.Creature.Character
     {
         [field: Header("Systems")]
         [field: SerializeField] private AnimationSystem AnimationSystem;
+        [field: SerializeField] private Transform SFXParent;
         
         [field: Header("Objects")]
         [field: SerializeField] private StatusBar healthBar;
@@ -35,6 +36,11 @@ namespace Explore_System.System.Child.Battle_System.Object.Creature.Character
                 if (AnimationSystem is null)
                 {
                     throw new InvalidOperationException(nameof(AnimationSystem));
+                }
+
+                if (SFXParent is null)
+                {
+                    throw new InvalidOperationException(nameof(SFXParent));
                 }
 
                 if (healthBar is null)
@@ -131,7 +137,7 @@ namespace Explore_System.System.Child.Battle_System.Object.Creature.Character
                         alive: () =>
                         {
                             #region 播放受擊特效
-                                var vfx = Instantiate(enemyData.AttackVFX.gameObject, transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
+                                var vfx = Instantiate(enemyData.AttackVFX.gameObject, SFXParent.position, Quaternion.identity).GetComponent<ParticleSystem>();
                                 vfx.Play();
                                 
                                 Destroy(vfx.gameObject, vfx.main.duration);
@@ -150,7 +156,7 @@ namespace Explore_System.System.Child.Battle_System.Object.Creature.Character
                         dead: () =>
                         {
                             #region 播放死亡特效
-                                var vfx = Instantiate(CharacterData.DeathVFX.gameObject, transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
+                                var vfx = Instantiate(CharacterData.DeathVFX.gameObject, SFXParent.position, Quaternion.identity).GetComponent<ParticleSystem>();
                                 vfx.Play();
                                     
                                 Destroy(vfx.gameObject, vfx.main.duration);

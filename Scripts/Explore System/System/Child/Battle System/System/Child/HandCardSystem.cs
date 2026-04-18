@@ -62,6 +62,12 @@ namespace Explore_System.System.Child.Battle_System.System.Child
             foreach (var cardSlot in cardSlots)
             {
                 cardSlot.Get(out var card);
+                
+                if (card is null)
+                {
+                    continue;
+                }
+                
                 card.Interactable = true;
                 cardSlot.Set(card);
             }
@@ -72,6 +78,12 @@ namespace Explore_System.System.Child.Battle_System.System.Child
             foreach (var cardSlot in cardSlots)
             {
                 cardSlot.Get(out var card);
+                
+                if (card is null)
+                {
+                    continue;
+                }
+                
                 card.Interactable = false;
                 cardSlot.Set(card);
             }

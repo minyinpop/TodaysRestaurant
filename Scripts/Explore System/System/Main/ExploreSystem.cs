@@ -4,7 +4,7 @@ using Audio_System.Data;
 using Audio_System.Main;
 using Common.Database;
 using Common.Enemy_Battle_Group;
-using Common.Enemy.Enemy_Object;
+using Common.Enemy_Explore_Object;
 using Common.Level.Main;
 using Common.Scene_Name;
 using Common.Scene_Starter;
@@ -40,7 +40,7 @@ namespace Explore_System.System.Main
         private Action _onEnemyAttackCleanupAction;
         private Action _onExitBattleCleanupAction;
 
-        private EnemyObject _attackingEnemy;
+        private EnemyExploreObject _attackingEnemy;
 
         public static Action<SceneNameSO> OnLevelExplore;
 
@@ -162,10 +162,10 @@ namespace Explore_System.System.Main
                 #endregion
                 
                 #region 訂閱事件
-                    EnemyObject.OnAttack += EnterBattle;
+                    EnemyExploreObject.OnAttack += EnterBattle;
                     _onEnemyAttackCleanupAction = () =>
                     {
-                        EnemyObject.OnAttack -= EnterBattle;
+                        EnemyExploreObject.OnAttack -= EnterBattle;
                         _onEnemyAttackCleanupAction = null;
                     };
 
@@ -181,7 +181,7 @@ namespace Explore_System.System.Main
                 
                 yield break;
                 
-                void EnterBattle(EnemyObject enemyObject, EnemyBattleGroupSO enemyBattleGroupData)
+                void EnterBattle(EnemyExploreObject enemyExploreObject, EnemyBattleGroupSO enemyBattleGroupData)
                 {
                     if (_battleCoroutine is not null)
                     {
@@ -197,7 +197,7 @@ namespace Explore_System.System.Main
                         var complete = false;
 
                         #region 設定哪個敵人發起的攻擊
-                            _attackingEnemy = enemyObject;
+                            _attackingEnemy = enemyExploreObject;
                         #endregion
                         
                         #region 淡入過場

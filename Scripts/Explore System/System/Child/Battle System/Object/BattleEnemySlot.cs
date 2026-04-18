@@ -1,5 +1,4 @@
-using Explore_System.System.Child.Battle_System.Object.Creature.Enemy;
-using Explore_System.System.Child.Battle_System.Object.Creature.Enemy.Main;
+using Common.Enemy_Battle_Object.Main;
 using UnityEngine;
 
 namespace Explore_System.System.Child.Battle_System.Object
