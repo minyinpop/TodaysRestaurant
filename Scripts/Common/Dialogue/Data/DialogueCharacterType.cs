@@ -2,11 +2,12 @@ namespace Common.Dialogue.Data
 {
     public enum DialogueCharacterType
     {
-        Narrator,
-        Bernard,
-        Ray,
-        Muu_1,
-        Muu_2,
-        Gu
+        Narrator = 1,
+        Bernard = 11,
+        Ray = 21,
+        Muu_1 = 31,
+        Muu_2 = 32,
+        Muu_3 = 33,
+        Gu = 41
     }
 }

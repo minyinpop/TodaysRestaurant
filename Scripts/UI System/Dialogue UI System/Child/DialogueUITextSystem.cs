@@ -100,6 +100,12 @@ namespace UI_System.Dialogue_UI_System.Child
                     case DialogueCharacterType.Muu_2:
                     {
                         characterNamePanel.SetActive(true);
+                        characterName.text = "？";
+                        break;
+                    }
+                    case DialogueCharacterType.Muu_3:
+                    {
+                        characterNamePanel.SetActive(true);
                         characterName.text = "武";
                         break;
                     }
