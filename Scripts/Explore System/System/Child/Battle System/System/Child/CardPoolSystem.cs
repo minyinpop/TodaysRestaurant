@@ -68,49 +68,55 @@ namespace Explore_System.System.Child.Battle_System.System.Child
             private IEnumerator SortCoroutine()
             {
                 var remainingCards = new List<Card>();
+                
                 foreach (var slot in CardSlots)
                 {
-                    if (!slot.Get(out var card)) continue;
+                    if (!slot.Get(out var card))
+                    {
+                        Debug.Log("A");
+                        continue;
+                    }
+                    
+                    Debug.Log("B");
                     remainingCards.Add(card);
                 }
 
-                switch (remainingCards.Count)
+                if (remainingCards.Count <= 0)
                 {
-                    case 0:
+                    Debug.Log("沒有卡片需要整理，直接開始填充卡片");
+                    
+                    StartCoroutine(RefillCor);
+                    SortCor = null;
+                }
+                else
+                {
+                    Debug.Log("有卡片需要整理");
+                    
+                    for (var i = 0; i < remainingCards.Count; i++)
                     {
-                        StartCoroutine(RefillCor);
-                        SortCor = null;
-                        break;
-                    }
-                    case > 0:
-                    {
-                        for (var i = 0; i < remainingCards.Count; i++)
+                        var index = i;
+                        var slot = CardSlots[index];
+                        var card = remainingCards[index];
+
+                        if (card is not BattleCard battleCard)
                         {
-                            var index = i;
-                            var slot = CardSlots[index];
-                            var card = remainingCards[index];
-
-                            if (card is not BattleCard battleCard)
-                            {
-                                throw new InvalidOperationException($"{nameof(card)} 不是 {nameof(BattleCard)}，無法添加到 {nameof(CardPoolSystem)} 裡。");
-                            }
-
-                            slot.Set(battleCard);
-                            battleCard.Move(slot.transform, new(Vector3.zero, .5f, true, Ease.OutExpo),
-                                onComplete: () =>
-                                {
-                                    if (index != remainingCards.Count - 1)
-                                    {
-                                        return;
-                                    }
-                                    
-                                    StartCoroutine(RefillCor);
-                                    SortCor = null;
-                                });
-                            yield return new WaitForSeconds(.2f);
+                            throw new InvalidOperationException(
+                                $"{nameof(card)} 不是 {nameof(BattleCard)}，無法添加到 {nameof(CardPoolSystem)} 裡。");
                         }
 
-                        break;
+                        slot.Set(battleCard);
+                        battleCard.Move(slot.transform, new(Vector3.zero, .5f, true, Ease.OutExpo),
+                            onComplete: () =>
+                            {
+                                if (index != remainingCards.Count - 1)
+                                {
+                                    return;
+                                }
+
+                                StartCoroutine(RefillCor);
+                                SortCor = null;
+                            });
+                        yield return new WaitForSeconds(.2f);
                     }
                 }
             }
@@ -177,7 +183,7 @@ namespace Explore_System.System.Child.Battle_System.System.Child
             
             IEnumerator RecycleCardCoroutine()
             {
-                var completes = new List<bool>();
+                var completes = new Dictionary<BattleCard, bool>();
                 
                 foreach (var slot in CardSlots)
                 {
@@ -185,18 +191,17 @@ namespace Explore_System.System.Child.Battle_System.System.Child
 
                     if (card is not BattleCard battleCard)
                     {
-                        Debug.Log($"{card.name} 不是 {nameof(BattleCard)}，將自動跳過。");
-                        
                         slot.Set(card);
                         continue;
                     }
 
                     if (battleCard.BattleCardData.BattleCardType != targetType)
                     {
+                        slot.Set(card);
                         continue;
                     }
                     
-                    completes.Add(false);
+                    completes.Add(battleCard, false);
                     
                     card.DestroyCard(
                         onComplete: () =>
@@ -215,13 +220,16 @@ namespace Explore_System.System.Child.Battle_System.System.Child
                                     
                                 _currentDeck.Remove(_currentDeck[i]);
                             }
-
-                            completes[completes.Count - 1] = true;
+                            
+                            completes[battleCard] = true;
                         });
+
+                    yield return new WaitForSeconds(.1f);
                 }
                 
-                yield return new WaitUntil(() => completes.All(c => c));
-                onComplete?.Invoke();
+                yield return new WaitUntil(() => completes.Values.All(value => value));
+                
+                onComplete.Invoke();
             }
         }
     }

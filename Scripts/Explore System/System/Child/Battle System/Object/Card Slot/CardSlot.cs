@@ -10,10 +10,15 @@ namespace Explore_System.System.Child.Battle_System.Object.Card_Slot
         {
             if (!IsEmpty())
             {
+                return;
+            }
+
+            if (card is null)
+            {
                 Debug.Log($"{nameof(card)} 不能傳入空值。");
                 return;
             }
-            
+
             _card = card;
         }
 

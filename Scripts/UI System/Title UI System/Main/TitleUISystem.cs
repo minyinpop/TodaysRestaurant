@@ -163,7 +163,7 @@ namespace UI_System.Title_UI_System.Main
                 Debug.Log("登入源：未完成新手教學的帳號");
                 
                 SceneNameDatabase.GetSceneName(SceneNameType.Dialogue_Scene, out var sceneNameData);
-                DialogueDatabase.GetDialogue(DialogueType.Tutorial_04, out var dialogueData);
+                DialogueDatabase.GetDialogue(DialogueType.Tutorial_05, out var dialogueData);
                 
                 OnStartTutorial.Invoke(sceneNameData, dialogueData);
             }

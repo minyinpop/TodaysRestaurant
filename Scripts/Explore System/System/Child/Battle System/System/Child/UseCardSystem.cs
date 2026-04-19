@@ -160,14 +160,13 @@ namespace Explore_System.System.Child.Battle_System.System.Child
                         
                         if (card is not BattleCard battleCard)
                         {
-                            Debug.Log($"{card.name} 不是 {nameof(BattleCard)}，將自動跳過。");
-                        
                             slot.Set(card);
                             continue;
                         }
                         
                         if (battleCard.BattleCardData.BattleCardType != targetType)
                         {
+                            slot.Set(card);
                             continue;
                         }
                         
