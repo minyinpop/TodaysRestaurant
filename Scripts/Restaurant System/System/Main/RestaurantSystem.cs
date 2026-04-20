@@ -13,10 +13,13 @@ namespace Restaurant_System.System.Main
 {
     internal sealed class RestaurantSystem : SceneStarter
     {
-        [field: Header("System")]
-        [field: SerializeField] private CustomerManagerSystem CustomerManagerSystem;
-
-        private IEnumerator RoundStartCor;
+        [field: Header("系統")]
+        [field: SerializeField] private CustomerManagerSystem customerManagerSystem;
+        
+        [field: Header("狀態")]
+        [field: SerializeField] private bool autoStart;
+        
+        private IEnumerator _roundStartCoroutine;
         
         private readonly StateMachine _stateMachine = new();
 
@@ -48,7 +51,7 @@ namespace Restaurant_System.System.Main
             _roundStartState = new RoundStart(
                 onEnter: () =>
                 {
-                    CustomerManagerSystem.StartSystem();
+                    customerManagerSystem.StartSystem();
                 },
                 onExit: () =>
                 {
@@ -57,14 +60,26 @@ namespace Restaurant_System.System.Main
         
         private void OnDisable()
         {
-            if (RoundStartCor is not null)
+            if (_roundStartCoroutine is not null)
             {
-                StopCoroutine(RoundStartCor);
-                RoundStartCor = null;
+                StopCoroutine(_roundStartCoroutine);
+                _roundStartCoroutine = null;
             }
         }
 
         public override void InvokeOnSceneLoad(Action onComplete)
+        {
+            if (autoStart)
+            {
+                StartSystem();
+            }
+            else
+            {
+                Debug.Log($"{nameof(RestaurantSystem)} 的 {nameof(autoStart)} 為 false，須從外部觸發 {nameof(StartSystem)}。");
+            }
+        }
+        
+        public void StartSystem()
         {
             _stateMachine.ChangeState(_chooseItemState);
         }

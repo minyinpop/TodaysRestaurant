@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Common.Scene_Starter
 {
-    public class SceneStarter : MonoBehaviour
+    public abstract class SceneStarter : MonoBehaviour
     {
         public virtual void InvokeOnSceneLoad(Action onComplete)
         {
@@ -18,6 +18,11 @@ namespace Common.Scene_Starter
         }
 
         public virtual void InvokeOnSceneChangeComplete()
+        {
+            Debug.Log($"該場景沒有 {nameof(SceneStarter)}，或是沒有 {nameof(SceneStarter)} 繼承 {nameof(InvokeOnSceneLoad)}");
+        }
+        
+        public virtual void InvokeOnSceneChangeComplete(SceneStarterData starterData)
         {
             Debug.Log($"該場景沒有 {nameof(SceneStarter)}，或是沒有 {nameof(SceneStarter)} 繼承 {nameof(InvokeOnSceneLoad)}");
         }

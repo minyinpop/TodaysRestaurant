@@ -1,6 +1,6 @@
 using System;
 
-namespace Explore_System.System.Child.Battle_System.System.Child.Initiative_System.System.Main.State_Machine.State
+namespace Explore_System.System.Child.Battle_System.System.Child.Initiative_System___Legacy__.System.Main.State_Machine.State
 {
     internal sealed class OnTossEnd : IState
     {

@@ -8,7 +8,6 @@ using DG.Tweening;
 using Explore_System.System.Child.Battle_System.Object.Card_Slot;
 using Explore_System.System.Child.Battle_System.Object.Card;
 using Explore_System.System.Child.Battle_System.Object.Card.Battle;
-using Explore_System.System.Child.Battle_System.System.Child.Selected_Card_System.System;
 using UnityEngine;
 using UnityEngine.Serialization;
 

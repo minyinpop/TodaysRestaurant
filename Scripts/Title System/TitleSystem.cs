@@ -1,11 +1,10 @@
 using System;
 using System.IO;
-using Common.Scene_Starter;
 using UnityEngine;
 
 namespace Title_System
 {
-    public sealed class TitleSystem : SceneStarter
+    public sealed class TitleSystem : MonoBehaviour
     {
         private void Awake()
         {

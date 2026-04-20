@@ -5,7 +5,7 @@ using DG.Tweening;
 using TMPro;
 using UnityEngine;
 
-namespace Explore_System.System.Child.Battle_System.System.Child.Initiative_System.Object.Toss_Result_Text
+namespace Explore_System.System.Child.Battle_System.System.Child.Initiative_System___Legacy__.Object.Toss_Result_Text
 {
     [RequireComponent(typeof(DoAnimation))]
     internal sealed class TossResultText : MonoBehaviour

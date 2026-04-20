@@ -1,7 +1,7 @@
 using DG.Tweening;
 using UnityEngine;
 
-namespace Explore_System.System.Child.Battle_System.System.Child.Initiative_System.System.Child
+namespace Explore_System.System.Child.Battle_System.System.Child.Initiative_System___Legacy__.System.Child
 {
     internal sealed class ScreenMaskSystem : MonoBehaviour
     {

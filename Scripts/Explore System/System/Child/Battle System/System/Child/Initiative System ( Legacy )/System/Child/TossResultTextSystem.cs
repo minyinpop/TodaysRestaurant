@@ -1,10 +1,10 @@
 using System;
 using System.Collections;
 using Common.Value;
-using Explore_System.System.Child.Battle_System.System.Child.Initiative_System.Object.Toss_Result_Text;
+using Explore_System.System.Child.Battle_System.System.Child.Initiative_System___Legacy__.Object.Toss_Result_Text;
 using UnityEngine;
 
-namespace Explore_System.System.Child.Battle_System.System.Child.Initiative_System.System.Child
+namespace Explore_System.System.Child.Battle_System.System.Child.Initiative_System___Legacy__.System.Child
 {
     internal sealed class TossResultTextSystem : MonoBehaviour
     {

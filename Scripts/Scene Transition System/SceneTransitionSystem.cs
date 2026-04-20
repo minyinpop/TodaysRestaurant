@@ -10,7 +10,7 @@ using DG.Tweening;
 using Explore_System.System.Child.Battle_System.System.Main;
 using Explore_System.System.Main;
 using Tutorial_System;
-using UI_System.Dialogue_UI_System.Main;
+using UI_System.Dialogue_UI_System.Full.Main;
 using UI_System.Lobby_UI_System.Child.Level_Select_UI_System.Object.Level_Select_UI.Main;
 using UI_System.Lobby_UI_System.Main;
 using UI_System.Title_UI_System.Main;
@@ -102,7 +102,7 @@ namespace Scene_Transition_System
             #endregion
             
             #region 對話場景訂閱
-                DialogueUISystem.OnChangeScene += ChangeScene;
+                DialogueFullUISystem.OnChangeScene += ChangeScene;
             #endregion
             
             #region 戰鬥場景訂閱
@@ -113,9 +113,9 @@ namespace Scene_Transition_System
                 ExploreSystem.OnLevelExplore += ChangeScene;
             #endregion
             
-            #region 比賽投稿用專用訂閱
+            #region 教學專用訂閱
                 MissionUI_DevelopOnly.ChangeScene_DevelopOnly += ChangeScene;
-                RestaurantTutorialSystem.OnTutorialComplete += ChangeScene;
+                RestaurantCookTutorialSystem.OnTutorialComplete += ChangeScene;
                 BattleTutorialSystem.OnTutorialComplete += ChangeScene;
             #endregion
         }
@@ -142,7 +142,7 @@ namespace Scene_Transition_System
             #endregion
             
             #region 對話場景訂閱
-                DialogueUISystem.OnChangeScene -= ChangeScene;
+                DialogueFullUISystem.OnChangeScene -= ChangeScene;
             #endregion
             
             #region 戰鬥場景訂閱
@@ -153,20 +153,21 @@ namespace Scene_Transition_System
                 ExploreSystem.OnLevelExplore -= ChangeScene;
             #endregion
             
-            #region 比賽投稿用專用訂閱
+            #region 教學專用訂閱
                 MissionUI_DevelopOnly.ChangeScene_DevelopOnly -= ChangeScene;
-                RestaurantTutorialSystem.OnTutorialComplete -= ChangeScene;
+                RestaurantCookTutorialSystem.OnTutorialComplete -= ChangeScene;
                 BattleTutorialSystem.OnTutorialComplete -= ChangeScene;
             #endregion
         }
 
         private void ChangeScene(SceneNameSO sceneNameData)
         {
-
             _changeSceneCoroutine = ChangeSceneCoroutine(
                 sceneName: sceneNameData.SceneName,
                 onSceneLoaded: onComplete =>
                 {
+                    var foundSceneStarter = false;
+                    
                     var scene = SceneManager.GetSceneByName(sceneNameData.SceneName);
                     var rootObjects = scene.GetRootGameObjects();
                     
@@ -177,7 +178,15 @@ namespace Scene_Transition_System
                             continue;
                         }
                         
+                        foundSceneStarter = true;
+                        
                         sceneStarter.InvokeOnSceneLoad(onComplete);
+                    }
+
+                    if (!foundSceneStarter)
+                    {
+                        Debug.Log($"無法在 {sceneNameData.SceneName} 裡找到 {nameof(SceneStarter)}。");
+                        onComplete.Invoke();
                     }
                 },
                 onComplete: () =>
@@ -195,16 +204,18 @@ namespace Scene_Transition_System
                         sceneStarter.InvokeOnSceneChangeComplete();
                     }
                 });
+            
             StartCoroutine(_changeSceneCoroutine);
         }
 
         private void ChangeScene(SceneNameSO sceneNameData, SceneStarterData starterData)
         {
-
             _changeSceneCoroutine = ChangeSceneCoroutine(
                 sceneName: sceneNameData.SceneName,
                 onSceneLoaded: onComplete =>
                 {
+                    var foundSceneStarter = false;
+                    
                     var scene = SceneManager.GetSceneByName(sceneNameData.SceneName);
                     var rootObjects = scene.GetRootGameObjects();
                     
@@ -215,8 +226,16 @@ namespace Scene_Transition_System
                             continue;
                         }
                         
+                        foundSceneStarter = true;
+                        
                         sceneStarter.InvokeOnSceneLoad(starterData, onComplete);
                         sceneStarter.InvokeOnSceneLoad(onComplete);
+                    }
+                    
+                    if (!foundSceneStarter)
+                    {
+                        Debug.Log($"無法在 {sceneNameData.SceneName} 裡找到 {nameof(SceneStarter)}。");
+                        onComplete.Invoke();
                     }
                 },
                 onComplete: () =>
@@ -232,8 +251,10 @@ namespace Scene_Transition_System
                         }
 
                         sceneStarter.InvokeOnSceneChangeComplete();
+                        sceneStarter.InvokeOnSceneChangeComplete(starterData);
                     }
                 });
+            
             StartCoroutine(_changeSceneCoroutine);
         }
 

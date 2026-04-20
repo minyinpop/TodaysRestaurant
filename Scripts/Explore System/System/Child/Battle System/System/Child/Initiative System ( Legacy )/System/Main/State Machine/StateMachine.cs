@@ -1,4 +1,4 @@
-namespace Explore_System.System.Child.Battle_System.System.Child.Initiative_System.System.Main.State_Machine
+namespace Explore_System.System.Child.Battle_System.System.Child.Initiative_System___Legacy__.System.Main.State_Machine
 {
     internal sealed class StateMachine
     {

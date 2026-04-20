@@ -13,7 +13,6 @@ using Common.Value;
 using Common.Value.Type;
 using Explore_System.System.Child.Battle_System.Object;
 using Explore_System.System.Child.Battle_System.System.Child;
-using Explore_System.System.Child.Battle_System.System.Child.Selected_Card_System.System;
 using Explore_System.System.Child.Battle_System.System.Main.State_Machine;
 using Explore_System.System.Child.Battle_System.System.Main.State_Machine.State;
 using UI_System.Message_UI_System.Main;
@@ -173,11 +172,11 @@ namespace Explore_System.System.Child.Battle_System.System.Main
                     throw new ArgumentException($"{nameof(starterData)} 不是 {nameof(EnemyBattleGroupSO)}。");
                 }
             #endregion
-
+            
             #region 參數附值
                 _enemyBattleGroupData = enemyBattleGroupData;
             #endregion
-
+            
             #region 生成敵人
                 foreach (var enemyObject in _enemyBattleGroupData.EnemyObjects)
                 {
@@ -208,10 +207,6 @@ namespace Explore_System.System.Child.Battle_System.System.Main
                     break;
                 }
             #endregion
-
-            #region 返回系統準備完畢
-                onComplete.Invoke();
-            #endregion
         }
         
         public override void InvokeOnSceneChangeComplete()
@@ -224,7 +219,7 @@ namespace Explore_System.System.Child.Battle_System.System.Main
                 OnBattleStart();
             #endregion
         }
-        
+
         private void DrawAndShowCard(int drawNumber, Action onComplete)
         {
             _drawCardAndShowCardCoroutine = DrawAndShowCardCoroutine();

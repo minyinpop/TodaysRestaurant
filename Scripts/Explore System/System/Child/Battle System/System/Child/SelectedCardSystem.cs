@@ -14,7 +14,7 @@ using UI_System.Message_UI_System.Main;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace Explore_System.System.Child.Battle_System.System.Child.Selected_Card_System.System
+namespace Explore_System.System.Child.Battle_System.System.Child
 {
     [RequireComponent(typeof(DoAnimation))]
     internal sealed class SelectedCardSystem : MonoBehaviour

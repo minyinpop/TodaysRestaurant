@@ -9,7 +9,7 @@ namespace Common.Dialogue.SO.Main
     {
         [field: SerializeField] private DialogueType dialogueType;
                                 public DialogueType DialogueType => dialogueType;
-
+        
         [field: SerializeField] private string skipMessage;
                                 public string SkipMessage => skipMessage;
         

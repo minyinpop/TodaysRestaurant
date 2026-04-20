@@ -1,13 +1,13 @@
 using System;
 using Common.Value;
 using DG.Tweening;
-using Explore_System.System.Child.Battle_System.System.Child.Initiative_System.Object.Initiative_Coin;
-using Explore_System.System.Child.Battle_System.System.Child.Initiative_System.System.Child;
-using Explore_System.System.Child.Battle_System.System.Child.Initiative_System.System.Main.State_Machine;
-using Explore_System.System.Child.Battle_System.System.Child.Initiative_System.System.Main.State_Machine.State;
+using Explore_System.System.Child.Battle_System.System.Child.Initiative_System___Legacy__.Object.Initiative_Coin;
+using Explore_System.System.Child.Battle_System.System.Child.Initiative_System___Legacy__.System.Child;
+using Explore_System.System.Child.Battle_System.System.Child.Initiative_System___Legacy__.System.Main.State_Machine;
+using Explore_System.System.Child.Battle_System.System.Child.Initiative_System___Legacy__.System.Main.State_Machine.State;
 using UnityEngine;
 
-namespace Explore_System.System.Child.Battle_System.System.Child.Initiative_System.System.Main
+namespace Explore_System.System.Child.Battle_System.System.Child.Initiative_System___Legacy__.System.Main
 {
     internal sealed class InitiativeSystem : MonoBehaviour
     {
