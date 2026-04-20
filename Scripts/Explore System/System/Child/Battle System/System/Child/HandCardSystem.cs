@@ -8,7 +8,6 @@ using DG.Tweening;
 using Explore_System.System.Child.Battle_System.Object.Card_Slot;
 using Explore_System.System.Child.Battle_System.Object.Card;
 using Explore_System.System.Child.Battle_System.Object.Card.Battle;
-using Explore_System.System.Child.Battle_System.System.Child.Selected_Card_System.System;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -218,7 +217,7 @@ namespace Explore_System.System.Child.Battle_System.System.Child
             
             IEnumerator RecycleCardCoroutine()
             {
-                var completes = new List<bool>();
+                var completes = new Dictionary<BattleCard, bool>();
                 
                 foreach (var slot in cardSlots)
                 {
@@ -226,30 +225,31 @@ namespace Explore_System.System.Child.Battle_System.System.Child
                     
                     if (card is not BattleCard battleCard)
                     {
-                        Debug.Log($"{card.name} 不是 {nameof(BattleCard)}，將自動跳過。");
-                        
                         slot.Set(card);
                         continue;
                     }
                     
                     if (battleCard.BattleCardData.BattleCardType != targetType)
                     {
+                        slot.Set(card);
                         continue;
                     }
                     
-                    completes.Add(false);
+                    completes.Add(battleCard, false);
                     
                     card.DestroyCard(
                         onComplete: () =>
                         {
                             cardSlots.Remove(slot);
                             Destroy(slot.gameObject);
-                            completes[completes.Count - 1] = true;
+                            
+                            completes[battleCard] = true;
                         });
                 }
                 
-                yield return new WaitUntil(() => completes.All(c => c));
-                onComplete?.Invoke();
+                yield return new WaitUntil(() => completes.Values.All(value => value));
+                
+                onComplete.Invoke();
             }
         }
     }

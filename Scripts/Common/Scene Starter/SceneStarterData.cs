@@ -3,7 +3,7 @@ using UnityEngine;
 namespace Common.Scene_Starter
 {
     [System.Serializable]
-    public class SceneStarterData : ScriptableObject
+    public abstract class SceneStarterData : ScriptableObject
     {
     }
 }

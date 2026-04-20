@@ -12,7 +12,8 @@ namespace Common.Dialogue.Data
         Play_Character_Animation = 203,
         
         // 對話
-        Show_Text = 301,
+        Show_Full_Text = 301,
+        Show_Lite_Text = 303,
         Hide_Text = 302,
         
         // 章節標題

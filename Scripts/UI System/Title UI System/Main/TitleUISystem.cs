@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using Common.Button;
 using Common.Database;
-using Common.Dialogue.Data;
 using Common.Dialogue.SO.Main;
 using Common.Scene_Name;
 using Common.Value;
@@ -22,6 +21,9 @@ namespace UI_System.Title_UI_System.Main
         [field: SerializeField] private Button settingsButton;
         [field: SerializeField] private Button quitButton;
         [field: SerializeField] private Button dataCleanButton;
+        
+        [field: Header("新帳號的開場對話資料")]
+        [field: SerializeField] private DialogueSO tutorialDialogueData;
 
         /// <summary>
         /// 登入帳號（用於完成新手教學的舊帳號）
@@ -146,7 +148,7 @@ namespace UI_System.Title_UI_System.Main
                 ItemDatabase.Initialize();
                 LevelDatabase.Initialize();
                 CharacterDatabase.Initialize();
-                DialogueDatabase.Initialize();
+            
                 SceneNameDatabase.Initialize();
             #endregion
             
@@ -163,11 +165,8 @@ namespace UI_System.Title_UI_System.Main
                 Debug.Log("登入源：未完成新手教學的帳號");
                 
                 SceneNameDatabase.GetSceneName(SceneNameType.Dialogue_Scene, out var sceneNameData);
-                DialogueDatabase.GetDialogue(DialogueType.Tutorial_05, out var dialogueData);
-                
-                OnStartTutorial.Invoke(sceneNameData, dialogueData);
+                OnStartTutorial.Invoke(sceneNameData, tutorialDialogueData);
             }
         }
-
     }
 }

@@ -8,7 +8,6 @@ using DG.Tweening;
 using Explore_System.System.Child.Battle_System.Object.Card_Slot;
 using Explore_System.System.Child.Battle_System.Object.Card;
 using Explore_System.System.Child.Battle_System.Object.Card.Battle;
-using Explore_System.System.Child.Battle_System.System.Child.Selected_Card_System.System;
 using UnityEngine;
 
 namespace Explore_System.System.Child.Battle_System.System.Child
@@ -160,14 +159,13 @@ namespace Explore_System.System.Child.Battle_System.System.Child
                         
                         if (card is not BattleCard battleCard)
                         {
-                            Debug.Log($"{card.name} 不是 {nameof(BattleCard)}，將自動跳過。");
-                        
                             slot.Set(card);
                             continue;
                         }
                         
                         if (battleCard.BattleCardData.BattleCardType != targetType)
                         {
+                            slot.Set(card);
                             continue;
                         }
                         

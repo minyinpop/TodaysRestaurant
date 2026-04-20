@@ -13,7 +13,6 @@ using Common.Value;
 using Common.Value.Type;
 using Explore_System.System.Child.Battle_System.Object;
 using Explore_System.System.Child.Battle_System.System.Child;
-using Explore_System.System.Child.Battle_System.System.Child.Selected_Card_System.System;
 using Explore_System.System.Child.Battle_System.System.Main.State_Machine;
 using Explore_System.System.Child.Battle_System.System.Main.State_Machine.State;
 using UI_System.Message_UI_System.Main;
@@ -173,11 +172,11 @@ namespace Explore_System.System.Child.Battle_System.System.Main
                     throw new ArgumentException($"{nameof(starterData)} 不是 {nameof(EnemyBattleGroupSO)}。");
                 }
             #endregion
-
+            
             #region 參數附值
                 _enemyBattleGroupData = enemyBattleGroupData;
             #endregion
-
+            
             #region 生成敵人
                 foreach (var enemyObject in _enemyBattleGroupData.EnemyObjects)
                 {
@@ -208,10 +207,6 @@ namespace Explore_System.System.Child.Battle_System.System.Main
                     break;
                 }
             #endregion
-
-            #region 返回系統準備完畢
-                onComplete.Invoke();
-            #endregion
         }
         
         public override void InvokeOnSceneChangeComplete()
@@ -224,7 +219,7 @@ namespace Explore_System.System.Child.Battle_System.System.Main
                 OnBattleStart();
             #endregion
         }
-        
+
         private void DrawAndShowCard(int drawNumber, Action onComplete)
         {
             _drawCardAndShowCardCoroutine = DrawAndShowCardCoroutine();
@@ -265,10 +260,12 @@ namespace Explore_System.System.Child.Battle_System.System.Main
             IEnumerator RecycleCardCoroutine()
             {
                 var completes = new List<bool>();
+                
                 for (var i = 0; i < cardTypes.Length; i++)
                 {
                     var index = i;
                     var type = cardTypes[index];
+                    
                     completes.Add(false);
                     
                     var CardPoolRecycleComplete = false;
@@ -278,36 +275,48 @@ namespace Explore_System.System.Child.Battle_System.System.Main
                     cardPoolSystem.RecycleCard(type, 
                         onComplete:() =>
                         {
+                            Debug.Log("卡池卡片回收完畢。");
                             CardPoolRecycleComplete = true;
                         });
                     
                     handCardSystem.RecycleCard(type,
                         onComplete: () =>
                         {
+                            Debug.Log("手牌卡片回收完畢。");
                             HandCardRecycleComplete = true;
                         });
                     
                     useCardSystem.RecycleCard(type,
                         onComplete: () =>
                         {
+                            Debug.Log("使用卡片回收完畢。");
                             UseCardRecycleComplete = true;
                         });
                     
                     yield return new WaitUntil(() => CardPoolRecycleComplete && HandCardRecycleComplete && UseCardRecycleComplete);
+                    
                     completes[index] = true;
                 }
                 
+                Debug.Log("等待目標卡片被回收中。");
+                
                 yield return new WaitUntil(() => completes.All(c => c));
+                
+                Debug.Log("卡片回收完畢。");
+                
                 var CardPoolRefillComplete = false;
                 
                 cardPoolSystem.Refill(
                     onComplete: () =>
                     {
+                        Debug.Log("卡池卡片填充完畢。");
                         CardPoolRefillComplete = true;
                     });
                 
                 yield return new WaitUntil(() => CardPoolRefillComplete);
-                onComplete?.Invoke();
+                
+                Debug.Log("卡片回收邏輯完成。");
+                onComplete.Invoke();
             }
         }
 
