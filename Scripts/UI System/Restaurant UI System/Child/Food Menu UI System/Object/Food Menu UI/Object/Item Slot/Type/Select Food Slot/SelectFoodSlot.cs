@@ -35,20 +35,26 @@ namespace UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_M
         protected override void OnPointerEnter()
         {
             if (SlotState != ItemSlotState.HaveItem) return;
+            if (!Interactable) return;
+            
             DoAnimation.DoScale_UI(BackgroundRect, ScaleUpSettings);
         }
 
         protected override void OnPointerExit()
         {
             if (SlotState != ItemSlotState.HaveItem) return;
+            if (!Interactable) return;
+            
             DoAnimation.DoScale_UI(BackgroundRect, ScaleDownSettings);
         }
 
         protected override void OnPointerClick()
         {
             if (SlotState != ItemSlotState.HaveItem) return;
+            if (!Interactable) return;
+            
             DoAnimation.DoScale_UI(BackgroundRect, ScaleDownSettings);
-            OnClicked(ItemData);
+            InvokeOnClick(ItemData);
         }
 
         #region Item Slot State

@@ -7,7 +7,7 @@ namespace UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_M
 {
     internal sealed class FoodMenu : MonoBehaviour
     {
-        [field: Header("Child System")]
+        [field: Header("子系統")]
         [field: SerializeField] private OpenState openState;
         [field: SerializeField] private CloseState closeState;
 

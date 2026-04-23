@@ -55,8 +55,7 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Child
             playerUnlockFoodData.GetUnlockFoods(out var unlockedDishesData);
             foreach (var category in unlockedDishesData)
             {
-                category.GetValues(out _, out var dishesData);
-                foreach (var dishData in dishesData)
+                foreach (var dishData in category.FoodsData)
                 {
                     dishData.GetItemType(out _, out var cookType, out _);
                     if (cookType != cookwareType) continue;

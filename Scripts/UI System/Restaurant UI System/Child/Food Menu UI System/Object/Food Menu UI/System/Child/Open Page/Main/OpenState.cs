@@ -25,7 +25,9 @@ namespace UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_M
         
         [field: Header("Child System")]
         [field: SerializeField] private UnlockFoodPage unlockFoodPage;
+                                public UnlockFoodPage UnlockFoodPage => unlockFoodPage;
         [field: SerializeField] private SelectFoodPage selectFoodPage;
+                                public SelectFoodPage SelectFoodPage => selectFoodPage;
         
         [field: Header("Button")]
         [field: SerializeField] private Button confirmButton;
@@ -42,6 +44,8 @@ namespace UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_M
         
         private readonly Queue<Action> _foodTypeButtonCleanupActions = new();
         public event Action OnConfirm;
+
+        private readonly Queue<FoodTypeButton> _foodTypeButtons = new();
 
         private void Awake()
         {
@@ -79,44 +83,49 @@ namespace UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_M
         {
             ui.SetActive(true);
             
-            // Unlock Food Page
-            FindCategory(_currentFoodType, out var foodCategory);
-            unlockFoodPage.Spawn(foodCategory);
+            #region Unlock Food Page
+                FindCategory(_currentFoodType, out var foodCategory);
+                unlockFoodPage.Spawn(foodCategory);
+            #endregion
             
-            // Select Dish Page
-            selectFoodPage.Spawn();
+            #region Select Dish Page
+                selectFoodPage.Spawn();
+            #endregion
             
-            // Food Type Button
-            playerUnlockFoodData.GetUnlockFoods(out var dishCategory);
-            foreach (var category in dishCategory)
-            {
-                category.GetValues(out var foodTypeData, out _);
-                var button = Instantiate(foodTypeButtonPrefab, foodTypeButtonParent);
-                var button_FoodTypeButton = button.GetComponent<FoodTypeButton>();
-                button_FoodTypeButton.Init(foodTypeData);
+            #region Food Type Button
+                playerUnlockFoodData.GetUnlockFoods(out var dishCategory);
                 
-                button_FoodTypeButton.OnClick += OnClicked;
-                button_FoodTypeButton.SetInteractable(true);
-                _foodTypeButtonCleanupActions.Enqueue(() =>
+                foreach (var category in dishCategory)
                 {
-                    button_FoodTypeButton.SetInteractable(false);
-                    button_FoodTypeButton.OnClick -= OnClicked;
-                });
-                continue;
-
-                void OnClicked(FoodType foodType)
-                {
-                    _currentFoodType = foodType;
-                    FindCategory(_currentFoodType, out var newFoodCategory);
+                    var button = Instantiate(foodTypeButtonPrefab, foodTypeButtonParent).GetComponent<FoodTypeButton>();
+                    _foodTypeButtons.Enqueue(button);
                     
-                    // Unlock Food Page
-                    unlockFoodPage.Clear();
-                    unlockFoodPage.Spawn(newFoodCategory);
+                    button.Init(category.FoodTypeData);
+                    
+                    button.OnClick += OnClicked;
+                    button.SetInteractable(true);
+                    
+                    _foodTypeButtonCleanupActions.Enqueue(() =>
+                    {
+                        button.SetInteractable(false);
+                        button.OnClick -= OnClicked;
+                    });
+                    continue;
 
-                    selectFoodPageData.GetAllItemData(out var itemsData);
-                    foreach (var itemData in itemsData.Where(itemData => itemData is not null)) { unlockFoodPage.CheckItemDataHasBeenSelect(itemData); }
+                    void OnClicked(FoodType foodType)
+                    {
+                        _currentFoodType = foodType;
+                        FindCategory(_currentFoodType, out var newFoodCategory);
+                        
+                        // Unlock Food Page
+                        unlockFoodPage.Clear();
+                        unlockFoodPage.Spawn(newFoodCategory);
+
+                        selectFoodPageData.GetAllItemData(out var itemsData);
+                        foreach (var itemData in itemsData.Where(itemData => itemData is not null)) { unlockFoodPage.CheckItemDataHasBeenSelect(itemData); }
+                    }
                 }
-            }
+            #endregion
         }
 
         private void OnClickConfirmButton()
@@ -194,16 +203,27 @@ namespace UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_M
             private void FindCategory(FoodType targetFoodType, out FoodCategorySO targetFoodCategory)
             {
                 playerUnlockFoodData.GetUnlockFoods(out var foodCategory);
+                
                 foreach (var category in foodCategory)
                 {
-                    category.GetValues(out var foodTypeData, out _);
-                    foodTypeData.GetValues(out var foodType, out _, out _);
-                    if (foodType != targetFoodType) continue;
+                    if (category.FoodTypeData.FoodType != targetFoodType)
+                    {
+                        continue;
+                    }
+                    
                     targetFoodCategory = category;
                     return;
                 }
                 
                 targetFoodCategory = null;
+            }
+
+            public void SetInteractable(bool interactable)
+            {
+                foreach (var button in _foodTypeButtons)
+                {
+                    button.SetInteractable(interactable);
+                }
             }
         #endregion
     }

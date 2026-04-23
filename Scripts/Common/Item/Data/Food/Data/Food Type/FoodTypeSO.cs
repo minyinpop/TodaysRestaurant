@@ -1,5 +1,6 @@
 using Common.Value.Type;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Common.Item.Data.Food.Data.Food_Type
 {
@@ -7,15 +8,11 @@ namespace Common.Item.Data.Food.Data.Food_Type
     internal sealed class FoodTypeSO : ScriptableObject
     {
         [field: Header("Information")]
-        [field: SerializeField] private FoodType FoodType;
-        [field: SerializeField] private string TypeName;
-        [field: SerializeField] private Color TypeColor;
-        
-        public void GetValues(out FoodType foodType, out string typeName, out Color typeColor)
-        {
-            foodType = FoodType;
-            typeName = TypeName;
-            typeColor = TypeColor;
-        }
+        [field: SerializeField, FormerlySerializedAs("FoodType")] private FoodType foodType;
+                                                                          public FoodType FoodType => foodType;
+        [field: SerializeField, FormerlySerializedAs("TypeName")] private string typeName;
+                                                                          public string TypeName => typeName;
+        [field: SerializeField, FormerlySerializedAs("TypeColor")] private Color typeColor;
+                                                                           public Color TypeColor => typeColor;
     }
 }

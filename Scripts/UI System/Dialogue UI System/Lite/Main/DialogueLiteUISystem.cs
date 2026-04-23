@@ -4,6 +4,7 @@ using Common.Button;
 using Common.Dialogue.Data;
 using Common.Dialogue.SO.Child.Text.Show_Lite_Text;
 using Common.Dialogue.SO.Main;
+using Input_System;
 using UI_System.Dialogue_UI_System.Lite.Child;
 using UnityEngine;
 
@@ -70,7 +71,11 @@ namespace UI_System.Dialogue_UI_System.Lite.Main
             
             _dialogueData = dialogueData;
             
-            _dialogueCoroutine = DialogueCoroutine(onComplete);
+            _dialogueCoroutine = DialogueCoroutine(
+                onComplete: () =>
+                {
+                    onComplete.Invoke();
+                });
             StartCoroutine(_dialogueCoroutine);
         }
 
@@ -114,6 +119,8 @@ namespace UI_System.Dialogue_UI_System.Lite.Main
                                         _continueDialogue = true;
                                     }
                                     
+                                    continueButton.gameObject.SetActive(true);
+                                    
                                     continueButton.SetInteractable(true);
                                 });
                             
@@ -124,6 +131,8 @@ namespace UI_System.Dialogue_UI_System.Lite.Main
                             textSystem.HideText(onComplete: () =>
                             {
                                 _continueDialogue = true;
+                                
+                                continueButton.gameObject.SetActive(false);
                             });
                             
                             break;

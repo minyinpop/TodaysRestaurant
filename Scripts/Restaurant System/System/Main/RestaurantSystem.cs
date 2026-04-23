@@ -13,11 +13,11 @@ namespace Restaurant_System.System.Main
 {
     internal sealed class RestaurantSystem : SceneStarter
     {
-        [field: Header("系統")]
-        [field: SerializeField] private CustomerManagerSystem customerManagerSystem;
-        
         [field: Header("狀態")]
         [field: SerializeField] private bool autoStart;
+        
+        [field: Header("系統")]
+        [field: SerializeField] private CustomerManagerSystem customerManagerSystem;
         
         private IEnumerator _roundStartCoroutine;
         

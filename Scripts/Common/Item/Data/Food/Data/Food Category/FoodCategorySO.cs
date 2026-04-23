@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Common.Item.Data.Food.Data.Food_Type;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Common.Item.Data.Food.Data.Food_Category
 {
@@ -8,15 +9,11 @@ namespace Common.Item.Data.Food.Data.Food_Category
     internal sealed class FoodCategorySO : ScriptableObject
     {
         [field: Header("Food Type")]
-        [field: SerializeField] private FoodTypeSO FoodTypeData;
+        [field: SerializeField, FormerlySerializedAs("FoodTypeData")] private FoodTypeSO foodTypeData;
+                                                                              public FoodTypeSO FoodTypeData => foodTypeData;
         
         [field: Header("Food Data")]
-        [field: SerializeField] private List<FoodSO> FoodsData;
-        
-        public void GetValues(out FoodTypeSO foodTypeData, out List<FoodSO> foodsData)
-        {
-            foodTypeData = FoodTypeData;
-            foodsData = FoodsData;
-        }
+        [field: SerializeField, FormerlySerializedAs("FoodsData")] private List<FoodSO> foodsData;
+                                                                           public IReadOnlyList<FoodSO> FoodsData => foodsData;
     }
 }

@@ -10,18 +10,24 @@ namespace UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_M
 {
     internal sealed class SelectFoodPage : MonoBehaviour
     {
+        [field: Header("頁面狀態")]
+        [field: SerializeField] private bool interactable;
+        
         [field: Header("Select Food Slot")]
         [field: SerializeField] private Transform SelectFoodSlotParent;
         [field: SerializeField] private GameObject SelectFoodSlotPrefab;
-        private readonly List<ItemSlot> SelectFoodSlots = new();
-        private readonly List<Action> SelectFoodSlot_Actions = new();
         
         [field: Header("Select Food Type Data")]
         [field: SerializeField] private SelectFoodPageSO SelectFoodPageData;
-
+        
+        private readonly List<ItemSlot> _selectFoodSlots = new();
+        public IReadOnlyList<ItemSlot> SelectFoodSlots => _selectFoodSlots;
+        
+        private readonly List<Action> SelectFoodSlot_Actions = new();
+        
         // Develop Only
-        private const int TotalSlotCount = 12;
-        private const int UnlockSlotCount = 3;
+        private const int TotalSlotCount = 16;
+        private const int UnlockSlotCount = 2;
         
         public event Action<ItemSlot, ItemSO> OnClicked;
 
@@ -42,7 +48,10 @@ namespace UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_M
             {
                 var slot = Instantiate(SelectFoodSlotPrefab, SelectFoodSlotParent);
                 var slot_ItemSlot = slot.GetComponent<ItemSlot>();
-                SelectFoodSlots.Add(slot_ItemSlot);
+                
+                slot_ItemSlot.Interactable = interactable;
+                
+                _selectFoodSlots.Add(slot_ItemSlot);
                 
                 slot_ItemSlot.OnClick += OnClicked;
                 SelectFoodSlot_Actions.Add(() => slot_ItemSlot.OnClick -= OnClicked);
@@ -55,7 +64,7 @@ namespace UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_M
         {
             for (var i = 0; i < TotalSlotCount; i++)
             {
-                var slot = SelectFoodSlots[i];
+                var slot = _selectFoodSlots[i];
                 slot.Add(targetItemData, out isSuccess);
                 if (!isSuccess) continue;
                 SelectFoodPageData.AddItemData(i, targetItemData);
@@ -67,7 +76,7 @@ namespace UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_M
 
         public void Remove(ItemSO targetItemData)
         {
-            foreach (var slot in SelectFoodSlots)
+            foreach (var slot in _selectFoodSlots)
             {
                 slot.Get(out var itemData);
                 if (itemData is null) continue;
@@ -91,7 +100,7 @@ namespace UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_M
             type = SelectFoodSlotType.UnSelect;
             for (var i = 0; i < TotalSlotCount; i++)
             {
-                var slot = SelectFoodSlots[i];
+                var slot = _selectFoodSlots[i];
                 if (i >= UnlockSlotCount) continue;
                 slot.Get(out var itemData);
                 if (itemData is null)
@@ -104,6 +113,16 @@ namespace UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_M
             }
 
             if (isAllSelect) type = SelectFoodSlotType.Full;
+        }
+
+        public void SetInteractable(bool interactable)
+        {
+            this.interactable = interactable;
+            
+            foreach (var slot in _selectFoodSlots)
+            {
+                slot.Interactable = this.interactable;
+            }
         }
     }
 }

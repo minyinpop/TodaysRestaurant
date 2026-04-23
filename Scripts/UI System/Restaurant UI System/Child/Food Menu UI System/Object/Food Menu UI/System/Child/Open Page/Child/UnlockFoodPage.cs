@@ -9,32 +9,43 @@ namespace UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_M
 {
     internal sealed class UnlockFoodPage : MonoBehaviour
     {
+        [field: Header("頁面狀態")]
+        [field: SerializeField] private bool interactable;
+        
         [field: Header("Unlock Dish Slot")]
         [field: SerializeField] private Transform UnlockFoodSlotParent;
         [field: SerializeField] private GameObject UnlockFoodSlotPrefab;
-        private readonly List<ItemSlot> UnlockFoodSlots = new();
-        private readonly List<Action> UnlockFoodSlot_Actions = new();
+        
+        private readonly List<ItemSlot> _unlockFoodSlots = new();
+        public IReadOnlyList<ItemSlot> UnlockFoodSlots => _unlockFoodSlots;
+        
+        private readonly List<Action> _unlockFoodSlot_Actions = new();
 
         public event Action<ItemSlot, ItemSO> OnClicked;
         
         private void OnDisable()
         {
-            foreach (var action in UnlockFoodSlot_Actions) action?.Invoke();
-            UnlockFoodSlot_Actions.Clear();
+            foreach (var action in _unlockFoodSlot_Actions) action?.Invoke();
+            _unlockFoodSlot_Actions.Clear();
         }
 
         public void Spawn(FoodCategorySO foodCategory)
         {
-            foodCategory.GetValues(out _, out var dishesData);
-            foreach (var dishData in dishesData)
+            foreach (var dishData in foodCategory.FoodsData)
             {
                 var slot = Instantiate(UnlockFoodSlotPrefab, UnlockFoodSlotParent);
                 var slot_ItemSlot = slot.GetComponent<ItemSlot>();
-                UnlockFoodSlots.Add(slot_ItemSlot);
+                
+                slot_ItemSlot.Interactable = interactable;
+                
+                _unlockFoodSlots.Add(slot_ItemSlot);
                 slot_ItemSlot.Add(dishData);
                 
                 slot_ItemSlot.OnClick += OnClicked;
-                UnlockFoodSlot_Actions.Add(() => slot_ItemSlot.OnClick -= OnClicked);
+                _unlockFoodSlot_Actions.Add(() =>
+                {
+                    slot_ItemSlot.OnClick -= OnClicked;
+                });
                 
                 slot_ItemSlot.SetSlotState(ItemSlotState.UnSelect);
             }
@@ -42,10 +53,10 @@ namespace UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_M
 
         public void Clear()
         {
-            foreach (var action in UnlockFoodSlot_Actions) action?.Invoke();
-            UnlockFoodSlot_Actions.Clear();
-            foreach (var slot in UnlockFoodSlots) Destroy(slot.gameObject);
-            UnlockFoodSlots.Clear();
+            foreach (var action in _unlockFoodSlot_Actions) action?.Invoke();
+            _unlockFoodSlot_Actions.Clear();
+            foreach (var slot in _unlockFoodSlots) Destroy(slot.gameObject);
+            _unlockFoodSlots.Clear();
         }
         
         public void ChangeSelectState(ItemSlot itemSlot)
@@ -56,7 +67,7 @@ namespace UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_M
 
         public void CheckItemDataHasBeenSelect(ItemSO targetItemData)
         {
-            foreach (var slot in UnlockFoodSlots)
+            foreach (var slot in _unlockFoodSlots)
             {
                 slot.Get(out var itemData);
                 if (targetItemData != itemData) continue;
@@ -68,13 +79,23 @@ namespace UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_M
 
         public void CancelSelect(ItemSO targetItemData)
         {
-            foreach (var slot in UnlockFoodSlots)
+            foreach (var slot in _unlockFoodSlots)
             {
                 slot.Get(out var itemData); 
                 if (targetItemData != itemData) continue;
                 slot.ChangeSelectState();
                 slot.SetAlpha();
                 return;
+            }
+        }
+
+        public void SetInteractable(bool interactable)
+        {
+            this.interactable = interactable;
+            
+            foreach (var slot in _unlockFoodSlots)
+            {
+                slot.Interactable = this.interactable;
             }
         }
     }

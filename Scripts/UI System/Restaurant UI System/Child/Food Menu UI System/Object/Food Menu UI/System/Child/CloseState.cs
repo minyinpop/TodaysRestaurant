@@ -6,7 +6,7 @@ namespace UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_M
 {
     internal sealed class CloseState : MonoBehaviour
     {
-        [field: Header("Components")]
+        [field: Header("組件")]
         [field: SerializeField] private GameObject ui;
         [field: SerializeField] private Button openButton;
         

@@ -33,11 +33,14 @@ namespace UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_M
         
         public void Init(FoodTypeSO foodTypeData)
         {
-            if (FoodType != FoodType.Null) return;
-            foodTypeData.GetValues(out var foodType, out var typeName, out var typeColor);
-            FoodType = foodType;
-            Background.color = typeColor;
-            TitleTMP.text = typeName;
+            if (FoodType != FoodType.Null)
+            {
+                return;
+            }
+            
+            FoodType = foodTypeData.FoodType;
+            Background.color = foodTypeData.TypeColor;
+            TitleTMP.text = foodTypeData.TypeName;
         }
 
         public void SetInteractable(bool interactable)

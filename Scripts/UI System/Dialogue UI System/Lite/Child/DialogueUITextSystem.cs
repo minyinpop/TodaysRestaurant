@@ -63,21 +63,18 @@ namespace UI_System.Dialogue_UI_System.Lite.Child
 
         public void ShowText(ShowText dialogueData, Action onComplete)
         {
-            if (dialoguePanel.activeSelf)
-            {
-                animation.DoScale_UI(
-                    rect: dialoguePanel.GetComponent<RectTransform>(),
-                    settings: scaleUpSettings,
-                    onComplete: () =>
-                    {
-                        ShowTextProcess();
-                    });
-            }
-            else
-            {
-                ShowTextProcess();
-            }
-
+            #region 開啟對話框
+                dialoguePanel.SetActive(true);
+            #endregion
+            
+            animation.DoScale_UI(
+                rect: dialoguePanel.GetComponent<RectTransform>(),
+                settings: scaleUpSettings,
+                onComplete: () =>
+                {
+                    ShowTextProcess();
+                });
+            
             return;
 
             void ShowTextProcess()
@@ -87,10 +84,6 @@ namespace UI_System.Dialogue_UI_System.Lite.Child
                     dialogueText.text = string.Empty;
                     
                     continueIndicator.gameObject.SetActive(false);
-                #endregion
-                
-                #region 開啟對話框
-                    dialoguePanel.SetActive(true);
                 #endregion
                 
                 #region 設定角色名稱
@@ -149,6 +142,18 @@ namespace UI_System.Dialogue_UI_System.Lite.Child
 
         public void HideText(Action onComplete)
         {
+            #region 清除角色的名稱
+                nameText.text = string.Empty;
+            #endregion
+    
+            #region 清除說的內容
+                dialogueText.text = string.Empty;
+            #endregion
+    
+            #region 關閉繼續指示
+                continueIndicator.gameObject.SetActive(false);
+            #endregion
+            
             animation.DoScale_UI(
                 rect: dialoguePanel.GetComponent<RectTransform>(),
                 settings: scaleDownSettings,
@@ -156,18 +161,6 @@ namespace UI_System.Dialogue_UI_System.Lite.Child
                 {
                     #region 關閉對話框
                         dialoguePanel.SetActive(false);
-                    #endregion
-            
-                    #region 清除角色的名稱
-                        nameText.text = string.Empty;
-                    #endregion
-            
-                    #region 清除說的內容
-                        dialogueText.text = string.Empty;
-                    #endregion
-            
-                    #region 關閉繼續指示
-                        continueIndicator.gameObject.SetActive(false);
                     #endregion
                     
                     onComplete.Invoke();

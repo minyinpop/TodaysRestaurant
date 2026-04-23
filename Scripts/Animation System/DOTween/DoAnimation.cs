@@ -25,6 +25,8 @@ namespace Animation_System.DOTween
             DoColor_Image_Tween?.Kill();
             
             DoText_Tween?.Kill();
+            
+            DoFillAmount_Tween?.Kill();
         }
 
         #region Move
@@ -244,6 +246,29 @@ namespace Animation_System.DOTween
                     .OnKill(() =>
                     {
                         DoText_Tween = null;
+                    });
+            }
+        #endregion
+        
+        #region Image
+            private Tween DoFillAmount_Tween;
+
+            public void DoFillAmount(Image image, DoFillAmount settings, Action onComplete = null)
+            {
+                DoFillAmount_Tween?.Kill();
+                DoFillAmount_Tween = image
+                    .DOFillAmount(
+                        endValue: settings.EndValue,
+                        duration: settings.Duration)
+                    .SetEase(
+                        ease: settings.Ease)
+                    .OnComplete(() =>
+                    {
+                        onComplete?.Invoke();
+                    })
+                    .OnKill(() =>
+                    {
+                        DoFillAmount_Tween = null;
                     });
             }
         #endregion

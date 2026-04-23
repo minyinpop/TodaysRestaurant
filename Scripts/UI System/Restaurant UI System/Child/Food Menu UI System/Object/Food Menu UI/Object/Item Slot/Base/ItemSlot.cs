@@ -1,14 +1,20 @@
 using System;
-using Common;
 using Common.Item.Data;
 using Common.Pointer_Event;
+using UnityEngine;
 
 namespace UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_Menu_UI.Object.Item_Slot.Base
 {
     public abstract class ItemSlot : PointerEvent
     {
+        [field: Header("格子狀態")]
+        public bool Interactable;
+        
         public event Action<ItemSlot, ItemSO> OnClick;
-        protected void OnClicked(ItemSO itemData) { OnClick?.Invoke(this, itemData); }
+        protected void InvokeOnClick(ItemSO itemData)
+        {
+            OnClick?.Invoke(this, itemData);
+        }
 
         protected override void OnPointerEnter() { }
         protected override void OnPointerExit() { }
