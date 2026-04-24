@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using Common.Scene_Starter;
 using Input_System;
+using Restaurant_System.Object.Cookware.System;
 using Restaurant_System.System.Child;
 using Restaurant_System.System.Main.State_Machine;
 using Restaurant_System.System.Main.State_Machine.State;
@@ -18,6 +19,9 @@ namespace Restaurant_System.System.Main
         
         [field: Header("系統")]
         [field: SerializeField] private CustomerManagerSystem customerManagerSystem;
+        
+        [field: Header("廚具")]
+        [field: SerializeField] private CookwareSystem[] cookwares;
         
         private IEnumerator _roundStartCoroutine;
         
@@ -52,6 +56,11 @@ namespace Restaurant_System.System.Main
                 onEnter: () =>
                 {
                     customerManagerSystem.StartSystem();
+                    
+                    foreach (var cookware in cookwares)
+                    {
+                        cookware.StartSystem();
+                    }
                 },
                 onExit: () =>
                 {

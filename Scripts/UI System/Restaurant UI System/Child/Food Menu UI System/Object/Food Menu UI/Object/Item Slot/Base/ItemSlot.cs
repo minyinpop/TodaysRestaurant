@@ -1,14 +1,12 @@
 using System;
 using Common.Item.Data;
 using Common.Pointer_Event;
-using UnityEngine;
 
 namespace UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_Menu_UI.Object.Item_Slot.Base
 {
     public abstract class ItemSlot : PointerEvent
     {
-        [field: Header("格子狀態")]
-        public bool Interactable;
+        protected bool Interactable;
         
         public event Action<ItemSlot, ItemSO> OnClick;
         protected void InvokeOnClick(ItemSO itemData)
@@ -33,5 +31,7 @@ namespace UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_M
         public virtual void SetAlpha() { }
 
         public virtual void Reset() { }
+
+        public abstract void SetInteractable(bool interactable);
     }
 }

@@ -27,7 +27,7 @@ namespace UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_M
         
         // Develop Only
         private const int TotalSlotCount = 16;
-        private const int UnlockSlotCount = 2;
+        private const int UnlockSlotCount = 1;
         
         public event Action<ItemSlot, ItemSO> OnClicked;
 
@@ -48,8 +48,8 @@ namespace UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_M
             {
                 var slot = Instantiate(SelectFoodSlotPrefab, SelectFoodSlotParent);
                 var slot_ItemSlot = slot.GetComponent<ItemSlot>();
-                
-                slot_ItemSlot.Interactable = interactable;
+
+                slot_ItemSlot.SetInteractable(interactable);
                 
                 _selectFoodSlots.Add(slot_ItemSlot);
                 
@@ -121,7 +121,7 @@ namespace UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_M
             
             foreach (var slot in _selectFoodSlots)
             {
-                slot.Interactable = this.interactable;
+                slot.SetInteractable(this.interactable);
             }
         }
     }

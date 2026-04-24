@@ -28,11 +28,12 @@ namespace UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_M
 
         private ItemSO ItemData;
 
-        private ItemSlotState SlotState = ItemSlotState.Lock;
+        private ItemSlotState _slotState = ItemSlotState.Lock;
+        public ItemSlotState SlotState => _slotState;
         
         protected override void OnPointerEnter()
         {
-            if (SlotState == ItemSlotState.Lock) return;
+            if (_slotState == ItemSlotState.Lock) return;
             if (!Interactable) return;
             
             DoAnimation.DoScale_UI(BackgroundRect, ScaleUpSettings);
@@ -40,7 +41,7 @@ namespace UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_M
 
         protected override void OnPointerExit()
         {
-            if (SlotState == ItemSlotState.Lock) return;
+            if (_slotState == ItemSlotState.Lock) return;
             if (!Interactable) return;
             
             DoAnimation.DoScale_UI(BackgroundRect, ScaleDownSettings);
@@ -48,7 +49,7 @@ namespace UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_M
 
         protected override void OnPointerClick()
         {
-            if (SlotState == ItemSlotState.Lock) return;
+            if (_slotState == ItemSlotState.Lock) return;
             if (!Interactable) return;
             
             InvokeOnClick(ItemData);
@@ -56,21 +57,21 @@ namespace UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_M
 
         public override void SetSlotState(ItemSlotState slotState)
         {
-            SlotState = slotState;
+            _slotState = slotState;
         }
         
         public override void GetSlotState(out ItemSlotState slotState)
         {
-            slotState = SlotState;
+            slotState = _slotState;
         }
 
         public override void ChangeSelectState()
         {
-            SlotState = SlotState switch
+            _slotState = _slotState switch
             {
                 ItemSlotState.Select => ItemSlotState.UnSelect,
                 ItemSlotState.UnSelect => ItemSlotState.Select,
-                _ => SlotState
+                _ => _slotState
             };
         }
         
@@ -91,13 +92,19 @@ namespace UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_M
         {
             foreach (var image in AllImage)
             {
-                image.color = SlotState switch
+                image.color = _slotState switch
                 {
                     ItemSlotState.Select => new Color(image.color.r, image.color.g, image.color.b, OnSelectAlpha),
                     ItemSlotState.UnSelect => new Color(image.color.r, image.color.g, image.color.b, UnSelectAlpha),
                     _ => image.color
                 };
             }
+        }
+
+        public override void SetInteractable(bool interactable)
+        {
+            Interactable = interactable;
+            DoAnimation.DoScale_UI(BackgroundRect, ScaleDownSettings);
         }
     }
 }

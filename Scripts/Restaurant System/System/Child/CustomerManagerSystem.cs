@@ -19,9 +19,9 @@ namespace Restaurant_System.System.Child
         [field: Header("Points")]
         [field: SerializeField] private SeatPoint[] SeatPoints;
         
-        private int CurrentCustomerAmount;
+        private int _currentCustomerAmount;
         
-        private IEnumerator MainCor;
+        private IEnumerator _mainCoroutine;
         
         private readonly Dictionary<Customer, SeatPoint> _customers = new();
         private readonly Queue<Action> _cleanUpActions = new();
@@ -45,12 +45,15 @@ namespace Restaurant_System.System.Child
 
             private void EndSystem()
             {
-                while (_cleanUpActions.Count > 0) _cleanUpActions.Dequeue()?.Invoke();
-                
-                if (MainCor is not null)
+                while (_cleanUpActions.Count > 0)
                 {
-                    StopCoroutine(MainCor);
-                    MainCor = null;
+                    _cleanUpActions.Dequeue()?.Invoke();
+                }
+                
+                if (_mainCoroutine is not null)
+                {
+                    StopCoroutine(_mainCoroutine);
+                    _mainCoroutine = null;
                 }
             }
         #endregion
@@ -58,19 +61,19 @@ namespace Restaurant_System.System.Child
         #region Customer
             private void SpawnCustomer()
             {
-                MainCor = SpawnCustomerProcess();
-                StartCoroutine(MainCor);
+                _mainCoroutine = SpawnCustomerProcess();
+                StartCoroutine(_mainCoroutine);
             }
 
             private IEnumerator SpawnCustomerProcess()
             {
-                while (CurrentCustomerAmount < CustomerAmountPerRound)
+                while (_currentCustomerAmount < CustomerAmountPerRound)
                 {
                     foreach (var seatPoint in SeatPoints)
                     {
                         if (seatPoint.IsOccupied()) continue;
                         
-                        CurrentCustomerAmount++;
+                        _currentCustomerAmount++;
                         var newCustomer = Instantiate(CustomerPrefab, CustomerSpawnPoint.position, Quaternion.identity, CustomerParent).GetComponent<Customer>();
                         
                         _customers.Add(newCustomer, seatPoint);
