@@ -36,7 +36,7 @@ namespace UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_M
                 var slot = Instantiate(UnlockFoodSlotPrefab, UnlockFoodSlotParent);
                 var slot_ItemSlot = slot.GetComponent<ItemSlot>();
                 
-                slot_ItemSlot.Interactable = interactable;
+                slot_ItemSlot.SetInteractable(interactable);
                 
                 _unlockFoodSlots.Add(slot_ItemSlot);
                 slot_ItemSlot.Add(dishData);
@@ -95,7 +95,7 @@ namespace UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_M
             
             foreach (var slot in _unlockFoodSlots)
             {
-                slot.Interactable = this.interactable;
+                slot.SetInteractable(this.interactable);
             }
         }
     }

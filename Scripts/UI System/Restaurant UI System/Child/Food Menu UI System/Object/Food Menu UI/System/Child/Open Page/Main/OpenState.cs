@@ -20,6 +20,9 @@ namespace UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_M
 {
     internal sealed class OpenState : MonoBehaviour
     {
+        [field: Header("狀態")]
+        [field: SerializeField] private bool interactable;
+        
         [field: Header("UI")]
         [field: SerializeField] private GameObject ui;
         
@@ -31,6 +34,7 @@ namespace UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_M
         
         [field: Header("Button")]
         [field: SerializeField] private Button confirmButton;
+                                public Button ConfirmButton => confirmButton;
         
         [field: Header("Food Type Button")]
         [field: SerializeField] private Transform foodTypeButtonParent;
@@ -45,7 +49,8 @@ namespace UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_M
         private readonly Queue<Action> _foodTypeButtonCleanupActions = new();
         public event Action OnConfirm;
 
-        private readonly Queue<FoodTypeButton> _foodTypeButtons = new();
+        private readonly List<FoodTypeButton> _foodTypeButtons = new();
+        public IReadOnlyList<FoodTypeButton> FoodTypeButtons => _foodTypeButtons;
 
         private void Awake()
         {
@@ -59,7 +64,7 @@ namespace UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_M
 
         private void OnEnable()
         {
-            confirmButton.SetInteractable(true);
+            confirmButton.SetInteractable(interactable);
         }
 
         private void OnDisable()
@@ -69,7 +74,10 @@ namespace UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_M
 
         private void OnDestroy()
         {
-            while (_foodTypeButtonCleanupActions.Count > 0) _foodTypeButtonCleanupActions.Dequeue()?.Invoke();
+            while (_foodTypeButtonCleanupActions.Count > 0)
+            {
+                _foodTypeButtonCleanupActions.Dequeue()?.Invoke();
+            }
             
             // Book
             confirmButton.OnClick -= OnClickConfirmButton;
@@ -83,31 +91,31 @@ namespace UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_M
         {
             ui.SetActive(true);
             
-            #region Unlock Food Page
+            #region 生成解鎖料理頁面
                 FindCategory(_currentFoodType, out var foodCategory);
                 unlockFoodPage.Spawn(foodCategory);
             #endregion
             
-            #region Select Dish Page
+            #region 生成選擇料理頁面
                 selectFoodPage.Spawn();
             #endregion
             
-            #region Food Type Button
+            #region 生成料理組類按鈕
                 playerUnlockFoodData.GetUnlockFoods(out var dishCategory);
                 
                 foreach (var category in dishCategory)
                 {
                     var button = Instantiate(foodTypeButtonPrefab, foodTypeButtonParent).GetComponent<FoodTypeButton>();
-                    _foodTypeButtons.Enqueue(button);
+                    _foodTypeButtons.Add(button);
                     
                     button.Init(category.FoodTypeData);
                     
                     button.OnClick += OnClicked;
-                    button.SetInteractable(true);
+                    button.SetInteractable(interactable);
                     
                     _foodTypeButtonCleanupActions.Enqueue(() =>
                     {
-                        button.SetInteractable(false);
+                        button.SetInteractable(interactable);
                         button.OnClick -= OnClicked;
                     });
                     continue;
@@ -216,14 +224,6 @@ namespace UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_M
                 }
                 
                 targetFoodCategory = null;
-            }
-
-            public void SetInteractable(bool interactable)
-            {
-                foreach (var button in _foodTypeButtons)
-                {
-                    button.SetInteractable(interactable);
-                }
             }
         #endregion
     }

@@ -166,5 +166,11 @@ namespace UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_M
                 FoodNameTMP.text = string.Empty;
             }
         #endregion
+        
+        public override void SetInteractable(bool interactable)
+        {
+            Interactable = interactable;
+            DoAnimation.DoScale_UI(BackgroundRect, ScaleDownSettings);
+        }
     }
 }

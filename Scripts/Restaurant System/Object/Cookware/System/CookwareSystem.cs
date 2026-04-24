@@ -19,6 +19,9 @@ namespace Restaurant_System.Object.Cookware.System
 {
     internal sealed class CookwareSystem : MonoBehaviour, InteractableObject
     {
+        [field: Header("系統狀態")]
+        [field: SerializeField] private bool autoStart;
+        
         [field: Header("廚具類型")]
         [field: SerializeField, FormerlySerializedAs("CookwareType")] private CookType cookwareType;
         
@@ -40,6 +43,8 @@ namespace Restaurant_System.Object.Cookware.System
         [field: SerializeField] private PlaySFXData openSFXData;
         [field: SerializeField] private PlaySFXData closeSFXData;
         [field: SerializeField] private PlayAMBData cookingAMBData;
+
+        private bool _initialized;
 
         private ClickableBubble _currentBubble;
         private CookGameSystem _currentCookGame;
@@ -140,7 +145,10 @@ namespace Restaurant_System.Object.Cookware.System
 
         private void Start()
         {
-            _stateMachine.InitializeState(_onEmptyState);
+            if (autoStart)
+            {
+                StartSystem();
+            }
         }
 
         private void OnDisable()
@@ -149,6 +157,19 @@ namespace Restaurant_System.Object.Cookware.System
             {
                 _cleanUpActions.Dequeue()?.Invoke();
             }
+        }
+
+        public void StartSystem()
+        {
+            if (_initialized)
+            {
+                Debug.Log($"{name} 已經初始化過了。");
+                return;
+            }
+
+            _initialized = true;
+
+            _stateMachine.InitializeState(_onEmptyState);
         }
 
         #region InteractableObject

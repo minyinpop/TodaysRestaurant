@@ -6,7 +6,9 @@ using Common.Button;
 using Common.Dialogue.SO.Main;
 using Common.Item.Data;
 using Common.Scene_Starter;
+using Common.Value.Type;
 using Input_System;
+using Restaurant_System.Object.Cookware.System;
 using Restaurant_System.System.Main;
 using UI_System.Dialogue_UI_System.Lite.Main;
 using UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_Menu_UI.Object.Item_Slot.Base;
@@ -35,6 +37,15 @@ namespace Tutorial_System
         [field: SerializeField] private TutorialTip tip4;
         [field: SerializeField] private TutorialTip tip5_1;
         [field: SerializeField] private TutorialTip tip5_2;
+        
+        [field: Header("教學 4")]
+        [field: SerializeField] private TutorialTip tip6;
+        [field: SerializeField] private TutorialTip tip7;
+        
+        [field: Header("教學 5")]
+        [field: SerializeField] private TutorialTip tip8;
+        [field: SerializeField] private TutorialTip tip9;
+        [field: SerializeField] private CookwareSystem  stockpotSystem;
         
         private IEnumerator _tutorialCoroutine;
 
@@ -72,10 +83,6 @@ namespace Tutorial_System
 
         private void StartTutorial()
         {
-            foodMenuOpenState.SetInteractable(false);
-            foodMenuOpenState.UnlockFoodPage.SetInteractable(false);
-            foodMenuOpenState.SelectFoodPage.SetInteractable(false);
-            
             Tutorial1(
                 onComplete: () =>
                 {
@@ -85,7 +92,15 @@ namespace Tutorial_System
                             Tutorial3(
                                 onComplete: () =>
                                 {
-                                    Debug.Log("教學內容結束。");
+                                    Tutorial4(
+                                        onComplete: () =>
+                                        {
+                                            Tutorial5(
+                                                onComplete: () =>
+                                                {
+                                                    Debug.Log("教學結束。");
+                                                });
+                                        });
                                 });
                         });
                 });
@@ -117,7 +132,7 @@ namespace Tutorial_System
                         onComplete: () =>
                         {
                             foodMenuOpenState.UnlockFoodPage.UnlockFoodSlots[0].OnClick += OnClickSlot;
-                            Debug.Log("A"); foodMenuOpenState.UnlockFoodPage.SetInteractable(true); Debug.Log("B");
+                            foodMenuOpenState.UnlockFoodPage.SetInteractable(true);
                         });
                 });
             
@@ -126,7 +141,13 @@ namespace Tutorial_System
             void OnClickSlot(ItemSlot slot, ItemSO itemData)
             {
                 foodMenuOpenState.UnlockFoodPage.UnlockFoodSlots[0].OnClick -= OnClickSlot;
-                tip3.HideTip(onComplete);
+                foodMenuOpenState.UnlockFoodPage.SetInteractable(false);
+                
+                tip3.HideTip(
+                    onComplete: () =>
+                    {
+                        onComplete.Invoke();
+                    });
             }
         }
 
@@ -186,9 +207,92 @@ namespace Tutorial_System
                 {
                     foodMenuOpenState.UnlockFoodPage.UnlockFoodSlots[0].OnClick -= OnClickSlot;
                     foodMenuOpenState.SelectFoodPage.SelectFoodSlots[0].OnClick -= OnClickSlot;
+                    foodMenuOpenState.UnlockFoodPage.SetInteractable(false);
+                    foodMenuOpenState.SelectFoodPage.SetInteractable(false);
 
                     complete = true;
                 }
+            }
+        }
+
+        private void Tutorial4(Action onComplete)
+        {
+            tip6.ShowTip(
+                onComplete: () =>
+                {
+                    tip7.ShowTip(
+                        onComplete: () =>
+                        {
+                            foodMenuOpenState.FoodTypeButtons[1].OnClick += OnClickFoodTypeButton;
+                            foodMenuOpenState.FoodTypeButtons[1].SetInteractable(true);
+                        });
+                });
+
+            return;
+
+            void OnClickFoodTypeButton(FoodType  foodType)
+            {
+                foodMenuOpenState.FoodTypeButtons[1].OnClick -= OnClickFoodTypeButton;
+                foodMenuOpenState.FoodTypeButtons[1].SetInteractable(false);
+                
+                tip7.HideTip(
+                    onComplete: () =>
+                    {
+                        onComplete.Invoke();
+                    });
+            }
+        }
+
+        private void Tutorial5(Action onComplete)
+        {
+            tip8.ShowTip(
+                onComplete: () =>
+                {
+                    tip9.ShowTip(
+                        onComplete: () =>
+                        {
+                            foodMenuOpenState.UnlockFoodPage.SetInteractable(true);
+                            foodMenuOpenState.SelectFoodPage.SetInteractable(true);
+
+                            foreach (var foodTypeButton in foodMenuOpenState.FoodTypeButtons)
+                            {
+                                foodTypeButton.SetInteractable(true);
+                            }
+
+                            foodMenuOpenState.ConfirmButton.OnClick += OnClickContinue;
+                            foodMenuOpenState.ConfirmButton.SetInteractable(true);
+                        });
+                });
+
+            return;
+
+            void OnClickContinue()
+            {
+                foodMenuOpenState.SelectFoodPage.SelectFoodSlots[0].GetSlotState(out var slotState);
+                
+                if (slotState is not ItemSlotState.Select)
+                {
+                    return;
+                }
+
+                foodMenuOpenState.UnlockFoodPage.SetInteractable(false);
+                foodMenuOpenState.SelectFoodPage.SetInteractable(false);
+                
+                foreach (var foodTypeButton in foodMenuOpenState.FoodTypeButtons)
+                {
+                    foodTypeButton.SetInteractable(false);
+                }
+
+                foodMenuOpenState.ConfirmButton.OnClick -= OnClickContinue;
+                foodMenuOpenState.ConfirmButton.SetInteractable(false);
+                
+                tip9.HideTip(
+                    onComplete: () =>
+                    {
+                        stockpotSystem.StartSystem();
+                        
+                        onComplete.Invoke();
+                    });
             }
         }
     }
