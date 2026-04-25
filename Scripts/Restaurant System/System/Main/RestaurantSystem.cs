@@ -1,5 +1,7 @@
 using System;
 using System.Collections;
+using Audio_System.Data;
+using Audio_System.Main;
 using Common.Scene_Starter;
 using Input_System;
 using Restaurant_System.Object.Cookware.System;
@@ -22,6 +24,9 @@ namespace Restaurant_System.System.Main
         
         [field: Header("廚具")]
         [field: SerializeField] private CookwareSystem[] cookwares;
+        
+        [field: Header("音樂")]
+        [field: SerializeField] private FadeInBGMData fadeInBGM;
         
         private IEnumerator _roundStartCoroutine;
         
@@ -64,6 +69,13 @@ namespace Restaurant_System.System.Main
                 },
                 onExit: () =>
                 {
+                });
+            
+            AudioSystem.Instance.CommonBGM.FadeInBGM(
+                data:  fadeInBGM,
+                onComplete: () =>
+                {
+                    Debug.Log($"{fadeInBGM.ChangeClip} 播放成功。");
                 });
         }
         

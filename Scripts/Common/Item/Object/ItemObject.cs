@@ -5,18 +5,28 @@ using Common.Item.Data;
 using Input_System;
 using Player_System.Object;
 using UnityEngine;
+using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 namespace Common.Item.Object
 {
     public sealed class ItemObject : MonoBehaviour, InteractableObject
     {
-        [field: Header("物品資料")]
+        [field: Header("資料")]
         [field: SerializeField] private ItemSO itemData;
         
-        [field: Header("特效位置")]
+        [field: Header("模型")]
+        [field: SerializeField] private Transform modelTransform;
+        
+        [field: Header("特效")]
         [field: SerializeField] private Transform VFXParent;
-
+        
+        [field: Header("提示")]
+        [field: SerializeField] private Image tipImage;
+        
         public static event Action OnTake;
+
+        private bool _initialized;
 
         private void Awake()
         {
@@ -31,12 +41,25 @@ namespace Common.Item.Object
             }
         }
 
+        public void Initialize()
+        {
+            if (_initialized)
+            {
+                Debug.Log($"{name} 已經初始化過了！");
+                return;
+            }
+
+            modelTransform.eulerAngles = new Vector3(transform.localRotation.x, Random.Range(0, 360), transform.localRotation.z);
+        }
+
         public void OnEnterDetect(PlayerObject playerObject)
         {
+            tipImage.gameObject.SetActive(true);
         }
 
         public void OnExitDetect(PlayerObject playerObject)
         {
+            tipImage.gameObject.SetActive(false);
         }
 
         public void OnInteractStart()

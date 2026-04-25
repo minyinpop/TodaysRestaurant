@@ -29,8 +29,15 @@ namespace Player_System.Object
 
             void OnEnterDetect(GameObject detectObj)
             {
-                if (!detectObj.TryGetComponent<InteractableObject>(out var detectObjectScript)) return;
-                if (_interactableObjects.Contains(detectObjectScript)) return;
+                if (!detectObj.TryGetComponent<InteractableObject>(out var detectObjectScript))
+                {
+                    return;
+                }
+                
+                if (_interactableObjects.Contains(detectObjectScript))
+                {
+                    return;
+                }
                 
                 _interactableObjects.Add(detectObjectScript);
                 detectObjectScript.OnEnterDetect(this);
@@ -38,7 +45,10 @@ namespace Player_System.Object
 
             void OnExitDetect(GameObject detectObj)
             {
-                if (!detectObj.TryGetComponent<InteractableObject>(out var detectObjectScript)) return;
+                if (!detectObj.TryGetComponent<InteractableObject>(out var detectObjectScript))
+                {
+                    return;
+                }
                 
                 _interactableObjects.Remove(detectObjectScript);
                 detectObjectScript.OnExitDetect(this);
