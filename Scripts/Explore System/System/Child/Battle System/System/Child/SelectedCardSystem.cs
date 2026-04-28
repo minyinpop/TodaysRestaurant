@@ -51,8 +51,8 @@ namespace Explore_System.System.Child.Battle_System.System.Child
         public static event Action<List<Card>, Action> BeforeCloseUI;
         public event Action AfterCloseUI;
 
-        public static event Action OnOpen;
-        public static event Action OnConfirm;
+        public static event Action EnableHandCards;
+        public static event Action DisableHandCards;
 
         private IEnumerator _onClickConfirmButtonCor;
 
@@ -88,7 +88,7 @@ namespace Explore_System.System.Child.Battle_System.System.Child
         public void OpenUI(Action onUIOpen = null, Action onUIClose = null)
         {
             #region 狀態廣播
-                OnOpen?.Invoke();
+                EnableHandCards?.Invoke();
             #endregion
             
             UICanvasGroup.gameObject.SetActive(true);
@@ -246,12 +246,9 @@ namespace Explore_System.System.Child.Battle_System.System.Child
 
             IEnumerator OnConfirmButtonClickCoroutine()
             {
-                #region 狀態廣播
-                    OnConfirm?.Invoke();
-                #endregion
-                
                 var onConfirm = false;
                 var selectedCards = new List<Card>();
+                
                 foreach (var slot in _cardSlots)
                 {
                     if (slot.IsEmpty()) continue;
@@ -261,58 +258,82 @@ namespace Explore_System.System.Child.Battle_System.System.Child
 
                 if (selectedCards.Count == _cardSlots.Count)
                 {
+                    DisableHandCards?.Invoke();
+                    
                     foreach (var card in selectedCards)
+                    {
                         _selectedCards.Add(card);
-                    CloseUI();
+                    }
+                    
+                    onConfirm = true;
+                    
                     _onClickConfirmButtonCor = null;
-                    yield break;
-                }
-
-                if (selectedCards.Count == 0)
-                {
-                    confirmButton.SetInteractable(false);
-                    MessageUISystem.ShowTipUI(
-                        content: new PopUpUIContent(
-                            message:"請選擇至少一張卡牌",
-                            confirmButtonTitle: "確定",
-                            cancelButtonTitle: string.Empty,
-                            closeButtonTitle: string.Empty),
-                        onConfirm: () =>
-                        {
-                            confirmButton.SetInteractable(true);
-                        });
                 }
                 else
                 {
-                    foreach (var card in selectedCards)
-                        card.Interactable = false;
-                    
-                    MessageUISystem.ShowSwitchUI(
-                        content: new PopUpUIContent(
-                            message: "還可以選擇卡片\n確定要直接開始戰鬥嗎？",
-                            confirmButtonTitle: "確定",
-                            cancelButtonTitle: "返回",
-                            closeButtonTitle: string.Empty),
-                        onConfirm: () =>
-                        {
-                            foreach (var card in selectedCards)
-                                _selectedCards.Add(card);
-                            onConfirm = true;
-                        },
-                        onCancel: () =>
-                        {
-                            for (var i = 0; i < selectedCards.Count; i++)
+                    if (selectedCards.Count == 0)
+                    {
+                        confirmButton.SetInteractable(false);
+
+                        MessageUISystem.ShowTipUI(
+                            content: new PopUpUIContent(
+                                message: "請選擇至少一張卡牌",
+                                confirmButtonTitle: "確定",
+                                cancelButtonTitle: string.Empty,
+                                closeButtonTitle: string.Empty),
+                            onConfirm: () =>
                             {
-                                var slot = _cardSlots[i];
-                                var card = selectedCards[i];
-                                slot.Set(card);
-                                card.Interactable = true;
-                            }
-                        });
+                                EnableHandCards?.Invoke();
+
+                                foreach (var card in selectedCards)
+                                {
+                                    card.Interactable = true;
+                                }
+
+                                confirmButton.SetInteractable(true);
+                            });
+                    }
+                    else
+                    {
+                        foreach (var card in selectedCards)
+                            card.Interactable = false;
+
+                        MessageUISystem.ShowSwitchUI(
+                            content: new PopUpUIContent(
+                                message: "還可以選擇卡片\n確定要直接開始戰鬥嗎？",
+                                confirmButtonTitle: "確定",
+                                cancelButtonTitle: "返回",
+                                closeButtonTitle: string.Empty),
+                            onConfirm: () =>
+                            {
+                                DisableHandCards?.Invoke();
+
+                                foreach (var card in selectedCards)
+                                {
+                                    _selectedCards.Add(card);
+                                }
+
+                                onConfirm = true;
+                            },
+                            onCancel: () =>
+                            {
+                                EnableHandCards?.Invoke();
+
+                                for (var i = 0; i < selectedCards.Count; i++)
+                                {
+                                    var slot = _cardSlots[i];
+                                    var card = selectedCards[i];
+                                    slot.Set(card);
+                                    card.Interactable = true;
+                                }
+                            });
+                    }
                 }
 
                 yield return new WaitUntil(() => onConfirm);
-                if (onConfirm) CloseUI();
+                
+                CloseUI();
+                
                 _onClickConfirmButtonCor = null;
             }
         }

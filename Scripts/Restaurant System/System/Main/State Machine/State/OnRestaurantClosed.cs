@@ -2,12 +2,12 @@ using System;
 
 namespace Restaurant_System.System.Main.State_Machine.State
 {
-    internal class RoundStart : IState
+    internal class OnRestaurantClosed : IState
     {
         private readonly Action OnEnter;
         private readonly Action OnExit;
         
-        public RoundStart(Action onEnter, Action onExit)
+        public OnRestaurantClosed(Action onEnter, Action onExit)
         {
             OnEnter = onEnter;
             OnExit = onExit;
@@ -15,12 +15,12 @@ namespace Restaurant_System.System.Main.State_Machine.State
 
         public void Enter()
         {
-            OnEnter?.Invoke();
+            OnEnter.Invoke();
         }
 
         public void Exit()
         {
-            OnExit?.Invoke();
+            OnExit.Invoke();
         }
     }
 }

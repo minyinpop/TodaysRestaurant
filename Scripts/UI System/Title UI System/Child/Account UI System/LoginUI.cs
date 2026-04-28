@@ -13,14 +13,17 @@ namespace UI_System.Title_UI_System.Child.Account_UI_System
 {
     public sealed class LoginUI : MonoBehaviour
     {
-        [field: Header("Input Field")]
+        [field: Header("輸入框")]
         [field: SerializeField] private TMP_InputField accountInputField;
         [field: SerializeField] private TMP_InputField passwordInputField;
         
-        [field: Header("Error Result Text")]
+        [field: Header("錯誤訊息")]
         [field: SerializeField] private TextMeshProUGUI loginErrorResultText;
         
-        [field: Header("Button")]
+        [field: Header("遊客登入按鈕")]
+        [field: SerializeField] private Button guestLoginButton;
+        
+        [field: Header("其它按鈕")]
         [field: SerializeField] private Button loginButton;
         [field: SerializeField] private Button registerButton;
         [field: SerializeField] private Button returnButton;
@@ -52,8 +55,15 @@ namespace UI_System.Title_UI_System.Child.Account_UI_System
                     throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(loginErrorResultText)} cannot be null.");           
                 }
             #endregion
+            
+            #region 遊客登入按鈕
+                if (guestLoginButton is null)
+                {
+                    throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(guestLoginButton)} cannot be null.");
+                }
+            #endregion
 
-            #region 按鈕
+            #region 其它按鈕
                 if (loginButton is null)
                 {
                     throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(loginButton)} cannot be null.");
@@ -69,6 +79,8 @@ namespace UI_System.Title_UI_System.Child.Account_UI_System
                     throw new InvalidOperationException($"{name} > {GetType().Name} > {nameof(returnButton)} cannot be null.");
                 }
             #endregion
+
+            guestLoginButton.OnClick += OnClickGuestLoginButton;
             
             loginButton.OnClick += OnClickLoginButton;
             registerButton.OnClick += OnClickRegisterButton;
@@ -87,6 +99,7 @@ namespace UI_System.Title_UI_System.Child.Account_UI_System
             accountInputField.text = string.Empty;
             passwordInputField.text = string.Empty;
             
+            loginErrorResultText.gameObject.SetActive(false);
             loginErrorResultText.text = string.Empty;
             
             loginButton.SetInteractable(false);
@@ -104,6 +117,8 @@ namespace UI_System.Title_UI_System.Child.Account_UI_System
 
         private void OnDestroy()
         {
+            guestLoginButton.OnClick -= OnClickGuestLoginButton;
+            
             loginButton.OnClick -= OnClickLoginButton;
             registerButton.OnClick -= OnClickRegisterButton;
             returnButton.OnClick -= OnClickReturnButton;
@@ -114,6 +129,21 @@ namespace UI_System.Title_UI_System.Child.Account_UI_System
             loginButton.SetInteractable(true);
             registerButton.SetInteractable(true);
             returnButton.SetInteractable(true);
+        }
+
+        private void OnClickGuestLoginButton()
+        {
+            #region 暫時關閉所有的按鈕互動
+                SetAllButtonInteractable(false);
+            #endregion
+
+            if (OnClickLoginButtonEvent is null)
+            {
+                Debug.Log($"{OnClickLoginButtonEvent} 沒有被訂閱。");
+                return;
+            }
+
+            OnClickLoginButtonEvent.Invoke(false);
         }
 
         private void OnClickLoginButton()
@@ -130,6 +160,7 @@ namespace UI_System.Title_UI_System.Child.Account_UI_System
             #endregion
             
             #region 清除提示訊息
+                loginErrorResultText.gameObject.SetActive(false);
                 loginErrorResultText.text = string.Empty;
             #endregion
             
@@ -141,6 +172,8 @@ namespace UI_System.Title_UI_System.Child.Account_UI_System
                         Email = accountInputField.text,
                         Password = passwordInputField.text
                     };
+                    
+                    PlayFabSettings.RequestTimeout = 3;
                     
                     PlayFabClientAPI.LoginWithEmailAddress(
                         request: request,
@@ -156,6 +189,8 @@ namespace UI_System.Title_UI_System.Child.Account_UI_System
                         errorCallback: error =>
                         {
                             #region 顯示登入錯誤訊息
+                                loginErrorResultText.gameObject.SetActive(true);
+                                
                                 switch (error.Error)
                                 {
                                     case PlayFabErrorCode.InvalidParams:
@@ -176,6 +211,16 @@ namespace UI_System.Title_UI_System.Child.Account_UI_System
                                     case PlayFabErrorCode.InvalidEmailOrPassword:
                                     {
                                         loginErrorResultText.text = "電子信箱或密碼錯誤";
+                                        break;
+                                    }
+                                    case PlayFabErrorCode.ConnectionError:
+                                    {
+                                        loginErrorResultText.text = "連線異常 請稍後再嘗試";
+                                        break;
+                                    }
+                                    case PlayFabErrorCode.ServiceUnavailable:
+                                    {
+                                        loginErrorResultText.text = "伺服器忙碌中 請稍後再嘗試";
                                         break;
                                     }
                                     default:
@@ -204,6 +249,8 @@ namespace UI_System.Title_UI_System.Child.Account_UI_System
                         Password = passwordInputField.text
                     };
                     
+                    PlayFabSettings.RequestTimeout = 3;
+                    
                     PlayFabClientAPI.LoginWithPlayFab(
                         request: request,
                         resultCallback: result =>
@@ -218,6 +265,8 @@ namespace UI_System.Title_UI_System.Child.Account_UI_System
                         errorCallback: error =>
                         {
                             #region 顯示登入錯誤訊息
+                                loginErrorResultText.gameObject.SetActive(true);
+                                
                                 switch (error.Error)
                                 {
                                     case PlayFabErrorCode.InvalidParams:
@@ -238,6 +287,16 @@ namespace UI_System.Title_UI_System.Child.Account_UI_System
                                     case PlayFabErrorCode.APIClientRequestRateLimitExceeded:
                                     {
                                         loginErrorResultText.text = "錯誤太多次 請稍後再嘗試";
+                                        break;
+                                    }
+                                    case PlayFabErrorCode.ConnectionError:
+                                    {
+                                        loginErrorResultText.text = "連線異常 請稍後再嘗試";
+                                        break;
+                                    }
+                                    case PlayFabErrorCode.ServiceUnavailable:
+                                    {
+                                        loginErrorResultText.text = "伺服器忙碌中 請稍後再嘗試";
                                         break;
                                     }
                                     default:
@@ -286,6 +345,8 @@ namespace UI_System.Title_UI_System.Child.Account_UI_System
 
         private void SetAllButtonInteractable(bool interactable)
         {
+            guestLoginButton.SetInteractable(interactable);
+            
             loginButton.SetInteractable(interactable);
             registerButton.SetInteractable(interactable);
             returnButton.SetInteractable(interactable);

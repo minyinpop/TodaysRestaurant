@@ -9,6 +9,7 @@ using Restaurant_System.System.Child;
 using Restaurant_System.System.Main.State_Machine;
 using Restaurant_System.System.Main.State_Machine.State;
 using UI_System.Player_UI_System.Main;
+using UI_System.Restaurant_UI_System.Child.Open_Closed_UI_System.System;
 using UI_System.Restaurant_UI_System.Main;
 using UnityEngine;
 
@@ -21,6 +22,7 @@ namespace Restaurant_System.System.Main
         
         [field: Header("系統")]
         [field: SerializeField] private CustomerManagerSystem customerManagerSystem;
+        [field: SerializeField] private OpenClosedUISystem openClosedUISystem;
         
         [field: Header("廚具")]
         [field: SerializeField] private CookwareSystem[] cookwares;
@@ -32,21 +34,22 @@ namespace Restaurant_System.System.Main
         
         private readonly StateMachine _stateMachine = new();
 
-        private IState _chooseItemState;
-        private IState _roundStartState;
+        private IState _onFoodMenuState;
+        private IState _onRestaurantOpenState;
+        private IState _onRestaurantClosedState;
 
         private void Awake()
         {
-            _chooseItemState = new ChooseItem(
+            _onFoodMenuState = new OnFoodMenu(
                 onEnter: () =>
                 {
                     PlayerUISystem.SetHotbarUI(false);
-                    PlayerUISystem.SetBackpackUI(false);
                     
                     RestaurantUISystem.OpenFoodMenu(() =>
                     {
                         RestaurantUISystem.CloseFoodMenu();
-                        _stateMachine.ChangeState(_roundStartState);
+                        
+                        _stateMachine.ChangeState(_onRestaurantClosedState);
                     });
                 },
                 onExit: () =>
@@ -54,18 +57,25 @@ namespace Restaurant_System.System.Main
                     InputSystem.EnablePlayerWalk();
                     
                     PlayerUISystem.SetHotbarUI(true);
-                    PlayerUISystem.SetBackpackUI(true);
                 });
-            
-            _roundStartState = new RoundStart(
+
+            _onRestaurantOpenState = new OnRestaurantOpen(
                 onEnter: () =>
                 {
                     customerManagerSystem.StartSystem();
-                    
+
                     foreach (var cookware in cookwares)
                     {
                         cookware.StartSystem();
                     }
+                },
+                onExit: () =>
+                {
+                });
+            
+            _onRestaurantClosedState = new OnRestaurantClosed(
+                onEnter: () =>
+                {
                 },
                 onExit: () =>
                 {
@@ -77,10 +87,16 @@ namespace Restaurant_System.System.Main
                 {
                     Debug.Log($"{fadeInBGM.ChangeClip} 播放成功。");
                 });
+
+            openClosedUISystem.OnOpen += InvokeRestaurantOpen;
+            openClosedUISystem.OnClosed += InvokeRestaurantClosed;
         }
         
         private void OnDisable()
         {
+            openClosedUISystem.OnOpen -= InvokeRestaurantOpen;
+            openClosedUISystem.OnClosed -= InvokeRestaurantClosed;
+            
             if (_roundStartCoroutine is not null)
             {
                 StopCoroutine(_roundStartCoroutine);
@@ -92,17 +108,27 @@ namespace Restaurant_System.System.Main
         {
             if (autoStart)
             {
-                StartSystem();
+                InvokeFoodMenu();
             }
             else
             {
-                Debug.Log($"{nameof(RestaurantSystem)} 的 {nameof(autoStart)} 為 false，須從外部觸發 {nameof(StartSystem)}。");
+                Debug.Log($"{nameof(RestaurantSystem)} 的 {nameof(autoStart)} 為 false，須從外部觸發。");
             }
         }
-        
-        public void StartSystem()
+
+        public void InvokeFoodMenu()
         {
-            _stateMachine.ChangeState(_chooseItemState);
+            _stateMachine.ChangeState(_onFoodMenuState);
+        }
+
+        private void InvokeRestaurantOpen()
+        {
+            _stateMachine.ChangeState(_onRestaurantOpenState);
+        }
+
+        private void InvokeRestaurantClosed()
+        {
+            _stateMachine.ChangeState(_onRestaurantClosedState);
         }
     }
 }

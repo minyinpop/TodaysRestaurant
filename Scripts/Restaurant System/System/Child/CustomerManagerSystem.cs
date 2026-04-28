@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Audio_System.Data;
+using Audio_System.Main;
 using Restaurant_System.Object;
 using Restaurant_System.Object.Creature.Customer.System.Main;
 using UnityEngine;
@@ -9,15 +11,18 @@ namespace Restaurant_System.System.Child
 {
     public sealed class CustomerManagerSystem : MonoBehaviour
     {
-        [field: Header("Customer")]
+        [field: Header("顧客關鍵點")]
         [field: SerializeField] private Transform CustomerSpawnPoint;
         [field: SerializeField] private Transform CustomerParent;
         [field: SerializeField] private GameObject CustomerPrefab;
         [field: SerializeField] private int CustomerAmountPerRound;
         [field: SerializeField] private int CustomerComeDuration;
         
-        [field: Header("Points")]
+        [field: Header("椅子位置點")]
         [field: SerializeField] private SeatPoint[] SeatPoints;
+        
+        [field: Header("音效")]
+        [field: SerializeField] private PlaySFXData customerSpawnSFX;
         
         private int _currentCustomerAmount;
         
@@ -25,12 +30,6 @@ namespace Restaurant_System.System.Child
         
         private readonly Dictionary<Customer, SeatPoint> _customers = new();
         private readonly Queue<Action> _cleanUpActions = new();
-        
-        private void Awake()
-        {
-            CustomerAmountPerRound = Mathf.Abs(CustomerAmountPerRound);
-            CustomerComeDuration = Mathf.Abs(CustomerComeDuration);
-        }
         
         private void OnDisable()
         {
@@ -43,13 +42,13 @@ namespace Restaurant_System.System.Child
                 SpawnCustomer();
             }
 
-            private void EndSystem()
+            public void EndSystem()
             {
-                while (_cleanUpActions.Count > 0)
+                foreach (var cleanUp in _cleanUpActions)
                 {
-                    _cleanUpActions.Dequeue()?.Invoke();
+                    cleanUp?.Invoke();
                 }
-                
+
                 if (_mainCoroutine is not null)
                 {
                     StopCoroutine(_mainCoroutine);
@@ -71,9 +70,15 @@ namespace Restaurant_System.System.Child
                 {
                     foreach (var seatPoint in SeatPoints)
                     {
-                        if (seatPoint.IsOccupied()) continue;
+                        if (seatPoint.IsOccupied())
+                        {
+                            continue;
+                        }
+                        
+                        AudioSystem.Instance.OtherSFX.PlayOneShot(customerSpawnSFX);
                         
                         _currentCustomerAmount++;
+                        
                         var newCustomer = Instantiate(CustomerPrefab, CustomerSpawnPoint.position, Quaternion.identity, CustomerParent).GetComponent<Customer>();
                         
                         _customers.Add(newCustomer, seatPoint);
@@ -83,9 +88,13 @@ namespace Restaurant_System.System.Child
                         newCustomer.WalkToSeatPoint(seatPoint.StandPoint(), seatPoint.SitPoint());
                         
                         newCustomer.PrepareToLeave += Leave;
-                        _cleanUpActions.Enqueue(() => newCustomer.PrepareToLeave -= Leave);
+                        _cleanUpActions.Enqueue(() =>
+                        {
+                            newCustomer.PrepareToLeave -= Leave;
+                        });
                         
                         yield return new WaitForSeconds(CustomerComeDuration);
+                        
                         continue;
                         
                         void Leave()
