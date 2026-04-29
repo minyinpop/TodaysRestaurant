@@ -1,7 +1,7 @@
 using System;
-using System.Collections;
 using Audio_System.Data;
 using Audio_System.Main;
+using Common.Restaurant_Statistical_Report;
 using Common.Scene_Starter;
 using Input_System;
 using Restaurant_System.Object.Cookware.System;
@@ -9,20 +9,19 @@ using Restaurant_System.System.Child;
 using Restaurant_System.System.Main.State_Machine;
 using Restaurant_System.System.Main.State_Machine.State;
 using UI_System.Player_UI_System.Main;
-using UI_System.Restaurant_UI_System.Child.Open_Closed_UI_System.System;
 using UI_System.Restaurant_UI_System.Main;
 using UnityEngine;
 
 namespace Restaurant_System.System.Main
 {
-    internal sealed class RestaurantSystem : SceneStarter
+    public sealed class RestaurantSystem : SceneStarter
     {
         [field: Header("狀態")]
         [field: SerializeField] private bool autoStart;
         
         [field: Header("系統")]
         [field: SerializeField] private CustomerManagerSystem customerManagerSystem;
-        [field: SerializeField] private OpenClosedUISystem openClosedUISystem;
+        [field: SerializeField] private RestaurantUISystem restaurantUISystem;
         
         [field: Header("廚具")]
         [field: SerializeField] private CookwareSystem[] cookwares;
@@ -30,27 +29,33 @@ namespace Restaurant_System.System.Main
         [field: Header("音樂")]
         [field: SerializeField] private FadeInBGMData fadeInBGM;
         
-        private IEnumerator _roundStartCoroutine;
-        
         private readonly StateMachine _stateMachine = new();
 
+        // Step 1.
         private IState _onFoodMenuState;
+        // Step 2.
+        private IState _onFinishFoodMenuState;
+        // Step 3.
         private IState _onRestaurantOpenState;
+        // Step 4.
         private IState _onRestaurantClosedState;
+
+        private RestaurantStatisticalReport _reportData = new();
 
         private void Awake()
         {
-            _onFoodMenuState = new OnFoodMenu(
+            _onFoodMenuState = new RestaurantState(
                 onEnter: () =>
                 {
                     PlayerUISystem.SetHotbarUI(false);
                     
-                    RestaurantUISystem.OpenFoodMenu(() =>
-                    {
-                        RestaurantUISystem.CloseFoodMenu();
-                        
-                        _stateMachine.ChangeState(_onRestaurantClosedState);
-                    });
+                    restaurantUISystem.FoodMenuUISystem.OpenUI(
+                        onConfirm: () =>
+                        {
+                            restaurantUISystem.FoodMenuUISystem.CloseUI();
+                            
+                            _stateMachine.ChangeState(_onFinishFoodMenuState);
+                        });
                 },
                 onExit: () =>
                 {
@@ -59,11 +64,9 @@ namespace Restaurant_System.System.Main
                     PlayerUISystem.SetHotbarUI(true);
                 });
 
-            _onRestaurantOpenState = new OnRestaurantOpen(
+            _onFinishFoodMenuState = new RestaurantState(
                 onEnter: () =>
                 {
-                    customerManagerSystem.StartSystem();
-
                     foreach (var cookware in cookwares)
                     {
                         cookware.StartSystem();
@@ -73,9 +76,20 @@ namespace Restaurant_System.System.Main
                 {
                 });
             
-            _onRestaurantClosedState = new OnRestaurantClosed(
+            _onRestaurantOpenState = new RestaurantState(
                 onEnter: () =>
                 {
+                    customerManagerSystem.StartSystem();
+                },
+                onExit: () =>
+                {
+                    customerManagerSystem.EndSystem();
+                });
+
+            _onRestaurantClosedState = new RestaurantState(
+                onEnter: () =>
+                {
+                    restaurantUISystem.StatisticalReportUISystem.OpenStatisticalTableUI(_reportData);
                 },
                 onExit: () =>
                 {
@@ -88,20 +102,22 @@ namespace Restaurant_System.System.Main
                     Debug.Log($"{fadeInBGM.ChangeClip} 播放成功。");
                 });
 
-            openClosedUISystem.OnOpen += InvokeRestaurantOpen;
-            openClosedUISystem.OnClosed += InvokeRestaurantClosed;
+            restaurantUISystem.OpenClosedUISystem.OnOpen += InvokeRestaurantOpen;
+            restaurantUISystem.OpenClosedUISystem.OnClosed += InvokeRestaurantClosed;
+
+            customerManagerSystem.CustomerSpawned += InvokeCustomerSpawned;
+            customerManagerSystem.CustomerHappy += InvokeCustomerHappy;
+            customerManagerSystem.CustomerAngry += InvokeCustomerAngry;
         }
-        
-        private void OnDisable()
+
+        private void OnDestroy()
         {
-            openClosedUISystem.OnOpen -= InvokeRestaurantOpen;
-            openClosedUISystem.OnClosed -= InvokeRestaurantClosed;
+            restaurantUISystem.OpenClosedUISystem.OnOpen -= InvokeRestaurantOpen;
+            restaurantUISystem.OpenClosedUISystem.OnClosed -= InvokeRestaurantClosed;
             
-            if (_roundStartCoroutine is not null)
-            {
-                StopCoroutine(_roundStartCoroutine);
-                _roundStartCoroutine = null;
-            }
+            customerManagerSystem.CustomerSpawned -= InvokeCustomerSpawned;
+            customerManagerSystem.CustomerHappy -= InvokeCustomerHappy;
+            customerManagerSystem.CustomerAngry -= InvokeCustomerAngry;
         }
 
         public override void InvokeOnSceneLoad(Action onComplete)
@@ -129,6 +145,21 @@ namespace Restaurant_System.System.Main
         private void InvokeRestaurantClosed()
         {
             _stateMachine.ChangeState(_onRestaurantClosedState);
+        }
+
+        private void InvokeCustomerSpawned()
+        {
+            _reportData.TotalCustomerCount += 1;
+        }
+
+        private void InvokeCustomerHappy()
+        {
+            _reportData.HappyCustomerCount += 1;
+        }
+
+        private void InvokeCustomerAngry()
+        {
+            _reportData.AngryCustomerCount += 1;
         }
     }
 }

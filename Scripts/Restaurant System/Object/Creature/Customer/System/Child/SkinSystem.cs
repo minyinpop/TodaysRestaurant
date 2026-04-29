@@ -1,4 +1,4 @@
-using Restaurant_System.Object.Creature.Customer.Data;
+using Common.Customer;
 using Spine.Unity;
 using UnityEngine;
 

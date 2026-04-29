@@ -241,6 +241,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b98354d339b7416e91546b8df61e8b79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::General.Object.Button
+  Interactable: 0
+  CanPlaySFX: 0
   Rect: {fileID: 5256179420205271630}
   TitleTMP: {fileID: 0}
   DoAnimation: {fileID: 3005839170450424858}
@@ -252,7 +254,9 @@ MonoBehaviour:
     EndValue: {x: 1, y: 1, z: 1}
     Duration: 0.2
     Ease: 18
-  Interactable: 0
+  playSFXData:
+    AudioSourceType: 0
+    Clip: {fileID: 0}
 --- !u!114 &3005839170450424858
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1137,6 +1141,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b98354d339b7416e91546b8df61e8b79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::General.Object.Button
+  Interactable: 0
+  CanPlaySFX: 0
   Rect: {fileID: 2464088557980681201}
   TitleTMP: {fileID: 0}
   DoAnimation: {fileID: 304933897619101008}
@@ -1148,7 +1154,9 @@ MonoBehaviour:
     EndValue: {x: 1, y: 1, z: 1}
     Duration: 0.2
     Ease: 18
-  Interactable: 0
+  playSFXData:
+    AudioSourceType: 0
+    Clip: {fileID: 0}
 --- !u!114 &304933897619101008
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1369,6 +1377,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
+  m_UseReflectionProbes: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: -1767491641
@@ -1508,7 +1517,7 @@ MonoBehaviour:
   Slider: {fileID: 6612461535502817914}
   MaxValue: 100
   MinValue: 0
-  InitialValue: 5
+  InitialValue: 1.5
   AnimationSettings:
     EndValue: 0
     Duration: 0.2

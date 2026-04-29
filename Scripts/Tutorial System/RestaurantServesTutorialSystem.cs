@@ -20,25 +20,21 @@ namespace Tutorial_System
 {
     public sealed class RestaurantServesTutorialSystem : SceneStarter
     {
-        [field: Header("系統")] [field: SerializeField]
-        private DialogueLiteUISystem dialogueLiteUISystem;
-
+        [field: Header("系統")]
+        [field: SerializeField] private DialogueLiteUISystem dialogueLiteUISystem;
         [field: SerializeField] private RestaurantSystem restaurantSystem;
 
-        [field: Header("教學 1")] [field: SerializeField]
-        private TutorialTip tip1;
-
+        [field: Header("教學 1")]
+        [field: SerializeField] private TutorialTip tip1;
         [field: SerializeField, FormerlySerializedAs("openButton")] private Button openFoodMenuButton;
 
-        [field: Header("教學 2")] [field: SerializeField]
-        private TutorialTip tip2;
-
+        [field: Header("教學 2")]
+        [field: SerializeField] private TutorialTip tip2;
         [field: SerializeField] private TutorialTip tip3;
         [field: SerializeField] private OpenState foodMenuOpenState;
 
-        [field: Header("教學 3")] [field: SerializeField]
-        private TutorialTip tip4;
-
+        [field: Header("教學 3")]
+        [field: SerializeField] private TutorialTip tip4;
         [field: SerializeField] private TutorialTip tip5_1;
         [field: SerializeField] private TutorialTip tip5_2;
 
@@ -57,6 +53,9 @@ namespace Tutorial_System
         [field: Header("教學 6")]
         [field: SerializeField] private TutorialTip tip10;
         [field: SerializeField] private Button openClosedButton;
+        
+        [field: Header("劇情 2")]
+        [field: SerializeField] private DialogueSO dialogue2Data;
 
         private IEnumerator _tutorialCoroutine;
 
@@ -115,6 +114,10 @@ namespace Tutorial_System
                                                             Tutorial6(
                                                                 onComplete: () =>
                                                                 {
+                                                                    Dialogue2(
+                                                                        onComplete: () =>
+                                                                        {
+                                                                        });
                                                                 });
                                                         });
                                                 });
@@ -346,6 +349,15 @@ namespace Tutorial_System
                         onComplete.Invoke();
                     });
             }
+        }
+
+        private void Dialogue2(Action onComplete)
+        {
+            dialogueLiteUISystem.StartDialogue(
+                dialogueData: dialogue2Data,
+                onComplete: () =>
+                {
+                });
         }
     }
 }
