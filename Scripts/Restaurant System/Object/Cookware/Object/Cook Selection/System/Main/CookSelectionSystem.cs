@@ -3,7 +3,6 @@ using System.Collections;
 using Common.Item.Data.Food.Custom_Food;
 using Common.Value;
 using Common.Value.Type;
-using Input_System;
 using Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Child;
 using Restaurant_System.Object.Cookware.System;
 using UI_System.Message_UI_System.Main;
@@ -44,7 +43,7 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Main
             CookwareSystem.CloseCookSelectionUI -= Close;
         }
 
-        private void Open(CookType cookwareType, Action<CustomFoodItem> onConfirm, Action onCancel)
+        private void Open(CookType cookwareType, Action<CustomFoodItem> onConfirm, Action onCancelStart, Action onCancelEnd)
         {
             OnSelectionUIOpen?.Invoke();
             
@@ -131,14 +130,17 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Main
                 },
                 onClose: () =>
                 {
+                    onCancelStart.Invoke();
+                    
                     selectionSystem.Hide(
                         onComplete: () =>
                         {
+                            onCancelEnd.Invoke();
                         });
                 });
         }
 
-        public void Close()
+        private void Close()
         {
             putIngredientSystem.Hide();
             selectionSystem.Hide();

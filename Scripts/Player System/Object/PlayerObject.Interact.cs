@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Common.Detect_Area;
 using Common.Interactable_Object;
 using UnityEngine;
@@ -16,6 +15,7 @@ namespace Player_System.Object
         private Action _onExitDetectCleanupAction;
         
         private readonly List<InteractableObject> _interactableObjects = new();
+        private InteractableObject _currentInteractObject;
 
         private bool _canInteract = true;
 
@@ -51,7 +51,7 @@ namespace Player_System.Object
                 }
                 
                 _interactableObjects.Remove(detectObjectScript);
-                detectObjectScript.OnExitDetect(this);
+                detectObjectScript.OnExitDetect();
             }
         }
 
@@ -72,18 +72,31 @@ namespace Player_System.Object
             {
                 return;
             }
-            
-            _stateMachine.ChangeState(_takeItemState);
+
+            for (var i = 0; i < _interactableObjects.Count; i++)
+            {
+                if (_interactableObjects[i] is null)
+                {
+                    _interactableObjects.RemoveAt(i);
+                    continue;
+                }
+
+                if (!_interactableObjects[i].Interactable)
+                {
+                    continue;
+                }
+
+                _currentInteractObject = _interactableObjects[i];
+                
+                _stateMachine.ChangeState(_takeItemState);
+                return;
+            }
         }
 
-        private void RemoveInteractableObject()
+        private void InvokeInteract()
         {
-            var interactableObject = _interactableObjects.First();
-
-            if (interactableObject.OnInteract(this))
-            {
-                _interactableObjects.Remove(interactableObject);
-            }
+            _currentInteractObject.Interact(this);
+            _currentInteractObject = null;
         }
     }
 }

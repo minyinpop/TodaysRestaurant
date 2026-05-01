@@ -4,11 +4,11 @@ namespace Common.Interactable_Object
 {
     public interface InteractableObject
     {
+        public bool Interactable { get; }
+        
         public void OnEnterDetect(PlayerObject playerObject);
-        public void OnExitDetect(PlayerObject playerObject);
+        public void OnExitDetect();
 
-        public void OnInteractStart();
-        public bool OnInteract(PlayerObject playerObject);
-        public void OnInteractEnd();
+        public void Interact(PlayerObject playerObject);
     }
 }

@@ -22,13 +22,17 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
 {
     public sealed class Customer : MonoBehaviour, InteractableObject
     {
-        [field: Header("Component Settings")]
+        [field: Header("狀態")]
+        [field: SerializeField] private bool interactable;
+                                public bool Interactable => interactable;
+        
+        [field: Header("自身組件")]
         [field: SerializeField] private MoveSystem moveSystem;
         [field: SerializeField] private AnimationSystem animationSystem;
         [field: SerializeField] private FlipSystem flipSystem;
         [field: SerializeField] private SkinSystem skinSystem;
         
-        [field: Header("Clickable Bubble Settings")]
+        [field: Header("互動氣泡設定")]
         [field: SerializeField] private Transform bubbleParent;
         [field: SerializeField] private GameObject thinkBubble;
         [field: SerializeField] private GameObject orderBubble;
@@ -38,7 +42,7 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
         [field: SerializeField] private GameObject checkoutBubble;
         private ClickableBubble _currentBubble;
         
-        [field: Header("Data Settings")]
+        [field: Header("資料")]
         [field: SerializeField] private SelectFoodPageSO selectFoodPageData;
         [field: SerializeField] private CustomerSO customerData;
         
@@ -92,24 +96,17 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
                 _currentBubble?.SetInteractable(true);
             }
             
-            public void OnExitDetect(PlayerObject playerObject)
+            public void OnExitDetect()
             {
                 _currentBubble?.SetInteractable(false);
             }
 
-            public void OnInteractStart()
+            public void Interact(PlayerObject playerObject)
             {
+                Debug.Log($"尚未實作 {nameof(Interact)}");
             }
 
-            public bool OnInteract(PlayerObject playerObject)
-            {
-                return false;
-            }
-
-            public void OnInteractEnd()
-            {
-            }
-        #endregion
+            #endregion
 
         #region StateMachine
             #region WalkToSeatPoint

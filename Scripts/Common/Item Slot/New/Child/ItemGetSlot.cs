@@ -8,7 +8,7 @@ using UnityEngine.UI;
 using ItemSlot = Common.Item_Slot.New.Main.ItemSlot;
 using NotImplementedException = System.NotImplementedException;
 
-namespace UI_System.Message_UI_System.Child.Item_Get_UI_System.Object.Child
+namespace Common.Item_Slot.New.Child
 {
     [RequireComponent(typeof(DoAnimation))]
     public sealed class ItemGetSlot : PointerEvent, ItemSlot

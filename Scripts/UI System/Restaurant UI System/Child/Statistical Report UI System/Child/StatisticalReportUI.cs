@@ -1,6 +1,7 @@
 using System;
 using Animation_System.DOTween;
 using Animation_System.DOTween.Basic;
+using Common.Button;
 using Common.Restaurant_Statistical_Report;
 using UnityEngine;
 
@@ -19,7 +20,11 @@ namespace UI_System.Restaurant_UI_System.Child.Statistical_Report_UI_System.Chil
         [field: SerializeField] private InformationContainer angryCustomerCount;
         [field: SerializeField] private InformationContainer earnedCount;
 
-        public void ShowInformation(RestaurantStatisticalReport reportData)
+        [field: Header("按鈕")]
+        [field: SerializeField] private Button confirmButton;
+                                public Button ConfirmButton => confirmButton;
+        
+        public void ShowInformation(RestaurantStatisticalReport reportData, Action onComplete)
         {
             ShowInformationProcess(
                 text: reportData.TotalCustomerCount.ToString(),
@@ -41,6 +46,7 @@ namespace UI_System.Restaurant_UI_System.Child.Statistical_Report_UI_System.Chil
                                         container: earnedCount,
                                         onComplete: () =>
                                         {
+                                            onComplete.Invoke();
                                         });
                                 });
                         });

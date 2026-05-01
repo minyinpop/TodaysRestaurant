@@ -66,7 +66,7 @@ namespace Player_System.Object
                 {
                     case "Take":
                     {
-                        RemoveInteractableObject();
+                        InvokeInteract();
                         break;
                     }
                     default:

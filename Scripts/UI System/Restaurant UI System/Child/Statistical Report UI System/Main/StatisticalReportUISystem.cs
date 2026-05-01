@@ -37,7 +37,12 @@ namespace UI_System.Restaurant_UI_System.Child.Statistical_Report_UI_System.Main
                         settings: fadeInSettings,
                         onComplete: () =>
                         {
-                            statisticalReportUI.ShowInformation(reportData);
+                            statisticalReportUI.ShowInformation(
+                                reportData: reportData,
+                                onComplete: () =>
+                                {
+                                    
+                                });
                         });
                 });
         }

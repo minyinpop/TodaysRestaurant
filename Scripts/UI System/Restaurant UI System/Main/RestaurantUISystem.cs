@@ -26,7 +26,12 @@ namespace UI_System.Restaurant_UI_System.Main
         [field: Header("營業報告")]
         [field: SerializeField] private StatisticalReportUISystem  statisticalReportUISystem;
                                 public  StatisticalReportUISystem StatisticalReportUISystem => statisticalReportUISystem;
-        
+
+        private void Awake()
+        {
+            _servingNoteUISystem = servingNoteUISystem;
+        }
+
         #region 供餐紙條
             public static bool TryInitializeServingNoteUI(ServingNoteSO servingNoteData, GameObject prefab)
             {
