@@ -139,17 +139,18 @@ namespace Common.Item_Slot.New.Child
             return true;
         }
 
-        public bool TryRemoveItem(IItem itemData)
+        public void RemoveItem()
         {
-            if (Item is null) return false;
-            if (Item != itemData) return false;
+            if (Item is null)
+            {
+                return;
+            }
             
             itemImage.gameObject.SetActive(false);
             itemImage.sprite = null;
             
-            itemData.Remove();
+            Item.Remove();
             Item = null;
-            return true;
         }
         
         public void Selected()

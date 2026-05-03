@@ -116,7 +116,8 @@ namespace Common.Item_Slot.New.Child
                     
                     if (Item is null)
                     {
-                        throw new System.InvalidOperationException($"{name} > {GetType().Name} > {nameof(AddItem)} > {nameof(Item)} is null.");
+                        ingredient = null;
+                        return false;
                     }
                 #endregion
                     

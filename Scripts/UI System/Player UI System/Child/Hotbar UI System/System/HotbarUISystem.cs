@@ -11,6 +11,7 @@ namespace UI_System.Player_UI_System.Child.Hotbar_UI_System.System
     {
         [field: Header("Objects")]
         [field: SerializeField] private HotbarUI hotbarUI;
+                                public IReadOnlyList<HotbarSlot> HotBarSlots => hotbarUI.HotbarSlots;
 
         private bool _isHotbarEnabled = true;
         
@@ -59,7 +60,6 @@ namespace UI_System.Player_UI_System.Child.Hotbar_UI_System.System
 
                 if (!_isHotbarEnabled)
                 {
-                    Debug.Log("快捷欄尚未開啟，故無法添加物品。");
                     throw new InvalidOperationException(nameof(_isHotbarEnabled));
                 }
             #endregion
@@ -67,27 +67,26 @@ namespace UI_System.Player_UI_System.Child.Hotbar_UI_System.System
             return hotbarUI.AddItem(item);
         }
 
-        public bool RemoveItem(ItemSO item)
+        public bool SearchAndRemoveItem(ItemSO itemData)
         {
             #region 條件檢查
-                if (item is null)
+                if (itemData is null)
                 {
-                    throw new ArgumentNullException(nameof(item));
+                    throw new ArgumentNullException(nameof(itemData), "不能為空值。");
                 }
 
                 if (!_isHotbarEnabled)
                 {
-                    Debug.Log("快捷欄尚未開啟，故無法移除物品。");
                     throw new InvalidOperationException(nameof(_isHotbarEnabled));
                 }
             #endregion
 
-            return hotbarUI.RemoveItem(item);
+            return hotbarUI.SearchAndRemoveItem(itemData);
         }
 
-        public IReadOnlyList<HotbarSlot> GetHotbarSlots()
+        public void RemoveAllItems()
         {
-            return hotbarUI.HotbarSlots;
+            hotbarUI.RemoveAllItems();
         }
     }
 }

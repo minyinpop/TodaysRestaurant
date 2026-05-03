@@ -92,6 +92,21 @@ namespace UI_System.Player_UI_System.Child.Backpack_UI_System.System
 
             return backpackUI.AddItem(item);
         }
+        
+        public bool SearchAndRemoveItem(ItemSO itemData)
+        {
+            if (itemData is null)
+            {
+                throw new ArgumentNullException(nameof(itemData), "不能為空值。");
+            }
+
+            return backpackUI.SearchAndRemoveItem(itemData);
+        }
+
+        public void RemoveAllItems()
+        {
+            backpackUI.RemoveAllItems();
+        }
 
         public IReadOnlyList<BackpackSlot> GetBackpackSlots()
         {

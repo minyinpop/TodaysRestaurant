@@ -30,5 +30,34 @@ namespace UI_System.Player_UI_System.Child.Backpack_UI_System.Object
             var result = backpackSlots.Any(slot => slot.AddItem(item));
             return result;
         }
+        
+        public bool SearchAndRemoveItem(ItemSO itemData)
+        {
+            if (itemData is null)
+            {
+                throw new ArgumentNullException(nameof(itemData), "不能為空值。");
+            }
+                
+            foreach (var backpackSlot in backpackSlots)
+            {
+                if (!ReferenceEquals(backpackSlot.Item, itemData))
+                {
+                    continue;
+                }
+
+                backpackSlot.RemoveItem();
+                return true;
+            }
+
+            return false;
+        }
+        
+        public void RemoveAllItems()
+        {
+            foreach (var backpackSlot in backpackSlots)
+            {
+                backpackSlot.RemoveItem();
+            }
+        }
     }
 }

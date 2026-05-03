@@ -51,8 +51,6 @@ namespace UI_System.Player_UI_System.Main
                 PlayerInventorySaver.LoadInventoryFromLocal(out var saveData);
                 
                 #region 載入快捷欄的物品
-                    var hotbarSlots = HotbarUISystem.GetHotbarSlots();
-
                     for (var i = 0; i < saveData.HotbarSlots.Count; i++)
                     {
                         var slotData = saveData.HotbarSlots[i];
@@ -63,7 +61,7 @@ namespace UI_System.Player_UI_System.Main
                             continue;
                         }
                                                 
-                        hotbarSlots[i].AddItem(item);
+                        HotbarUISystem.HotBarSlots[i].AddItem(item);
                     }
                 #endregion
                                     
@@ -96,7 +94,7 @@ namespace UI_System.Player_UI_System.Main
                 };
                     
                 #region 快捷欄
-                    var hotbarSlots = HotbarUISystem.GetHotbarSlots();
+                    var hotbarSlots = HotbarUISystem.HotBarSlots;
                             
                     for (var i = 0; i < hotbarSlots.Count; i++)
                     {
@@ -149,11 +147,6 @@ namespace UI_System.Player_UI_System.Main
                 BackpackUISystem.SetBackpackUI(isEnabled);
             }
 
-            public static void RequireBackpackUI()
-            {
-                BackpackUISystem.SetBackpackUI();
-            }
-
             public static void PerformHotbar(int hotbarIndex)
             {
                 HotbarUISystem.PerformHotbar(hotbarIndex);
@@ -173,10 +166,26 @@ namespace UI_System.Player_UI_System.Main
             
             public static bool RemoveItem(ItemSO itemData)
             {
-                return HotbarUISystem.RemoveItem(itemData);
+                if (HotbarUISystem.SearchAndRemoveItem(itemData))
+                {
+                    return true;
+                }
+                
+                if (BackpackUISystem.SearchAndRemoveItem(itemData))
+                {
+                    return true;
+                }
+                
+                Debug.Log($"無法在 {nameof(HotbarUISystem)} 或 {nameof(BackpackUISystem)} 裡搜尋到 {nameof(itemData)}。");
+                return false;
             }
 
-            #endregion
+            public static void RemoveAllItems()
+            {
+                HotbarUISystem.RemoveAllItems();
+                BackpackUISystem.RemoveAllItems();
+            }
+        #endregion
         
         #region 物品拖曳
             public static void RequireItemDragUI(bool isDragging, IItem item)

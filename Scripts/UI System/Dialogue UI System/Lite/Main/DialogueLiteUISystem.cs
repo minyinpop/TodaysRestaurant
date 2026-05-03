@@ -100,6 +100,8 @@ namespace UI_System.Dialogue_UI_System.Lite.Main
                     {
                         case DialogueDataType.Show_Lite_Text:
                         {
+                            InputSystem.DisablePlayerWalk();
+                            
                             if (!dialogueData.BlockProcess)
                             {
                                 _continueDialogue = true;
@@ -133,6 +135,8 @@ namespace UI_System.Dialogue_UI_System.Lite.Main
                                 _continueDialogue = true;
                                 
                                 continueButton.gameObject.SetActive(false);
+                                
+                                InputSystem.EnablePlayerWalk();
                             });
                             
                             break;

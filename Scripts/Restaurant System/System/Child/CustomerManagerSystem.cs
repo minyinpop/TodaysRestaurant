@@ -116,8 +116,8 @@ namespace Restaurant_System.System.Child
                         #endregion
                         
                         yield return new WaitForSeconds(CustomerComeDuration);
-                        
-                        continue;
+
+                        break;
                         
                         void HappyToLeave()
                         {
@@ -150,6 +150,8 @@ namespace Restaurant_System.System.Child
 
                     yield return null;
                 }
+                
+                Debug.Log("不會再有顧客來了");
             }
         #endregion
     }

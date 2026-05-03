@@ -129,6 +129,20 @@ namespace Common.Item_Slot.New.Child
                 itemImage.sprite = Item.ItemSprite;
                 return true;
             }
+            
+            public void RemoveItem()
+            {
+                if (Item is null)
+                {
+                    return;
+                }
+            
+                itemImage.gameObject.SetActive(false);
+                itemImage.sprite = null;
+            
+                Item.Remove();
+                Item = null;
+            }
         #endregion
 
         public void Refresh()

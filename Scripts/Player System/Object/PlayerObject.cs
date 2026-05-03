@@ -135,7 +135,7 @@ namespace Player_System.Object
 
         public bool TryAddItem(IItem itemData)
         {
-            return playerSystem.TryAddItem(itemData);
+            return playerSystem.AddItem(itemData);
         }
     }
 }

@@ -177,8 +177,13 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
                                 time: customerData.WaitForOrderDuration,
                                 onComplete: () =>
                                 {
-                                    PlayerSystem.TryRemoveItem(_servingNoteData);
-                                    Angry();
+                                    if (PlayerSystem.RemoveItem(_servingNoteData))
+                                    {
+                                        Angry();
+                                        return;
+                                    }
+                                    
+                                    throw new InvalidOperationException($"移除 {nameof(_servingNoteData)} 時，發生了錯誤。");
                                 });
                         },
                         onExit: () =>
@@ -229,7 +234,7 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
                             Destroy(_currentBubble.gameObject);
                             _currentBubble = null;
 
-                            if (!PlayerSystem.TryRemoveItem(_servingNoteData))
+                            if (!PlayerSystem.RemoveItem(_servingNoteData))
                             {
                                 throw new InvalidOperationException($"無法把 {nameof(_servingNoteData)} 從玩家身上移除。");
                             }

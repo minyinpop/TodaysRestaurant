@@ -1,5 +1,6 @@
 using Input_System;
 using Restaurant_System.Object.Creature.Customer.System.Main;
+using Tutorial_System;
 using UnityEngine;
 
 namespace Player_System.System.Player_System
@@ -16,7 +17,9 @@ namespace Player_System.System.Player_System
             InputSystem.OnPerformedHotbar += PerformHotbar;
             
             // CookwareSystem.TryAddItem += TryAddItem;
-            Customer.GivingServingNote += TryAddItem;
+            Customer.GivingServingNote += AddItem;
+
+            RestaurantServesTutorialSystem.RemoveAllItems += RemoveAllItems;
 
             _itemDragSFX = itemDragSFX;
         }
@@ -29,7 +32,9 @@ namespace Player_System.System.Player_System
             InputSystem.OnPerformedHotbar -= PerformHotbar;
             
             // CookwareSystem.TryAddItem -= TryAddItem;
-            Customer.GivingServingNote -= TryAddItem;
+            Customer.GivingServingNote -= AddItem;
+            
+            RestaurantServesTutorialSystem.RemoveAllItems -= RemoveAllItems;
         }
     }
 }

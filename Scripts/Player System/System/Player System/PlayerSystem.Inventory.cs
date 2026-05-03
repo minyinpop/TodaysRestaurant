@@ -10,19 +10,19 @@ namespace Player_System.System.Player_System
             PlayerUISystem.PerformHotbar(hotbarIndex);
         }
 
-        private void RequireBackpackUI()
-        {
-            PlayerUISystem.RequireBackpackUI();
-        }
-
-        public bool TryAddItem(IItem itemData)
+        public bool AddItem(IItem itemData)
         {
             return PlayerUISystem.AddItem(itemData);
         }
 
-        public static bool TryRemoveItem(ItemSO itemData)
+        public static bool RemoveItem(ItemSO itemData)
         {
             return PlayerUISystem.RemoveItem(itemData);
+        }
+
+        public void RemoveAllItems()
+        {
+            PlayerUISystem.RemoveAllItems();
         }
     }
 }

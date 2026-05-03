@@ -8,6 +8,7 @@ using Common.Item.Data;
 using Common.Scene_Starter;
 using Common.Value.Type;
 using Input_System;
+using Player_System.System.Player_System;
 using Restaurant_System.System.Main;
 using UI_System.Dialogue_UI_System.Lite.Main;
 using UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_Menu_UI.Object.Item_Slot.Base;
@@ -23,7 +24,10 @@ namespace Tutorial_System
         [field: Header("系統")]
         [field: SerializeField] private DialogueLiteUISystem dialogueLiteUISystem;
         [field: SerializeField] private RestaurantSystem restaurantSystem;
-
+        
+        [field: Header("玩家設定")]
+        [field: SerializeField] private PlayerSystem playerSystem;
+        
         [field: Header("教學 1")]
         [field: SerializeField] private TutorialTip tip1;
         [field: SerializeField, FormerlySerializedAs("openButton")] private Button openFoodMenuButton;
@@ -38,8 +42,8 @@ namespace Tutorial_System
         [field: SerializeField] private TutorialTip tip5_1;
         [field: SerializeField] private TutorialTip tip5_2;
 
-        [field: Header("教學 4")] [field: SerializeField]
-        private TutorialTip tip6;
+        [field: Header("教學 4")]
+        [field: SerializeField] private TutorialTip tip6;
 
         [field: SerializeField] private TutorialTip tip7;
 
@@ -59,6 +63,8 @@ namespace Tutorial_System
 
         private IEnumerator _tutorialCoroutine;
 
+        public static event Action RemoveAllItems;
+
         private void OnDestroy()
         {
             if (_tutorialCoroutine is not null)
@@ -66,6 +72,17 @@ namespace Tutorial_System
                 StopCoroutine(_tutorialCoroutine);
                 _tutorialCoroutine = null;
             }
+        }
+
+        public override void InvokeOnSceneLoad(Action onComplete)
+        {
+            if (RemoveAllItems is null)
+            {
+                throw new InvalidOperationException($"{nameof(RemoveAllItems)} 沒有被訂閱。");
+            }
+            
+            RemoveAllItems.Invoke();
+            onComplete.Invoke();
         }
 
         public override void InvokeOnSceneChangeComplete(SceneStarterData starterData)

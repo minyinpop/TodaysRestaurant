@@ -5,6 +5,7 @@ using Common.Database;
 using Common.Dialogue.SO.Main;
 using Common.Scene_Name;
 using Common.Value;
+using Spine.Unity;
 using UI_System.Message_UI_System.Main;
 using UI_System.Title_UI_System.Child.Account_UI_System;
 using UnityEngine;
@@ -13,14 +14,17 @@ namespace UI_System.Title_UI_System.Main
 {
     internal sealed class TitleUISystem : MonoBehaviour
     {
-        [field: Header("System")]
+        [field: Header("系統")]
         [field: SerializeField] private AccountUISystem accountUISystem;
         
-        [field: Header("Button")]
+        [field: Header("按鈕")]
         [field: SerializeField] private Button startButton;
         [field: SerializeField] private Button settingsButton;
         [field: SerializeField] private Button quitButton;
         [field: SerializeField] private Button dataCleanButton;
+        
+        [field: Header("")]
+        [field: SerializeField] private new SkeletonGraphic animation;
         
         [field: Header("新帳號的開場對話資料")]
         [field: SerializeField] private DialogueSO tutorialDialogueData;

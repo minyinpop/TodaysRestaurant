@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Common.Item_Slot.New.Child;
@@ -38,9 +39,33 @@ namespace UI_System.Player_UI_System.Child.Hotbar_UI_System.Object
                 return result;
             }
 
-            public bool RemoveItem(ItemSO itemData)
+            public bool SearchAndRemoveItem(ItemSO itemData)
             {
-                return hotbarSlots.Any(hotbarSlot => hotbarSlot.TryRemoveItem(itemData));
+                if (itemData is null)
+                {
+                    throw new ArgumentNullException(nameof(itemData), "不能為空值。");
+                }
+                
+                foreach (var hotbarSlot in hotbarSlots)
+                {
+                    if (!ReferenceEquals(hotbarSlot.Item, itemData))
+                    {
+                        continue;
+                    }
+
+                    hotbarSlot.RemoveItem();
+                    return true;
+                }
+
+                return false;
+            }
+
+            public void RemoveAllItems()
+            {
+                foreach (var hotbarSlot in hotbarSlots)
+                {
+                    hotbarSlot.RemoveItem();
+                }
             }
         #endregion
         
