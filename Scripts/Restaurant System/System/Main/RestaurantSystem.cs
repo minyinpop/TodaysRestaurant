@@ -1,5 +1,7 @@
 using System;
-using System.Collections;
+using Audio_System.Data;
+using Audio_System.Main;
+using Common.Restaurant_Statistical_Report;
 using Common.Scene_Starter;
 using Input_System;
 using Restaurant_System.Object.Cookware.System;
@@ -12,51 +14,59 @@ using UnityEngine;
 
 namespace Restaurant_System.System.Main
 {
-    internal sealed class RestaurantSystem : SceneStarter
+    public sealed class RestaurantSystem : SceneStarter
     {
         [field: Header("狀態")]
         [field: SerializeField] private bool autoStart;
         
         [field: Header("系統")]
         [field: SerializeField] private CustomerManagerSystem customerManagerSystem;
+        [field: SerializeField] private RestaurantUISystem restaurantUISystem;
         
         [field: Header("廚具")]
         [field: SerializeField] private CookwareSystem[] cookwares;
         
-        private IEnumerator _roundStartCoroutine;
+        [field: Header("音樂")]
+        [field: SerializeField] private FadeInBGMData fadeInBGM;
         
         private readonly StateMachine _stateMachine = new();
 
-        private IState _chooseItemState;
-        private IState _roundStartState;
+        // Step 1.
+        private IState _onFoodMenuState;
+        // Step 2.
+        private IState _onFinishFoodMenuState;
+        // Step 3.
+        private IState _onRestaurantOpenState;
+        // Step 4.
+        private IState _onRestaurantClosedState;
+
+        private RestaurantStatisticalReport _reportData = new();
 
         private void Awake()
         {
-            _chooseItemState = new ChooseItem(
+            _onFoodMenuState = new RestaurantState(
                 onEnter: () =>
                 {
                     PlayerUISystem.SetHotbarUI(false);
-                    PlayerUISystem.SetBackpackUI(false);
                     
-                    RestaurantUISystem.OpenFoodMenu(() =>
-                    {
-                        RestaurantUISystem.CloseFoodMenu();
-                        _stateMachine.ChangeState(_roundStartState);
-                    });
+                    restaurantUISystem.FoodMenuUISystem.OpenUI(
+                        onConfirm: () =>
+                        {
+                            restaurantUISystem.FoodMenuUISystem.CloseUI();
+                            
+                            _stateMachine.ChangeState(_onFinishFoodMenuState);
+                        });
                 },
                 onExit: () =>
                 {
                     InputSystem.EnablePlayerWalk();
                     
                     PlayerUISystem.SetHotbarUI(true);
-                    PlayerUISystem.SetBackpackUI(true);
                 });
-            
-            _roundStartState = new RoundStart(
+
+            _onFinishFoodMenuState = new RestaurantState(
                 onEnter: () =>
                 {
-                    customerManagerSystem.StartSystem();
-                    
                     foreach (var cookware in cookwares)
                     {
                         cookware.StartSystem();
@@ -65,32 +75,91 @@ namespace Restaurant_System.System.Main
                 onExit: () =>
                 {
                 });
+            
+            _onRestaurantOpenState = new RestaurantState(
+                onEnter: () =>
+                {
+                    customerManagerSystem.StartSystem();
+                },
+                onExit: () =>
+                {
+                    customerManagerSystem.EndSystem();
+                });
+
+            _onRestaurantClosedState = new RestaurantState(
+                onEnter: () =>
+                {
+                    restaurantUISystem.StatisticalReportUISystem.OpenStatisticalTableUI(_reportData);
+                },
+                onExit: () =>
+                {
+                });
+            
+            AudioSystem.Instance.CommonBGM.FadeInBGM(
+                data:  fadeInBGM,
+                onComplete: () =>
+                {
+                    Debug.Log($"{fadeInBGM.ChangeClip} 播放成功。");
+                });
+
+            restaurantUISystem.OpenClosedUISystem.OnOpen += InvokeRestaurantOpen;
+            restaurantUISystem.OpenClosedUISystem.OnClosed += InvokeRestaurantClosed;
+
+            customerManagerSystem.CustomerSpawned += InvokeCustomerSpawned;
+            customerManagerSystem.CustomerHappy += InvokeCustomerHappy;
+            customerManagerSystem.CustomerAngry += InvokeCustomerAngry;
         }
-        
-        private void OnDisable()
+
+        private void OnDestroy()
         {
-            if (_roundStartCoroutine is not null)
-            {
-                StopCoroutine(_roundStartCoroutine);
-                _roundStartCoroutine = null;
-            }
+            restaurantUISystem.OpenClosedUISystem.OnOpen -= InvokeRestaurantOpen;
+            restaurantUISystem.OpenClosedUISystem.OnClosed -= InvokeRestaurantClosed;
+            
+            customerManagerSystem.CustomerSpawned -= InvokeCustomerSpawned;
+            customerManagerSystem.CustomerHappy -= InvokeCustomerHappy;
+            customerManagerSystem.CustomerAngry -= InvokeCustomerAngry;
         }
 
         public override void InvokeOnSceneLoad(Action onComplete)
         {
             if (autoStart)
             {
-                StartSystem();
+                InvokeFoodMenu();
             }
             else
             {
-                Debug.Log($"{nameof(RestaurantSystem)} 的 {nameof(autoStart)} 為 false，須從外部觸發 {nameof(StartSystem)}。");
+                Debug.Log($"{nameof(RestaurantSystem)} 的 {nameof(autoStart)} 為 false，須從外部觸發。");
             }
         }
-        
-        public void StartSystem()
+
+        public void InvokeFoodMenu()
         {
-            _stateMachine.ChangeState(_chooseItemState);
+            _stateMachine.ChangeState(_onFoodMenuState);
+        }
+
+        private void InvokeRestaurantOpen()
+        {
+            _stateMachine.ChangeState(_onRestaurantOpenState);
+        }
+
+        private void InvokeRestaurantClosed()
+        {
+            _stateMachine.ChangeState(_onRestaurantClosedState);
+        }
+
+        private void InvokeCustomerSpawned()
+        {
+            _reportData.TotalCustomerCount += 1;
+        }
+
+        private void InvokeCustomerHappy()
+        {
+            _reportData.HappyCustomerCount += 1;
+        }
+
+        private void InvokeCustomerAngry()
+        {
+            _reportData.AngryCustomerCount += 1;
         }
     }
 }

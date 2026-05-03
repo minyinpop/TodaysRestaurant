@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Common.Button;
+using Common.Item_Slot.New.Child;
 using Common.Item.Data;
 using Common.Value;
 using TMPro;

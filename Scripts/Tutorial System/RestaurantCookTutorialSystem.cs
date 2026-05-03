@@ -22,6 +22,9 @@ namespace Tutorial_System
         [field: Header("自身組件")]
         [field: SerializeField] private new DoAnimation animation;
         
+        [field: Header("深煮鍋")]
+        [field: SerializeField] private CookwareSystem stockpot;
+        
         [field: Header("氣泡點擊指示")]
         [field: SerializeField] private GameObject clickIndicator;
         
@@ -49,6 +52,11 @@ namespace Tutorial_System
             if (animation is null)
             {
                 throw new InvalidOperationException($"{nameof(animation)} 沒有被掛載。");
+            }
+            
+            if (stockpot is null)
+            {
+                throw new InvalidOperationException($"{nameof(stockpot)} 沒有被掛載。");
             }
             
             if (clickIndicator is null)
@@ -127,6 +135,9 @@ namespace Tutorial_System
             public override void InvokeOnSceneChangeComplete()
             {
                 AudioSystem.Instance.CommonBGM.FadeInBGM(fadeInBGMData);
+                
+                stockpot.StartSystem();
+                clickIndicator.SetActive(true);
                 
                 RefreshTip1("請靠近<b><color=yellow>深煮鍋</color></b>並<b><color=yellow>點擊氣泡</color></b>");
             }

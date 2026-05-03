@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Common.Clickable_Bubble;
+using Common.Customer;
 using Common.Interactable_Object;
 using Common.Item.Data;
 using Common.Item.Data.Serving_Note;
@@ -15,18 +16,23 @@ using UI_System.Message_UI_System.Main;
 using UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_Menu_UI.System.Child.Open_Page.Child.Select_Food_Page.Data;
 using UI_System.Restaurant_UI_System.Main;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Restaurant_System.Object.Creature.Customer.System.Main
 {
     public sealed class Customer : MonoBehaviour, InteractableObject
     {
-        [field: Header("Component Settings")]
+        [field: Header("狀態")]
+        [field: SerializeField] private bool interactable;
+                                public bool Interactable => interactable;
+        
+        [field: Header("自身組件")]
         [field: SerializeField] private MoveSystem moveSystem;
         [field: SerializeField] private AnimationSystem animationSystem;
         [field: SerializeField] private FlipSystem flipSystem;
         [field: SerializeField] private SkinSystem skinSystem;
         
-        [field: Header("Clickable Bubble Settings")]
+        [field: Header("互動氣泡設定")]
         [field: SerializeField] private Transform bubbleParent;
         [field: SerializeField] private GameObject thinkBubble;
         [field: SerializeField] private GameObject orderBubble;
@@ -36,40 +42,47 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
         [field: SerializeField] private GameObject checkoutBubble;
         private ClickableBubble _currentBubble;
         
-        [field: Header("Data Settings")]
+        [field: Header("資料")]
         [field: SerializeField] private SelectFoodPageSO selectFoodPageData;
+        [field: SerializeField] private CustomerSO customerData;
         
         private readonly StateMachine _stateMachine = new();
-        
-        private IEnumerator _mainCor;
+
+        private IEnumerator _mainCoroutine;
         
         private ServingNoteSO _servingNoteData;
         
         public static event Func<ItemSO, bool> GivingServingNote;
-        public event Action PrepareToLeave;
         
-        private readonly Queue<Action> _cleanUpActions = new();
-
+        public event Action HappyToLeave;
+        public event Action AngryToLeave;
+        
         private bool isHappy;
-        
+
+        private void Awake()
+        {
+            moveSystem.ToLeft += flipSystem.TurnsLeft;
+            moveSystem.ToRight += flipSystem.TurnsRight;
+        }
+
         private void Start()
         {
             skinSystem.SetRandomSkin();
         }
 
-        private void OnEnable()
-        {
-            moveSystem.ToLeft += flipSystem.TurnsLeft;
-            _cleanUpActions.Enqueue(() => moveSystem.ToLeft -= flipSystem.TurnsLeft);
-            
-            moveSystem.ToRight += flipSystem.TurnsRight;
-            _cleanUpActions.Enqueue(() => moveSystem.ToRight -= flipSystem.TurnsRight);
-        }
-
         private void OnDisable()
         {
-            while (_cleanUpActions.Count > 0) _cleanUpActions.Dequeue()?.Invoke();
-            if (_mainCor is not null) { StopCoroutine(_mainCor); _mainCor = null; }
+            if (_mainCoroutine is not null)
+            {
+                StopCoroutine(_mainCoroutine);
+                _mainCoroutine = null;
+            }
+        }
+
+        private void OnDestroy()
+        {
+            moveSystem.ToLeft -= flipSystem.TurnsLeft;
+            moveSystem.ToRight -= flipSystem.TurnsRight;
         }
 
         public void GiveServingNote(ServingNoteSO servingNote)
@@ -83,121 +96,110 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
                 _currentBubble?.SetInteractable(true);
             }
             
-            public void OnExitDetect(PlayerObject playerObject)
+            public void OnExitDetect()
             {
                 _currentBubble?.SetInteractable(false);
             }
 
-            public void OnInteractStart()
+            public void Interact(PlayerObject playerObject)
             {
+                Debug.Log($"尚未實作 {nameof(Interact)}");
             }
 
-            public bool OnInteract(PlayerObject playerObject)
-            {
-                return false;
-            }
-
-            public void OnInteractEnd()
-            {
-            }
-        #endregion
+            #endregion
 
         #region StateMachine
             #region WalkToSeatPoint
                 public void WalkToSeatPoint(Transform standPoint, Transform sitPoint)
                 {
-                    _stateMachine.ChangeState(new WalkToSeatPoint(OnEnter, OnExit));
-                    return;
+                    _stateMachine.ChangeState(new WalkToSeatPoint(
+                        onEnter: () =>
+                        {
+                            animationSystem.Walk();
+                            moveSystem.StartWalk(standPoint,
+                                onArrive: () =>
+                                {
+                                    animationSystem.Sit();
+                                    moveSystem.SitDown(sitPoint);
 
-                    void OnEnter()
-                    {
-                        animationSystem.Walk();
-                        moveSystem.StartWalk(standPoint,
-                            onArrive: () =>
-                            {
-                                animationSystem.Sit();
-                                moveSystem.SitDown(sitPoint);
-
-                                WatchFoodMenu();
-                            });
-                    }
-                        
-                    void OnExit()
-                    {
-                    }
+                                    WatchFoodMenu();
+                                });
+                        },
+                        onExit: () =>
+                        {
+                        }));
                 }
             #endregion
             
             #region WatchFoodMenu
                 private void WatchFoodMenu()
                 {
-                    _stateMachine.ChangeState(new WatchFoodMenu(OnEnter, OnExit));
-                    return;
-
-                    void OnEnter()
-                    {
-                        _currentBubble = Instantiate(thinkBubble, bubbleParent).GetComponent<ClickableBubble>();
-                        _currentBubble.StartCountDown(3,
-                            onComplete: () =>
-                            {
-                                var orderedItems = new List<IItem>();
-                                
-                                selectFoodPageData.GetRandomItemData(out var firstItemData);
-                                orderedItems.Add(firstItemData);
-                                
-                                if (UnityEngine.Random.Range(0, 100) > 80)
+                    _stateMachine.ChangeState(new WatchFoodMenu(
+                        onEnter: () =>
+                        {
+                            _currentBubble = Instantiate(thinkBubble, bubbleParent).GetComponent<ClickableBubble>();
+                            _currentBubble.StartCountDown(
+                                time: customerData.WatchFoodMenuDuration,
+                                onComplete: () =>
                                 {
-                                    selectFoodPageData.GetRandomItemData(out var secondItemData);
-                                    orderedItems.Add(secondItemData);
-                                }
+                                    var orderedItems = new List<IItem>();
+                                    
+                                    selectFoodPageData.GetRandomItemData(out var firstItemData);
+                                    orderedItems.Add(firstItemData);
+                                    
+                                    if (Random.Range(0, 100) > 80)
+                                    {
+                                        selectFoodPageData.GetRandomItemData(out var secondItemData);
+                                        orderedItems.Add(secondItemData);
+                                    }
 
-                                _servingNoteData.SetOrderedItems(orderedItems);
-                                WaitForOrder();
-                            });
-                    }
-
-                    void OnExit()
-                    {
-                        Destroy(_currentBubble.gameObject);
-                        _currentBubble = null;
-                    }
+                                    _servingNoteData.SetOrderedItems(orderedItems);
+                                    WaitForOrder();
+                                });
+                        },
+                        onExit: () =>
+                        {
+                            Destroy(_currentBubble.gameObject);
+                            _currentBubble = null;
+                        }));
                 }
             #endregion
             
             #region WaitForOrder
                 private void WaitForOrder()
                 {
-                    _stateMachine.ChangeState(new WaitForOrder(OnEnter, OnExit));
-                    return;
-
-                    void OnEnter()
-                    {
-                        _currentBubble = Instantiate(orderBubble, bubbleParent).GetComponent<ClickableBubble>();
-                        _currentBubble.OnClick += OnClick;
-                        _currentBubble.StartCountDown(16, () =>
+                    _stateMachine.ChangeState(new WaitForOrder(
+                        onEnter: () =>
                         {
-                            PlayerSystem.TryRemoveItem(_servingNoteData);
-                            Angry();
-                        });
-                    }
+                            _currentBubble = Instantiate(orderBubble, bubbleParent).GetComponent<ClickableBubble>();
+                            _currentBubble.OnClick += OnClick;
+                            _currentBubble.StartCountDown(
+                                time: customerData.WaitForOrderDuration,
+                                onComplete: () =>
+                                {
+                                    PlayerSystem.TryRemoveItem(_servingNoteData);
+                                    Angry();
+                                });
+                        },
+                        onExit: () =>
+                        {
+                            _currentBubble.OnClick -= OnClick;
+                            
+                            Destroy(_currentBubble.gameObject);
+                            _currentBubble = null;
+                        }));
                     
-                    void OnExit()
-                    {
-                        _currentBubble.OnClick -= OnClick;
-                        Destroy(_currentBubble.gameObject);
-                        _currentBubble = null;
-                    }
+                    return;
 
                     void OnClick()
                     {
-                        var isGivingServingNoteSuccess = GivingServingNote?.Invoke(_servingNoteData) ?? false;
-                        if (isGivingServingNoteSuccess)
+                        if (GivingServingNote?.Invoke(_servingNoteData) ?? false)
                         {
                             WaitForReturnServingNote();
                         }
                         else
                         {
-                            // TODO 顧客無法給予玩家點餐的紙條
+                            throw new InvalidOperationException($"{name} 無法將 {nameof(_servingNoteData)} 給予玩家。");
                         }
                     }
                 }
@@ -206,26 +208,35 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
             #region WaitForReturnServingNote
                 private void WaitForReturnServingNote()
                 {
-                    _stateMachine.ChangeState(new WaitForReturnServingNote(OnEnter, OnExit));
-                    return;
+                    _stateMachine.ChangeState(new WaitForReturnServingNote(
+                        onEnter: () =>
+                        {
+                            _currentBubble = Instantiate(servingNoteBubble, bubbleParent).GetComponent<ClickableBubble>();
+                            _currentBubble.ShowItem(_servingNoteData);
+                            _currentBubble.StartCountDown(
+                                time: customerData.WaitForReturnServingNoteDuration,
+                                onComplete: () =>
+                                {
+                                    Angry();
+                                });
+                            
+                            _currentBubble.OnClick += OnClick;
+                        },
+                        onExit: () =>
+                        {
+                            _currentBubble.OnClick -= OnClick;
+                            
+                            Destroy(_currentBubble.gameObject);
+                            _currentBubble = null;
 
-                    void OnEnter()
-                    {
-                        _currentBubble = Instantiate(servingNoteBubble, bubbleParent).GetComponent<ClickableBubble>();
-                        _currentBubble.ShowItem(_servingNoteData);
-                        _currentBubble.StartCountDown(60, Angry);
-                        _currentBubble.OnClick += OnClick;
-                    }
+                            if (!PlayerSystem.TryRemoveItem(_servingNoteData))
+                            {
+                                throw new InvalidOperationException($"無法把 {nameof(_servingNoteData)} 從玩家身上移除。");
+                            }
+                        }));
                     
-                    void OnExit()
-                    {
-                        _currentBubble.OnClick -= OnClick;
-                        Destroy(_currentBubble.gameObject);
-                        _currentBubble = null;
-                        
-                        PlayerSystem.TryRemoveItem(_servingNoteData);
-                    }
-
+                    return;
+                    
                     void OnClick()
                     {
                         MessageUISystem.ShowSwitchUI(
@@ -271,112 +282,121 @@ namespace Restaurant_System.Object.Creature.Customer.System.Main
             #region ThinksServingNoteItems
                 private void ThinksServingNoteItems()
                 {
-                    _stateMachine.ChangeState(new ThinksServingNoteItems(OnEnter, OnExit));
-                    return;
-                    
-                    void OnEnter()
-                    {
-                        // TODO [2025.12.30] 更改思考辭兼
-                        const float thinkDuration = 3f;
-                        _currentBubble = Instantiate(thinkBubble, bubbleParent).GetComponent<ClickableBubble>();
-                        
-                        if (isHappy)
+                    _stateMachine.ChangeState(new ThinksServingNoteItems(
+                        onEnter: () =>
                         {
-                            _currentBubble.StartCountDown(thinkDuration, Happy);
-                        }
-                        else
+                            _currentBubble = Instantiate(thinkBubble, bubbleParent).GetComponent<ClickableBubble>();
+                            
+                            if (isHappy)
+                            {
+                                _currentBubble.StartCountDown(
+                                    time: customerData.ThinksServingNoteItemsDuration,
+                                    onComplete: () =>
+                                    {
+                                        Happy();
+                                    });
+                            }
+                            else
+                            {
+                                _currentBubble.StartCountDown(
+                                    time: customerData.ThinksServingNoteItemsDuration,
+                                    onComplete: () =>
+                                    {
+                                        Angry();
+                                    });
+                            }
+                        },
+                        onExit: () =>
                         {
-                            _currentBubble.StartCountDown(thinkDuration, Angry);
-                        }
-                    }
-                    
-                    void OnExit()
-                    {
-                        Destroy(_currentBubble.gameObject);
-                        _currentBubble = null;
-                    }
+                            Destroy(_currentBubble.gameObject);
+                            _currentBubble = null;
+                        }));
                 }
             #endregion
             
             #region Happy
                 private void Happy()
                 {
-                    _stateMachine.ChangeState(new Happy(OnEnter, OnExit));
-                    return;
-
-                    void OnEnter()
-                    {
-                        _currentBubble = Instantiate(happyBubble, bubbleParent).GetComponent<ClickableBubble>();
-                        _currentBubble.StartCountDown(3, WaitForCheckout);
-                    }
-                    
-                    void OnExit()
-                    {
-                        Destroy(_currentBubble.gameObject);
-                        _currentBubble = null;
-                    }
+                    _stateMachine.ChangeState(new Happy(
+                        onEnter: () =>
+                        {
+                            _currentBubble = Instantiate(happyBubble, bubbleParent).GetComponent<ClickableBubble>();
+                            _currentBubble.StartCountDown(
+                                time: customerData.EmotionDuration,
+                                onComplete: () =>
+                                {
+                                    WaitForCheckout();
+                                });
+                        },
+                        onExit: () =>
+                        {
+                            Destroy(_currentBubble.gameObject);
+                            _currentBubble = null;
+                        }));
                 }
             #endregion
             
             #region Angry
                 private void Angry()
                 {
-                    _stateMachine.ChangeState(new Angry(OnEnter, OnExit));
-                    return;
-
-                    void OnEnter()
-                    {
-                        _currentBubble = Instantiate(angryBubble, bubbleParent).GetComponent<ClickableBubble>();
-                        _currentBubble.StartCountDown(3, PrepareToLeave);
-                    }
-                    
-                    void OnExit()
-                    {
-                        Destroy(_currentBubble.gameObject);
-                        _currentBubble = null;
-                    }
+                    _stateMachine.ChangeState(new Angry(
+                        onEnter: () =>
+                        {
+                            _currentBubble = Instantiate(angryBubble, bubbleParent).GetComponent<ClickableBubble>();
+                            _currentBubble.StartCountDown(
+                                time: customerData.EmotionDuration,
+                                onComplete: () =>
+                                {
+                                    if (AngryToLeave is null)
+                                    {
+                                        throw new InvalidOperationException($"沒有其它 class 訂閱 {nameof(AngryToLeave)}。");
+                                    }
+                                    
+                                    AngryToLeave();
+                                });
+                        },
+                        onExit: () =>
+                        {
+                            Destroy(_currentBubble.gameObject);
+                            _currentBubble = null;
+                        }));
                 }
             #endregion
             
             #region WaitForCheckout
                 private void WaitForCheckout()
                 {
-                    _stateMachine.ChangeState(new WaitForCheckout(OnEnter, OnExit));
-                    return;
-
-                    void OnEnter()
-                    {
-                        _currentBubble = Instantiate(checkoutBubble, bubbleParent).GetComponent<ClickableBubble>();
-                        _currentBubble.OnClick += PrepareToLeave;
-                    }
-                    
-                    void OnExit()
-                    {
-                        _currentBubble.OnClick -= PrepareToLeave;
-                        Destroy(_currentBubble.gameObject);
-                        _currentBubble = null;
-                    }
+                    _stateMachine.ChangeState(new WaitForCheckout(
+                        onEnter: () =>
+                        {
+                            _currentBubble = Instantiate(checkoutBubble, bubbleParent).GetComponent<ClickableBubble>();
+                            _currentBubble.OnClick += HappyToLeave;
+                        },
+                        onExit: () =>
+                        {
+                            _currentBubble.OnClick -= HappyToLeave;
+                            
+                            Destroy(_currentBubble.gameObject);
+                            _currentBubble = null;
+                        }));
                 }
             #endregion
             
             #region WalkToEntrance
-                public void WalkToEntrance(Transform standPoint, Transform spawnPoint, Action onArrive = null)
+                public void WalkToEntrance(Transform standPoint, Transform spawnPoint, Action onArrive)
                 {
-                    _stateMachine.ChangeState(new WalkToEntrance(OnEnter, OnExit));
-                    return;
-
-                    void OnEnter()
-                    {
-                        animationSystem.Walk();
-                        moveSystem.StandUp(standPoint);
-                        moveSystem.StartWalk(spawnPoint, onArrive);
-                    }
-                    
-                    void OnExit()
-                    {
-                        Destroy(_currentBubble.gameObject);
-                        _currentBubble = null;
-                    }
+                    _stateMachine.ChangeState(new WalkToEntrance(
+                        onEnter: () =>
+                        {
+                            animationSystem.Walk();
+                            moveSystem.StandUp(standPoint);
+                            moveSystem.StartWalk(spawnPoint, onArrive);
+                        },
+                        onExit: () =>
+                        {
+                            Destroy(_currentBubble.gameObject);
+                            _currentBubble = null;
+                        }));
                 }
             #endregion
         #endregion

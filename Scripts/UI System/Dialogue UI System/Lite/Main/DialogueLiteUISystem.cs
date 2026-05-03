@@ -150,6 +150,8 @@ namespace UI_System.Dialogue_UI_System.Lite.Main
                     _continueDialogue = false;
                 }
             }
+            
+            _dialogueCoroutine = null;
 
             onComplete.Invoke();
 

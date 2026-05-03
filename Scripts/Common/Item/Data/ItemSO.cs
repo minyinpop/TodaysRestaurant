@@ -1,4 +1,3 @@
-using Audio_System.Data;
 using UnityEngine;
 
 namespace Common.Item.Data
@@ -16,14 +15,6 @@ namespace Common.Item.Data
         [field: Header("父資料 - 物品圖片")]
         [field: SerializeField] private Sprite itemSprite;
                                 public Sprite ItemSprite => itemSprite;
-                                
-        [field: Header("子資料 - 拿取音效")]
-        [field: SerializeField] private PlaySFXData takeSFX;
-                                public PlaySFXData TakeSFX => takeSFX;
-
-        [field: Header("子資料 - 拿取特效")]
-        [field: SerializeField] private ParticleSystem takeVFX;
-                                public ParticleSystem TakeVFX => takeVFX;
         
         #region Interaction
             public abstract void Selected();

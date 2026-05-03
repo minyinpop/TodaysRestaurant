@@ -20,7 +20,8 @@ namespace Restaurant_System.Object.Cookware.System
     internal sealed class CookwareSystem : MonoBehaviour, InteractableObject
     {
         [field: Header("系統狀態")]
-        [field: SerializeField] private bool autoStart;
+        [field: SerializeField] private bool interactable;
+                                public bool Interactable => interactable;
         
         [field: Header("廚具類型")]
         [field: SerializeField, FormerlySerializedAs("CookwareType")] private CookType cookwareType;
@@ -67,7 +68,7 @@ namespace Restaurant_System.Object.Cookware.System
         public static event Action OnCookComplete;
         public static event Action OnAddDish;
 
-        public static event Action<CookType, Action<CustomFoodItem>, Action> OpenCookSelectionUI;
+        public static event Action<CookType, Action<CustomFoodItem>, Action, Action> OpenCookSelectionUI;
         public static event Action CloseCookSelectionUI;
 
         private PlayerObject _interactingPlayer;
@@ -143,14 +144,6 @@ namespace Restaurant_System.Object.Cookware.System
             _onOvercookedState = InitializeOvercookedState();
         }
 
-        private void Start()
-        {
-            if (autoStart)
-            {
-                StartSystem();
-            }
-        }
-
         private void OnDisable()
         {
             while (_cleanUpActions.Count > 0)
@@ -168,6 +161,7 @@ namespace Restaurant_System.Object.Cookware.System
             }
 
             _initialized = true;
+            _interactable = true;
 
             _stateMachine.InitializeState(_onEmptyState);
         }
@@ -179,28 +173,20 @@ namespace Restaurant_System.Object.Cookware.System
                 _currentBubble?.SetInteractable(true);
             }
 
-            public void OnExitDetect(PlayerObject playerObject)
+            public void OnExitDetect()
             {
                 _interactingPlayer = null;
                 _currentBubble?.SetInteractable(false);
                 CloseCookSelectionUI?.Invoke();
             }
 
-            public void OnInteractStart()
-            {
-            }
-
-            public bool OnInteract(PlayerObject playerObject)
+            public void Interact(PlayerObject playerObject)
             {
                 _interactingPlayer = playerObject;
                 _stateMachine.InteractState();
-                return false;
             }
-            
-            public void OnInteractEnd()
-            {
-            }
-        #endregion
+
+            #endregion
 
         #region StateMachine
             #region OnEmpty
@@ -239,10 +225,12 @@ namespace Restaurant_System.Object.Cookware.System
                                     
                                     InputSystem.EnablePlayerWalk();
                                 },
-                                /* onCancel: */ () =>
+                                /* onCancelStart: */ () =>
                                 {
                                     AudioSystem.Instance.InteractSFX.PlayOneShot(closeSFXData);
-
+                                },
+                                /* onCancelEnd: */ () =>
+                                {
                                     _interactable = true;
                                     
                                     InputSystem.EnablePlayerWalk();

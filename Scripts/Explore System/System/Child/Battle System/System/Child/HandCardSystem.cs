@@ -31,8 +31,8 @@ namespace Explore_System.System.Child.Battle_System.System.Child
         
         private void Awake()
         {
-            SelectedCardSystem.OnOpen += EnableAllCards;
-            SelectedCardSystem.OnConfirm += DisableAllCards;
+            SelectedCardSystem.EnableHandCards += EnableAllCards;
+            SelectedCardSystem.DisableHandCards += DisableAllCards;
         }
 
         private void OnDisable()
@@ -52,8 +52,8 @@ namespace Explore_System.System.Child.Battle_System.System.Child
 
         private void OnDestroy()
         {
-            SelectedCardSystem.OnOpen -= EnableAllCards;
-            SelectedCardSystem.OnConfirm -= DisableAllCards;
+            SelectedCardSystem.EnableHandCards -= EnableAllCards;
+            SelectedCardSystem.DisableHandCards -= DisableAllCards;
         }
         
         private void EnableAllCards()

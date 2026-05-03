@@ -9,13 +9,13 @@ namespace Explore_System.Object
 
         public void InitializeIngredient(ItemObject itemObject)
         {
-            if (itemObject == null)
+            if (itemObject is null)
             {
-                Debug.Log($"{gameObject.name} > {GetType().Name} > {nameof(InitializeIngredient)} > {nameof(itemObject)} cannot be null.");
+                Debug.Log($"{gameObject.name} > {nameof(IngredientSpawnPoint)} > {nameof(InitializeIngredient)} > {nameof(itemObject)} cannot be null.");
                 return;
             }
 
-            if (_currentItemObject != null)
+            if (_currentItemObject is not null)
             {
                 Debug.Log($"{gameObject.name} is already occupied.");
                 return;
@@ -23,10 +23,11 @@ namespace Explore_System.Object
 
             var prefab = itemObject.gameObject;
             var position = transform.position;
-            var rotation = Quaternion.Euler(transform.rotation.x, Random.Range(0, 360), transform.rotation.z);
+            var rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, transform.rotation.z);
             var parent = transform;
 
             _currentItemObject = Instantiate(prefab, position, rotation, parent).GetComponent<ItemObject>();
+            _currentItemObject.Initialize();
         }
     }
 }

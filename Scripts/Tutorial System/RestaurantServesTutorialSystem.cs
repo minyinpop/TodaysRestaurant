@@ -8,12 +8,12 @@ using Common.Item.Data;
 using Common.Scene_Starter;
 using Common.Value.Type;
 using Input_System;
-using Restaurant_System.Object.Cookware.System;
 using Restaurant_System.System.Main;
 using UI_System.Dialogue_UI_System.Lite.Main;
 using UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_Menu_UI.Object.Item_Slot.Base;
 using UI_System.Restaurant_UI_System.Child.Food_Menu_UI_System.Object.Food_Menu_UI.System.Child.Open_Page.Main;
 using UnityEngine;
+using UnityEngine.Serialization;
 using TutorialTip = Common.Tutorial_Tip.Main.TutorialTip;
 
 namespace Tutorial_System
@@ -23,30 +23,40 @@ namespace Tutorial_System
         [field: Header("系統")]
         [field: SerializeField] private DialogueLiteUISystem dialogueLiteUISystem;
         [field: SerializeField] private RestaurantSystem restaurantSystem;
-        
+
         [field: Header("教學 1")]
         [field: SerializeField] private TutorialTip tip1;
-        [field: SerializeField] private Button openButton;
-        
+        [field: SerializeField, FormerlySerializedAs("openButton")] private Button openFoodMenuButton;
+
         [field: Header("教學 2")]
         [field: SerializeField] private TutorialTip tip2;
         [field: SerializeField] private TutorialTip tip3;
         [field: SerializeField] private OpenState foodMenuOpenState;
-        
+
         [field: Header("教學 3")]
         [field: SerializeField] private TutorialTip tip4;
         [field: SerializeField] private TutorialTip tip5_1;
         [field: SerializeField] private TutorialTip tip5_2;
-        
-        [field: Header("教學 4")]
-        [field: SerializeField] private TutorialTip tip6;
+
+        [field: Header("教學 4")] [field: SerializeField]
+        private TutorialTip tip6;
+
         [field: SerializeField] private TutorialTip tip7;
-        
+
         [field: Header("教學 5")]
         [field: SerializeField] private TutorialTip tip8;
         [field: SerializeField] private TutorialTip tip9;
-        [field: SerializeField] private CookwareSystem  stockpotSystem;
         
+        [field: Header("劇情 1")]
+        [field: SerializeField] private DialogueSO dialogue1Data;
+
+        [field: Header("教學 6")]
+        [field: SerializeField] private TutorialTip tip10;
+        [field: SerializeField] private Button openClosedButton;
+        
+        [field: Header("劇情 2")]
+        [field: SerializeField] private DialogueSO dialogue2Data;
+
         private IEnumerator _tutorialCoroutine;
 
         private void OnDestroy()
@@ -69,14 +79,14 @@ namespace Tutorial_System
             {
                 throw new InvalidOperationException($"{nameof(starterData)} 不是 {nameof(DialogueSO)}。");
             }
-            
+
             InputSystem.DisablePlayerWalk();
 
             dialogueLiteUISystem.StartDialogue(
                 dialogueData: dialogueData,
                 onComplete: () =>
                 {
-                    restaurantSystem.StartSystem();
+                    restaurantSystem.InvokeFoodMenu();
                     StartTutorial();
                 });
         }
@@ -98,7 +108,18 @@ namespace Tutorial_System
                                             Tutorial5(
                                                 onComplete: () =>
                                                 {
-                                                    Debug.Log("教學結束。");
+                                                    Dialogue1(
+                                                        onComplete: () =>
+                                                        {
+                                                            Tutorial6(
+                                                                onComplete: () =>
+                                                                {
+                                                                    Dialogue2(
+                                                                        onComplete: () =>
+                                                                        {
+                                                                        });
+                                                                });
+                                                        });
                                                 });
                                         });
                                 });
@@ -111,14 +132,14 @@ namespace Tutorial_System
             tip1.ShowTip(
                 onComplete: () =>
                 {
-                    openButton.OnClick += OnClickButton;
-                    openButton.SetInteractable(true);
+                    openFoodMenuButton.OnClick += OnClickButton;
+                    openFoodMenuButton.SetInteractable(true);
                 });
             return;
 
             void OnClickButton()
             {
-                openButton.OnClick -= OnClickButton;
+                openFoodMenuButton.OnClick -= OnClickButton;
                 tip1.HideTip(onComplete);
             }
         }
@@ -135,14 +156,14 @@ namespace Tutorial_System
                             foodMenuOpenState.UnlockFoodPage.SetInteractable(true);
                         });
                 });
-            
+
             return;
-            
+
             void OnClickSlot(ItemSlot slot, ItemSO itemData)
             {
                 foodMenuOpenState.UnlockFoodPage.UnlockFoodSlots[0].OnClick -= OnClickSlot;
                 foodMenuOpenState.UnlockFoodPage.SetInteractable(false);
-                
+
                 tip3.HideTip(
                     onComplete: () =>
                     {
@@ -156,7 +177,7 @@ namespace Tutorial_System
             _tutorialCoroutine = TutorialCoroutine();
             StartCoroutine(_tutorialCoroutine);
             return;
-            
+
             IEnumerator TutorialCoroutine()
             {
                 var complete = false;
@@ -179,13 +200,13 @@ namespace Tutorial_System
                             {
                                 foodMenuOpenState.SelectFoodPage.SetInteractable(true);
                             });
-                        
+
                         foodMenuOpenState.UnlockFoodPage.UnlockFoodSlots[0].OnClick += OnClickSlot;
                         foodMenuOpenState.SelectFoodPage.SelectFoodSlots[0].OnClick += OnClickSlot;
                     });
 
                 yield return new WaitUntil(() => complete);
-                
+
                 tip5_1.HideTip(
                     onComplete: () =>
                     {
@@ -202,11 +223,12 @@ namespace Tutorial_System
                 onComplete.Invoke();
 
                 yield break;
-                
+
                 void OnClickSlot(ItemSlot slot, ItemSO itemData)
                 {
                     foodMenuOpenState.UnlockFoodPage.UnlockFoodSlots[0].OnClick -= OnClickSlot;
                     foodMenuOpenState.SelectFoodPage.SelectFoodSlots[0].OnClick -= OnClickSlot;
+                    
                     foodMenuOpenState.UnlockFoodPage.SetInteractable(false);
                     foodMenuOpenState.SelectFoodPage.SetInteractable(false);
 
@@ -230,11 +252,11 @@ namespace Tutorial_System
 
             return;
 
-            void OnClickFoodTypeButton(FoodType  foodType)
+            void OnClickFoodTypeButton(FoodType foodType)
             {
                 foodMenuOpenState.FoodTypeButtons[1].OnClick -= OnClickFoodTypeButton;
                 foodMenuOpenState.FoodTypeButtons[1].SetInteractable(false);
-                
+
                 tip7.HideTip(
                     onComplete: () =>
                     {
@@ -259,41 +281,83 @@ namespace Tutorial_System
                                 foodTypeButton.SetInteractable(true);
                             }
 
-                            foodMenuOpenState.ConfirmButton.OnClick += OnClickContinue;
+                            foodMenuOpenState.ConfirmButton.OnClick += OnClickButton;
                             foodMenuOpenState.ConfirmButton.SetInteractable(true);
                         });
                 });
 
             return;
 
-            void OnClickContinue()
+            void OnClickButton()
             {
                 foodMenuOpenState.SelectFoodPage.SelectFoodSlots[0].GetSlotState(out var slotState);
-                
-                if (slotState is not ItemSlotState.Select)
+
+                if (slotState is not ItemSlotState.HaveItem)
                 {
                     return;
                 }
-
-                foodMenuOpenState.UnlockFoodPage.SetInteractable(false);
-                foodMenuOpenState.SelectFoodPage.SetInteractable(false);
                 
                 foreach (var foodTypeButton in foodMenuOpenState.FoodTypeButtons)
                 {
                     foodTypeButton.SetInteractable(false);
                 }
-
-                foodMenuOpenState.ConfirmButton.OnClick -= OnClickContinue;
-                foodMenuOpenState.ConfirmButton.SetInteractable(false);
                 
+                foodMenuOpenState.UnlockFoodPage.SetInteractable(false);
+                foodMenuOpenState.SelectFoodPage.SetInteractable(false);
+
+                foodMenuOpenState.ConfirmButton.SetInteractable(false);
+                foodMenuOpenState.ConfirmButton.OnClick -= OnClickButton;
+
                 tip9.HideTip(
                     onComplete: () =>
                     {
-                        stockpotSystem.StartSystem();
-                        
+                    });
+                
+                onComplete.Invoke();
+            }
+        }
+
+        private void Dialogue1(Action onComplete)
+        {
+            dialogueLiteUISystem.StartDialogue(
+                dialogueData: dialogue1Data,
+                onComplete: () =>
+                {
+                    onComplete.Invoke();
+                });
+        }
+
+        private void Tutorial6(Action onComplete)
+        {
+            tip10.ShowTip(
+                onComplete: () =>
+                {
+                    openClosedButton.OnClick += OnButtonClick;
+                    openClosedButton.SetInteractable(true);
+                });
+            
+            return;
+
+            void OnButtonClick()
+            {
+                openClosedButton.SetInteractable(false);
+                openClosedButton.OnClick -= OnButtonClick;
+                
+                tip10.HideTip(
+                    onComplete: () =>
+                    {
                         onComplete.Invoke();
                     });
             }
+        }
+
+        private void Dialogue2(Action onComplete)
+        {
+            dialogueLiteUISystem.StartDialogue(
+                dialogueData: dialogue2Data,
+                onComplete: () =>
+                {
+                });
         }
     }
 }
