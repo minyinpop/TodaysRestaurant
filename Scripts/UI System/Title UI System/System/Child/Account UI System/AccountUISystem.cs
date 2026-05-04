@@ -3,7 +3,7 @@ using Animation_System.DOTween;
 using Animation_System.DOTween.Basic;
 using UnityEngine;
 
-namespace UI_System.Title_UI_System.Child.Account_UI_System
+namespace UI_System.Title_UI_System.System.Child.Account_UI_System
 {
     [RequireComponent(typeof(DoAnimation))]
     public sealed class AccountUISystem : MonoBehaviour

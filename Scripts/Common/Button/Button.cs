@@ -30,6 +30,9 @@ namespace Common.Button
         [field: Header("聲音播放資料")]
         [field: SerializeField] private PlaySFXData playSFXData;
 
+        public event Action OnCursorEnter;
+        public event Action OnCursorExit;
+        
         public event Action OnClick;
 
         /* 2026.04.06 會跳 ERROR
@@ -65,6 +68,8 @@ namespace Common.Button
                     {
                         AudioSystem.Instance.UISFX.PlayOneShot(playSFXData);
                     }
+
+                    OnCursorEnter?.Invoke();
                 }
             }
             
@@ -73,18 +78,24 @@ namespace Common.Button
                 if (Interactable)
                 {
                     DoAnimation?.DoScale_UI(Rect, OnPointerExitScale);
+                    
+                    OnCursorExit?.Invoke();
                 }
             }
 
             protected override void OnPointerClick()
             {
-                if (!Interactable) return;
-                if (OnClick == null)
+                if (!Interactable)
+                {
+                    return;
+                }
+                
+                if (OnClick is null)
                 {
                     Debug.LogWarning($"{gameObject.name} > {GetType().Name} > {nameof(OnClick)} cannot be null.");
                     return;
                 }
-
+                
                 OnClick.Invoke();
             }
         #endregion

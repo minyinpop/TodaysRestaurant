@@ -6,7 +6,7 @@ using PlayFab.ClientModels;
 using TMPro;
 using UnityEngine;
 
-namespace UI_System.Title_UI_System.Child.Account_UI_System
+namespace UI_System.Title_UI_System.System.Child.Account_UI_System
 {
     public sealed class RegisterUI : MonoBehaviour
     {
