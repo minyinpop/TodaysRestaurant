@@ -31,13 +31,8 @@ namespace Restaurant_System.System.Main
         
         private readonly StateMachine _stateMachine = new();
 
-        // Step 1.
         private IState _onFoodMenuState;
-        // Step 2.
-        private IState _onFinishFoodMenuState;
-        // Step 3.
         private IState _onRestaurantOpenState;
-        // Step 4.
         private IState _onRestaurantClosedState;
 
         private RestaurantStatisticalReport _reportData = new();
@@ -53,32 +48,20 @@ namespace Restaurant_System.System.Main
                         onConfirm: () =>
                         {
                             restaurantUISystem.FoodMenuUISystem.CloseUI();
-                            
-                            _stateMachine.ChangeState(_onFinishFoodMenuState);
                         });
                 },
                 onExit: () =>
                 {
-                    InputSystem.EnablePlayerWalk();
-                    
                     PlayerUISystem.SetHotbarUI(true);
-                });
-
-            _onFinishFoodMenuState = new RestaurantState(
-                onEnter: () =>
-                {
-                    foreach (var cookware in cookwares)
-                    {
-                        cookware.StartSystem();
-                    }
-                },
-                onExit: () =>
-                {
+                    
+                    InputSystem.EnablePlayerWalk();
                 });
             
             _onRestaurantOpenState = new RestaurantState(
                 onEnter: () =>
                 {
+                    InvokeCookwareStart();
+                    
                     customerManagerSystem.StartSystem();
                 },
                 onExit: () =>
@@ -135,6 +118,14 @@ namespace Restaurant_System.System.Main
         public void InvokeFoodMenu()
         {
             _stateMachine.ChangeState(_onFoodMenuState);
+        }
+
+        private void InvokeCookwareStart()
+        {
+            foreach (var cookware in cookwares)
+            {
+                cookware.StartSystem();
+            }
         }
 
         private void InvokeRestaurantOpen()

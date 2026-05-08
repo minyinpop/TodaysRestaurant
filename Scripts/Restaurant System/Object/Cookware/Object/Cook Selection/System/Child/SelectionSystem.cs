@@ -94,7 +94,11 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Child
         public void SetInteractable(bool interactable)
         {
             CloseButton.SetInteractable(interactable);
-            foreach (var stickyNote in StickyNotes) stickyNote.SetInteractable(interactable);
+            
+            foreach (var stickyNote in StickyNotes)
+            {
+                stickyNote.SetInteractable(interactable);
+            }
         }
     }
 }

@@ -98,6 +98,7 @@ namespace Tutorial_System
             
             CookwareSystem.OnGameTime += OnGameTimeReady;
             CookwareSystem.OnCookComplete += OnCookComplete;
+            
             CookwareSystem.OnAddDish += OnAddDish;
 
             CookGameSystem.OnGameStart += OnGameStart;
@@ -125,6 +126,7 @@ namespace Tutorial_System
             
             CookwareSystem.OnGameTime -= OnGameTimeReady;
             CookwareSystem.OnCookComplete -= OnCookComplete;
+            
             CookwareSystem.OnAddDish -= OnAddDish;
             
             CookGameSystem.OnGameStart -= OnGameStart;

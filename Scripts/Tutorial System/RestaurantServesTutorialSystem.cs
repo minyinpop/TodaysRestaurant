@@ -65,7 +65,7 @@ namespace Tutorial_System
 
         public static event Action RemoveAllItems;
 
-        private void OnDestroy()
+        private void OnDisable()
         {
             if (_tutorialCoroutine is not null)
             {
@@ -134,6 +134,7 @@ namespace Tutorial_System
                                                                     Dialogue2(
                                                                         onComplete: () =>
                                                                         {
+                                                                            Debug.Log("對話結束，開始實操。");
                                                                         });
                                                                 });
                                                         });
@@ -374,6 +375,7 @@ namespace Tutorial_System
                 dialogueData: dialogue2Data,
                 onComplete: () =>
                 {
+                    onComplete.Invoke();
                 });
         }
     }

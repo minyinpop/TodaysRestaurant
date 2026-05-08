@@ -89,6 +89,7 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Main
                 
                                 #region Ingredient
                                     putIngredientSystem.GetIngredients(out var ingredients);
+                                    
                                     foreach (var ingredient in ingredients)
                                     {
                                         totalCookTime += ingredient.CookTime;
@@ -102,11 +103,13 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Main
                                 #region UI
                                     var isSelectionUIClosed = false;
                                     var isPutIngredientUIClosed = false;
+                                    
                                     selectionSystem.Hide(
                                         onComplete: () =>
                                         {
                                             isSelectionUIClosed = true;
                                         });
+                                    
                                     putIngredientSystem.Hide(
                                         onComplete: () =>
                                         {
@@ -114,7 +117,9 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Main
                                             
                                             OnPutIngredientUIClose?.Invoke();
                                         });
+                                    
                                     yield return new WaitUntil(() => isSelectionUIClosed && isPutIngredientUIClosed);
+                                    
                                     onConfirm?.Invoke(cookDish);
                                 #endregion
                             }

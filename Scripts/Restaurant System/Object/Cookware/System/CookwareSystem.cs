@@ -402,7 +402,11 @@ namespace Restaurant_System.Object.Cookware.System
                             
                             if (OnAddDish is null)
                             {
+                                /*
                                 throw new InvalidOperationException($"{nameof(OnAddDish)} 沒有其它 class 訂閱。");
+                                */
+                                
+                                Debug.Log($"{nameof(OnAddDish)} 沒有被訂閱。");
                             }
 
                             if (_interactingPlayer is null)
@@ -414,7 +418,7 @@ namespace Restaurant_System.Object.Cookware.System
                             
                             if (_interactingPlayer.TryAddItem(_currentCookItem))
                             {
-                                OnAddDish.Invoke();
+                                OnAddDish?.Invoke();
                                 
                                 AudioSystem.Instance.InteractSFX.PlayOneShot(closeSFXData);
                                 
@@ -425,7 +429,15 @@ namespace Restaurant_System.Object.Cookware.System
                                 Debug.Log($"無法添加 {_currentCookItem.ItemName} 至玩家背包。");
                             }
                         },
-                        onExit: Reset);
+                        onExit: () =>
+                        {
+                            audioSource.Stop();
+                            audioSource.clip = null;
+                            audioSource.loop = false;
+                            audioSource.time = 0;
+                            
+                            Reset();
+                        });
                 }
             #endregion
             
@@ -464,7 +476,15 @@ namespace Restaurant_System.Object.Cookware.System
                                 Debug.Log($"無法添加 {_currentCookItem.ItemName} 至玩家背包。");
                             }
                         },
-                        onExit: Reset);
+                        onExit: () =>
+                        {
+                            audioSource.Stop();
+                            audioSource.clip = null;
+                            audioSource.loop = false;
+                            audioSource.time = 0;
+                            
+                            Reset();
+                        });
                 }
             #endregion
         #endregion

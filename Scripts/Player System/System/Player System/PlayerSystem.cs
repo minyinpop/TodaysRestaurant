@@ -1,4 +1,5 @@
 using Input_System;
+using Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Child;
 using Restaurant_System.Object.Creature.Customer.System.Main;
 using Tutorial_System;
 using UnityEngine;
@@ -21,6 +22,8 @@ namespace Player_System.System.Player_System
 
             RestaurantServesTutorialSystem.RemoveAllItems += RemoveAllItems;
 
+            PutIngredientSystem.GiveRemainingItem += AddItem;
+
             _itemDragSFX = itemDragSFX;
         }
 
@@ -35,6 +38,8 @@ namespace Player_System.System.Player_System
             Customer.GivingServingNote -= AddItem;
             
             RestaurantServesTutorialSystem.RemoveAllItems -= RemoveAllItems;
+            
+            PutIngredientSystem.GiveRemainingItem -= AddItem;
         }
     }
 }

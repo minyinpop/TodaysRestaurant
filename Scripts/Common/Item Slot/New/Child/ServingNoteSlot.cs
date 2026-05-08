@@ -85,6 +85,12 @@ namespace Common.Item_Slot.New.Child
                     {
                         throw new System.ArgumentNullException($"{name} > {GetType().Name} > {nameof(AddItem)} > {nameof(item)} is null.");
                     }
+
+                    if (item.ItemID != _targetItem.ItemID)
+                    {
+                        Debug.Log($"{item.ItemName} 與 {_targetItem.ItemName} 不是一樣的東西。");
+                        return false;
+                    }
                 #endregion
                 
                 #region 檢查格子狀態
@@ -135,6 +141,12 @@ namespace Common.Item_Slot.New.Child
                     if (targetItem is null)
                     {
                         throw new System.ArgumentNullException($"{name} > {GetType().Name} > {nameof(AddItem)} > {nameof(targetItem)} is null.");
+                    }
+
+                    if (targetItem != _targetItem)
+                    {
+                        slotItem = null;
+                        return false;
                     }
                 #endregion
                 

@@ -5,6 +5,7 @@ using Animation_System.DOTween;
 using Animation_System.DOTween.Basic;
 using Common.Button;
 using Common.Item_Slot.New.Child;
+using Common.Item.Data;
 using Common.Item.Data.Food;
 using Common.Item.Data.Ingredient;
 using UnityEngine;
@@ -32,24 +33,38 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Child
         [field: SerializeField] private Transform ItemSlotParent;
         
         private readonly List<PutIngredientSlot> slots = new();
-        
-        private readonly List<Action> CloseAction = new();
+
+        private Action _invokeConfirmButton;
+        private Action _invokeCloseButton;
+
+        public static event Func<IItem, bool> GiveRemainingItem;
 
         private void OnDisable()
         {
-            foreach (var action in CloseAction) action?.Invoke();
-            CloseAction.Clear();
+            _invokeConfirmButton?.Invoke();
+            _invokeCloseButton?.Invoke();
         }
 
         public void Show(FoodSO selectedFoodData, Action onConfirm, Action onCancel)
         {
-            if (PutIngredientUI.activeSelf) return;
+            if (PutIngredientUI.activeSelf)
+            {
+                return;
+            }
             
             #region Button
-                ConfirmButton.OnClick += onConfirm;
-                CloseAction.Add(() => ConfirmButton.OnClick -= onConfirm);
-                CloseButton.OnClick += onCancel;
-                CloseAction.Add(() => CloseButton.OnClick -= onCancel);
+                ConfirmButton.OnClick += InvokeConfirmButton;
+                CloseButton.OnClick += InvokeCloseButton;
+                
+                _invokeConfirmButton = () =>
+                {
+                    ConfirmButton.OnClick -= InvokeConfirmButton;
+                };
+                
+                _invokeCloseButton = () =>
+                {
+                    CloseButton.OnClick -= InvokeCloseButton;
+                };
             #endregion
             
             #region Item Slot
@@ -66,20 +81,53 @@ namespace Restaurant_System.Object.Cookware.Object.Cook_Selection.System.Child
                 DoAnimation.DoFade_CanvasGroup(PutIngredientUI_CanvasGroup, FadeInSettings,
                     onComplete: () => SetInteractable(true));
             #endregion
+
+            return;
+            
+            void InvokeConfirmButton()
+            {
+                onConfirm.Invoke();
+            }
+
+            void InvokeCloseButton()
+            {
+                onCancel.Invoke();
+            }
         }
 
         public void Hide(Action onComplete = null)
         {
             SetInteractable(false);
-            foreach (var action in CloseAction) action?.Invoke();
-            CloseAction.Clear();
             
             DoAnimation.DoFade_CanvasGroup(PutIngredientUI_CanvasGroup, FadeOutSettings,
                 onComplete: () =>
                 {
                     PutIngredientUI.SetActive(false);
-                    foreach (var itemSlot in slots) Destroy(itemSlot.gameObject);
+                    
+                    foreach (var itemSlot in slots)
+                    {
+                        if (itemSlot.Item is null)
+                        {
+                            Destroy(itemSlot.gameObject);
+                            continue;
+                        }
+
+                        if (GiveRemainingItem is null)
+                        {
+                            throw new InvalidOperationException($"{GiveRemainingItem} 沒有被訂閱！");
+                        }
+
+                        if (!GiveRemainingItem.Invoke(itemSlot.Item))
+                        {
+                            Debug.LogWarning($"{itemSlot.Item} 添加失敗，可能是玩家的背包滿了！");
+                            return;
+                        }
+
+                        Destroy(itemSlot.gameObject);
+                    }
+                    
                     slots.Clear();
+                    
                     onComplete?.Invoke();
                 });
         }
